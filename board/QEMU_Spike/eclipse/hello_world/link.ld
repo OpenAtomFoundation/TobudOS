@@ -41,12 +41,10 @@ SECTIONS
   . = ALIGN(8);
   PROVIDE( end = . );
   
-  /*
-  _stack_size = 256;
+  _stack_size = 128;
   .stack ORIGIN(RAM) + LENGTH(RAM) - _stack_size :
   {
     . = _stack_size;  
     PROVIDE( _stack_top = . ); 
   } >RAM AT>RAM
-  */ 
 }

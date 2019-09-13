@@ -134,8 +134,6 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/kernel/pm/include}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/Inc}&quot;"/>
-                                    									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/osal/cmsis_os}&quot;"/>
                                     								
                                 </option>
                                 								

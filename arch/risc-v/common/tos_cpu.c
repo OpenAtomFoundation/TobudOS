@@ -7,9 +7,6 @@
 #include <tos.h>
 #include <riscv_encoding.h>
 
-// soc code shoud not put here
-#define __SYSTEM_CLOCK_108M_PLL_HXTAL           (uint32_t)(108000000)
-uint32_t SystemCoreClock = __SYSTEM_CLOCK_108M_PLL_HXTAL;
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
@@ -20,7 +17,6 @@ __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 __KERNEL__ void cpu_init(void) {
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
     cpu_systick_init(k_cpu_cycle_per_tick);
-	//TODO
 }
 
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)
@@ -122,27 +118,29 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
 
 void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
 {
-	int ddd = cause;
 	while(1) {
-		ddd++;
+		// TODO
 	}
 }
 
 void SysTick_IRQHandler() {
-	//asm("csrs mip, %0"::"r"(MIP_MTIP));
-
 	port_systick_config(k_cpu_cycle_per_tick);
-#if 1
 	if(tos_knl_is_running()) {
 	  tos_knl_irq_enter();
 	  tos_tick_handler();
 	  tos_knl_irq_leave();
 	}
-#endif
 }
 
 void cpu_irq_entry(cpu_data_t irq, cpu_context_t *regs)
 {
+#if 1
+	if(irq != 7) {
+		return;
+	}
+
+	SysTick_IRQHandler();
+#else
 	void (*irq_handler)();
 	extern void (*handler_vector_table[])();
 
@@ -152,6 +150,7 @@ void cpu_irq_entry(cpu_data_t irq, cpu_context_t *regs)
 	}
 
 	(*irq_handler)();
+#endif
 }
 
 __API__ uint32_t tos_cpu_clz(uint32_t val)

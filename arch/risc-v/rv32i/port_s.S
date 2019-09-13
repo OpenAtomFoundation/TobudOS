@@ -4,6 +4,10 @@
 .global port_cpsr_save
 .global port_cpsr_restore
 
+.global port_systick_resume
+.global port_systick_suspend
+.global port_systick_pending_reset
+
 .global port_sched_start
 .global port_context_switch
 .global port_irq_context_switch
@@ -26,13 +30,31 @@ port_int_enable:
 .type port_cpsr_save, %function
 port_cpsr_save:
 	csrrci	a0, mstatus, MSTATUS_MIE
-	#csrrci  a0, mstatus, MSTATUS_MPIE
 	ret
 
 .type port_cpsr_restore, %function
 port_cpsr_restore:
 	csrw	mstatus, a0
 	ret
+
+.type port_systick_resume, %function
+port_systick_resume:
+    li t0, MIE_MTIE
+    csrs mie, t0
+    ret
+
+.type port_systick_suspend, %function
+port_systick_suspend:
+    li t0, MIE_MTIE
+    csrc mie, t0
+    ret
+
+.type port_systick_pending_reset, %function
+port_systick_pending_reset:
+    li t0, MIP_MTIP
+    csrc mip, t0
+    ret
+
 
 
 #define REGBYTES	4
@@ -405,3 +427,5 @@ port_irq_context_switch:
 
 irq_context_return:
 	ret
+
+
