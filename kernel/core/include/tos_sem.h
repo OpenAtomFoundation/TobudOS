@@ -1,0 +1,86 @@
+#ifndef _TOS_SEM_H_
+#define  _TOS_SEM_H_
+
+#if TOS_CFG_SEM_EN > 0u
+
+typedef struct k_sem_st {
+    pend_obj_t      pend_obj;
+    k_sem_cnt_t     count;
+} k_sem_t;
+
+/**
+ * @brief Create a semaphore.
+ * create a semaphore.
+ *
+ * @attention None
+ *
+ * @param[in]   sem         pointer to the handler of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count);
+
+/**
+ * @brief Destroy a semaphore.
+ * destroy a semaphore.
+ *
+ * @attention None
+ *
+ * @param[in]   semaphore   pointer to the handler of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_sem_destroy(k_sem_t *sem);
+
+/**
+ * @brief Pend a semaphore.
+ * pend a semaphore.
+ *
+ * @attention None
+ *
+ * @param[in]   sem         pointer to the handler of the semaphore.
+ * @param[in]   timeout     how much time(in k_tick_t) we would like to wait.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_PEND_NOWAIT                we get nothing, and we don't wanna wait.
+ * @retval  #K_ERR_PEND_SCHED_LOCKED          we can wait, but scheduler is locked.
+ * @retval  #K_ERR_PEND_TIMEOUT               the time we wait is up, we get nothing.
+ * @retval  #K_ERR_PEND_DESTROY               the semaphore we are pending is destroyed.
+ * @retval  #K_ERR_NONE                       return successfully.
+ */
+__API__ k_err_t tos_sem_pend(k_sem_t *sem, k_tick_t timeout);
+
+/**
+ * @brief Post a semaphore.
+ * post a semaphore and wakeup one pending task.
+ *
+ * @attention when tos_sem_post return successfully, only one task who are waitting for the semaphore will be woken up.
+ *
+ * @param[in]   sem     pointer to the handler of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_SEM_OVERFLOW               we are nesting post a semaphore too much.
+ * @retval  #K_ERR_NONE                       return successfully.
+ */
+__API__ k_err_t tos_sem_post(k_sem_t *sem);
+
+/**
+ * @brief Post a semaphore.
+ * post a semaphore and wakeup all the pending task.
+ *
+ * @attention when tos_sem_post_all return successfully, all of the tasks who are waitting for the semaphore will be woken up.
+ *
+ * @param[in]   sem     pointer to the handler of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_SEM_OVERFLOW               we are nesting post a semaphore too much.
+ * @retval  #K_ERR_NONE                       return successfully.
+ */
+__API__ k_err_t tos_sem_post_all(k_sem_t *sem);
+
+#endif
+
+#endif /* _TOS_SEM_H_ */
+

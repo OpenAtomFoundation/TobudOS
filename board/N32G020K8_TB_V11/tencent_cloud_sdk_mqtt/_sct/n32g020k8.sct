@@ -1,0 +1,16 @@
+; CHIP: N32G020K8, FLASH: 256K, RAM: 20K
+
+LR_IROM1 0x010000 0x040000     ; load region
+{
+    ER_IROM1 0x010000 0x040000   ; load address = execution address
+    {
+        *.o (RESET, +First)
+        *(InRoot$$Sections)
+   	    * (+RO)
+    }
+
+    RW_IRAM1 0x20000000 0x005000  ; RAM
+    {
+   	    * (+RW +ZI)
+    }
+}

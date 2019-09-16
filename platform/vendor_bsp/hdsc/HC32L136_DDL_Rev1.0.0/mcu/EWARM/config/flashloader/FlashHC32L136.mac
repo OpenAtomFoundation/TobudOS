@@ -1,0 +1,23 @@
+setup()
+{
+  __message "----- setup hardware for Flashloader -----\n";
+  /*Wait*/ 
+  __delay(5);
+  __emulatorSpeed(0);
+  
+  /*Vectors at RAM*/
+  __writeMemory32(0x20000000, 0xE000ED08, "Memory");
+}
+
+execUserPreload()
+{
+  __message "----- execUserPreload  -----\n";
+  setup();
+}
+
+execUserFlashInit()  // Called by debugger before loading flash loader in RAM.
+{
+  __message "----- execUserFlashInit -----\n";
+  setup();
+}
+

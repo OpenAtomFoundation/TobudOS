@@ -1,0 +1,1 @@
+For details on licenses, see .\documentation\licenses.txt or .\documentation\licenses.html.

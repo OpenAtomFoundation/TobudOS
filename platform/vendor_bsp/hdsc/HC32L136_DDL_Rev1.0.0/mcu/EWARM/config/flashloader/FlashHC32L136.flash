@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<flash_device>
+  <exe>$PROJ_DIR$\config\flashloader\FlashHC32L136.out</exe>
+  <page>1</page>
+  <block>128 0x200</block>
+  <flash_base>0x00000000</flash_base>
+  <macro>$PROJ_DIR$\config\flashloader\FlashHC32L136.mac</macro>
+  <aggregate>0</aggregate>
+</flash_device>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<flash_board>
+  <pass>
+    <loader>$PROJ_DIR$\config\flashloader\FlashHC32L136.flash</loader>
+    <range>CODE 0x00000000 0x0000FFFF</range>
+  </pass>
+</flash_board>

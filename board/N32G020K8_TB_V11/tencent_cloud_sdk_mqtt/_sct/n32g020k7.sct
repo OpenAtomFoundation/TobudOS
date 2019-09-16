@@ -1,0 +1,16 @@
+; CHIP: N32G020K7, FLASH: 128K, RAM: 20K
+
+LR_ROM1 0x030000 0x020000     ; load region
+{
+    FLASH 0x030000 0x020000   ; load address = execution address
+    {
+        *.o (RESET, +First)
+        *(InRoot$$Sections)
+   	    * (+RO)
+    }
+
+    RAM 0x20000000 0x005000  ; RAM
+    {
+   	    * (+RW +ZI)
+    }
+}
