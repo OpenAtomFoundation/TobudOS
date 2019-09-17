@@ -109,7 +109,7 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/common}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i/gcc}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -131,7 +131,7 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/common}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i/gcc}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/Inc}&quot;"/>
                                     									
