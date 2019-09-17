@@ -85,10 +85,10 @@ static int esp8266_multilink_set(sal_multilink_state_t state)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_echo_create(&echo, NULL, 0, "link is builded");
     while (try++ < 10) {
         tos_at_cmd_exec(&echo, 500, "AT+CIPMUX=%d\r\n", state == SAL_MULTILINK_STATE_ENABLE ? 1 : 0);
-        if (echo.status == AT_ECHO_STATUS_OK) {
+        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
     }

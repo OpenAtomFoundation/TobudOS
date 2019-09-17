@@ -437,6 +437,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
             </File>
+            <File>
+              <FileName>dwt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\dwt.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

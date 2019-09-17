@@ -1,5 +1,9 @@
 #include "tos.h"
 
+/* 用户根据自己的底层通信链路来配置此宏
+ * 如果是基于以太网lwip的链路，这里应该定义 USE_LWIP
+ * 如果是基于模组的通信链路，这里应该定义相应的模组宏，如使用ESP8266则定义 USE_ESP8266
+ * */
 #define USE_ESP8266
 
 #ifdef USE_LWIP

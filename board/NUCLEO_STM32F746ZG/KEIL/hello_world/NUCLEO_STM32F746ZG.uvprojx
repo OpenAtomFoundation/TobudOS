@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F746xx,USE_HAL_DRIVER,STM32F746xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F7xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F7xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F7xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F7xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F7xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F7xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\net\lwip\3rdparty\src\include;..\..\..\..\net\lwip\port\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -393,11 +393,6 @@
           <GroupName>Application/User</GroupName>
           <Files>
             <File>
-              <FileName>eth.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\eth.c</FilePath>
-            </File>
-            <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\gpio.c</FilePath>
@@ -418,9 +413,9 @@
               <FilePath>..\..\BSP\Src\stm32f7xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f7xx_it.c</FileName>
+              <FileName>stm32f7xx_it_noeth.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32f7xx_it.c</FilePath>
+              <FilePath>..\..\BSP\Src\stm32f7xx_it_noeth.c</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>
