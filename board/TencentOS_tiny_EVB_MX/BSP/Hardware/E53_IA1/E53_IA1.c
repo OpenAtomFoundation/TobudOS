@@ -1,6 +1,7 @@
 #include "E53_IA1.h"
 #include "stm32l4xx.h"
 #include "i2c.h"
+#include "string.h"
 
 const int16_t POLYNOMIAL = 0x131;
 E53_IA1_Data_TypeDef E53_IA1_Data;
@@ -161,10 +162,10 @@ void Init_Motor(void)
   /* GPIO Ports Clock Enable */
   IA1_Motor_GPIO_CLK_ENABLE();
 
-	 /*Configure GPIO pin Output Level */
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
-	E53_IA1_Data.MotorMode=0;
-	 /*Configure GPIO pin : PtPin */
+  E53_IA1_Data.MotorMode=0;
+  /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = IA1_Motor_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -216,7 +217,7 @@ void Init_Light(void)
 
 	 /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
-	E53_IA1_Data.LightMode=0;
+  E53_IA1_Data.LightMode=0;
 	 /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = IA1_Light_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -235,9 +236,9 @@ void Init_E53_IA1(void)
     //printf("E53_sensor_board init!\n");
    	MX_I2C1_Init();
     Init_BH1750();
-		Init_SHT30();
-		Init_Motor();
-		Init_Light();
+    Init_SHT30();
+    Init_Motor();
+    Init_Light();
     memset((char *)&E53_IA1_Data,0,sizeof(E53_IA1_Data));
 }
 
@@ -251,40 +252,38 @@ void E53_IA1_Read_Data(void)
 {
 	
     char  data[3];    //data array for checksum verification
-		unsigned char addr = 0;
     unsigned short tmp = 0;
-    float t = 0;
-		uint16_t dat;
-		uint8_t SHT3X_Fetchcommand_Bbuffer[2]={0xE0,0x00};								//read the measurement results
-		uint8_t SHT3X_Data_Buffer[6]; 																		//byte 0,1 is temperature byte 4,5 is humidity
-		
-		E53_IA1_Data.Lux=Convert_BH1750();																								//Read bh1750 sensor data 
-		
-		HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Fetchcommand_Bbuffer,2,0x10); //Read sht30 sensor data 
-		HAL_I2C_Master_Receive(&hi2c1,(SHT30_Addr<<1)+1,SHT3X_Data_Buffer,6,0x10); 
-		
-		//    /* check tem */
+    uint16_t dat;
+    uint8_t SHT3X_Fetchcommand_Bbuffer[2]={0xE0,0x00};								//read the measurement results
+    uint8_t SHT3X_Data_Buffer[6]; 																		//byte 0,1 is temperature byte 4,5 is humidity
+
+    E53_IA1_Data.Lux=Convert_BH1750();																								//Read bh1750 sensor data 
+
+    HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Fetchcommand_Bbuffer,2,0x10); //Read sht30 sensor data 
+    HAL_I2C_Master_Receive(&hi2c1,(SHT30_Addr<<1)+1,SHT3X_Data_Buffer,6,0x10); 
+
+    //    /* check tem */
     data[0] = SHT3X_Data_Buffer[0];
     data[1] = SHT3X_Data_Buffer[1];
     data[2] = SHT3X_Data_Buffer[2];
-	
-		tmp=SHT3x_CheckCrc(data, 2, data[2]);
-		if( !tmp ) /* value is ture */
+
+    tmp=SHT3x_CheckCrc(data, 2, data[2]);
+    if( !tmp ) /* value is ture */
     {
-        dat = ((uint16_t)data[0] << 8) | data[1];
-        E53_IA1_Data.Temperature = SHT3x_CalcTemperatureC( dat );    
+    dat = ((uint16_t)data[0] << 8) | data[1];
+    E53_IA1_Data.Temperature = SHT3x_CalcTemperatureC( dat );    
     }
-		
-		//    /* check humidity */
-		data[0] = SHT3X_Data_Buffer[3];
+
+    //    /* check humidity */
+    data[0] = SHT3X_Data_Buffer[3];
     data[1] = SHT3X_Data_Buffer[4];
     data[2] = SHT3X_Data_Buffer[5];
-	
-		tmp=SHT3x_CheckCrc(data, 2, data[2]);
-		if( !tmp ) /* value is ture */
+
+    tmp=SHT3x_CheckCrc(data, 2, data[2]);
+    if( !tmp ) /* value is ture */
     {
-        dat = ((uint16_t)data[0] << 8) | data[1];
-        E53_IA1_Data.Humidity = SHT3x_CalcRH( dat );    
+    dat = ((uint16_t)data[0] << 8) | data[1];
+    E53_IA1_Data.Humidity = SHT3x_CalcRH( dat );    
     }
     
 }

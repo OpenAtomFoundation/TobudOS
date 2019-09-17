@@ -73,7 +73,7 @@ TencentOS tiny目前主要支持ARM Cortex M核芯片的移植，比如STM32 基
 这样NUCLEO-L073RZ裸机工程生成完成，该工程可直接编译并烧写在板子上运行。
      
 ###   4. 准备TencentOS tiny的源码
-TencentOS tiny的源码已经在内网开源，git下载地址为：[http://git.code.oa.com/TencentOS_tiny/TencentOS_tiny.git]()
+TencentOS tiny的源码已经开源，github下载地址为：[https://github.com/Tencent/TencentOS-tiny.git]()
 
      
 

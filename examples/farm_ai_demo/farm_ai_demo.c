@@ -4,9 +4,7 @@
 #include "E53_IA1.h"
 #include "mcu_init.h"
 
-//#define  USE_NB_BC35
 #define  USE_ESP8266
-
 
 int sock_id = 0;
 
@@ -42,7 +40,6 @@ static int str_to_hex(const char *bufin, int len, char *bufout)
 int mq_dev_report(void)
 {
 	char *data;
-	char topic[50]={0};	
 	cJSON *root = NULL;
     mqtt_pub_opt_t pub_opt;
     pub_opt.dup = 0;
@@ -52,7 +49,6 @@ int mq_dev_report(void)
     pub_opt.topic = MQTT_PUBLISH_TOPIC;
     
 //  {"motor":0,"light":1,"temperature":22.22,"humidity":55.55,"light_intensity":100.00}
-   // printf("motor:%d,light:%d,tem:%f,humi:%f,lux:%f\n",E53_IA1_Data.MotorMode,E53_IA1_Data.LightMode,E53_IA1_Data.Temperature,E53_IA1_Data.Humidity,E53_IA1_Data.Lux);
     root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "motor",E53_IA1_Data.MotorMode);
     cJSON_AddNumberToObject(root, "light",E53_IA1_Data.LightMode);
@@ -60,7 +56,6 @@ int mq_dev_report(void)
  	cJSON_AddNumberToObject(root, "humidity",math_keep_ndot((double)E53_IA1_Data.Humidity,2));
   	cJSON_AddNumberToObject(root, "light_intensity",math_keep_ndot((double)E53_IA1_Data.Lux,2));
      /* formatted print */
-    //data = cJSON_Print(root); 
 	data=cJSON_PrintUnformatted(root);
 
     pub_opt.topic = MQTT_PUBLISH_TOPIC;
@@ -75,25 +70,23 @@ int mq_dev_report(void)
     return 0;	
 }
 
-int parse_dev_cmd(char *data)
+int parse_dev_cmd(uint8_t *data)
 {
     //{"motor":0,"light":1}
 	//JSON字符串到cJSON格式
-	cJSON* cjson = cJSON_Parse(data); 
+	cJSON* cjson = cJSON_Parse((char *)data); 
 	cJSON *cjsonret=NULL;
 	int motor;
     int light;
     char *str;
 	printf("parse_dev_cmd...\n");
-	//判断cJSON_Parse函数返回值确定是否打包成�??
 	if(cjson == NULL){
 		 printf("json pack into cjson error...");
 		 return -1;
 	}
-	else{//打包成功调用cJSON_Print打印输出
+	else{
 		cJSON_Print(cjson);
 	}
-
 	cjsonret = NULL;
 	cjsonret = cJSON_GetObjectItem(cjson,"motor");
 	if(cjsonret!=NULL)
@@ -127,7 +120,6 @@ int parse_dev_cmd(char *data)
             light_control(0);
 		}			
 	}
-
    	cjsonret = cJSON_GetObjectItem(cjson,"speaker");
 	if(cjsonret!=NULL)
 	{
@@ -142,11 +134,7 @@ int parse_dev_cmd(char *data)
     	    speaker(str);
             tos_mmheap_free(str);
         }
-
 	} 
-
-
-
 	//delete cjson
 	cJSON_Delete(cjson);
 	return 0;	
@@ -156,7 +144,6 @@ int mq_dev_receiv(void){
     static int count = 1;
     uint8_t read_data[100];
     int read_len;
-    char topic[50];
     mqtt_sub_opt_t sub_opt;
 
     sub_opt.count = 1;
@@ -173,10 +160,10 @@ int mq_dev_receiv(void){
             parse_dev_cmd(read_data);
     }
     count++;
+		return 0;
 }
 
 int mq_dev_subscribe(void){
-   char topic[50];
     mqtt_sub_opt_t sub_opt;
 
     sub_opt.count = 1;
@@ -189,7 +176,7 @@ int mq_dev_subscribe(void){
     if (tos_mqtt_subscribe(sock_id, &sub_opt) != 0) {
         printf("subscribe failed!!!\n");
     }
-
+   return 0;
 }
 void ai_demo(void)
 {
@@ -201,17 +188,6 @@ void ai_demo(void)
     esp8266_join_ap("test", "12345678");
 #endif
 
-#ifdef USE_M26
-    int m26_sal_init(hal_uart_port_t uart_port);
-    m26_power_on();
-    m26_sal_init(HAL_UART_PORT_0);
-#endif
-
-#ifdef USE_NB_BC35
-    int bc35_28_95_sal_init(hal_uart_port_t uart_port);
-    bc35_28_95_sal_init(HAL_UART_PORT_0);
-#endif
-    
     con_opt.keep_alive_interval = 2000;
     con_opt.cleansession = 1;
     con_opt.username = MQTT_USR_NAME;
@@ -236,15 +212,10 @@ void sensor_read(void){
     }
 }
 
-#define welcomspeak "��ӭTOS"
-//#define welcomspeak "��ӭ"
-//FD 00 06 01 01 BB B6 D3 AD
+#define welcomspeak "欢迎TOS"
 void speaker(char *str){
-    char data[100];
+    uint8_t data[100];
     int16_t len=0;
-    char code=0;
-    char times=10;
-    int ret;
 
     len=2+strlen(str);
     printf("speaker(%s)\n",str);

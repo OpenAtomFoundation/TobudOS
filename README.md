@@ -56,7 +56,7 @@ TencentOS tiny 主体架构图，从下到上主要包括：
 TencentOS tiny目前支持STM32、NXP、华大半导体、国民技术、GD32、Nordic、TI等主流MCU。当前已完成两套官方定制开发板设计，支持全系列STM32 NUCLEO官方评估板内核移植。TencentOS tiny 将携手合作伙伴为物联网终端厂家提供更优质的IoT终端软件解决方案，方便各种物联网设备快速接入腾讯云，共同扩展IoT生态，更好地支撑智慧城市、智能水表、智能家居、智能穿戴、车联网等多种行业应用。
 
 # 二、TencentOS tiny 代码目录
-- [TencentOS tiny代码目录说明](./doc/TencentOS-tiny代码目录.xlsx)
+- [TencentOS tiny代码目录说明](./doc/TencentOS-tiny-代码目录说明.md)
 
 # 三、TencentOS tiny 参考文档
 ## 1、移植指南
@@ -79,7 +79,10 @@ TencentOS tiny能支持物联网终端设备和业务快速接入[腾讯云物�
 TencentOS tiny结合腾讯云物联网开发平台IoT Explorer，已经构筑起连接通讯芯片到云开发的能力，加上已经建设完成的国内最大规模LoRa网络，腾讯彻底打通从芯片通讯开发、网络支撑服务，物理设备定义管理，数据分析和多场景应用开发等全链条IoT云开发服务能力，重新定义了物联网开发模式，助力亿级设备多方式多模式低门槛接入腾讯云服务。作为物联网基础设施建设服务者，腾讯将持续打造开放的物联网生态体系，促进物联网生态良性发展。
 
 # 六、TencentOS tiny 快速入门参考
-TencentOS tiny联合合作伙伴设计了定制开发板，开发者可以基于定制开发板进行快速入门学习，点击下载参考文档
+TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板，如下图：
+![](./doc/picture/introduction/EVB_MX.png)
+
+- [TencentOS tiny定制开发板购买链接](https://item.taobao.com/item.htm?id=602421545135)，开发者可以基于定制开发板进行快速入门学习，点击下载参考文档
 - [TencentOS-tiny定制开发板入门指南](./doc/TencentOS-tiny定制开发板入门指南.pdf)
 
 # 七、贡献代码

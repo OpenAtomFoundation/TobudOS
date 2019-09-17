@@ -42,29 +42,29 @@ CubeMX安装完成后，我们就可以使用CubeMX来给NUCLEO-L037RZ开发板�
 ![](https://main.qcloudimg.com/raw/5c6a1eca65dbec90fe73402cc39a2fa4.png)
 
 #### 3.2 选择MCU型号
-     
+
 ![](https://main.qcloudimg.com/raw/70d3cc4e69c36a9d9707efde2c0e2472.png)
      
 如上图所示：通过MCU筛选来找到自己开发板对应的芯片型号，双击后弹出工程配置界面，如下图：
      
 ![](https://main.qcloudimg.com/raw/f8f05e6b8ef07fc9d30fa3c51a0c82fe.png)
 #### 3.3 Pin设置界面配置时钟源     
-     
+
 ![](https://main.qcloudimg.com/raw/01dcc7684d340dca5d84b88e5b6b707b.png)
 
 #### 3.4 Pin设置界面配置串口
-     
+
 ![](https://main.qcloudimg.com/raw/ffd52f709fd148ba7e654c8ce320d0ad.png)
      
 #### 3.5 Pin设置界面配置GPIO
 ![](https://main.qcloudimg.com/raw/278977b909359db187519b8d6a9125d4.png)
      
 #### 3.6 配置总线时钟
-     
+
 ![](https://main.qcloudimg.com/raw/72f3f1ed823d1e57bac1eda0d0487b2f.png)
      
 #### 3.7 工程生成参数配置
-     
+
 ![](https://main.qcloudimg.com/raw/4dc67aba66af9240b3811079548c4bdb.png)
      
      
@@ -75,14 +75,16 @@ CubeMX安装完成后，我们就可以使用CubeMX来给NUCLEO-L037RZ开发板�
 ![](https://main.qcloudimg.com/raw/ecc132f84a548f8802abb7d8aefc8ba9.png)
      
 #### 3.10 编译GCC下的裸机工程
-     
+
 点击生成代码后，生成的裸机工程效果如下，在makefile同级目录下打开windows的cmd命令窗口（目录下按shift+鼠标右键，点击在此处打开命令窗口），输入make命令，就可以编译gcc裸机工程了，编译完成后，可以看到生成了elf和bin文件，通过工具就可以下载bin文件到开发板运行了。
      
 ![](https://main.qcloudimg.com/raw/093a8de45e44f255ac8cd8ca859a5a1c.png)
      
 ###   4. 准备TencentOS tiny的源码
 
-TencentOS tiny的源码已经在内网开源，git下载地址为：[http://git.code.oa.com/TencentOS_tiny/TencentOS_tiny.git]()
+TencentOS tiny的源码已经开源，github下载地址为：
+
+[https://github.com/Tencent/TencentOS-tiny.git]()
 
 |一级目录 | 二级目录 | 说明 |
 |---------|---------|---------|
@@ -127,7 +129,7 @@ TencentOS tiny的源码已经在内网开源，git下载地址为：[http://git.
 ![](https://main.qcloudimg.com/raw/d8fd36e0383589d8766809522d434b2b.png)
 
 ### 4. 添加cmsis os源码
-	
+
 cmsis os是TencentOS tiny为了兼容cmsis标准而适配的OS抽象层，可以简化大家将业务从其他RTOS迁移到TencentOS tiny的工作量。
 	
 ![](https://main.qcloudimg.com/raw/f8ed59521bc83d0fdf52d59b195b455b.png)
@@ -267,17 +269,17 @@ cmsis os是TencentOS tiny为了兼容cmsis标准而适配的OS抽象层，可以
      osThreadCreate(osThread(task2), NULL);// Create task2
      osKernelStart();//Start TOS Tiny
 ```
-   
+
 如图：
-   
+
 ![](https://main.qcloudimg.com/raw/9fe99042cc3bdf0b75aff576337343ba.png)
 
 ### 3. 编译下载测试TencentOS tiny移植结果
 
    完成代码编辑后回到TencentOS_tiny\board\NUCLEO_L073RZ目录下，找到makefile文件，该目录下打开cmd命令窗口，输入make命令进行编译，得到bin文件，然后将bin文件通过下载工具下载到开发板即可完成TencentOS tiny的测试，如下图所示，可以看到串口交替打印信息，表示两个任务正在进行调度，切换运行：
-   
+
 ![](https://main.qcloudimg.com/raw/e64474d46ddb9d622a6e38481c6a7859.png)
-   
+
    
 
 
