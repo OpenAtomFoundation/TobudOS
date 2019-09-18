@@ -82,7 +82,7 @@ TencentOS tiny结合腾讯云物联网开发平台IoT Explorer，已经构筑起
 TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板，如下图：
 ![](./doc/picture/introduction/EVB_MX.png)
 
-- [TencentOS tiny定制开发板购买链接](https://item.taobao.com/item.htm?id=602421545135)，开发者可以基于定制开发板进行快速入门学习，点击下载参考文档
+- [TencentOS tiny定制开发板介绍页](http://www.holdiot.com/product/showproduct.php?id=8)，开发者可以基于定制开发板进行快速入门学习，点击下载参考文档
 - [TencentOS-tiny定制开发板入门指南](./doc/TencentOS-tiny定制开发板入门指南.pdf)
 
 # 七、贡献代码
