@@ -92,9 +92,8 @@ TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板�
 * 4.  创建 pull request，向TencentOS tiny官方开发分支提交合入请求；
 * 5.  TencentOS tiny研发团队会定期review代码，通过测试后合入。
 
-# 八、加入TencentOS tiny官方微信技术交流群
+# 八、加入TencentOS tiny官方QQ技术交流群
 
-由于微信二维码只有7天有效期，这里需要大家先添加TencentOS tiny工作人员微信，然后由工作人员邀请进群。
-添加工作人员微信时，请说明是TencentOS tiny开发者 工作人员微信二维码：
+扫码加群，请备注TencentOS tiny开发者，工作人员会根据备注进行审核：
 
-![](./doc/picture/introduction/weixin.png)
+![](./doc/picture/introduction/qq.png)
