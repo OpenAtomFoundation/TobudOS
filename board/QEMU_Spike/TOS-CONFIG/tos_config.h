@@ -1,10 +1,3 @@
-/*
- * tos_config.h
- *
- *  Created on: Sep 7, 2019
- *      Author: ace
- */
-
 #ifndef INC_TOS_CONFIG_H_
 #define INC_TOS_CONFIG_H_
 
