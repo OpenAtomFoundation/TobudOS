@@ -1,10 +1,3 @@
-/*
- * tos_cpu_def.h
- *
- *  Created on: Sep 7, 2019
- *      Author: ace
- */
-
 #ifndef _TOS_CPU_DEF_H_
 #define _TOS_CPU_DEF_H_
 
