@@ -1,9 +1,3 @@
-/*
- * port_c.c
- *
- *  Created on: Sep 9, 2019
- *      Author: ace
- */
 #include "riscv_encoding.h"
 #include <tos.h>
 

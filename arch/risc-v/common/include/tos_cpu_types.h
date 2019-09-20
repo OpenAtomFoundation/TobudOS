@@ -1,10 +1,3 @@
-/*
- * tos_cpu_types.h
- *
- *  Created on: Sep 7, 2019
- *      Author: ace
- */
-
 #ifndef _TOS_CPU_TYPES_H_
 #define _TOS_CPU_TYPES_H_
 

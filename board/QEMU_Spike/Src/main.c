@@ -1,10 +1,3 @@
-/*
- * main.c
- *
- *  Created on: Sep 13, 2019
- *      Author: ace
- */
-
 #include "tos.h"
 
 #define TASK_SIZE 512

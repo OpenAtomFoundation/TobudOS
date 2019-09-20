@@ -1,9 +1,3 @@
-/*
- * tos_cpu.c
- *
- *  Created on: Sep 8, 2019
- *      Author: ace
- */
 #include <tos.h>
 #include <riscv_encoding.h>
 
