@@ -19,8 +19,8 @@
 *.tra
 *.dep
 *.iex
-
 *.map
+.DS_Store
 board/*/MDK-ARM/DebugConfig/
 board/*/obj/
 board/*/MDK-ARM/Obj/
