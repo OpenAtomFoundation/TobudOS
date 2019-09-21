@@ -1,4 +1,6 @@
 #include "mcu_init.h"
+#include "logo.h"
+
 
 int fputc(int ch, FILE *f)
 {
@@ -31,6 +33,13 @@ void board_init(void)
   SystemClock_Config();
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+	MX_I2C1_Init();
+	MX_SPI2_Init();
+	
+	Init_BH1750();
+	LCD_Init();
+	
+	LCD_Show_Image(0,0,240,55,gImage_logo);
 }
 
 /**

@@ -8,8 +8,12 @@
 #include "usart.h"
 #include "gpio.h"
 #include "tos.h"
+#include "i2c.h"
+#include "bh1750.h"
+#include "spi.h"
+#include "lcd_spi2_drv.h"
 
-void m26_power_on(void);
+
 void board_init(void);
 void SystemClock_Config(void);
 
