@@ -227,8 +227,10 @@ port_irq_context_switch:
 
 
 .align 2
-.global machine_trap_entry
-machine_trap_entry:
+.global trap_entry
+.global irq_entry
+trap_entry:
+irq_entry:
     SAVE_CONTEXT
 
     csrr    t0,  mepc
