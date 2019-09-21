@@ -9,7 +9,7 @@ _start:
     csrc mstatus, MSTATUS_MIE
     csrw mie, 0
 
-    la t0, machine_trap_entry
+    la t0, trap_entry
     csrw mtvec, t0
 
     la sp, _stack_top

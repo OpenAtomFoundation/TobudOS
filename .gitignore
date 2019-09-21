@@ -20,7 +20,9 @@
 *.dep
 *.iex
 *.map
+*.swp
 .DS_Store
+board/**/build
 board/*/MDK-ARM/DebugConfig/
 board/*/obj/
 board/*/MDK-ARM/Obj/

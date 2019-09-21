@@ -110,6 +110,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/common/include}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/rv32i/gcc}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/Inc}&quot;"/>
                                     								
                                 </option>
                                 								
