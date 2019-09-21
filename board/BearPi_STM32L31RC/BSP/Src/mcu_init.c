@@ -40,21 +40,21 @@ void board_init(void)
 {
   char *str = "TencentOS tiny";
 	
-  HAL_Init();
-  SystemClock_Config();
-  MX_GPIO_Init();
-  MX_ADC1_Init();
-  MX_I2C1_Init();
-  MX_LPUART1_UART_Init();
+	HAL_Init();
+	SystemClock_Config();
+	MX_GPIO_Init();
+	MX_ADC1_Init();
+	MX_I2C1_Init();
+	MX_LPUART1_UART_Init();
 	MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
+	MX_USART2_UART_Init();
 	MX_USART3_UART_Init();
-  MX_SPI1_Init();
-  MX_SPI3_Init();
-  Init_BH1750();
-  LCD_Init();
-  LCD_Clear(WHITE);
-  LCD_Show_Image(0,0,240,55,gImage_logo);
+	MX_SPI1_Init();
+	MX_SPI3_Init();
+	BH1750_Init();
+	LCD_Init();
+	LCD_Clear(WHITE);
+	LCD_Show_Image(0,0,240,55,gImage_logo);
 	LCD_ShowCharStr(36,100,(char*)str, WHITE, BLUE, 24);
 }
 

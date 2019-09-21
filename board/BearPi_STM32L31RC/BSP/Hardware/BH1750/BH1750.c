@@ -14,7 +14,7 @@ int result;
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
-void Init_BH1750(void)
+void BH1750_Init(void)
 {
     uint8_t t_Data = 0x01;
     HAL_I2C_Master_Transmit(&hi2c1,BH1750_Addr,&t_Data,1,0xff);
@@ -26,7 +26,7 @@ void Init_BH1750(void)
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
-void Start_BH1750(void)
+void BH1750_Start(void)
 {
     uint8_t t_Data = 0x10;
     HAL_I2C_Master_Transmit(&hi2c1,BH1750_Addr,&t_Data,1,0xff); 
@@ -40,9 +40,9 @@ void Start_BH1750(void)
 * 参    数: 无
 * 返 回 值: 光强值
 ***************************************************************/
-float Convert_BH1750(void)
+float BH1750_Convert(void)
 {
-	Start_BH1750();
+	BH1750_Start();
 	HAL_Delay(180);
 	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
 	result=BUF[0];
