@@ -30,7 +30,7 @@
 // suspended when sleeping
 #define K_TASK_STATE_SLEEP_SUSPENDED                  (k_task_state_t)(K_TASK_STATE_SLEEP | K_TASK_STATE_SUSPENDED)
 
-// suspened when pending
+// suspended when pending
 #define K_TASK_STATE_PEND_SUSPENDED                   (k_task_state_t)(K_TASK_STATE_PEND | K_TASK_STATE_SUSPENDED)
 
 // suspended when pendtimeout
@@ -71,7 +71,7 @@ typedef struct k_task_st {
 #if TOS_CFG_MUTEX_EN > 0u
     k_list_t            mutex_own_list;     /**< the list hold all the mutex we own.
                                                 When we die(tos_task_destroy), we have an obligation to wakeup all the task pending for those mutexs we own;
-                                                if not, those pending tasks may never get a change to wakeup. */
+                                                if not, those pending tasks may never get a chance to wakeup. */
     k_prio_t            prio_pending;       /*< when tos_task_prio_change called, we may be just the owner of a mutex.
                                                 to avoid PRIORITY INVERSION, must make sure our priority is higher than any one who is pending for
                                                 the mutex we hold. So, if the prio_new of tos_task_prio_change is not appropriate
