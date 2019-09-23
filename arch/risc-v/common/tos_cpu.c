@@ -116,7 +116,7 @@ void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
 }
 
 void SysTick_IRQHandler() {
-    port_systick_config(k_cpu_cycle_per_tick);
+    port_systick_config((uint32_t)k_cpu_cycle_per_tick);
     if (tos_knl_is_running()) {
         tos_knl_irq_enter();
         tos_tick_handler();

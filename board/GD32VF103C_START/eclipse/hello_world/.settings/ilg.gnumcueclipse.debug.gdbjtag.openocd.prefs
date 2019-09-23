@@ -1,2 +1,3 @@
 eclipse.preferences.version=1
-install.folder=C\:\\ToolChain\\OpenOCD\\0.10.0-12-20190722-0746\\bin
+executable.name=openocd
+install.folder=/Users/ace/sys/gnu-mcu-eclipse/openocd/self/bin

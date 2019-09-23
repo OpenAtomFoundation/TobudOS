@@ -3,25 +3,25 @@
 
 #include "stddef.h"
 
-#define TOS_CFG_TASK_PRIO_MAX 10u // ÅäÖÃTencentOS tinyÄ¬ÈÏÖ§³ÖµÄ×î´óÓÅÏÈ¼¶ÊıÁ¿
+#define TOS_CFG_TASK_PRIO_MAX 10u // é…ç½®TencentOS tinyé»˜è®¤æ”¯æŒçš„æœ€å¤§ä¼˜å…ˆçº§æ•°é‡
 
-#define TOS_CFG_ROUND_ROBIN_EN 0u // ÅäÖÃTencentOS tinyµÄÄÚºËÊÇ·ñ¿ªÆôÊ±¼äÆ¬ÂÖ×ª
+#define TOS_CFG_ROUND_ROBIN_EN 0u // é…ç½®TencentOS tinyçš„å†…æ ¸æ˜¯å¦å¼€å¯æ—¶é—´ç‰‡è½®è½¬
 
-#define TOS_CFG_OBJECT_VERIFY 0u // ÅäÖÃTencentOS tinyÊÇ·ñĞ£ÑéÖ¸ÕëºÏ·¨
+#define TOS_CFG_OBJECT_VERIFY 0u // é…ç½®TencentOS tinyæ˜¯å¦æ ¡éªŒæŒ‡é’ˆåˆæ³•
 
-#define TOS_CFG_EVENT_EN 1u // TencentOS tiny ÊÂ¼şÄ£¿é¹¦ÄÜºê
+#define TOS_CFG_EVENT_EN 1u // TencentOS tiny äº‹ä»¶æ¨¡å—åŠŸèƒ½å®
 
-#define TOS_CFG_MMHEAP_EN 1u // ÅäÖÃTencentOS tinyÊÇ·ñ¿ªÆô¶¯Ì¬ÄÚ´æÄ£¿é
+#define TOS_CFG_MMHEAP_EN 1u // é…ç½®TencentOS tinyæ˜¯å¦å¼€å¯åŠ¨æ€å†…å­˜æ¨¡å—
 
-#define TOS_CFG_MMHEAP_POOL_SIZE 8192 // ÅäÖÃTencentOS tiny¶¯Ì¬ÄÚ´æ³Ø´óĞ¡
+#define TOS_CFG_MMHEAP_POOL_SIZE 8192 // é…ç½®TencentOS tinyåŠ¨æ€å†…å­˜æ± å¤§å°
 
-#define TOS_CFG_MUTEX_EN 1u // ÅäÖÃTencentOS tinyÊÇ·ñ¿ªÆô»¥³âËøÄ£¿é
+#define TOS_CFG_MUTEX_EN 1u // é…ç½®TencentOS tinyæ˜¯å¦å¼€å¯äº’æ–¥é”æ¨¡å—
 
-#define TOS_CFG_QUEUE_EN 1u // ÅäÖÃTencentOS tinyÊÇ·ñ¿ªÆô¶ÓÁĞÄ£¿é
+#define TOS_CFG_QUEUE_EN 1u // é…ç½®TencentOS tinyæ˜¯å¦å¼€å¯é˜Ÿåˆ—æ¨¡å—
 
-#define TOS_CFG_TIMER_EN 0u // ÅäÖÃTencentOS tinyÊÇ·ñ¿ªÆôÈí¼ş¶¨Ê±Æ÷Ä£¿é
+#define TOS_CFG_TIMER_EN 0u // é…ç½®TencentOS tinyæ˜¯å¦å¼€å¯è½¯ä»¶å®šæ—¶å™¨æ¨¡å—
 
-#define TOS_CFG_SEM_EN 1u // ÅäÖÃTencentOS tinyÊÇ·ñ¿ªÆôĞÅºÅÁ¿Ä£¿é
+#define TOS_CFG_SEM_EN 1u // é…ç½®TencentOS tinyæ˜¯å¦å¼€å¯ä¿¡å·é‡æ¨¡å—
 
 #if (TOS_CFG_QUEUE_EN > 0u)
 #define TOS_CFG_MSG_EN 1u
@@ -29,15 +29,15 @@
 #define TOS_CFG_MSG_EN 0u
 #endif
 
-#define TOS_CFG_MSG_POOL_SIZE 10u // ÅäÖÃTencentOS tinyÏûÏ¢¶ÓÁĞ´óĞ¡
+#define TOS_CFG_MSG_POOL_SIZE 10u // é…ç½®TencentOS tinyæ¶ˆæ¯é˜Ÿåˆ—å¤§å°
 
-#define TOS_CFG_IDLE_TASK_STK_SIZE 512u // ÅäÖÃTencentOS tiny¿ÕÏĞÈÎÎñÕ»´óĞ¡
+#define TOS_CFG_IDLE_TASK_STK_SIZE 512u // é…ç½®TencentOS tinyç©ºé—²ä»»åŠ¡æ ˆå¤§å°
 
-#define TOS_CFG_CPU_TICK_PER_SECOND 1000u // ÅäÖÃTencentOS tinyµÄtickÆµÂÊ
+#define TOS_CFG_CPU_TICK_PER_SECOND 4000u // é…ç½®TencentOS tinyçš„tické¢‘ç‡
 
-#define TOS_CFG_CPU_CLOCK 108000000 // ÅäÖÃTencentOS tiny CPUÆµÂÊ
+#define TOS_CFG_CPU_CLOCK 108000000 // é…ç½®TencentOS tiny CPUé¢‘ç‡
 
-#define TOS_CFG_TIMER_AS_PROC 1u // ÅäÖÃÊÇ·ñ½«TIMERÅäÖÃ³Éº¯ÊıÄ£Ê½
+#define TOS_CFG_TIMER_AS_PROC 1u // é…ç½®æ˜¯å¦å°†TIMERé…ç½®æˆå‡½æ•°æ¨¡å¼
 
 #define TOS_CFG_VFS_EN 1u
 
