@@ -11,7 +11,7 @@ __STATIC_INLINE__ void task_reset(k_task_t *task)
 
 #if TOS_CFG_MUTEX_EN > 0u
     tos_list_init(&task->mutex_own_list);
-    task->prio_pending = K_TASK_PRIO_INVALID;
+    task->prio_pending  = K_TASK_PRIO_INVALID;
 #endif
 
     task->pend_state    = PEND_STATE_NONE;

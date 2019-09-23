@@ -18,6 +18,10 @@ __STATIC__ void tick_task_place(k_task_t *task, k_tick_t timeout)
         if (task->tick_expires < curr_expires) {
             break;
         }
+        if (task->tick_expires == curr_expires &&
+            task->prio < curr_task->prio) {
+            break;
+        }
         prev_expires = curr_expires;
     }
     task->tick_expires -= prev_expires;

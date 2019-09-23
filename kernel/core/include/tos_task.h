@@ -48,7 +48,7 @@ typedef void (*k_task_entry_t)(void *arg);
  * task control block
  */
 typedef struct k_task_st {
-    k_stack_t          *sp;                 /**< task stack pointer. This lady always comes first, we use her in port_s.S for context switch. */
+    k_stack_t          *sp;                 /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t           knl_obj;            /**< just for verification, test whether current object is really a task. */
