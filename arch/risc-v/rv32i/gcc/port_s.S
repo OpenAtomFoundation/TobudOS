@@ -250,8 +250,8 @@ irq_entry:
     call    cpu_trap_entry
     j       restore
 irq:
-    slli    a0, a0, 1
-    srli    a0, a0, 1
+    slli    a0, a0, 16
+    srli    a0, a0, 16
     call    cpu_irq_entry
 restore:
     RESTORE_CONTEXT

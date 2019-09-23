@@ -16,7 +16,7 @@ void delay_1ms(uint32_t count)
     }while(delta_mtime <(SystemCoreClock/4000.0 *count));
 }
 
-#define TASK_SIZE 512
+#define TASK_SIZE 1024
 k_task_t k_task_task1;
 k_task_t k_task_task2;
 uint8_t k_task1_stk[TASK_SIZE];
@@ -59,12 +59,14 @@ void main(void) {
     gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
 
     gpio_bit_reset(GPIOA, GPIO_PIN_7);
-
 	tos_knl_init();
 
-	tos_task_create(&k_task_task1, "task1", task1, NULL, 3, k_task1_stk, TASK_SIZE, 0);
-	tos_task_create(&k_task_task2, "task2", task2, NULL, 3, k_task2_stk, TASK_SIZE, 0);
+    eclic_irq_enable(CLIC_INT_TMR, 0, 0);
 
+	tos_task_create(&k_task_task1, "task1", task1, NULL, 3, k_task1_stk, TASK_SIZE, 0);
+	//tos_task_create(&k_task_task2, "task2", task2, NULL, 3, k_task2_stk, TASK_SIZE, 0);
+
+    //eclic_irq_enable(CLIC_INT_TMR, 0, 0);
 	tos_knl_start();
 
 
