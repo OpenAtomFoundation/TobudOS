@@ -175,7 +175,7 @@
                                 								
                                 <option id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.linker.usenewlibnosys.584568698" name="Do not use syscalls (--specs=nosys.specs)" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.linker.usenewlibnosys" useByScannerDiscovery="false" value="true" valueType="boolean"/>
                                 								
-                                <option id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.linker.other.328577347" name="Other linker flags" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.linker.other" useByScannerDiscovery="false" value="-W -mno-relax" valueType="string"/>
+                                <option id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.linker.other.328577347" name="Other linker flags" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.linker.other" useByScannerDiscovery="false" value="" valueType="string"/>
                                 								
                                 <inputType id="ilg.gnumcueclipse.managedbuild.cross.riscv.tool.c.linker.input.316705344" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.tool.c.linker.input">
                                     									
