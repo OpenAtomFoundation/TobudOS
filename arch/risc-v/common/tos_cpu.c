@@ -101,6 +101,10 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     }
 #endif
 
+    cpu_data_t gp;
+    asm("mv %0, gp"::"r"(gp));
+
+    regs->gp        = (cpu_data_t)gp;                           // gp: global pointer
     regs->a0        = (cpu_data_t)arg;                          // a0: argument
     regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
     regs->mstatus   = (cpu_data_t)(MSTATUS_MPP | MSTATUS_MPIE); // return to machine mode and enable interrupt
