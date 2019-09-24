@@ -5,9 +5,9 @@
 __API__ evtdrv_err_t tos_evtdrv_event_set(evtdrv_task_id_t task_id, evtdrv_event_flag_t event_flags)
 {
     TOS_CPU_CPSR_ALLOC();
-	uint8_t i = 0;
-	evtdrv_event_t *event;
-	evtdrv_event_flag_t flag;
+    uint8_t i = 0;
+    evtdrv_event_t *event;
+    evtdrv_event_flag_t flag;
 
     if (evtdrv_task_id_is_invalid(task_id)) {
         return EVTDRV_ERR_TASK_INVALID;
@@ -16,18 +16,18 @@ __API__ evtdrv_err_t tos_evtdrv_event_set(evtdrv_task_id_t task_id, evtdrv_event
     TOS_CPU_INT_DISABLE();
 
     event = &evtdrv_events[task_id];
-	for (i = 0; i < sizeof(evtdrv_event_flag_t) * 8; ++i) {
-		flag = (1 << i);
+    for (i = 0; i < sizeof(evtdrv_event_flag_t) * 8; ++i) {
+        flag = (1 << i);
 
-		if (event_flags & flag) {
-			if (event->nesting[i] == (evtdrv_event_nesting_t)-1) {
-				continue;
-			}
+        if (event_flags & flag) {
+            if (event->nesting[i] == (evtdrv_event_nesting_t)-1) {
+                continue;
+            }
 
-			++event->nesting[i];
-		    event->flags |= flag;
-		}
-	}
+            ++event->nesting[i];
+            event->flags |= flag;
+        }
+    }
 
     TOS_CPU_INT_ENABLE();
 
@@ -37,9 +37,9 @@ __API__ evtdrv_err_t tos_evtdrv_event_set(evtdrv_task_id_t task_id, evtdrv_event
 __API__ evtdrv_err_t tos_evtdrv_event_reset(evtdrv_task_id_t task_id, evtdrv_event_flag_t event_flags)
 {
     TOS_CPU_CPSR_ALLOC();
-	uint8_t i = 0;
-	evtdrv_event_t *event;
-	evtdrv_event_flag_t flag;
+    uint8_t i = 0;
+    evtdrv_event_t *event;
+    evtdrv_event_flag_t flag;
 
     if (evtdrv_task_id_is_invalid(task_id)) {
         return EVTDRV_ERR_TASK_INVALID;
@@ -48,23 +48,23 @@ __API__ evtdrv_err_t tos_evtdrv_event_reset(evtdrv_task_id_t task_id, evtdrv_eve
     TOS_CPU_INT_DISABLE();
 
     event = &evtdrv_events[task_id];
-	for (i = 0; i < sizeof(evtdrv_event_flag_t) * 8; ++i) {
-		flag = (1 << i);
+    for (i = 0; i < sizeof(evtdrv_event_flag_t) * 8; ++i) {
+        flag = (1 << i);
 
-		if (event_flags & flag) {
+        if (event_flags & flag) {
             if (!(event->flags & flag)) {
                 continue;
             }
 
-			if (event->nesting[i] > (evtdrv_event_nesting_t)0u) {
-				--event->nesting[i];
-			}
+            if (event->nesting[i] > (evtdrv_event_nesting_t)0u) {
+                --event->nesting[i];
+            }
 
             if (event->nesting[i] == (evtdrv_event_nesting_t)0u) {
                 event->flags &= ~flag;
             }
-		}
-	}
+        }
+    }
 
     TOS_CPU_INT_ENABLE();
 
