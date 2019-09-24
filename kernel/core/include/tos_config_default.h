@@ -1,6 +1,136 @@
 #ifndef _TOS_CONFIG_DEFAULT_H_
 #define  _TOS_CONFIG_DEFAULT_H_
 
+#ifndef TOS_CFG_EVENT_DRIVEN_EN
+#define TOS_CFG_EVENT_DRIVEN_EN     0u
+#endif
+
+#if TOS_CFG_EVENT_DRIVEN_EN > 0u
+
+/////////////////////////////////////////
+// disable round robin
+#ifdef TOS_CFG_ROUND_ROBIN_EN
+#undef  TOS_CFG_ROUND_ROBIN_EN
+#endif
+#define  TOS_CFG_ROUND_ROBIN_EN             0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable event
+#ifdef TOS_CFG_EVENT_EN
+#undef  TOS_CFG_EVENT_EN
+#endif
+#define TOS_CFG_EVENT_EN                    0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable mutex
+#ifdef TOS_CFG_MUTEX_EN
+#undef  TOS_CFG_MUTEX_EN
+#endif
+#define  TOS_CFG_MUTEX_EN                   0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable queue
+#ifdef TOS_CFG_QUEUE_EN
+#undef  TOS_CFG_QUEUE_EN
+#endif
+#define TOS_CFG_QUEUE_EN                    0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable semaphore
+#ifdef TOS_CFG_SEM_EN
+#undef  TOS_CFG_SEM_EN
+#endif
+#define TOS_CFG_SEM_EN                      0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable the "traditional" timer
+#ifdef TOS_CFG_TIMER_EN
+#undef  TOS_CFG_TIMER_EN
+#endif
+#define TOS_CFG_TIMER_EN                    0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable stack draught depth detact
+#ifdef TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN
+#undef  TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN
+#endif
+#define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// enable mmheap
+#ifndef TOS_CFG_MMHEAP_EN
+#define TOS_CFG_MMHEAP_EN                       1u
+#endif
+
+#if     (TOS_CFG_MMHEAP_EN > 0u) && !defined(TOS_CFG_MMHEAP_POOL_SIZE)
+#define  TOS_CFG_MMHEAP_POOL_SIZE               0x1000
+#endif
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable default
+#ifndef TOS_CFG_MMBLK_EN
+#define TOS_CFG_MMBLK_EN                       0u
+#endif
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable default
+#ifndef TOS_CFG_FAULT_BACKTRACE_EN
+#define  TOS_CFG_FAULT_BACKTRACE_EN         0u
+#endif
+/////////////////////////////////////////
+
+/////////////////////////////////////////
+#ifndef TOS_CFG_CPU_SYSTICK_PRIO
+#define  TOS_CFG_CPU_SYSTICK_PRIO               0u
+#endif
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+// disable default
+#ifndef TOS_CFG_PWR_MGR_EN
+#define TOS_CFG_PWR_MGR_EN                  0u
+#endif
+
+#ifndef TOS_CFG_TICKLESS_EN
+#define TOS_CFG_TICKLESS_EN                 0u
+#endif
+
+
+/////////////////////////////////////////
+// we donot really need these, it's a compromise to the compiler.
+#ifndef TOS_CFG_TASK_PRIO_MAX
+#define  TOS_CFG_TASK_PRIO_MAX                  8u
+#endif
+
+#ifndef TOS_CFG_IDLE_TASK_STK_SIZE
+#define  TOS_CFG_IDLE_TASK_STK_SIZE         128u
+#endif
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+
+#else /* TOS_CFG_EVENT_DRIVEN_EN */
+
 #ifndef TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN
 #define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  0u
 #endif
@@ -13,10 +143,6 @@
 #define  TOS_CFG_EVENT_EN                   0u
 #endif
 
-#ifndef TOS_CFG_MMHEAP_EN
-#define  TOS_CFG_MMHEAP_EN                  0u
-#endif
-
 #ifndef TOS_CFG_MUTEX_EN
 #define  TOS_CFG_MUTEX_EN                   0u
 #endif
@@ -27,6 +153,10 @@
 
 #ifndef TOS_CFG_SEM_EN
 #define  TOS_CFG_SEM_EN                     0u
+#endif
+
+#ifndef TOS_CFG_MMHEAP_EN
+#define  TOS_CFG_MMHEAP_EN                  0u
 #endif
 
 #if     (TOS_CFG_QUEUE_EN > 0u) && !defined(TOS_CFG_MSG_EN)
@@ -76,7 +206,7 @@
 #endif
 
 #ifndef TOS_CFG_TASK_PRIO_MAX
-#define  TOS_CFG_TASK_PRIO_MAX                  10u
+#define  TOS_CFG_TASK_PRIO_MAX                  8u
 #endif
 
 #ifndef TOS_CFG_MMBLK_EN
@@ -109,6 +239,8 @@
 #ifndef TOS_CFG_FAULT_BACKTRACE_EN
 #define  TOS_CFG_FAULT_BACKTRACE_EN         0u
 #endif
+
+#endif /* TOS_CFG_EVENT_DRIVEN_EN */
 
 #endif /* _TOS_CONFIG_DEFAULT_H_ */
 

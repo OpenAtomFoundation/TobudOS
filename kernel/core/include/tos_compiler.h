@@ -40,6 +40,7 @@
 #define __PURE__            __attribute__((__pure__))
 #define __CONST__           __attribute__((__const__))
 #define __NO_RETURN__       __attribute__((__noreturn__))
+#define __WEAK__            __attribute__((weak))
 
 /*------------------ ARM Compiler V6 -------------------*/
 #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
@@ -61,7 +62,7 @@
 #define __CONST__           __attribute__((__const__))
 #define __NO_RETURN__       __attribute__((__noreturn__))
 #define __NAKED__           __attribute__((naked))
-
+#define __WEAK__            __attribute__((weak))
 /*------------------ ICC Compiler ----------------------*/
 #elif defined(__ICCARM__)
 
@@ -82,6 +83,8 @@
 #define __CONST__
 #define __NO_RETURN__
 #define __NAKED__
+#define __WEAK__            __weak
+
 
 /*------------------ GNU Compiler ----------------------*/
 #elif defined(__GNUC__)
@@ -103,6 +106,7 @@
 #define __CONST__           __attribute__((__const__))
 #define __NO_RETURN__       __attribute__((__noreturn__))
 #define __NAKED__           __attribute__((naked))
+#define __WEAK__            __attribute__((weak))
 
 #endif
 

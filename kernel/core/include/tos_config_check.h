@@ -1,6 +1,18 @@
 #ifndef _TOS_CONFIG_CHECK_H_
 #define  _TOS_CONFIG_CHECK_H_
 
+#if TOS_CFG_EVENT_DRIVEN_EN > 0u
+
+#if     TOS_CFG_MMHEAP_EN == 0u
+#error  "INVALID config, must enable tos_mmheap to use event-driven"
+#endif
+
+#if     TOS_CFG_TICKLESS_EN == 1u
+#error  "INVALID config, tickless not supported in event-driven yet"
+#endif
+
+#else /* TOS_CFG_EVENT_DRIVEN_EN */
+
 #if     TOS_CFG_TASK_PRIO_MAX < 8u
 #error  "INVALID config, TOS_CFG_TASK_PRIO_MAX must be >= 8"
 #endif
@@ -57,5 +69,7 @@
 #error  "INVALID config, TOS_CFG_CPU_DATA_SIZE"
 #endif
 
-#endif /* _TOS_CHECK_CONFIG_H_ */
+#endif /* TOS_CFG_EVENT_DRIVEN_EN */
+
+#endif /* _TOS_CONFIG_CHECK_H_ */
 
