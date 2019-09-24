@@ -14,7 +14,7 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     // then mtime_lo == 0 and mtime_hi = 1 at next read
     // the result will be  0x1FFFFFFFF, not 0x100000000
     uint64_t mtime = 0;
-    while(1) {
+    while (1) {
         uint32_t mtime_hi = *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIME + 4);
         uint32_t mtime_lo = *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIME + 0);
         uint32_t mtime_hn = *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIME + 4);

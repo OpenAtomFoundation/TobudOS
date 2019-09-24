@@ -93,13 +93,11 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
 
     regs = (cpu_context_t*) sp;
 
-#if 1
     for(int i=0; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i++) {
         #define _V(v) ((unsigned int)((v/10) << 4 | (v % 10)))
         *(sp + i) = (_V(i) << 24) | (_V(i) << 16) | (_V(i) << 8) | _V(i);
         #undef _V
     }
-#endif
 
     regs->a0        = (cpu_data_t)arg;                          // a0: argument
     regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
@@ -112,14 +110,14 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
 
 void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
 {
-    while(1) {
+    while (1) {
         // TODO
     }
 }
 
 void SysTick_IRQHandler() {
     port_systick_config(k_cpu_cycle_per_tick);
-    if(tos_knl_is_running()) {
+    if (tos_knl_is_running()) {
         tos_knl_irq_enter();
         tos_tick_handler();
         tos_knl_irq_leave();
@@ -128,23 +126,11 @@ void SysTick_IRQHandler() {
 
 void cpu_irq_entry(cpu_data_t irq, cpu_context_t *regs)
 {
-#if 1
-    if(irq != 7) {
+    if (irq != 7) {
         return;
     }
 
     SysTick_IRQHandler();
-#else
-    void (*irq_handler)();
-    extern void (*handler_vector_table[])();
-
-    irq_handler = handler_vector_table[irq];
-    if((*irq_handler) == 0) {
-        return;
-    }
-
-    (*irq_handler)();
-#endif
 }
 
 __API__ uint32_t tos_cpu_clz(uint32_t val)
