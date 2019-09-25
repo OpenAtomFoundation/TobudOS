@@ -127,8 +127,6 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/common/include}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i/gcc}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/GD32VF103_Firmware_Library/RISCV/drivers}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/GD32VF103_Firmware_Library/GD32VF103_standard_peripheral/Include}&quot;"/>
@@ -140,6 +138,10 @@
                                     <listOptionValue builtIn="false" value=".././"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/kernel/core/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/bumblebee}&quot;"/>
                                     								
                                 </option>
                                 								

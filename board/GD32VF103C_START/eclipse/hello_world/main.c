@@ -61,7 +61,6 @@ void main(void) {
     gpio_bit_reset(GPIOA, GPIO_PIN_7);
 	tos_knl_init();
 
-    eclic_irq_enable(CLIC_INT_TMR, 0, 0);
 
 	tos_task_create(&k_task_task1, "task1", task1, NULL, 3, k_task1_stk, TASK_SIZE, 0);
 	//tos_task_create(&k_task_task2, "task2", task2, NULL, 3, k_task2_stk, TASK_SIZE, 0);

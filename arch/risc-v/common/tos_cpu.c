@@ -1,6 +1,6 @@
 #include <tos.h>
 #include <riscv_encoding.h>
-
+#include <riscv_port.h>
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
@@ -11,6 +11,8 @@ __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 __KERNEL__ void cpu_init(void) {
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
     cpu_systick_init(k_cpu_cycle_per_tick);
+
+    riscv_cpu_init();
 }
 
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)
@@ -99,7 +101,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
         #undef _V
     }
 
-    cpu_data_t gp;
+    cpu_data_t gp = regs->gp;
     asm("mv %0, gp"::"r"(gp));
 
     regs->gp        = (cpu_data_t)gp;                           // gp: global pointer

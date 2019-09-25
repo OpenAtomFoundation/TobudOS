@@ -1,18 +1,8 @@
 #include "riscv_encoding.h"
+#include "riscv_port.h"
 #include <tos.h>
 
-#if 0
-#define CLINT_CTRL_ADDR 0x2000000
-#define CLINT_MSIP      0x0000
-#define CLINT_MTIMECMP  0x4000
-#define CLINT_MTIME     0xBFF8
-#else
-#include "gd32vf103.h"
-#define CLINT_CTRL_ADDR 0xD1000000
-#define CLINT_MSIP      0x0FFC
-#define CLINT_MTIMECMP  0x0008
-#define CLINT_MTIME     0x0000
-#endif
+//#include "gd32vf103.h"
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {
@@ -43,8 +33,6 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF;
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 4) = 0xFFFFFFFF & (mtimecmp >> 32);
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF & (mtimecmp >>  0);
-
-
 }
 
 __PORT__ void port_systick_priority_set(uint32_t prio)

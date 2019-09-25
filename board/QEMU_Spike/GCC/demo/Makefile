@@ -41,6 +41,7 @@ KERNEL_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/risc-v/rv32i/gcc/*.c} \
+        ${wildcard $(TOP_DIR)/arch/risc-v/spike/gcc/*.c} \
         ${wildcard $(TOP_DIR)/arch/risc-v/common/*.c}
         C_SOURCES += $(ARCH_SRC)
 
@@ -108,6 +109,7 @@ KERNEL_INC = \
         -I $(TOP_DIR)/kernel/hal/include \
         -I $(TOP_DIR)/arch/risc-v/common/include \
         -I $(TOP_DIR)/arch/risc-v/rv32i/gcc \
+        -I $(TOP_DIR)/arch/risc-v/spike/gcc \
 		-I $(TOP_DIR)/platform/vendor_bsp/gd/GD32VF103_Firmware_Library/RISCV/drivers \
         -I $(TOP_DIR)/board/QEMU_Spike/TOS-CONFIG
         C_INCLUDES += $(KERNEL_INC)

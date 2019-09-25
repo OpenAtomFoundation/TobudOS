@@ -6,9 +6,6 @@
     .globl _start
     .type _start,@function
 _start:
-    lui s0, 0x20000
-    lw  a0, 148(s0)
-
     csrc mstatus, MSTATUS_MIE
     csrw mie, 0
 
