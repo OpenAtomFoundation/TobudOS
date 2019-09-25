@@ -101,8 +101,8 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
         #undef _V
     }
 
-    cpu_data_t gp = regs->gp;
-    asm("mv %0, gp"::"r"(gp));
+    cpu_data_t gp = 0;
+    __ASM__ __VOLATILE__ ("mv %0, gp":"=r"(gp));
 
     regs->gp        = (cpu_data_t)gp;                           // gp: global pointer
     regs->a0        = (cpu_data_t)arg;                          // a0: argument
