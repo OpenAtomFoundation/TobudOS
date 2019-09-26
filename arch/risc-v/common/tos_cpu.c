@@ -12,7 +12,7 @@ __KERNEL__ void cpu_init(void) {
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
     cpu_systick_init(k_cpu_cycle_per_tick);
 
-    riscv_cpu_init();
+    port_cpu_init();
 }
 
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)

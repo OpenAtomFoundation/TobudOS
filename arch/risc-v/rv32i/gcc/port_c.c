@@ -1,6 +1,6 @@
+#include <tos.h>
 #include "riscv_encoding.h"
 #include "riscv_port.h"
-#include <tos.h>
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {
@@ -31,9 +31,4 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF;
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 4) = 0xFFFFFFFF & (mtimecmp >> 32);
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF & (mtimecmp >>  0);
-}
-
-__PORT__ void port_systick_priority_set(uint32_t prio)
-{
-
 }

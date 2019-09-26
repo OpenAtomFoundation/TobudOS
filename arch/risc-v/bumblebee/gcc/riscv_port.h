@@ -24,6 +24,8 @@
 #define CLINT_MTIMECMP  0x0008
 #define CLINT_MTIME     0x0000
 
-void riscv_cpu_init();
+void port_cpu_init();
+
+void port_systick_priority_set(uint32_t priority);
 
 #endif // _RISCV_PORT_H_

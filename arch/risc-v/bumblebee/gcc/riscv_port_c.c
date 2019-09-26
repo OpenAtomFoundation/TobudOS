@@ -76,8 +76,8 @@ static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
 
 
     uint8_t pad   = ~0;
-    pad         >>= (8 - cicbits);
-    pad         <<= (8 - cicbits);
+    pad         <<= cicbits;
+    pad         >>= cicbits;
 
 
     uint8_t intctrl_val = eclic_get_intctrl(CLIC_INT_TMR);
@@ -90,12 +90,14 @@ static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
     eclic_set_intctrl(CLIC_INT_TMR, intctrl_val);
 }
 
-void riscv_cpu_init() {
+__PORT__ void port_cpu_init() {
 
     eclic_enable_interrupt(CLIC_INT_TMR);
 
     eclic_set_irq_level(CLIC_INT_TMR, 0);
 
-    eclic_set_irq_priority(CLIC_INT_TMR, 0);
+}
 
+__PORT__ void port_systick_priority_set(uint32_t priority) {
+    eclic_set_irq_priority(CLIC_INT_TMR, priority);
 }
