@@ -2,8 +2,6 @@
 #include "riscv_port.h"
 #include <tos.h>
 
-//#include "gd32vf103.h"
-
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {
 
@@ -37,5 +35,5 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 
 __PORT__ void port_systick_priority_set(uint32_t prio)
 {
-    //NVIC_SetPriority(SysTick_IRQn, prio);
+
 }

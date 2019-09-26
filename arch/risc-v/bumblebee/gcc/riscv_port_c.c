@@ -1,5 +1,101 @@
-#include "gd32vf103.h"
+#include "tos.h"
+
+#define ECLIC_ADDR_BASE         0xD2000000
+#define CLIC_INT_TMR            0x07
+
+#define ECLIC_CFG_OFFSET        0x00
+#define ECLIC_INFO_OFFSET       0x04
+#define ECLIC_MTH_OFFSET        0x0B
+
+
+#define ECLIC_INT_IP_OFFSET     0x1000
+#define ECLIC_INT_IE_OFFSET     0x1001
+#define ECLIC_INT_ATTR_OFFSET   0x1002
+#define ECLIC_INT_CTRL_OFFSET   0x1003
+
+
+#define ECLIC_CFG_NLBITS_MASK   0x1E
+#define ECLIC_CFG_NLBITS_LSB    1
+
+
+static uint8_t elci_get_clic_int_ctl_bits() {
+    uint32_t bits = *(volatile uint32_t*)(ECLIC_ADDR_BASE+ECLIC_INFO_OFFSET);
+    bits >>= 21;
+    return (uint8_t) bits;
+}
+
+
+static uint8_t elci_get_nlbits() {
+    uint8_t nlbits = *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_CFG_OFFSET);
+    nlbits = (nlbits & ECLIC_CFG_NLBITS_MASK) >> ECLIC_CFG_NLBITS_LSB;
+
+    uint8_t cicbits = elci_get_clic_int_ctl_bits();
+    if(nlbits > cicbits) {
+        nlbits = cicbits;
+    }
+
+    return nlbits;
+}
+
+static uint8_t eclic_get_intctrl(uint32_t source) {
+    return *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_INT_CTRL_OFFSET+source*4);
+}
+
+static void    eclic_set_intctrl(uint32_t source, uint8_t v) {
+    *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_INT_CTRL_OFFSET+source*4) = v;
+}
+
+
+static void eclic_enable_interrupt(uint32_t source) {
+    *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_INT_IE_OFFSET+source*4) = 1;
+}
+
+static void eclic_set_irq_level(uint32_t source, uint8_t level) {
+    uint8_t nlbits = elci_get_nlbits();
+
+    if (nlbits == 0) {
+        return ;
+    }
+
+    uint8_t intctrl_val = eclic_get_intctrl(CLIC_INT_TMR);
+
+    intctrl_val <<= nlbits;
+    intctrl_val >>= nlbits;
+    intctrl_val  |= (level << (8- nlbits));
+
+    eclic_set_intctrl(CLIC_INT_TMR, intctrl_val);
+}
+
+static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
+    uint8_t nlbits = elci_get_nlbits();
+    uint8_t cicbits= elci_get_clic_int_ctl_bits();
+
+    if (nlbits >= cicbits) {
+        return ;
+    }
+
+
+    uint8_t pad   = ~0;
+    pad         >>= (8 - cicbits);
+    pad         <<= (8 - cicbits);
+
+
+    uint8_t intctrl_val = eclic_get_intctrl(CLIC_INT_TMR);
+
+    intctrl_val >>= (8 - nlbits);
+    intctrl_val <<= (8 - nlbits);
+    intctrl_val  |= (priority << (8 - cicbits));
+    intctrl_val  |= pad;
+
+    eclic_set_intctrl(CLIC_INT_TMR, intctrl_val);
+}
 
 void riscv_cpu_init() {
-    eclic_irq_enable(CLIC_INT_TMR, 0, 0);
+
+    eclic_enable_interrupt(CLIC_INT_TMR);
+
+    eclic_set_irq_level(CLIC_INT_TMR, 0);
+
+    eclic_set_irq_priority(CLIC_INT_TMR, 0);
+
 }

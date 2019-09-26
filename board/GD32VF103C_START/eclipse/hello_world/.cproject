@@ -142,6 +142,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/rv32i}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/bumblebee}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/kernel/evtdrv/include}&quot;"/>
                                     								
                                 </option>
                                 								
