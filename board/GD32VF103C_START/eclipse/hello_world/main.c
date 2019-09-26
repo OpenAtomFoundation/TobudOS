@@ -13,7 +13,7 @@ k_sem_t sem;
 void task1(void *pdata)
 {
 	int task_cnt1 = 0;
-	while(1) {
+	while (1) {
 	    task_cnt1++;
 	    tos_sem_pend(&sem, ~0U);
 	    gpio_bit_write(GPIOA, GPIO_PIN_7, share % 2);
@@ -23,7 +23,7 @@ void task1(void *pdata)
 void task2(void *pdata)
 {
 	int task_cnt2 = 0;
-	while(1) {
+	while (1) {
 	    task_cnt2--;
 	    share++;
 		tos_task_delay(1000);
@@ -52,7 +52,7 @@ void main(void) {
 	tos_knl_start();
 
 die:
-	while(1) {
+	while (1) {
 		asm("wfi;");
 	}
 }

@@ -33,9 +33,9 @@
 
 #define TOS_CFG_IDLE_TASK_STK_SIZE 512u // 配置TencentOS tiny空闲任务栈大小
 
-#define TOS_CFG_CPU_TICK_PER_SECOND 4000u // 配置TencentOS tiny的tick频率
+#define TOS_CFG_CPU_TICK_PER_SECOND 1000u // 配置TencentOS tiny的tick频率
 
-#define TOS_CFG_CPU_CLOCK 108000000 // 配置TencentOS tiny CPU频率
+#define TOS_CFG_CPU_CLOCK (108000000/4) // 配置TencentOS tiny CPU频率
 
 #define TOS_CFG_TIMER_AS_PROC 1u // 配置是否将TIMER配置成函数模式
 
