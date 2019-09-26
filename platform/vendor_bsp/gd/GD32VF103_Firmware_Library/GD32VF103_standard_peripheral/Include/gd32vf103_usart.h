@@ -2,7 +2,8 @@
     \file    gd32vf103_usart.h
     \brief   definitions for the USART
 
-    \version 2019-6-5, V1.0.0, firmware for GD32VF103
+    \version 2019-06-05, V1.0.0, firmware for GD32VF103
+    \version 2019-09-18, V1.0.1, firmware for GD32VF103
 */
 
 /*
@@ -137,12 +138,12 @@ OF SUCH DAMAGE.
 typedef enum
 {
     /* flags in STAT register */
-    USART_FLAG_CTSF = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 9U),      /*!< CTS change flag */
-    USART_FLAG_LBDF = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 8U),      /*!< LIN break detected flag */
+    USART_FLAG_CTS  = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 9U),      /*!< CTS change flag */
+    USART_FLAG_LBD  = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 8U),      /*!< LIN break detected flag */
     USART_FLAG_TBE = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 7U),       /*!< transmit data buffer empty */
     USART_FLAG_TC = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 6U),        /*!< transmission complete */
     USART_FLAG_RBNE = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 5U),      /*!< read data buffer not empty */
-    USART_FLAG_IDLEF = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 4U),     /*!< IDLE frame detected flag */
+    USART_FLAG_IDLE  = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 4U),     /*!< IDLE frame detected flag */
     USART_FLAG_ORERR = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 3U),     /*!< overrun error */
     USART_FLAG_NERR = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 2U),      /*!< noise error flag */
     USART_FLAG_FERR = USART_REGIDX_BIT(USART_STAT_REG_OFFSET, 1U),      /*!< frame error flag */
@@ -364,11 +365,11 @@ void usart_flag_clear(uint32_t usart_periph, usart_flag_enum flag);
 
 /* interrupt functions */
 /* enable USART interrupt */
-void usart_interrupt_enable(uint32_t usart_periph, uint32_t int_flag);
+void usart_interrupt_enable(uint32_t usart_periph, uint32_t interrupt);
 /* disable USART interrupt */
-void usart_interrupt_disable(uint32_t usart_periph, uint32_t int_flag);
+void usart_interrupt_disable(uint32_t usart_periph, uint32_t interrupt);
 /* get USART interrupt and flag status */
 FlagStatus usart_interrupt_flag_get(uint32_t usart_periph, uint32_t int_flag);
 /* clear interrupt flag in STAT register */
-void usart_interrupt_flag_clear(uint32_t usart_periph, uint32_t flag);
+void usart_interrupt_flag_clear(uint32_t usart_periph, uint32_t int_flag);
 #endif /* GD32VF103_USART_H */
