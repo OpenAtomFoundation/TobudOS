@@ -1,10 +1,8 @@
 #include "riscv_encoding.h"
+#include "riscv_port.h"
 #include <tos.h>
 
-#define CLINT_CTRL_ADDR 0x2000000
-#define CLINT_MSIP      0x0000
-#define CLINT_MTIMECMP  0x4000
-#define CLINT_MTIME     0xBFF8
+//#include "gd32vf103.h"
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {

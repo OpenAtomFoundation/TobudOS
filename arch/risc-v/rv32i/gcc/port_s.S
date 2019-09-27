@@ -227,8 +227,10 @@ port_irq_context_switch:
 
 
 .align 2
-.global machine_trap_entry
-machine_trap_entry:
+.global trap_entry
+.global irq_entry
+trap_entry:
+irq_entry:
     SAVE_CONTEXT
 
     csrr    t0,  mepc
@@ -248,8 +250,8 @@ machine_trap_entry:
     call    cpu_trap_entry
     j       restore
 irq:
-    slli    a0, a0, 1
-    srli    a0, a0, 1
+    slli    a0, a0, 16
+    srli    a0, a0, 16
     call    cpu_irq_entry
 restore:
     RESTORE_CONTEXT

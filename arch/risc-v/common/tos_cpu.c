@@ -1,6 +1,6 @@
 #include <tos.h>
 #include <riscv_encoding.h>
-
+#include <riscv_port.h>
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
@@ -11,6 +11,8 @@ __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 __KERNEL__ void cpu_init(void) {
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
     cpu_systick_init(k_cpu_cycle_per_tick);
+
+    riscv_cpu_init();
 }
 
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)
@@ -99,6 +101,10 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
         #undef _V
     }
 
+    cpu_data_t gp = 0;
+    __ASM__ __VOLATILE__ ("mv %0, gp":"=r"(gp));
+
+    regs->gp        = (cpu_data_t)gp;                           // gp: global pointer
     regs->a0        = (cpu_data_t)arg;                          // a0: argument
     regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
     regs->mstatus   = (cpu_data_t)(MSTATUS_MPP | MSTATUS_MPIE); // return to machine mode and enable interrupt
@@ -116,7 +122,7 @@ void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
 }
 
 void SysTick_IRQHandler() {
-    port_systick_config(k_cpu_cycle_per_tick);
+    port_systick_config((uint32_t)k_cpu_cycle_per_tick);
     if (tos_knl_is_running()) {
         tos_knl_irq_enter();
         tos_tick_handler();
