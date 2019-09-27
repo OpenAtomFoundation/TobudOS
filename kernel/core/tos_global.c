@@ -32,7 +32,6 @@ k_mmheap_ctl_t      k_mmheap_ctl;
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 k_timeslice_t       k_robin_default_timeslice       = TOS_CFG_CPU_TICK_PER_SECOND / 10;
-k_robin_state_t     k_robin_state                   = TOS_ROBIN_STATE_DISABLED;
 #endif
 
 #if TOS_CFG_TIMER_EN > 0u

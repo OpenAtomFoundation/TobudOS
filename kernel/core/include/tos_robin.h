@@ -3,11 +3,6 @@
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 
-typedef enum k_robin_state_en {
-    TOS_ROBIN_STATE_ENABLED,
-    TOS_ROBIN_STATE_DISABLED,
-} k_robin_state_t;
-
 /**
  * @brief Set time slice.
  * Set time slice of a task.
@@ -32,7 +27,7 @@ __API__ void    tos_robin_timeslice_set(k_task_t *task, k_timeslice_t timeslice)
  *
  * @return  None
  */
-__API__ void    tos_robin_config(k_robin_state_t robin_state, k_timeslice_t default_timeslice);
+__API__ void    tos_robin_default_timeslice_config(k_timeslice_t default_timeslice);
 
 __KERNEL__ void robin_sched(k_prio_t prio);
 

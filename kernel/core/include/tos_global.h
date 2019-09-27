@@ -49,7 +49,6 @@ extern k_mmheap_ctl_t       k_mmheap_ctl;
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 extern k_timeslice_t        k_robin_default_timeslice;
-extern k_robin_state_t      k_robin_state;
 #endif
 
 #if TOS_CFG_TIMER_EN > 0u
