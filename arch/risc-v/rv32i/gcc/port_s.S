@@ -137,11 +137,6 @@ port_systick_pending_reset:
 .endm
 
 .align 2
-context_switch_return:
-irq_context_return:
-    ret
-
-.align 2
 .type port_sched_start, %function
 port_sched_start:
     // enable timer interrupt
@@ -167,9 +162,7 @@ port_sched_start:
 port_context_switch:
     SAVE_CONTEXT
 
-    // return from port_context_switch as return from a function
-    la      t0,  context_switch_return
-    sw      t0,  0*REGBYTES(sp)
+    sw      ra,  0*REGBYTES(sp)
 
     csrr   t0,  mstatus
     li     t1,  MSTATUS_MPP
@@ -200,9 +193,7 @@ port_context_switch:
 port_irq_context_switch:
     SAVE_CONTEXT
 
-
-    la      t0,  irq_context_return
-    sw      t0,  0*REGBYTES(sp)
+    sw      ra,  0*REGBYTES(sp)
 
     li      t0,  MSTATUS_MPP
     sw     t0,  1*REGBYTES(sp)
