@@ -128,11 +128,11 @@ void SysTick_Handler(void)
 
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
-  if(tos_knl_is_running())					 //OS开始跑了,才执行正常的调度处理
+  if(tos_knl_is_running())
   {
-      tos_knl_irq_enter();					//进入中断
-      tos_tick_handler();       				//调用TencentOS tiny的时钟服务程序               
-      tos_knl_irq_leave();       	 			//触发任务切换软中断
+      tos_knl_irq_enter();
+      tos_tick_handler();             
+      tos_knl_irq_leave();
   }
   /* USER CODE BEGIN SysTick_IRQn 1 */
 

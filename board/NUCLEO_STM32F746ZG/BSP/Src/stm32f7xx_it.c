@@ -187,11 +187,11 @@ void SysTick_Handler(void)
 
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
-  if(tos_knl_is_running())					 //OS?a：o??：1：♂?,2????DD?y3?┷|━?|━???：：??|：∴：a
+  if(tos_knl_is_running())
   {
-      tos_knl_irq_enter();					//??：：??D??
-      tos_tick_handler();       				//|━??：??TencentOS tiny|━?：o?┐?：??∴t??3：?D：＜               
-      tos_knl_irq_leave();       	 			//??♀∴?∴?└：：????D??：：：a?D??
+      tos_knl_irq_enter();
+      tos_tick_handler();             
+      tos_knl_irq_leave();
   }
   /* USER CODE BEGIN SysTick_IRQn 1 */
 

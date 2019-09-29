@@ -73,11 +73,11 @@ typedef struct shadow_device_property_st {
 } shadow_dev_property_t;
 
 /**
- * @brief 设备属性处理回调函数
+ * @brief Define callback when device property change
  *
- * @param pJsonValueBuffer 设备属性值
- * @param valueLength      设备属性值长度
- * @param DeviceProperty   设备属性结构体
+ * @param pJsonValueBuffer property JSON buffer
+ * @param valueLength      property length
+ * @param DeviceProperty   reference to device property
  */
 typedef void (*shadow_property_delta_handler_fn_t)(void *client, const char *json_doc, uint32_t json_doc_len, shadow_dev_property_t *property);
 
@@ -101,12 +101,12 @@ typedef enum qcloud_shadow_request_method_en {
 } qcloud_shadow_req_method_t;
 
 /**
- * @brief 每次文档请求响应的回调函数
+ * @brief Define MQTT shadow callback when request response arrived
  *
- * @param method         文档操作方式
- * @param requestAck     请求响应类型
- * @param pJsonDocument  云端响应返回的文档
- * @param userContext      用户数据
+ * @param method         type of request
+ * @param requestAck     response type 
+ * @param pJsonDocument  JSON document from server
+ * @param userContext    User context
  *
  */
 typedef void (*shadow_requset_handler_fn_t)(void *client, qcloud_shadow_req_method_t method, qcloud_shadow_req_state_t req_state, const char *json_doc, void *context);
