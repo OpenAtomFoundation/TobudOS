@@ -23,6 +23,8 @@
 
 #define TOS_CFG_SEM_EN 1u // 配置TencentOS tiny是否开启信号量模块
 
+#define TOS_CFG_CPU_SYSTICK_PRIO 0xF
+
 #if (TOS_CFG_QUEUE_EN > 0u)
 #define TOS_CFG_MSG_EN 1u
 #else
