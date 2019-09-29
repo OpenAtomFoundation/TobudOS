@@ -2,7 +2,8 @@
     \file  gd32vf103_fmc.h
     \brief definitions for the FMC
 
-    \version 2019-6-5, V1.0.0, firmware for GD32VF103
+    \version 2019-06-05, V1.0.0, firmware for GD32VF103
+    \version 2019-09-18, V1.0.1, firmware for GD32VF103
 */
 
 /*
@@ -43,11 +44,11 @@ OF SUCH DAMAGE.
 
 /* registers definitions */
 #define FMC_WS                     REG32((FMC) + 0x00U)            /*!< FMC wait state register */
-#define FMC_KEY0                   REG32((FMC) + 0x04U)            /*!< FMC unlock key register 0 */
+#define FMC_KEY                    REG32((FMC) + 0x04U)            /*!< FMC unlock key register */
 #define FMC_OBKEY                  REG32((FMC) + 0x08U)            /*!< FMC option bytes unlock key register */
-#define FMC_STAT0                  REG32((FMC) + 0x0CU)            /*!< FMC status register 0 */
-#define FMC_CTL0                   REG32((FMC) + 0x10U)            /*!< FMC control register 0 */
-#define FMC_ADDR0                  REG32((FMC) + 0x14U)            /*!< FMC address register 0 */
+#define FMC_STAT                   REG32((FMC) + 0x0CU)            /*!< FMC status register */
+#define FMC_CTL                    REG32((FMC) + 0x10U)            /*!< FMC control register */
+#define FMC_ADDR                   REG32((FMC) + 0x14U)            /*!< FMC address register */
 #define FMC_OBSTAT                 REG32((FMC) + 0x1CU)            /*!< FMC option bytes status register */
 #define FMC_WP                     REG32((FMC) + 0x20U)            /*!< FMC erase/program protection register */
 #define FMC_PID                    REG32((FMC) + 0x100U)           /*!< FMC product ID register */
@@ -63,31 +64,31 @@ OF SUCH DAMAGE.
 /* FMC_WS */
 #define FMC_WS_WSCNT               BITS(0,2)                       /*!< wait state counter */
 
-/* FMC_KEY0 */
-#define FMC_KEY0_KEY               BITS(0,31)                      /*!< FMC_CTL0 unlock key bits */
+/* FMC_KEY */
+#define FMC_KEY_KEY                BITS(0,31)                      /*!< FMC_CTL unlock key bits */
 
 /* FMC_OBKEY */
 #define FMC_OBKEY_OBKEY            BITS(0,31)                      /*!< option bytes unlock key bits */
 
-/* FMC_STAT0 */
-#define FMC_STAT0_BUSY             BIT(0)                          /*!< flash busy flag bit */
-#define FMC_STAT0_PGERR            BIT(2)                          /*!< flash program error flag bit */
-#define FMC_STAT0_WPERR            BIT(4)                          /*!< erase/program protection error flag bit */
-#define FMC_STAT0_ENDF             BIT(5)                          /*!< end of operation flag bit */
+/* FMC_STAT */
+#define FMC_STAT_BUSY              BIT(0)                          /*!< flash busy flag bit */
+#define FMC_STAT_PGERR             BIT(2)                          /*!< flash program error flag bit */
+#define FMC_STAT_WPERR             BIT(4)                          /*!< erase/program protection error flag bit */
+#define FMC_STAT_ENDF              BIT(5)                          /*!< end of operation flag bit */
 
-/* FMC_CTL0 */
-#define FMC_CTL0_PG                BIT(0)                          /*!< main flash program for bank0 command bit */
-#define FMC_CTL0_PER               BIT(1)                          /*!< main flash page erase for bank0 command bit */
-#define FMC_CTL0_MER               BIT(2)                          /*!< main flash mass erase for bank0 command bit */
-#define FMC_CTL0_OBPG              BIT(4)                          /*!< option bytes program command bit */
-#define FMC_CTL0_OBER              BIT(5)                          /*!< option bytes erase command bit */
-#define FMC_CTL0_START             BIT(6)                          /*!< send erase command to FMC bit */
-#define FMC_CTL0_LK                BIT(7)                          /*!< FMC_CTL0 lock bit */
-#define FMC_CTL0_OBWEN             BIT(9)                          /*!< option bytes erase/program enable bit */
-#define FMC_CTL0_ERRIE             BIT(10)                         /*!< error interrupt enable bit */
-#define FMC_CTL0_ENDIE             BIT(12)                         /*!< end of operation interrupt enable bit */
+/* FMC_CTL */
+#define FMC_CTL_PG                 BIT(0)                          /*!< main flash program command bit */
+#define FMC_CTL_PER                BIT(1)                          /*!< main flash page erase command bit */
+#define FMC_CTL_MER                BIT(2)                          /*!< main flash mass erase command bit */
+#define FMC_CTL_OBPG               BIT(4)                          /*!< option bytes program command bit */
+#define FMC_CTL_OBER               BIT(5)                          /*!< option bytes erase command bit */
+#define FMC_CTL_START              BIT(6)                          /*!< send erase command to FMC bit */
+#define FMC_CTL_LK                 BIT(7)                          /*!< FMC_CTL lock bit */
+#define FMC_CTL_OBWEN              BIT(9)                          /*!< option bytes erase/program enable bit */
+#define FMC_CTL_ERRIE              BIT(10)                         /*!< error interrupt enable bit */
+#define FMC_CTL_ENDIE              BIT(12)                         /*!< end of operation interrupt enable bit */
 
-/* FMC_ADDR0 */
+/* FMC_ADDR */
 #define FMC_ADDR0_ADDR             BITS(0,31)                      /*!< Flash erase/program command address bits */
 
 /* FMC_OBSTAT */
@@ -117,8 +118,8 @@ OF SUCH DAMAGE.
 #define FMC_REG_OFFSET_GET(flag)                    ((uint32_t)(flag) >> 12)
 
 /* configuration register */
-#define FMC_STAT0_REG_OFFSET       0x0CU                          /*!< status register 0 offset */
-#define FMC_CTL0_REG_OFFSET        0x10U                          /*!< control register 0 offset */
+#define FMC_STAT_REG_OFFSET        0x0CU                          /*!< status register offset */
+#define FMC_CTL_REG_OFFSET         0x10U                          /*!< control register offset */
 #define FMC_OBSTAT_REG_OFFSET      0x1CU                          /*!< option byte status register offset */
 
 /* fmc state */
@@ -134,26 +135,26 @@ typedef enum
 /* FMC interrupt enable */
 typedef enum
 {
-    FMC_INT_END     = FMC_REGIDX_BIT(FMC_CTL0_REG_OFFSET, 12U),            /*!< enable FMC end of program interrupt */
-    FMC_INT_ERR     = FMC_REGIDX_BIT(FMC_CTL0_REG_OFFSET, 10U),            /*!< enable FMC error interrupt */
+    FMC_INT_END     = FMC_REGIDX_BIT(FMC_CTL_REG_OFFSET, 12U),            /*!< enable FMC end of program interrupt */
+    FMC_INT_ERR     = FMC_REGIDX_BIT(FMC_CTL_REG_OFFSET, 10U),            /*!< enable FMC error interrupt */
 }fmc_int_enum;
 
 /* FMC flags */
 typedef enum
 {
-    FMC_FLAG_BUSY   = FMC_REGIDX_BIT(FMC_STAT0_REG_OFFSET, 0U),                  /*!< FMC busy flag */
-    FMC_FLAG_PGERR  = FMC_REGIDX_BIT(FMC_STAT0_REG_OFFSET, 2U),                  /*!< FMC operation error flag bit */
-    FMC_FLAG_WPERR  = FMC_REGIDX_BIT(FMC_STAT0_REG_OFFSET, 4U),                  /*!< FMC erase/program protection error flag bit */
-    FMC_FLAG_END    = FMC_REGIDX_BIT(FMC_STAT0_REG_OFFSET, 5U),                  /*!< FMC end of operation flag bit */
-    FMC_FLAG_OBERR  = FMC_REGIDX_BIT(FMC_OBSTAT_REG_OFFSET, 0U),                 /*!< FMC option bytes read error flag */
+    FMC_FLAG_BUSY   = FMC_REGIDX_BIT(FMC_STAT_REG_OFFSET, 0U),                  /*!< FMC busy flag */
+    FMC_FLAG_PGERR  = FMC_REGIDX_BIT(FMC_STAT_REG_OFFSET, 2U),                  /*!< FMC operation error flag bit */
+    FMC_FLAG_WPERR  = FMC_REGIDX_BIT(FMC_STAT_REG_OFFSET, 4U),                  /*!< FMC erase/program protection error flag bit */
+    FMC_FLAG_END    = FMC_REGIDX_BIT(FMC_STAT_REG_OFFSET, 5U),                  /*!< FMC end of operation flag bit */
+    FMC_FLAG_OBERR  = FMC_REGIDX_BIT(FMC_OBSTAT_REG_OFFSET, 0U),                /*!< FMC option bytes read error flag */
 }fmc_flag_enum;
 
 /* FMC interrupt flags */
 typedef enum
 {
-    FMC_INT_FLAG_PGERR  = FMC_REGIDX_BITS(FMC_STAT0_REG_OFFSET, 2U, 10U),  /*!< FMC operation error interrupt flag bit */
-    FMC_INT_FLAG_WPERR  = FMC_REGIDX_BITS(FMC_STAT0_REG_OFFSET, 4U, 10U),  /*!< FMC erase/program protection error interrupt flag bit */
-    FMC_INT_FLAG_END    = FMC_REGIDX_BITS(FMC_STAT0_REG_OFFSET, 5U, 12U),  /*!< FMC end of operation interrupt flag bit */
+    FMC_INT_FLAG_PGERR  = FMC_REGIDX_BITS(FMC_STAT_REG_OFFSET, 2U, 10U),  /*!< FMC operation error interrupt flag bit */
+    FMC_INT_FLAG_WPERR  = FMC_REGIDX_BITS(FMC_STAT_REG_OFFSET, 4U, 10U),  /*!< FMC erase/program protection error interrupt flag bit */
+    FMC_INT_FLAG_END    = FMC_REGIDX_BITS(FMC_STAT_REG_OFFSET, 5U, 12U),  /*!< FMC end of operation interrupt flag bit */
 }fmc_interrupt_flag_enum;
 
 /* unlock key */
@@ -273,21 +274,21 @@ void ob_unlock(void);
 void ob_lock(void);
 /* erase the FMC option byte */
 fmc_state_enum ob_erase(void);
-/* enable write protect */
+/* enable write protection */
 fmc_state_enum ob_write_protection_enable(uint32_t ob_wp);
-/* configure the option byte security protection */
+/* configure security protection */
 fmc_state_enum ob_security_protection_config(uint8_t ob_spc);
-/* write the FMC option byte */
+/* program the FMC user option byte */
 fmc_state_enum ob_user_write(uint8_t ob_fwdgt, uint8_t ob_deepsleep, uint8_t ob_stdby, uint8_t ob_boot);
-/* program option bytes data */
+/* program the FMC data option byte */
 fmc_state_enum ob_data_program(uint32_t address, uint8_t data);
-/* get the FMC option byte user */
+/* get OB_USER in register FMC_OBSTAT */
 uint8_t ob_user_get(void);
 /* get OB_DATA in register FMC_OBSTAT */
 uint16_t ob_data_get(void);
 /* get the FMC option byte write protection */
 uint32_t ob_write_protection_get(void);
-/* get FMC option byte security protection code value */
+/* get FMC option byte security protection state */
 FlagStatus ob_spc_get(void);
 
 /* FMC interrupts and flags management functions */

@@ -2,7 +2,7 @@
     \file  gd32vf103_timer.c
     \brief TIMER driver
     
-    \version 2019-6-5, V1.0.0, firmware for GD32VF103
+    \version 2019-06-05, V1.0.1, firmware for GD32VF103
 */
 
 /*
@@ -40,7 +40,7 @@ OF SUCH DAMAGE.
 
 /*!
     \brief      deinit a timer
-    \param[in]  timer_periph: TIMERx(x=0..13)
+    \param[in]  timer_periph: TIMERx(x=0..6)
     \param[out] none
     \retval     none
 */
@@ -166,7 +166,7 @@ void timer_enable(uint32_t timer_periph)
 
 /*!
     \brief      disable a timer
-    \param[in]  timer_periph: TIMERx(x=0..13)
+    \param[in]  timer_periph: TIMERx(x=0..6)
     \param[out] none
     \retval     none
 */
@@ -383,6 +383,7 @@ void timer_update_source_config(uint32_t timer_periph, uint32_t update)
         /* illegal parameters */        
     }
 }
+
 
 /*!
     \brief      enable the TIMER DMA
@@ -979,7 +980,7 @@ void timer_channel_output_fast_config(uint32_t timer_periph, uint16_t channel, u
     \param[in]  channel:
                 only one parameter can be selected which is shown as below:
       \arg        TIMER_CH_0: TIMER channel 0(TIMERx(x=0..4))
-      \arg        TIMER_CH_1: TIMER channel 1(TIMERx(x=0..41))
+      \arg        TIMER_CH_1: TIMER channel 1(TIMERx(x=0..4))
       \arg        TIMER_CH_2: TIMER channel 2(TIMERx(x=0..4))
       \arg        TIMER_CH_3: TIMER channel 3(TIMERx(x=0..4))
     \param[in]  occlear: channel output clear function
@@ -1900,7 +1901,7 @@ FlagStatus timer_interrupt_flag_get(uint32_t timer_periph, uint32_t interrupt)
       \arg        TIMER_INT_FLAG_CH2: channel 2 interrupt flag, TIMERx(x=0..4)
       \arg        TIMER_INT_FLAG_CH3: channel 3 interrupt flag, TIMERx(x=0..4)
       \arg        TIMER_INT_FLAG_CMT: channel commutation interrupt flag, TIMERx(x=0) 
-      \arg        TIMER_INT_FLAG_TRG: trigger interrupt flag, TIMERx(x=0)
+      \arg        TIMER_INT_FLAG_TRG: trigger interrupt flag, TIMERx(x=0..4)
       \arg        TIMER_INT_FLAG_BRK: break interrupt flag, TIMERx(x=0)
     \param[out] none
     \retval     none
@@ -1921,7 +1922,7 @@ void timer_interrupt_flag_clear(uint32_t timer_periph, uint32_t interrupt)
       \arg        TIMER_FLAG_CH2: channel 2 flag, TIMERx(x=0..4)
       \arg        TIMER_FLAG_CH3: channel 3 flag, TIMERx(x=0..4)
       \arg        TIMER_FLAG_CMT: channel commutation flag, TIMERx(x=0)
-      \arg        TIMER_FLAG_TRG: trigger flag, TIMERx(x=0) 
+      \arg        TIMER_FLAG_TRG: trigger flag, TIMERx(x=0..4) 
       \arg        TIMER_FLAG_BRK: break flag, TIMERx(x=0)
       \arg        TIMER_FLAG_CH0O: channel 0 overcapture flag, TIMERx(x=0..4)
       \arg        TIMER_FLAG_CH1O: channel 1 overcapture flag, TIMERx(x=0..4)
@@ -1950,7 +1951,7 @@ FlagStatus timer_flag_get(uint32_t timer_periph, uint32_t flag)
       \arg        TIMER_FLAG_CH2: channel 2 flag, TIMERx(x=0..4)
       \arg        TIMER_FLAG_CH3: channel 3 flag, TIMERx(x=0..4)
       \arg        TIMER_FLAG_CMT: channel commutation flag, TIMERx(x=0) 
-      \arg        TIMER_FLAG_TRG: trigger flag, TIMERx(x=0) 
+      \arg        TIMER_FLAG_TRG: trigger flag, TIMERx(x=0..4) 
       \arg        TIMER_FLAG_BRK: break flag, TIMERx(x=0)
       \arg        TIMER_FLAG_CH0O: channel 0 overcapture flag, TIMERx(x=0..4)
       \arg        TIMER_FLAG_CH1O: channel 1 overcapture flag, TIMERx(x=0..4)

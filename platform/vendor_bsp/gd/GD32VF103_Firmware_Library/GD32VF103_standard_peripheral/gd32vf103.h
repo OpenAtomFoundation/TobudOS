@@ -2,7 +2,7 @@
     \file    gd32vf103.h
     \brief   general definitions for GD32VF103
 
-    \version 2019-6-5, V1.0.0, firmware for GD32VF103
+    \version 2019-06-05, V1.0.0, firmware for GD32VF103
 */
 
 /*
@@ -59,7 +59,7 @@ OF SUCH DAMAGE.
    #ifdef GD32VF103R_START
    #define HXTAL_VALUE    ((uint32_t)25000000) /*!< value of the external oscillator in Hz */
    #define HXTAL_VALUE_8M  HXTAL_VALUE
-   #elif defined(GD32VF103V_EVAL) || defined(GD32VF103C_START)
+#elif defined(GD32VF103V_EVAL) || defined(GD32VF103C_START) || defined(GD32VF103T_START)
    #define HXTAL_VALUE    ((uint32_t)8000000) /*!< value of the external oscillator in Hz */
    #define HXTAL_VALUE_25M  HXTAL_VALUE
    #else
