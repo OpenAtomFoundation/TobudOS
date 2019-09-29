@@ -566,7 +566,6 @@ int data_template_light_thread(void)
 
         /* �����������Ϣ��ҵ�����߼�1��� */
         if (is_light_property_changed) {
-            // æœåŠ¡å™¨ä¸‹å‘äº†æŽ§åˆ¶æŒ‡ä»¤ï¼Œæ›´æ”¹äº†è®¾å¤‡çš„çŠ¶æ€
             deal_down_stream_user_logic();
 
             /* ҵ���߼����������Ҫͬ��֪ͨ�����:�豸�����Ѹ��£�ɾ��dseire���� */
