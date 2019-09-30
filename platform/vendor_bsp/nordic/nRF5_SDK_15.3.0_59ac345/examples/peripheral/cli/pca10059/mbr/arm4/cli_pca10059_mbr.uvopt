@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<ProjectOpt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_opt.xsd">
+
+  <SchemaVersion>1.0</SchemaVersion>
+
+  <Header>### uVision Project, (C) Keil Software</Header>
+  <Target>
+    <TargetName>nrf52840_xxaa</TargetName>
+    <ToolsetNumber>0x4</ToolsetNumber>
+    <ToolsetName>ARM-ADS</ToolsetName>
+    <TargetOption>      <OPTFL>
+        <IsCurrentTarget>1</IsCurrentTarget>
+      </OPTFL>      <DebugOpt>
+        <pMon>Segger\JL2CM3.dll</pMon>
+      </DebugOpt>
+  <TargetDriverDllRegistry>
+       <SetRegEntry>
+          <Number>0</Number>
+          <Key>JL2CM3</Key>
+          <Name>-O78 -S0 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(0BB11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC2000 -FN1 -FF0nrf52xxx -FS00 -FL0200000 -FF1nrf52xxx_uicr.flm -FS110001000 -FL11000</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
+          <Key>UL2CM3</Key>
+          <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0nrf52xxx -FS00 -FL0200000)</Name>
+        </SetRegEntry>
+      </TargetDriverDllRegistry>
+    </TargetOption>
+  </Target>  <Target>
+    <TargetName>flash_mbr</TargetName>
+    <ToolsetNumber>0x4</ToolsetNumber>
+    <ToolsetName>ARM-ADS</ToolsetName>
+    <TargetOption>      <DebugOpt>
+        <pMon>Segger\JL2CM3.dll</pMon>
+      </DebugOpt>
+  <TargetDriverDllRegistry>
+       <SetRegEntry>
+          <Number>0</Number>
+          <Key>JL2CM3</Key>
+          <Name>-O78 -S0 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(0BB11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC2000 -FN1 -FF0nrf52xxx_ecb -FS00 -FL0200000 -FF1nrf52xxx_uicr.flm -FS110001000 -FL11000</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
+          <Key>UL2CM3</Key>
+          <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0nrf52xxx -FS00 -FL0200000)</Name>
+        </SetRegEntry>
+      </TargetDriverDllRegistry>
+    </TargetOption>
+  </Target></ProjectOpt>
+
+

@@ -1,0 +1,7 @@
+<!DOCTYPE CrossStudio_Session_File>
+<session>
+  <ARMCrossStudioWindow activeProject="ble_app_ias_c_pca10056_s140" buildConfiguration="Release"/>
+  <Files>
+    <SessionOpenFile codecName="Default" debugPath="../../../main.c" left="0" name="unnamed" path="../../../main.c" selected="1" top="0" useBinaryEdit="0" useTextEdit="1" x="0" y="0"/>
+  </Files>
+</session>

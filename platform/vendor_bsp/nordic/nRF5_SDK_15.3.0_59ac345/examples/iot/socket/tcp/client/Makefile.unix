@@ -1,0 +1,2 @@
+all:
+	gcc -o pcclient main.c

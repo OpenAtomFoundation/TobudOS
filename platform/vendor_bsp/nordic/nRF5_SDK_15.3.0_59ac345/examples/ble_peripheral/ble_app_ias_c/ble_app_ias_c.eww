@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10040\s132\iar\ble_app_ias_c_pca10040_s132.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056\s140\iar\ble_app_ias_c_pca10056_s140.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e\s112\iar\ble_app_ias_c_pca10040e_s112.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e\s112\iar\ble_app_ias_c_pca10056e_s112.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

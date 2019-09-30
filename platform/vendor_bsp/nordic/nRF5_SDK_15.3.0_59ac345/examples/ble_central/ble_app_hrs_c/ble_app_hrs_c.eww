@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056\s140\iar\ble_app_hrs_c_pca10056_s140.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056\s340\iar\ble_app_hrs_c_pca10056_s340.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\s332\iar\ble_app_hrs_c_pca10040_s332.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\s132\iar\ble_app_hrs_c_pca10040_s132.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\ser_s132_spi\iar\ble_app_hrs_c_pca10040_s132_spi.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\ser_s132_hci\iar\ble_app_hrs_c_pca10040_s132_hci.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\ser_s132_uart\iar\ble_app_hrs_c_pca10040_s132_uart.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\ser_s132_spi_5W\iar\ble_app_hrs_c_pca10040_s132_spi_5W.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

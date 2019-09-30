@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056\blank\iar\esb_ptx_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\blank\iar\esb_ptx_pca10040.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e\blank\iar\esb_ptx_pca10056e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e\blank\iar\esb_ptx_pca10040e.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

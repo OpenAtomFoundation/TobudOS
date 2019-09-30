@@ -1,0 +1,18 @@
+# Display the states of some buttons on the device. These are enumerations.
+0,Button A Status,e,PUSHED.NOTPUSHED
+1,Button B Status,e,PUSHED.NOTPUSHED
+2,Button C Status,e,PUSHED.NOTPUSHED
+3,Button D Status,e,PUSHED.NOTPUSHED
+
+# Display information about asserts
+4,Error Line Number,u,1
+5,First Two Letters in File Name,c
+
+# Display the contents of a register in hex
+6,GPIO Register Low,h,1
+7,GPIO Register High,h,1
+
+#Channel statistics about the application channel
+132,RxTotalCh0,u,1
+140,TxTotalCh0,u,1
+148,CollisionsCh0,u,1

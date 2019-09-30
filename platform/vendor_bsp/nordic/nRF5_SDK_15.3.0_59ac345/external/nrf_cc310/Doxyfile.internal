@@ -1,0 +1,25 @@
+@INCLUDE_PATH        = /build/HP-NG7-JOB1/ext/arm_cc310/arm-sw-cc310-1.2.0.1294/doxygen/
+@INCLUDE             = doxygen_cc310.conf
+
+PROJECT_NAME         = "ARM TrustZone CryptoCell 310 TEE API Documentation - INTERNAL"
+PROJECT_LOGO         = "/build/HP-NG7-JOB1/ext/arm_cc310/arm-sw-cc310-1.2.0.1294/doxygen/doxywrapper/ARM_Logo.png"
+HTML_HEADER          = "/build/HP-NG7-JOB1/ext/arm_cc310/arm-sw-cc310-1.2.0.1294/doxygen/doxywrapper/header.html"
+HTML_FOOTER          = "/build/HP-NG7-JOB1/ext/arm_cc310/arm-sw-cc310-1.2.0.1294/doxygen/doxywrapper/footer.html"
+HTML_STYLESHEET      = "/build/HP-NG7-JOB1/ext/arm_cc310/arm-sw-cc310-1.2.0.1294/doxygen/doxywrapper/sasi_doxygen.css"
+
+INPUT                = /build/HP-NG7-JOB1/ext/arm_cc310/arm-sw-cc310-1.2.0.1294/
+RECURSIVE            = YES
+EXTRACT_ALL          = YES
+EXTRACT_PRIVATE      = YES
+EXTRACT_PACKAGE      = YES
+EXTRACT_STATIC       = YES
+INTERNAL_DOCS        = YES
+HAVE_DOT             = YES
+INCLUDE_GRAPH        = YES
+INCLUDED_BY_GRAPH    = YES
+CALL_GRAPH           = YES
+CALLER_GRAPH         = YES
+DIRECTORY_GRAPH      = YES
+GENERATE_ECLIPSEHELP = YES
+ECLIPSE_DOC_ID       = com.nordic.cc310
+OUTPUT_DIRECTORY     = runtime/docs/internal

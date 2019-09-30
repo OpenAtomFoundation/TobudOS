@@ -1,0 +1,1 @@
+Keil license is required in order to build serialization example (code exceeds 32k limit). GCC makefile provided.

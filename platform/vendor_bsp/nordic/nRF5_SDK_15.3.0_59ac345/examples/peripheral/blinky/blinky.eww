@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056\blank\iar\blinky_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\blank\iar\blinky_pca10040.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e\blank\iar\blinky_pca10056e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\mbr\iar\blinky_pca10040_mbr.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e\blank\iar\blinky_pca10040e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056\mbr\iar\blinky_pca10056_mbr.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10059\mbr\iar\blinky_pca10059_mbr.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e\mbr\iar\blinky_pca10056e_mbr.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e\mbr\iar\blinky_pca10040e_mbr.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\s132\iar\blinky_pca10040_s132.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

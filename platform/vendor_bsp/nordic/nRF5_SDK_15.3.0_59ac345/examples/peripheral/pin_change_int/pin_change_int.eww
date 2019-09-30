@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056\blank\iar\pin_change_int_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\blank\iar\pin_change_int_pca10040.ewp</path>
+  </project>  <batchBuild/>
+</workspace>
