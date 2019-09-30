@@ -25,10 +25,10 @@
 #define TOS_CFG_CPU_HRTIMER_EN               0u
 #define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  1u
 
-#ifndef __ARMVFP__
-#define TOS_CFG_CPU_ARM_FPU_EN      1u
+#ifndef ARMVFP
+#define TOS_CFG_CPU_ARM_FPU_EN 0u
 #else
-#define TOS_CFG_CPU_ARM_FPU_EN      0u
+#define TOS_CFG_CPU_ARM_FPU_EN 1u
 #endif
 
 #endif /* _PORT_CONFIG_H_ */
