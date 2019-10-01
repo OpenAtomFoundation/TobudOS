@@ -1,7 +1,7 @@
-#include "gd32vf103.h"
+#include "mcu_init.h"
 #include "tos.h"
 
-#define TASK_SIZE 512
+#define TASK_SIZE 1024
 k_task_t k_task_task1;
 k_task_t k_task_task2;
 uint8_t k_task1_stk[TASK_SIZE];
@@ -14,7 +14,7 @@ void task1(void *pdata)
 {
 	int task_cnt1 = 0;
 	while (1) {
-	    task_cnt1++;
+	    printf("hello world from %s cnt: %d\n", __func__, task_cnt1++);
 	    tos_sem_pend(&sem, ~0U);
 	    gpio_bit_write(GPIOA, GPIO_PIN_7, share % 2);
 	}
@@ -24,20 +24,18 @@ void task2(void *pdata)
 {
 	int task_cnt2 = 0;
 	while (1) {
-	    task_cnt2--;
-	    share++;
-		tos_task_delay(1000);
+        share++;
+        for(int i=0; i<5; i++) {
+            printf("hello world from %s cnt: %08x\n", __func__, task_cnt2--);
+            tos_task_delay(200);
+        }
 		tos_sem_post(&sem);
 	}
 }
 
 
 void main(void) {
-    rcu_periph_clock_enable(RCU_GPIOA);
-
-    gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
-
-    gpio_bit_reset(GPIOA, GPIO_PIN_7);
+    board_init();
 
 	tos_knl_init();
 
@@ -55,4 +53,14 @@ die:
 	while (1) {
 		asm("wfi;");
 	}
+}
+
+
+int _put_char(int ch)
+{
+    usart_data_transmit(USART0, (uint8_t) ch );
+    while (usart_flag_get(USART0, USART_FLAG_TBE)== RESET){
+    }
+
+    return ch;
 }
