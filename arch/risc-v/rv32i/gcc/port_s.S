@@ -15,8 +15,14 @@
 .extern k_curr_task
 .extern k_next_task
 
+#define MSTATUS_MIE         0x00000008
+#define MSTATUS_MPP         0x00001800
 
-#include "riscv_encoding.h"
+#define MIE_MTIE            (1 << 7)
+
+#define MIP_MTIP            (1 << 7)
+
+#define REGBYTES            4
 
 .text
 .align 2
@@ -59,7 +65,6 @@ port_systick_pending_reset:
     csrc mip, t0
     ret
 
-#define REGBYTES 4
 
 .macro SAVE_CONTEXT
     addi   sp, sp, -32*REGBYTES
