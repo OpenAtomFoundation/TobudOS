@@ -95,6 +95,7 @@ int mbedtls_pk_load_file( const char *path, unsigned char **buf, size_t *n )
         ( *buf = mbedtls_calloc( 1, *n + 1 ) ) == NULL )
     {
         fclose( f );
+        mbedtls_free( *buf );
         return( MBEDTLS_ERR_PK_ALLOC_FAILED );
     }
 
