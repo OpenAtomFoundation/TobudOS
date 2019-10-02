@@ -12,47 +12,49 @@ k_sem_t sem;
 
 void task1(void *pdata)
 {
-	int task_cnt1 = 0;
-	while (1) {
-	    printf("hello world from %s cnt: %d\n", __func__, task_cnt1++);
-	    tos_sem_pend(&sem, ~0U);
-	    gpio_bit_write(GPIOA, GPIO_PIN_7, share % 2);
-	}
+    int task_cnt1 = 0;
+    while (1) {
+        printf("hello world from %s cnt: %d\n", __func__, task_cnt1++);
+        tos_sem_pend(&sem, ~0U);
+        gpio_bit_write(GPIOA, GPIO_PIN_7, share % 2);
+    }
 }
 
 void task2(void *pdata)
 {
-	int task_cnt2 = 0;
-	while (1) {
+    int task_cnt2 = 0;
+    while (1) {
         share++;
         for(int i=0; i<5; i++) {
             printf("hello world from %s cnt: %08x\n", __func__, task_cnt2--);
             tos_task_delay(200);
         }
-		tos_sem_post(&sem);
-	}
+        tos_sem_post(&sem);
+    }
 }
 
 
 void main(void) {
     board_init();
 
-	tos_knl_init();
+    usart0_init(115200);
 
-	tos_task_create(&k_task_task1, "task1", task1, NULL, 3, k_task1_stk, TASK_SIZE, 0);
-	tos_task_create(&k_task_task2, "task2", task2, NULL, 3, k_task2_stk, TASK_SIZE, 0);
+    tos_knl_init();
 
-	k_err_t err = tos_sem_create(&sem, 1);
-	if (err != K_ERR_NONE) {
-	    goto die;
-	}
+    tos_task_create(&k_task_task1, "task1", task1, NULL, 3, k_task1_stk, TASK_SIZE, 0);
+    tos_task_create(&k_task_task2, "task2", task2, NULL, 3, k_task2_stk, TASK_SIZE, 0);
 
-	tos_knl_start();
+    k_err_t err = tos_sem_create(&sem, 1);
+    if (err != K_ERR_NONE) {
+        goto die;
+    }
+
+    tos_knl_start();
 
 die:
-	while (1) {
-		asm("wfi;");
-	}
+    while (1) {
+        asm("wfi;");
+    }
 }
 
 
