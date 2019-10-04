@@ -41,17 +41,17 @@ void board_init(void)
   OLED_Init();
   Init_BH1750();
   DHT11_Init();
-  //OLED_ShowCHinese(0,0,0);	
-  //OLED_ShowCHinese(18,0,1);	
-  //OLED_ShowCHinese(38,0,2);
-  //OLED_ShowCHinese(56,0,3);	
-  //OLED_ShowCHinese(74,0,4);	
+  //OLED_ShowChinese(0,0,0);	
+  //OLED_ShowChinese(18,0,1);	
+  //OLED_ShowChinese(38,0,2);
+  //OLED_ShowChinese(56,0,3);	
+  //OLED_ShowChinese(74,0,4);	
   OLED_ShowString(10,0,(uint8_t*)"TencentOS tiny");
-//  OLED_ShowCHinese(1,3,5);
-//  OLED_ShowCHinese(21,3,6);
+//  OLED_ShowChinese(1,3,5);
+//  OLED_ShowChinese(21,3,6);
 //  OLED_ShowString(39,3,(uint8_t*)":25 C");
-//  OLED_ShowCHinese(1,6,7);
-//  OLED_ShowCHinese(21,6,8);    
+//  OLED_ShowChinese(1,6,7);
+//  OLED_ShowChinese(21,6,8);    
 //  OLED_ShowString(39,6,(uint8_t*)":88 RH%");
 }
 
