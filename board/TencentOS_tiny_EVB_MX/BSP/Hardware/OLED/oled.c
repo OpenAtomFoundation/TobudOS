@@ -179,8 +179,10 @@ void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size)
 	{
 		OLED_Set_Pos(x,y);	
 		for(i=0;i<8;i++)
+		{
 			OLED_WR_Byte(F8X16[c*16+i],OLED_DATA);
-			OLED_Set_Pos(x,y+1);
+		}
+		OLED_Set_Pos(x,y+1);
 		for(i=0;i<8;i++)
 			OLED_WR_Byte(F8X16[c*16+i+8],OLED_DATA);
 	}
