@@ -18,6 +18,8 @@
 #ifndef _PORT_H_
 #define _PORT_H_
 
+#ifndef __ASSEMBLER__
+
 __PORT__ void       port_int_disable(void);
 
 __PORT__ void       port_int_enable(void);
@@ -68,5 +70,10 @@ __PORT__ void       HardFault_Handler(void);
 
 __PORT__ void       port_fault_diagnosis(void);
 #endif
+
+#endif /* __ASSEMBLER__ */
+
+
+#define REGBYTES    4
 
 #endif /* _PORT_H_ */

@@ -53,7 +53,8 @@ HAL_DRIVER_SRC =  \
 ASM_SOURCES = 
 
 ASM_SOURCES_S =  \
-$(TOP_DIR)/arch/risc-v/rv32i/gcc/port_s.S	\
+$(TOP_DIR)/arch/risc-v/rv32i/gcc/port_s.S		\
+$(TOP_DIR)/arch/risc-v/spike/gcc/riscv_port_s.S	\
 start.S
 
 
