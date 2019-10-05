@@ -5,7 +5,6 @@
 
 .extern k_curr_task
 .extern k_next_task
-.extern k_task_irq_switch_flag
 
 .align 2
 irq_entry:
@@ -55,25 +54,33 @@ irq_entry:
     csrr    a0,  mcause
     mv      a1,  sp
 
-    slli    a0,  a0, 16
-    srli    a0,  a0, 16
+    // the bumblebee mstatus register is different
+    // name         bit         detail
+    // INTERRUPT    31          0: exception or nmi, 1 irq
+    // MINHV        30          reading irq vector table
+    // MPP          29:28       == mstatus.MPP
+    // MPIE         27          == mstatus.MPIE
+    // Reserved     26:24       0
+    // MPIL         23:16       previous interrupt level
+    // Reserved     15:12       0
+    // EXCCODE      11:0        exception code
+    slli    a0,  a0, 20
+    srli    a0,  a0, 20
     call    cpu_irq_entry
 
-    la      t0,  k_task_irq_switch_flag
-    lw      t1,  (t0)
-    beqz    t1,  irq_restore
-    sw      zero,(t0)
+    la      t0,  k_curr_task
+    la      t1,  k_next_task
+
+    beq     t0,  t1, irq_restore
 
     // save sp to k_curr_task.sp
     la      t0, k_curr_task         // t0 = &k_curr_task
-    lw      t1, (t0)
-    sw      sp, (t1)
+    lw      t2, (t0)                // t2 =  k_curr_task->sp
+    sw      sp, (t2)                // k_curr_task->sp = sp
 
     // switch task
-    // k_curr_task = k_next_task
-    la      t1, k_next_task         // t1 = &k_next_task
-    lw      t1, (t1)                // t1 = k_next_task
-    sw      t1, (t0)
+    lw      t1, (t1)                // t1 =  k_next_task
+    sw      t1, (t0)                // k_curr_task = k_next_task
 
     // load new task sp
     lw      sp, (t1)

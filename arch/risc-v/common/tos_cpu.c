@@ -32,7 +32,7 @@ __KERNEL__ void cpu_context_switch(void)
 
 __KERNEL__ void cpu_irq_context_switch(void)
 {
-    port_irq_context_switch();
+    // DO NOTHING
 }
 
 __KERNEL__ void cpu_sched_start(void)
