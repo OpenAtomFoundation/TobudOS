@@ -122,7 +122,7 @@ irq_restore:
     mret
 
 
-.align 2
+.align 6
 trap_entry:
     addi   sp,  sp, -32*REGBYTES
     sw     x1,  2*REGBYTES(sp)
