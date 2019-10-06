@@ -1,40 +1,46 @@
 #ifndef _TOS_CPU_H_
 #define _TOS_CPU_H_
 
-
 typedef struct cpu_context_st {
+    union { cpu_data_t  s0, x8,  fp; };
+    union { cpu_data_t  s1, x9;  };
+    union { cpu_data_t  s2, x18; };
+    union { cpu_data_t  s3, x19; };
+    union { cpu_data_t  s4, x20; };
+    union { cpu_data_t  s5, x21; };
+    union { cpu_data_t  s6, x22; };
+    union { cpu_data_t  s7, x23; };
+    union { cpu_data_t  s8, x24; };
+    union { cpu_data_t  s9, x25; };
+    union { cpu_data_t  s10,x26; };
+    union { cpu_data_t  s11,x27; };
+
+    // caller save
+    union { cpu_data_t  ra, x1;  };
+
+    union { cpu_data_t  gp, x3;  };
+    union { cpu_data_t  tp, x4;  };
+
+    union { cpu_data_t  t0, x5;  };
+    union { cpu_data_t  t1, x6;  };
+    union { cpu_data_t  t2, x7;  };
+    union { cpu_data_t  t3, x28; };
+    union { cpu_data_t  t4, x29; };
+    union { cpu_data_t  t5, x30; };
+    union { cpu_data_t  t6, x31; };
+
+    union { cpu_data_t  a0, x10; };
+    union { cpu_data_t  a1, x11; };
+
+    union { cpu_data_t  a2, x12; };
+    union { cpu_data_t  a3, x13; };
+    union { cpu_data_t  a4, x14; };
+    union { cpu_data_t  a5, x15; };
+    union { cpu_data_t  a6, x16; };
+    union { cpu_data_t  a7, x17; };
+
     cpu_data_t          epc;
     cpu_data_t          mstatus;
-    union { cpu_data_t  x1,  ra; };
-    union { cpu_data_t  x3,  gp; };
-    union { cpu_data_t  x4,  tp; };
-    union { cpu_data_t  x5,  t0; };
-    union { cpu_data_t  x6,  t1; };
-    union { cpu_data_t  x7,  t2; };
-    union { cpu_data_t  x8,  s0, fp; };
-    union { cpu_data_t  x9,  s1; };
-    union { cpu_data_t x10,  a0; };
-    union { cpu_data_t x11,  a1; };
-    union { cpu_data_t x12,  a2; };
-    union { cpu_data_t x13,  a3; };
-    union { cpu_data_t x14,  a4; };
-    union { cpu_data_t x15,  a5; };
-    union { cpu_data_t x16,  a6; };
-    union { cpu_data_t x17,  a7; };
-    union { cpu_data_t x18,  s2; };
-    union { cpu_data_t x19,  s3; };
-    union { cpu_data_t x20,  s4; };
-    union { cpu_data_t x21,  s5; };
-    union { cpu_data_t x22,  s6; };
-    union { cpu_data_t x23,  s7; };
-    union { cpu_data_t x24,  s8; };
-    union { cpu_data_t x25,  s9; };
-    union { cpu_data_t x26, s10; };
-    union { cpu_data_t x27, s11; };
-    union { cpu_data_t x28,  t3; };
-    union { cpu_data_t x29,  t4; };
-    union { cpu_data_t x30,  t5; };
-    union { cpu_data_t x31,  t6; };
 } cpu_context_t;
 
 __API__ uint32_t        tos_cpu_clz(uint32_t val);
@@ -114,5 +120,6 @@ __KERNEL__ void cpu_standby_mode_enter(void);
     do { \
         tos_cpu_cpsr_restore(cpu_cpsr); \
     } while (0)
+
 
 #endif /* _TOS_CPU_H_ */

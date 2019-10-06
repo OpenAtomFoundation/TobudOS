@@ -172,3 +172,5 @@ __API__ uint32_t tos_cpu_clz(uint32_t val)
 
     return (nbr_lead_zeros);
 }
+
+
