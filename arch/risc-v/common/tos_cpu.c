@@ -7,7 +7,7 @@
 #endif
 
 k_stack_t k_irq_stk[TOS_CFG_IRQ_STK_SIZE];
-const k_stack_t *k_irq_stk_top = (k_stack_t *) ((char *)(k_irq_stk + TOS_CFG_IRQ_STK_SIZE) - sizeof(cpu_data_t));
+k_stack_t *k_irq_stk_top = k_irq_stk + TOS_CFG_IRQ_STK_SIZE;
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
@@ -16,6 +16,12 @@ __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 }
 
 __KERNEL__ void cpu_init(void) {
+
+    // reserve storage space for sp registers
+    k_irq_stk_top = (k_stack_t *)(((cpu_addr_t) k_irq_stk_top) - sizeof(cpu_data_t));
+
+    k_irq_stk_top = (k_stack_t *)(((cpu_addr_t) k_irq_stk_top) & 0xFFFFFFFC);
+
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
 
     cpu_systick_init(k_cpu_cycle_per_tick);
@@ -97,27 +103,26 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     cpu_context_t *regs = 0;
 
     sp = (cpu_data_t *)&stk_base[stk_size];
-    sp = (cpu_data_t *)((cpu_addr_t)(sp) & 0xFFFFFFF8);
+    sp = (cpu_data_t *)((cpu_addr_t)(sp) & 0xFFFFFFFC);
 
     sp  -= (sizeof(cpu_context_t)/sizeof(cpu_data_t));
 
     regs = (cpu_context_t*) sp;
 
-    for(int i=0; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i++) {
-        #define _V(v) ((unsigned int)((v/10) << 4 | (v % 10)))
-        *(sp + i) = (_V(i) << 24) | (_V(i) << 16) | (_V(i) << 8) | _V(i);
-        #undef _V
+    for(int i=1; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i+=2) {
+        // every task begin with "Tencent"
+        *(sp + i - 1) = 0x0054656E;
+        *(sp + i - 0) = 0x63656E74;
     }
 
     cpu_data_t gp = 0;
     __ASM__ __VOLATILE__ ("mv %0, gp":"=r"(gp));
 
-    regs->gp        = (cpu_data_t)gp;                           // gp: global pointer
-    regs->a0        = (cpu_data_t)arg;                          // a0: argument
-    regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
-    regs->mstatus   = (cpu_data_t)0x00001880;                   // return to machine mode and enable interrupt
-    regs->mepc      = (cpu_data_t)entry;
-
+    regs->gp        = (cpu_data_t)gp;           // global pointer
+    regs->a0        = (cpu_data_t)arg;          // argument
+    regs->ra        = (cpu_data_t)0xACE00ACE;   // return address
+    regs->mstatus   = (cpu_data_t)0x00001880;   // return to machine mode and enable interrupt
+    regs->epc       = (cpu_data_t)entry;        // task entry
 
     return (k_stack_t*)sp;
 }

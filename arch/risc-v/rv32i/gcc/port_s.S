@@ -226,7 +226,6 @@ port_context_switch:
     sw x30, __reg_x30_OFFSET(sp)
     sw x31, __reg_x31_OFFSET(sp)
 
-
     sw     ra,  __reg_mepc_OFFSET(sp)
 
     csrr   t0,  mstatus
@@ -324,12 +323,10 @@ rv32_exception_entry:
     mv      t0, sp
     la      t1, k_irq_stk_top
     lw      sp, (t1)
-    andi    sp, sp, 0xFFFFFFF0
     sw      t0, (sp)
 
-
     // get irq num and call irq handler
-    li      t0,  SOC_MCAUSE_EXP_MASK
+    li      t0,  MCAUSE_EXP_CODE_MASK
     csrr    a0,  mcause
     and     a0,  a0, t0
     call    cpu_irq_entry

@@ -23,7 +23,7 @@
 #define CLINT_MTIMECMP  0x4000
 #define CLINT_MTIME     0xBFF8
 
-#define SOC_MCAUSE_EXP_MASK 0x7FFFFFFF
+#define MCAUSE_EXP_CODE_MASK 0x7FFFFFFF
 
 #ifndef __ASSEMBLER__
 void port_cpu_init();
