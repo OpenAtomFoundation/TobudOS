@@ -129,7 +129,7 @@ void SysTick_IRQHandler() {
     }
 }
 
-void cpu_irq_entry(cpu_data_t irq, cpu_context_t *regs)
+void cpu_irq_entry(cpu_data_t irq)
 {
     if (irq != 7) {
         return;

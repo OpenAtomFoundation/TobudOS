@@ -12,10 +12,10 @@
 
 .global port_sched_start
 .global port_context_switch
+.global rv32_exception_entry
 
 .extern k_curr_task
 .extern k_next_task
-.extern k_task_irq_switch_flag
 
 .equ    MSTATUS_MIE,        0x00000008
 .equ    MSTATUS_MPP,        0x00001800
@@ -236,7 +236,43 @@ port_context_switch:
 .align 2
 .global rv32_exception_entry
 rv32_exception_entry:
-    addi   sp,  sp, -32*REGBYTES
+    addi   sp,  sp, -20*REGBYTES
+    sw ra, (12-12)*REGBYTES(sp)
+    sw gp, (13-12)*REGBYTES(sp)
+    sw tp, (14-12)*REGBYTES(sp)
+    sw t0, (15-12)*REGBYTES(sp)
+    sw t1, (16-12)*REGBYTES(sp)
+    sw t2, (17-12)*REGBYTES(sp)
+    sw t3, (18-12)*REGBYTES(sp)
+    sw t4, (19-12)*REGBYTES(sp)
+    sw t5, (20-12)*REGBYTES(sp)
+    sw t6, (21-12)*REGBYTES(sp)
+    sw a0, (22-12)*REGBYTES(sp)
+    sw a1, (23-12)*REGBYTES(sp)
+    sw a2, (24-12)*REGBYTES(sp)
+    sw a3, (25-12)*REGBYTES(sp)
+    sw a4, (26-12)*REGBYTES(sp)
+    sw a5, (27-12)*REGBYTES(sp)
+    sw a6, (28-12)*REGBYTES(sp)
+    sw a7, (29-12)*REGBYTES(sp)
+
+    csrr    t0,  mepc
+    sw      t0,  (30-12)*REGBYTES(sp)
+
+    csrr    t0,  mstatus
+    sw      t0,  (31-12)*REGBYTES(sp)
+
+    // get irq num and call irq handler
+    li      t0,  SOC_MCAUSE_EXP_MASK
+    csrr    a0,  mcause
+    and     a0,  a0, t0
+    call    cpu_irq_entry
+
+    la      t0,  k_curr_task
+    la      t1,  k_next_task
+
+    beq     t0,  t1, irq_restore
+    addi   sp,  sp, -12*REGBYTES
     sw s0, 0*REGBYTES(sp)
     sw s1, 1*REGBYTES(sp)
     sw s2, 2*REGBYTES(sp)
@@ -250,49 +286,6 @@ rv32_exception_entry:
     sw s10, 10*REGBYTES(sp)
     sw s11, 11*REGBYTES(sp)
 
-    // caller save
-    sw ra, 12*REGBYTES(sp)
-    sw gp, 13*REGBYTES(sp)
-    sw tp, 14*REGBYTES(sp)
-    sw t0, 15*REGBYTES(sp)
-    sw t1, 16*REGBYTES(sp)
-    sw t2, 17*REGBYTES(sp)
-    sw t3, 18*REGBYTES(sp)
-    sw t4, 19*REGBYTES(sp)
-    sw t5, 20*REGBYTES(sp)
-    sw t6, 21*REGBYTES(sp)
-    sw a0, 22*REGBYTES(sp)
-    sw a1, 23*REGBYTES(sp)
-    sw a2, 24*REGBYTES(sp)
-    sw a3, 25*REGBYTES(sp)
-    sw a4, 26*REGBYTES(sp)
-    sw a5, 27*REGBYTES(sp)
-    sw a6, 28*REGBYTES(sp)
-    sw a7, 29*REGBYTES(sp)
-
-    csrr    t0,  mepc
-    sw      t0,  30*REGBYTES(sp)
-
-    csrr    t0,  mstatus
-    sw      t0,  31*REGBYTES(sp)
-
-    // save sp to k_curr_task.sp
-    la      t0, k_curr_task         // t0 = &k_curr_task
-    lw      t1, (t0)
-    sw      sp, (t1)
-
-    csrr    a0,  mcause
-    mv      a1,  sp
-
-    li      t0,  SOC_MCAUSE_EXP_MASK
-    and     a0,  a0, t0
-    call    cpu_irq_entry
-
-    la      t0,  k_curr_task
-    la      t1,  k_next_task
-
-    beq     t0,  t1, irq_restore
-
     // save sp to k_curr_task.sp
     la      t0, k_curr_task         // t0 = &k_curr_task
     lw      t2, (t0)                // t2 =  k_curr_task->sp
@@ -304,15 +297,6 @@ rv32_exception_entry:
 
     // load new task sp
     lw      sp, (t1)
-
-irq_restore:
-    // restore context
-    lw      t0,   30*REGBYTES(sp)
-    csrw    mepc, t0
-
-    lw      t0,   31*REGBYTES(sp)
-    csrw    mstatus, t0
-
 
     lw s0, 0*REGBYTES(sp)
     lw s1, 1*REGBYTES(sp)
@@ -326,27 +310,35 @@ irq_restore:
     lw s9, 9*REGBYTES(sp)
     lw s10, 10*REGBYTES(sp)
     lw s11, 11*REGBYTES(sp)
+    addi    sp, sp, 12*REGBYTES
 
-    // caller save
-    lw ra, 12*REGBYTES(sp)
-    lw gp, 13*REGBYTES(sp)
-    lw tp, 14*REGBYTES(sp)
-    lw t0, 15*REGBYTES(sp)
-    lw t1, 16*REGBYTES(sp)
-    lw t2, 17*REGBYTES(sp)
-    lw t3, 18*REGBYTES(sp)
-    lw t4, 19*REGBYTES(sp)
-    lw t5, 20*REGBYTES(sp)
-    lw t6, 21*REGBYTES(sp)
-    lw a0, 22*REGBYTES(sp)
-    lw a1, 23*REGBYTES(sp)
-    lw a2, 24*REGBYTES(sp)
-    lw a3, 25*REGBYTES(sp)
-    lw a4, 26*REGBYTES(sp)
-    lw a5, 27*REGBYTES(sp)
-    lw a6, 28*REGBYTES(sp)
-    lw a7, 29*REGBYTES(sp)
-    addi    sp, sp, 32*REGBYTES
+irq_restore:
+    // restore context
+    lw      t0,   (30-12)*REGBYTES(sp)
+    csrw    mepc, t0
+
+    lw      t0,   (31-12)*REGBYTES(sp)
+    csrw    mstatus, t0
+
+    lw ra, (12-12)*REGBYTES(sp)
+    lw gp, (13-12)*REGBYTES(sp)
+    lw tp, (14-12)*REGBYTES(sp)
+    lw t0, (15-12)*REGBYTES(sp)
+    lw t1, (16-12)*REGBYTES(sp)
+    lw t2, (17-12)*REGBYTES(sp)
+    lw t3, (18-12)*REGBYTES(sp)
+    lw t4, (19-12)*REGBYTES(sp)
+    lw t5, (20-12)*REGBYTES(sp)
+    lw t6, (21-12)*REGBYTES(sp)
+    lw a0, (22-12)*REGBYTES(sp)
+    lw a1, (23-12)*REGBYTES(sp)
+    lw a2, (24-12)*REGBYTES(sp)
+    lw a3, (25-12)*REGBYTES(sp)
+    lw a4, (26-12)*REGBYTES(sp)
+    lw a5, (27-12)*REGBYTES(sp)
+    lw a6, (28-12)*REGBYTES(sp)
+    lw a7, (29-12)*REGBYTES(sp)
+    addi    sp, sp, 20*REGBYTES
 
     mret
 

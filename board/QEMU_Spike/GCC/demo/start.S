@@ -1,3 +1,4 @@
+.extern rv32_exception_entry
 .align 2
 .section .text.entry
     .globl _start
@@ -6,7 +7,7 @@ _start:
     csrc mstatus, 0x00000008 
     csrw mie, 0
 
-    la t0, rv32_trap_entry
+    la t0, rv32_exception_entry
     csrw mtvec, t0
 
     la sp, _stack_top
