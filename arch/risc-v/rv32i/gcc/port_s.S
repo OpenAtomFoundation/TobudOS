@@ -320,11 +320,23 @@ rv32_exception_entry:
     csrr    t0,  mstatus
     sw      t0,  __reg_mstatus__OFFSET(sp)
 
+    // switch to irq stack
+    mv      t0, sp
+    la      t1, k_irq_stk_top
+    lw      sp, (t1)
+    andi    sp, sp, 0xFFFFFFF0
+    sw      t0, (sp)
+
+
     // get irq num and call irq handler
     li      t0,  SOC_MCAUSE_EXP_MASK
     csrr    a0,  mcause
     and     a0,  a0, t0
     call    cpu_irq_entry
+
+    // switch back to task stack
+    lw      t0, (sp)
+    mv      sp, t0
 
     la      t0,  k_curr_task
     la      t1,  k_next_task

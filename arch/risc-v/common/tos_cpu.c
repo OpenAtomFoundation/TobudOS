@@ -1,6 +1,14 @@
 #include <tos.h>
 #include <riscv_port.h>
 
+#ifndef TOS_CFG_IRQ_STK_SIZE
+#warning "did not specify the irq stack size, use default value"
+#define TOS_CFG_IRQ_STK_SIZE 128
+#endif
+
+k_stack_t k_irq_stk[TOS_CFG_IRQ_STK_SIZE];
+const k_stack_t *k_irq_stk_top = (k_stack_t *) ((char *)(k_irq_stk + TOS_CFG_IRQ_STK_SIZE) - sizeof(cpu_data_t));
+
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
     port_systick_priority_set(TOS_CFG_CPU_SYSTICK_PRIO);
@@ -9,6 +17,7 @@ __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 
 __KERNEL__ void cpu_init(void) {
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
+
     cpu_systick_init(k_cpu_cycle_per_tick);
 
     port_cpu_init();
@@ -172,5 +181,4 @@ __API__ uint32_t tos_cpu_clz(uint32_t val)
 
     return (nbr_lead_zeros);
 }
-
 

@@ -43,5 +43,6 @@
 
 #define TOS_CFG_MMBLK_EN 1u
 
+#define TOS_CFG_IRQ_STK_SIZE 128u
 
 #endif /* INC_TOS_CONFIG_H_ */

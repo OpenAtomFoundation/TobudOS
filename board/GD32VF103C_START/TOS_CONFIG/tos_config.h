@@ -48,6 +48,9 @@
 // 配置TencentOS tiny空闲任务栈大小
 #define TOS_CFG_IDLE_TASK_STK_SIZE 512u
 
+// 配置TencentOS tiny中断栈大小
+#define TOS_CFG_IRQ_STK_SIZE 128u
+
 // 配置TencentOS tiny的tick频率
 #define TOS_CFG_CPU_TICK_PER_SECOND 1000u
 
