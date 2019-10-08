@@ -23,8 +23,12 @@
 #define CLINT_MTIMECMP  0x4000
 #define CLINT_MTIME     0xBFF8
 
+#define SOC_MCAUSE_EXP_MASK 0x7FFFFFFF
+
+#ifndef __ASSEMBLER__
 void port_cpu_init();
 
 void port_systick_priority_set(uint32_t priority);
+#endif /* __ASSEMBLER__ */
 
-#endif // _RISCV_PORT_H_
+#endif /* _RISCV_PORT_H_ */

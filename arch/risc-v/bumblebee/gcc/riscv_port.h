@@ -24,8 +24,22 @@
 #define CLINT_MTIMECMP  0x0008
 #define CLINT_MTIME     0x0000
 
+// the bumblebee mstatus register is different
+// name         bit         detail
+// INTERRUPT    31          0: exception or nmi, 1 irq
+// MINHV        30          reading irq vector table
+// MPP          29:28       == mstatus.MPP
+// MPIE         27          == mstatus.MPIE
+// Reserved     26:24       0
+// MPIL         23:16       previous interrupt level
+// Reserved     15:12       0
+// EXCCODE      11:0        exception code
+#define SOC_MCAUSE_EXP_MASK 0x00000FFF
+
+#ifndef __ASSEMBLER__
 void port_cpu_init();
 
 void port_systick_priority_set(uint32_t priority);
+#endif
 
 #endif // _RISCV_PORT_H_

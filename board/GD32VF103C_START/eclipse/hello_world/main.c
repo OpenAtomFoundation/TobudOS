@@ -27,7 +27,7 @@ void task2(void *pdata)
         share++;
         for(int i=0; i<5; i++) {
             printf("hello world from %s cnt: %08x\n", __func__, task_cnt2--);
-            tos_task_delay(10);
+            tos_task_delay(50);
         }
         tos_sem_post(&sem);
     }

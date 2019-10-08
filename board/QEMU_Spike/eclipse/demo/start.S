@@ -1,15 +1,14 @@
-// See LICENSE for license details.
+.extern rv32_exception_entry
 
-#include "riscv_encoding.h"
-
+.align 2
 .section .text.entry
     .globl _start
     .type _start,@function
 _start:
-    csrc mstatus, MSTATUS_MIE
+    csrc mstatus, 0x00000008
     csrw mie, 0
 
-    la t0, trap_entry
+    la t0, rv32_exception_entry
     csrw mtvec, t0
 
     la sp, _stack_top
