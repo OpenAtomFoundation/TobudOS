@@ -209,14 +209,14 @@ void OLED_ShowString(uint8_t x,uint8_t y,uint8_t *chr)
 	}
 
 /***************************************************************
-* 函数名称: OLED_ShowCHinese
+* 函数名称: OLED_ShowChinese
 * 说    明: 在指定位置显示中文
 * 参    数: x，起始位置x坐标
 			y，起始位置y坐标
 			no，要显示的中文在字库中的编号，编号从0开始
 * 返 回 值: 无
 ***************************************************************/
-void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no)
+void OLED_ShowChinese(uint8_t x,uint8_t y,uint8_t no)
 {      			    
 	uint8_t t,adder=0;
 	OLED_Set_Pos(x,y);	

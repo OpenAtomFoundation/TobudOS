@@ -1,45 +1,41 @@
 #ifndef __OLED_H
-#define __OLED_H			  	 
+#define __OLED_H
 #include "stm32l4xx_hal.h"
-#include "stdlib.h"	    	
+#include "stdlib.h"
 #define OLED_MODE 0
 #define OLED_SIZE 8
 #define XLevelL		0x00
 #define XLevelH		0x10
 #define Max_Column	128
 #define Max_Row		64
-#define	Brightness	0xFF 
+#define	Brightness	0xFF
 #define X_WIDTH 	128
-#define Y_WIDTH 	64	    						  
-//-----------------OLED IIC¶Ë¿Ú¶¨Òå----------------  					   
+#define Y_WIDTH 	64
+//-----------------OLED IICç«¯å£å®šä¹‰----------------
 //HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState);
-#define OLED_SCLK_Clr() HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10, GPIO_PIN_RESET);//SDA IIC½Ó¿ÚµÄÊ±ÖÓĞÅºÅ
+#define OLED_SCLK_Clr() HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10, GPIO_PIN_RESET);//SDA IICæ¥å£çš„æ—¶é’Ÿä¿¡å·
 #define OLED_SCLK_Set() HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10, GPIO_PIN_SET);
 
-#define OLED_SDIN_Clr() HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3, GPIO_PIN_RESET);//SCL IIC½Ó¿ÚµÄÊı¾İĞÅºÅ
+#define OLED_SDIN_Clr() HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3, GPIO_PIN_RESET);//SCL IICæ¥å£çš„æ•°æ®ä¿¡å·
 #define OLED_SDIN_Set() HAL_GPIO_WritePin(GPIOB,GPIO_PIN_3, GPIO_PIN_SET);
 
- 		     
-#define OLED_CMD  0	//Ğ´ÃüÁî
-#define OLED_DATA 1	//Ğ´Êı¾İ
+
+#define OLED_CMD  0	//å†™å‘½ä»¤
+#define OLED_DATA 1	//å†™æ•°æ®
 
 
-//OLED½Ó¿Ú¿ØÖÆÓÃº¯Êı  
+//OLEDæ¥å£æ§åˆ¶ç”¨å‡½æ•°
 void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size);
-void OLED_ShowString(uint8_t x,uint8_t y, uint8_t *p,uint8_t Char_Size);	 
-void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
+void OLED_ShowString(uint8_t x,uint8_t y, uint8_t *p,uint8_t Char_Size);
+void OLED_ShowChinese(uint8_t x,uint8_t y,uint8_t no);
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
 
 
 
-//OLED»ù´¡º¯Êı 
+//OLEDåŸºç¡€å‡½æ•°
 void OLED_Init(void);
 void OLED_Clear(void);
 void OLED_Display_On(void);
-void OLED_Display_Off(void);	   							   		    
+void OLED_Display_Off(void);
 void OLED_Set_Pos(unsigned char x, unsigned char y);
-#endif  
-	 
-
-
-
+#endif

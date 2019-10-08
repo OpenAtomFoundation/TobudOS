@@ -53,12 +53,12 @@ void board_init(void)
   DHT11_Init();
   OLED_Init();
   OLED_Clear();
-  OLED_ShowCHinese(0,0,0);
-  OLED_ShowCHinese(18,0,1);
-  OLED_ShowCHinese(36,0,2);
-  OLED_ShowCHinese(54,0,3);
-  OLED_ShowCHinese(72,0,4);
-  OLED_ShowCHinese(90,0,5);
+  OLED_ShowChinese(0,0,0);
+  OLED_ShowChinese(18,0,1);
+  OLED_ShowChinese(36,0,2);
+  OLED_ShowChinese(54,0,3);
+  OLED_ShowChinese(72,0,4);
+  OLED_ShowChinese(90,0,5);
   OLED_ShowString(0,2,(uint8_t*)str,16);
 }
 
