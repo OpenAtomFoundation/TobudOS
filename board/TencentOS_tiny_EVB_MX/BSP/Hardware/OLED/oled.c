@@ -239,7 +239,7 @@ void OLED_ShowString(uint8_t x,uint8_t y,uint8_t *chr,uint8_t Char_Size)
 	}
 }
 //ÏÔÊ¾ºº×Ö
-void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no)
+void OLED_ShowChinese(uint8_t x,uint8_t y,uint8_t no)
 {      			    
 	uint8_t t,adder=0;
 	OLED_Set_Pos(x,y);	
