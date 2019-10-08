@@ -1,5 +1,4 @@
 #include <tos.h>
-#include <riscv_encoding.h>
 #include <riscv_port.h>
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
@@ -107,7 +106,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     regs->gp        = (cpu_data_t)gp;                           // gp: global pointer
     regs->a0        = (cpu_data_t)arg;                          // a0: argument
     regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
-    regs->mstatus   = (cpu_data_t)(MSTATUS_MPP | MSTATUS_MPIE); // return to machine mode and enable interrupt
+    regs->mstatus   = (cpu_data_t)0x00001880;                   // return to machine mode and enable interrupt
     regs->epc       = (cpu_data_t)entry;
 
 
