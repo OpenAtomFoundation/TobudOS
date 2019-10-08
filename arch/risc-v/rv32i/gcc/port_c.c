@@ -1,5 +1,4 @@
 #include <tos.h>
-#include "riscv_encoding.h"
 #include "riscv_port.h"
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)

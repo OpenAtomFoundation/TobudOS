@@ -1,4 +1,5 @@
-#include "tos.h"
+#include <tos_compiler.h>
+#include <tos_ktypes.h>
 
 #define ECLIC_ADDR_BASE         0xD2000000
 #define CLIC_INT_TMR            0x07
@@ -18,18 +19,18 @@
 #define ECLIC_CFG_NLBITS_LSB    1
 
 
-static uint8_t elci_get_clic_int_ctl_bits() {
+static uint8_t eclic_get_clic_int_ctl_bits() {
     uint32_t bits = *(volatile uint32_t*)(ECLIC_ADDR_BASE+ECLIC_INFO_OFFSET);
     bits >>= 21;
     return (uint8_t) bits;
 }
 
 
-static uint8_t elci_get_nlbits() {
+static uint8_t eclic_get_nlbits() {
     uint8_t nlbits = *(volatile uint8_t*)(ECLIC_ADDR_BASE+ECLIC_CFG_OFFSET);
     nlbits = (nlbits & ECLIC_CFG_NLBITS_MASK) >> ECLIC_CFG_NLBITS_LSB;
 
-    uint8_t cicbits = elci_get_clic_int_ctl_bits();
+    uint8_t cicbits = eclic_get_clic_int_ctl_bits();
     if(nlbits > cicbits) {
         nlbits = cicbits;
     }
@@ -51,7 +52,7 @@ static void eclic_enable_interrupt(uint32_t source) {
 }
 
 static void eclic_set_irq_level(uint32_t source, uint8_t level) {
-    uint8_t nlbits = elci_get_nlbits();
+    uint8_t nlbits = eclic_get_nlbits();
 
     if (nlbits == 0) {
         return ;
@@ -67,8 +68,8 @@ static void eclic_set_irq_level(uint32_t source, uint8_t level) {
 }
 
 static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
-    uint8_t nlbits = elci_get_nlbits();
-    uint8_t cicbits= elci_get_clic_int_ctl_bits();
+    uint8_t nlbits = eclic_get_nlbits();
+    uint8_t cicbits= eclic_get_clic_int_ctl_bits();
 
     if (nlbits >= cicbits) {
         return ;

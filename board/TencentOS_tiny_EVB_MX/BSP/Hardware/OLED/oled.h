@@ -27,7 +27,7 @@
 //OLED接口控制用函数
 void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size);
 void OLED_ShowString(uint8_t x,uint8_t y, uint8_t *p,uint8_t Char_Size);
-void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
+void OLED_ShowChinese(uint8_t x,uint8_t y,uint8_t no);
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
 
 
