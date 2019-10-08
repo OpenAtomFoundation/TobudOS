@@ -122,7 +122,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     regs->a0        = (cpu_data_t)arg;          // argument
     regs->ra        = (cpu_data_t)0xACE00ACE;   // return address
     regs->mstatus   = (cpu_data_t)0x00001880;   // return to machine mode and enable interrupt
-    regs->epc       = (cpu_data_t)entry;        // task entry
+    regs->mepc      = (cpu_data_t)entry;        // task entry
 
     return (k_stack_t*)sp;
 }
