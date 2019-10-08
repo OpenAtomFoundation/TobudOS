@@ -104,6 +104,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/Application}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/GD32VF103_Firmware_Library/RISCV/drivers}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/arch/risc-v/bumblebee}&quot;"/>
                                     								
                                 </option>
                                 								
