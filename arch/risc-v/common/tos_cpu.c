@@ -74,7 +74,7 @@ Inx Offset Register
 03    012    x3         gp
 02    008    x1         ra
 01    004    mstatus
-00    000    epc
+00    000    mepc
 
 */
 
@@ -107,7 +107,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     regs->a0        = (cpu_data_t)arg;                          // a0: argument
     regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
     regs->mstatus   = (cpu_data_t)0x00001880;                   // return to machine mode and enable interrupt
-    regs->epc       = (cpu_data_t)entry;
+    regs->mepc      = (cpu_data_t)entry;
 
 
     return (k_stack_t*)sp;
