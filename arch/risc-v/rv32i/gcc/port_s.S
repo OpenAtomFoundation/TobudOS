@@ -250,7 +250,6 @@ restore_context:
     lw x29, __reg_x29_OFFSET(sp)
     lw x30, __reg_x30_OFFSET(sp)
     lw x31, __reg_x31_OFFSET(sp)
-
     addi    sp, sp, 128
 
     mret
@@ -260,7 +259,6 @@ restore_context:
 .global rv32_exception_entry
 rv32_exception_entry:
     addi   sp,  sp, -128
-
     sw ra, __reg_ra__OFFSET(sp)
     sw gp, __reg_gp__OFFSET(sp)
     sw tp, __reg_tp__OFFSET(sp)
@@ -305,22 +303,8 @@ rv32_exception_entry:
     la      t0,  k_curr_task
     la      t1,  k_next_task
 
-    beq     t0,  t1, irq_restore
-
-    sw s0, __reg_s0__OFFSET(sp)
-    sw s1, __reg_s1__OFFSET(sp)
-    sw s2, __reg_s2__OFFSET(sp)
-    sw s3, __reg_s3__OFFSET(sp)
-    sw s4, __reg_s4__OFFSET(sp)
-    sw s5, __reg_s5__OFFSET(sp)
-    sw s6, __reg_s6__OFFSET(sp)
-    sw s7, __reg_s7__OFFSET(sp)
-    sw s8, __reg_s8__OFFSET(sp)
-    sw s9, __reg_s9__OFFSET(sp)
-    sw s10, __reg_s10__OFFSET(sp)
-    sw s11, __reg_s11__OFFSET(sp)
-
-    j switch_task
+    // unlikely
+    bne     t0,  t1, irq_task_switch
 
 irq_restore:
     lw      t0,   __reg_mepc_OFFSET(sp)
@@ -350,3 +334,19 @@ irq_restore:
     addi    sp, sp, 128
 
     mret
+
+irq_task_switch:
+    sw s0, __reg_s0__OFFSET(sp)
+    sw s1, __reg_s1__OFFSET(sp)
+    sw s2, __reg_s2__OFFSET(sp)
+    sw s3, __reg_s3__OFFSET(sp)
+    sw s4, __reg_s4__OFFSET(sp)
+    sw s5, __reg_s5__OFFSET(sp)
+    sw s6, __reg_s6__OFFSET(sp)
+    sw s7, __reg_s7__OFFSET(sp)
+    sw s8, __reg_s8__OFFSET(sp)
+    sw s9, __reg_s9__OFFSET(sp)
+    sw s10, __reg_s10__OFFSET(sp)
+    sw s11, __reg_s11__OFFSET(sp)
+
+    j switch_task
