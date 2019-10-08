@@ -10,19 +10,19 @@
 
 .global port_sched_start
 .global port_context_switch
-.global port_irq_context_switch
 
 .extern k_curr_task
 .extern k_next_task
+.extern k_task_irq_switch_flag
 
-#define MSTATUS_MIE         0x00000008
-#define MSTATUS_MPP         0x00001800
+.equ    MSTATUS_MIE,        0x00000008
+.equ    MSTATUS_MPP,        0x00001800
 
-#define MIE_MTIE            (1 << 7)
+.equ    MIE_MTIE,           (1 << 7)        // machine mode interrupt enable
 
-#define MIP_MTIP            (1 << 7)
+.equ    MIP_MTIP,           (1 << 7)        // machine mode timer interrupt pending
 
-#define REGBYTES            4
+.equ    REGBYTES,           4
 
 .text
 .align 2
@@ -192,36 +192,6 @@ port_context_switch:
 
     mret
 
-
-.align 2
-.type port_irq_context_switch, %function
-port_irq_context_switch:
-    SAVE_CONTEXT
-
-    sw      ra,  0*REGBYTES(sp)
-
-    li      t0,  MSTATUS_MPP
-    sw     t0,  1*REGBYTES(sp)
-
-    // save sp to k_curr_task.sp
-    la      t0, k_curr_task         // t0 = &k_curr_task
-    lw      t1, (t0)
-    sw      sp, (t1)
-
-    // switch task
-    // k_curr_task = k_next_task
-    la      t1, k_next_task         // t1 = &k_next_task
-    lw      t1, (t1)                // t1 = k_next_task
-    sw      t1, (t0)
-
-    // load new task sp
-    lw      sp, (t1)
-
-    RESTORE_CONTEXT
-
-    mret
-
-
 .align 2
 .global trap_entry
 .global irq_entry
@@ -244,13 +214,33 @@ irq_entry:
     mv      a1,  sp
     bltz    a0,  irq
     call    cpu_trap_entry
-    j       restore
+    j       irq_restore
+
 irq:
-    slli    a0, a0, 16
-    srli    a0, a0, 16
+    slli    a0,  a0, 16
+    srli    a0,  a0, 16
     call    cpu_irq_entry
-restore:
+
+    la      t0,  k_task_irq_switch_flag 
+    lw      t1,  (t0)
+    beqz    t1,  irq_restore
+    sw      zero,(t0)
+
+    // save sp to k_curr_task.sp
+    la      t0, k_curr_task         // t0 = &k_curr_task
+    lw      t1, (t0)
+    sw      sp, (t1)
+
+    // switch task
+    // k_curr_task = k_next_task
+    la      t1, k_next_task         // t1 = &k_next_task
+    lw      t1, (t1)                // t1 = k_next_task
+    sw      t1, (t0)
+
+    // load new task sp
+    lw      sp, (t1)
+
+irq_restore:
     RESTORE_CONTEXT
 
     mret
-

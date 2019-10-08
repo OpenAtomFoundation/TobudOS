@@ -31,3 +31,11 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 4) = 0xFFFFFFFF & (mtimecmp >> 32);
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF & (mtimecmp >>  0);
 }
+
+
+
+int k_task_irq_switch_flag = 0;
+__PORT__ void port_irq_context_switch()
+{
+    k_task_irq_switch_flag = 1;
+}
