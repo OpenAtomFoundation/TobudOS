@@ -7,6 +7,6 @@
 irq_entry:
     j rv32_exception_entry
 
-.align 6
+.align 2
 trap_entry:
     j rv32_exception_entry

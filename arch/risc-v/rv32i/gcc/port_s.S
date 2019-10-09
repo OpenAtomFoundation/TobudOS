@@ -146,56 +146,14 @@ port_sched_start:
     lw      t0, (t0)                // t0 = &(k_curr_task->sp)
     lw      sp, (t0)                // sp = k_curr_task->sp
 
-    // save sp to stack
-    addi    t1, sp, 128
-    sw      t1, (t0)
-
-    // restore context
-    lw      t0, __reg_mepc__OFFSET(sp)
-    csrw    mepc, t0
-
-    lw      t0, __reg_mstatus__OFFSET(sp)
-    csrw    mstatus, t0
-
-    lw x3, __reg_x3_OFFSET(sp)
-    lw x4, __reg_x4_OFFSET(sp)
-    lw x5, __reg_x5_OFFSET(sp)
-    lw x6, __reg_x6_OFFSET(sp)
-    lw x7, __reg_x7_OFFSET(sp)
-    lw x8, __reg_x8_OFFSET(sp)
-    lw x9, __reg_x9_OFFSET(sp)
-    lw x10, __reg_x10_OFFSET(sp)
-    lw x11, __reg_x11_OFFSET(sp)
-    lw x12, __reg_x12_OFFSET(sp)
-    lw x13, __reg_x13_OFFSET(sp)
-    lw x14, __reg_x14_OFFSET(sp)
-    lw x15, __reg_x15_OFFSET(sp)
-    lw x16, __reg_x16_OFFSET(sp)
-    lw x17, __reg_x17_OFFSET(sp)
-    lw x18, __reg_x18_OFFSET(sp)
-    lw x19, __reg_x19_OFFSET(sp)
-    lw x20, __reg_x20_OFFSET(sp)
-    lw x21, __reg_x21_OFFSET(sp)
-    lw x22, __reg_x22_OFFSET(sp)
-    lw x23, __reg_x23_OFFSET(sp)
-    lw x24, __reg_x24_OFFSET(sp)
-    lw x25, __reg_x25_OFFSET(sp)
-    lw x26, __reg_x26_OFFSET(sp)
-    lw x27, __reg_x27_OFFSET(sp)
-    lw x28, __reg_x28_OFFSET(sp)
-    lw x29, __reg_x29_OFFSET(sp)
-    lw x30, __reg_x30_OFFSET(sp)
-    lw x31, __reg_x31_OFFSET(sp)
-
-    addi    sp, sp, 128
-
-    mret
+    j       restore_context
 
 
 .align 2
 .type port_context_switch, %function
 port_context_switch:
     addi   sp, sp, -128
+    sw x1, __reg_x1_OFFSET(sp)
     sw x3, __reg_x3_OFFSET(sp)
     sw x4, __reg_x4_OFFSET(sp)
     sw x5, __reg_x5_OFFSET(sp)
@@ -226,7 +184,6 @@ port_context_switch:
     sw x30, __reg_x30_OFFSET(sp)
     sw x31, __reg_x31_OFFSET(sp)
 
-
     sw     ra,  __reg_mepc_OFFSET(sp)
 
     csrr   t0,  mstatus
@@ -234,20 +191,24 @@ port_context_switch:
     or     t0,  t0, t1
     sw     t0,  __reg_mstatus_OFFSET(sp)
 
-    // save sp to k_curr_task.sp
+
     la      t0, k_curr_task         // t0 = &k_curr_task
-    lw      t1, (t0)
-    sw      sp, (t1)
+    la      t1, k_next_task         // t1 = &k_next_task
+
+switch_task:
+    // save sp to k_curr_task.sp
+    lw      t2, (t0)
+    sw      sp, (t2)
 
     // switch task
     // k_curr_task = k_next_task
-    la      t1, k_next_task         // t1 = &k_next_task
     lw      t1, (t1)                // t1 = k_next_task
     sw      t1, (t0)
 
     // load new task sp
     lw      sp, (t1)
 
+restore_context:
     // restore context
     lw      t0,   __reg_mepc_OFFSET(sp)
     csrw    mepc, t0
@@ -255,6 +216,7 @@ port_context_switch:
     lw      t0,   __reg_mstatus_OFFSET(sp)
     csrw    mstatus, t0
 
+    lw x1, __reg_x1_OFFSET(sp)
     lw x3, __reg_x3_OFFSET(sp)
     lw x4, __reg_x4_OFFSET(sp)
     lw x5, __reg_x5_OFFSET(sp)
@@ -284,7 +246,6 @@ port_context_switch:
     lw x29, __reg_x29_OFFSET(sp)
     lw x30, __reg_x30_OFFSET(sp)
     lw x31, __reg_x31_OFFSET(sp)
-
     addi    sp, sp, 128
 
     mret
@@ -294,7 +255,6 @@ port_context_switch:
 .global rv32_exception_entry
 rv32_exception_entry:
     addi   sp,  sp, -128
-
     sw ra, __reg_ra__OFFSET(sp)
     sw gp, __reg_gp__OFFSET(sp)
     sw tp, __reg_tp__OFFSET(sp)
@@ -320,54 +280,27 @@ rv32_exception_entry:
     csrr    t0,  mstatus
     sw      t0,  __reg_mstatus__OFFSET(sp)
 
+    // switch to irq stack
+    mv      t0, sp
+    la      t1, k_irq_stk_top
+    lw      sp, (t1)
+    sw      t0, (sp)
+
     // get irq num and call irq handler
-    li      t0,  SOC_MCAUSE_EXP_MASK
+    li      t0,  MCAUSE_EXP_CODE_MASK
     csrr    a0,  mcause
     and     a0,  a0, t0
     call    cpu_irq_entry
 
+    // switch back to task stack
+    lw      t0, (sp)
+    mv      sp, t0
+
     la      t0,  k_curr_task
     la      t1,  k_next_task
 
-    beq     t0,  t1, irq_restore
-
-    sw s0, __reg_s0__OFFSET(sp)
-    sw s1, __reg_s1__OFFSET(sp)
-    sw s2, __reg_s2__OFFSET(sp)
-    sw s3, __reg_s3__OFFSET(sp)
-    sw s4, __reg_s4__OFFSET(sp)
-    sw s5, __reg_s5__OFFSET(sp)
-    sw s6, __reg_s6__OFFSET(sp)
-    sw s7, __reg_s7__OFFSET(sp)
-    sw s8, __reg_s8__OFFSET(sp)
-    sw s9, __reg_s9__OFFSET(sp)
-    sw s10, __reg_s10__OFFSET(sp)
-    sw s11, __reg_s11__OFFSET(sp)
-
-    // save sp to k_curr_task.sp
-    la      t0, k_curr_task         // t0 = &k_curr_task
-    lw      t2, (t0)                // t2 =  k_curr_task->sp
-    sw      sp, (t2)                // k_curr_task->sp = sp
-
-    // switch task
-    lw      t1, (t1)                // t1 =  k_next_task
-    sw      t1, (t0)                // k_curr_task = k_next_task
-
-    // load new task sp
-    lw      sp, (t1)
-
-    lw s0, __reg_s0__OFFSET(sp)
-    lw s1, __reg_s1__OFFSET(sp)
-    lw s2, __reg_s2__OFFSET(sp)
-    lw s3, __reg_s3__OFFSET(sp)
-    lw s4, __reg_s4__OFFSET(sp)
-    lw s5, __reg_s5__OFFSET(sp)
-    lw s6, __reg_s6__OFFSET(sp)
-    lw s7, __reg_s7__OFFSET(sp)
-    lw s8, __reg_s8__OFFSET(sp)
-    lw s9, __reg_s9__OFFSET(sp)
-    lw s10, __reg_s10__OFFSET(sp)
-    lw s11, __reg_s11__OFFSET(sp)
+    // unlikely
+    bne     t0,  t1, irq_task_switch
 
 irq_restore:
     lw      t0,   __reg_mepc_OFFSET(sp)
@@ -398,4 +331,18 @@ irq_restore:
 
     mret
 
+irq_task_switch:
+    sw s0, __reg_s0__OFFSET(sp)
+    sw s1, __reg_s1__OFFSET(sp)
+    sw s2, __reg_s2__OFFSET(sp)
+    sw s3, __reg_s3__OFFSET(sp)
+    sw s4, __reg_s4__OFFSET(sp)
+    sw s5, __reg_s5__OFFSET(sp)
+    sw s6, __reg_s6__OFFSET(sp)
+    sw s7, __reg_s7__OFFSET(sp)
+    sw s8, __reg_s8__OFFSET(sp)
+    sw s9, __reg_s9__OFFSET(sp)
+    sw s10, __reg_s10__OFFSET(sp)
+    sw s11, __reg_s11__OFFSET(sp)
 
+    j switch_task
