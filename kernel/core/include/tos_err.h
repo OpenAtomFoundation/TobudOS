@@ -29,6 +29,7 @@ typedef enum k_err_en {
 
     K_ERR_MSG_QUEUE_FULL                        = 900u,
     K_ERR_MSG_QUEUE_EMPTY,
+    K_ERR_MSG_QUEUE_MSG_NOT_EXIST,
 
     K_ERR_MUTEX_NOT_OWNER                       = 1000u,
     K_ERR_MUTEX_NESTING,
@@ -43,9 +44,11 @@ typedef enum k_err_en {
 
     K_ERR_QUEUE_EMPTY                           = 1500u,
     K_ERR_QUEUE_FULL,
+    K_ERR_QUEUE_MSG_NOT_EXIST,
 
     K_ERR_PEND_NOWAIT                           = 1600u,
     K_ERR_PEND_SCHED_LOCKED,
+    K_ERR_PEND_IN_IRQ,
     K_ERR_PEND_ABNORMAL,
     K_ERR_PEND_TIMEOUT,
     K_ERR_PEND_DESTROY,
@@ -77,6 +80,7 @@ typedef enum k_err_en {
     K_ERR_TIMER_INVALID_STATE,
     K_ERR_TIMER_INVALID_OPT,
     K_ERR_TIMER_STOPPED,
+    K_ERR_TIMER_RUNNING,
 } k_err_t;
 
 #endif /* _TOS_ERR_H_ */

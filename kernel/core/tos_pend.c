@@ -106,6 +106,8 @@ __KERNEL__ void pend_task_wakeup(k_task_t *task, pend_state_t state)
 __KERNEL__ void pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout)
 {
     readyqueue_remove(task);
+
+    task->pend_state = PEND_STATE_NONE;
     pend_list_add(task, object);
 
     if (timeout != TOS_TIME_FOREVER) {

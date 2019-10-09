@@ -211,6 +211,55 @@ __API__ k_err_t tos_timer_stop(k_timer_t *tmr)
     return K_ERR_NONE;
 }
 
+__STATIC__ k_err_t timer_change(k_timer_t *tmr, k_tick_t new_val, timer_change_type_t change_type)
+{
+    TOS_PTR_SANITY_CHECK(tmr);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    if (!knl_object_verify(&tmr->knl_obj, KNL_OBJ_TYPE_TIMER)) {
+        return K_ERR_OBJ_INVALID;
+    }
+#endif
+
+    if (tmr->state == TIMER_STATE_UNUSED) {
+        return K_ERR_TIMER_INACTIVE;
+    }
+
+    if (tmr->state == TIMER_STATE_RUNNING) {
+        return K_ERR_TIMER_RUNNING;
+    }
+
+    if (tmr->opt == TOS_OPT_TIMER_ONESHOT &&
+        change_type == TIMER_CHANGE_TYPE_DELAY &&
+        new_val == (k_tick_t)0u) {
+        return K_ERR_TIMER_INVALID_DELAY;
+    }
+
+    if (tmr->opt == TOS_OPT_TIMER_PERIODIC &&
+        change_type == TIMER_CHANGE_TYPE_PERIOD &&
+        new_val == (k_tick_t)0u) {
+        return K_ERR_TIMER_INVALID_PERIOD;
+    }
+
+    if (change_type == TIMER_CHANGE_TYPE_DELAY) {
+        tmr->delay  = new_val;
+    } else {
+        tmr->period = new_val;
+    }
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_timer_delay_change(k_timer_t *tmr, k_tick_t delay)
+{
+    return timer_change(tmr, delay, TIMER_CHANGE_TYPE_DELAY);
+}
+
+__API__ k_err_t tos_timer_period_change(k_timer_t *tmr, k_tick_t period)
+{
+    return timer_change(tmr, period, TIMER_CHANGE_TYPE_PERIOD);
+}
+
 __KERNEL__ k_tick_t timer_next_expires_get(void)
 {
     TOS_CPU_CPSR_ALLOC();

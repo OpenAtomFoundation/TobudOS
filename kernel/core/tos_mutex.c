@@ -53,6 +53,8 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
 {
     TOS_PTR_SANITY_CHECK(mutex);
 
+    TOS_IN_IRQ_CHECK();
+
     pend_object_init(&mutex->pend_obj, PEND_TYPE_MUTEX);
     mutex->pend_nesting     = (k_nesting_t)0u;
     mutex->owner            = K_NULL;
@@ -67,6 +69,7 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(mutex);
+    TOS_IN_IRQ_CHECK();
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     if (!pend_object_verify(&mutex->pend_obj, PEND_TYPE_MUTEX)) {
@@ -168,6 +171,7 @@ __API__ k_err_t tos_mutex_post(k_mutex_t *mutex)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(mutex);
+    TOS_IN_IRQ_CHECK();
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     if (!pend_object_verify(&mutex->pend_obj, PEND_TYPE_MUTEX)) {

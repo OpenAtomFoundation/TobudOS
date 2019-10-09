@@ -60,7 +60,6 @@ __API__ k_err_t tos_event_pend(k_event_t *event, k_event_flag_t flag_expect, k_e
 
     TOS_PTR_SANITY_CHECK(event);
     TOS_PTR_SANITY_CHECK(flag_match);
-    TOS_IN_IRQ_CHECK();
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     if (!pend_object_verify(&event->pend_obj, PEND_TYPE_EVENT)) {
@@ -89,6 +88,11 @@ __API__ k_err_t tos_event_pend(k_event_t *event, k_event_flag_t flag_expect, k_e
     if (timeout == TOS_TIME_NOWAIT) {
         TOS_CPU_INT_ENABLE();
         return K_ERR_PEND_NOWAIT;
+    }
+
+    if (knl_is_inirq()) {
+        TOS_CPU_INT_ENABLE();
+        return K_ERR_PEND_IN_IRQ;
     }
 
     if (knl_is_sched_locked()) {

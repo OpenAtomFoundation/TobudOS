@@ -3,15 +3,15 @@
 
 #include "nrf51.h"
 #include "stdio.h"
-#define TOS_CFG_TASK_PRIO_MAX           10u
+#define TOS_CFG_TASK_PRIO_MAX           8u
 
-#define TOS_CFG_ROUND_ROBIN_EN          1u
+#define TOS_CFG_ROUND_ROBIN_EN          0u
 
 #define TOS_CFG_OBJECT_VERIFY_EN           0u
 
 #define TOS_CFG_EVENT_EN                1u
 
-#define TOS_CFG_MMBLK_EN                1u
+#define TOS_CFG_MMBLK_EN                0u
 
 #define TOS_CFG_MMHEAP_EN               1u
 
@@ -31,7 +31,7 @@
 #define TOS_CFG_MSG_EN     0u
 #endif
 
-#define TOS_CFG_MSG_POOL_SIZE           10u
+#define TOS_CFG_MSG_POOL_SIZE           20u
 
 #define TOS_CFG_IDLE_TASK_STK_SIZE      80u
 

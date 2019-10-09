@@ -1,0 +1,10 @@
+In order to use integrated BLE Controller (CMAC) on DA1469x you will need
+a binary firmware to be loaded to CMAC. Library containing such firmware can
+be found in SDK package available at:
+https://www.dialog-semiconductor.com/products/da1469x-product-family
+
+Copy sdk/interfaces/ble/binaries/DA1469x-Release/libble_stack_da1469x.a file
+to src/ subdirectory and rebuild you application.
+
+Current version was tested with SDK version 10.0.4.66.
+

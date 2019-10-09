@@ -1,0 +1,99 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+syscfg.defs:
+    BLE_HCI_EMSPI:
+        description: 'Indicates that the emspi host HCI transport is present.'
+        value: 1
+        restrictions:
+            # XXX: This package only builds with the apollo2 MCU.
+            # MCU-dependencies need to be removed.
+            - MCU_APOLLO2
+
+            # This is a host-only transport.
+            - BLE_HOST
+
+    BLE_HCI_EVT_HI_BUF_COUNT:
+        description: 'Number of high-priority event buffers.'
+        value:  2
+
+    BLE_HCI_EVT_LO_BUF_COUNT:
+        description: 'Number of low-priority event buffers.'
+        value:  8
+
+    BLE_HCI_EVT_BUF_SIZE:
+        description: 'Size of each event buffer, in bytes.'
+        value:  70
+
+    BLE_ACL_BUF_COUNT:
+        description: 'The number of ACL data buffers'
+        value: 4
+
+    BLE_ACL_BUF_SIZE:
+        description: >
+            This is the maximum size of the data portion of HCI ACL data
+            packets. It does not include the HCI data header (of 4 bytes).
+        value: 255
+
+    BLE_HCI_ACL_OUT_COUNT:
+        description: >
+            This count is used in creating a pool of elements used by the
+            code to enqueue various elements. In the case of the controller
+            only HCI, this number should be equal to the number of mbufs in
+            the msys pool. For host only, it is really dependent on the
+            number of ACL buffers that the controller tells the host it
+            has.
+        value: 12
+
+    BLE_HCI_EMSPI_SPI_NUM:
+        description: The index of the SPI device to use for HCI.
+        value: 5
+
+    BLE_HCI_EMSPI_BAUD:
+        description: The SPI baud rate.
+        value: 8000000
+
+    BLE_HCI_EMSPI_RESET_PIN:
+        description: The GPIO pin that resets the EM controller.
+        value: 42
+
+    BLE_HCI_EMSPI_SS_PIN:
+        description: The GPIO pin to use for SPI slave select.
+        value: 45
+
+    BLE_HCI_EMSPI_RDY_PIN:
+        description: >
+            The GPIO pin that the EM controller uses to indicate data ready.
+        value: 26
+
+    BLE_HCI_EMSPI_PRIO:
+        description: The priority of the emspi task.
+        type: task_priority
+        value: 5
+
+    BLE_HCI_EMSPI_STACK_SIZE:
+        description: 'The size of the emspi task (units: 4-byte words).'
+        value: 256
+
+    BLE_HCI_EMSPI_SYSINIT_STAGE:
+        description: >
+            Sysinit stage for the EMSPI BLE transport.
+        value: 100
+
+syscfg.vals.BLE_EXT_ADV:
+    BLE_HCI_EVT_BUF_SIZE: 257

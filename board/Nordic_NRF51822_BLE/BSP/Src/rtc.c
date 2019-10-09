@@ -25,7 +25,7 @@
 #include "nrf.h"
 #include "nrf_gpio.h"
 #include "main.h"
- 
+
 extern void tos_tick_handler (void);                                         /**< osTickHandler not declared in any header file, extern here. */
 
 #define GPIO_TOGGLE_TICK_EVENT    (LED_0)                                 /**< Pin number to toggle when there is a tick event in RTC. */
@@ -61,26 +61,26 @@ static void rtc_config(void)
         prescaler++;
     }
 
-    NVIC_EnableIRQ(RTC0_IRQn);                                      // Enable Interrupt for the RTC in the core.
-    NRF_RTC0->PRESCALER     = prescaler;                            // Set prescaler to a TICK of RTC_FREQUENCY.
+    NVIC_EnableIRQ(RTC1_IRQn);                                      // Enable Interrupt for the RTC in the core.
+    NRF_RTC1->PRESCALER     = prescaler;                            // Set prescaler to a TICK of RTC_FREQUENCY.
 
     // Enable TICK event and TICK interrupt:
-    NRF_RTC0->EVTENSET      = RTC_EVTENSET_TICK_Msk;
-    NRF_RTC0->INTENSET      = RTC_INTENSET_TICK_Msk;
+    NRF_RTC1->EVTENSET      = RTC_EVTENSET_TICK_Msk;
+    NRF_RTC1->INTENSET      = RTC_INTENSET_TICK_Msk;
 }
 
 /** @brief: Function for handling the RTC0 interrupts.
  * Triggered on TICK updated.
  */
-void RTC0_IRQHandler()
+void RTC1_IRQHandler()
 {
-    if ((NRF_RTC0->EVENTS_TICK != 0) && 
-        ((NRF_RTC0->INTENSET & RTC_INTENSET_TICK_Msk) != 0))
+    if ((NRF_RTC1->EVENTS_TICK != 0) &&
+        ((NRF_RTC1->INTENSET & RTC_INTENSET_TICK_Msk) != 0))
     {
-        NRF_RTC0->EVENTS_TICK = 0;
-        tos_knl_irq_enter();	
+        NRF_RTC1->EVENTS_TICK = 0;
+        tos_knl_irq_enter();
         tos_tick_handler ();
-        tos_knl_irq_leave();   
+        tos_knl_irq_leave();
     }
 }
 
@@ -92,7 +92,7 @@ void nrf_rtc_init (void)
     lfclk_config();
     rtc_config();
 
-    NRF_RTC0->TASKS_START = 1;
+    NRF_RTC1->TASKS_START = 1;
 }
 
 /**  @} */

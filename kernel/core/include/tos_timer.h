@@ -9,6 +9,11 @@
 // if we want the timer run periodically, this option should be passed to tos_timer_create.
 #define TOS_OPT_TIMER_PERIODIC                  (k_opt_t)(0x0002u)
 
+typedef enum timer_change_type_en {
+    TIMER_CHANGE_TYPE_DELAY,
+    TIMER_CHANGE_TYPE_PERIOD,
+} timer_change_type_t;
+
 /**
  * state for timer
  */
@@ -109,6 +114,39 @@ __API__ k_err_t tos_timer_start(k_timer_t *tmr);
  * @retval  #K_ERR_NONE                 return successfully.
  */
 __API__ k_err_t tos_timer_stop(k_timer_t *tmr);
+
+/**
+ * @brief Change a timer's delay.
+ *
+ * @attention None
+ *
+ * @param[in]   tmr         pointer to the handler of the timer.
+ * @param[in]   delay       new delay of the timer.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TIMER_INACTIVE       the timer is not active yet.
+ * @retval  #K_ERR_TIMER_RUNNING        the timer is running.
+ * @retval  #K_ERR_TIMER_INVALID_DELAY  the delay is invalid.
+ * @retval  #K_ERR_NONE                 return successfully.
+ */
+__API__ k_err_t tos_timer_delay_change(k_timer_t *tmr, k_tick_t delay);
+
+/**
+ * @brief Change a timer's period.
+ *
+ * @attention None
+ *
+ * @param[in]   tmr         pointer to the handler of the timer.
+ * @param[in]   period      new period of the timer.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TIMER_INACTIVE       the timer is not active yet.
+ * @retval  #K_ERR_TIMER_RUNNING        the timer is running.
+ * @retval  #K_ERR_TIMER_INVALID_PERIOD the period is invalid.
+ * @retval  #K_ERR_NONE                 return successfully.
+ */
+__API__ k_err_t tos_timer_period_change(k_timer_t *tmr, k_tick_t period);
+
 
 #if TOS_CFG_TIMER_AS_PROC > 0u
 

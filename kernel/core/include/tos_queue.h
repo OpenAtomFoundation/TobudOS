@@ -5,7 +5,7 @@
 
 typedef struct k_queue_st {
     pend_obj_t      pend_obj;
-    k_msg_queue_t msg_queue;
+    k_msg_queue_t   msg_queue;
 } k_queue_t;
 
 /**
@@ -35,19 +35,6 @@ __API__ k_err_t tos_queue_create(k_queue_t *queue);
 __API__ k_err_t tos_queue_destroy(k_queue_t *queue);
 
 /**
- * @brief Flush a queue.
- * flush a queue, clear all the msg in the queue.
- *
- * @attention None
- *
- * @param[in]   queue       pointer to the handler of the queue.
- *
- * @return  errcode
- * @retval  #K_ERR_NONE                   return successfully.
- */
-__API__ k_err_t tos_queue_flush(k_queue_t *queue);
-
-/**
  * @brief Pend a queue.
  * pend a queue.
  *
@@ -55,8 +42,8 @@ __API__ k_err_t tos_queue_flush(k_queue_t *queue);
  *            that means you DONNOT need to alloc memory for msg_addr, msg_addr can just be a pointer.
  *
  * @param[in]   queue       pointer to the handler of the queue.
- * @param[OUT]  msg_addr    a pointer point to the message we wanna recive.
- * @param[OUT]  msg_size    pointer to the message size returned.
+ * @param[out]  msg_addr    a pointer point to the message we wanna recive.
+ * @param[out]  msg_size    pointer to the message size returned.
  * @param[in]   timeout     how much time(in k_tick_t) we would like to wait.
  *
  * @return  errcode
@@ -95,6 +82,34 @@ __API__ k_err_t tos_queue_post(k_queue_t *queue, void *msg_addr, size_t msg_size
  * @retval  #K_ERR_NONE                       return successfully.
  */
 __API__ k_err_t tos_queue_post_all(k_queue_t *queue, void *msg_addr, size_t msg_size);
+
+/**
+ * @brief Flush a queue.
+ * flush a queue, clear all the msg in the queue.
+ *
+ * @attention None
+ *
+ * @param[in]   queue       pointer to the handler of the queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_queue_flush(k_queue_t *queue);
+
+/**
+ * @brief Remove one message from the queue.
+ * Remove one message with certain address from the queue.
+ *
+ * @attention None
+ *
+ * @param[in]   queue       pointer to the handler of the queue.
+ * @param[in]   msg_addr    the address of the message.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_QUEUE_MSG_NOT_EXIST      message to remove is not existed.
+ * @retval  #K_ERR_NONE                     return successfully.
+ */
+__API__ k_err_t tos_queue_remove(k_queue_t *queue, void *msg_addr);
 
 #endif
 

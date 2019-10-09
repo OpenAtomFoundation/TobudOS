@@ -80,6 +80,21 @@ __API__ k_err_t tos_msg_queue_get(k_msg_queue_t *msg_queue, void **msg_addr, siz
 __API__ k_err_t tos_msg_queue_put(k_msg_queue_t *msg_queue, void *msg_addr, size_t msg_size, k_opt_t opt);
 
 /**
+ * @brief Remove one message from the message queue.
+ * Remove one message with certain address from the message queue.
+ *
+ * @attention None
+ *
+ * @param[IN]   msg_queue       the pointer to the handler of the message queue.
+ * @param[IN]   msg_addr        the address of the message.
+ *
+ * @return  errcode.
+ * @retval  #K_ERR_MSG_QUEUE_MSG_NOT_EXIST  message to remove is not existed
+ * @retval  #K_ERR_NONE                     return successfully
+ */
+__API__ k_err_t tos_msg_queue_remove(k_msg_queue_t *msg_queue, void *msg_addr);
+
+/**
  * @brief Flush all of the messages.
  * Flush all of the messages in the queue.
  *
