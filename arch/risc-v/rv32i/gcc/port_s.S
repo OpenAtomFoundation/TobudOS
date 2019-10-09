@@ -146,10 +146,6 @@ port_sched_start:
     lw      t0, (t0)                // t0 = &(k_curr_task->sp)
     lw      sp, (t0)                // sp = k_curr_task->sp
 
-    // save sp to stack
-    addi    t1, sp, 128
-    sw      t1, (t0)
-
     j       restore_context
 
 
