@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include "riscv_port.h"
 
 .global port_int_disable
@@ -142,8 +159,7 @@ port_sched_start:
     csrs    mie, t0
 
     // load sp from k_curr_task->sp
-    la      t0, k_curr_task         // t0 = &k_curr_task
-    lw      t0, (t0)                // t0 = &(k_curr_task->sp)
+    lw      t0, k_curr_task
     lw      sp, (t0)                // sp = k_curr_task->sp
 
     j       restore_context
@@ -280,10 +296,10 @@ rv32_exception_entry:
     csrr    t0,  mstatus
     sw      t0,  __reg_mstatus__OFFSET(sp)
 
-    // switch to irq stack
     mv      t0, sp
-    la      t1, k_irq_stk_top
-    lw      sp, (t1)
+    // switch to irq stack
+    lw      sp, k_irq_stk_top
+    // save task stack pointer
     sw      t0, (sp)
 
     // get irq num and call irq handler
@@ -293,8 +309,7 @@ rv32_exception_entry:
     call    cpu_irq_entry
 
     // switch back to task stack
-    lw      t0, (sp)
-    mv      sp, t0
+    lw      sp, (sp)
 
     la      t0,  k_curr_task
     la      t1,  k_next_task
