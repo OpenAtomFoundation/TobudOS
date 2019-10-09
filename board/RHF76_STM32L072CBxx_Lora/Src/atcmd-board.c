@@ -31,7 +31,7 @@ uint8_t isspace(char x)
 /*ASCÂë×ªÕûĞÎ*/
 int asc2int(const uint8_t * asc, uint8_t len)
 {
-    uint8_t i;
+    uint8_t i = 0;
     char c;
     char sign;
     int total = 0;
@@ -234,7 +234,7 @@ uint8_t at_key_handle(uint8_t *param, uint16_t size)
      * AT+KEY=APPKEY, "2B7E151628AED2A6ABF7158809CF4F3C"
      */
     uint8_t key[16];
-    uint8_t i;
+    uint8_t i = 0;
     MibRequestConfirm_t mibReq;
     
     while(param[i++] != '\"');
