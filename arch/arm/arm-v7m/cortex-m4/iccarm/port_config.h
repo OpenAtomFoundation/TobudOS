@@ -25,7 +25,7 @@
 #define TOS_CFG_CPU_HRTIMER_EN               0u
 #define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  1u
 
-#ifndef ARMVFP
+#ifndef __ARMVFP__
 #define TOS_CFG_CPU_ARM_FPU_EN 0u
 #else
 #define TOS_CFG_CPU_ARM_FPU_EN 1u
