@@ -43,6 +43,8 @@
 #include <tos_mutex.h>
 #include <tos_sem.h>
 #include <tos_event.h>
+#include <tos_countdownlatch.h>
+#include <tos_completion.h>
 #include <tos_timer.h>
 #include <tos_time.h>
 #include <tos_mmblk.h>

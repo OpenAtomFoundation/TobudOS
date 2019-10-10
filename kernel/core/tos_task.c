@@ -53,8 +53,8 @@ __STATIC__ k_prio_t task_highest_pending_prio_get(k_task_t *task)
     k_prio_t prio, highest_prio_pending = K_TASK_PRIO_INVALID;
 
     TOS_LIST_FOR_EACH(curr, &task->mutex_own_list) {
-        mutex   = TOS_LIST_ENTRY(curr, k_mutex_t, owner_list);
-        prio    = pend_highest_prio_get(&mutex->pend_obj);
+        mutex   = TOS_LIST_ENTRY(curr, k_mutex_t, owner_anchor);
+        prio    = pend_highest_pending_prio_get(&mutex->pend_obj);
         if (prio < highest_prio_pending) {
             highest_prio_pending = prio;
         }
@@ -67,7 +67,7 @@ __STATIC__ void task_mutex_release(k_task_t *task)
     k_list_t *curr, *next;
 
     TOS_LIST_FOR_EACH_SAFE(curr, next, &task->mutex_own_list) {
-        mutex_release(TOS_LIST_ENTRY(curr, k_mutex_t, owner_list));
+        mutex_release(TOS_LIST_ENTRY(curr, k_mutex_t, owner_anchor));
     }
 }
 #endif
@@ -358,6 +358,7 @@ __API__ k_err_t tos_task_delay(k_tick_t delay)
 
     if (tick_list_add(k_curr_task, delay) != K_ERR_NONE) {
         TOS_CPU_INT_ENABLE();
+        // if you wanna delay your task forever, why don't just suspend?
         return K_ERR_DELAY_FOREVER;
     }
 
