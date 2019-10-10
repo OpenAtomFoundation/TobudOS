@@ -12,7 +12,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-
 #include "tos.h"
 #include "nrf_gpio.h"
 
