@@ -25,7 +25,7 @@ typedef struct k_mutex_st {
     k_nesting_t     pend_nesting;
     k_task_t       *owner;
     k_prio_t        owner_orig_prio;
-    k_list_t        owner_list;
+    k_list_t        owner_anchor;
 } k_mutex_t;
 
 /**

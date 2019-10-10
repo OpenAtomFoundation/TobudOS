@@ -37,11 +37,13 @@ typedef enum pend_state_en {
    is initialized, or whether user pass the correct parameter.
  */
 typedef enum pend_type_en {
-    PEND_TYPE_NONE      = 0x0000,
-    PEND_TYPE_SEM       = 0x1BEE,
-    PEND_TYPE_MUTEX     = 0x2BEE,
-    PEND_TYPE_EVENT     = 0x3BEE,
-    PEND_TYPE_QUEUE     = 0x4BEE,
+    PEND_TYPE_NONE              = 0x0000,
+    PEND_TYPE_SEM               = 0x1BEE,
+    PEND_TYPE_MUTEX             = 0x2BEE,
+    PEND_TYPE_EVENT             = 0x3BEE,
+    PEND_TYPE_QUEUE             = 0x4BEE,
+    PEND_TYPE_COUNTDOWNLATCH    = 0x5BEE,
+    PEND_TYPE_COMPLETION        = 0x6BEE,
 } pend_type_t;
 
 typedef enum opt_post_en {
@@ -62,7 +64,9 @@ __KERNEL__ int      pend_object_verify(pend_obj_t *object, pend_type_t type);
 
 __KERNEL__ int      pend_is_nopending(pend_obj_t *object);
 
-__KERNEL__ k_prio_t pend_highest_prio_get(pend_obj_t *object);
+__KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object);
+
+__KERNEL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object);
 
 __KERNEL__ void     pend_list_remove(k_task_t *task);
 

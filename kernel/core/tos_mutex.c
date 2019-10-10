@@ -25,8 +25,9 @@ __STATIC_INLINE__ void mutex_old_owner_release(k_mutex_t *mutex)
 
     owner = mutex->owner;
 
-    tos_list_del(&mutex->owner_list);
-    mutex->owner = K_NULL;
+    tos_list_del(&mutex->owner_anchor);
+    mutex->owner        = K_NULL;
+    mutex->pend_nesting = (k_nesting_t)0u;
 
     // the right time comes! let's do it!
     if (owner->prio_pending != K_TASK_PRIO_INVALID) {
@@ -40,11 +41,11 @@ __STATIC_INLINE__ void mutex_old_owner_release(k_mutex_t *mutex)
 
 __STATIC_INLINE__ void mutex_fresh_owner_mark(k_mutex_t *mutex, k_task_t *task)
 {
-    mutex->pend_nesting     = (k_nesting_t)1u;
     mutex->owner            = task;
     mutex->owner_orig_prio  = task->prio;
+    mutex->pend_nesting     = (k_nesting_t)1u;
 
-    tos_list_add(&mutex->owner_list, &task->mutex_own_list);
+    tos_list_add(&mutex->owner_anchor, &task->mutex_own_list);
 }
 
 __STATIC_INLINE__ void mutex_new_owner_mark(k_mutex_t *mutex, k_task_t *task)
@@ -54,7 +55,7 @@ __STATIC_INLINE__ void mutex_new_owner_mark(k_mutex_t *mutex, k_task_t *task)
     mutex_fresh_owner_mark(mutex, task);
 
     // we own the mutex now, make sure our priority is higher than any one in the pend list.
-    highest_pending_prio = pend_highest_prio_get(&mutex->pend_obj);
+    highest_pending_prio = pend_highest_pending_prio_get(&mutex->pend_obj);
     if (task->prio > highest_pending_prio) {
         tos_task_prio_change(task, highest_pending_prio);
     }
@@ -76,7 +77,7 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
     mutex->pend_nesting     = (k_nesting_t)0u;
     mutex->owner            = K_NULL;
     mutex->owner_orig_prio  = K_TASK_PRIO_INVALID;
-    tos_list_init(&mutex->owner_list);
+    tos_list_init(&mutex->owner_anchor);
 
     return K_ERR_NONE;
 }
@@ -101,7 +102,6 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
     }
 
     pend_object_deinit(&mutex->pend_obj);
-    mutex->pend_nesting = (k_nesting_t)0u;
 
     if (mutex->owner) {
         mutex_old_owner_release(mutex);
@@ -116,7 +116,6 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 __API__ k_err_t tos_mutex_pend_timed(k_mutex_t *mutex, k_tick_t timeout)
 {
     TOS_CPU_CPSR_ALLOC();
-    k_err_t err;
 
     TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
@@ -166,16 +165,7 @@ __API__ k_err_t tos_mutex_pend_timed(k_mutex_t *mutex, k_tick_t timeout)
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
-    err = pend_state2errno(k_curr_task->pend_state);
-
-    if (err == K_ERR_NONE) {
-        // good, we are the owner now.
-        TOS_CPU_INT_DISABLE();
-        mutex_new_owner_mark(mutex, k_curr_task);
-        TOS_CPU_INT_ENABLE();
-    }
-
-    return err;
+    return pend_state2errno(k_curr_task->pend_state);
 }
 
 __API__ k_err_t tos_mutex_pend(k_mutex_t *mutex)
@@ -186,6 +176,7 @@ __API__ k_err_t tos_mutex_pend(k_mutex_t *mutex)
 __API__ k_err_t tos_mutex_post(k_mutex_t *mutex)
 {
     TOS_CPU_CPSR_ALLOC();
+    k_task_t *pending_task;
 
     TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
@@ -214,6 +205,14 @@ __API__ k_err_t tos_mutex_post(k_mutex_t *mutex)
         TOS_CPU_INT_ENABLE();
         return K_ERR_NONE;
     }
+
+    /* must do the mutex owner switch right here
+       if the pender don't get a chance to schedule, the poster(old owner) may obtain the mutex immediately again
+       but the pender already get ready(already in the critical section).
+       we switch the owner right here to avoid the old owner obtain the mutex again
+     */
+    pending_task = pend_highest_pending_task_get(&mutex->pend_obj);
+    mutex_new_owner_mark(mutex, pending_task);
 
     pend_wakeup_one(&mutex->pend_obj, PEND_STATE_POST);
     TOS_CPU_INT_ENABLE();

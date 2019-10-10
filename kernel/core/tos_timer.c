@@ -113,6 +113,7 @@ __API__ k_err_t tos_timer_create(k_timer_t *tmr,
     }
 
     if (opt == TOS_OPT_TIMER_ONESHOT && delay == (k_tick_t)0u) {
+        // if you create a oneshot timer and delay 0 to trigger, why don't just call the timer_callback?
         return K_ERR_TIMER_INVALID_DELAY;
     }
 

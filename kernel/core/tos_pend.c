@@ -39,13 +39,18 @@ __STATIC__ void pend_list_add(k_task_t *task, pend_obj_t *pend_obj)
     task_state_set_pend(task);
 }
 
-__KERNEL__ k_prio_t pend_highest_prio_get(pend_obj_t *object)
+__KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object)
 {
     k_task_t *task;
 
     // we keep the task priority in descending order, so the first one is just fine.
     task = TOS_LIST_FIRST_ENTRY_OR_NULL(&object->list, k_task_t, pend_list);
     return task ? task->prio : K_TASK_PRIO_INVALID;
+}
+
+__KERNEL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object)
+{
+    return TOS_LIST_FIRST_ENTRY(&object->list, k_task_t, pend_list);
 }
 
 __KERNEL__ void pend_list_remove(k_task_t *task)

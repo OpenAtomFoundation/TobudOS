@@ -21,6 +21,10 @@
 typedef enum k_err_en {
     K_ERR_NONE                                  = 0u,
 
+    K_ERR_COMPLETION_OVERFLOW               = 25u,
+
+    K_ERR_COUNTDOWNLATCH_OVERFLOW           = 50u,
+
     K_ERR_DELAY_ZERO                            = 100u,
     K_ERR_DELAY_FOREVER,
 

@@ -78,8 +78,7 @@ __KERNEL__ k_task_t *readyqueue_highest_ready_task_get(void)
     k_list_t *task_list;
 
     task_list = &k_rdyq.task_list_head[k_rdyq.highest_prio];
-    k_task_t *fuck = TOS_LIST_FIRST_ENTRY(task_list, k_task_t, pend_list);
-    return fuck;
+    return TOS_LIST_FIRST_ENTRY(task_list, k_task_t, pend_list);
 }
 
 __KERNEL__ void readyqueue_init(void)
