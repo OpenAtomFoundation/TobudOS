@@ -418,14 +418,19 @@
               <FilePath>..\..\BSP\Src\stm32l0xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>stm32l0xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32l0xx_it.c</FilePath>
-            </File>
-            <File>
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l0xx_it_module.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\stm32l0xx_it_module.c</FilePath>
+            </File>
+            <File>
+              <FileName>rhf76_lora.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\rhf76_lora.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -646,56 +651,6 @@
               <FileName>cmsis_os.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\osal\cmsis_os\cmsis_os.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>examples</GroupName>
-          <Files>
-            <File>
-              <FileName>lora_demo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\LoRaWAN\lora_demo.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>devices</GroupName>
-          <Files>
-            <File>
-              <FileName>RHF76.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\devices\rhf76_lora\RHF76.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>hal</GroupName>
-          <Files>
-            <File>
-              <FileName>tos_hal_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\hal\st\stm32l0xx\src\tos_hal_uart.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>at</GroupName>
-          <Files>
-            <File>
-              <FileName>tos_at.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_at_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at_utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora_module_wrapper.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\lora_module_wrapper\lora_module_wrapper.c</FilePath>
             </File>
           </Files>
         </Group>

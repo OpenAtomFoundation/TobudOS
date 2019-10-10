@@ -9,6 +9,7 @@
 #include "usart.h"
 #include "i2c.h"
 #include "gpio.h"
+#include "rhf76_lora.h"
 #include "tos.h"
 
 void board_init(void);
