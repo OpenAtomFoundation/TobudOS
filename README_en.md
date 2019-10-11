@@ -60,7 +60,7 @@ The fault scene information is automatically uploaded to the cloud platform, whi
 
 ## 3、TencentOS tiny and partners are committed to building the IoT ecosystem
 
-![](./doc/picture/introduction/Partners.png)
+![](./doc/picture/introduction/Partners_en.png)
 
 TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
 
@@ -94,7 +94,7 @@ TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development b
 - [TencentOS tiny custom development board introduction page](http://www.holdiot.com/product/showproduct.php?id=8) ,Developers can quickly learn based on custom development boards, click to download reference documentation
 - [TencentOS-tiny Custom Development Board Getting Started Guide](./doc/TencentOS-tiny定制开发板入门指南.pdf)
 
-# Contribution code
+# Contributing
 * 1.  Under the Fork TencentOS tiny open source project under your own GitHub account;
 * 2.  Clone a TencentOS tiny code locally according to your needs;
 * 3.  After you modify or add a new function, push to the remote branch of your fork;
