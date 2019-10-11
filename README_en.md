@@ -4,6 +4,9 @@
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/TencentOS-tiny/pulls)
 [![Build status](https://travis-ci.org/Tencent/TencentOS-tiny.svg?branch=master)](https://travis-ci.org/Tencent/TencentOS-tiny)
+
+[(中文)](README.md)
+
 # Introduction to TencentOS Tiny
 
 [TencentOS tiny](https://cloud.tencent.com/product/tos-tiny) is a real-time operating system developed by Tencent for the Internet of Things. It features low power consumption, low resource consumption, modularity, security and reliability, and can effectively improve the development efficiency of IoT terminal products. TencentOS tiny provides a streamlined RTOS core that can be tailored and configurable for rapid migration to a wide range of mainstream MCUs (such as the full range of STM32) and module chips. Moreover, based on the RTOS kernel, it provides a wealth of IoT components, and internally integrates mainstream IoT protocol stacks (such as CoAP/MQTT/TLS/DTLS/LoRaWAN/NB-IoT, etc.), which can help IoT terminals and services to quickly access Tencent. Cloud Internet of Things platform.
@@ -11,7 +14,7 @@
 
 ## 1、The software architecture of TencentOS tiny
 
-![](./doc/picture/introduction/TencentOS_tiny_Architecture.png)
+![](./doc/picture/introduction/TencentOS_tiny_Architecture_en.png)
 
 TencentOS tiny main architecture diagram, from bottom to top, mainly includes:
 
@@ -31,7 +34,7 @@ TencentOS tiny main architecture diagram, from bottom to top, mainly includes:
 
 **examples**：TencentOS tiny provides sample code, module test code, etc., which is convenient for users to refer to.
 
-## 2、TencentOS tiny优势
+## 2、Key features of TencentOS tiny
 
 ### (1).Small size
 
