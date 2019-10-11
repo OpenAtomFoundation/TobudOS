@@ -112,11 +112,11 @@ TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development b
 - [TencentOS-tiny Custom Development Board Getting Started Guide](./doc/TencentOS-tiny定制开发板入门指南.pdf)
 
 # Contributing
-* 1.  Under the Fork TencentOS tiny open source project under your own GitHub account;
+* 1.  Fork TencentOS tiny open source project under your own GitHub account;
 * 2.  Clone a TencentOS tiny code locally according to your needs;
 * 3.  After you modify or add a new function, push to the remote branch of your fork;
 * 4.  Create a pull request and submit a join request to the official TencentOS tiny development branch;
-* 5.  The TencentOS tiny R&D team will periodically review the code and pass the test.
+* 5.  The TencentOS tiny R&D team will periodically review the code and merge your pull request.
 
 # Join the TencentOS tiny official QQ technology exchange group
 
