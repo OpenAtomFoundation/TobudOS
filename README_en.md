@@ -38,24 +38,41 @@ TencentOS tiny main architecture diagram, from bottom to top, mainly includes:
 
 ### (1).Small size
 
-Minimum kernel: RAM 0.6KB, ROM 1.8KB  
-Typical LoraWAN and Sensor Applications: RAM 3.3KB, ROM 12KB 
+Minimum kernel: RAM 0.6KB, ROM 1.8KB;
+
+Typical LoraWAN and Sensor Applications: RAM 3.3KB, ROM 12KB.
+
 ### (2).Low power consumption
-Minimum sleep power consumption as low as 2 uA
-Support for peripheral power management framework
+
+Minimum sleep power consumption as low as 2 uA;
+
+Support for peripheral power management framework;
+
 ### (3).Rich IoT components
-Integrate mainstream IoT protocol stack
+
+Integrate mainstream IoT protocol stack;
+
 Multiple communication module SAL layer adaptation framework;
-Support FOTA 
-Provides easy-to-use end-cloud API to accelerate user service access to Tencent Cloud
+
+Support FOTA;
+
+Provides easy-to-use end-cloud API to accelerate user service access to Tencent Cloud.
+
 ### (4).Reliable security framework
-Diversified security grading scheme
-Balanced security requirements & cost control
+
+Diversified security grading scheme; 
+
+Balanced security requirements & cost control.
+
 ### (5).Good portability
-Highly decoupled core and IoT components, providing a standard adaptation layer
-Provide automated migration tools to improve development efficiency
+
+Highly decoupled core and IoT components, providing a standard adaptation layer;
+
+Provide automated migration tools to improve development efficiency.
+
 ### (6).Convenient debugging means
-Provide cloudized last screen debugging
+Provide cloudized last screen debugging;
+
 The fault scene information is automatically uploaded to the cloud platform, which is convenient for developers to debug and analyze.
 
 ## 3、TencentOS tiny and partners are committed to building the IoT ecosystem
@@ -85,7 +102,7 @@ TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semi
 # The IoT platform TencentOS tiny  support 
 TencentOS tiny can support IoT terminal devices and services for fast access to Tencent Cloud IoT Platform [IoT Explorer](https://cloud.tencent.com/product/iotexplorer)。
 
-TencentOS tiny combines Tencent Cloud IoT development platform IoT Explorer, which has built up the ability to connect communication chips to cloud development. Together with the largest LoRa network in China, Tencent has completely opened up from chip communication development, network support services, and physical equipment. Defining management, data analysis and multi-scenario application development and other full-chain IoT cloud development service capabilities, redefining the IoT development model, helping multi-mode multi-mode multi-mode low threshold access to Tencent cloud services. As an IoT infrastructure construction service provider, Tencent will continue to build an open IoT ecosystem and promote the sound development of the Internet of Things.
+TencentOS tiny combines Tencent Cloud IoT development platform IoT Explorer, which has built up the ability to connect communication chips to cloud development. Together with the largest LoRa network in China, Tencent has completely opened up from chip communication development, network support services, and physical equipment. Defining management, data analysis and multi-scenario application development and other full-chain IoT cloud development service capabilities, redefining the IoT development model, helping multi-mode low threshold access to Tencent cloud services. As an IoT infrastructure construction service provider, Tencent will continue to build an open IoT ecosystem and promote the sound development of the Internet of Things.
 
 # TencentOS tiny Quick Start Reference
 TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development board, as shown below:
@@ -103,7 +120,7 @@ TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development b
 
 # Join the TencentOS tiny official QQ technology exchange group
 
-Scan the QR code plus group, please note the TencentOS tiny developer, the staff will review according to the notes:
+Scan the QR code to join the qq group, please note the TencentOS tiny developer, the TencentOS tiny staff will review according to the notes:
 
 ![](./doc/picture/introduction/qq.png)
 
