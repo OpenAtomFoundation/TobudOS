@@ -14,16 +14,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>nRF51822_xxAA</Device>
+          <Device>nRF51822_xxAC</Device>
           <Vendor>Nordic Semiconductor</Vendor>
-          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.17.0</PackID>
+          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.24.1</PackID>
           <PackURL>http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/</PackURL>
-          <Cpu>IRAM(0x20000000,0x4000) IROM(0x00000000,0x40000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x8000) IROM(0x00000000,0x40000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC4000 -FN1 -FF0nrf51xxx -FS00 -FL0200000 -FP0($$Device:nRF51822_xxAA$Flash\nrf51xxx.flm))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC4000 -FN1 -FF0nrf51xxx -FS00 -FL0200000 -FP0($$Device:nRF51822_xxAC$Flash\nrf51xxx.flm))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:nRF51822_xxAA$Device\Include\nrf.h</RegisterFile>
+          <RegisterFile>$$Device:nRF51822_xxAC$Device\Include\nrf.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:nRF51822_xxAA$SVD\nrf51.svd</SFDFile>
+          <SFDFile>$$Device:nRF51822_xxAC$SVD\nrf51.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -245,7 +245,7 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x4000</Size>
+                <Size>0x8000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -338,7 +338,7 @@
               <MiscControls>--reduce_paths --gnu</MiscControls>
               <Define>NRF51,NIMBLE_CFG_CONTROLLER=1,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m0+\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\npl\TencentOS tiny\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\drivers\nrf51\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\transport\ram\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\drivers\Nordic Soc\nrfx;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\drivers\Nordic Soc\nrfx\templates\nRF51;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\drivers\Nordic Soc\nrfx\templates;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\lls\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\ans\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\bas\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\bleuart\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\gap\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\ias\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\lls\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\tps\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\gatt\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\store\ram\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\util\include;..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\npl\TencentOS tiny\include;..\..\..\..\platform\vendor_bsp\nordic\nRF5_SDK_15.3.0_59ac345\modules\nrfx</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m0+\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\npl\TencentOS tiny\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\drivers\nrf51\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\transport\ram\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\lls\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\ans\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\bas\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\bleuart\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\gap\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\ias\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\lls\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\tps\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\gatt\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\store\ram\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\util\include;..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\npl\TencentOS tiny\include;..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\include;..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\include\nrf51832;..\..\..\..\platform\vendor_bsp\nordic\nRF5_SDK_15.3.0\modules\nrfx</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -555,12 +555,47 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>TOS-CONFIG</GroupName>
+          <GroupName>CONFIG</GroupName>
           <Files>
             <File>
               <FileName>tos_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\TOS_CONFIG\tos_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>nrfx_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\BSP\Inc\nrfx_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>private_syscfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\include\nrf51832\config\private_syscfg.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>porting/TencentOS_tiny</GroupName>
+          <Files>
+            <File>
+              <FileName>nimble_port_tencentos_tiny.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\nimble_port_tencentos_tiny.c</FilePath>
+            </File>
+            <File>
+              <FileName>npl_os_tencenos_tiny.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\npl_os_tencenos_tiny.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf5x_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\nrf5x_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>tencent_os_tiny_libc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\tencent_os_tiny_libc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -570,222 +605,222 @@
             <File>
               <FileName>ble_att.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_att.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_att.c</FilePath>
             </File>
             <File>
               <FileName>ble_att_clt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_att_clt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_att_clt.c</FilePath>
             </File>
             <File>
               <FileName>ble_att_cmd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_att_cmd.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_att_cmd.c</FilePath>
             </File>
             <File>
               <FileName>ble_att_svr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_att_svr.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_att_svr.c</FilePath>
             </File>
             <File>
               <FileName>ble_eddystone.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_eddystone.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_eddystone.c</FilePath>
             </File>
             <File>
               <FileName>ble_gap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_gap.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_gap.c</FilePath>
             </File>
             <File>
               <FileName>ble_gattc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_gattc.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_gattc.c</FilePath>
             </File>
             <File>
               <FileName>ble_gatts.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_gatts.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_gatts.c</FilePath>
             </File>
             <File>
               <FileName>ble_gatts_lcl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_gatts_lcl.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_gatts_lcl.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_adv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_adv.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_adv.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_atomic.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_atomic.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_atomic.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_cfg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_cfg.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_cfg.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_conn.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_conn.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_conn.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_dbg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_dbg.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_dbg.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_flow.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_flow.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_flow.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_hci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_hci.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_hci.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_hci_cmd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_hci_cmd.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_hci_cmd.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_hci_evt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_hci_evt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_hci_evt.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_hci_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_hci_util.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_hci_util.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_id.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_id.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_id.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_log.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_log.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_mbuf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_mbuf.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_mbuf.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_misc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_misc.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_misc.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_mqueue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_mqueue.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_mqueue.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_periodic_sync.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_periodic_sync.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_periodic_sync.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_pvcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_pvcy.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_pvcy.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_shutdown.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_shutdown.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_shutdown.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_startup.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_startup.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_startup.c</FilePath>
             </File>
             <File>
               <FileName>ble_hs_stop.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_hs_stop.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_hs_stop.c</FilePath>
             </File>
             <File>
               <FileName>ble_ibeacon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_ibeacon.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_ibeacon.c</FilePath>
             </File>
             <File>
               <FileName>ble_l2cap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_l2cap.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_l2cap.c</FilePath>
             </File>
             <File>
               <FileName>ble_l2cap_coc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_l2cap_coc.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_l2cap_coc.c</FilePath>
             </File>
             <File>
               <FileName>ble_l2cap_sig.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_l2cap_sig.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_l2cap_sig.c</FilePath>
             </File>
             <File>
               <FileName>ble_l2cap_sig_cmd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_l2cap_sig_cmd.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_l2cap_sig_cmd.c</FilePath>
             </File>
             <File>
               <FileName>ble_monitor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_monitor.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_monitor.c</FilePath>
             </File>
             <File>
               <FileName>ble_sm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_sm.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_sm.c</FilePath>
             </File>
             <File>
               <FileName>ble_sm_alg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_sm_alg.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_sm_alg.c</FilePath>
             </File>
             <File>
               <FileName>ble_sm_cmd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_sm_cmd.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_sm_cmd.c</FilePath>
             </File>
             <File>
               <FileName>ble_sm_lgcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_sm_lgcy.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_sm_lgcy.c</FilePath>
             </File>
             <File>
               <FileName>ble_sm_sc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_sm_sc.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_sm_sc.c</FilePath>
             </File>
             <File>
               <FileName>ble_store.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_store.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_store.c</FilePath>
             </File>
             <File>
               <FileName>ble_store_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_store_util.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_store_util.c</FilePath>
             </File>
             <File>
               <FileName>ble_uuid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\src\ble_uuid.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\src\ble_uuid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -795,92 +830,92 @@
             <File>
               <FileName>ble_ll.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_adv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_adv.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_adv.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_conn.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_conn.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_conn.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_conn_hci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_conn_hci.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_conn_hci.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_ctrl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_ctrl.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_ctrl.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_dtm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_dtm.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_dtm.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_hci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_hci.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_hci.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_hci_ev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_hci_ev.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_hci_ev.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_rand.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_rand.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_rand.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_resolv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_resolv.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_resolv.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_scan.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_scan.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_scan.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_sched.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_sched.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_sched.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_supp_cmd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_supp_cmd.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_supp_cmd.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_sync.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_sync.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_sync.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_trace.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_trace.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_trace.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_utils.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_utils.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_whitelist.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_whitelist.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_whitelist.c</FilePath>
             </File>
             <File>
               <FileName>ble_ll_xcvr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\controller\src\ble_ll_xcvr.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\controller\src\ble_ll_xcvr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -890,47 +925,47 @@
             <File>
               <FileName>endian.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\endian.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\endian.c</FilePath>
             </File>
             <File>
               <FileName>hal_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\hal_timer.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\hal_timer.c</FilePath>
             </File>
             <File>
               <FileName>mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\mem.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\mem.c</FilePath>
             </File>
             <File>
               <FileName>nimble_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\nimble_port.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\nimble_port.c</FilePath>
             </File>
             <File>
               <FileName>os_cputime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\os_cputime.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\os_cputime.c</FilePath>
             </File>
             <File>
               <FileName>os_cputime_pwr2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\os_cputime_pwr2.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\os_cputime_pwr2.c</FilePath>
             </File>
             <File>
               <FileName>os_mbuf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\os_mbuf.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\os_mbuf.c</FilePath>
             </File>
             <File>
               <FileName>os_mempool.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\os_mempool.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\os_mempool.c</FilePath>
             </File>
             <File>
               <FileName>os_msys_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\nimble\src\os_msys_init.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\porting\nimble\src\os_msys_init.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -940,32 +975,32 @@
             <File>
               <FileName>aes_decrypt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\src\aes_decrypt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\src\aes_decrypt.c</FilePath>
             </File>
             <File>
               <FileName>aes_encrypt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\src\aes_encrypt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\src\aes_encrypt.c</FilePath>
             </File>
             <File>
               <FileName>cmac_mode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\src\cmac_mode.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\src\cmac_mode.c</FilePath>
             </File>
             <File>
               <FileName>ecc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\src\ecc.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\src\ecc.c</FilePath>
             </File>
             <File>
               <FileName>ecc_dh.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\src\ecc_dh.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\src\ecc_dh.c</FilePath>
             </File>
             <File>
               <FileName>utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\ext\tinycrypt\src\utils.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\ext\tinycrypt\src\utils.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -975,7 +1010,7 @@
             <File>
               <FileName>ble_hci_ram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\transport\ram\src\ble_hci_ram.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\transport\ram\src\ble_hci_ram.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -985,7 +1020,7 @@
             <File>
               <FileName>ble_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\src\ble_util.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\src\ble_util.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -995,37 +1030,12 @@
             <File>
               <FileName>ble_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\drivers\nrf51\src\ble_hw.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\drivers\nrf51\src\ble_hw.c</FilePath>
             </File>
             <File>
               <FileName>ble_phy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\drivers\nrf51\src\ble_phy.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>NimBLE/TencentOS_tiny</GroupName>
-          <Files>
-            <File>
-              <FileName>nimble_port_tencentos_tiny.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\npl\TencentOS tiny\src\nimble_port_tencentos_tiny.c</FilePath>
-            </File>
-            <File>
-              <FileName>npl_os_tencenos_tiny.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\npl\TencentOS tiny\src\npl_os_tencenos_tiny.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrf5x_isr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\npl\TencentOS tiny\src\nrf5x_isr.c</FilePath>
-            </File>
-            <File>
-              <FileName>tencent_os_tiny_libc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\porting\npl\TencentOS tiny\src\tencent_os_tiny_libc.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\drivers\nrf51\src\ble_phy.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1035,7 +1045,7 @@
             <File>
               <FileName>ble_svc_ans.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\ans\src\ble_svc_ans.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\ans\src\ble_svc_ans.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1045,7 +1055,7 @@
             <File>
               <FileName>ble_svc_bas.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\bas\src\ble_svc_bas.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\bas\src\ble_svc_bas.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1055,7 +1065,7 @@
             <File>
               <FileName>bleuart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\bleuart\src\bleuart.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\bleuart\src\bleuart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1065,7 +1075,7 @@
             <File>
               <FileName>ble_svc_gap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\gap\src\ble_svc_gap.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\gap\src\ble_svc_gap.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1075,7 +1085,7 @@
             <File>
               <FileName>ble_svc_gatt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\gatt\src\ble_svc_gatt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\gatt\src\ble_svc_gatt.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1085,7 +1095,7 @@
             <File>
               <FileName>ble_svc_ias.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\ias\src\ble_svc_ias.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\ias\src\ble_svc_ias.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1095,7 +1105,7 @@
             <File>
               <FileName>ble_svc_lls.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\lls\src\ble_svc_lls.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\lls\src\ble_svc_lls.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1105,7 +1115,7 @@
             <File>
               <FileName>ble_svc_tps.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\services\tps\src\ble_svc_tps.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\services\tps\src\ble_svc_tps.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1115,7 +1125,7 @@
             <File>
               <FileName>ble_store_ram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\store\ram\src\ble_store_ram.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\store\ram\src\ble_store_ram.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1125,7 +1135,7 @@
             <File>
               <FileName>addr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\Bluetooth 5.0\3rdparty\NimBLE\nimble\host\util\src\addr.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\3rdparty\NimBLE_1_2_0\nimble\host\util\src\addr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1139,8 +1149,8 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.1.1" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.3.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.3.0" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.6.0"/>
         <targetInfos>
           <targetInfo name="TencentOS_tiny"/>
         </targetInfos>
