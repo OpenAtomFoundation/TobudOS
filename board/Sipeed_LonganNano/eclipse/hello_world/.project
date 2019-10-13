@@ -42,12 +42,12 @@
 		<link>
 			<name>Application/Inc</name>
 			<type>2</type>
-			<locationURI>TOP_DIR/board/GD32VF103C_START/BSP/Inc</locationURI>
+			<locationURI>TOP_DIR/board/Sipeed_LonganNano/BSP/Inc</locationURI>
 		</link>
 		<link>
 			<name>Application/Src</name>
 			<type>2</type>
-			<locationURI>TOP_DIR/board/GD32VF103C_START/BSP/Src</locationURI>
+			<locationURI>TOP_DIR/board/Sipeed_LonganNano/BSP/Src</locationURI>
 		</link>
 		<link>
 			<name>Application/tos_config.h</name>
