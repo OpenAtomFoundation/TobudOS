@@ -111,8 +111,8 @@
 #define TOS_CFG_MMHEAP_EN                       1u
 #endif
 
-#if     (TOS_CFG_MMHEAP_EN > 0u) && !defined(TOS_CFG_MMHEAP_POOL_SIZE)
-#define  TOS_CFG_MMHEAP_POOL_SIZE               0x1000
+#ifndef TOS_CFG_MMHEAP_DEFAULT_POOL_EN
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_EN          1u
 #endif
 /////////////////////////////////////////
 
@@ -198,10 +198,6 @@
 #define TOS_CFG_COMPLETION_EN               0u
 #endif
 
-#ifndef TOS_CFG_MMHEAP_EN
-#define  TOS_CFG_MMHEAP_EN                  0u
-#endif
-
 #if     (TOS_CFG_QUEUE_EN > 0u) && !defined(TOS_CFG_MSG_EN)
 #define  TOS_CFG_MSG_EN                   1u
 #elif   (TOS_CFG_QUEUE_EN == 0u) && !defined(TOS_CFG_MSG_EN)
@@ -260,8 +256,8 @@
 #define TOS_CFG_MMHEAP_EN                       0u
 #endif
 
-#if     (TOS_CFG_MMHEAP_EN > 0u) && !defined(TOS_CFG_MMHEAP_POOL_SIZE)
-#define  TOS_CFG_MMHEAP_POOL_SIZE               0x1000
+#ifndef TOS_CFG_MMHEAP_DEFAULT_POOL_EN
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_EN          1u
 #endif
 
 #ifndef TOS_CFG_PWR_MGR_EN

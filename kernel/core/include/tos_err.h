@@ -47,6 +47,9 @@ typedef enum k_err_en {
 
     K_ERR_MMHEAP_INVALID_POOL_ADDR              = 800u,
     K_ERR_MMHEAP_INVALID_POOL_SIZE,
+    K_ERR_MMHEAP_POOL_OVERFLOW,
+    K_ERR_MMHEAP_POOL_ALREADY_EXIST,
+    K_ERR_MMHEAP_POOL_NOT_EXIST,
 
     K_ERR_MSG_QUEUE_FULL                        = 900u,
     K_ERR_MSG_QUEUE_EMPTY,

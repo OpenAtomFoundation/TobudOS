@@ -26,7 +26,14 @@ __API__ k_err_t tos_knl_init(void)
     readyqueue_init();
 
 #if TOS_CFG_MMHEAP_EN > 0
-    mmheap_init(k_mmheap_pool, TOS_CFG_MMHEAP_POOL_SIZE);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+    err = mmheap_init_with_pool(k_mmheap_default_pool, TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE);
+#else
+    err = mmheap_init();
+#endif
+    if (err != K_ERR_NONE) {
+        return err;
+    }
 #endif
 
 #if (TOS_CFG_MSG_EN) > 0

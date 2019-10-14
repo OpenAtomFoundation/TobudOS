@@ -29,7 +29,11 @@ __API__ evtdrv_err_t tos_evtdrv_sys_init(evtdrv_task_entry_t tasks[], evtdrv_ttb
     evtdrv_poll                 = poll;
 
 #if TOS_CFG_MMHEAP_EN > 0
-    mmheap_init(k_mmheap_pool, TOS_CFG_MMHEAP_POOL_SIZE);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+    mmheap_init_with_pool(k_mmheap_default_pool, TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE);
+#else
+    mmheap_init();
+#endif
 #else
     return EVTDRV_ERR_MMHEAP_NOT_ENABLED;
 #endif

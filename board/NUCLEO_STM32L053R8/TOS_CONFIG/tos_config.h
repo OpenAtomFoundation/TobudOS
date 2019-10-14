@@ -15,7 +15,7 @@
 
 #define TOS_CFG_MMHEAP_EN               1u
 
-#define TOS_CFG_MMHEAP_POOL_SIZE        0x400
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE        0x400
 
 #define TOS_CFG_MUTEX_EN                1u
 

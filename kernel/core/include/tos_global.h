@@ -60,7 +60,9 @@ extern k_fault_log_writer_t k_fault_log_writer;
 #endif
 
 #if TOS_CFG_MMHEAP_EN > 0u
-extern uint8_t              k_mmheap_pool[] __ALIGNED__(4);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+extern uint8_t              k_mmheap_default_pool[] __ALIGNED__(4);
+#endif
 extern k_mmheap_ctl_t       k_mmheap_ctl;
 #endif
 

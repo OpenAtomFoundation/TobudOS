@@ -28,6 +28,12 @@
 #error  "INVALID config, tickless not supported in event-driven yet"
 #endif
 
+#if     (TOS_CFG_MMHEAP_EN > 0u) && (TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u)
+#if     !defined(TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE) || (TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE == 0u)
+#error  "INVALID config, must define a valid TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE"
+#endif
+#endif
+
 #else /* TOS_CFG_EVENT_DRIVEN_EN */
 
 #if     TOS_CFG_TASK_PRIO_MAX < 8u
@@ -40,6 +46,12 @@
 
 #if     ((TOS_CFG_TIMER_EN > 0u) && !defined(TOS_CFG_TIMER_AS_PROC))
 #error  "UNDECLARED config, TOS_CFG_TIMER_AS_PROC"
+#endif
+
+#if     (TOS_CFG_MMHEAP_EN > 0u) && (TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u)
+#if     !defined(TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE) || (TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE == 0u)
+#error  "INVALID config, must define a valid TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE"
+#endif
 #endif
 
 #if     (TOS_CFG_VFS_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)

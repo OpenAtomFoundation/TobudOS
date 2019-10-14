@@ -90,6 +90,11 @@
 #define K_MMHEAP_BLOCK_SIZE_MASK        ~(K_MMHEAP_BLOCK_CURR_FREE | K_MMHEAP_BLOCK_PREV_FREE)
 #define K_MMHEAP_BLOCK_STATE_MASK       (K_MMHEAP_BLOCK_CURR_FREE | K_MMHEAP_BLOCK_PREV_FREE)
 
+typedef struct k_mmheap_information_st {
+    uint32_t    used; /* space is used */
+    uint32_t    free; /* space is free */
+} k_mmheap_info_t;
+
 /**
  * Block structure.
  *
@@ -120,10 +125,15 @@ typedef struct mmheap_blk_st {
 #define K_MMHEAP_BLK_HEADER_OVERHEAD    (sizeof(size_t))
 #define K_MMHEAP_BLK_START_OFFSET       (TOS_OFFSET_OF_FIELD(mmheap_blk_t, size) + sizeof(size_t))
 
+#define K_MMHEAP_POOL_MAX               3
+
 /**
  * memory heap control
  */
 typedef struct k_mmheap_control_st {
+    int             pool_cnt;
+    void           *pool_start[K_MMHEAP_POOL_MAX];
+
     mmheap_blk_t    block_null; /**< Empty lists point at this block to indicate they are free. */
 
     uint32_t        fl_bitmap; /**< Bitmaps for free lists. */
@@ -142,9 +152,11 @@ typedef struct k_mmheap_control_st {
  * @param[in]   pool_size   size of the pool.
  *
  * @return  errcode
- * @retval  #K_ERR_MMHEAP_INVALID_POOL_ADDR start address of the pool is invalid.
- * @retval  #K_ERR_MMHEAP_INVALID_POOL_SIZE size of the pool is invalid.
- * @retval  #K_ERR_NONE                     return successfully.
+ * @retval  #K_ERR_MMHEAP_INVALID_POOL_ADDR     start address of the pool is invalid.
+ * @retval  #K_ERR_MMHEAP_INVALID_POOL_SIZE     size of the pool is invalid.
+ * @retval  #K_ERR_MMHEAP_POOL_OVERFLOW         too many pools are added.
+ * @retval  #K_ERR_MMHEAP_POOL_ALREADY_EXIST    the pool is already exist.
+ * @retval  #K_ERR_NONE                         return successfully.
  */
 __API__ k_err_t tos_mmheap_pool_add(void *pool_start, size_t pool_size);
 
@@ -156,9 +168,12 @@ __API__ k_err_t tos_mmheap_pool_add(void *pool_start, size_t pool_size);
  *
  * @param[in]   pool_start  start address of the pool.
  *
- * @return  None
+ * @return  errcode
+ * @retval  #K_ERR_OBJ_PTR_NULL             start address of the pool is NULL
+ * @retval  #K_ERR_MMHEAP_POOL_NOT_EXIST    the pool is not exist
+ * @retval  #K_ERR_NONE                     return successfully.
  */
-__API__ void    tos_mmheap_pool_rmv(void *pool_start);
+__API__ k_err_t tos_mmheap_pool_rmv(void *pool_start);
 
 /**
  * @brief Alloc memory.
@@ -216,7 +231,34 @@ __API__ void   *tos_mmheap_realloc(void *ptr, size_t size);
  */
 __API__ void    tos_mmheap_free(void *ptr);
 
-__KERNEL__ k_err_t mmheap_init(void *pool_start, size_t pool_size);
+/**
+ * @brief Check the pool.
+ *
+ * @attention
+ *
+ * @param[in]   pool_start  start address of the pool.
+ * @param[out]  info        pointer to the information struct.
+ *
+ * @return  errcode.
+ * @retval  #K_ERR_NONE                     return successfully.
+ */
+__API__ k_err_t tos_mmheap_pool_check(void *pool_start, k_mmheap_info_t *info);
+
+/**
+ * @brief Check the heap.
+ *
+ * @attention
+ *
+ * @param[out]  info        pointer to the information struct.
+ *
+ * @return  errcode.
+ * @retval  #K_ERR_NONE                     return successfully.
+ */
+__API__ k_err_t tos_mmheap_check(k_mmheap_info_t *info);
+
+__KERNEL__ k_err_t mmheap_init(void);
+
+__KERNEL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size);
 
 #endif
 

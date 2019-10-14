@@ -43,7 +43,9 @@ k_fault_log_writer_t    k_fault_log_writer = fault_default_log_writer;
 #endif
 
 #if TOS_CFG_MMHEAP_EN > 0u
-uint8_t             k_mmheap_pool[TOS_CFG_MMHEAP_POOL_SIZE] __ALIGNED__(4);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+uint8_t             k_mmheap_default_pool[TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE] __ALIGNED__(4);
+#endif
 k_mmheap_ctl_t      k_mmheap_ctl;
 #endif
 
