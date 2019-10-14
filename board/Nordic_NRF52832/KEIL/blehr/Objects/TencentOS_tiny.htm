@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\TencentOS_tiny.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\TencentOS_tiny.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Oct 10 16:07:25 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Oct 14 12:16:00 2019
 <BR><P>
 <H3>Maximum Stack Usage =        992 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -688,12 +688,8 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fputc
 </UL>
 
-<P><STRONG><a name="[123]"></a>simple_uart_putstring</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, simple_uart.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = simple_uart_putstring
-</UL>
-<BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;simple_uart_put
-</UL>
-<BR>[Called By]<UL><LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<P><STRONG><a name="[123]"></a>simple_uart_putstring</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, simple_uart.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;simple_uart_put
 </UL>
 
 <P><STRONG><a name="[122]"></a>simple_uart_config</STRONG> (Thumb, 116 bytes, Stack size 24 bytes, simple_uart.o(.text))
@@ -2027,17 +2023,15 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[116]"></a>main</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[116]"></a>main</STRONG> (Thumb, 56 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 272 + Unknown Stack Size
 <LI>Call Chain = main &rArr; nimble_port_init &rArr; ble_ll_init &rArr; ble_ll_conn_module_init &rArr; ble_ll_conn_module_reset &rArr; ble_ll_conn_end &rArr; ble_npl_eventq_remove &rArr; npl_tencentos_tiny_eventq_remove &rArr; tos_queue_remove &rArr; tos_msg_queue_remove &rArr; msgpool_free &rArr; tos_list_add
 </UL>
-<BR>[Calls]<UL><LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;simple_uart_putstring
-<LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;board_init
+<BR>[Calls]<UL><LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;board_init
 <LI><a href="#[1ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tos_task_create
 <LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tos_knl_start
 <LI><a href="#[1cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tos_knl_init
 <LI><a href="#[214]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nimble_port_init
-<LI><a href="#[1bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
@@ -2126,6 +2120,9 @@ Global Symbols
 <LI><a href="#[6f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_resolv_list_add
 <LI><a href="#[6d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hci_trans_ll_evt_tx
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_cmd_proc
+<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_access
+<LI><a href="#[7ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_appearance_write_access
+<LI><a href="#[7ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_device_name_write_access
 <LI><a href="#[7a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_phy_rx
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_phy_isr
 <LI><a href="#[7a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_phy_rx_end_isr
@@ -2135,9 +2132,6 @@ Global Symbols
 <LI><a href="#[777]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_cputime_timer_relative
 <LI><a href="#[773]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hci_ram_init
 <LI><a href="#[7ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_init
-<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_access
-<LI><a href="#[7ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_appearance_write_access
-<LI><a href="#[7ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_device_name_write_access
 </UL>
 
 <P><STRONG><a name="[213]"></a>nimble_port_tencentos_tiny_init</STRONG> (Thumb, 84 bytes, Stack size 32 bytes, nimble_port_tencentos_tiny.o(.text))
@@ -2482,7 +2476,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[45f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_init
 </UL>
 
-<P><STRONG><a name="[84]"></a>ble_att_clt_rx_error</STRONG> (Thumb, 60 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[84]"></a>ble_att_clt_rx_error</STRONG> (Thumb, 46 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 304 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_rx_error &rArr; ble_gattc_rx_err &rArr; ble_gattc_extract_first_by_conn_op &rArr; ble_gattc_extract_by_conn_op &rArr; ble_gattc_extract &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -2491,7 +2485,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[23c]"></a>ble_att_clt_tx_mtu</STRONG> (Thumb, 144 bytes, Stack size 32 bytes, ble_att_clt.o(.text), UNUSED)
+<P><STRONG><a name="[23c]"></a>ble_att_clt_tx_mtu</STRONG> (Thumb, 136 bytes, Stack size 32 bytes, ble_att_clt.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_unlock
 <LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_lock
 <LI><a href="#[226]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_conn_chan_find
@@ -2501,7 +2495,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gattc_mtu_tx
 </UL>
 
-<P><STRONG><a name="[86]"></a>ble_att_clt_rx_mtu</STRONG> (Thumb, 102 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[86]"></a>ble_att_clt_rx_mtu</STRONG> (Thumb, 94 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 320 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_rx_mtu &rArr; ble_gap_mtu_event &rArr; ble_gap_call_conn_event_cb &rArr; ble_gap_extract_conn_cb &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -2516,7 +2510,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[242]"></a>ble_att_clt_tx_find_info</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[242]"></a>ble_att_clt_tx_find_info</STRONG> (Thumb, 50 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_find_info &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2538,7 +2532,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[248]"></a>ble_att_clt_tx_find_type_value</STRONG> (Thumb, 98 bytes, Stack size 40 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[248]"></a>ble_att_clt_tx_find_type_value</STRONG> (Thumb, 74 bytes, Stack size 40 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 304 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_find_type_value &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2559,7 +2553,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[24c]"></a>ble_att_clt_tx_read_type</STRONG> (Thumb, 90 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[24c]"></a>ble_att_clt_tx_read_type</STRONG> (Thumb, 74 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_read_type &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2574,7 +2568,7 @@ Global Symbols
 <LI><a href="#[3d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gattc_find_inc_svcs_tx
 </UL>
 
-<P><STRONG><a name="[8c]"></a>ble_att_clt_rx_read_type</STRONG> (Thumb, 132 bytes, Stack size 40 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[8c]"></a>ble_att_clt_rx_read_type</STRONG> (Thumb, 124 bytes, Stack size 40 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 336 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_rx_read_type &rArr; ble_gattc_rx_read_type_complete &rArr; ble_gattc_extract_with_rx_entry &rArr; ble_gattc_extract_one &rArr; ble_gattc_extract &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -2585,7 +2579,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[251]"></a>ble_att_clt_tx_read</STRONG> (Thumb, 60 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[251]"></a>ble_att_clt_tx_read</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_read &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2605,7 +2599,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[253]"></a>ble_att_clt_tx_read_blob</STRONG> (Thumb, 76 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[253]"></a>ble_att_clt_tx_read_blob</STRONG> (Thumb, 60 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_read_blob &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2623,7 +2617,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[255]"></a>ble_att_clt_tx_read_mult</STRONG> (Thumb, 78 bytes, Stack size 32 bytes, ble_att_clt.o(.text), UNUSED)
+<P><STRONG><a name="[255]"></a>ble_att_clt_tx_read_mult</STRONG> (Thumb, 68 bytes, Stack size 32 bytes, ble_att_clt.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_tx
 <LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_cmd_get
 </UL>
@@ -2638,7 +2632,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[257]"></a>ble_att_clt_tx_read_group_type</STRONG> (Thumb, 90 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[257]"></a>ble_att_clt_tx_read_group_type</STRONG> (Thumb, 74 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_read_group_type &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2662,7 +2656,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[25b]"></a>ble_att_clt_tx_write_req</STRONG> (Thumb, 60 bytes, Stack size 24 bytes, ble_att_clt.o(.text), UNUSED)
+<P><STRONG><a name="[25b]"></a>ble_att_clt_tx_write_req</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_clt.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_free_chain
 <LI><a href="#[25d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_concat
 <LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_tx
@@ -2671,7 +2665,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gattc_write
 </UL>
 
-<P><STRONG><a name="[25e]"></a>ble_att_clt_tx_write_cmd</STRONG> (Thumb, 132 bytes, Stack size 40 bytes, ble_att_clt.o(.text), UNUSED)
+<P><STRONG><a name="[25e]"></a>ble_att_clt_tx_write_cmd</STRONG> (Thumb, 122 bytes, Stack size 40 bytes, ble_att_clt.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[25f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 <LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_copydata
 <LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_assert
@@ -2691,7 +2685,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[261]"></a>ble_att_clt_tx_prep_write</STRONG> (Thumb, 122 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[261]"></a>ble_att_clt_tx_prep_write</STRONG> (Thumb, 104 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_prep_write &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2705,7 +2699,7 @@ Global Symbols
 <LI><a href="#[3f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gattc_write_long_tx
 </UL>
 
-<P><STRONG><a name="[98]"></a>ble_att_clt_rx_prep_write</STRONG> (Thumb, 82 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[98]"></a>ble_att_clt_rx_prep_write</STRONG> (Thumb, 70 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 344 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_rx_prep_write &rArr; ble_gattc_rx_prep_write_rsp &rArr; ble_gattc_extract_with_rx_entry &rArr; ble_gattc_extract_one &rArr; ble_gattc_extract &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -2736,7 +2730,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[265]"></a>ble_att_clt_tx_notify</STRONG> (Thumb, 74 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[265]"></a>ble_att_clt_tx_notify</STRONG> (Thumb, 66 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_notify &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2748,7 +2742,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gattc_notify_custom
 </UL>
 
-<P><STRONG><a name="[266]"></a>ble_att_clt_tx_indicate</STRONG> (Thumb, 74 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[266]"></a>ble_att_clt_tx_indicate</STRONG> (Thumb, 66 bytes, Stack size 32 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_tx_indicate &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -2842,11 +2836,11 @@ Global Symbols
 <LI><a href="#[23c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_clt_tx_mtu
 </UL>
 
-<P><STRONG><a name="[26e]"></a>ble_att_error_rsp_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[26e]"></a>ble_att_error_rsp_parse</STRONG> (Thumb, 44 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[270]"></a>ble_att_error_rsp_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[270]"></a>ble_att_error_rsp_write</STRONG> (Thumb, 44 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2854,19 +2848,19 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[274]"></a>ble_att_mtu_req_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[274]"></a>ble_att_mtu_req_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[275]"></a>ble_att_mtu_rsp_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[275]"></a>ble_att_mtu_rsp_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[276]"></a>ble_att_mtu_req_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[276]"></a>ble_att_mtu_req_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[277]"></a>ble_att_mtu_rsp_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[277]"></a>ble_att_mtu_rsp_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2874,11 +2868,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[279]"></a>ble_att_find_info_req_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[279]"></a>ble_att_find_info_req_parse</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[27a]"></a>ble_att_find_info_req_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[27a]"></a>ble_att_find_info_req_write</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2898,11 +2892,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[27f]"></a>ble_att_find_type_value_req_parse</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[27f]"></a>ble_att_find_type_value_req_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[280]"></a>ble_att_find_type_value_req_write</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[280]"></a>ble_att_find_type_value_req_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2910,11 +2904,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[282]"></a>ble_att_read_type_req_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[282]"></a>ble_att_read_type_req_parse</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[283]"></a>ble_att_read_type_req_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[283]"></a>ble_att_read_type_req_write</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2934,11 +2928,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[288]"></a>ble_att_read_req_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[288]"></a>ble_att_read_req_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[289]"></a>ble_att_read_req_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[289]"></a>ble_att_read_req_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2946,11 +2940,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[28b]"></a>ble_att_read_blob_req_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[28b]"></a>ble_att_read_blob_req_parse</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[28c]"></a>ble_att_read_blob_req_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[28c]"></a>ble_att_read_blob_req_write</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -2966,7 +2960,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[290]"></a>ble_att_read_mult_rsp_parse</STRONG> (Thumb, 208 bytes, Stack size 16 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[290]"></a>ble_att_read_mult_rsp_parse</STRONG> (Thumb, 20 bytes, Stack size 16 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
@@ -2974,15 +2968,15 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[292]"></a>ble_att_read_group_type_req_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[292]"></a>ble_att_read_group_type_req_parse</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[293]"></a>ble_att_read_group_type_req_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[293]"></a>ble_att_read_group_type_req_write</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[294]"></a>ble_att_read_group_type_req_log</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[294]"></a>ble_att_read_group_type_req_log</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
@@ -2994,23 +2988,23 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[297]"></a>ble_att_read_group_type_rsp_log</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[297]"></a>ble_att_read_group_type_rsp_log</STRONG> (Thumb, 204 bytes, Stack size 8 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[298]"></a>ble_att_write_req_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[298]"></a>ble_att_write_req_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[299]"></a>ble_att_write_cmd_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[299]"></a>ble_att_write_cmd_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[29a]"></a>ble_att_write_req_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[29a]"></a>ble_att_write_req_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[29b]"></a>ble_att_write_cmd_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[29b]"></a>ble_att_write_cmd_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -3022,19 +3016,19 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[29e]"></a>ble_att_prep_write_req_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[29e]"></a>ble_att_prep_write_req_parse</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[29f]"></a>ble_att_prep_write_req_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[29f]"></a>ble_att_prep_write_req_write</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[2a0]"></a>ble_att_prep_write_rsp_parse</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[2a0]"></a>ble_att_prep_write_rsp_parse</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[2a1]"></a>ble_att_prep_write_rsp_write</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[2a1]"></a>ble_att_prep_write_rsp_write</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -3062,11 +3056,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
-<P><STRONG><a name="[2a8]"></a>ble_att_notify_req_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[2a8]"></a>ble_att_notify_req_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[2a9]"></a>ble_att_notify_req_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[2a9]"></a>ble_att_notify_req_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -3074,11 +3068,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[2ab]"></a>ble_att_indicate_req_parse</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[2ab]"></a>ble_att_indicate_req_parse</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_parse
 </UL>
 
-<P><STRONG><a name="[2ac]"></a>ble_att_indicate_req_write</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
+<P><STRONG><a name="[2ac]"></a>ble_att_indicate_req_write</STRONG> (Thumb, 32 bytes, Stack size 24 bytes, ble_att_cmd.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_init_write
 </UL>
 
@@ -3154,7 +3148,7 @@ Global Symbols
 <LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_free_chain
 </UL>
 
-<P><STRONG><a name="[230]"></a>ble_att_svr_tx_error_rsp</STRONG> (Thumb, 64 bytes, Stack size 32 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[230]"></a>ble_att_svr_tx_error_rsp</STRONG> (Thumb, 56 bytes, Stack size 32 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_tx_error_rsp &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -3165,7 +3159,7 @@ Global Symbols
 <LI><a href="#[2c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_tx_rsp
 </UL>
 
-<P><STRONG><a name="[85]"></a>ble_att_svr_rx_mtu</STRONG> (Thumb, 164 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[85]"></a>ble_att_svr_rx_mtu</STRONG> (Thumb, 156 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 392 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_mtu &rArr; ble_att_svr_tx_rsp &rArr; ble_att_svr_tx_error_rsp &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -3181,7 +3175,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[87]"></a>ble_att_svr_rx_find_info</STRONG> (Thumb, 136 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[87]"></a>ble_att_svr_rx_find_info</STRONG> (Thumb, 122 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 392 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_find_info &rArr; ble_att_svr_tx_rsp &rArr; ble_att_svr_tx_error_rsp &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -3191,7 +3185,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[89]"></a>ble_att_svr_rx_find_type_value</STRONG> (Thumb, 162 bytes, Stack size 64 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[89]"></a>ble_att_svr_rx_find_type_value</STRONG> (Thumb, 140 bytes, Stack size 64 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 752 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_find_type_value &rArr; ble_att_svr_build_find_type_value_rsp &rArr; ble_att_svr_fill_type_value &rArr; ble_att_svr_read_flat &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3201,7 +3195,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[8b]"></a>ble_att_svr_rx_read_type</STRONG> (Thumb, 192 bytes, Stack size 80 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[8b]"></a>ble_att_svr_rx_read_type</STRONG> (Thumb, 174 bytes, Stack size 80 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 712 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_read_type &rArr; ble_att_svr_build_read_type_rsp &rArr; ble_att_svr_read_flat &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3212,7 +3206,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[8d]"></a>ble_att_svr_rx_read</STRONG> (Thumb, 132 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[8d]"></a>ble_att_svr_rx_read</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 552 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_read &rArr; ble_att_svr_read_handle &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3224,7 +3218,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[8f]"></a>ble_att_svr_rx_read_blob</STRONG> (Thumb, 144 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[8f]"></a>ble_att_svr_rx_read_blob</STRONG> (Thumb, 132 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 560 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_read_blob &rArr; ble_att_svr_read_handle &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3245,7 +3239,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[93]"></a>ble_att_svr_rx_read_group_type</STRONG> (Thumb, 218 bytes, Stack size 88 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[93]"></a>ble_att_svr_rx_read_group_type</STRONG> (Thumb, 204 bytes, Stack size 88 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 760 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_read_group_type &rArr; ble_att_svr_build_read_group_type_rsp &rArr; ble_att_svr_service_uuid &rArr; ble_att_svr_read_flat &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3257,7 +3251,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[95]"></a>ble_att_svr_rx_write</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[95]"></a>ble_att_svr_rx_write</STRONG> (Thumb, 118 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 536 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_write &rArr; ble_att_svr_write_handle &rArr; ble_att_svr_write &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3269,7 +3263,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[9e]"></a>ble_att_svr_rx_write_no_rsp</STRONG> (Thumb, 68 bytes, Stack size 32 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[9e]"></a>ble_att_svr_rx_write_no_rsp</STRONG> (Thumb, 60 bytes, Stack size 32 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 528 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_write_no_rsp &rArr; ble_att_svr_write_handle &rArr; ble_att_svr_write &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3294,7 +3288,7 @@ Global Symbols
 <LI><a href="#[47d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_conn_free
 </UL>
 
-<P><STRONG><a name="[97]"></a>ble_att_svr_rx_prep_write</STRONG> (Thumb, 198 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[97]"></a>ble_att_svr_rx_prep_write</STRONG> (Thumb, 164 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 464 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_prep_write &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3325,7 +3319,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[9b]"></a>ble_att_svr_rx_notify</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[9b]"></a>ble_att_svr_rx_notify</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 312 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_notify &rArr; ble_gap_notify_rx_event &rArr; ble_gap_call_conn_event_cb &rArr; ble_gap_extract_conn_cb &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -3335,7 +3329,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_att.o(.constdata)
 </UL>
-<P><STRONG><a name="[9c]"></a>ble_att_svr_rx_indicate</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[9c]"></a>ble_att_svr_rx_indicate</STRONG> (Thumb, 118 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_rx_indicate &rArr; ble_att_svr_tx_rsp &rArr; ble_att_svr_tx_error_rsp &rArr; ble_att_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -4693,6 +4687,9 @@ Global Symbols
 <LI><a href="#[4f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_ltk_req_rx
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_num_completed_pkts
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_disconn_complete
+<LI><a href="#[5a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete
+<LI><a href="#[5a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_write
+<LI><a href="#[59e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_read
 <LI><a href="#[586]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_inject_io
 <LI><a href="#[56a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_process_result
 <LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_sign_info_rx
@@ -4714,9 +4711,6 @@ Global Symbols
 <LI><a href="#[53d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_proc_insert
 <LI><a href="#[52f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_stop
 <LI><a href="#[529]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_stop_done
-<LI><a href="#[5a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete
-<LI><a href="#[5a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_write
-<LI><a href="#[59e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_read
 </UL>
 
 <P><STRONG><a name="[22e]"></a>ble_hs_unlock</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, ble_hs.o(.text))
@@ -4803,6 +4797,9 @@ Global Symbols
 <LI><a href="#[4f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_ltk_req_rx
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_num_completed_pkts
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_disconn_complete
+<LI><a href="#[5a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete
+<LI><a href="#[5a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_write
+<LI><a href="#[59e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_read
 <LI><a href="#[586]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_inject_io
 <LI><a href="#[56a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_process_result
 <LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_sign_info_rx
@@ -4824,9 +4821,6 @@ Global Symbols
 <LI><a href="#[53d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_proc_insert
 <LI><a href="#[52f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_stop
 <LI><a href="#[529]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_stop_done
-<LI><a href="#[5a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete
-<LI><a href="#[5a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_write
-<LI><a href="#[59e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_read
 </UL>
 
 <P><STRONG><a name="[43a]"></a>ble_hs_process_rx_data_queue</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, ble_hs.o(.text))
@@ -6312,7 +6306,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[45f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_init
 </UL>
 
-<P><STRONG><a name="[330]"></a>ble_l2cap_sig_update</STRONG> (Thumb, 182 bytes, Stack size 48 bytes, ble_l2cap_sig.o(.text))
+<P><STRONG><a name="[330]"></a>ble_l2cap_sig_update</STRONG> (Thumb, 150 bytes, Stack size 48 bytes, ble_l2cap_sig.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 312 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_update &rArr; ble_l2cap_sig_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -6329,7 +6323,7 @@ Global Symbols
 <LI><a href="#[32d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gap_rx_update_complete
 </UL>
 
-<P><STRONG><a name="[485]"></a>ble_l2cap_sig_create_chan</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, ble_l2cap_sig.o(.text))
+<P><STRONG><a name="[485]"></a>ble_l2cap_sig_create_chan</STRONG> (Thumb, 88 bytes, Stack size 16 bytes, ble_l2cap_sig.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_create_chan &rArr; ble_l2cap_chan_alloc &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -6381,13 +6375,13 @@ Global Symbols
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_update_req_rx
 </UL>
 
-<P><STRONG><a name="[547]"></a>ble_l2cap_sig_hdr_parse</STRONG> (Thumb, 28 bytes, Stack size 12 bytes, ble_l2cap_sig_cmd.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = ble_l2cap_sig_hdr_parse
+<P><STRONG><a name="[547]"></a>ble_l2cap_sig_hdr_parse</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, ble_l2cap_sig_cmd.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ble_l2cap_sig_hdr_parse
 </UL>
 <BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_rx
 </UL>
 
-<P><STRONG><a name="[543]"></a>ble_l2cap_sig_cmd_get</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, ble_l2cap_sig_cmd.o(.text))
+<P><STRONG><a name="[543]"></a>ble_l2cap_sig_cmd_get</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, ble_l2cap_sig_cmd.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_cmd_get &rArr; ble_hs_mbuf_l2cap_pkt &rArr; ble_hs_mbuf_gen_pkt &rArr; os_mbuf_free_chain &rArr; os_mbuf_free &rArr; os_memblock_put &rArr; os_memblock_put_from_cb &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -6400,7 +6394,7 @@ Global Symbols
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_update_req_rx
 </UL>
 
-<P><STRONG><a name="[549]"></a>ble_l2cap_sig_reject_tx</STRONG> (Thumb, 68 bytes, Stack size 32 bytes, ble_l2cap_sig_cmd.o(.text))
+<P><STRONG><a name="[549]"></a>ble_l2cap_sig_reject_tx</STRONG> (Thumb, 60 bytes, Stack size 32 bytes, ble_l2cap_sig_cmd.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_reject_tx &rArr; ble_l2cap_sig_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -6605,7 +6599,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_timer_exp
 </UL>
 
-<P><STRONG><a name="[382]"></a>ble_sm_slave_initiate</STRONG> (Thumb, 124 bytes, Stack size 40 bytes, ble_sm.o(.text), UNUSED)
+<P><STRONG><a name="[382]"></a>ble_sm_slave_initiate</STRONG> (Thumb, 98 bytes, Stack size 40 bytes, ble_sm.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_unlock
 <LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_lock
 <LI><a href="#[56a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_process_result
@@ -6844,10 +6838,10 @@ Global Symbols
 <LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_lock
 </UL>
 <BR>[Called By]<UL><LI><a href="#[417]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete_cccd
-<LI><a href="#[5aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_util_delete_all
 <LI><a href="#[5a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_clear
 <LI><a href="#[5a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete_peer_sec
 <LI><a href="#[5a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_delete_our_sec
+<LI><a href="#[5aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_util_delete_all
 </UL>
 
 <P><STRONG><a name="[5a3]"></a>ble_store_full_event</STRONG> (Thumb, 24 bytes, Stack size 24 bytes, ble_store.o(.text), UNUSED)
@@ -8472,8 +8466,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;put_le16
 <LI><a href="#[4af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hci_trans_buf_alloc
-<LI><a href="#[69b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_event_send
 <LI><a href="#[6da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_get_num_cmd_pkts
+<LI><a href="#[69b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_event_send
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_task
 </UL>
@@ -9724,13 +9718,13 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = swap_buf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[587]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_alg_encrypt
+<LI><a href="#[6db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_encrypt
 <LI><a href="#[6cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_ctrl_rx_enc_req
 <LI><a href="#[6ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_ctrl_rx_enc_rsp
 <LI><a href="#[6bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_ctrl_enc_req_make
 <LI><a href="#[6b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_le_ltk_reply
 <LI><a href="#[6b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_le_start_encrypt
 <LI><a href="#[6f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_resolv_list_add
-<LI><a href="#[6db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_encrypt
 </UL>
 
 <P><STRONG><a name="[75e]"></a>nrf52_timer5_irq_handler</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, hal_timer.o(.text))
@@ -9749,7 +9743,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[214]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nimble_port_init
 </UL>
 
-<P><STRONG><a name="[761]"></a>hal_timer_config</STRONG> (Thumb, 148 bytes, Stack size 32 bytes, hal_timer.o(.text))
+<P><STRONG><a name="[761]"></a>hal_timer_config</STRONG> (Thumb, 156 bytes, Stack size 32 bytes, hal_timer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48 + Unknown Stack Size
 <LI>Call Chain = hal_timer_config &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -9831,8 +9825,8 @@ Global Symbols
 
 <P><STRONG><a name="[76a]"></a>mem_malloc_mempool_ext</STRONG> (Thumb, 80 bytes, Stack size 40 bytes, mem.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[225]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
-<LI><a href="#[768]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mem_malloc_mempool_gen
 <LI><a href="#[76b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mempool_ext_init
+<LI><a href="#[768]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mem_malloc_mempool_gen
 </UL>
 
 <P><STRONG><a name="[76c]"></a>mem_malloc_mbuf_pool</STRONG> (Thumb, 112 bytes, Stack size 40 bytes, mem.o(.text), UNUSED)
@@ -10465,9 +10459,9 @@ Global Symbols
 <LI><a href="#[539]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_init
 <LI><a href="#[538]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_init
 <LI><a href="#[5fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_scan_init
-<LI><a href="#[773]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hci_ram_init
 <LI><a href="#[76b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mempool_ext_init
 <LI><a href="#[769]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mem_malloc_mempool
+<LI><a href="#[773]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hci_ram_init
 </UL>
 
 <P><STRONG><a name="[76b]"></a>os_mempool_ext_init</STRONG> (Thumb, 56 bytes, Stack size 32 bytes, os_mempool.o(.text), UNUSED)
@@ -10746,13 +10740,13 @@ Global Symbols
 <P><STRONG><a name="[6c8]"></a>ble_hw_encrypt_block</STRONG> (Thumb, 62 bytes, Stack size 12 bytes, ble_hw.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = ble_hw_encrypt_block
 </UL>
-<BR>[Called By]<UL><LI><a href="#[6b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_calc_session_key
+<BR>[Called By]<UL><LI><a href="#[6db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_encrypt
+<LI><a href="#[6b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_calc_session_key
 <LI><a href="#[685]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_resolv_rpa
 <LI><a href="#[70d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_resolv_gen_priv_addr
-<LI><a href="#[6db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_encrypt
 </UL>
 
-<P><STRONG><a name="[70a]"></a>ble_hw_rng_init</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, ble_hw.o(.text))
+<P><STRONG><a name="[70a]"></a>ble_hw_rng_init</STRONG> (Thumb, 114 bytes, Stack size 16 bytes, ble_hw.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ble_hw_rng_init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[760]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_npl_hw_set_isr
@@ -10866,7 +10860,7 @@ Global Symbols
 <LI><a href="#[7a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_phy_rx_end_isr
 </UL>
 
-<P><STRONG><a name="[5e0]"></a>ble_phy_init</STRONG> (Thumb, 362 bytes, Stack size 16 bytes, ble_phy.o(.text))
+<P><STRONG><a name="[5e0]"></a>ble_phy_init</STRONG> (Thumb, 370 bytes, Stack size 16 bytes, ble_phy.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = ble_phy_init &rArr; __aeabi_memclr4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[760]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_npl_hw_set_isr
@@ -11123,14 +11117,10 @@ Global Symbols
 
 <P><STRONG><a name="[839]"></a>_ll_udiv</STRONG> (Thumb, 238 bytes, Stack size 48 bytes, lludivv7m.o(.text), UNUSED)
 
-<P><STRONG><a name="[1bb]"></a>__2printf</STRONG> (Thumb, 20 bytes, Stack size 24 bytes, noretval__2printf.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
-<LI>Call Chain = __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[7c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_file
+<P><STRONG><a name="[1bb]"></a>__2printf</STRONG> (Thumb, 20 bytes, Stack size 24 bytes, noretval__2printf.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[7c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_file
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readyqueue_walkthru
-<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[5af]"></a>__2sprintf</STRONG> (Thumb, 34 bytes, Stack size 32 bytes, noretval__2sprintf.o(.text), UNUSED)
@@ -11188,11 +11178,8 @@ Global Symbols
 
 <P><STRONG><a name="[83a]"></a>_printf_longlong_hex</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, _printf_hex_int.o(.text), UNUSED)
 
-<P><STRONG><a name="[7c9]"></a>__printf</STRONG> (Thumb, 308 bytes, Stack size 40 bytes, __printf_flags_wp.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40 + Unknown Stack Size
-<LI>Call Chain = __printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[7cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_percent
+<P><STRONG><a name="[7c9]"></a>__printf</STRONG> (Thumb, 308 bytes, Stack size 40 bytes, __printf_flags_wp.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[7cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_percent
 <LI><a href="#[7ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_is_digit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_common
@@ -11340,8 +11327,8 @@ Global Symbols
 <LI><a href="#[313]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gap_disc_report
 <LI><a href="#[30c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_gap_master_extract_state
 <LI><a href="#[589]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tc_aes128_set_encrypt_key
-<LI><a href="#[77f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_os_mbuf_copypkthdr
 <LI><a href="#[76f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_trim_front
+<LI><a href="#[77f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_os_mbuf_copypkthdr
 <LI><a href="#[7cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_memmove_w
 <LI><a href="#[7cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_memcpy
 <LI><a href="#[7bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_ram_write_peer_sec
@@ -11454,6 +11441,7 @@ Global Symbols
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_le_dir_adv_rpt
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_le_adv_rpt
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_hci_evt_le_conn_complete
+<LI><a href="#[5a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_clear
 <LI><a href="#[586]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_inject_io
 <LI><a href="#[56a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_process_result
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_rx
@@ -11469,7 +11457,6 @@ Global Symbols
 <LI><a href="#[644]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_adv_sm_init
 <LI><a href="#[5e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_phy_init
 <LI><a href="#[5fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_module_init
-<LI><a href="#[5a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_store_clear
 <LI><a href="#[73b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_scan_common_init
 <LI><a href="#[70d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_resolv_gen_priv_addr
 </UL>
@@ -11508,11 +11495,8 @@ Global Symbols
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_int_dec
 </UL>
 
-<P><STRONG><a name="[7c4]"></a>_printf_char_common</STRONG> (Thumb, 32 bytes, Stack size 64 bytes, _printf_char_common.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104 + Unknown Stack Size
-<LI>Call Chain = _printf_char_common &rArr; __printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[7c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
+<P><STRONG><a name="[7c4]"></a>_printf_char_common</STRONG> (Thumb, 32 bytes, Stack size 64 bytes, _printf_char_common.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[7c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_file
 <LI><a href="#[48d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
@@ -11549,17 +11533,14 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_s
 </UL>
 
-<P><STRONG><a name="[7c3]"></a>_printf_char_file</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, _printf_char_file.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120 + Unknown Stack Size
-<LI>Call Chain = _printf_char_file &rArr; _printf_char_common &rArr; __printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[7d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ferror
+<P><STRONG><a name="[7c3]"></a>_printf_char_file</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, _printf_char_file.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[7d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ferror
 <LI><a href="#[7c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_common
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 
-<P><STRONG><a name="[7d5]"></a>ferror</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, ferror.o(.text))
+<P><STRONG><a name="[7d5]"></a>ferror</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, ferror.o(.text), UNUSED)
 <BR><BR>[Called By]<UL><LI><a href="#[7c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_file
 </UL>
 
@@ -11593,7 +11574,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[627]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_utils_calc_access_addr
 </UL>
 
-<P><STRONG><a name="[7ca]"></a>_is_digit</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, __printf_wp.o(i._is_digit))
+<P><STRONG><a name="[7ca]"></a>_is_digit</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, __printf_wp.o(i._is_digit), UNUSED)
 <BR><BR>[Called By]<UL><LI><a href="#[7c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
 </UL>
 
@@ -12488,7 +12469,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_clt_rx_find_info
 </UL>
 
-<P><STRONG><a name="[249]"></a>ble_att_clt_parse_find_type_value_hinfo</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
+<P><STRONG><a name="[249]"></a>ble_att_clt_parse_find_type_value_hinfo</STRONG> (Thumb, 50 bytes, Stack size 24 bytes, ble_att_clt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 168 + Unknown Stack Size
 <LI>Call Chain = ble_att_clt_parse_find_type_value_hinfo &rArr; ble_hs_mbuf_pullup_base &rArr; os_mbuf_pullup &rArr; os_mbuf_free_chain &rArr; os_mbuf_free &rArr; os_memblock_put &rArr; os_memblock_put_from_cb &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -12741,7 +12722,7 @@ Local Symbols
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_rx_exec_write
 </UL>
 
-<P><STRONG><a name="[2c9]"></a>ble_att_svr_build_mtu_rsp</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[2c9]"></a>ble_att_svr_build_mtu_rsp</STRONG> (Thumb, 116 bytes, Stack size 40 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_build_mtu_rsp &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -12817,7 +12798,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[2d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_build_find_type_value_rsp
 </UL>
 
-<P><STRONG><a name="[2d2]"></a>ble_att_svr_build_find_type_value_rsp</STRONG> (Thumb, 112 bytes, Stack size 72 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[2d2]"></a>ble_att_svr_build_find_type_value_rsp</STRONG> (Thumb, 114 bytes, Stack size 72 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 688 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_build_find_type_value_rsp &rArr; ble_att_svr_fill_type_value &rArr; ble_att_svr_read_flat &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -12829,7 +12810,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_rx_find_type_value
 </UL>
 
-<P><STRONG><a name="[2d3]"></a>ble_att_svr_build_read_type_rsp</STRONG> (Thumb, 340 bytes, Stack size 104 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[2d3]"></a>ble_att_svr_build_read_type_rsp</STRONG> (Thumb, 324 bytes, Stack size 104 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 632 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_build_read_type_rsp &rArr; ble_att_svr_read_flat &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -12844,7 +12825,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_rx_read_type
 </UL>
 
-<P><STRONG><a name="[2d4]"></a>ble_att_svr_build_read_mult_rsp</STRONG> (Thumb, 166 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[2d4]"></a>ble_att_svr_build_read_mult_rsp</STRONG> (Thumb, 168 bytes, Stack size 48 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 560 + Unknown Stack Size
 <LI>Call Chain = ble_att_svr_build_read_mult_rsp &rArr; ble_att_svr_read_handle &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -12944,7 +12925,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[2e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_insert_prep_entry
 </UL>
 
-<P><STRONG><a name="[2e1]"></a>ble_att_svr_prep_validate</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, ble_att_svr.o(.text))
+<P><STRONG><a name="[2e1]"></a>ble_att_svr_prep_validate</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, ble_att_svr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ble_att_svr_prep_validate
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_att_svr_prep_write
@@ -15726,7 +15707,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[473]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adv_set_fields
 </UL>
 
-<P><STRONG><a name="[46f]"></a>ble_hs_adv_set_array_uuid32</STRONG> (Thumb, 162 bytes, Stack size 48 bytes, ble_hs_adv.o(.text))
+<P><STRONG><a name="[46f]"></a>ble_hs_adv_set_array_uuid32</STRONG> (Thumb, 122 bytes, Stack size 48 bytes, ble_hs_adv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
 <LI>Call Chain = ble_hs_adv_set_array_uuid32 &rArr; ble_hs_adv_set_hdr &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -15748,7 +15729,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[473]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adv_set_fields
 </UL>
 
-<P><STRONG><a name="[472]"></a>ble_hs_adv_set_array16</STRONG> (Thumb, 128 bytes, Stack size 48 bytes, ble_hs_adv.o(.text))
+<P><STRONG><a name="[472]"></a>ble_hs_adv_set_array16</STRONG> (Thumb, 118 bytes, Stack size 48 bytes, ble_hs_adv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
 <LI>Call Chain = ble_hs_adv_set_array16 &rArr; ble_hs_adv_set_hdr &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -15813,7 +15794,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[2fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_conn_find_by_addr
 </UL>
 
-<P><STRONG><a name="[48b]"></a>ble_hs_dbg_le_event_disp</STRONG> (Thumb, 902 bytes, Stack size 120 bytes, ble_hs_dbg.o(.text), UNUSED)
+<P><STRONG><a name="[48b]"></a>ble_hs_dbg_le_event_disp</STRONG> (Thumb, 892 bytes, Stack size 120 bytes, ble_hs_dbg.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[341]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_le32
 <LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_le16
 <LI><a href="#[48c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
@@ -15836,7 +15817,7 @@ Local Symbols
 <LI><a href="#[48c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
 
-<P><STRONG><a name="[491]"></a>ble_hs_dbg_rd_rem_ver_disp</STRONG> (Thumb, 1046 bytes, Stack size 32 bytes, ble_hs_dbg.o(.text), UNUSED)
+<P><STRONG><a name="[491]"></a>ble_hs_dbg_rd_rem_ver_disp</STRONG> (Thumb, 1044 bytes, Stack size 32 bytes, ble_hs_dbg.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_le16
 <LI><a href="#[48c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
 </UL>
@@ -15859,7 +15840,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[495]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_dbg_cmd_complete_disp
 </UL>
 
-<P><STRONG><a name="[495]"></a>ble_hs_dbg_cmd_complete_disp</STRONG> (Thumb, 476 bytes, Stack size 56 bytes, ble_hs_dbg.o(.text), UNUSED)
+<P><STRONG><a name="[495]"></a>ble_hs_dbg_cmd_complete_disp</STRONG> (Thumb, 474 bytes, Stack size 56 bytes, ble_hs_dbg.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[341]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_le32
 <LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_le16
 <LI><a href="#[48c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modlog_dummy
@@ -16770,7 +16751,7 @@ Local Symbols
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_l2cap_sig_update_rsp_rx
 </UL>
 
-<P><STRONG><a name="[ec]"></a>ble_l2cap_sig_update_req_rx</STRONG> (Thumb, 230 bytes, Stack size 56 bytes, ble_l2cap_sig.o(.text))
+<P><STRONG><a name="[ec]"></a>ble_l2cap_sig_update_req_rx</STRONG> (Thumb, 188 bytes, Stack size 56 bytes, ble_l2cap_sig.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 416 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_update_req_rx &rArr; ble_gap_update_params &rArr; ble_l2cap_sig_update &rArr; ble_l2cap_sig_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -16783,7 +16764,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_l2cap_sig.o(.constdata)
 </UL>
-<P><STRONG><a name="[ed]"></a>ble_l2cap_sig_update_rsp_rx</STRONG> (Thumb, 114 bytes, Stack size 32 bytes, ble_l2cap_sig.o(.text))
+<P><STRONG><a name="[ed]"></a>ble_l2cap_sig_update_rsp_rx</STRONG> (Thumb, 108 bytes, Stack size 32 bytes, ble_l2cap_sig.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_update_rsp_rx &rArr; ble_l2cap_sig_proc_extract &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -16803,7 +16784,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_l2cap_sig.o(.constdata)
 </UL>
-<P><STRONG><a name="[58]"></a>ble_l2cap_sig_rx</STRONG> (Thumb, 184 bytes, Stack size 32 bytes, ble_l2cap_sig.o(.text))
+<P><STRONG><a name="[58]"></a>ble_l2cap_sig_rx</STRONG> (Thumb, 132 bytes, Stack size 32 bytes, ble_l2cap_sig.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 328 + Unknown Stack Size
 <LI>Call Chain = ble_l2cap_sig_rx &rArr; ble_l2cap_sig_reject_tx &rArr; ble_l2cap_sig_tx &rArr; ble_l2cap_tx &rArr; ble_hs_hci_acl_tx &rArr; ble_hs_hci_acl_tx_now &rArr; mem_split_frag &rArr; os_mbuf_appendfrom &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>
@@ -17128,7 +17109,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[4f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_ltk_req_rx
 </UL>
 
-<P><STRONG><a name="[571]"></a>ble_sm_ltk_req_reply_tx</STRONG> (Thumb, 106 bytes, Stack size 72 bytes, ble_sm.o(.text))
+<P><STRONG><a name="[571]"></a>ble_sm_ltk_req_reply_tx</STRONG> (Thumb, 94 bytes, Stack size 72 bytes, ble_sm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288 + Unknown Stack Size
 <LI>Call Chain = ble_sm_ltk_req_reply_tx &rArr; ble_hs_hci_cmd_tx &rArr; ble_hs_hci_wait_for_ack &rArr; npl_tencentos_tiny_sem_pend &rArr; tos_sem_pend &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -17140,7 +17121,7 @@ Local Symbols
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_sm_ltk_start_exec
 </UL>
 
-<P><STRONG><a name="[572]"></a>ble_sm_ltk_req_neg_reply_tx</STRONG> (Thumb, 88 bytes, Stack size 32 bytes, ble_sm.o(.text))
+<P><STRONG><a name="[572]"></a>ble_sm_ltk_req_neg_reply_tx</STRONG> (Thumb, 76 bytes, Stack size 32 bytes, ble_sm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 248 + Unknown Stack Size
 <LI>Call Chain = ble_sm_ltk_req_neg_reply_tx &rArr; ble_hs_hci_cmd_tx &rArr; ble_hs_hci_wait_for_ack &rArr; npl_tencentos_tiny_sem_pend &rArr; tos_sem_pend &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -17390,8 +17371,8 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_sm.o(.constdata)
 </UL>
-<P><STRONG><a name="[f4]"></a>ble_sm_master_id_rx</STRONG> (Thumb, 304 bytes, Stack size 32 bytes, ble_sm.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200 + Unknown Stack Size
+<P><STRONG><a name="[f4]"></a>ble_sm_master_id_rx</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, ble_sm.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 192 + Unknown Stack Size
 <LI>Call Chain = ble_sm_master_id_rx &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
 <BR>[Calls]<UL><LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_hs_unlock
@@ -17448,7 +17429,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_sm.o(.constdata)
 </UL>
-<P><STRONG><a name="[59]"></a>ble_sm_rx</STRONG> (Thumb, 110 bytes, Stack size 56 bytes, ble_sm.o(.text))
+<P><STRONG><a name="[59]"></a>ble_sm_rx</STRONG> (Thumb, 136 bytes, Stack size 56 bytes, ble_sm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 768 + Unknown Stack Size
 <LI>Call Chain = ble_sm_rx &rArr; ble_sm_process_result &rArr; ble_gap_enc_event &rArr; ble_gatts_bonding_restored &rArr; ble_gattc_indicate &rArr; ble_gattc_indicate_custom &rArr; ble_att_svr_read_handle &rArr; ble_att_svr_read &rArr; ble_att_svr_check_perms &rArr; ble_store_read_peer_sec &rArr; ble_store_read &rArr; ble_hs_lock &rArr; ble_hs_lock_nested &rArr; npl_tencentos_tiny_mutex_pend &rArr; tos_mutex_pend_timed &rArr; pend_task_block &rArr; tick_list_add &rArr; tick_task_place &rArr; tos_cpu_cpsr_save
 </UL>
@@ -18891,7 +18872,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 272 + Unknown Stack Size
 <LI>Call Chain = ble_ll_hci_le_cmd_proc &rArr; ble_ll_conn_create &rArr; ble_ll_scan_initiator_start &rArr; ble_ll_scan_sm_start &rArr; ble_ll_event_send &rArr; ble_npl_eventq_put &rArr; npl_tencentos_tiny_eventq_put &rArr; tos_queue_post &rArr; queue_do_post &rArr; queue_task_msg_recv &rArr; pend_task_wakeup &rArr; readyqueue_add &rArr; readyqueue_add_tail &rArr; tos_list_add_tail
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_le_ltk_neg_reply
+<BR>[Calls]<UL><LI><a href="#[6db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_encrypt
+<LI><a href="#[6b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_le_ltk_neg_reply
 <LI><a href="#[6b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_le_ltk_reply
 <LI><a href="#[6b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_le_start_encrypt
 <LI><a href="#[6ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_conn_hci_set_data_len
@@ -18935,7 +18917,6 @@ Local Symbols
 <LI><a href="#[6df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_read_bufsize
 <LI><a href="#[6ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_set_le_event_mask
 <LI><a href="#[6dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_rand
-<LI><a href="#[6db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_encrypt
 </UL>
 <BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_cmd_proc
 </UL>
@@ -18988,13 +18969,13 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_assert
 <LI><a href="#[2cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;put_le16
 <LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_le16
+<LI><a href="#[6da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_get_num_cmd_pkts
 <LI><a href="#[69b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_event_send
 <LI><a href="#[702]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_status_params_cmd_proc
 <LI><a href="#[6ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_info_params_cmd_proc
 <LI><a href="#[6fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_ctlr_bb_cmd_proc
 <LI><a href="#[6fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_link_ctrl_cmd_proc
 <LI><a href="#[6eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_le_cmd_proc
-<LI><a href="#[6da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_ll_hci_get_num_cmd_pkts
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> ble_ll_hci.o(.text)
 </UL>
@@ -19675,8 +19656,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = _os_mbuf_leadingspace
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_prepend
-<LI><a href="#[782]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_dup
 <LI><a href="#[76f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_trim_front
+<LI><a href="#[782]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_mbuf_dup
 </UL>
 
 <P><STRONG><a name="[780]"></a>_os_mbuf_trailingspace</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, os_mbuf.o(.text))
@@ -19910,7 +19891,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_svc_gap_access
 </UL>
 
-<P><STRONG><a name="[7ac]"></a>ble_svc_gap_appearance_read_access</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, ble_svc_gap.o(.text))
+<P><STRONG><a name="[7ac]"></a>ble_svc_gap_appearance_read_access</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, ble_svc_gap.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104 + Unknown Stack Size
 <LI>Call Chain = ble_svc_gap_appearance_read_access &rArr; os_mbuf_append &rArr; os_mbuf_get &rArr; os_memblock_get &rArr; ble_npl_hw_exit_critical &rArr; tos_cpu_cpsr_restore
 </UL>

@@ -17,11 +17,9 @@
 ; NOTICE: This file has been modified by Nordic Semiconductor ASA.
 
                 IF :DEF: __STARTUP_CONFIG
-#ifdef  __STARTUP_CONFIG
 #include "startup_config.h"
 #ifndef __STARTUP_CONFIG_STACK_ALIGNEMENT
 #define __STARTUP_CONFIG_STACK_ALIGNEMENT 3
-#endif
 #endif
                 ENDIF
 
@@ -30,7 +28,7 @@ Stack_Size      EQU __STARTUP_CONFIG_STACK_SIZE
                 ELIF :DEF: __STACK_SIZE
 Stack_Size      EQU __STACK_SIZE
                 ELSE
-Stack_Size      EQU 256
+Stack_Size      EQU     2048
                 ENDIF
                 
                 IF :DEF: __STARTUP_CONFIG
@@ -48,7 +46,7 @@ Heap_Size       EQU __STARTUP_CONFIG_HEAP_SIZE
                 ELIF :DEF: __HEAP_SIZE
 Heap_Size       EQU __HEAP_SIZE
                 ELSE
-Heap_Size       EQU 0
+Heap_Size       EQU     2048
                 ENDIF
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
@@ -134,7 +132,7 @@ Reset_Handler   PROC
                 IMPORT  SystemInit
                 IMPORT  __main
 
-                                MOVS    R1, #NRF_POWER_RAMONx_RAMxON_ONMODE_Msk
+                MOVS    R1, #NRF_POWER_RAMONx_RAMxON_ONMODE_Msk
                 
                 LDR     R0, =NRF_POWER_RAMON_ADDRESS
                 LDR     R2, [R0]
