@@ -168,7 +168,7 @@ cmsis os是TencentOS tiny为了兼容cmsis标准而适配的OS抽象层，可以
 
    #define TOS_CFG_MMHEAP_EN               1u		// 配置TencentOS tiny是否开启动态内存模块
 
-   #define TOS_CFG_MMHEAP_POOL_SIZE        0x100	// 配置TencentOS tiny动态内存池大小
+   #define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE        0x100	// 配置TencentOS tiny动态内存池大小
 
    #define TOS_CFG_MUTEX_EN                1u		// 配置TencentOS tiny是否开启互斥锁模块
 
