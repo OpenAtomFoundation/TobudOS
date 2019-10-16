@@ -19,22 +19,6 @@
 .global irq_entry
 .global trap_entry
 
-.extern SysTick_IRQHandler
-
-.align 2
-eclic_mtip_handler:
-	/* normal code */
-    // add sp, sp, -4
-    // sw ra, (sp)
-    // call SysTick_IRQHandler
-    // lw ra, (sp)
-    // add sp, sp, 4
-    // ret
-
-	/* the most efficient code */
-	j SysTick_IRQHandler
-	// the code will return to caller directly from SysTick_IRQHandler
-
 .align 2
 irq_entry:
     j irq_entry
