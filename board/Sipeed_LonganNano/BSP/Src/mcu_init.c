@@ -1,5 +1,5 @@
 #include "mcu_init.h"
-
+#include "lcd.h"
 void board_init() {
 
     SystemInit();
@@ -14,4 +14,7 @@ void board_init() {
     gpio_bit_set(LEDR_GPIO_PORT, LEDR_PIN);
     gpio_bit_set(LEDG_GPIO_PORT, LEDG_PIN);
     gpio_bit_set(LEDB_GPIO_PORT, LEDB_PIN);
+
+    LCD_Init();         // init LCD
+    LCD_Clear(BLACK);
 }

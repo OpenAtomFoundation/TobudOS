@@ -148,6 +148,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/TencentOS_tiny/kernel/evtdrv/include}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/Application/Inc}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hello_world/Application/Hardware/lcd}&quot;"/>
                                     								
                                 </option>
                                 								
