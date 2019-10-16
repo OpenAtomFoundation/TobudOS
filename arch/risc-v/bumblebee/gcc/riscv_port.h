@@ -36,10 +36,4 @@
 // EXCCODE          11:0        exception code
 #define MCAUSE_EXP_CODE_MASK    0x00000FFF
 
-#ifndef __ASSEMBLER__
-void port_cpu_init();
-
-void port_systick_priority_set(uint32_t priority);
-#endif
-
 #endif // _RISCV_PORT_H_

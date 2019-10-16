@@ -126,10 +126,8 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
 
     regs = (cpu_context_t*) sp;
 
-    for(int i=1; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i+=2) {
-        // every task begin with "Tencent"
-        *(sp + i - 1) = 0x0054656E;
-        *(sp + i - 0) = 0x63656E74;
+    for(int i=1; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i++) {
+        *(sp + i) = 0xACEADD00 | ((i / 10) << 4) | (i % 10);
     }
 
     cpu_data_t gp = 0;
@@ -137,7 +135,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
 
     regs->gp        = (cpu_data_t)gp;           // global pointer
     regs->a0        = (cpu_data_t)arg;          // argument
-    regs->ra        = (cpu_data_t)0xACE00ACE;   // return address
+    regs->ra        = (cpu_data_t)exit;         // return address
     regs->mstatus   = (cpu_data_t)0x00001880;   // return to machine mode and enable interrupt
     regs->mepc      = (cpu_data_t)entry;        // task entry
 
@@ -151,22 +149,16 @@ void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
     }
 }
 
-void SysTick_IRQHandler() {
-    port_systick_config((uint32_t)k_cpu_cycle_per_tick);
-    if (tos_knl_is_running()) {
-        tos_knl_irq_enter();
-        tos_tick_handler();
-        tos_knl_irq_leave();
-    }
-}
-
 void cpu_irq_entry(cpu_data_t irq)
 {
-    if (irq != 7) {
+    void (*irq_handler)();
+
+    irq_handler = *((void (**)())(port_get_irq_vector_table() + irq*sizeof(cpu_addr_t)));
+    if((*irq_handler) == 0) {
         return;
     }
 
-    SysTick_IRQHandler();
+    (*irq_handler)();
 }
 
 __API__ uint32_t tos_cpu_clz(uint32_t val)
