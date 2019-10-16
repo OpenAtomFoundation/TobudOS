@@ -15,14 +15,18 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _RISCV_PORT_H_
-#define _RISCV_PORT_H_
+.global irq_vector_table_base
 
-#define CLINT_CTRL_ADDR 0x2000000
-#define CLINT_MSIP      0x0000
-#define CLINT_MTIMECMP  0x4000
-#define CLINT_MTIME     0xBFF8
+.extern SysTick_IRQHandler
 
-#define MCAUSE_EXP_CODE_MASK 0x7FFFFFFF
-
-#endif /* _RISCV_PORT_H_ */
+.section .text
+.align 2
+irq_vector_table_base:
+    .word   0xACEACEAC
+    .word   0
+    .word   0
+    .word   0
+    .word   0
+    .word   0
+    .word   0
+    .word   SysTick_IRQHandler

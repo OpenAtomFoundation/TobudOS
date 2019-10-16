@@ -15,15 +15,15 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
+.global eclic_mtip_handler
 .global irq_entry
 .global trap_entry
 
-.extern rv32_exception_entry
-
 .align 2
 irq_entry:
-    j rv32_exception_entry
+    j irq_entry
 
 .align 2
 trap_entry:
-    j rv32_exception_entry
+    j trap_entry
+

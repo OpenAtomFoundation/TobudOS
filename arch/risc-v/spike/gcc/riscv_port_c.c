@@ -24,3 +24,10 @@ __PORT__ void port_cpu_init() {
 __PORT__ void port_systick_priority_set(uint32_t priority) {
     // DO NOTHING
 }
+
+
+extern cpu_data_t irq_vector_table_base;
+__PORT__ void* port_get_irq_vector_table() {
+    void *base = (void *) &irq_vector_table_base;
+    return base;
+}

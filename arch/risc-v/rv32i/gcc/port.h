@@ -40,6 +40,14 @@ __PORT__ void       port_systick_config(uint32_t cycle_per_tick);
 
 __PORT__ void       port_systick_priority_set(uint32_t prio);
 
+
+__PORT__ void       port_cpu_init();
+
+__PORT__ void       port_systick_priority_set(uint32_t priority);
+
+__PORT__ void*      port_get_irq_vector_table();
+
+
 #if TOS_CFG_TICKLESS_EN > 0u
 
 __PORT__ void       port_systick_resume(void);
