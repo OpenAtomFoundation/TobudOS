@@ -274,8 +274,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\stm32l0xx_it.c</PathWithFileName>
-      <FilenameWithoutPath>stm32l0xx_it.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\BSP\Src\stm32l0xx_it_lorawan.c</PathWithFileName>
+      <FilenameWithoutPath>stm32l0xx_it_lorawan.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -791,7 +791,7 @@
 
   <Group>
     <GroupName>examples</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -802,8 +802,92 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\hello_world\hello_world.c</PathWithFileName>
-      <FilenameWithoutPath>hello_world.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\LoRaWAN\lora_demo.c</PathWithFileName>
+      <FilenameWithoutPath>lora_demo.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>devices</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>48</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\devices\rhf76_lora\RHF76.c</PathWithFileName>
+      <FilenameWithoutPath>RHF76.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>hal</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>49</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\platform\hal\st\stm32l0xx\src\tos_hal_uart.c</PathWithFileName>
+      <FilenameWithoutPath>tos_hal_uart.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>at</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>50</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\net\at\src\tos_at.c</PathWithFileName>
+      <FilenameWithoutPath>tos_at.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>51</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\net\at\src\tos_at_utils.c</PathWithFileName>
+      <FilenameWithoutPath>tos_at_utils.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>52</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\net\lora_module_wrapper\lora_module_wrapper.c</PathWithFileName>
+      <FilenameWithoutPath>lora_module_wrapper.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

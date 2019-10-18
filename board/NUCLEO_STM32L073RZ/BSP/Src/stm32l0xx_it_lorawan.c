@@ -22,6 +22,7 @@
 #include "main.h"
 #include "stm32l0xx_it.h"
 #include "tos.h"
+#include "tos_at.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -176,6 +177,13 @@ void USART2_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    extern uint8_t data;
+    if (huart->Instance == USART1) {
+        HAL_UART_Receive_IT(&huart1, &data, 1);
+        tos_at_uart_write_byte(data);
+    }
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
