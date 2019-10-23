@@ -9,6 +9,8 @@
 
 #define TOS_CFG_OBJECT_VERIFY_EN           1u
 
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN  1u
+
 #define TOS_CFG_EVENT_EN                1u
 
 #define TOS_CFG_MMBLK_EN                1u
@@ -43,7 +45,7 @@
 
 #define TOS_CFG_MSG_POOL_SIZE           3u
 
-#define TOS_CFG_IDLE_TASK_STK_SIZE      512u
+#define TOS_CFG_IDLE_TASK_STK_SIZE      128u
 
 #define TOS_CFG_CPU_TICK_PER_SECOND     1000u
 

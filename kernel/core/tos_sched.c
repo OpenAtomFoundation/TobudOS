@@ -96,27 +96,6 @@ __KERNEL__ void readyqueue_init(void)
     }
 }
 
-__DEBUG__ void readyqueue_walkthru(void)
-{
-    uint8_t i;
-    k_task_t *task;
-    k_list_t *task_list, *curr;
-
-    tos_kprintf("==========================\n");
-    tos_kprintf("%d\n", k_rdyq.highest_prio);
-
-    for (i = 0; i < TOS_CFG_TASK_PRIO_MAX; ++i) {
-        task_list = &k_rdyq.task_list_head[i];
-        if (!tos_list_empty(task_list)) {
-            TOS_LIST_FOR_EACH(curr, task_list) {
-                task = TOS_LIST_ENTRY(curr, k_task_t, pend_list);
-                tos_kprintf("----  %d   %d   [%d]  %s\n", task->prio, i, task->state, task->name);
-            }
-        }
-    }
-    tos_kprintf("\n\n");
-}
-
 __KERNEL__ void readyqueue_add_head(k_task_t *task)
 {
     k_prio_t task_prio;
