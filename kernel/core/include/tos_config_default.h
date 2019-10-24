@@ -34,6 +34,15 @@
 
 
 /////////////////////////////////////////
+// disable dynamic task create
+#ifdef TOS_CFG_TASK_DYNAMIC_CREATE_EN
+#undef  TOS_CFG_TASK_DYNAMIC_CREATE_EN
+#endif
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN      0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
 // disable event
 #ifdef TOS_CFG_EVENT_EN
 #undef  TOS_CFG_EVENT_EN
@@ -167,7 +176,11 @@
 #else /* TOS_CFG_EVENT_DRIVEN_EN */
 
 #ifndef TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN
-#define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  0u
+#define  TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  0u
+#endif
+
+#ifndef TOS_CFG_TASK_DYNAMIC_CREATE_EN
+#define  TOS_CFG_TASK_DYNAMIC_CREATE_EN     0u
 #endif
 
 #ifndef TOS_CFG_ROUND_ROBIN_EN
@@ -272,6 +285,13 @@
 #if TOS_CFG_IDLE_TASK_STK_SIZE < 256
 #undef TOS_CFG_IDLE_TASK_STK_SIZE
 #define TOS_CFG_IDLE_TASK_STK_SIZE          256u
+#endif
+#endif
+
+#if (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u)
+#if TOS_CFG_IDLE_TASK_STK_SIZE < 512
+#undef TOS_CFG_IDLE_TASK_STK_SIZE
+#define TOS_CFG_IDLE_TASK_STK_SIZE          512u
 #endif
 #endif
 

@@ -40,8 +40,12 @@
 #error  "INVALID config, TOS_CFG_TASK_PRIO_MAX must be >= 8"
 #endif
 
+#if     (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
+#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support dynamic task create"
+#endif
+
 #if     (TOS_CFG_QUEUE_EN > 0u) && (TOS_CFG_MSG_EN == 0u)
-#error  "INVALID config, must enable tos_msg to use tos_queue"
+#error  "INVALID config, must enable TOS_CFG_MSG_EN to use tos_queue"
 #endif
 
 #if     ((TOS_CFG_TIMER_EN > 0u) && !defined(TOS_CFG_TIMER_AS_PROC))
@@ -55,7 +59,7 @@
 #endif
 
 #if     (TOS_CFG_VFS_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable tos_mmheap to use tos_vfs"
+#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to use tos_vfs"
 #endif
 
 #ifndef  TOS_CFG_CPU_HRTIMER_EN

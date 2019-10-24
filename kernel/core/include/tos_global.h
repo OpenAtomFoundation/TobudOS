@@ -44,7 +44,15 @@ extern k_stack_t            k_idle_task_stk[];
 extern k_stack_t           *const k_idle_task_stk_addr;
 extern size_t               const k_idle_task_stk_size;
 
-/* list to hold all the task delayed or pend for timeout */
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+/* list to hold all the destroyed dynamic created tasks */
+extern k_list_t             k_dead_task_list;
+#endif
+
+/* list to hold all the tasks for statistics */
+extern k_list_t             k_stat_list;
+
+/* list to hold all the tasks delayed or pend for timeout */
 extern k_list_t             k_tick_list;
 
 /* how many ticks will be triggered in a second */

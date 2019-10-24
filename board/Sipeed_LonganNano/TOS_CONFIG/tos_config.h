@@ -13,6 +13,8 @@
 // 配置TencentOS tiny是否校验指针合法
 #define TOS_CFG_OBJECT_VERIFY 0u
 
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN  0u
+
 // TencentOS tiny 事件模块功能宏
 #define TOS_CFG_EVENT_EN 1u
 

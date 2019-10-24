@@ -19,14 +19,20 @@
 
 #if TOS_CFG_SEM_EN > 0u
 
-__API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count)
+__API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count)
 {
     TOS_PTR_SANITY_CHECK(sem);
 
     pend_object_init(&sem->pend_obj, PEND_TYPE_SEM);
-    sem->count = init_count;
+    sem->count      = init_count;
+    sem->count_max  = max_count;
 
     return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count)
+{
+    return tos_sem_create_max(sem, init_count, (k_sem_cnt_t)-1);
 }
 
 __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
@@ -69,7 +75,7 @@ __STATIC__ k_err_t sem_do_post(k_sem_t *sem, opt_post_t opt)
 
     TOS_CPU_INT_DISABLE();
 
-    if (sem->count == (k_sem_cnt_t)-1) {
+    if (sem->count == sem->count_max) {
         TOS_CPU_INT_ENABLE();
         return K_ERR_SEM_OVERFLOW;
     }
