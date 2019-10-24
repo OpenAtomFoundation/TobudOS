@@ -203,6 +203,29 @@ __API__ k_err_t tos_task_destroy(k_task_t *task)
 
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
 
+__STATIC__ void task_free(k_task_t *task)
+{
+    tos_mmheap_free(task->stk_base);
+    tos_mmheap_free(task);
+}
+
+__KERNEL__ void task_free_all(void)
+{
+    TOS_CPU_CPSR_ALLOC();
+    k_task_t *task;
+    k_list_t *curr, *next;
+
+    TOS_CPU_INT_DISABLE();
+
+    TOS_LIST_FOR_EACH_SAFE(curr, next, &k_dead_task_list) {
+        task = TOS_LIST_ENTRY(curr, k_task_t, dead_list);
+        tos_list_del(&task->dead_list);
+        task_free(task);
+    }
+
+    TOS_CPU_INT_ENABLE();
+}
+
 __API__ k_err_t tos_task_create_dyn(k_task_t **task,
                                                     char *name,
                                                     k_task_entry_t entry,
@@ -292,31 +315,12 @@ __API__ k_err_t tos_task_destroy_dyn(k_task_t *task)
         // we count on the idle task to free the memory
         tos_list_add(&task->dead_list, &k_dead_task_list);
     } else {
-        tos_mmheap_free(task->stk_base);
-        tos_mmheap_free(task);
+        task_free(task);
     }
 
     tos_knl_sched_unlock();
 
     return K_ERR_NONE;
-}
-
-__KERNEL__ void task_free_all(void)
-{
-    TOS_CPU_CPSR_ALLOC();
-    k_task_t *task;
-    k_list_t *curr, *next;
-
-    TOS_CPU_INT_DISABLE();
-
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &k_dead_task_list) {
-        task = TOS_LIST_ENTRY(curr, k_task_t, dead_list);
-        tos_list_del(&task->dead_list);
-        tos_mmheap_free(task->stk_base);
-        tos_mmheap_free(task);
-    }
-
-    TOS_CPU_INT_ENABLE();
 }
 
 #endif
