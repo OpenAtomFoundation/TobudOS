@@ -62,6 +62,8 @@ TencentOS tiny 主体架构图，从下到上主要包括：
 
 TencentOS tiny目前支持STM32、NXP、华大半导体、国民技术、GD32、Nordic、TI等主流MCU。当前已完成两套官方定制开发板设计，支持全系列STM32 NUCLEO官方评估板内核移植。TencentOS tiny 将携手合作伙伴为物联网终端厂家提供更优质的IoT终端软件解决方案，方便各种物联网设备快速接入腾讯云，共同扩展IoT生态，更好地支撑智慧城市、智能水表、智能家居、智能穿戴、车联网等多种行业应用。
 
+欢迎IoT相关项目合作，有合作需求的请邮件联系TencentOS tiny官方工作人员，邮箱地址 ： supowang@tencent.com
+
 # 二、TencentOS tiny 代码目录
 - [TencentOS tiny代码目录说明](./doc/TencentOS-tiny-代码目录说明.md)
 
