@@ -28,7 +28,7 @@
 #include <port_config.h>
 #include <port.h>
 #include <tos_cpu.h>
-//#include <tos_config_check.h>
+#include <tos_config_check.h>
 #include <tos_fault.h>
 #include <tos_klib.h>
 #include <tos_list.h>
