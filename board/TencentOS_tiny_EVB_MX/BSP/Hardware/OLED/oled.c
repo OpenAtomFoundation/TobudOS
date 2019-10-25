@@ -194,6 +194,7 @@ void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size)
 			OLED_WR_Byte(F6x8[c][i],OLED_DATA);
 	}
 }
+
 //m^n函数
 uint32_t oled_pow(uint8_t m,uint8_t n)
 {

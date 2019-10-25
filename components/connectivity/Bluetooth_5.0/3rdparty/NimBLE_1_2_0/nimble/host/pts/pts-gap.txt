@@ -1,0 +1,428 @@
+PTS test results for GAP
+
+PTS version: 7.0
+Tested: 18-Jul-2017
+
+Results:
+PASS	test passed
+FAIL	test failed
+INC	test is inconclusive
+N/A	test is disabled due to PICS setup
+
+-------------------------------------------------------------------------------
+Test Name		Result	Notes
+-------------------------------------------------------------------------------
+TC_MOD_NDIS_BV_01_C	N/A
+TC_MOD_LDIS_BV_01_C	N/A
+TC_MOD_LDIS_BV_02_C	N/A
+TC_MOD_LDIS_BV_03_C	N/A
+TC_MOD_GDIS_BV_01_C	N/A
+TC_MOD_GDIS_BV_02_C	N/A
+TC_MOD_NCON_BV_01_C	N/A
+TC_MOD_CON_BV_01_C	N/A
+-------------------------------------------------------------------------------
+
+TC_BROB_BCST_BV_01_C	PASS	b adv conn=non
+TC_BROB_BCST_BV_02_C	PASS	b adv conn=non
+TC_BROB_BCST_BV_03_C	PASS	b set irk=<IRK> e.g: 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:11
+				Note: in PTS IXIT please set:
+				TSPX_iut_device_IRK_for_resolvable_privacy_address_generation_procedure=11000000000000000000000000000000
+				b set adv_data flags=4
+				b adv conn=non disc=non own_addr_type=rpa_pub
+TC_BROB_BCST_BV_04_C	PASS
+				TSPX_advertising_data=07086E696D626C65
+				set-adv-data name=nimble
+                set addr_type=random addr=01:3e:56:f7:46:21
+				advertise conn=non own_addr_type=random
+TC_BROB_BCST_BV_05_C	PASS
+				TSPX_advertising_data=07086E696D626C65
+				TSPX_iut_device_IRK_for_resolvable_privacy_address_generation_procedure=11000000000000000000000000000000
+				set-adv-data name=nimble
+				set irk=00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:11
+				advertise conn=non own_addr_type=rpa_pub
+TC_BROB_OBSV_BV_01_C	PASS	b scan passive
+TC_BROB_OBSV_BV_02_C	PASS	b scan
+TC_BROB_OBSV_BV_03_C	N/A
+TC_BROB_OBSV_BV_04_C	N/A
+TC_BROB_OBSV_BV_05_C	N/A
+TC_BROB_OBSV_BV_06_C	N/A
+-------------------------------------------------------------------------------
+
+TC_DISC_NONM_BV_01_C	PASS	b adv conn=non disc=non
+TC_DISC_NONM_BV_02_C	PASS	b adv conn=und disc=non
+TC_DISC_LIMM_BV_01_C	N/A
+TC_DISC_LIMM_BV_02_C	N/A
+TC_DISC_LIMM_BV_03_C	PASS	b set adv_data flags=5
+				b adv conn=non disc=ltd
+TC_DISC_LIMM_BV_04_C	PASS	b set adv_data flags=5
+				b adv conn=und disc=ltd
+TC_DISC_GENM_BV_01_C	N/A
+TC_DISC_GENM_BV_02_C	N/A
+TC_DISC_GENM_BV_03_C	PASS	b set adv_data flags=6
+				b adv conn=non disc=gen
+TC_DISC_GENM_BV_04_C	PASS	b set adv_data flags=6
+				b adv conn=und disc=gen
+TC_DISC_LIMP_BV_01_C	PASS	b scan ltd=1 nodups=1
+TC_DISC_LIMP_BV_02_C	PASS	b scan ltd=1 nodups=1
+TC_DISC_LIMP_BV_03_C	PASS	b scan ltd=1 nodups=1
+TC_DISC_LIMP_BV_04_C	PASS	b scan ltd=1 nodups=1
+TC_DISC_LIMP_BV_05_C	PASS	b scan ltd=1 nodups=1
+TC_DISC_GENP_BV_01_C	PASS	b scan nodups=1
+TC_DISC_GENP_BV_02_C	PASS	b scan nodups=1
+TC_DISC_GENP_BV_03_C	PASS    b scan nodups=1
+				verify that PTS has note: "Non discoverable mode"
+TC_DISC_GENP_BV_04_C	PASS	b scan nodups=1
+				verify that PTS has note: "Non discoverable mode"
+TC_DISC_GENP_BV_05_C	PASS	b scan nodups=1
+				verify that advertising event has: "Connection directed advertising event"
+TC_DISC_RPA_BV_01_C	N/A
+-------------------------------------------------------------------------------
+
+TC_IDLE_GIN_BV_01_C	N/A
+TC_IDLE_LIN_BV_01_C	N/A
+TC_IDLE_NAMP_BV_01_C	PASS	<answer NO to role question>
+				b adv
+				b disc svc conn=<handle>
+				b show chr
+				<check start end handle for 0x1800>
+				b read conn=<handle> uuid=0x2a00 start=<start> end=<end>
+				b term conn=<handle>
+TC_IDLE_NAMP_BV_02_C	PASS	<answer NO to role question>
+				b adv
+-------------------------------------------------------------------------------
+
+TC_CONN_NCON_BV_01_C	PASS	b adv conn=non
+TC_CONN_NCON_BV_02_C	PASS	b set adv_data flags=6
+				b adv conn=non disc=gen
+TC_CONN_NCON_BV_03_C	PASS	b set adv_data flags=5
+				b adv conn=non disc=ltd
+TC_CONN_DCON_BV_01_C	PASS	b adv conn=dir peer_addr_type=public peer_addr=<addr>
+TC_CONN_DCON_BV_02_C	N/A
+TC_CONN_DCON_BV_03_C	N/A
+TC_CONN_UCON_BV_01_C	PASS	b adv conn=und disc=non
+TC_CONN_UCON_BV_02_C	PASS	b adv conn=und disc=gen
+TC_CONN_UCON_BV_03_C	PASS	b adv conn=und disc=ltd
+TC_CONN_UCON_BV_04_C	N/A
+TC_CONN_UCON_BV_05_C	N/A
+TC_CONN_UCON_BV_06_C	PASS	b set adv_data flags=6
+				b set sm_data bonding=1 our_key_dist=7 their_key_dist=7
+				b set irk=<IRK> e.g: 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:11
+				Note: in PTS IXIT please set:
+				TSPX_iut_device_IRK=11000000000000000000000000000000
+				TSPX_iut_private_address_interval=5000
+				set BLE_RPA_TIMEOUT: 5 in syscfg.yml
+				b adv own_addr_type=rpa_pub
+                <wait for 5 seconds>
+				b adv own_addr_type=rpa_pub
+TC_CONN_ACEP_BV_01_C	PASS	b wl addr=<addr> addr_type=public
+				b conn addr_type=wl
+				b term conn=<handle>
+TC_CONN_ACEP_BV_02_C	PASS
+				set addr_type=random addr=<NRPA> e.g: 01:3e:56:f7:46:21
+				white-list addr=<PTS-ADDR> addr_type=public
+				connect
+				Note: Discover Reconnect Address Characteristic and use value handle
+				gatt-write conn=1 attr=7 value=21:46:f7:56:3e:01
+				disconnect conn=1
+				white-list addr=01:3e:56:f7:46:21 addr_type=random
+				connect own_addr_type=random
+TC_CONN_ACEP_BV_03_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_ACEP_BV_04_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_GCEP_BV_01_C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+TC_CONN_GCEP_BV_02_C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+TC_CONN_GCEP_BV_03_C	N/A
+TC_CONN_GCEP_BV_04_C	N/A
+TC_CONN_GCEP_BV_05_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_GCEP_BV_06_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_SCEP_BV_01_C	PASS	b wl addr=<addr> addr_type=public
+				b conn addr_type=wl
+				b term conn=<handle>
+TC_CONN_SCEP_BV_02_C	N/A
+TC_CONN_SCEP_BV_03_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_DCEP_BV_01_C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+TC_CONN_DCEP_BV_02_C	N/A
+TC_CONN_DCEP_BV_03_C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+TC_CONN_DCEP_BV_04_C	N/A
+TC_CONN_DCEP_BV_05_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_DCEP_BV_06_C	INCONC
+				PTS 7.3.0 requires IUT to be able to add PTS's Identity
+				to resolv list without pairing
+TC_CONN_CPUP_BV_01_C	PASS	b adv
+				b l2cap update conn=<handle>
+TC_CONN_CPUP_BV_02_C	PASS	b adv
+				b l2cap update conn=<handle>
+TC_CONN_CPUP_BV_03_C	PASS	b adv
+				b l2cap update conn=<handle>
+TC_CONN_CPUP_BV_04_C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+TC_CONN_CPUP_BV_05_C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+TC_CONN_TERM_BV_01_C	PASS	<answer NO to role question>
+				b adv conn=und disc=non
+				b term conn=1
+TC_CONN_PRDA_BV_01_C	PASS	b set adv_data flags=6
+				b set sm_data bonding=1 our_key_dist=7 their_key_dist=7
+				b set irk=<IRK> e.g: 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:11
+				Note: in PTS IXIT please set:
+					TSPX_uit_device_IRK=11000000000000000000000000000000
+				b adv
+				b term conn=<handle>
+				b adv own_addr_type=rpa_pub
+				b term conn=<handle>
+				b adv own_addr_type=rpa_pub
+				b term conn=<handle>
+TC_CONN_PRDA_BV_02_C	N/A
+-------------------------------------------------------------------------------
+
+TC_BOND_NBON_BV_01_C	PASS	b set sm_data bonding=0
+				b conn peer_addr=<addr>
+				<ok>
+				b conn peer_addr=<addr>
+				<ok>
+TC_BOND_NBON_BV_02_C	PASS	b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+				<ok>
+				b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+				<ok>
+TC_BOND_NBON_BV_03_C	PASS	b adv conn=und
+				<ok>
+TC_BOND_BON_BV_01_C	PASS	b set sm_data bonding=1
+				b adv
+				b sec start conn=<handle>
+                <ok>
+				b adv
+				<ok>
+TC_BOND_BON_BV_02_C	PASS	b set sm_data bonding=1
+				b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+                <ok>
+				b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+                <ok>
+TC_BOND_BON_BV_03_C	PASS	b set sm_data bonding=1 our_key_dist=7 their_key_dist=7
+				b adv
+				<ok>
+				b adv
+				<ok>
+TC_BOND_BON_BV_04_C	PASS	b set sm_data bonding=1
+				b conn peer_addr=<addr>
+				b term conn=<handle>
+				b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+				b term conn=<handle>
+-------------------------------------------------------------------------------
+
+TC_SEC_AUT_BV_11_C	PASS	b set sm_data io_capabilities=1
+				b adv
+				Note: in PTS enter handle for characteristics
+				      value which requires encryption for read
+				b passkey conn=<handle> action=3 key=123456
+				Note: enter '123456' passkey in PTS
+TC_SEC_AUT_BV_12_C	PASS	b set sm_data io_capabilities=1
+				b conn peer_addr=<addr>
+				b disc svc conn=<handle>
+				Note: in PTS enter handle for characteristics
+				      value which requires encryption for read
+TC_SEC_AUT_BV_13_C	PASS	Note: in PTS confirm that IUT supports GATT Server
+				b set sm_data mitm_flag=1
+				b set sm_data io_capabilities=1
+				b conn peer_addr=<addr>
+				b disc svc conn=<handle>
+				Note: in PTS enter handle for characteristics
+				      value which requires authenticated
+				      pairing for read
+				b passkey conn=<handle> action=3 key=123456
+				Note: enter '123456' passkey in PTS
+TC_SEC_AUT_BV_14_C	PASS	b set sm_data io_capabilities=1
+				b adv
+				Note: in PTS enter handle for characteristics
+				      value which requires authenticated
+				      pairing for read
+				b passkey conn=<handle> action=3 key=123456
+				Note: enter '123456' passkey in PTS
+				Note: enter handle for characteristics value which
+				      requires authentication
+TC_SEC_AUT_BV_15_C	N/A
+TC_SEC_AUT_BV_16_C	N/A
+TC_SEC_AUT_BV_17_C	PASS	b conn peer_addr=<addr>
+				b disc full conn=<handle>
+				b read conn=<handle> attr=<val_handle>
+				b set sm_data bonding=1
+				b sec pair conn=<handle>
+                b term conn=1
+TC_SEC_AUT_BV_18_C	PASS	b adv
+				b disc full conn=<handle>
+				b read conn=<handle> attr=<val_handle>
+				b sec start conn=<handle>
+				b read conn=<handle> attr=<val_handle>
+TC_SEC_AUT_BV_19_C	PASS	b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+				<ok>
+				b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				b sec pair conn=<handle>
+				b read conn=<handle> attr=<val_handle>
+				b term conn=<handle>
+TC_SEC_AUT_BV_20_C	PASS	b adv
+				<ok>
+				b adv
+				b read conn=<handle> attr=<val_handle>
+				b set sm_data bonding=1
+				b sec start conn=<handle>
+				b read conn=<handle> attr=<val_handle>
+TC_SEC_AUT_BV_21_C	PASS	b set sm_data bonding=1
+				b set sm_data our_key_dist=1
+				b set sm_data their_key_dist=1
+				b conn peer_addr=<addr>
+				b sec pair conn=<handle>
+				<ok>
+				b conn peer_addr=<addr>
+				b sec start conn=<handle>
+				b term conn=<handle>
+TC_SEC_AUT_BV_22_C	PASS	b set sm_data bonding=1
+				b set sm_data our_key_dist=1
+				b set sm_data their_key_dist=1
+				b adv
+				<ok>
+				b adv
+				b sec start conn=1
+				<ok>
+TC_SEC_AUT_BV_23_C	PASS	b set sm_data bonding=1
+				b set sm_data our_key_dist=1
+				b set sm_data their_key_dist=1
+				b adv
+				b adv
+				Note: in PTS enter handle for characteristics
+				      value which requires encryption for read
+TC_SEC_AUT_BV_24_C	PASS	b set sm_data bonding=1
+				b set sm_data our_key_dist=1
+				b set sm_data their_key_dist=1
+				b conn peer_addr=<addr>
+				b term conn=<handle>
+				b conn peer_addr=<addr>
+				Note: in PTS enter handle for characteristics
+				      value which requires encryption for read
+TC_SEC_CSIGN_BV_01_C	N/A
+TC_SEC_CSIGN_BV_02_C	N/A
+TC_SEC_CSIGN_BI_01_C	N/A
+TC_SEC_CSIGN_BI_02_C	N/A
+TC_SEC_CSIGN_BI_03_C	N/A
+TC_SEC_CSIGN_BI_04_C	N/A
+-------------------------------------------------------------------------------
+
+TC_PRIV_CONN_BV_01_C	N/A
+TC_PRIV_CONN_BV_02_C	N/A
+TC_PRIV_CONN_BV_03_C	N/A
+TC_PRIV_CONN_BV_04_C	N/A
+TC_PRIV_CONN_BV_05_C	N/A
+TC_PRIV_CONN_BV_06_C	N/A
+TC_PRIV_CONN_BV_07_C	N/A
+TC_PRIV_CONN_BV_08_C	N/A
+TC_PRIV_CONN_BV_09_C	N/A
+TC_PRIV_CONN_BV_10_C	PASS
+				b set adv_data flags=6
+				b set sm_data io_capabilities=1 mitm_flag=1
+				b set sm_data bonding=1 our_key_dist=7 their_key_dist=7
+				b set irk=<IRK> e.g: 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:11
+				Note: in PTS IXIT please set:
+					TSPX_uit_device_IRK=11000000000000000000000000000000
+				TSPX_iut_private_address_interval=5000
+				set BLE_RPA_TIMEOUT: 5 in syscfg.yml
+				b adv
+				b passkey conn=<handle> action=3 key=123456
+				Note: enter '123456' passkey in PTS
+				b term conn=<handle>
+				b adv own_addr_type=rpa_pub
+                <wait for 5 seconds>
+				b adv own_addr_type=rpa_pub
+				b term conn=<handle>
+TC_PRIV_CONN_BV_11_C	N/A
+-------------------------------------------------------------------------------
+
+TC_ADV_BV_01_C		PASS	b set adv_data uuid16=0x1802
+				b adv
+                                b adv stop
+TC_ADV_BV_02_C		PASS	b set adv_data name=nimble
+				b adv
+                                b adv stop
+TC_ADV_BV_03_C		PASS	b set adv_data flags=6
+				b adv
+                                b adv stop
+TC_ADV_BV_04_C		PASS	b set adv_data mfg_data=ff:ff
+				b adv
+                                b adv stop
+TC_ADV_BV_05_C		PASS	b set adv_data tx_pwr_lvl=10
+				b adv
+                                b adv stop
+TC_ADV_BV_08_C		PASS	b set adv_data slave_itvl_range=00:00:ff:ff
+				b adv
+                                b adv stop
+TC_ADV_BV_09_C		N/A
+TC_ADV_BV_10_C		PASS	b set adv_data svc_data_uuid16=18:02:ff:ff
+				b adv
+                                b adv stop
+TC_ADV_BV_11_C		PASS	b set adv_data appearance=12
+				b adv
+                                b adv stop
+TC_ADV_BV_12_C		PASS	b set adv_data public_tgt_addr=<addr>
+				b adv
+                                b adv stop
+TC_ADV_BV_13_C		N/A
+TC_ADV_BV_14_C		PASS	b set adv_data adv_itvl=2
+				b adv
+                                b adv stop
+TC_ADV_BV_15_C		N/A
+TC_ADV_BV_16_C		N/A
+TC_ADV_BV_17_C		PASS
+ 				TSPX_URI=<bytes>
+ 				set-adv-data uri=<bytes>
+ 				advertise
+-------------------------------------------------------------------------------
+
+TC_GAT_BV_01_C		PASS	<answer NO to role question>
+				b adv
+TC_GAT_BV_02_C		N/A
+TC_GAT_BV_03_C		N/A
+TC_GAT_BV_04_C		N/A
+TC_GAT_BV_05_C		N/A
+TC_GAT_BV_06_C		N/A
+TC_GAT_BV_07_C		N/A
+TC_GAT_BV_08_C		N/A
+-------------------------------------------------------------------------------
+
+TC_DM_NCON_BV_01_C	N/A
+TC_DM_CON_BV_01_C	N/A
+TC_DM_NBON_BV_01_C	N/A
+TC_DM_BON_BV_01_C	N/A
+TC_DM_GIN_BV_01_C	N/A
+TC_DM_LIN_BV_01_C	N/A
+TC_DM_NAD_BV_01_C	N/A
+TC_DM_NAD_BV_02_C	N/A
+TC_DM_LEP_BV_01_C	N/A	PTS Errata 15174
+TC_DM_LEP_BV_02_C	N/A
+TC_DM_LEP_BV_04_C	N/A
+TC_DM_LEP_BV_05_C	N/A
+TC_DM_LEP_BV_06_C	N/A
+TC_DM_LEP_BV_07_C	N/A
+TC_DM_LEP_BV_08_C	N/A
+TC_DM_LEP_BV_09_C	N/A
+TC_DM_LEP_BV_10_C	N/A
+TC_DM_LEP_BV_11_C	N/A
+-------------------------------------------------------------------------------

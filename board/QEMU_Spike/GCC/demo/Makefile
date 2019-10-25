@@ -46,14 +46,16 @@ ARCH_SRC =  \
         C_SOURCES += $(ARCH_SRC)
 
 HAL_DRIVER_SRC =  \
-		$(TOP_DIR)/board/QEMU_Spike/Src/main.c 
+		$(TOP_DIR)/board/QEMU_Spike/Src/main.c 	\
+		$(TOP_DIR)/board/QEMU_Spike/Src/gd32vf103_it.c
         C_SOURCES += $(HAL_DRIVER_SRC) 
 
 # ASM sources
 ASM_SOURCES = 
 
 ASM_SOURCES_S =  \
-$(TOP_DIR)/arch/risc-v/rv32i/gcc/port_s.S	\
+$(TOP_DIR)/arch/risc-v/rv32i/gcc/port_s.S		\
+$(TOP_DIR)/arch/risc-v/spike/gcc/riscv_port_s.S	\
 start.S
 
 

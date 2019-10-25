@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_MSG_H_
 #define  _TOS_MSG_H_
 
@@ -78,6 +95,21 @@ __API__ k_err_t tos_msg_queue_get(k_msg_queue_t *msg_queue, void **msg_addr, siz
  * @retval  #K_ERR_NONE         return successfully.
  */
 __API__ k_err_t tos_msg_queue_put(k_msg_queue_t *msg_queue, void *msg_addr, size_t msg_size, k_opt_t opt);
+
+/**
+ * @brief Remove one message from the message queue.
+ * Remove one message with certain address from the message queue.
+ *
+ * @attention None
+ *
+ * @param[IN]   msg_queue       the pointer to the handler of the message queue.
+ * @param[IN]   msg_addr        the address of the message.
+ *
+ * @return  errcode.
+ * @retval  #K_ERR_MSG_QUEUE_MSG_NOT_EXIST  message to remove is not existed
+ * @retval  #K_ERR_NONE                     return successfully
+ */
+__API__ k_err_t tos_msg_queue_remove(k_msg_queue_t *msg_queue, void *msg_addr);
 
 /**
  * @brief Flush all of the messages.

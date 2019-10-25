@@ -1,0 +1,72 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+syscfg.defs:
+    BLE_HCI_EVT_BUF_SIZE:
+        description: 'The size of the allocated event buffers'
+        value: 70
+    BLE_HCI_EVT_HI_BUF_COUNT:
+        description: 'The number of high priority event buffers'
+        value: 8
+    BLE_HCI_EVT_LO_BUF_COUNT:
+        description: 'The number of low priority event buffers'
+        value: 8
+    BLE_ACL_BUF_COUNT:
+        description: 'The number of ACL data buffers'
+        value: 12
+    BLE_ACL_BUF_SIZE:
+        description: >
+            This is the maximum size of the data portion of HCI ACL data
+            packets. It does not include the HCI data header (of 4 bytes).
+        value: 255
+
+    BLE_HCI_ACL_OUT_COUNT:
+        description: >
+            This count is used in creating a pool of elements used by the
+            code to enqueue various elements. In the case of the controller
+            only HCI, this number should be equal to the number of mbufs in
+            the msys pool. For host only, it is really dependent on the
+            number of ACL buffers that the controller tells the host it
+            has.
+        value: 12
+
+    BLE_HCI_UART_PORT:
+        description: 'The uart to use for the HCI uart interface'
+        value:            0
+    BLE_HCI_UART_BAUD:
+        description: 'The baud rate of the HCI uart interface'
+        value:            1000000
+    BLE_HCI_UART_DATA_BITS:
+        description: 'Number of data bits used for HCI uart interface'
+        value:       8
+    BLE_HCI_UART_STOP_BITS:
+        description: 'Number of stop bits used for HCI uart interface'
+        value:       1
+    BLE_HCI_UART_PARITY:
+        description: 'Parity used for HCI uart interface'
+        value:          HAL_UART_PARITY_NONE
+    BLE_HCI_UART_FLOW_CTRL:
+        description: 'Flow control used for HCI uart interface'
+        value:       HAL_UART_FLOW_CTL_RTS_CTS
+    BLE_TRANS_UART_SYSINIT_STAGE:
+        description: >
+            Sysinit stage for the UART BLE transport.
+        value: 500
+
+syscfg.vals.BLE_EXT_ADV:
+    BLE_HCI_EVT_BUF_SIZE: 257

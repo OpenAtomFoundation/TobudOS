@@ -1,0 +1,45 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+
+syscfg.vals:
+    # Disable not used GAP roles (we only do non-connectable
+    # advertising here)
+    BLE_ROLE_BROADCASTER: 1
+    BLE_ROLE_CENTRAL: 0
+    BLE_ROLE_OBSERVER: 0
+    BLE_ROLE_PERIPHERAL: 0
+
+    # Disable unused eddystone featdure.
+    BLE_EDDYSTONE: 0
+
+    # Enable Extended Advertising
+    BLE_EXT_ADV: 1
+
+    # Max advertising data size
+    BLE_EXT_ADV_MAX_SIZE: 1650
+
+    # Number of multi-advertising instances. Note that due
+    # to historical reasonds total number of advertising
+    # instances is BLE_MULTI_ADV_INSTANCES + 1 as instance
+    # 0 is always available
+    BLE_MULTI_ADV_INSTANCES: 4
+
+    # Controller uses msys pool for storing advertising data and scan responses.
+    # Since we advertise a lot of data (~4k in total) at the same time we need
+    # to increase block count.
+    MSYS_1_BLOCK_COUNT: 24

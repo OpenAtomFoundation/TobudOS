@@ -11,13 +11,15 @@
 
 #define TOS_CFG_OBJECT_VERIFY_EN           0u
 
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN  0u
+
 #define TOS_CFG_EVENT_EN                1u
 
 #define TOS_CFG_MMBLK_EN                1u
 
 #define TOS_CFG_MMHEAP_EN               1u
 
-#define TOS_CFG_MMHEAP_POOL_SIZE        0x2000
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE        0x2000
 
 #define TOS_CFG_MUTEX_EN                1u
 

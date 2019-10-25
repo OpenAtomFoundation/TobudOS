@@ -1,0 +1,133 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+language: go
+
+_addons: &addon_conf
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-multilib
+      - gcc-7-multilib
+
+go:
+  - "1.11"
+
+git:
+  depth: false
+
+matrix:
+  include:
+    # newt build <targets>
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=BUILD_TARGETS
+        - VM_AMOUNT=4
+        - TARGET_SET=1
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=BUILD_TARGETS
+        - VM_AMOUNT=4
+        - TARGET_SET=2
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=BUILD_TARGETS
+        - VM_AMOUNT=4
+        - TARGET_SET=3
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=BUILD_TARGETS
+        - VM_AMOUNT=4
+        - TARGET_SET=4
+
+    # newt test all (Linux)
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=TEST_ALL
+        - VM_AMOUNT=2
+        - TARGET_SET=1
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=TEST_ALL
+        - VM_AMOUNT=2
+        - TARGET_SET=2
+
+    # ports
+    - os: linux
+      addons: *addon_conf
+      env:
+        - TEST=BUILD_PORTS
+        - VM_AMOUNT=1
+        - TARGET_SET=1
+
+    # newt test all
+    - os: osx
+      osx_image: xcode9.2
+      env:
+        - TEST=TEST_ALL
+        - VM_AMOUNT=3
+        - TARGET_SET=1
+    - os: osx
+      osx_image: xcode9.2
+      env:
+        - TEST=TEST_ALL
+        - VM_AMOUNT=3
+        - TARGET_SET=2
+    - os: osx
+      osx_image: xcode9.2
+      env:
+        - TEST=TEST_ALL
+        - VM_AMOUNT=3
+        - TARGET_SET=3
+
+before_install:
+  - printenv
+  - export GOPATH=$HOME/gopath
+  - go version
+
+install:
+  - git clone https://github.com/runtimeco/mynewt-travis-ci $HOME/ci
+  - chmod +x $HOME/ci/*.sh
+  - $HOME/ci/${TRAVIS_OS_NAME}_travis_install.sh
+
+before_script:
+  - newt version
+  - gcc --version
+  - if [ "${TEST}" != "TEST_ALL" ]; then arm-none-eabi-gcc --version; fi
+  - cp -R $HOME/ci/mynewt-nimble-project.yml project.yml
+  - mkdir -p targets
+  - cp -R $HOME/ci/mynewt-nimble-targets targets
+  - $HOME/ci/prepare_test.sh $VM_AMOUNT
+  - mkdir -p repos && pushd repos/
+  - git clone --depth=1 https://github.com/apache/mynewt-core apache-mynewt-core
+  - git clone --depth=1 https://github.com/JuulLabs-OSS/mcuboot mcuboot
+  - popd
+
+script:
+  - $HOME/ci/run_test.sh
+
+cache:
+  directories:
+  - $HOME/TOOLCHAIN
+  - $HOME/Library/Caches/Homebrew

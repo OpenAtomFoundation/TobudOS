@@ -57,12 +57,12 @@
 		<link>
 			<name>TencentOS_tiny/arch/risc-v/common</name>
 			<type>2</type>
-			<locationURI>TOP_DIR/arch/risc-v/common</locationURI>
+			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/arch/risc-v/common</locationURI>
 		</link>
 		<link>
 			<name>TencentOS_tiny/arch/risc-v/rv32i</name>
 			<type>2</type>
-			<locationURI>TOP_DIR/arch/risc-v/rv32i/gcc</locationURI>
+			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/arch/risc-v/rv32i</locationURI>
 		</link>
 		<link>
 			<name>TencentOS_tiny/arch/risc-v/spike</name>

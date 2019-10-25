@@ -1,0 +1,14 @@
+Title: Bluetooth tester application
+
+Description:
+
+Tester application uses binary protocol to control Mynewt Nimble stack
+and is aimed at automated testing. It uses Bluetooth Testing Protocol (BTP)
+to drive Bluetooth stack. BTP commands and events are received and buffered for
+further processing.
+--------------------------------------------------------------------------------
+Supported Profiles:
+
+GAP, GATT, SM, L2CAP, MESH
+--------------------------------------------------------------------------------
+

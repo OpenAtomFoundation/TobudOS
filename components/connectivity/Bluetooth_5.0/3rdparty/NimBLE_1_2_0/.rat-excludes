@@ -1,0 +1,28 @@
+# Can't easily add license to rat-excludes file.
+.rat-excludes
+
+# Ignore documentation folder
+docs
+
+# Non-source files
+RELEASE_NOTES.md
+.gitignore
+README.md
+pts-gap.txt
+pts-gatt.txt
+pts-l2cap.txt
+pts-sm.txt
+94654-20170317-085122560.tpg
+94654-20170317-085441153.pts
+
+# tinycrypt - BSD License.
+tinycrypt
+
+# Bluetooth Mesh - Apache 2.0 License
+mesh
+
+# Queue implementation - BSD License
+queue.h
+
+# mbuf implementation - BSD License
+os_mbuf.c

@@ -125,7 +125,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
-          <Name>-U-O142 -O2254 -S0 -C0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC800 -FN1 -STM32L0xx_192.FLM -FS08000000 -FL030000 -FP0($$Device:STM32L073RZTx$CMSIS\Flash\STM32L0xx_192.FLM)</Name>
+          <Name>-U066EFF515254667267072614 -O2254 -SF4000 -C0 -A0 -I0 -HNlocalhost -HP7184 -P1 -N00("ARM CoreSight SW-DP") -D00(0BC11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC800 -FN1 -FF0STM32L0xx_192.FLM -FS08000000 -FL030000 -FP0($$Device:STM32L073RZTx$CMSIS\Flash\STM32L0xx_192.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
@@ -203,7 +203,7 @@
 
   <Group>
     <GroupName>Application/User</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -250,8 +250,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\stm32l0xx_it.c</PathWithFileName>
-      <FilenameWithoutPath>stm32l0xx_it.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\BSP\Src\usart.c</PathWithFileName>
+      <FilenameWithoutPath>usart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -262,8 +262,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\usart.c</PathWithFileName>
-      <FilenameWithoutPath>usart.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\BSP\Src\mcu_init.c</PathWithFileName>
+      <FilenameWithoutPath>mcu_init.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -274,8 +274,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\mcu_init.c</PathWithFileName>
-      <FilenameWithoutPath>mcu_init.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\BSP\Src\stm32l0xx_it.c</PathWithFileName>
+      <FilenameWithoutPath>stm32l0xx_it.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

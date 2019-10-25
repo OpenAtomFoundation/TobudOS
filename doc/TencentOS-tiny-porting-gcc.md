@@ -168,7 +168,7 @@ cmsis os是TencentOS tiny为了兼容cmsis标准而适配的OS抽象层，可以
 
    #define TOS_CFG_MMHEAP_EN               1u		// 配置TencentOS tiny是否开启动态内存模块
 
-   #define TOS_CFG_MMHEAP_POOL_SIZE        0x100	// 配置TencentOS tiny动态内存池大小
+   #define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE        0x100	// 配置TencentOS tiny动态内存池大小
 
    #define TOS_CFG_MUTEX_EN                1u		// 配置TencentOS tiny是否开启互斥锁模块
 
@@ -209,7 +209,7 @@ cmsis os是TencentOS tiny为了兼容cmsis标准而适配的OS抽象层，可以
 在stm32l0xx_it.c（board\NUCLEO_L073RZ\Src目录下）文件中包含 tos.h 头文件
 ![](https://main.qcloudimg.com/raw/d3212faec1bb029a1de508697a619a31.png)
 
-在stm32l0xx_it.c文件中的PendSV_Handler函数前添加___weak关键字，因为该函数在TencentOS tiny的调度汇编中已经重新实现；同时在SysTick_Handler函数中添加TencentOS tiny的调度处理函数，如下图所示：
+在stm32l0xx_it.c文件中的PendSV_Handler函数前添加__weak关键字，因为该函数在TencentOS tiny的调度汇编中已经重新实现；同时在SysTick_Handler函数中添加TencentOS tiny的调度处理函数，如下图所示：
 	
 ![](https://main.qcloudimg.com/raw/29da9ce673eb20b7996734e251f71d21.png)
 

@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_PEND_H_
 #define  _TOS_PEND_H_
 
@@ -20,11 +37,13 @@ typedef enum pend_state_en {
    is initialized, or whether user pass the correct parameter.
  */
 typedef enum pend_type_en {
-    PEND_TYPE_NONE      = 0x0000,
-    PEND_TYPE_SEM       = 0x1BEE,
-    PEND_TYPE_MUTEX     = 0x2BEE,
-    PEND_TYPE_EVENT     = 0x3BEE,
-    PEND_TYPE_QUEUE     = 0x4BEE,
+    PEND_TYPE_NONE              = 0x0000,
+    PEND_TYPE_SEM               = 0x1BEE,
+    PEND_TYPE_MUTEX             = 0x2BEE,
+    PEND_TYPE_EVENT             = 0x3BEE,
+    PEND_TYPE_QUEUE             = 0x4BEE,
+    PEND_TYPE_COUNTDOWNLATCH    = 0x5BEE,
+    PEND_TYPE_COMPLETION        = 0x6BEE,
 } pend_type_t;
 
 typedef enum opt_post_en {
@@ -45,7 +64,9 @@ __KERNEL__ int      pend_object_verify(pend_obj_t *object, pend_type_t type);
 
 __KERNEL__ int      pend_is_nopending(pend_obj_t *object);
 
-__KERNEL__ k_prio_t pend_highest_prio_get(pend_obj_t *object);
+__KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object);
+
+__KERNEL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object);
 
 __KERNEL__ void     pend_list_remove(k_task_t *task);
 

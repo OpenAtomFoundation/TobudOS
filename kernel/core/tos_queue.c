@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include "tos.h"
 
 #if TOS_CFG_QUEUE_EN > 0u
@@ -38,25 +55,6 @@ __API__ k_err_t tos_queue_destroy(k_queue_t *queue)
     return K_ERR_NONE;
 }
 
-__API__ k_err_t tos_queue_flush(k_queue_t *queue)
-{
-    TOS_CPU_CPSR_ALLOC();
-
-    TOS_PTR_SANITY_CHECK(queue);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&queue->pend_obj, PEND_TYPE_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
-
-    TOS_CPU_INT_DISABLE();
-    tos_msg_queue_flush(&queue->msg_queue);
-    TOS_CPU_INT_ENABLE();
-
-    return K_ERR_NONE;
-}
-
 __API__ k_err_t tos_queue_pend(k_queue_t *queue, void **msg_addr, size_t *msg_size, k_tick_t timeout)
 {
     TOS_CPU_CPSR_ALLOC();
@@ -84,6 +82,11 @@ __API__ k_err_t tos_queue_pend(k_queue_t *queue, void **msg_addr, size_t *msg_si
         *msg_size = 0;
         TOS_CPU_INT_ENABLE();
         return K_ERR_PEND_NOWAIT;
+    }
+
+    if (knl_is_inirq()) {
+        TOS_CPU_INT_ENABLE();
+        return K_ERR_PEND_IN_IRQ;
     }
 
     if (knl_is_sched_locked()) {
@@ -164,6 +167,46 @@ __API__ k_err_t tos_queue_post(k_queue_t *queue, void *msg_addr, size_t msg_size
 __API__ k_err_t tos_queue_post_all(k_queue_t *queue, void *msg_addr, size_t msg_size)
 {
     return queue_do_post(queue, msg_addr, msg_size, OPT_POST_ALL);
+}
+
+__API__ k_err_t tos_queue_remove(k_queue_t *queue, void *msg_addr)
+{
+    TOS_CPU_CPSR_ALLOC();
+    k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(queue);
+    TOS_PTR_SANITY_CHECK(msg_addr);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    if (!pend_object_verify(&queue->pend_obj, PEND_TYPE_QUEUE)) {
+        return K_ERR_OBJ_INVALID;
+    }
+#endif
+
+    TOS_CPU_INT_DISABLE();
+    err = tos_msg_queue_remove(&queue->msg_queue, msg_addr);
+    TOS_CPU_INT_ENABLE();
+
+    return err == K_ERR_MSG_QUEUE_MSG_NOT_EXIST ? K_ERR_QUEUE_MSG_NOT_EXIST : K_ERR_NONE;
+}
+
+__API__ k_err_t tos_queue_flush(k_queue_t *queue)
+{
+    TOS_CPU_CPSR_ALLOC();
+
+    TOS_PTR_SANITY_CHECK(queue);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    if (!pend_object_verify(&queue->pend_obj, PEND_TYPE_QUEUE)) {
+        return K_ERR_OBJ_INVALID;
+    }
+#endif
+
+    TOS_CPU_INT_DISABLE();
+    tos_msg_queue_flush(&queue->msg_queue);
+    TOS_CPU_INT_ENABLE();
+
+    return K_ERR_NONE;
 }
 
 #endif

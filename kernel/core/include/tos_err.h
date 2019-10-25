@@ -1,8 +1,29 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_ERR_H_
 #define  _TOS_ERR_H_
 
 typedef enum k_err_en {
     K_ERR_NONE                                  = 0u,
+
+    K_ERR_COMPLETION_OVERFLOW               = 25u,
+
+    K_ERR_COUNTDOWNLATCH_OVERFLOW           = 50u,
 
     K_ERR_DELAY_ZERO                            = 100u,
     K_ERR_DELAY_FOREVER,
@@ -26,9 +47,13 @@ typedef enum k_err_en {
 
     K_ERR_MMHEAP_INVALID_POOL_ADDR              = 800u,
     K_ERR_MMHEAP_INVALID_POOL_SIZE,
+    K_ERR_MMHEAP_POOL_OVERFLOW,
+    K_ERR_MMHEAP_POOL_ALREADY_EXIST,
+    K_ERR_MMHEAP_POOL_NOT_EXIST,
 
     K_ERR_MSG_QUEUE_FULL                        = 900u,
     K_ERR_MSG_QUEUE_EMPTY,
+    K_ERR_MSG_QUEUE_MSG_NOT_EXIST,
 
     K_ERR_MUTEX_NOT_OWNER                       = 1000u,
     K_ERR_MUTEX_NESTING,
@@ -43,9 +68,11 @@ typedef enum k_err_en {
 
     K_ERR_QUEUE_EMPTY                           = 1500u,
     K_ERR_QUEUE_FULL,
+    K_ERR_QUEUE_MSG_NOT_EXIST,
 
     K_ERR_PEND_NOWAIT                           = 1600u,
     K_ERR_PEND_SCHED_LOCKED,
+    K_ERR_PEND_IN_IRQ,
     K_ERR_PEND_ABNORMAL,
     K_ERR_PEND_TIMEOUT,
     K_ERR_PEND_DESTROY,
@@ -64,6 +91,7 @@ typedef enum k_err_en {
     K_ERR_TASK_SUSPEND_IDLE,
     K_ERR_TASK_STK_OVERFLOW,
     K_ERR_TASK_STK_SIZE_INVALID,
+    K_ERR_TASK_OUT_OF_MEMORY,
 
     K_ERR_TICKLESS_WKUP_ALARM_NOT_INSTALLED     = 2000u,
     K_ERR_TICKLESS_WKUP_ALARM_NO_INIT,
@@ -77,6 +105,7 @@ typedef enum k_err_en {
     K_ERR_TIMER_INVALID_STATE,
     K_ERR_TIMER_INVALID_OPT,
     K_ERR_TIMER_STOPPED,
+    K_ERR_TIMER_RUNNING,
 } k_err_t;
 
 #endif /* _TOS_ERR_H_ */

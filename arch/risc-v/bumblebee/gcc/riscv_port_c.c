@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include <tos_compiler.h>
 #include <tos_ktypes.h>
 
@@ -91,7 +108,14 @@ static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
     eclic_set_intctrl(CLIC_INT_TMR, intctrl_val);
 }
 
+void rv32_exception_entry();
 __PORT__ void port_cpu_init() {
+
+    __ASM__ __VOLATILE__("csrw mtvec, %0"::"r"(rv32_exception_entry));
+
+    // MTVT2: 0x7EC
+    // use mtvec as entry of irq and other trap
+    __ASM__ __VOLATILE__("csrc 0x7EC, 0x1");
 
     eclic_enable_interrupt(CLIC_INT_TMR);
 
@@ -101,4 +125,14 @@ __PORT__ void port_cpu_init() {
 
 __PORT__ void port_systick_priority_set(uint32_t priority) {
     eclic_set_irq_priority(CLIC_INT_TMR, priority);
+}
+
+
+__PORT__ void *port_get_irq_vector_table() {
+    void *base = 0;
+
+    // MTVT:  0x307
+    __ASM__ __VOLATILE__("csrr %0, 0x307":"=r"(base));
+
+    return base;
 }

@@ -21,7 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+uint8_t ch;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -46,7 +46,7 @@ void MX_USART1_UART_Init(void)
   {
     Error_Handler();
   }
-
+  HAL_UART_Receive_IT(&huart1, &ch, 1);
 }
 /* USART2 init function */
 
@@ -176,7 +176,14 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 } 
 
 /* USER CODE BEGIN 1 */
-
+//extern void g_ring_buf(uint8_t in_data);
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart== &huart1) {
+        HAL_UART_Receive_IT(&huart1, &ch, 1);
+		//g_ring_buf(ch);
+    }
+}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -9,11 +9,13 @@
 
 #define TOS_CFG_OBJECT_VERIFY 0u // 配置TencentOS tiny是否校验指针合法
 
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN  0u
+
 #define TOS_CFG_EVENT_EN 1u // TencentOS tiny 事件模块功能宏
 
 #define TOS_CFG_MMHEAP_EN 1u // 配置TencentOS tiny是否开启动态内存模块
 
-#define TOS_CFG_MMHEAP_POOL_SIZE 8192 // 配置TencentOS tiny动态内存池大小
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE 8192 // 配置TencentOS tiny动态内存池大小
 
 #define TOS_CFG_MUTEX_EN 1u // 配置TencentOS tiny是否开启互斥锁模块
 
@@ -43,5 +45,6 @@
 
 #define TOS_CFG_MMBLK_EN 1u
 
+#define TOS_CFG_IRQ_STK_SIZE 128u
 
 #endif /* INC_TOS_CONFIG_H_ */

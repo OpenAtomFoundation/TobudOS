@@ -1,0 +1,66 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+syscfg.defs:
+    BLEPRPH_LE_PHY_SUPPORT:
+        description: >
+            Enable support for changing PHY preference on active connection.
+            PHY preference change is triggered by configured GPIO pins.
+            Current PHY is indicated using LEDs connected to configured
+            GPIO pins.
+        value: 0
+    BLEPRPH_LE_PHY_BUTTON_GPIO:
+        description: >
+            GPIO pins for changing PHY preference on active connection. This
+            is an array of 4 GPIO pin numbers for 1M, 2M, LE Coded S=2 and
+            LE Coded S=8 respectively.
+        value: "(int[]){ BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4 }"
+    BLEPRPH_LE_PHY_LED_GPIO:
+        description: >
+            GPIO pins for indicating current PHY on active connection. This
+            is an array of 3 GPIO pin numbers for 1M, 2M and LE Coded
+            respectively.
+        value: "(int[]){ LED_1, LED_2, LED_3 }"
+
+syscfg.vals:
+    # Disable central and observer roles.
+    BLE_ROLE_BROADCASTER: 1
+    BLE_ROLE_CENTRAL: 0
+    BLE_ROLE_OBSERVER: 0
+    BLE_ROLE_PERIPHERAL: 1
+
+    # Configure DIS
+    BLE_SVC_DIS_FIRMWARE_REVISION_READ_PERM: 1
+
+    # Log reboot messages to a flash circular buffer.
+    REBOOT_LOG_FCB: 1
+    LOG_FCB: 1
+    CONFIG_FCB: 1
+
+    # Enable newtmgr commands.
+    STATS_NEWTMGR: 1
+    LOG_NEWTMGR: 1
+    CONFIG_NEWTMGR: 1
+
+    # OS main/default task
+    OS_MAIN_STACK_SIZE: 468
+
+    # Lots of smaller mbufs are required for newtmgr using typical BLE ATT MTU
+    # values.
+    MSYS_1_BLOCK_COUNT: 22
+    MSYS_1_BLOCK_SIZE: 110

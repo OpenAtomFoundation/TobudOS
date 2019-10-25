@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_SYS_H_
 #define  _TOS_SYS_H_
 
@@ -14,10 +31,11 @@ typedef enum knl_state_en {
 typedef enum knl_obj_type_en {
     KNL_OBJ_TYPE_NONE       = 0x0000,
     KNL_OBJ_TYPE_TASK       = 0xDAD1,
-    KNL_OBJ_TYPE_TIMER      = 0xDAD2,
+    KNL_OBJ_TYPE_TASK_DYN   = 0xDAD2,
+    KNL_OBJ_TYPE_TIMER      = 0xDAD3,
     KNL_OBJ_TYPE_MSG_QUEUE  = 0xDAD4,
-    KNL_OBJ_TYPE_MMBLK_POOL = 0xDAD8,
-    KNL_OBJ_TYPE_FIFO       = 0xDAE1,
+    KNL_OBJ_TYPE_MMBLK_POOL = 0xDAD5,
+    KNL_OBJ_TYPE_FIFO       = 0xDAD6,
 } knl_obj_type_t;
 
 typedef struct knl_object_st {

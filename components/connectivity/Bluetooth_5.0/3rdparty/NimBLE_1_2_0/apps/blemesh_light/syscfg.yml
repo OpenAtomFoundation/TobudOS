@@ -1,0 +1,63 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+syscfg.defs:
+    USE_NEOPIXEL:
+        value: 0
+
+syscfg.vals:
+    # Enable the shell task.
+    SHELL_TASK: 1
+
+    # Set log level to info (disable debug logging).
+    LOG_LEVEL: 1
+
+    # Default task settings
+    OS_MAIN_STACK_SIZE: 768
+
+    # Newtmgr is not supported in this app, so disable newtmgr-over-shell.
+    SHELL_NEWTMGR: 0
+
+    MSYS_1_BLOCK_COUNT: 80
+
+    BLE_MESH_ADV_BUF_COUNT: 20
+    BLE_MESH_TX_SEG_MAX: 6
+
+    BLE_MESH: 1
+    BLE_MESH_SHELL: 1
+    BLE_MESH_PROV: 1
+    BLE_MESH_PB_ADV: 1
+    BLE_MESH_PB_GATT: 1
+    BLE_MESH_GATT_PROXY: 1
+    BLE_MESH_TESTING: 1
+    BLE_MESH_FRIEND: 0
+    BLE_MESH_CFG_CLI: 1
+    BLE_MESH_HEALTH_CLI: 0
+    BLE_MESH_SHELL_MODELS: 1
+    BLE_MESH_OOB_OUTPUT_ACTIONS: 0
+    BLE_MESH_SETTINGS: 0
+    CONFIG_NFFS: 0
+
+    USE_NEOPIXEL: 0
+
+syscfg.vals.BLE_MESH_SHELL_MODELS:
+    PWM_0: 1
+    PWM_1: 1
+    PWM_2: 1
+    PWM_3: 1
+

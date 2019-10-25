@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include "tos.h"
 
 __STATIC__ void pend_list_add(k_task_t *task, pend_obj_t *pend_obj)
@@ -22,13 +39,18 @@ __STATIC__ void pend_list_add(k_task_t *task, pend_obj_t *pend_obj)
     task_state_set_pend(task);
 }
 
-__KERNEL__ k_prio_t pend_highest_prio_get(pend_obj_t *object)
+__KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object)
 {
     k_task_t *task;
 
     // we keep the task priority in descending order, so the first one is just fine.
     task = TOS_LIST_FIRST_ENTRY_OR_NULL(&object->list, k_task_t, pend_list);
     return task ? task->prio : K_TASK_PRIO_INVALID;
+}
+
+__KERNEL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object)
+{
+    return TOS_LIST_FIRST_ENTRY(&object->list, k_task_t, pend_list);
 }
 
 __KERNEL__ void pend_list_remove(k_task_t *task)
@@ -106,6 +128,8 @@ __KERNEL__ void pend_task_wakeup(k_task_t *task, pend_state_t state)
 __KERNEL__ void pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout)
 {
     readyqueue_remove(task);
+
+    task->pend_state = PEND_STATE_NONE;
     pend_list_add(task, object);
 
     if (timeout != TOS_TIME_FOREVER) {

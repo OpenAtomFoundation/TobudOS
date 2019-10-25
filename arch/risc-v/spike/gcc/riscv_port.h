@@ -23,8 +23,6 @@
 #define CLINT_MTIMECMP  0x4000
 #define CLINT_MTIME     0xBFF8
 
-void port_cpu_init();
+#define MCAUSE_EXP_CODE_MASK 0x7FFFFFFF
 
-void port_systick_priority_set(uint32_t priority);
-
-#endif // _RISCV_PORT_H_
+#endif /* _RISCV_PORT_H_ */

@@ -65,6 +65,11 @@ __PORT__ void port_systick_suspend(void)
     SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 }
 
+__PORT__ k_cycle_t port_systick_max_reload_cycle(void)
+{
+    return SysTick_LOAD_RELOAD_Msk;
+}
+
 __PORT__ void port_systick_reload(uint32_t cycle_per_tick)
 {
     uint32_t max_cycle;

@@ -111,7 +111,7 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/Inc}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/rv32i}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/spike}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -137,11 +137,11 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TOS-CONFIG}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/rv32i}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/spike}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/kernel/evtdrv/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo/TencentOS_tiny/arch/risc-v/rv32i/gcc/}&quot;"/>
                                     								
                                 </option>
                                 								
