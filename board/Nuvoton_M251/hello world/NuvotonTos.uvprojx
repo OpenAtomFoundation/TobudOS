@@ -7,23 +7,23 @@
 
   <Targets>
     <Target>
-      <TargetName>TencentOS_tiny</TargetName>
+      <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
-      <uAC6>0</uAC6>
+      <pCCUsed>6070000::V6.7::.\ARMCLANG</pCCUsed>
+      <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>nRF52832_xxAA</Device>
-          <Vendor>Nordic Semiconductor</Vendor>
-          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.24.1</PackID>
-          <PackURL>http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/</PackURL>
-          <Cpu>IRAM(0x20000000,0x10000) IROM(0x00000000,0x80000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <Device>M251KG6AE</Device>
+          <Vendor>Nuvoton</Vendor>
+          <PackID>Nuvoton.NuMicro_DFP.1.3.4</PackID>
+          <PackURL>http://www.nuvoton.com/hq/enu/Documents/KEILSoftwarePack</PackURL>
+          <Cpu>IRAM(0x20000000,0x8000) IROM(0x00000000,0x40000) CPUTYPE("Cortex-M23") CLOCK(12000000)</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC4000 -FN2 -FF0nrf52xxx -FS00 -FL0200000 -FF1nrf52xxx_uicr -FS110001000 -FL11000 -FP0($$Device:nRF52832_xxAA$Flash\nrf52xxx.flm) -FP1($$Device:nRF52832_xxAA$Flash\nrf52xxx_uicr.flm))</FlashDriverDll>
+          <FlashDriverDll>UL2V8M(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0M251_AP_256 -FS00 -FL040000 -FP0($$Device:M251KG6AE$Flash\M251_AP_256.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:nRF52832_xxAA$Device\Include\nrf.h</RegisterFile>
+          <RegisterFile>$$Device:M251KG6AE$Device\M251\Include\M251.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:nRF52832_xxAA$SVD\nrf52.svd</SFDFile>
+          <SFDFile>$$Device:M251KG6AE$SVD\Nuvoton\M251_v1.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -49,12 +49,12 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>TencentOS_tiny</OutputName>
+          <OutputName>NuvotonTos</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>0</BrowseInformation>
+          <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -109,14 +109,14 @@
           <ComprImg>1</ComprImg>
         </CommonProperty>
         <DllOption>
-          <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments>  -MPU</SimDllArguments>
-          <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
-          <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments> -MPU</TargetDllArguments>
+          <SimDllName></SimDllName>
+          <SimDllArguments></SimDllArguments>
+          <SimDlgDll></SimDlgDll>
+          <SimDlgDllArguments></SimDlgDllArguments>
+          <TargetDllName>SARMV8M.DLL</TargetDllName>
+          <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pCM23</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -133,12 +133,12 @@
             <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
-            <Capability>1</Capability>
-            <DriverSelection>4096</DriverSelection>
+            <Capability>0</Capability>
+            <DriverSelection>-1</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash2>BIN\UL2V8M.DLL</Flash2>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -174,7 +174,7 @@
             <AdsLsxf>1</AdsLsxf>
             <RvctClst>0</RvctClst>
             <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M4"</AdsCpuType>
+            <AdsCpuType>"Cortex-M23"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
@@ -183,7 +183,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>0</RvdsVP>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -244,12 +244,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x8000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x80000</Size>
+                <Size>0x40000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -274,7 +274,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x80000</Size>
+                <Size>0x40000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -299,7 +299,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x8000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -311,32 +311,32 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>7</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
-            <OneElfS>0</OneElfS>
+            <OneElfS>1</OneElfS>
             <Strict>0</Strict>
             <EnumInt>0</EnumInt>
             <PlainCh>0</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
-            <wLevel>2</wLevel>
+            <wLevel>1</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>1</uC99>
+            <uC99>0</uC99>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
-            <v6LangP>1</v6LangP>
+            <v6Lang>3</v6Lang>
+            <v6LangP>3</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <v6Lto>0</v6Lto>
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>--diag_suppress=1,47,177,186,223,1295</MiscControls>
-              <Define>NRF52</Define>
+              <MiscControls></MiscControls>
+              <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\platform\vendor_bsp\nordic\nRF5_SDK_15.3.0\modules\nrfx;..\..\BSP\Src\</IncludePath>
+              <IncludePath>..\..\..\platform\vendor_bsp\Nuvoton\Nuvoton_M251\StdDriver\inc;..\TOS_CONFIG;..\..\..\arch\arm\arm-v8m\common\include;..\..\..\arch\arm\arm-v8m\cortex-m23\armcc;..\..\..\kernel\core\include;..\..\..\kernel\pm\include;..\BSP\Src;..\BSP\Inc;..\..\..\platform\vendor_bsp\st\CMSIS\Core\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -378,192 +378,202 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Startup</GroupName>
+          <GroupName>STARTUP</GroupName>
           <Files>
             <File>
-              <FileName>arm_startup_nrf52.s</FileName>
+              <FileName>system_M251.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\system_M251.c</FilePath>
+            </File>
+            <File>
+              <FileName>startup_M251.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\arm_startup_nrf52.s</FilePath>
+              <FilePath>.\startup_M251.s</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User</GroupName>
+          <GroupName>StdDriver</GroupName>
+          <Files>
+            <File>
+              <FileName>clk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\vendor_bsp\Nuvoton\Nuvoton_M251\StdDriver\src\clk.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\vendor_bsp\Nuvoton\Nuvoton_M251\StdDriver\src\gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>retarget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\vendor_bsp\Nuvoton\Nuvoton_M251\StdDriver\src\retarget.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\vendor_bsp\Nuvoton\Nuvoton_M251\StdDriver\src\sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\vendor_bsp\Nuvoton\Nuvoton_M251\StdDriver\src\uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USER</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrfx_glue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\nrfx_glue.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrfx_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\nrfx_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>simple_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\simple_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>system_nrf52.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\system_nrf52.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrfx_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\nrfx_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrfx_prs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\prs\nrfx_prs.c</FilePath>
+              <FilePath>..\BSP\Src\main.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>tos/arch</GroupName>
+          <GroupName>Tos/arch</GroupName>
           <Files>
             <File>
               <FileName>tos_cpu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\arch\arm\arm-v7m\common\tos_cpu.c</FilePath>
+              <FilePath>..\..\..\arch\arm\arm-v8m\common\tos_cpu.c</FilePath>
             </File>
             <File>
-              <FileName>port_c.c</FileName>
+              <FileName>tos_fault.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc\port_c.c</FilePath>
+              <FilePath>..\..\..\arch\arm\arm-v8m\common\tos_fault.c</FilePath>
             </File>
             <File>
               <FileName>port_s.S</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc\port_s.S</FilePath>
+              <FilePath>..\..\..\arch\arm\arm-v8m\cortex-m23\armcc\port_s.S</FilePath>
+            </File>
+            <File>
+              <FileName>port_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\arch\arm\arm-v8m\cortex-m23\armcc\port_c.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>tos/kernel</GroupName>
+          <GroupName>Tos/kernel</GroupName>
           <Files>
             <File>
               <FileName>tos_event.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_event.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_event.c</FilePath>
             </File>
             <File>
               <FileName>tos_fifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_fifo.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_fifo.c</FilePath>
             </File>
             <File>
               <FileName>tos_global.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_global.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_global.c</FilePath>
             </File>
             <File>
               <FileName>tos_mmblk.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_mmblk.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_mmblk.c</FilePath>
             </File>
             <File>
               <FileName>tos_mmheap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_mmheap.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_mmheap.c</FilePath>
             </File>
             <File>
               <FileName>tos_msg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_msg.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_msg.c</FilePath>
             </File>
             <File>
               <FileName>tos_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_mutex.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_mutex.c</FilePath>
             </File>
             <File>
               <FileName>tos_pend.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_pend.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_pend.c</FilePath>
             </File>
             <File>
               <FileName>tos_queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_queue.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_queue.c</FilePath>
             </File>
             <File>
               <FileName>tos_robin.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_robin.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_robin.c</FilePath>
             </File>
             <File>
               <FileName>tos_sched.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_sched.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_sched.c</FilePath>
             </File>
             <File>
               <FileName>tos_sem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_sem.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_sem.c</FilePath>
             </File>
             <File>
               <FileName>tos_sys.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_sys.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_sys.c</FilePath>
             </File>
             <File>
               <FileName>tos_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_task.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_task.c</FilePath>
             </File>
             <File>
               <FileName>tos_tick.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_tick.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_tick.c</FilePath>
             </File>
             <File>
               <FileName>tos_time.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_time.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_time.c</FilePath>
             </File>
             <File>
               <FileName>tos_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_timer.c</FilePath>
+              <FilePath>..\..\..\kernel\core\tos_timer.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>tos/cmsis</GroupName>
-          <Files>
             <File>
-              <FileName>cmsis_os.c</FileName>
+              <FileName>tos_pm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\osal\cmsis_os\cmsis_os.c</FilePath>
+              <FilePath>..\..\..\kernel\pm\tos_pm.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_tickless.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\pm\tos_tickless.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_completion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\core\tos_completion.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_countdownlatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\core\tos_countdownlatch.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>CONFIG</GroupName>
+          <GroupName>Tos/config</GroupName>
           <Files>
-            <File>
-              <FileName>nrfx_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\BSP\Inc\nrfx_config.h</FilePath>
-            </File>
             <File>
               <FileName>tos_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\TOS_CONFIG\tos_config.h</FilePath>
+              <FilePath>..\TOS_CONFIG\tos_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -577,27 +587,14 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.1.2" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.4.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.0.1" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.0.1"/>
         <targetInfos>
-          <targetInfo name="TencentOS_tiny"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
     </components>
-    <files>
-      <file attr="config" category="source" condition="ARM Compiler" name="Device\Source\arm\arm_startup_nrf51.s" version="8.16.0">
-        <instance index="0" removed="1">RTE\Device\nRF51822_xxAA\arm_startup_nrf51.s</instance>
-        <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.16.0" condition="nRF51 Series and CMSIS"/>
-        <package license="License\license.txt" name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.16.0"/>
-        <targetInfos/>
-      </file>
-      <file attr="config" category="source" name="Device\Source\system_nrf51.c" version="8.16.0">
-        <instance index="0" removed="1">RTE\Device\nRF51822_xxAA\system_nrf51.c</instance>
-        <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.16.0" condition="nRF51 Series and CMSIS"/>
-        <package license="License\license.txt" name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.16.0"/>
-        <targetInfos/>
-      </file>
-    </files>
+    <files/>
   </RTE>
 
 </Project>

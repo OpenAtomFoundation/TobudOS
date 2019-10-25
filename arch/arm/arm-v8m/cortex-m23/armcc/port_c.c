@@ -16,7 +16,7 @@
  *---------------------------------------------------------------------------*/
 
 #include "tos.h"
-#include "core_cm0plus.h"
+#include "core_armv8mbl.h"
 
 __PORT__ void port_cpu_reset(void)
 {

@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'TencentOS_tiny' 
- * Target:  'TencentOS_tiny' 
+ * Project: 'STM32F746NGH6' 
+ * Target:  'STM32F746NGH6' 
  */
 
 #ifndef RTE_COMPONENTS_H
