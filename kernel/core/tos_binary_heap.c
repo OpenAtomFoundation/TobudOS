@@ -47,7 +47,6 @@ __STATIC__ void bin_heap_do_percolate_up(k_bin_heap_t *bin_heap, uint16_t hole, 
     uint16_t parent, top;
     void *hole_item, *parent_item;
 
-    // hole        = bin_heap->total;
     top         = 0u;
     parent      = BIN_HEAP_PARENT(hole);
     cmp         = bin_heap->cmp;
