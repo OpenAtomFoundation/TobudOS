@@ -44,13 +44,13 @@
 extern "C" {
 #endif
 
-#define SYS_MBOX_NULL   (k_queue_t*)K_NULL
+#define SYS_MBOX_NULL   (k_msg_q_t*)K_NULL
 #define SYS_SEM_NULL   (k_sem_t*)K_NULL
 #define SYS_MRTEX_NULL (k_mutex_t*)K_NULL
 
 typedef k_sem_t sys_sem_t;
 typedef k_mutex_t sys_mutex_t;
-typedef k_queue_t sys_mbox_t;
+typedef k_msg_q_t sys_mbox_t;
 typedef k_task_t* sys_thread_t;
 
 #ifdef  __cplusplus

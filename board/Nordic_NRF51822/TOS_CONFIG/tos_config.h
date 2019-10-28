@@ -25,6 +25,14 @@
 
 #define TOS_CFG_SEM_EN                  1u
 
+#define TOS_CFG_MESSAGE_QUEUE_EN        1u
+
+#define TOS_CFG_MAIL_QUEUE_EN           0u
+
+#define TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN   0u
+
+#define TOS_CFG_PRIORITY_MAIL_QUEUE_EN      0u
+
 #define TOS_CFG_IDLE_TASK_STK_SIZE      80u
 
 #define TOS_CFG_CPU_TICK_PER_SECOND     1000u

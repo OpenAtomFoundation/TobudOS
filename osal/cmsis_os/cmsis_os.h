@@ -315,18 +315,22 @@ typedef struct os_messageQ_def {
     void                       *pool;       ///< memory array for messages
     k_msg_q_t                  *queue;      ///< queue handler
 } osMessageQDef_t;
+#endif // TOS_CFG_MESSAGE_QUEUE_EN
 
 /// Definition structure for mail queue.
 /// \note CAN BE CHANGED: \b os_mailQ_def is implementation specific in every CMSIS-RTOS.
+#if TOS_CFG_MAIL_QUEUE_EN > 0u
 typedef struct os_mailQ_def {
     uint32_t                    queue_sz;   ///< number of elements in the queue
     uint32_t                    item_sz;    ///< size of an item
     void                       *pool;       ///< memory array for mail
 } osMailQDef_t;
+#endif // TOS_CFG_MAIL_QUEUE_EN
 
 /// Event structure contains detailed information about an event.
 /// \note MUST REMAIN UNCHANGED: \b os_event shall be consistent in every CMSIS-RTOS.
 ///       However the struct may be extended at the end.
+#if (TOS_CFG_MAIL_QUEUE_EN > 0u) || (TOS_CFG_MESSAGE_QUEUE_EN > 0u)
 typedef struct {
     osStatus                    status;     ///< status code: event or error information
     union  {
@@ -335,12 +339,16 @@ typedef struct {
         int32_t                 signals;    ///< signal flags
     } value;                                ///< event value
     union  {
+#if TOS_CFG_MAIL_QUEUE_EN > 0u
         osMailQId               mail_id;    ///< mail id obtained by \ref osMailCreate
+#endif
+#if TOS_CFG_MESSAGE_QUEUE_EN > 0u
         osMessageQId            message_id; ///< message id obtained by \ref osMessageCreate
+#endif
     } def;                                  ///< event definition
 } osEvent;
+#endif
 
-#endif // TOS_CFG_MESSAGE_QUEUE_EN
 
 //  ==== Kernel Control Functions ====
 
@@ -716,9 +724,9 @@ osStatus osPoolFree(osPoolId pool_id, void *block);
     extern const osMessageQDef_t os_messageQ_def_##name
 #else                            // define the object
 #define osMessageQDef(name, queue_sz, type)   \
-    k_queue_t queue_handler_##name; \
+    k_msg_q_t msg_q_handler_##name; \
     const osMessageQDef_t os_messageQ_def_##name = \
-        { (queue_sz), sizeof(type), NULL, (&(queue_handler_##name)) }
+        { (queue_sz), sizeof(type), NULL, (&(msg_q_handler_##name)) }
 #endif
 
 /// \brief Access a Message Queue Definition.
@@ -751,8 +759,9 @@ osStatus osMessagePut(osMessageQId queue_id, uint32_t info, uint32_t millisec);
 osEvent osMessageGet(osMessageQId queue_id, uint32_t millisec);
 
 #endif // Message Queues available
+#endif
 
-
+#if TOS_CFG_MAIL_QUEUE_EN > 0u
 //  ==== Mail Queue Management Functions ====
 
 #if (defined (osFeature_MailQ) && (osFeature_MailQ != 0))     // Mail Queues available
@@ -822,7 +831,7 @@ osEvent osMailGet(osMailQId queue_id, uint32_t millisec);
 osStatus osMailFree(osMailQId queue_id, void *mail);
 
 #endif // Mail Queues available
-#endif // TOS_CFG_MESSAGE_QUEUE_EN
+#endif // TOS_CFG_MAIL_QUEUE_EN
 
 
 #ifdef  __cplusplus
