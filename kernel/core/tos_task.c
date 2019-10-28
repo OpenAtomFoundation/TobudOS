@@ -38,10 +38,15 @@ __STATIC_INLINE__ void task_reset(k_task_t *task)
     task->pend_state    = PEND_STATE_NONE;
     task->pending_obj   = (pend_obj_t *)K_NULL;
 
-#if TOS_CFG_MSG_EN > 0u
-    task->msg_addr      = K_NULL;
-    task->msg_size      = 0;
+#if TOS_CFG_MESSAGE_QUEUE_EN > 0u
+    task->msg           = K_NULL;
 #endif
+
+#if TOS_CFG_MAIL_QUEUE_EN > 0u
+    task->mail          = K_NULL;
+    task->mail_size     = 0;
+#endif
+
 }
 
 __STATIC__ void task_exit(void)

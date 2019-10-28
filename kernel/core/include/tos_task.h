@@ -112,9 +112,13 @@ typedef struct k_task_st {
     k_timeslice_t       timeslice;          /**< how much time slice left for us? */
 #endif
 
-#if TOS_CFG_MSG_EN > 0u
-    void               *msg_addr;           /**< if we pend a queue successfully, our msg_addr and msg_size will be set by the queue poster */
-    size_t              msg_size;
+#if (TOS_CFG_MESSAGE_QUEUE_EN > 0u) || (TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u)
+    void               *msg;                /**< if we pend a message queue successfully, our msg will be set by the message queue poster */
+#endif
+
+#if (TOS_CFG_MAIL_QUEUE_EN > 0u) || (TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u)
+    void               *mail;               /**< if we pend a mail queue successfully, our mail and mail_size will be set by the message queue poster */
+    size_t              mail_size;
 #endif
 
 #if TOS_CFG_EVENT_EN > 0u

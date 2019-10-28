@@ -82,7 +82,7 @@ typedef enum at_channel_status_en {
 
 typedef struct at_data_channel_st {
     uint8_t             is_free;
-    k_fifo_t            rx_fifo;
+    k_chr_fifo_t        rx_fifo;
     uint8_t            *rx_fifo_buffer;
 
     at_channel_status_t status;
@@ -115,21 +115,21 @@ typedef struct at_agent_st {
 
     at_data_channel_t   data_channel[AT_DATA_CHANNEL_NUM];
 
-    at_event_t *event_table;
-    size_t      event_table_size;
+    at_event_t     *event_table;
+    size_t          event_table_size;
 
-    at_echo_t  *echo;
+    at_echo_t      *echo;
 
-    at_cache_t  recv_cache;
+    at_cache_t      recv_cache;
 
-    at_timer_t  timer;
+    at_timer_t      timer;
 
-    char       *cmd_buf;
+    char           *cmd_buf;
 
-    hal_uart_t  uart;
+    hal_uart_t      uart;
 
-    k_fifo_t    uart_rx_fifo;
-    uint8_t    *uart_rx_fifo_buffer;
+    k_chr_fifo_t    uart_rx_fifo;
+    uint8_t        *uart_rx_fifo_buffer;
 } at_agent_t;
 
 #define AT_AGENT        ((at_agent_t *)(&at_agent))

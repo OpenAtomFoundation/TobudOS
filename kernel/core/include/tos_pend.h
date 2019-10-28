@@ -37,13 +37,16 @@ typedef enum pend_state_en {
    is initialized, or whether user pass the correct parameter.
  */
 typedef enum pend_type_en {
-    PEND_TYPE_NONE              = 0x0000,
-    PEND_TYPE_SEM               = 0x1BEE,
-    PEND_TYPE_MUTEX             = 0x2BEE,
-    PEND_TYPE_EVENT             = 0x3BEE,
-    PEND_TYPE_QUEUE             = 0x4BEE,
-    PEND_TYPE_COUNTDOWNLATCH    = 0x5BEE,
-    PEND_TYPE_COMPLETION        = 0x6BEE,
+    PEND_TYPE_NONE                      = 0x0000,
+    PEND_TYPE_SEM                       = 0x1BEE,
+    PEND_TYPE_MUTEX                     = 0x2BEE,
+    PEND_TYPE_EVENT                     = 0x3BEE,
+    PEND_TYPE_MAIL_QUEUE                = 0x4BEE,
+    PEND_TYPE_MESSAGE_QUEUE             = 0x5BEE,
+    PEND_TYPE_PRIORITY_MAIL_QUEUE       = 0x6BEE,
+    PEND_TYPE_PRIORITY_MESSAGE_QUEUE    = 0x7BEE,
+    PEND_TYPE_COUNTDOWNLATCH            = 0x8BEE,
+    PEND_TYPE_COMPLETION                = 0x9BEE,
 } pend_type_t;
 
 typedef enum opt_post_en {

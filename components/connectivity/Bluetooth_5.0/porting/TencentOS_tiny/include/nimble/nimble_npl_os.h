@@ -51,7 +51,7 @@ struct ble_npl_event {
 };
 
 struct ble_npl_eventq {
-    k_queue_t q;
+    k_msg_q_t q;
 };
 
 struct ble_npl_callout {

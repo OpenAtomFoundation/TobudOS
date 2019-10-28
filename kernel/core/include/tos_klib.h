@@ -51,5 +51,17 @@
     printf(__VA_ARGS__); \
     printf("\n");
 
+#define TOS_ASSERT_AUX(exp, function, line) \
+    if (!(exp)) { \
+        tos_kprintln("assert failed: %s %d\n", function, line); \
+        tos_knl_sched_lock(); \
+        tos_cpu_int_disable(); \
+        while (K_TRUE) { \
+            ; \
+        } \
+    }
+
+#define TOS_ASSERT(exp) TOS_ASSERT_AUX(exp, __FUNCTION__, __LINE__)
+
 #endif /* _TOS_KLIB_H_ */
 

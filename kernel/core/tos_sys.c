@@ -36,10 +36,6 @@ __API__ k_err_t tos_knl_init(void)
     }
 #endif
 
-#if (TOS_CFG_MSG_EN) > 0
-    msgpool_init();
-#endif
-
     err = knl_idle_init();
     if (err != K_ERR_NONE) {
         return err;

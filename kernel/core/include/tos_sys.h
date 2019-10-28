@@ -29,13 +29,16 @@ typedef enum knl_state_en {
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
 // some kind of magic number, mainly for identifing whether the object is initialized, or whether user pass the correct parameter.
 typedef enum knl_obj_type_en {
-    KNL_OBJ_TYPE_NONE       = 0x0000,
-    KNL_OBJ_TYPE_TASK       = 0xDAD1,
-    KNL_OBJ_TYPE_TASK_DYN   = 0xDAD2,
-    KNL_OBJ_TYPE_TIMER      = 0xDAD3,
-    KNL_OBJ_TYPE_MSG_QUEUE  = 0xDAD4,
-    KNL_OBJ_TYPE_MMBLK_POOL = 0xDAD5,
-    KNL_OBJ_TYPE_FIFO       = 0xDAD6,
+    KNL_OBJ_TYPE_NONE                   = 0x0000,
+    KNL_OBJ_TYPE_TASK                   = 0xDAD1,
+    KNL_OBJ_TYPE_TASK_DYN               = 0xDAD2,
+    KNL_OBJ_TYPE_TIMER                  = 0xDAD3,
+    KNL_OBJ_TYPE_MSG_QUEUE              = 0xDAD4,
+    KNL_OBJ_TYPE_MMBLK_POOL             = 0xDAD5,
+    KNL_OBJ_TYPE_RING_QUEUE             = 0xDAD6,
+    KNL_OBJ_TYPE_BINARY_HEAP            = 0xDAD7,
+    KNL_OBJ_TYPE_PRIORITY_QUEUE         = 0xDAD8,
+    KNL_OBJ_TYPE_CHAR_FIFO              = 0xDAD9,
 } knl_obj_type_t;
 
 typedef struct knl_object_st {

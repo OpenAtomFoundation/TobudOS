@@ -27,9 +27,6 @@
 // 配置TencentOS tiny是否开启互斥锁模块
 #define TOS_CFG_MUTEX_EN 1u
 
-// 配置TencentOS tiny是否开启队列模块
-#define TOS_CFG_QUEUE_EN 1u
-
 // 配置TencentOS tiny是否开启软件定时器模块
 #define TOS_CFG_TIMER_EN 0u
 
@@ -37,15 +34,6 @@
 #define TOS_CFG_SEM_EN 1u
 
 #define TOS_CFG_CPU_SYSTICK_PRIO 0xF
-
-#if (TOS_CFG_QUEUE_EN > 0u)
-#define TOS_CFG_MSG_EN 1u
-#else
-#define TOS_CFG_MSG_EN 0u
-#endif
-
-// 配置TencentOS tiny消息队列大小
-#define TOS_CFG_MSG_POOL_SIZE 10u
 
 // 配置TencentOS tiny空闲任务栈大小
 #define TOS_CFG_IDLE_TASK_STK_SIZE 512u

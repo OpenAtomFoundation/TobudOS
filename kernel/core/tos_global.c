@@ -72,11 +72,6 @@ size_t              const k_timer_task_stk_size     = TOS_CFG_TIMER_TASK_STK_SIZ
 
 #endif
 
-#if TOS_CFG_MSG_EN > 0u
-TOS_LIST_DEFINE(k_msg_freelist);
-k_msg_t             k_msg_pool[TOS_CFG_MSG_POOL_SIZE];
-#endif
-
 #if TOS_CFG_PWR_MGR_EN > 0u
 pm_device_ctl_t     k_pm_device_ctl             = { 0u };
 

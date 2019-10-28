@@ -8,7 +8,7 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
 
     at_delay(1);
 
-    err = tos_fifo_pop(&AT_AGENT->uart_rx_fifo, data);
+    err = tos_chr_fifo_pop(&AT_AGENT->uart_rx_fifo, data);
 
     return err == K_ERR_NONE ? 0 : -1;
 }
@@ -315,7 +315,7 @@ __API__ int tos_at_channel_read(int channel_id, uint8_t *buffer, size_t buffer_l
     }
 
     while (K_TRUE) {
-        read_len = tos_fifo_pop_stream(&data_channel->rx_fifo, buffer, buffer_len);
+        read_len = tos_chr_fifo_pop_stream(&data_channel->rx_fifo, buffer, buffer_len);
 
         total_read_len += read_len;
         if (total_read_len < buffer_len) {
@@ -347,7 +347,7 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
             return total_read_len;
         }
 
-        read_len = tos_fifo_pop_stream(&data_channel->rx_fifo, buffer + read_len, buffer_len - total_read_len);
+        read_len = tos_chr_fifo_pop_stream(&data_channel->rx_fifo, buffer + read_len, buffer_len - total_read_len);
 
         total_read_len += read_len;
         if (total_read_len < buffer_len) {
@@ -369,7 +369,7 @@ __API__ int tos_at_channel_write(int channel_id, uint8_t *buffer, size_t buffer_
         return -1;
     }
 
-    return tos_fifo_push_stream(&data_channel->rx_fifo, buffer, buffer_len);
+    return tos_chr_fifo_push_stream(&data_channel->rx_fifo, buffer, buffer_len);
 }
 
 __STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, const char *ip, const char *port)
@@ -382,7 +382,7 @@ __STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, cons
     }
 
     data_channel->rx_fifo_buffer = fifo_buffer;
-    tos_fifo_create(&data_channel->rx_fifo, fifo_buffer, AT_DATA_CHANNEL_FIFO_BUFFER_SIZE);
+    tos_chr_fifo_create(&data_channel->rx_fifo, fifo_buffer, AT_DATA_CHANNEL_FIFO_BUFFER_SIZE);
     data_channel->remote_ip = ip;
     data_channel->remote_port = port;
 
@@ -441,7 +441,7 @@ __API__ int tos_at_channel_free(int channel_id)
     }
 
     tos_mmheap_free(data_channel->rx_fifo_buffer);
-    tos_fifo_destroy(&data_channel->rx_fifo);
+    tos_chr_fifo_destroy(&data_channel->rx_fifo);
 
     memset(data_channel, 0, sizeof(at_data_channel_t));
 
@@ -542,7 +542,7 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, evtdrv_task_id_t at_task_id, 
     }
 
     AT_AGENT->uart_rx_fifo_buffer = (uint8_t *)buffer;
-    tos_fifo_create(&AT_AGENT->uart_rx_fifo, (uint8_t *)buffer, AT_UART_RX_FIFO_BUFFER_SIZE);
+    tos_chr_fifo_create(&AT_AGENT->uart_rx_fifo, (uint8_t *)buffer, AT_UART_RX_FIFO_BUFFER_SIZE);
 
     buffer = tos_mmheap_alloc(AT_CMD_BUFFER_SIZE);
     if (!buffer) {
@@ -570,7 +570,7 @@ errout1:
 errout0:
     tos_mmheap_free(AT_AGENT->uart_rx_fifo_buffer);
     AT_AGENT->uart_rx_fifo_buffer = K_NULL;
-    tos_fifo_destroy(&AT_AGENT->uart_rx_fifo);
+    tos_chr_fifo_destroy(&AT_AGENT->uart_rx_fifo);
 
     return -1;
 }
@@ -587,7 +587,7 @@ __API__ void tos_at_deinit(void)
     tos_mmheap_free(AT_AGENT->uart_rx_fifo_buffer);
     AT_AGENT->uart_rx_fifo_buffer = K_NULL;
 
-    tos_fifo_destroy(&AT_AGENT->uart_rx_fifo);
+    tos_chr_fifo_destroy(&AT_AGENT->uart_rx_fifo);
 
     at_channel_deinit();
 }
@@ -596,9 +596,9 @@ __API__ void tos_at_deinit(void)
    hal(driver framework), that would be a huge work, we place it in future plans. */
 __API__ void tos_at_uart_write_byte(uint8_t data)
 {
-    if (tos_fifo_push(&AT_AGENT->uart_rx_fifo, data) == K_ERR_NONE) {
+    if (tos_chr_fifo_push(&AT_AGENT->uart_rx_fifo, data) == K_ERR_NONE) {
         tos_evtdrv_event_set(AT_AGENT->at_task_id, EVENT_AT_UART_INCOMING);
-	}
+    }
 }
 
 __STATIC__ void at_echo_event_emit(at_echo_t *echo)
