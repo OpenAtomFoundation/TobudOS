@@ -32,11 +32,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, with multibyte support.</state>
+                    <state>Full formatting, with multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>No specifier a, A, no specifier n, no float nor long long, with multibyte support.</state>
+                    <state>Full formatting, with multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -66,7 +66,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>8.32.2.19370</state>
+                    <state>8.32.1.18618</state>
                 </option>
                 <option>
                     <name>GeneralEnableMisra</name>
@@ -116,7 +116,7 @@
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
-                    <version>27</version>
+                    <version>26</version>
                     <state>39</state>
                 </option>
                 <option>
@@ -133,7 +133,7 @@
                 </option>
                 <option>
                     <name>CoreVariant</name>
-                    <version>27</version>
+                    <version>26</version>
                     <state>39</state>
                 </option>
                 <option>
@@ -156,7 +156,7 @@
                 </option>
                 <option>
                     <name>GFPUCoreSlave2</name>
-                    <version>27</version>
+                    <version>26</version>
                     <state>39</state>
                 </option>
                 <option>
@@ -362,6 +362,7 @@
                     <state>$PROJ_DIR$\..\..\..\..\osal\cmsis_os</state>
                     <state>$PROJ_DIR$\..\..\TOS_CONFIG</state>
                     <state>$PROJ_DIR$\..\..\..\..\examples\hello_world</state>
+                    <state>$PROJ_DIR$\..\..\..\..\kernel\pm\include</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1177,6 +1178,12 @@
     <group>
         <name>tos/kernel</name>
         <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_binary_heap.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_char_fifo.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_completion.c</name>
         </file>
         <file>
@@ -1186,10 +1193,13 @@
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_event.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_fifo.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_global.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_global.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mail_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_message_queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mmblk.c</name>
@@ -1198,16 +1208,22 @@
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mmheap.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_msg.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mutex.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_pend.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_queue.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_priority_mail_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_priority_message_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_priority_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_ring_queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_robin.c</name>
