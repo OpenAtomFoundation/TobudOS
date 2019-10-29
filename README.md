@@ -109,9 +109,13 @@ TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板�
 
 # 九、第三方开发者评测
 
-感谢CSDN博客专家杰杰的贡献
+1. 基于TencentOS tiny 的环境监测实战项目
+[【TencentOS tiny】环境监测实战项目最终完整版](https://www.bilibili.com/video/av73782956?from=search&seid=4421984671929108231)
+感谢阿正的贡献
 
-基于野火stm32f103开发板上移植的TencentOS tiny 例程、源码剖析、视频讲解。
+
+2.基于野火stm32f103开发板上移植的TencentOS tiny 例程、源码剖析、视频讲解。
+感谢CSDN博客专家杰杰的贡献
 
 ## 简单上手：
 
