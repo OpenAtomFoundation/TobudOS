@@ -93,6 +93,8 @@ __PORT__ void       port_systick_priority_set(uint32_t prio);  //ok
 
 __PORT__ pthread_t  port_create_thread(void *arg);
 
+__PORT__ void       port_delay_ms(uint32_t ms);
+
 #if TOS_CFG_TICKLESS_EN > 0u
 
 __PORT__ void       port_systick_resume(void);

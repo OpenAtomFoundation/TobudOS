@@ -59,7 +59,6 @@ extern k_task_t            *k_next_task;
 
 __PORT__ void _handle_tick_signal();
 __PORT__ void _handle_context_switch();
-__PORT__ void _delay_ms(uint32_t ms);
 __PORT__ void _suspend_thread(pthread_t thread_id);
 __PORT__ void _resume_thread(pthread_t thread_id);
 __PORT__ void _wait_resume();
@@ -70,6 +69,7 @@ __PORT__ void _suspend_task(k_task_t *task);
 __PORT__ void _resume_task(k_task_t *task);
 __PORT__ void _install_signal(int sig,void (*func)(int));
 __PORT__ void _filter_signal(sigset_t *sigset);
+__PORT__ uint64_t _get_time_ms(void);
 
 typedef struct {
     sigset_t signal_mask;
@@ -79,6 +79,8 @@ typedef struct {
 interrupt_manager _int_manager={
     .count = 0
 };
+
+static uint64_t tick_ms = 0;
 
 __PORT__ void port_int_disable(void)
 {
@@ -132,7 +134,7 @@ __PORT__ void port_sched_start(void)
     _resume_task(k_curr_task);
 
     while(1){
-        _delay_ms(1000);
+        _wait_resume();
     }
 }
 
@@ -186,6 +188,14 @@ __PORT__ void port_systick_priority_set(uint32_t prio)
 {
 }
 
+__PORT__ void port_delay_ms(uint32_t ms) 
+{   
+    uint64_t start_time = _get_time_ms();
+    do{
+        usleep(100);
+    }while((_get_time_ms() - start_time) < ms);
+}
+
 __PORT__ void _filter_signal(sigset_t *sigset)
 {
     sigdelset(sigset,SIGINT);
@@ -195,18 +205,7 @@ __PORT__ void _filter_signal(sigset_t *sigset)
 
 __PORT__ uint64_t _get_time_ms(void)
 {
-    struct timeval timer;
-    gettimeofday( &timer, NULL );
-
-    return (1000 * timer.tv_sec + timer.tv_usec/1000);
-}
-
-__PORT__ void _delay_ms(uint32_t ms) 
-{   
-    uint64_t start_time = _get_time_ms();
-    do{
-        usleep(100);
-    }while((_get_time_ms() - start_time) < ms);
+    return (tick_ms);
 }
 
 __PORT__ void _install_signal(int sig,void (*func)(int))
@@ -225,10 +224,11 @@ __PORT__ void _install_signal(int sig,void (*func)(int))
 
 __PORT__ void _handle_tick_signal()
 {
+    tick_ms ++;
     if(tos_knl_is_running()) {
-	  tos_knl_irq_enter();
-	  tos_tick_handler();
-	  tos_knl_irq_leave();
+        tos_knl_irq_enter();
+        tos_tick_handler();
+        tos_knl_irq_leave();
     }
 }
 
