@@ -7,7 +7,7 @@
 
 #define TOS_CFG_ROUND_ROBIN_EN      1u
 
-#define TOS_CFG_OBJECT_VERIFY_EN       0u
+#define TOS_CFG_OBJECT_VERIFY_EN       1u
 
 #define TOS_CFG_TASK_DYNAMIC_CREATE_EN  0u
 

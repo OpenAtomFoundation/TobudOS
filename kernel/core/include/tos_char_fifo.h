@@ -19,9 +19,7 @@
 #define  _TOS_CHAR_FIFO_H_
 
 typedef struct k_char_fifo_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t   knl_obj;
-#endif
 
     k_ring_q_t  ring_q;
 } k_chr_fifo_t;
@@ -56,6 +54,40 @@ __API__ k_err_t tos_chr_fifo_create(k_chr_fifo_t *chr_fifo, void *buffer, size_t
  * @retval  #K_ERR_NONE         return successfully.
  */
 __API__ k_err_t tos_chr_fifo_destroy(k_chr_fifo_t *chr_fifo);
+
+#if TOS_CFG_MMHEAP_EN > 0u
+
+/**
+ * @brief Create a character fifo with a dynamic allocated buffer.
+ * Create a character fifo with a dynamic allocated buffer.
+ *
+ * @attention the buffer is dynamic allocated(tos_mmheap_alloc)
+ *
+ * @param[in]   fifo        pointer to the handler of the fifo.
+ * @param[in]   fifo_size   size of the fifo.
+ *
+ * @return  errno
+ * @retval  #K_ERR_OBJ_PTR_NULL fifo is a NULL pointer.
+ * @retval  #K_ERR_NONE         return successfully.
+ */
+__API__ k_err_t tos_chr_fifo_create_dyn(k_chr_fifo_t *chr_fifo, size_t fifo_size);
+
+/**
+ * @brief Destroy a character fifo with a dynamic allocated buffer.
+ * Destroy a character fifo with a dynamic allocated buffer.
+ *
+ * @attention None
+ *
+ * @param[in]   fifo        pointer to the handler of the fifo.
+ *
+ * @return  errno
+ * @retval  #K_ERR_OBJ_PTR_NULL fifo is a NULL pointer.
+ * @retval  #K_ERR_OBJ_INVALID  not a valid pointer to a fifo.
+ * @retval  #K_ERR_NONE         return successfully.
+ */
+__API__ k_err_t tos_chr_fifo_destroy_dyn(k_chr_fifo_t *chr_fifo);
+
+#endif
 
 /**
  * @brief Push data into character fifo.

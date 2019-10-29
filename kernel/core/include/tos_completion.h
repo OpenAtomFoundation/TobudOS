@@ -23,6 +23,10 @@
 typedef uint16_t    completion_done_t;
 
 typedef struct k_completion_st {
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_obj_t           knl_obj;
+#endif
+
     pend_obj_t          pend_obj;
     completion_done_t   done;
 } k_completion_t;

@@ -21,6 +21,8 @@
 #if TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u
 
 typedef struct k_priority_mail_queue_st {
+    knl_obj_t   knl_obj;
+
     pend_obj_t  pend_obj;
 
     void       *prio_q_mgr_array;
@@ -55,6 +57,35 @@ __API__ k_err_t tos_prio_mail_q_create(k_prio_mail_q_t *prio_mail_q, void *pool,
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q);
+
+/**
+ * @brief Create a priority mail queue with dynamic allocated pool.
+ * create a priority mail queue with dynamic allocated pool.
+ *
+ * @attention a MAIL is a buffer with a certain size.
+ *
+ * @param[in]   prio_mail_q pointer to the handler of the priority mail queue.
+ * @param[in]   pool        pool buffer of the priority mail queue.
+ * @param[in]   mail_cnt    mail count of the priority mail queue.
+ * @param[in]   mail_size   size of each mail in the priority mail queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_prio_mail_q_create_dyn(k_prio_mail_q_t *prio_mail_q, size_t mail_cnt, size_t mail_size);
+
+/**
+ * @brief Destroy a priority mail queue with dynamic allocated pool.
+ * destroy a priority mail queue with dynamic allocated pool.
+ *
+ * @attention None
+ *
+ * @param[in]   prio_mail_q pointer to the handler of the priority mail queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_prio_mail_q_destroy_dyn(k_prio_mail_q_t *prio_mail_q);
 
 /**
  * @brief Flush the priority mail queue.

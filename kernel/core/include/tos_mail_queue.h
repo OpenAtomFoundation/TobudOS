@@ -21,6 +21,8 @@
 #if TOS_CFG_MAIL_QUEUE_EN > 0u
 
 typedef struct k_mail_queue_st {
+    knl_obj_t   knl_obj;
+
     pend_obj_t  pend_obj;
     k_ring_q_t  ring_q;
 } k_mail_q_t;
@@ -53,6 +55,38 @@ __API__ k_err_t tos_mail_q_create(k_mail_q_t *mail_q, void *pool, size_t mail_cn
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q);
+
+#if TOS_CFG_MMHEAP_EN > 0u
+
+/**
+ * @brief Create a mail queue with dynamic allocated pool.
+ * create a mail queue with dynamic allocated pool.
+ *
+ * @attention a MAIL is a buffer with a certain size.
+ *
+ * @param[in]   mail_q      pointer to the handler of the mail queue.
+ * @param[in]   mail_cnt    mail count of the mail queue.
+ * @param[in]   mail_size   size of each mail in the mail queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_mail_q_create_dyn(k_mail_q_t *mail_q, size_t mail_cnt, size_t mail_size);
+
+/**
+ * @brief Destroy a mail queue with dynamic allocated pool.
+ * destroy a mail queue with dynamic allocated pool.
+ *
+ * @attention None
+ *
+ * @param[in]   mail_q      pointer to the handler of the mail queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_mail_q_destroy_dyn(k_mail_q_t *mail_q);
+
+#endif
 
 /**
  * @brief Flush the mail queue.

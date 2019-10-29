@@ -190,6 +190,84 @@ TEST test_tos_prio_mail_queue_pend(void)
     PASS();
 }
 
+TEST test_tos_prio_mail_queue_pend_dyn(void)
+{
+    k_err_t err;
+    test_mail_t mail0 = {
+        0xDEAD0000,
+        "test_mail0",
+        'T',
+    };
+    test_mail_t mail1 = {
+        0xDEAD1111,
+        "test_mail1",
+        'U',
+    };
+    test_mail_t mail2 = {
+        0xDEAD2222,
+        "test_mail2",
+        'V',
+    };
+
+    test_mail_reset();
+    test_context_reset();
+    test_count_reset();
+    test_task_hook_set(test_count_inc);
+
+    err = tos_prio_mail_q_create_dyn(&test_prio_mail_q_00, TEST_PRIO_MAIL_Q_MAIL_CNT, sizeof(test_mail_t));
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    // create a test task with the same priority than current task
+    err = tos_task_create(&test_task_00, "test_task", test_prio_mail_queue_pend_task_entry,
+                            (void *)(&test_prio_mail_q_00), k_curr_task->prio,
+                            test_task_stack_00, sizeof(test_task_stack_00),
+                            0);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    ASSERT_EQ(test_count, 0);
+    ASSERT(test_context != TEST_CONTEXT_00);
+
+    // we post mail2, mail1, mail0 with the certain priority, the test_task should receive mail according the priority
+    tos_prio_mail_q_post(&test_prio_mail_q_00, &mail2, sizeof(test_mail_t), 2);
+    tos_prio_mail_q_post(&test_prio_mail_q_00, &mail1, sizeof(test_mail_t), 1);
+    tos_prio_mail_q_post(&test_prio_mail_q_00, &mail0, sizeof(test_mail_t), 0);
+
+    tos_task_yield(); // yeild to test_task
+
+    ASSERT_EQ(test_count, 0);
+    ASSERT_EQ(test_err, K_ERR_NONE);
+    ASSERT_EQ(test_context, TEST_CONTEXT_01);
+
+    ASSERT_EQ(test_mail.a, mail0.a);
+    ASSERT_EQ(strcmp(test_mail.b, mail0.b), 0);
+    ASSERT_EQ(test_mail.c, mail0.c);
+    tos_task_yield(); // yeild to test_task
+
+    ASSERT_EQ(test_count, 1);
+    ASSERT_EQ(test_err, K_ERR_NONE);
+    ASSERT_EQ(test_context, TEST_CONTEXT_01);
+
+    ASSERT_EQ(test_mail.a, mail1.a);
+    ASSERT_EQ(strcmp(test_mail.b, mail1.b), 0);
+    ASSERT_EQ(test_mail.c, mail1.c);
+    tos_task_yield(); // yeild to test_task
+
+    ASSERT_EQ(test_mail.a, mail2.a);
+    ASSERT_EQ(strcmp(test_mail.b, mail2.b), 0);
+    ASSERT_EQ(test_mail.c, mail2.c);
+    tos_task_yield(); // yeild to test_task
+
+    tos_prio_mail_q_destroy_dyn(&test_prio_mail_q_00);
+    tos_task_yield(); // yeild to test_task
+    ASSERT_EQ(test_err, K_ERR_PEND_DESTROY);
+    ASSERT_EQ(test_context, TEST_CONTEXT_01);
+
+    err = tos_task_destroy(&test_task_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
 TEST test_tos_prio_mail_queue_pend_timed(void)
 {
     k_err_t err;
@@ -415,6 +493,7 @@ SUITE(suit_priority_mail_queue)
     RUN_TEST(test_tos_prio_mail_queue_create);
     RUN_TEST(test_tos_prio_mail_queue_destroy);
     RUN_TEST(test_tos_prio_mail_queue_pend);
+    RUN_TEST(test_tos_prio_mail_queue_pend_dyn);
     RUN_TEST(test_tos_prio_mail_queue_pend_timed);
     RUN_TEST(test_tos_prio_mail_queue_post_all);
     RUN_TEST(test_tos_prio_mail_queue_flush);

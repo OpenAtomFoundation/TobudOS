@@ -21,15 +21,24 @@
 
 __API__ k_err_t tos_msg_q_create(k_msg_q_t *msg_q, void *pool, size_t msg_cnt)
 {
-    TOS_PTR_SANITY_CHECK(msg_q);
     k_err_t err;
 
-    pend_object_init(&msg_q->pend_obj, PEND_TYPE_MESSAGE_QUEUE);
+    TOS_PTR_SANITY_CHECK(msg_q);
+    TOS_PTR_SANITY_CHECK(pool);
 
     err = tos_ring_q_create(&msg_q->ring_q, pool, msg_cnt, sizeof(void *));
     if (err != K_ERR_NONE) {
         return err;
     }
+
+    pend_object_init(&msg_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&msg_q->knl_obj, KNL_OBJ_TYPE_MESSAGE_QUEUE);
+#endif
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_set_static(&msg_q->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -40,10 +49,11 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
     k_err_t err;
 
     TOS_PTR_SANITY_CHECK(msg_q);
+    TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&msg_q->pend_obj, PEND_TYPE_MESSAGE_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
+#if TOS_CFG_MMHEAP_EN > 0u
+    if (!knl_object_alloc_is_static(&msg_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
 #endif
 
@@ -61,21 +71,85 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
 
     pend_object_deinit(&msg_q->pend_obj);
 
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&msg_q->knl_obj);
+#endif
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_reset(&msg_q->knl_obj);
+#endif
+
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     return K_ERR_NONE;
 }
 
+#if TOS_CFG_MMHEAP_EN > 0u
+
+__API__ k_err_t tos_msg_q_create_dyn(k_msg_q_t *msg_q, size_t msg_cnt)
+{
+    k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(msg_q);
+
+    err = tos_ring_q_create_dyn(&msg_q->ring_q, msg_cnt, sizeof(void *));
+    if (err != K_ERR_NONE) {
+        return err;
+    }
+
+    pend_object_init(&msg_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&msg_q->knl_obj, KNL_OBJ_TYPE_MESSAGE_QUEUE);
+#endif
+    knl_object_alloc_set_dynamic(&msg_q->knl_obj);
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_msg_q_destroy_dyn(k_msg_q_t *msg_q)
+{
+    TOS_CPU_CPSR_ALLOC();
+    k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(msg_q);
+    TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
+
+    if (!knl_object_alloc_is_dynamic(&msg_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+
+    TOS_CPU_INT_DISABLE();
+
+    err = tos_ring_q_destroy_dyn(&msg_q->ring_q);
+    if (err != K_ERR_NONE) {
+        TOS_CPU_INT_ENABLE();
+        return err;
+    }
+
+    if (!pend_is_nopending(&msg_q->pend_obj)) {
+        pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
+    }
+
+    pend_object_deinit(&msg_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&msg_q->knl_obj);
+#endif
+    knl_object_alloc_reset(&msg_q->knl_obj);
+
+    TOS_CPU_INT_ENABLE();
+    knl_sched();
+
+    return K_ERR_NONE;
+}
+
+#endif
+
 __API__ k_err_t tos_msg_q_flush(k_msg_q_t *msg_q)
 {
     TOS_PTR_SANITY_CHECK(msg_q);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&msg_q->pend_obj, PEND_TYPE_MESSAGE_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
 
     return tos_ring_q_flush(&msg_q->ring_q);
 }
@@ -87,12 +161,7 @@ __API__ k_err_t tos_msg_q_pend(k_msg_q_t *msg_q, void **msg_ptr, k_tick_t timeou
 
     TOS_PTR_SANITY_CHECK(msg_q);
     TOS_PTR_SANITY_CHECK(msg_ptr);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&msg_q->pend_obj, PEND_TYPE_MESSAGE_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 
@@ -140,12 +209,7 @@ __STATIC__ k_err_t msg_q_do_post(k_msg_q_t *msg_q, void *msg_ptr, opt_post_t opt
     k_list_t *curr, *next;
 
     TOS_PTR_SANITY_CHECK(msg_q);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&msg_q->pend_obj, PEND_TYPE_MESSAGE_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 

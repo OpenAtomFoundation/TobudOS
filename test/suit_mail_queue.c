@@ -158,6 +158,53 @@ TEST test_tos_mail_queue_pend(void)
     PASS();
 }
 
+TEST test_tos_mail_queue_pend_dyn(void)
+{
+    k_err_t err;
+    test_mail_t mail = {
+        0xDEADBEEF,
+        "test_mail",
+        'T',
+    };
+
+    test_mail_reset();
+    test_context_reset();
+    test_count_reset();
+    test_task_hook_set(test_count_inc);
+
+    err = tos_mail_q_create_dyn(&test_mail_q_00, TEST_MAIL_Q_MAIL_CNT, sizeof(test_mail_t));
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    // create a test task with a higher priority than current task
+    err = tos_task_create(&test_task_00, "test_task", test_mail_queue_pend_task_entry,
+                            (void *)(&test_mail_q_00), k_curr_task->prio - 1,
+                            test_task_stack_00, sizeof(test_task_stack_00),
+                            0);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    ASSERT_EQ(test_count, 0);
+    ASSERT_EQ(test_context, TEST_CONTEXT_00);
+
+    tos_mail_q_post(&test_mail_q_00, &mail, sizeof(test_mail_t));
+
+    ASSERT_EQ(test_count, 1);
+    ASSERT_EQ(test_err, K_ERR_NONE);
+    ASSERT_EQ(test_context, TEST_CONTEXT_00);
+
+    ASSERT_EQ(test_mail.a, mail.a);
+    ASSERT_EQ(strcmp(test_mail.b, mail.b), 0);
+    ASSERT_EQ(test_mail.c, mail.c);
+
+    tos_mail_q_destroy_dyn(&test_mail_q_00);
+    ASSERT_EQ(test_err, K_ERR_PEND_DESTROY);
+    ASSERT_EQ(test_context, TEST_CONTEXT_01);
+
+    err = tos_task_destroy(&test_task_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
 TEST test_tos_mail_queue_pend_timed(void)
 {
     k_err_t err;
@@ -397,6 +444,7 @@ SUITE(suit_mail_queue)
     RUN_TEST(test_tos_mail_queue_create);
     RUN_TEST(test_tos_mail_queue_destroy);
     RUN_TEST(test_tos_mail_queue_pend);
+    RUN_TEST(test_tos_mail_queue_pend_dyn);
     RUN_TEST(test_tos_mail_queue_pend_timed);
     RUN_TEST(test_tos_mail_queue_post_all);
     RUN_TEST(test_tos_mail_queue_flush);

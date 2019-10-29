@@ -23,7 +23,11 @@ __API__ k_err_t tos_event_create(k_event_t *event, k_event_flag_t init_flag)
 {
     TOS_PTR_SANITY_CHECK(event);
 
-    pend_object_init(&event->pend_obj, PEND_TYPE_EVENT);
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&event->knl_obj, KNL_OBJ_TYPE_EVENT);
+#endif
+
+    pend_object_init(&event->pend_obj);
     event->flag = init_flag;
     return K_ERR_NONE;
 }
@@ -33,12 +37,7 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(event);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&event->pend_obj, PEND_TYPE_EVENT)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
 
     TOS_CPU_INT_DISABLE();
 
@@ -48,6 +47,10 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
 
     pend_object_deinit(&event->pend_obj);
     event->flag = (k_event_flag_t)0u;
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&event->knl_obj);
+#endif
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
@@ -77,12 +80,7 @@ __API__ k_err_t tos_event_pend(k_event_t *event, k_event_flag_t flag_expect, k_e
 
     TOS_PTR_SANITY_CHECK(event);
     TOS_PTR_SANITY_CHECK(flag_match);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&event->pend_obj, PEND_TYPE_EVENT)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
 
     if (!(opt_pend & TOS_OPT_EVENT_PEND_ALL) && !(opt_pend & TOS_OPT_EVENT_PEND_ANY)) {
         return K_ERR_EVENT_PEND_OPT_INVALID;
@@ -140,12 +138,7 @@ __STATIC__ k_err_t event_do_post(k_event_t *event, k_event_flag_t flag, opt_even
     k_list_t *curr, *next;
 
     TOS_PTR_SANITY_CHECK(event);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&event->pend_obj, PEND_TYPE_EVENT)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
 
     if (opt_post == OPT_EVENT_POST_KEP) {
         event->flag |= flag;

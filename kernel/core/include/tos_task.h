@@ -69,9 +69,7 @@ typedef void (*k_task_walker)(k_task_t *task);
 typedef struct k_task_st {
     k_stack_t          *sp;                 /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t           knl_obj;            /**< just for verification, test whether current object is really a task. */
-#endif
 
     char               *name;               /**< task name */
     k_task_entry_t      entry;              /**< task entry */

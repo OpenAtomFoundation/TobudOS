@@ -61,15 +61,13 @@ __KERNEL__ void pend_list_remove(k_task_t *task)
     task_state_reset_pending(task);
 }
 
-__KERNEL__ void pend_object_init(pend_obj_t *object, pend_type_t type)
+__KERNEL__ void pend_object_init(pend_obj_t *object)
 {
-    object->type = type;
     tos_list_init(&object->list);
 }
 
 __KERNEL__ void pend_object_deinit(pend_obj_t *object)
 {
-    object->type = PEND_TYPE_NONE;
     tos_list_init(&object->list);
 }
 
@@ -84,11 +82,6 @@ __KERNEL__ void pend_list_adjust(k_task_t *task)
     tos_list_del(&task->pend_list);
     // the "someday" comes
     pend_list_add(task, task->pending_obj);
-}
-
-__KERNEL__ int pend_object_verify(pend_obj_t *object, pend_type_t type)
-{
-    return object->type == type;
 }
 
 __KERNEL__ k_err_t pend_state2errno(pend_state_t state)

@@ -86,6 +86,38 @@ TEST test_tos_fifo_char_push(void)
     PASS();
 }
 
+TEST test_tos_fifo_char_push_dyn(void)
+{
+    k_err_t err;
+    int i = 0;
+    uint8_t data;
+
+    err = tos_chr_fifo_create_dyn(&test_fifo_00, sizeof(fifo_buffer_00));
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    for (i = 0; i < FIFO_BUFFER_SIZE; ++i) {
+        err = tos_chr_fifo_push(&test_fifo_00, 'a' + i);
+        ASSERT_EQ(err, K_ERR_NONE);
+    }
+
+    err = tos_chr_fifo_push(&test_fifo_00, 'z');
+    ASSERT_EQ(err, K_ERR_RING_Q_FULL);
+
+    for (i = 0; i < FIFO_BUFFER_SIZE; ++i) {
+        err = tos_chr_fifo_pop(&test_fifo_00, &data);
+        ASSERT_EQ(err, K_ERR_NONE);
+        ASSERT_EQ(data, 'a' + i);
+    }
+
+    err = tos_chr_fifo_pop(&test_fifo_00, &data);
+    ASSERT_EQ(err, K_ERR_RING_Q_EMPTY);
+
+    err = tos_chr_fifo_destroy_dyn(&test_fifo_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
 TEST test_tos_fifo_stream_push(void)
 {
     k_err_t err;
@@ -119,6 +151,7 @@ SUITE(suit_char_fifo)
     RUN_TEST(test_tos_fifo_create);
     RUN_TEST(test_tos_fifo_destory);
     RUN_TEST(test_tos_fifo_char_push);
+    RUN_TEST(test_tos_fifo_char_push_dyn);
     RUN_TEST(test_tos_fifo_stream_push);
 }
 

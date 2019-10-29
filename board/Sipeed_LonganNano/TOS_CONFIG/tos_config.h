@@ -11,7 +11,7 @@
 #define TOS_CFG_ROUND_ROBIN_EN 0u
 
 // 配置TencentOS tiny是否校验指针合法
-#define TOS_CFG_OBJECT_VERIFY 0u
+#define TOS_CFG_OBJECT_VERIFY_EN 0u
 
 #define TOS_CFG_TASK_DYNAMIC_CREATE_EN  0u
 

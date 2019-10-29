@@ -21,6 +21,8 @@
 #if TOS_CFG_MESSAGE_QUEUE_EN > 0u
 
 typedef struct k_message_queue_st {
+    knl_obj_t   knl_obj;
+
     pend_obj_t  pend_obj;
     k_ring_q_t  ring_q;
 } k_msg_q_t;
@@ -52,6 +54,37 @@ __API__ k_err_t tos_msg_q_create(k_msg_q_t *msg_q, void *pool, size_t msg_cnt);
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q);
+
+#if TOS_CFG_MMHEAP_EN > 0u
+
+/**
+ * @brief Create a message queue with dynamic allocated pool.
+ * create a message queue with dynamic allocated pool.
+ *
+ * @attention a MESSAGE is a "void *" pointer.
+ *
+ * @param[in]   msg_q       pointer to the handler of the message queue.
+ * @param[in]   msg_cnt     message count of the message queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_msg_q_create_dyn(k_msg_q_t *msg_q, size_t msg_cnt);
+
+/**
+ * @brief Destroy a message queue with dynamic allocated pool.
+ * destroy a message queue with dynamic allocated pool.
+ *
+ * @attention None
+ *
+ * @param[in]   msg_q       pointer to the handler of the message queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_msg_q_destroy_dyn(k_msg_q_t *msg_q);
+
+#endif
 
 /**
  * @brief Flush the message queue.

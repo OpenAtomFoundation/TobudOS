@@ -21,9 +21,7 @@
 typedef int (*k_bin_heap_cmp)(void *first, void *second);
 
 typedef struct k_binary_heap_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t           knl_obj;
-#endif
 
     size_t              total;
 
@@ -70,6 +68,39 @@ __API__ k_err_t tos_bin_heap_create(k_bin_heap_t *bin_heap, void *pool, size_t i
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_bin_heap_destroy(k_bin_heap_t *bin_heap);
+
+#if TOS_CFG_MMHEAP_EN > 0u
+
+/**
+ * @brief Create a binary heap with a dynamic allocated pool.
+ * create a binary heap with a dynamic allocated pool.
+ *
+ * @attention None
+ *
+ * @param[in]   bin_heap    pointer to the handler of the binary heap.
+ * @param[in]   item_cnt    item count of the binary heap.
+ * @param[in]   item_size   size of each item of the binary heap.
+ * @param[in]   cmp         compare function to determine two items which is bigger or smaller.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_bin_heap_create_dyn(k_bin_heap_t *bin_heap, size_t item_cnt, size_t item_size, k_bin_heap_cmp cmp);
+
+/**
+ * @brief Destroy a binary heap with a dynamic allocated pool.
+ * destroy a binary heap with a dynamic allocated pool.
+ *
+ * @attention None
+ *
+ * @param[in]   bin_heap    pointer to the handler of the binary heap.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_bin_heap_destroy_dyn(k_bin_heap_t *bin_heap);
+
+#endif
 
 /**
  * @brief Push an item.

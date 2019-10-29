@@ -37,12 +37,39 @@
         }   \
     } while(0)
 
+#define TOS_PTR_SANITY_CHECK_RC(ptr, return_code) \
+    do {    \
+        if (unlikely((ptr) == K_NULL)) {    \
+            return return_code;    \
+        }   \
+    } while(0)
+
 #define TOS_IN_IRQ_CHECK()    \
     do {    \
         if (unlikely(knl_is_inirq())) {   \
             return K_ERR_IN_IRQ; \
         }   \
     } while(0)
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+#define TOS_OBJ_VERIFY(obj, obj_type) \
+    do {    \
+        if (!knl_object_verify(&obj->knl_obj, obj_type)) {    \
+            return K_ERR_OBJ_INVALID;   \
+        }   \
+    } while (0)
+
+#define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code) \
+    do {    \
+        if (!knl_object_verify(&obj->knl_obj, obj_type)) {    \
+            return return_code;   \
+        }   \
+    } while (0)
+
+#else
+#define TOS_OBJ_VERIFY(obj, obj_type)
+#define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code)
+#endif
 
 // currently we use default microlib supplied by mdk
 #define tos_kprintf(...)         printf(__VA_ARGS__);

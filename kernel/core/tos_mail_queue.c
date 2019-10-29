@@ -24,12 +24,19 @@ __API__ k_err_t tos_mail_q_create(k_mail_q_t *mail_q, void *pool, size_t mail_cn
     TOS_PTR_SANITY_CHECK(mail_q);
     k_err_t err;
 
-    pend_object_init(&mail_q->pend_obj, PEND_TYPE_MAIL_QUEUE);
-
     err = tos_ring_q_create(&mail_q->ring_q, pool, mail_cnt, mail_size);
     if (err != K_ERR_NONE) {
         return err;
     }
+
+    pend_object_init(&mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&mail_q->knl_obj, KNL_OBJ_TYPE_MAIL_QUEUE);
+#endif
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_set_static(&mail_q->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -40,10 +47,11 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
     k_err_t err;
 
     TOS_PTR_SANITY_CHECK(mail_q);
+    TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mail_q->pend_obj, PEND_TYPE_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
+#if TOS_CFG_MMHEAP_EN > 0u
+    if (!knl_object_alloc_is_static(&mail_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
 #endif
 
@@ -61,30 +69,86 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
 
     pend_object_deinit(&mail_q->pend_obj);
 
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&mail_q->knl_obj);
+#endif
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_reset(&mail_q->knl_obj);
+#endif
+
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     return K_ERR_NONE;
 }
 
-__API__ k_err_t tos_mail_q_flush(k_mail_q_t *mail_q)
+#if TOS_CFG_MMHEAP_EN > 0u
+
+__API__ k_err_t tos_mail_q_create_dyn(k_mail_q_t *mail_q, size_t mail_cnt, size_t mail_size)
 {
+    TOS_PTR_SANITY_CHECK(mail_q);
     k_err_t err;
 
-    TOS_PTR_SANITY_CHECK(mail_q);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mail_q->pend_obj, PEND_TYPE_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
-
-    err = tos_ring_q_flush(&mail_q->ring_q);
+    err = tos_ring_q_create_dyn(&mail_q->ring_q, mail_cnt, mail_size);
     if (err != K_ERR_NONE) {
         return err;
     }
 
+    pend_object_init(&mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&mail_q->knl_obj, KNL_OBJ_TYPE_MAIL_QUEUE);
+#endif
+    knl_object_alloc_set_dynamic(&mail_q->knl_obj);
+
     return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_mail_q_destroy_dyn(k_mail_q_t *mail_q)
+{
+    TOS_CPU_CPSR_ALLOC();
+    k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(mail_q);
+    TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
+
+    if (!knl_object_alloc_is_dynamic(&mail_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+
+    TOS_CPU_INT_DISABLE();
+
+    err = tos_ring_q_destroy_dyn(&mail_q->ring_q);
+    if (err != K_ERR_NONE) {
+        TOS_CPU_INT_ENABLE();
+        return err;
+    }
+
+    if (!pend_is_nopending(&mail_q->pend_obj)) {
+        pend_wakeup_all(&mail_q->pend_obj, PEND_STATE_DESTROY);
+    }
+
+    pend_object_deinit(&mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&mail_q->knl_obj);
+#endif
+    knl_object_alloc_reset(&mail_q->knl_obj);
+
+    TOS_CPU_INT_ENABLE();
+    knl_sched();
+
+    return K_ERR_NONE;
+}
+
+#endif
+
+__API__ k_err_t tos_mail_q_flush(k_mail_q_t *mail_q)
+{
+    TOS_PTR_SANITY_CHECK(mail_q);
+    TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
+
+    return tos_ring_q_flush(&mail_q->ring_q);
 }
 
 __API__ k_err_t tos_mail_q_pend(k_mail_q_t *mail_q, void *mail_buf, size_t *mail_size, k_tick_t timeout)
@@ -94,12 +158,7 @@ __API__ k_err_t tos_mail_q_pend(k_mail_q_t *mail_q, void *mail_buf, size_t *mail
 
     TOS_PTR_SANITY_CHECK(mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mail_q->pend_obj, PEND_TYPE_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 
@@ -151,12 +210,7 @@ __STATIC__ k_err_t mail_q_do_post(k_mail_q_t *mail_q, void *mail_buf, size_t mai
 
     TOS_PTR_SANITY_CHECK(mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mail_q->pend_obj, PEND_TYPE_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 

@@ -167,10 +167,6 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
     TOS_PTR_SANITY_CHECK(mgr_array);
     TOS_PTR_SANITY_CHECK(pool);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE);
-#endif
-
     pool_mgr_ent_array  = (prio_q_pool_mgr_ent_t *)mgr_array;
     prio_mgr_ent_pool   = (prio_q_prio_mgr_ent_t *)((uint8_t *)mgr_array + PRIO_Q_POOL_MGR_ENT_ARRAY_SIZE(item_cnt));
 
@@ -180,7 +176,15 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
     prio_q->total       = 0;
     prio_q->item_size   = item_size;
     prio_q->item_cnt    = item_cnt;
-    prio_q->pool        = (uint8_t *)pool;
+    prio_q->mgr_pool    = (uint8_t *)mgr_array;
+    prio_q->data_pool   = (uint8_t *)pool;
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE);
+#endif
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_set_static(&prio_q->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -188,10 +192,11 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
 __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q)
 {
     TOS_PTR_SANITY_CHECK(prio_q);
+    TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
+#if TOS_CFG_MMHEAP_EN > 0u
+    if (!knl_object_alloc_is_static(&prio_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
 #endif
 
@@ -201,14 +206,82 @@ __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q)
     prio_q->total       = 0;
     prio_q->item_size   = 0;
     prio_q->item_cnt    = 0;
-    prio_q->pool        = K_NULL;
+    prio_q->mgr_pool    = K_NULL;
+    prio_q->data_pool   = K_NULL;
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_object_deinit(&prio_q->knl_obj);
 #endif
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_reset(&prio_q->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
+
+#if TOS_CFG_MMHEAP_EN > 0u
+
+__API__ k_err_t tos_prio_q_create_dyn(k_prio_q_t *prio_q, size_t item_cnt, size_t item_size)
+{
+    k_err_t err;
+    void *mgr_pool, *data_pool;
+
+    TOS_PTR_SANITY_CHECK(prio_q);
+
+    mgr_pool = tos_mmheap_alloc(TOS_PRIO_Q_MGR_ARRAY_SIZE(item_cnt));
+    if (!mgr_pool) {
+        return K_ERR_OUT_OF_MEMORY;
+    }
+
+    data_pool = tos_mmheap_alloc(item_cnt * item_size);
+    if (!data_pool) {
+        tos_mmheap_free(mgr_pool);
+        return K_ERR_OUT_OF_MEMORY;
+    }
+
+    err = tos_prio_q_create(prio_q, mgr_pool, data_pool, item_cnt, item_size);
+    if (err != K_ERR_NONE) {
+        tos_mmheap_free(data_pool);
+        tos_mmheap_free(mgr_pool);
+    }
+
+    knl_object_alloc_set_dynamic(&prio_q->knl_obj);
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_prio_q_destroy_dyn(k_prio_q_t *prio_q)
+{
+    TOS_PTR_SANITY_CHECK(prio_q);
+    TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
+
+#if TOS_CFG_MMHEAP_EN > 0u
+    if (!knl_object_alloc_is_dynamic(&prio_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+#endif
+
+    prio_q_pool_mgr_deinit(&prio_q->pool_mgr);
+    prio_q_prio_mgr_deinit(&prio_q->prio_mgr);
+
+    tos_mmheap_free(prio_q->mgr_pool);
+    tos_mmheap_free(prio_q->data_pool);
+
+    prio_q->total       = 0;
+    prio_q->item_size   = 0;
+    prio_q->item_cnt    = 0;
+    prio_q->mgr_pool    = K_NULL;
+    prio_q->data_pool   = K_NULL;
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&prio_q->knl_obj);
+#endif
+    knl_object_alloc_reset(&prio_q->knl_obj);
+
+    return K_ERR_NONE;
+}
+
+#endif
 
 __STATIC__ void prio_q_do_enqueue(k_prio_q_t *prio_q, void *item, prio_q_slot_t slot, k_prio_t prio)
 {
@@ -224,12 +297,7 @@ __API__ k_err_t tos_prio_q_enqueue(k_prio_q_t *prio_q, void *item, size_t item_s
 
     TOS_PTR_SANITY_CHECK(prio_q);
     TOS_PTR_SANITY_CHECK(item);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 
     if (item_size != prio_q->item_size) {
         return K_ERR_PRIO_Q_ITEM_SIZE_NOT_MATCH;
@@ -263,12 +331,7 @@ __API__ k_err_t tos_prio_q_dequeue(k_prio_q_t *prio_q, void *item, size_t *item_
 
     TOS_PTR_SANITY_CHECK(prio_q);
     TOS_PTR_SANITY_CHECK(item);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 
     if (tos_prio_q_is_empty(prio_q)) {
         return K_ERR_PRIO_Q_EMPTY;
@@ -288,12 +351,7 @@ __API__ k_err_t tos_prio_q_flush(k_prio_q_t *prio_q)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(prio_q);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 
@@ -310,15 +368,8 @@ __API__ int tos_prio_q_is_empty(k_prio_q_t *prio_q)
     TOS_CPU_CPSR_ALLOC();
     int is_empty = K_FALSE;
 
-    if (!prio_q) {
-        return K_FALSE;
-    }
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE)) {
-        return K_FALSE;
-    }
-#endif
+    TOS_PTR_SANITY_CHECK_RC(prio_q, K_FALSE);
+    TOS_OBJ_VERIFY_RC(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
     is_empty = (prio_q->total == 0);
@@ -332,15 +383,8 @@ __API__ int tos_prio_q_is_full(k_prio_q_t *prio_q)
     TOS_CPU_CPSR_ALLOC();
     int is_full = K_FALSE;
 
-    if (!prio_q) {
-        return K_FALSE;
-    }
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE)) {
-        return K_FALSE;
-    }
-#endif
+    TOS_PTR_SANITY_CHECK_RC(prio_q, K_FALSE);
+    TOS_OBJ_VERIFY_RC(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
     is_full = (prio_q->total == prio_q->item_cnt);

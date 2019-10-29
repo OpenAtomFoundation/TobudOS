@@ -150,6 +150,47 @@ TEST test_tos_message_queue_pend(void)
     PASS();
 }
 
+TEST test_tos_message_queue_pend_dyn(void)
+{
+    k_err_t err;
+    void *msg = (void *)0xDEADBEEF;
+
+    test_msg_reset();
+    test_context_reset();
+    test_count_reset();
+    test_task_hook_set(test_count_inc);
+
+    err = tos_msg_q_create_dyn(&test_msg_q_00, TEST_MESSAGE_Q_MSG_CNT);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    // create a test task with a higher priority than current task
+    err = tos_task_create(&test_task_00, "test_task", test_message_queue_pend_task_entry,
+                            (void *)(&test_msg_q_00), k_curr_task->prio - 1,
+                            test_task_stack_00, sizeof(test_task_stack_00),
+                            0);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    ASSERT_EQ(test_count, 0);
+    ASSERT_EQ(test_context, TEST_CONTEXT_00);
+
+    tos_msg_q_post(&test_msg_q_00, msg);
+
+    ASSERT_EQ(test_count, 1);
+    ASSERT_EQ(test_err, K_ERR_NONE);
+    ASSERT_EQ(test_context, TEST_CONTEXT_00);
+
+    ASSERT_EQ(test_msg, msg);
+
+    tos_msg_q_destroy_dyn(&test_msg_q_00);
+    ASSERT_EQ(test_err, K_ERR_PEND_DESTROY);
+    ASSERT_EQ(test_context, TEST_CONTEXT_01);
+
+    err = tos_task_destroy(&test_task_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
 TEST test_tos_message_queue_pend_timed(void)
 {
     k_err_t err;
@@ -363,6 +404,7 @@ SUITE(suit_message_queue)
     RUN_TEST(test_tos_message_queue_create);
     RUN_TEST(test_tos_message_queue_destroy);
     RUN_TEST(test_tos_message_queue_pend);
+    RUN_TEST(test_tos_message_queue_pend_dyn);
     RUN_TEST(test_tos_message_queue_pend_timed);
     RUN_TEST(test_tos_message_queue_post_all);
     RUN_TEST(test_tos_message_queue_flush);

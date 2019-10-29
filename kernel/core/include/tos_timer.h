@@ -48,9 +48,7 @@ typedef void (*k_timer_callback_t)(void *arg);
  * timer control block
  */
 typedef struct k_timer_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t               knl_obj;    /**< just for verification, test whether current object is really a timer */
-#endif
 
     k_timer_callback_t      cb;         /**< callback when time is up */
     void                   *cb_arg;     /**< argument for callback */

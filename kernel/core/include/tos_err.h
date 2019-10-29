@@ -58,6 +58,7 @@ typedef enum k_err_en {
 
     K_ERR_OBJ_PTR_NULL                          = 1100u,
     K_ERR_OBJ_INVALID,
+    K_ERR_OBJ_INVALID_ALLOC_TYPE,
 
     K_ERR_OUT_OF_MEMORY                         = 1150u,
 

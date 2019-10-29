@@ -21,6 +21,8 @@
 #if TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u
 
 typedef struct k_priority_message_queue_st {
+    knl_obj_t   knl_obj;
+
     pend_obj_t  pend_obj;
 
     void       *prio_q_mgr_array;
@@ -54,6 +56,34 @@ __API__ k_err_t tos_prio_msg_q_create(k_prio_msg_q_t *prio_msg_q, void *pool, si
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_prio_msg_q_destroy(k_prio_msg_q_t *prio_msg_q);
+
+/**
+ * @brief Create a priority message queue with dynamic allocated pool.
+ * create a priority message queue with dynamic allocated pool.
+ *
+ * @attention a MESSAGE is a "void *" pointer.
+ *
+ * @param[in]   prio_msg_q  pointer to the handler of the priority message queue.
+ * @param[in]   pool        pool buffer of the priority message queue.
+ * @param[in]   msg_cnt     message count of the priority message queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_prio_msg_q_create_dyn(k_prio_msg_q_t *prio_msg_q, size_t msg_cnt);
+
+/**
+ * @brief Destroy a priority message queue with dynamic allocated pool.
+ * destroy a priority message queue with dynamic allocated pool.
+ *
+ * @attention None
+ *
+ * @param[in]   prio_msg_q  pointer to the handler of the priority message queue.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_prio_msg_q_destroy_dyn(k_prio_msg_q_t *prio_msg_q);
 
 /**
  * @brief Flush the priority message queue.

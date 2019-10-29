@@ -37,7 +37,12 @@ __API__ k_err_t tos_prio_mail_q_create(k_prio_mail_q_t *prio_mail_q, void *pool,
     }
 
     prio_mail_q->prio_q_mgr_array = prio_q_mgr_array;
-    pend_object_init(&prio_mail_q->pend_obj, PEND_TYPE_PRIORITY_MAIL_QUEUE);
+    pend_object_init(&prio_mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&prio_mail_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
+#endif
+    knl_object_alloc_set_static(&prio_mail_q->knl_obj);
 
     return K_ERR_NONE;
 }
@@ -48,12 +53,11 @@ __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q)
     k_err_t err;
 
     TOS_PTR_SANITY_CHECK(prio_mail_q);
+    TOS_OBJ_VERIFY(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&prio_mail_q->pend_obj, PEND_TYPE_PRIORITY_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
+    if (!knl_object_alloc_is_static(&prio_mail_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     TOS_CPU_INT_DISABLE();
 
@@ -67,9 +71,72 @@ __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q)
         pend_wakeup_all(&prio_mail_q->pend_obj, PEND_STATE_DESTROY);
     }
 
-    pend_object_deinit(&prio_mail_q->pend_obj);
     tos_mmheap_free(prio_mail_q->prio_q_mgr_array);
     prio_mail_q->prio_q_mgr_array = K_NULL;
+
+    pend_object_deinit(&prio_mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&prio_mail_q->knl_obj);
+#endif
+    knl_object_alloc_reset(&prio_mail_q->knl_obj);
+
+    TOS_CPU_INT_ENABLE();
+    knl_sched();
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_prio_mail_q_create_dyn(k_prio_mail_q_t *prio_mail_q, size_t mail_cnt, size_t mail_size)
+{
+    TOS_PTR_SANITY_CHECK(prio_mail_q);
+    k_err_t err;
+
+    err = tos_prio_q_create_dyn(&prio_mail_q->prio_q, mail_cnt, mail_size);
+    if (err != K_ERR_NONE) {
+        return err;
+    }
+
+    pend_object_init(&prio_mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&prio_mail_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
+#endif
+    knl_object_alloc_set_dynamic(&prio_mail_q->knl_obj);
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_prio_mail_q_destroy_dyn(k_prio_mail_q_t *prio_mail_q)
+{
+    TOS_CPU_CPSR_ALLOC();
+    k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(prio_mail_q);
+    TOS_OBJ_VERIFY(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
+
+    if (!knl_object_alloc_is_dynamic(&prio_mail_q->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+
+    TOS_CPU_INT_DISABLE();
+
+    err = tos_prio_q_destroy_dyn(&prio_mail_q->prio_q);
+    if (err != K_ERR_NONE) {
+        TOS_CPU_INT_ENABLE();
+        return err;
+    }
+
+    if (!pend_is_nopending(&prio_mail_q->pend_obj)) {
+        pend_wakeup_all(&prio_mail_q->pend_obj, PEND_STATE_DESTROY);
+    }
+
+    pend_object_deinit(&prio_mail_q->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&prio_mail_q->knl_obj);
+#endif
+    knl_object_alloc_reset(&prio_mail_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
@@ -80,12 +147,7 @@ __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q)
 __API__ k_err_t tos_prio_mail_q_flush(k_prio_mail_q_t *prio_mail_q)
 {
     TOS_PTR_SANITY_CHECK(prio_mail_q);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&prio_mail_q->pend_obj, PEND_TYPE_PRIORITY_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
 
     return tos_prio_q_flush(&prio_mail_q->prio_q);
 }
@@ -97,12 +159,7 @@ __API__ k_err_t tos_prio_mail_q_pend(k_prio_mail_q_t *prio_mail_q, void *mail_bu
 
     TOS_PTR_SANITY_CHECK(prio_mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&prio_mail_q->pend_obj, PEND_TYPE_PRIORITY_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 
@@ -154,12 +211,7 @@ __STATIC__ k_err_t prio_mail_q_do_post(k_prio_mail_q_t *prio_mail_q, void *mail_
 
     TOS_PTR_SANITY_CHECK(prio_mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&prio_mail_q->pend_obj, PEND_TYPE_PRIORITY_MAIL_QUEUE)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
 
     TOS_CPU_INT_DISABLE();
 

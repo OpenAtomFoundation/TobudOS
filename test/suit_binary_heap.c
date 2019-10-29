@@ -257,6 +257,77 @@ TEST test_tos_binary_heap_max_push(void)
     PASS();
 }
 
+TEST test_tos_binary_heap_max_push_dyn(void)
+{
+    k_err_t err;
+    int i = 0;
+    test_bin_heap_item_t items[TEST_BIN_HEAP_ITEM_CNT] = {
+        { 2, "222", '2' },
+        { 4, "444", '4' },
+        { 1, "111", '1' },
+        { 7, "777", '7' },
+        { 5, "555", '5' },
+        { 5, "555", '5' },
+        { 2, "222", '2' },
+        { 0, "000", '0' },
+        { 9, "999", '9' },
+        { 10, "aaa", 'a' },
+        { 5, "555", '5' },
+        { 12, "ccc", 'c' },
+        { 11, "bbb", 'b' },
+        { 3, "333", '3' },
+        { 6, "666", '6' },
+        { 8, "888", '8' },
+    };
+    test_bin_heap_item_t items_should[TEST_BIN_HEAP_ITEM_CNT] = {
+        { 12, "ccc", 'c' },
+        { 11, "bbb", 'b' },
+        { 10, "aaa", 'a' },
+        { 9, "999", '9' },
+        { 8, "888", '8' },
+        { 7, "777", '7' },
+        { 6, "666", '6' },
+        { 5, "555", '5' },
+        { 5, "555", '5' },
+        { 5, "555", '5' },
+        { 4, "444", '4' },
+        { 3, "333", '3' },
+        { 2, "222", '2' },
+        { 2, "222", '2' },
+        { 1, "111", '1' },
+        { 0, "000", '0' },
+    };
+    test_bin_heap_item_t item_popped;
+    size_t item_size;
+
+    // we gonna build a max heap
+    err = tos_bin_heap_create_dyn(&test_bin_heap_00, TEST_BIN_HEAP_ITEM_CNT, sizeof(test_bin_heap_item_t), test_bin_heap_max_cmp_dummy);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    for (i = 0; i < TEST_BIN_HEAP_ITEM_CNT; ++i) {
+        err = tos_bin_heap_push(&test_bin_heap_00, &items[i], sizeof(test_bin_heap_item_t));
+        ASSERT_EQ(err, K_ERR_NONE);
+    }
+
+    ASSERT(tos_bin_heap_is_full(&test_bin_heap_00));
+
+    for (i = 0; i < TEST_BIN_HEAP_ITEM_CNT; ++i) {
+        err = tos_bin_heap_pop(&test_bin_heap_00, &item_popped, &item_size);
+        ASSERT_EQ(err, K_ERR_NONE);
+        ASSERT_EQ(item_size, sizeof(test_bin_heap_item_t));
+        ASSERT_EQ(item_popped.a, items_should[i].a);
+        ASSERT_EQ(strcmp(item_popped.b, items_should[i].b), 0);
+        ASSERT_EQ(item_popped.c, items_should[i].c);
+    }
+
+    ASSERT(tos_bin_heap_is_empty(&test_bin_heap_00));
+
+    err = tos_bin_heap_destroy_dyn(&test_bin_heap_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
 TEST test_tos_binary_heap_min_int_push(void)
 {
     k_err_t err;
@@ -390,6 +461,75 @@ TEST test_tos_binary_heap_max_int_push(void)
     ASSERT(tos_bin_heap_is_empty(&test_bin_heap_00));
 
     err = tos_bin_heap_destroy(&test_bin_heap_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
+TEST test_tos_binary_heap_max_int_push_dyn(void)
+{
+    k_err_t err;
+    int i = 0;
+    int items[TEST_BIN_HEAP_ITEM_CNT] = {
+        2,
+        4,
+        1,
+        7,
+        5,
+        5,
+        2,
+        0,
+        9,
+        10,
+        5,
+        12,
+        11,
+        3,
+        6,
+        8,
+    };
+    int items_should[TEST_BIN_HEAP_ITEM_CNT] = {
+        12,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        5,
+        5,
+        4,
+        3,
+        2,
+        2,
+        1,
+        0,
+    };
+    int item_popped;
+    size_t item_size;
+
+    // we gonna build a max heap
+    err = tos_bin_heap_create_dyn(&test_bin_heap_00, TEST_BIN_HEAP_ITEM_CNT, sizeof(int), test_bin_heap_max_int_cmp_dummy);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    for (i = 0; i < TEST_BIN_HEAP_ITEM_CNT; ++i) {
+        err = tos_bin_heap_push(&test_bin_heap_00, &items[i], sizeof(int));
+        ASSERT_EQ(err, K_ERR_NONE);
+    }
+
+    ASSERT(tos_bin_heap_is_full(&test_bin_heap_00));
+
+    for (i = 0; i < TEST_BIN_HEAP_ITEM_CNT; ++i) {
+        err = tos_bin_heap_pop(&test_bin_heap_00, &item_popped, &item_size);
+        ASSERT_EQ(err, K_ERR_NONE);
+        ASSERT_EQ(item_size, sizeof(int));
+        ASSERT_EQ(item_popped, items_should[i]);
+    }
+
+    ASSERT(tos_bin_heap_is_empty(&test_bin_heap_00));
+
+    err = tos_bin_heap_destroy_dyn(&test_bin_heap_00);
     ASSERT_EQ(err, K_ERR_NONE);
 
     PASS();
@@ -535,8 +675,10 @@ SUITE(suit_binary_heap)
     RUN_TEST(test_tos_binary_heap_destroy);
     RUN_TEST(test_tos_binary_heap_min_push);
     RUN_TEST(test_tos_binary_heap_max_push);
+    RUN_TEST(test_tos_binary_heap_max_push_dyn);
     RUN_TEST(test_tos_binary_heap_min_int_push);
     RUN_TEST(test_tos_binary_heap_max_int_push);
+    RUN_TEST(test_tos_binary_heap_max_int_push_dyn);
     RUN_TEST(test_tos_binary_heap_push_limit);
     RUN_TEST(test_tos_binary_flush);
 }
