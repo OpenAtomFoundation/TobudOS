@@ -12,12 +12,25 @@ static osMutexId socket_send_lock, socket_recv_lock;
 osMutexDef(socket_send_lock);
 osMutexDef(socket_recv_lock);
 
+static osSemaphoreId socket_recv_event;
+osSemaphoreDef(socket_recv_event);
+
 int socket_init(void)
 {
     socket_send_lock = osMutexCreate(osMutex(socket_send_lock));
     socket_recv_lock = osMutexCreate(osMutex(socket_recv_lock));
+    socket_recv_event = osSemaphoreCreate(osSemaphore(socket_recv_event),0);
 
-    return ((socket_recv_lock != NULL) && (socket_send_lock != NULL));
+    return (
+        (socket_recv_event != NULL) && 
+        (socket_recv_lock != NULL) && 
+        (socket_send_lock != NULL)
+    );
+}
+
+void io_signal_handle(int signal)
+{
+    osSemaphoreRelease(socket_recv_event);
 }
 
 int socket_connect(const char *ip, const char *port, sal_proto_t proto)
@@ -26,6 +39,7 @@ int socket_connect(const char *ip, const char *port, sal_proto_t proto)
         .sin_family = AF_INET,
         .sin_port = htons(atoi(port))};
     int socket_proto = 0;
+    struct sigaction sig_install;
 
     inet_pton(AF_INET, ip, &addr.sin_addr);
 
@@ -43,6 +57,19 @@ int socket_connect(const char *ip, const char *port, sal_proto_t proto)
     }
 
     int socket_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    
+    fcntl( socket_id, __F_SETOWN, getpid() );
+    fcntl( socket_id, __F_SETSIG, SIGIO );
+    fcntl( socket_id, F_SETFL, O_ASYNC );
+
+    sig_install.sa_flags = 0;
+	sig_install.sa_handler = io_signal_handle;
+	sigfillset( &sig_install.sa_mask );
+
+    if ( 0 != sigaction( SIGIO, &sig_install, NULL ) )
+	{
+		printf( "socket problem installing %d\n",SIGIO );
+	}
 
     connect(socket_id, &addr, sizeof(addr));
     return socket_id;
@@ -63,7 +90,7 @@ int socket_send(int sock, const void *buf, size_t len)
         }
         if (send_len != len)
         {
-            osDelay(5);
+            osSemaphoreWait(socket_recv_event,100);
         }
     } while (len != send_len);
     osMutexRelease(socket_send_lock);
@@ -85,7 +112,7 @@ int socket_recv(int sock, void *buf, size_t len)
         }
         if (recv_len != len)
         {
-            osDelay(5);
+            osSemaphoreWait(socket_recv_event,100);
         }
     } while (len != recv_len);
     osMutexRelease(socket_recv_lock);

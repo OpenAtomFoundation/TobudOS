@@ -89,7 +89,7 @@ __PORT__ void       port_irq_context_switch(void);
 
 __PORT__ void       port_systick_config(uint32_t cycle_per_tick);
 
-__PORT__ void       port_systick_priority_set(uint32_t prio);  //ok
+__PORT__ void       port_init(void);
 
 __PORT__ pthread_t  port_create_thread(void *arg);
 
