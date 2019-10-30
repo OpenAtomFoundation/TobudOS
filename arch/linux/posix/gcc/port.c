@@ -81,17 +81,23 @@ interrupt_manager _int_manager={
 };
 
 static uint64_t tick_ms = 0;
+static pthread_t main_thread_id;
+static pthread_mutex_t cpsr_mutex;
+
+#define CHECK_IS_MAIN_THREAD(main_thread_id) \
+    if(main_thread_id != pthread_self()) return
 
 __PORT__ void port_int_disable(void)
 {
     sigset_t signal_mask,*manager_mask=NULL;
     if(_int_manager.count == 0){
+        pthread_mutex_lock(&cpsr_mutex);
         manager_mask = &(_int_manager.signal_mask);
+        sigfillset(&signal_mask);
+        _filter_signal(&signal_mask);
+        pthread_sigmask(SIG_BLOCK,&signal_mask,manager_mask);
     }
     _int_manager.count ++;
-    sigfillset(&signal_mask);
-    _filter_signal(&signal_mask);
-    pthread_sigmask(SIG_BLOCK,&signal_mask,manager_mask);
 }
 
 __PORT__ void port_int_enable(void)
@@ -102,6 +108,7 @@ __PORT__ void port_int_enable(void)
     if(_int_manager.count == 0){
         sigaddset(&(_int_manager.signal_mask),SIG_RESUME); //ensure SIG_RESUME is blocked
         _filter_signal(&(_int_manager.signal_mask));
+        pthread_mutex_unlock(&cpsr_mutex);
         pthread_sigmask(SIG_SETMASK,&(_int_manager.signal_mask),NULL);
     }
 }
@@ -126,6 +133,8 @@ __PORT__ pthread_t  port_create_thread(void *arg)
 
 __PORT__ void port_sched_start(void) 
 {
+    main_thread_id = pthread_self();
+    pthread_mutex_init(&cpsr_mutex,NULL);
     _install_signal(SIG_SUSPEND, _handle_suspend_thread);
     _install_signal(SIG_RESUME, _handle_resume_thread);
     _install_signal(SIG_CONTEXT_SWITCH, _handle_context_switch);
@@ -224,6 +233,7 @@ __PORT__ void _install_signal(int sig,void (*func)(int))
 
 __PORT__ void _handle_tick_signal()
 {
+    CHECK_IS_MAIN_THREAD(main_thread_id);
     tick_ms ++;
     if(tos_knl_is_running()) {
         tos_knl_irq_enter();
