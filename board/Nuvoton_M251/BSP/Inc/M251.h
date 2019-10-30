@@ -185,7 +185,7 @@ typedef enum IRQn
 /*@}*/ /* end of group CMSIS_Device */
 
 
-#include "core_armv8mbl.h"                  /* Processor and core peripherals             */
+#include "core_cm23.h"                 /* Processor and core peripherals             */
 #include "system_M251.h"                    /* System Header                              */
 
 /**
