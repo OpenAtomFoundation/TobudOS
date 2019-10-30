@@ -78,6 +78,7 @@ __API__ void tos_cpu_cpsr_restore(cpu_cpsr_t cpsr)
 
 __KERNEL__ void cpu_init(void)
 {
+    port_init();
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
     cpu_systick_init(k_cpu_cycle_per_tick);
 
@@ -108,7 +109,6 @@ __KERNEL__ void cpu_irq_context_switch(void)
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
-    port_systick_priority_set(TOS_CFG_CPU_SYSTICK_PRIO);
     port_systick_config(cycle_per_tick);
 }
 

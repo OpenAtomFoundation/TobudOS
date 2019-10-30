@@ -133,12 +133,6 @@ __PORT__ pthread_t  port_create_thread(void *arg)
 
 __PORT__ void port_sched_start(void) 
 {
-    main_thread_id = pthread_self();
-    pthread_mutex_init(&cpsr_mutex,NULL);
-    _install_signal(SIG_SUSPEND, _handle_suspend_thread);
-    _install_signal(SIG_RESUME, _handle_resume_thread);
-    _install_signal(SIG_CONTEXT_SWITCH, _handle_context_switch);
-
     k_curr_task = k_next_task;
     _resume_task(k_curr_task);
 
@@ -193,8 +187,13 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 	}
 }
 
-__PORT__ void port_systick_priority_set(uint32_t prio)
+__PORT__ void port_init(void)
 {
+    main_thread_id = pthread_self();
+    pthread_mutex_init(&cpsr_mutex,NULL);
+    _install_signal(SIG_SUSPEND, _handle_suspend_thread);
+    _install_signal(SIG_RESUME, _handle_resume_thread);
+    _install_signal(SIG_CONTEXT_SWITCH, _handle_context_switch);
 }
 
 __PORT__ void port_delay_ms(uint32_t ms) 
