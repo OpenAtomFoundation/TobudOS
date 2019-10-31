@@ -1,0 +1,41 @@
+config COAP_COMM_ENABLED
+    bool "FEATURE_COAP_COMM_ENABLED"
+    default n
+    select INFRA_COMPAT
+    select COAP_CLIENT
+
+    help
+        Establish non-persistent connection with AliCloud via CoAP-based protocol
+
+        Switching to "y" leads to building CoAP related implementation into SDK and COAP_COMM_ENABLED included into CFLAGS
+        Switching to "n" leads to keeping CoAP-based cloud connection implementations out of SDK
+
+config COAP_PACKET
+    bool
+    default n
+
+config COAP_CLIENT
+    bool
+    default n
+    select INFRA_CJSON
+    select INFRA_JSON_PARSER
+    select INFRA_HTTPC
+    select INFRA_SHA256
+    select INFRA_MD5
+    select INFRA_REPORT
+    select INFRA_STRING
+    select HAL_CRYPTO
+    select HAL_UDP
+    select COAP_PACKET
+
+config COAP_SERVER
+    bool
+    default n
+    select INFRA_MD5
+    select INFRA_STRING
+    select INFRA_JSON_PARSER
+    select INFRA_SHA1
+    select HAL_UDP
+    select HAL_KV
+    select HAL_CRYPTO
+    select COAP_PACKET
