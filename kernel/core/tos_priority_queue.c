@@ -255,11 +255,9 @@ __API__ k_err_t tos_prio_q_destroy_dyn(k_prio_q_t *prio_q)
     TOS_PTR_SANITY_CHECK(prio_q);
     TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_dynamic(&prio_q->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     prio_q_pool_mgr_deinit(&prio_q->pool_mgr);
     prio_q_prio_mgr_deinit(&prio_q->prio_mgr);

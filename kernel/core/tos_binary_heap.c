@@ -196,11 +196,9 @@ __API__ k_err_t tos_bin_heap_destroy_dyn(k_bin_heap_t *bin_heap)
     TOS_PTR_SANITY_CHECK(bin_heap);
     TOS_OBJ_VERIFY(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_dynamic(&bin_heap->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     tos_mmheap_free(bin_heap->pool);
 

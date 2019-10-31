@@ -21,7 +21,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 #include <string.h>
 
 #define TOS_OFFSET_OF_FIELD(type, field) \

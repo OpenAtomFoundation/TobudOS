@@ -440,9 +440,9 @@ __DEBUG__ __STATIC_INLINE__ void task_default_walker(k_task_t *task)
     tos_kprintln("tsk stat: %s", state_str);
 
     tos_kprintln("stk size: %d", task->stk_size);
-    tos_kprintln("stk base: 0x%x", task->stk_base);
-    tos_kprintln("stk top : 0x%x", (cpu_addr_t)task->stk_base + task->stk_size);
-    tos_kprintln("");
+    tos_kprintln("stk base: 0x%p", task->stk_base);
+    tos_kprintln("stk top : 0x%p", task->stk_base + task->stk_size);
+    tos_kprintf("\n");
 }
 
 #endif /* _TOS_TASK_H_ */
