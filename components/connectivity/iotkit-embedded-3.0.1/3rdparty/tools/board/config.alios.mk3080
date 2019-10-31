@@ -1,0 +1,15 @@
+CONFIG_ENV_CFLAGS   += \
+    -mcpu=cortex-m4 -march=armv7-m -mthumb \
+    -mthumb-interwork -mlittle-endian \
+    -fno-short-enums \
+    -DCONFIG_PLATFORM_8711B -DM3 -w \
+
+CONFIG_ENV_CFLAGS   += \
+    -Os \
+    -DCONFIG_MQTT_TX_MAXLEN=640 \
+    -DCONFIG_MQTT_RX_MAXLEN=1200 \
+
+CONFIG_external_libs/mbedtls    :=
+CONFIG_tests                    :=
+
+CROSS_PREFIX        := arm-none-eabi-

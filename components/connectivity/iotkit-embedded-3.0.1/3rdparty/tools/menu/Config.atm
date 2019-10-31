@@ -1,0 +1,54 @@
+config ATM_ENABLED
+    bool "FEATURE_ATM_ENABLED"
+    default n
+
+menu "ATM Configurations"
+    depends on ATM_ENABLED
+
+config AT_TCP_ENABLED
+    bool "FEATURE_AT_TCP_ENABLED"
+    default n
+
+config AT_MQTT_ENABLED
+    bool "FEATURE_AT_MQTT_ENABLED"
+    depends on MQTT_COMM_ENABLED
+    depends on !MQTT_DEFAULT_IMPL
+    depends on !AT_TCP_ENABLED
+    default n
+
+config AT_PARSER_ENABLED
+    bool "FEATURE_AT_PARSER_ENABLED"
+    default n
+
+choice
+    prompt "AT HAL Configurations"
+    depends on AT_PARSER_ENABLED
+    default AT_HAL_NONE
+
+config AT_HAL_NONE
+        bool "FEATURE_AT_HAL_NONE"
+        default n
+
+config AT_TCP_HAL_MK3060
+        bool "FEATURE_AT_TCP_HAL_MK3060"
+        default n
+        depends on AT_TCP_ENABLED
+
+config AT_TCP_HAL_SIM800
+        bool "FEATURE_AT_TCP_HAL_SIM800"
+        default n
+        depends on AT_TCP_ENABLED
+
+config AT_MQTT_HAL_ICA
+        bool "FEATURE_AT_MQTT_HAL_ICA"
+        default n
+        depends on AT_MQTT_ENABLED
+
+config AT_MQTT_HAL_SIM800
+        bool "FEATURE_AT_MQTT_HAL_SIM800"
+        default n
+        depends on AT_MQTT_ENABLED
+
+endchoice
+
+endmenu

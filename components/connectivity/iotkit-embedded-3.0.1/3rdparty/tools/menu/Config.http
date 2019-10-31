@@ -1,0 +1,12 @@
+
+config HTTP_COMM_ENABLED
+    bool "FEATURE_HTTP_COMM_ENABLED"
+    default n
+    select INFRA_SHA1
+    select INFRA_HTTPC
+    select INFRA_REPORT
+    select INFRA_JSON_PARSER
+    select SUPPORT_TLS
+    help
+        Establish persistent connection with AliCloud via HTTP-based protocol
+
