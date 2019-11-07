@@ -71,20 +71,20 @@ NET_SRC =  \
 		C_SOURCES += $(NET_SRC)
 
 BSP_SRC =  \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/gpio.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/main.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/mcu_init.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/stm32l4xx_hal_msp.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/stm32l4xx_it_module.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/usart.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/adc.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/dac.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/i2c.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/spi.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Src/system_stm32l4xx.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/DHT11/DHT11_BUS.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/OLED/oled.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/E53_IA1/E53_IA1.c
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/gpio.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/main.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/mcu_init.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_hal_msp.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_it_module.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/usart.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/adc.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/dac.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/i2c.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/spi.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/system_stm32l4xx.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11/DHT11_BUS.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/OLED/oled.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/E53_IA1/E53_IA1.c
 		C_SOURCES += $(BSP_SRC)
 
 COMPONENTS_SRC =  \
@@ -183,12 +183,12 @@ PLATFORM_INC = \
 		C_INCLUDES += $(PLATFORM_INC)
 
 BOARD_INC =  \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX/TOS-CONFIG \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Inc \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/DHT11 \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/BH1750 \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/E53_IA1 \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX/BSP/Hardware/OLED
+		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/TOS-CONFIG \
+		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Inc \
+		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11 \
+		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/BH1750 \
+		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/E53_IA1 \
+		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/OLED
 		C_INCLUDES += $(BOARD_INC)
 
 NET_INC = \
