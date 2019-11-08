@@ -44,8 +44,12 @@
 #error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support dynamic task create"
 #endif
 
-#if     (TOS_CFG_QUEUE_EN > 0u) && (TOS_CFG_MSG_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MSG_EN to use tos_queue"
+#if     (TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
+#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support tos_prio_msg_q"
+#endif
+
+#if     (TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
+#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support tos_prio_mail_q"
 #endif
 
 #if     ((TOS_CFG_TIMER_EN > 0u) && !defined(TOS_CFG_TIMER_AS_PROC))

@@ -1,0 +1,20 @@
+This package contains the kconfig frontends and parser.
+
+Kconfig is the configuration language used by the Linux kernel. This package
+is a simple copy of the frontends and the parser found in the Linux kernel
+source tree, with very minor changes to adapt them to being built out of
+the kernel build infrastructure.
+
+This package has been ported to Windows so the code has been changed to get
+it work properly. The package also contains a copy PDCurses with some minor
+changes.
+
+Under non Windows platforms use the original package from:
+http://ymorin.is-a-geek.org/projects/kconfig-frontends
+
+---
+
+All required .dll files were added to the original package from uvc.de.
+
+This package and info about it can be found on http://distortos.org/ website.
+

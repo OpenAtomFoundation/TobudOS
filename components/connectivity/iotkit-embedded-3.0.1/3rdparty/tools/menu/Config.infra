@@ -1,0 +1,149 @@
+config PLATFORM_HAS_STDINT
+    bool "PLATFORM_HAS_STDINT"
+    default y
+    help
+        Tell if you have <stdint.h> when build image for target board
+
+        Switching to "n" leads to SDK use self-defined data-type in src/infra/infra_types.h
+
+config PLATFORM_HAS_DYNMEM
+    bool "PLATFORM_HAS_DYNMEM"
+    default y
+    help
+        Tell if you have malloc() and free() style capability on target board via HAL_Malloc() and HAL_Free()
+
+        Switching to "y" leads to SDK invoking HAL_Malloc() and HAL_Free() so runtime memory is dynamic
+        Switching to "n" leads to SDK use global static array instead of heap so process capability is more limited
+
+config PLATFORM_HAS_OS
+    bool "PLATFORM_HAS_OS"
+    default n
+    help
+        Tell if you have Operation System on target board
+
+        Switching to "y" leads to SDK invoking HAL_Mutex_Lock() / HAL_Semaphore_Wait() etc
+        Switching to "n" leads to SDK avoid using mutex and semaphore, and avoid using multi-task as well
+
+config INFRA_STRING
+    bool
+    default n
+
+config INFRA_NET
+    bool
+    default n
+
+config INFRA_LIST
+    bool
+    default n
+
+config INFRA_LOG_NETWORK_PAYLOAD
+    bool "FEATURE_INFRA_NETWORK_PAYLOAD"
+    default y if MQTT_COMM_ENABLED || COAP_COMM_ENABLED || HTTP_COMM_ENABLED || DEVICE_MODEL_ENABLED
+    help
+        Parse and print JSON format upstream and downstream network packet payload when SDK communicates with cloud
+        
+
+config INFRA_LOG
+    bool "FEATURE_INFRA_LOG"
+    default y
+    select INFRA_LOG_ALL_MUTED if (INFRA_LOG_MUTE_FLW && INFRA_LOG_MUTE_DBG && INFRA_LOG_MUTE_INF && INFRA_LOG_MUTE_WRN && INFRA_LOG_MUTE_ERR && INFRA_LOG_MUTE_CRT)
+    help
+        Control SDK print formatted log but all levels are muted by default, enable them in sub-menu of "Log Configurations"
+
+menu "Log Configurations"
+    depends on INFRA_LOG
+
+config INFRA_LOG_ALL_MUTED
+    bool
+    default n
+
+config INFRA_LOG_MUTE_FLW
+    bool "MUTE LEVEL of FLOW  (6)"
+    default y
+
+config INFRA_LOG_MUTE_DBG
+    bool "MUTE LEVEL of DEBUG (5)"
+    default y
+
+config INFRA_LOG_MUTE_INF
+    bool "MUTE LEVEL of INFO  (4)"
+    default y
+
+config INFRA_LOG_MUTE_WRN
+    bool "MUTE LEVEL of WARN  (3)"
+    default y
+
+config INFRA_LOG_MUTE_ERR
+    bool "MUTE LEVEL of ERROR (2)"
+    default y
+
+config INFRA_LOG_MUTE_CRT
+    bool "MUTE LEVEL of CRIT  (1)"
+    default y
+
+endmenu
+
+config INFRA_MEM_STATS
+    bool
+    default n
+
+config INFRA_TIMER
+    bool
+    default n
+
+config INFRA_RANDOM
+    bool
+    default n
+
+config INFRA_JSON_PARSER
+    bool
+    default n
+
+config INFRA_CJSON
+    bool
+    default n
+
+config INFRA_MD5
+    bool
+    default n
+
+config INFRA_SHA1
+    bool
+    default n
+
+config INFRA_SHA256
+    bool
+    default n
+
+config INFRA_REPORT
+    bool
+    default n
+    select INFRA_STRING
+
+config INFRA_HTTPC
+    bool
+    default n
+    select INFRA_NET
+    select INFRA_TIMER
+
+config INFRA_MEM_STATS
+    bool
+    default n
+    select INFRA_LIST
+
+config INFRA_COMPAT
+    bool
+    default n
+    select HAL_KV if DYNAMIC_REGISTER
+
+config INFRA_CLASSIC
+    bool
+    default n
+
+config INFRA_PREAUTH
+    bool
+    default n
+
+config INFRA_AES
+    bool
+    default n

@@ -24,6 +24,8 @@ __STATIC_INLINE__ void task_reset(k_task_t *task)
 #endif
 
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_reset(&task->knl_obj);
+
     tos_list_init(&task->dead_list);
 #endif
     tos_list_init(&task->stat_list);
@@ -38,10 +40,15 @@ __STATIC_INLINE__ void task_reset(k_task_t *task)
     task->pend_state    = PEND_STATE_NONE;
     task->pending_obj   = (pend_obj_t *)K_NULL;
 
-#if TOS_CFG_MSG_EN > 0u
-    task->msg_addr      = K_NULL;
-    task->msg_size      = 0;
+#if TOS_CFG_MESSAGE_QUEUE_EN > 0u
+    task->msg           = K_NULL;
 #endif
+
+#if TOS_CFG_MAIL_QUEUE_EN > 0u
+    task->mail          = K_NULL;
+    task->mail_size     = 0;
+#endif
+
 }
 
 __STATIC__ void task_exit(void)
@@ -110,6 +117,10 @@ __API__ k_err_t tos_task_create(k_task_t *task,
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_object_init(&task->knl_obj, KNL_OBJ_TYPE_TASK);
+#endif
+
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_set_static(&task->knl_obj);
 #endif
 
     task->sp        = cpu_task_stk_init((void *)entry, arg, (void *)task_exit, stk_base, stk_size);
@@ -188,13 +199,15 @@ __API__ k_err_t tos_task_destroy(k_task_t *task)
         task = k_curr_task;
     }
 
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
+
     if (knl_is_self(task) && knl_is_sched_locked()) {
         return K_ERR_SCHED_LOCKED;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK)) {
-        return K_ERR_OBJ_INVALID;
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN
+    if (!knl_object_alloc_is_static(&task->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
 #endif
 
@@ -266,16 +279,14 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
         return K_ERR_TASK_OUT_OF_MEMORY;
     }
 
+    the_task->stk_base = stk_base;
     err = tos_task_create(the_task, name, entry, arg, prio, stk_base, stk_size, timeslice);
     if (err != K_ERR_NONE) {
-        tos_mmheap_free(stk_base);
-        tos_mmheap_free(the_task);
+        task_free(the_task);
         return err;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&the_task->knl_obj, KNL_OBJ_TYPE_TASK_DYN);
-#endif
+    knl_object_alloc_set_dynamic(&the_task->knl_obj);
 
     *task = the_task;
 
@@ -292,15 +303,15 @@ __API__ k_err_t tos_task_destroy_dyn(k_task_t *task)
         task = k_curr_task;
     }
 
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
+
     if (knl_is_self(task) && knl_is_sched_locked()) {
         return K_ERR_SCHED_LOCKED;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK_DYN)) {
-        return K_ERR_OBJ_INVALID;
+    if (!knl_object_alloc_is_dynamic(&task->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     tos_knl_sched_lock();
 
@@ -350,14 +361,8 @@ __API__ k_err_t tos_task_prio_change(k_task_t *task, k_prio_t prio_new)
 #endif
 
     TOS_PTR_SANITY_CHECK(task);
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
     TOS_IN_IRQ_CHECK();
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK) &&
-        !knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK_DYN)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
 
     if (unlikely(prio_new >= K_TASK_PRIO_IDLE)) {
         return K_ERR_TASK_PRIO_INVALID;
@@ -415,12 +420,7 @@ __API__ k_err_t tos_task_suspend(k_task_t *task)
         task = k_curr_task;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK) &&
-        !knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK_DYN)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
 
     if (knl_is_idle(task)) {
         return K_ERR_TASK_SUSPEND_IDLE;
@@ -448,13 +448,7 @@ __API__ k_err_t tos_task_resume(k_task_t *task)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(task);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK) &&
-        !knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK_DYN)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
 
     if (unlikely(knl_is_self(task))) {
         return K_ERR_TASK_RESUME_SELF;
@@ -515,14 +509,8 @@ __API__ k_err_t tos_task_delay_abort(k_task_t *task)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(task);
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
     TOS_IN_IRQ_CHECK();
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK) &&
-        !knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK_DYN)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
 
     TOS_CPU_INT_DISABLE();
 
@@ -597,12 +585,7 @@ __API__ k_err_t tos_task_stack_draught_depth(k_task_t *task, int *depth)
         task = k_curr_task;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK) &&
-        !knl_object_verify(&task->knl_obj, KNL_OBJ_TYPE_TASK_DYN)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
 
     TOS_CPU_INT_DISABLE();
     rc = cpu_task_stack_draught_depth(task->stk_base, task->stk_size, depth);

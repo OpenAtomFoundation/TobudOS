@@ -23,7 +23,11 @@ __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_c
 {
     TOS_PTR_SANITY_CHECK(sem);
 
-    pend_object_init(&sem->pend_obj, PEND_TYPE_SEM);
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&sem->knl_obj, KNL_OBJ_TYPE_SEMAPHORE);
+#endif
+
+    pend_object_init(&sem->pend_obj);
     sem->count      = init_count;
     sem->count_max  = max_count;
 
@@ -40,12 +44,7 @@ __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(sem);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&sem->pend_obj, PEND_TYPE_SEM)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(sem, KNL_OBJ_TYPE_SEMAPHORE);
 
     TOS_CPU_INT_DISABLE();
 
@@ -54,6 +53,10 @@ __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
     }
 
     pend_object_deinit(&sem->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&sem->knl_obj);
+#endif
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
@@ -66,12 +69,7 @@ __STATIC__ k_err_t sem_do_post(k_sem_t *sem, opt_post_t opt)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(sem);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&sem->pend_obj, PEND_TYPE_SEM)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(sem, KNL_OBJ_TYPE_SEMAPHORE);
 
     TOS_CPU_INT_DISABLE();
 
@@ -109,12 +107,7 @@ __API__ k_err_t tos_sem_pend(k_sem_t *sem, k_tick_t timeout)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(sem);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&sem->pend_obj, PEND_TYPE_SEM)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(sem, KNL_OBJ_TYPE_SEMAPHORE);
 
     TOS_CPU_INT_DISABLE();
 

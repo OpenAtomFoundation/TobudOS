@@ -90,11 +90,6 @@ extern size_t               const k_timer_task_stk_size;
 #endif
 #endif
 
-#if (TOS_CFG_MSG_EN > 0u)
-extern k_list_t             k_msg_freelist;
-extern k_msg_t              k_msg_pool[];
-#endif
-
 #if TOS_CFG_PWR_MGR_EN > 0u
 extern pm_device_ctl_t      k_pm_device_ctl;
 

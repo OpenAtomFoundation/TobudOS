@@ -27,18 +27,21 @@ volatile int ble_npl_in_critical = 0;
 void
 npl_tencentos_tiny_eventq_init(struct ble_npl_eventq *evq)
 {
-    tos_queue_create(&evq->q);
+    void *msg_pool = tos_mmheap_alloc(sizeof(void *));
+    if (!msg_pool) {
+        return;
+    }
+
+#define EVENT_Q_MSG_CNT     32
+    tos_msg_q_create(&evq->q, msg_pool, EVENT_Q_MSG_CNT);
 }
 
 struct ble_npl_event *
 npl_tencentos_tiny_eventq_get(struct ble_npl_eventq *evq, ble_npl_time_t tmo)
 {
-    k_err_t err;
-    size_t msg_size;
     struct ble_npl_event *ev = NULL;
 
-    err = tos_queue_pend(&evq->q, (void **)&ev, &msg_size, tmo);
-    if (err != K_ERR_NONE) {
+    if (tos_msg_q_pend(&evq->q, (void **)&ev, tmo) != K_ERR_NONE) {
         return NULL;
     }
 
@@ -60,7 +63,7 @@ npl_tencentos_tiny_eventq_put(struct ble_npl_eventq *evq, struct ble_npl_event *
 
     ev->queued = true;
 
-    err = tos_queue_post(&evq->q, ev, sizeof(struct ble_npl_event));
+    err = tos_msg_q_post(&evq->q, ev);
 
     assert(err == K_ERR_NONE);
 }
@@ -69,11 +72,36 @@ void
 npl_tencentos_tiny_eventq_remove(struct ble_npl_eventq *evq,
                       struct ble_npl_event *ev)
 {
+    k_err_t err;
+    int i, count;
+    struct ble_npl_event *ev_received;
+    TOS_CPU_CPSR_ALLOC();
+
     if (!ev->queued) {
         return;
     }
 
-    tos_queue_remove(&evq->q, ev);
+    /*
+     * XXX We cannot extract element from inside TencentOS tiny message queue so as a quick
+     * workaround we'll just remove all elements and add them back except the
+     * one we need to remove. This is silly, but works for now
+     */
+
+    TOS_CPU_INT_DISABLE();
+
+    count = evq->q.ring_q.total;
+    for (i = 0; i < count; ++i) {
+        err = tos_msg_q_pend(&evq->q, (void **)&ev_received, TOS_TIME_NOWAIT);
+        TOS_ASSERT(err == K_ERR_NONE);
+        if (ev_received == ev) {
+            continue;
+        }
+
+        err = tos_msg_q_post(&evq->q, ev_received);
+        TOS_ASSERT(err == K_ERR_NONE);
+    }
+
+    TOS_CPU_INT_ENABLE();
 
     ev->queued = false;
 }
@@ -81,7 +109,7 @@ npl_tencentos_tiny_eventq_remove(struct ble_npl_eventq *evq,
 bool
 npl_tencentos_tiny_eventq_is_empty(struct ble_npl_eventq *evq)
 {
-    return tos_list_empty(&evq->q.msg_queue.queue_head);
+    return tos_ring_q_is_empty(&evq->q.ring_q);
 }
 
 ble_npl_error_t

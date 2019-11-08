@@ -59,7 +59,6 @@ extern k_task_t            *k_next_task;
 
 __PORT__ void _handle_tick_signal();
 __PORT__ void _handle_context_switch();
-__PORT__ void _delay_ms(uint32_t ms);
 __PORT__ void _suspend_thread(pthread_t thread_id);
 __PORT__ void _resume_thread(pthread_t thread_id);
 __PORT__ void _wait_resume();
@@ -70,6 +69,7 @@ __PORT__ void _suspend_task(k_task_t *task);
 __PORT__ void _resume_task(k_task_t *task);
 __PORT__ void _install_signal(int sig,void (*func)(int));
 __PORT__ void _filter_signal(sigset_t *sigset);
+__PORT__ uint64_t _get_time_ms(void);
 
 typedef struct {
     sigset_t signal_mask;
@@ -80,16 +80,24 @@ interrupt_manager _int_manager={
     .count = 0
 };
 
+static uint64_t tick_ms = 0;
+static pthread_t main_thread_id;
+static pthread_mutex_t cpsr_mutex;
+
+#define CHECK_IS_MAIN_THREAD(main_thread_id) \
+    if(main_thread_id != pthread_self()) return
+
 __PORT__ void port_int_disable(void)
 {
     sigset_t signal_mask,*manager_mask=NULL;
     if(_int_manager.count == 0){
+        pthread_mutex_lock(&cpsr_mutex);
         manager_mask = &(_int_manager.signal_mask);
+        sigfillset(&signal_mask);
+        _filter_signal(&signal_mask);
+        pthread_sigmask(SIG_BLOCK,&signal_mask,manager_mask);
     }
     _int_manager.count ++;
-    sigfillset(&signal_mask);
-    _filter_signal(&signal_mask);
-    pthread_sigmask(SIG_BLOCK,&signal_mask,manager_mask);
 }
 
 __PORT__ void port_int_enable(void)
@@ -100,6 +108,7 @@ __PORT__ void port_int_enable(void)
     if(_int_manager.count == 0){
         sigaddset(&(_int_manager.signal_mask),SIG_RESUME); //ensure SIG_RESUME is blocked
         _filter_signal(&(_int_manager.signal_mask));
+        pthread_mutex_unlock(&cpsr_mutex);
         pthread_sigmask(SIG_SETMASK,&(_int_manager.signal_mask),NULL);
     }
 }
@@ -124,15 +133,11 @@ __PORT__ pthread_t  port_create_thread(void *arg)
 
 __PORT__ void port_sched_start(void) 
 {
-    _install_signal(SIG_SUSPEND, _handle_suspend_thread);
-    _install_signal(SIG_RESUME, _handle_resume_thread);
-    _install_signal(SIG_CONTEXT_SWITCH, _handle_context_switch);
-
     k_curr_task = k_next_task;
     _resume_task(k_curr_task);
 
     while(1){
-        _delay_ms(1000);
+        _wait_resume();
     }
 }
 
@@ -182,8 +187,21 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 	}
 }
 
-__PORT__ void port_systick_priority_set(uint32_t prio)
+__PORT__ void port_init(void)
 {
+    main_thread_id = pthread_self();
+    pthread_mutex_init(&cpsr_mutex,NULL);
+    _install_signal(SIG_SUSPEND, _handle_suspend_thread);
+    _install_signal(SIG_RESUME, _handle_resume_thread);
+    _install_signal(SIG_CONTEXT_SWITCH, _handle_context_switch);
+}
+
+__PORT__ void port_delay_ms(uint32_t ms) 
+{   
+    uint64_t start_time = _get_time_ms();
+    do{
+        usleep(100);
+    }while((_get_time_ms() - start_time) < ms);
 }
 
 __PORT__ void _filter_signal(sigset_t *sigset)
@@ -195,18 +213,7 @@ __PORT__ void _filter_signal(sigset_t *sigset)
 
 __PORT__ uint64_t _get_time_ms(void)
 {
-    struct timeval timer;
-    gettimeofday( &timer, NULL );
-
-    return (1000 * timer.tv_sec + timer.tv_usec/1000);
-}
-
-__PORT__ void _delay_ms(uint32_t ms) 
-{   
-    uint64_t start_time = _get_time_ms();
-    do{
-        usleep(100);
-    }while((_get_time_ms() - start_time) < ms);
+    return (tick_ms);
 }
 
 __PORT__ void _install_signal(int sig,void (*func)(int))
@@ -225,10 +232,12 @@ __PORT__ void _install_signal(int sig,void (*func)(int))
 
 __PORT__ void _handle_tick_signal()
 {
+    CHECK_IS_MAIN_THREAD(main_thread_id);
+    tick_ms ++;
     if(tos_knl_is_running()) {
-	  tos_knl_irq_enter();
-	  tos_tick_handler();
-	  tos_knl_irq_leave();
+        tos_knl_irq_enter();
+        tos_tick_handler();
+        tos_knl_irq_leave();
     }
 }
 

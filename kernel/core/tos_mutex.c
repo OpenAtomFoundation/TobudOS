@@ -73,7 +73,11 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
 
     TOS_IN_IRQ_CHECK();
 
-    pend_object_init(&mutex->pend_obj, PEND_TYPE_MUTEX);
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_init(&mutex->knl_obj, KNL_OBJ_TYPE_MUTEX);
+#endif
+
+    pend_object_init(&mutex->pend_obj);
     mutex->pend_nesting     = (k_nesting_t)0u;
     mutex->owner            = K_NULL;
     mutex->owner_orig_prio  = K_TASK_PRIO_INVALID;
@@ -88,12 +92,7 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 
     TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mutex->pend_obj, PEND_TYPE_MUTEX)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
 
     TOS_CPU_INT_DISABLE();
 
@@ -101,11 +100,15 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
         pend_wakeup_all(&mutex->pend_obj, PEND_STATE_DESTROY);
     }
 
-    pend_object_deinit(&mutex->pend_obj);
-
     if (mutex->owner) {
         mutex_old_owner_release(mutex);
     }
+
+    pend_object_deinit(&mutex->pend_obj);
+
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_object_deinit(&mutex->knl_obj);
+#endif
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
@@ -119,12 +122,7 @@ __API__ k_err_t tos_mutex_pend_timed(k_mutex_t *mutex, k_tick_t timeout)
 
     TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mutex->pend_obj, PEND_TYPE_MUTEX)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
 
     TOS_CPU_INT_DISABLE();
     if (mutex->pend_nesting == (k_nesting_t)0u) { // first come
@@ -180,12 +178,7 @@ __API__ k_err_t tos_mutex_post(k_mutex_t *mutex)
 
     TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!pend_object_verify(&mutex->pend_obj, PEND_TYPE_MUTEX)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
 
     TOS_CPU_INT_DISABLE();
     if (!knl_is_self(mutex->owner)) {

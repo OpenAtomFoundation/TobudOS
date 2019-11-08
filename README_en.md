@@ -86,9 +86,9 @@ TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semi
 
 # TencentOS tiny reference documentation
 ## 1、Porting guide
-- [TencentOS tiny Porting guide（KEIL version）](./doc/TencentOS-tiny-porting-keil.md)
-- [TencentOS tiny Porting guide（IAR version）](./doc/TencentOS-tiny-porting-iar.md)
-- [TencentOS tiny Porting guide（GCC version）](./doc/TencentOS-tiny-porting-gcc.md)
+- [TencentOS tiny Porting guide（KEIL version）](./doc/TencentOS-tiny-porting-guide-keil.md)
+- [TencentOS tiny Porting guide（IAR version）](./doc/TencentOS-tiny-porting-guide-iar.md)
+- [TencentOS tiny Porting guide（GCC version）](./doc/TencentOS-tiny-porting-guide-gcc.md)
 
 ## 2、Development guide
 - [TencentOS tiny Kernel development guide](./doc/4.TencentOS-tiny开发指南.md)

@@ -198,7 +198,7 @@
 
   <Group>
     <GroupName>Application/User</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1465,8 +1465,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\kernel\core\tos_event.c</PathWithFileName>
-      <FilenameWithoutPath>tos_event.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\kernel\core\tos_binary_heap.c</PathWithFileName>
+      <FilenameWithoutPath>tos_binary_heap.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1477,14 +1477,50 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\kernel\core\tos_fifo.c</PathWithFileName>
-      <FilenameWithoutPath>tos_fifo.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\kernel\core\tos_char_fifo.c</PathWithFileName>
+      <FilenameWithoutPath>tos_char_fifo.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
       <FileNumber>104</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_completion.c</PathWithFileName>
+      <FilenameWithoutPath>tos_completion.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>105</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_countdownlatch.c</PathWithFileName>
+      <FilenameWithoutPath>tos_countdownlatch.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>106</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_event.c</PathWithFileName>
+      <FilenameWithoutPath>tos_event.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>107</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1496,7 +1532,31 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>105</FileNumber>
+      <FileNumber>108</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_mail_queue.c</PathWithFileName>
+      <FilenameWithoutPath>tos_mail_queue.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>109</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_message_queue.c</PathWithFileName>
+      <FilenameWithoutPath>tos_message_queue.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>110</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1508,7 +1568,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>106</FileNumber>
+      <FileNumber>111</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1520,19 +1580,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>107</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\kernel\core\tos_msg.c</PathWithFileName>
-      <FilenameWithoutPath>tos_msg.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>108</FileNumber>
+      <FileNumber>112</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1544,7 +1592,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>109</FileNumber>
+      <FileNumber>113</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1556,19 +1604,55 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>110</FileNumber>
+      <FileNumber>114</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\kernel\core\tos_queue.c</PathWithFileName>
-      <FilenameWithoutPath>tos_queue.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\kernel\core\tos_priority_mail_queue.c</PathWithFileName>
+      <FilenameWithoutPath>tos_priority_mail_queue.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>111</FileNumber>
+      <FileNumber>115</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_priority_message_queue.c</PathWithFileName>
+      <FilenameWithoutPath>tos_priority_message_queue.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>116</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_priority_queue.c</PathWithFileName>
+      <FilenameWithoutPath>tos_priority_queue.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>117</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\kernel\core\tos_ring_queue.c</PathWithFileName>
+      <FilenameWithoutPath>tos_ring_queue.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>118</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1580,7 +1664,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>112</FileNumber>
+      <FileNumber>119</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1592,7 +1676,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>113</FileNumber>
+      <FileNumber>120</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1604,7 +1688,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>114</FileNumber>
+      <FileNumber>121</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1616,7 +1700,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>115</FileNumber>
+      <FileNumber>122</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1628,7 +1712,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>116</FileNumber>
+      <FileNumber>123</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1640,7 +1724,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>117</FileNumber>
+      <FileNumber>124</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1652,7 +1736,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>118</FileNumber>
+      <FileNumber>125</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1672,7 +1756,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>119</FileNumber>
+      <FileNumber>126</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1684,7 +1768,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>120</FileNumber>
+      <FileNumber>127</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1696,7 +1780,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>121</FileNumber>
+      <FileNumber>128</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1716,7 +1800,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>122</FileNumber>
+      <FileNumber>129</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>

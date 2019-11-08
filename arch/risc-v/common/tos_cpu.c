@@ -46,6 +46,16 @@ __KERNEL__ void cpu_init(void) {
     port_cpu_init();
 }
 
+__API__ void tos_cpu_int_disable(void)
+{
+    port_int_disable();
+}
+
+__API__ void tos_cpu_int_enable(void)
+{
+    port_int_enable();
+}
+
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)
 {
     return port_cpsr_save();

@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32L4xx_DFP.2.2.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -608,19 +608,9 @@
               <FilePath>..\..\..\..\kernel\core\tos_mmheap.c</FilePath>
             </File>
             <File>
-              <FileName>tos_msg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_msg.c</FilePath>
-            </File>
-            <File>
               <FileName>tos_mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_queue.c</FilePath>
             </File>
             <File>
               <FileName>tos_sched.c</FileName>
@@ -663,11 +653,6 @@
               <FilePath>..\..\..\..\kernel\core\tos_event.c</FilePath>
             </File>
             <File>
-              <FileName>tos_fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_fifo.c</FilePath>
-            </File>
-            <File>
               <FileName>tos_global.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_global.c</FilePath>
@@ -681,6 +666,56 @@
               <FileName>tos_robin.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_robin.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_binary_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_binary_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_char_fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_char_fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_completion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_completion.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_countdownlatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_countdownlatch.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_ring_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_ring_queue.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -733,11 +768,6 @@
               <FilePath>..\..\..\..\test\suit_event.c</FilePath>
             </File>
             <File>
-              <FileName>suit_fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\test\suit_fifo.c</FilePath>
-            </File>
-            <File>
               <FileName>suit_mmblk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\test\suit_mmblk.c</FilePath>
@@ -748,19 +778,9 @@
               <FilePath>..\..\..\..\test\suit_mmheap.c</FilePath>
             </File>
             <File>
-              <FileName>suit_msg_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\test\suit_msg_queue.c</FilePath>
-            </File>
-            <File>
               <FileName>suit_mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\test\suit_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>suit_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\test\suit_queue.c</FilePath>
             </File>
             <File>
               <FileName>suit_robin.c</FileName>
@@ -791,6 +811,46 @@
               <FileName>test_utils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\test\test_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_binary_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_binary_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_char_fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_char_fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_priority_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_priority_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_priority_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_priority_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_priority_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_priority_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>suit_ring_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\test\suit_ring_queue.c</FilePath>
             </File>
           </Files>
         </Group>

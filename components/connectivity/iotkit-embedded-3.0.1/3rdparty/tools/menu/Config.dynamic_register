@@ -1,0 +1,7 @@
+config DYNAMIC_REGISTER
+    bool "FEATURE_DYNAMIC_REGISTER"
+    default n
+    select INFRA_STRING
+    select INFRA_HTTPC
+    select INFRA_SHA256
+    select SUPPORT_TLS

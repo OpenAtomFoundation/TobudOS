@@ -19,6 +19,7 @@
 #define  _TOS_KTYPES_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
 typedef uint8_t         k_prio_t;
 typedef uint8_t         k_stack_t;

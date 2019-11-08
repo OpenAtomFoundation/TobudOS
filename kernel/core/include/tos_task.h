@@ -69,9 +69,7 @@ typedef void (*k_task_walker)(k_task_t *task);
 typedef struct k_task_st {
     k_stack_t          *sp;                 /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t           knl_obj;            /**< just for verification, test whether current object is really a task. */
-#endif
 
     char               *name;               /**< task name */
     k_task_entry_t      entry;              /**< task entry */
@@ -112,9 +110,13 @@ typedef struct k_task_st {
     k_timeslice_t       timeslice;          /**< how much time slice left for us? */
 #endif
 
-#if TOS_CFG_MSG_EN > 0u
-    void               *msg_addr;           /**< if we pend a queue successfully, our msg_addr and msg_size will be set by the queue poster */
-    size_t              msg_size;
+#if (TOS_CFG_MESSAGE_QUEUE_EN > 0u) || (TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u)
+    void               *msg;                /**< if we pend a message queue successfully, our msg will be set by the message queue poster */
+#endif
+
+#if (TOS_CFG_MAIL_QUEUE_EN > 0u) || (TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u)
+    void               *mail;               /**< if we pend a mail queue successfully, our mail and mail_size will be set by the message queue poster */
+    size_t              mail_size;
 #endif
 
 #if TOS_CFG_EVENT_EN > 0u
@@ -438,9 +440,9 @@ __DEBUG__ __STATIC_INLINE__ void task_default_walker(k_task_t *task)
     tos_kprintln("tsk stat: %s", state_str);
 
     tos_kprintln("stk size: %d", task->stk_size);
-    tos_kprintln("stk base: 0x%x", task->stk_base);
-    tos_kprintln("stk top : 0x%x", (cpu_addr_t)task->stk_base + task->stk_size);
-    tos_kprintln("");
+    tos_kprintln("stk base: 0x%p", task->stk_base);
+    tos_kprintln("stk top : 0x%p", task->stk_base + task->stk_size);
+    tos_kprintf("\n");
 }
 
 #endif /* _TOS_TASK_H_ */

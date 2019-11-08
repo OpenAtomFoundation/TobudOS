@@ -1,0 +1,592 @@
+Manifest-Version: 1.0
+
+Name: ./ansi2knr.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: JKFAHL0h6kS65/tDdaJMy4e/C0Q=
+MD5-Digest: 8IyafiIzNoYb/f6GU3Tmug==
+
+Name: ./awk.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: k/Rky5hqlfv35clsxIRZO7/rPQc=
+MD5-Digest: NDbqtpiOipEYlRIu0YYoNg==
+
+Name: ./basename.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 5XWEe6QDzdyPJk+XorFG3P2P22A=
+MD5-Digest: BNV0TGg42RtjGC+Ojd7jlQ==
+
+Name: ./bash.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: iYAwMhbi3+/3i29ZxCPpU/14O5I=
+MD5-Digest: AyAkHxQ999gAkLiAJqt5Eg==
+
+Name: ./bc.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: M8/ndVOyOotd1DhANwKflbT87aU=
+MD5-Digest: T3k4qI5OSgaesuLr/UZkcQ==
+
+Name: ./bison.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: v0t85wyFNIrtqW8rlAjy8a/x6Hc=
+MD5-Digest: 8vji+jlhya1JO5AQ7Z20Bw==
+
+Name: ./cat.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: qcfd22kRyKg+z4Rwu39rrlxGxOI=
+MD5-Digest: +/rpWvc+7I1BJxhDpyrcRw==
+
+Name: ./chgrp.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: IZlzwsWAIiRUhwjcY03EitLoAlA=
+MD5-Digest: QypiYNdzzo9FQUSBY6Q5Cw==
+
+Name: ./chmod.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: IZlzwsWAIiRUhwjcY03EitLoAlA=
+MD5-Digest: QypiYNdzzo9FQUSBY6Q5Cw==
+
+Name: ./chown.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: IZlzwsWAIiRUhwjcY03EitLoAlA=
+MD5-Digest: QypiYNdzzo9FQUSBY6Q5Cw==
+
+Name: ./cksum.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: stTCi4nqYJWrhoPIM3yoISmiCvk=
+MD5-Digest: lcrEEK3ar0yd362rBVlWrw==
+
+Name: ./cmp.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 3xSXy2reU6j2z7NOh6+lZdT3UIo=
+MD5-Digest: DoLrUYwa3V7jtH4AShAVJw==
+
+Name: ./comm.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 4Mt4QRihXIF2nFlPX/XdrYnKqLg=
+MD5-Digest: cQsqAWbxZbTQ4f9quQkStw==
+
+Name: ./cp.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 4VCa9+PMzPgNEfnqU2BbtBAcT6I=
+MD5-Digest: bZJu/l/NiZLoN0Yx+OcY5Q==
+
+Name: ./cpp.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 7Uba6JXgI9MAJUAwJMQj9cUTNmc=
+MD5-Digest: 19b1K6u3/rAVx2itnpI5oA==
+
+Name: ./csplit.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: TR5ohrygiMx5xMiWdKrNzwCwezk=
+MD5-Digest: 9u0w2X/xvBNR1PUECsRC6g==
+
+Name: ./cut.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: YpgJ9NI880lLIeAyFM6B1W9B3LM=
+MD5-Digest: Ve+LmiS1qZKWxp6yYda53w==
+
+Name: ./cygwin1.dll
+Digest-Algorithms: SHA MD5 
+SHA-Digest: LFtvLMNmwHjLEkm5vkk/ASIFOWs=
+MD5-Digest: UljXvjv2g77fsGd43vF2mw==
+
+Name: ./cygwinb19.dll
+Digest-Algorithms: SHA MD5 
+SHA-Digest: DdI5+XOqL+elSBig3Jl0YGTmnGA=
+MD5-Digest: guKghiEGxe4BfHq7cvfGgg==
+
+Name: ./date.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: Pz1aEfcGWqAUqdtWkSoMvYGkMPM=
+MD5-Digest: YBJPtMk9mIUQ4ZRgesMa+Q==
+
+Name: ./dc.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: NGT96obq5i5iFSz8VgOX0MfwJHc=
+MD5-Digest: 7yl+3uanuddPClG6WcflvQ==
+
+Name: ./dd.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 7pIV1exiJOSqVPGP2YmnOO8gwS8=
+MD5-Digest: lBcySrRQwlzUeuLgT9rIww==
+
+Name: ./df.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: H7pPzErOi33wBNPPm5PKfyH3p/o=
+MD5-Digest: psChbGkuiJJSQVfZvD+7vg==
+
+Name: ./diff.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: FKFWq7Vsj+OC9SYFCQDitLbyKyg=
+MD5-Digest: kI3nu7h5AeKxHsadXaeC1A==
+
+Name: ./diff3.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: xToeIrxWKV20uHu73pDX1T0Ljko=
+MD5-Digest: cCwyIOb+CX6Z4lAlPJ2ykA==
+
+Name: ./dircolors.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: lHeezXBwgb/lSz8i9NsvNUI0g0o=
+MD5-Digest: uv1c+x/UiWoOuizhZO8ONQ==
+
+Name: ./dirname.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: rjv+wRLDoIu7aBddixTlJqhffw0=
+MD5-Digest: 8z4Hjl0SGnz8kGA1wFG0yw==
+
+Name: ./du.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 27117qhDWABCGp5hqYp4ZiRMx50=
+MD5-Digest: DBLl328pcvhnF1hfSS+UdA==
+
+Name: ./echo.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: fObe34obY3WZNkwSW5APp6ijo4Q=
+MD5-Digest: U8BIZqj3xripkGWFtRdE2w==
+
+Name: ./egrep.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: G3usO1KmsIWWjygZcDH7yTyX2Uk=
+MD5-Digest: n2s2xAWsMNqXY3co3VFRgw==
+
+Name: ./env.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: xp6IX8kPIAPLNONo+V4IgrA7RB8=
+MD5-Digest: mQLmxOBGADTpj9pG0vHwMw==
+
+Name: ./expand.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 3svTfj6dOjuomHP7R3UkLJ7/1OA=
+MD5-Digest: OxaQ3tyNBYic7i2Xw4cSKQ==
+
+Name: ./expr.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: LpJe0Cn+xVu98TtAs/cwHO/3ZVY=
+MD5-Digest: jFOMdUivuB6PA3L1R0DZzw==
+
+Name: ./factor.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: d76usAQ+uS3/eDcYSaZILHv6Pu0=
+MD5-Digest: Dmhhgfb6MpCH1z5uLb2tGA==
+
+Name: ./false
+Digest-Algorithms: SHA MD5 
+SHA-Digest: /mge3+3WhBgfpDDn+qAXGTef6AU=
+MD5-Digest: NJvyl8tIKJrr9ECWsWq6+w==
+
+Name: ./fgrep.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: uZ3Nt9xEsIIbEAQu7czke2Ptkwc=
+MD5-Digest: ZZqMR7wf3jzmcFh0mjgWZw==
+
+Name: ./find.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: b13wdvWGwCZ/sAot8dgWTDtmr5M=
+MD5-Digest: MwoofSNIDL4drf2OmaNFGg==
+
+Name: ./flex.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: rS0byk70JuEoPcoRHKcI5mM1TnA=
+MD5-Digest: QVsDromFcEH0goeXf6iUFg==
+
+Name: ./fltcr.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: SbT/6Lcq+K34IXi54C8MGiw+TRU=
+MD5-Digest: Q4LwYBksRa3fn5jVm7Rq1Q==
+
+Name: ./fmt.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: pGVUaNqfCqFLHuHoDvXwAzuMXoE=
+MD5-Digest: zm37qlLIXEnSAPWxwwINZA==
+
+Name: ./fold.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: WHtrQ5mODZhPnjcj+actuXT7xi0=
+MD5-Digest: e5ycGHLKQ49oFR53iMPkWA==
+
+Name: ./gawk.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: k/Rky5hqlfv35clsxIRZO7/rPQc=
+MD5-Digest: NDbqtpiOipEYlRIu0YYoNg==
+
+Name: ./GPL.txt
+Digest-Algorithms: SHA MD5 
+SHA-Digest: CxhK1Ruip56F0iiNX8+KHqBIHqQ=
+MD5-Digest: OTpcpEX2llhz7KAlmhf4Mw==
+
+Name: ./gplay.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: vPnwhS3wC4nlUvFDKiITkzf3k1Q=
+MD5-Digest: y0VHY8wvZtK2bfcuwFnMjw==
+
+Name: ./grep.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: X/MP8UmEggwBlB92fOR/Dzm94mU=
+MD5-Digest: uzUKmsIjaz4p8iKed3CfQA==
+
+Name: ./gsar.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: TiLHqfyJWHrdxNXdq3EZngjqW1A=
+MD5-Digest: 1qAF+PrP+I4mBojdt64AwQ==
+
+Name: ./gunzip.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: lffjcQNfJ4uyCbuK9SptwnMXKtk=
+MD5-Digest: wpJSIYMCdD/3LpxjWJVAQw==
+
+Name: ./gzip.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: lffjcQNfJ4uyCbuK9SptwnMXKtk=
+MD5-Digest: wpJSIYMCdD/3LpxjWJVAQw==
+
+Name: ./head.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: fx0iHHE9rt55nf5JM7C+ncJJG+o=
+MD5-Digest: mFHiYPX2TR6BwkifZg3K1w==
+
+Name: ./id.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: Wy/SwrSf3nkC/xIFayu0Cbi55vY=
+MD5-Digest: 2HcyZZQfwdONU1wQF1Py4Q==
+
+Name: ./indent.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: MaiLj8JtixChhDA2SMifIoNFomg=
+MD5-Digest: zGRjQQUI6Y2jPohEJC4yXQ==
+
+Name: ./install.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 7aBZ+QHUGnEX00boySo6Oe4fyGw=
+MD5-Digest: QAglgS63+Q9/oKWOhRZv/Q==
+
+Name: ./join.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: if9EEGyJsZ4OAxNGlvgZd0uQ+No=
+MD5-Digest: KCA0atRPntINaH5RsJ4fJQ==
+
+Name: ./jwhois.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: JRgo8ebqWBlz5mvTzkM1bOIvcp4=
+MD5-Digest: q6WaPuFxGCXMnI5oo4v4CQ==
+
+Name: ./less.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: ymw4p/hm9QEm7LK+cQ0iq0XKvgA=
+MD5-Digest: sOcPrRZPb9236grO556shw==
+
+Name: ./ln.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 55ZV7KoP50StvQlE2snPtKR+xbo=
+MD5-Digest: YvCPChFbrFvYU7YstqUABw==
+
+Name: ./logname.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: oe7RZoYtKyqg7ilH022he7g2baA=
+MD5-Digest: 25PZosTcI6Z0nmuwiYZdOA==
+
+Name: ./ls.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: lbNGlcmjQWeqy75TFUIwhyT+MHc=
+MD5-Digest: VIYZTqgdZUw1s/+GNvTCsg==
+
+Name: ./m4.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: a3KaEQVMbRBpxNu9Jz7SytFKu4s=
+MD5-Digest: kWtJdlaFJTKmMATFKtlbZg==
+
+Name: ./make.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: sNdZjhImpEMoOPaBosP8OXj8rfM=
+MD5-Digest: qjlASGNHEEFiDG/Nh00E4g==
+
+Name: ./md5sum.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 7bODklNUx5y7zt2YUGTn8lb8Sf4=
+MD5-Digest: BnB7b/9IqpYtSGW6AzhG4g==
+
+Name: ./mkdir.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: Uny81RsB03JUtQQngJP0nGp7Izw=
+MD5-Digest: 5Y88rozyb3JUcI3MRWMoJw==
+
+Name: ./mkfifo.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: v54RHkV6WxudpcZiflZ2ETDMAaI=
+MD5-Digest: I+cdfZ0kovmnhZ6IGK2W3A==
+
+Name: ./mknod.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: WxCBhxlhk83aAjnHu7F4dMgygmA=
+MD5-Digest: 1vytk9o/lkKBY0hmcmPFEw==
+
+Name: ./more.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: FNnOalJp7/OpzW4r0ncVY+gdmhM=
+MD5-Digest: pV9ZIms9LNTfRJLWGK8Ctw==
+
+Name: ./MSVCRT40.DLL
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 34uloBBEvOU5SCkuwkPgdy4CO4E=
+MD5-Digest: eyy2HZJKVmVKJ8m1/XR9UQ==
+
+Name: ./mv.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: QdV8xPosVQX/S+PLVrzFV9UDWm0=
+MD5-Digest: 3G+pio+z0sEQmzGDwPpxzA==
+
+Name: ./mvdir.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: tcB11JKJiZvTv/q52yQJKCTb3w0=
+MD5-Digest: NnSW5uWuZhKxez80w1BITQ==
+
+Name: ./nl.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: OnIwf2Wy9rIcg64wU7+lJknyXAI=
+MD5-Digest: wfURdM5gX/1+gn20pWbueA==
+
+Name: ./od.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: Xb9H+hDDO1exFJRoCPvZik4qO4w=
+MD5-Digest: B9edA3XkW2ixLu4Uy+p7og==
+
+Name: ./paste.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: +oqRs6PEUGiuPheWgbfyzsfNkb4=
+MD5-Digest: KMHumnKz/Ggnnza2apgSmw==
+
+Name: ./patch.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: qtTFN8TW3OSrfJUejkkgeqqLltA=
+MD5-Digest: 6jaqD5CYL58p0CDZ1aqayQ==
+
+Name: ./pr.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: cXZR+erjSacLXIb0pIS5JgnawWE=
+MD5-Digest: PCG198H3Zbx+LvKKojQVTA==
+
+Name: ./printenv.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: VO+wHEvVuXHE/Xhz/Xg54NE/Q7U=
+MD5-Digest: Fib3HE9J9OfewxM8ZXB12Q==
+
+Name: ./printf.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: prGkgEJ6Oz1y35BqZqI91aWOmfA=
+MD5-Digest: pEStlVseF2qqI8/g9tbM+A==
+
+Name: ./Psapi.Dll
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 2b9fC2wROCgbtF5M/r7CxNl1P7I=
+MD5-Digest: s9IqSDh1phyyBgx9UY7/wg==
+
+Name: ./pwd.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: m+zR6XmKPqAcSzsgxJl1GtYDesI=
+MD5-Digest: vQFS8FMQnLHph4eC34Gf3g==
+
+Name: ./README.txt
+Digest-Algorithms: SHA MD5 
+SHA-Digest: rywkWZrP39jcI/7njgsh1rPburc=
+MD5-Digest: zGyPVc3VGlr1Ip81kXubFw==
+
+Name: ./recode.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: oZZqh6IbdOt0A+zt87bY084tGaA=
+MD5-Digest: vucYGgc8di7hhWlMBOF8lA==
+
+Name: ./rm.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: ONV4fz0K6DfnV3EYk/48kA9Oxgw=
+MD5-Digest: 81ousuDbVLfTu1XxfxHfYg==
+
+Name: ./rman.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: M8GP5NGp4Vf6hyAMsmCMLGntYqU=
+MD5-Digest: AwEssN+VDv2vEN4ke5kEfw==
+
+Name: ./rmdir.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: C+sbFaD3LTzAaUiY91wqfTh/5eQ=
+MD5-Digest: Zhrp5bcW2BpSNMSsa+9ZuA==
+
+Name: ./sdiff.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: LYWx9CmHLs8SPoDuCvz/KOKk8g0=
+MD5-Digest: 33VCVA8//w5w0tmbaEaeKw==
+
+Name: ./sed.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: ybbT2hwpbWgnNFNn+Gb83yFUu5U=
+MD5-Digest: OjTQF6pOXBHyoymrBNoX9A==
+
+Name: ./seq.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: Y5Rxz2793ED2vHLqlPm5jVW8Kig=
+MD5-Digest: Qnz2yoeHPKLaqs73CRIYNA==
+
+Name: ./sh.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: iYAwMhbi3+/3i29ZxCPpU/14O5I=
+MD5-Digest: AyAkHxQ999gAkLiAJqt5Eg==
+
+Name: ./shar.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: cPC22nKVT3ywQHW0oGY0iZjLA7s=
+MD5-Digest: s7RJ0kyvy7qvxtrnqh1uIQ==
+
+Name: ./sleep.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: WhctGKY6ZqjwJoj0XmIqvIqsVCA=
+MD5-Digest: HbRAS/SCi9WKzxeFKH2fxA==
+
+Name: ./sort.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: OHJfWEJNfv+AgjDm8HWSelUNpr0=
+MD5-Digest: a2ZUjxg5arO/KBN9RE5tuw==
+
+Name: ./split.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: u1ZBF869Cj3OaeyCuwbF7HihVRE=
+MD5-Digest: EigJUq/QWPHwCtM5i3Fo3Q==
+
+Name: ./start_shell.bat
+Digest-Algorithms: SHA MD5 
+SHA-Digest: DY6KU2oyQfs6Su/s4T35X3dildQ=
+MD5-Digest: Hq20c3tiCkF3bQeBvOKaYg==
+
+Name: ./su.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: K+dYZuoPFwJtZaZKm6rORorVVjg=
+MD5-Digest: uKITTDnOc+VaHfzueV2AAw==
+
+Name: ./sum.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 1U/NRj6ONUhIyF//dp6BjFu78u0=
+MD5-Digest: gr8PbqEgFrSN5SwqQmxiHg==
+
+Name: ./sync.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: BGrRI8i2+4OQDRUgDGwDf/CDXsg=
+MD5-Digest: GgMNT6A3KtFQwVqR9VwiyQ==
+
+Name: ./tac.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 3/juVoy86vU00e1rqcnZBq8vEcA=
+MD5-Digest: ki4Jc2RXWlwsaKalTJQnaQ==
+
+Name: ./tail.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: QfvPdWUi6GlB401ugZUCznJ+ve4=
+MD5-Digest: dGC0urlA4iNKOieLsNhDWw==
+
+Name: ./tar.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: gKbvkjks18JuMhaFBvYsqoU9GoE=
+MD5-Digest: roR2er7Fp2mwx8taNW10xQ==
+
+Name: ./tee.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 50deojLP+keKqJKMs1DaVrXudDc=
+MD5-Digest: EW7ClqYbTOmYLZONHCEtVQ==
+
+Name: ./test.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: csXkTsQKnySSIggC83H71/wmEQw=
+MD5-Digest: c9hnp/SE7DregcG2ChtNFg==
+
+Name: ./touch.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: XrKFH7IM52ZgVaQt8sm124vmNwY=
+MD5-Digest: juOWFbUBjWZuchK9LifsNA==
+
+Name: ./tr.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: cJSLRr5uTYFlvwFLexhVChAp1mE=
+MD5-Digest: T98eKS1fbE+mRwDs42qddQ==
+
+Name: ./true
+Digest-Algorithms: SHA MD5 
+SHA-Digest: CfjwAscibty3Es/3u5aJcHq4N24=
+MD5-Digest: mn/oRo696E84GqqRoYbf5Q==
+
+Name: ./type.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 3BSLUwhaSVzwisaLb/n7wv5vCLI=
+MD5-Digest: vfjOgFq/U9UIvajp6tEFhA==
+
+Name: ./uname.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: tURbJRTRnvspZmD08gVlyTLYFDQ=
+MD5-Digest: nCIYW/zbT/nc9V02hMEvzQ==
+
+Name: ./unexpand.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: DR3cQipnn4zSeVxrDTukEubisRU=
+MD5-Digest: yTk0CJwRJ1/SFz3VFvrg5w==
+
+Name: ./uniq.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: DVw0wMSRGuSPtvlLyARTvhmj+3A=
+MD5-Digest: AtY5Uyrj07C+jeq8MDIoGA==
+
+Name: ./unshar.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 3DbpsDWRAjrsQGn9rRo+IywG0Gs=
+MD5-Digest: fIVluyQkA8DWdSk93r4iqg==
+
+Name: ./uudecode.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 6xrB6SwWVmbuWJ0t8KBhCN4tc14=
+MD5-Digest: /LTJKQ+6BV2caS0NCLKhaw==
+
+Name: ./uuencode.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: UXh+84ex8tHXN+tTWiz2J0S7clI=
+MD5-Digest: 1Uo5WNiMkHeWhefTZ+V4ug==
+
+Name: ./vi.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: eLMdtPlvVzlvrxTLsgygDnofxEw=
+MD5-Digest: SILA5noGpgcvJFtN2ZqfAw==
+
+Name: ./wc.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: AW2LWXtyy1FGd1uZaQzH4yVSvks=
+MD5-Digest: 1PBaJ8PCv8l3krRxWAl63Q==
+
+Name: ./wget.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: IcRXl7PIffXXrsILTUXs+L2JIao=
+MD5-Digest: iZvNoV1dA6loNztwgdkSHw==
+
+Name: ./wget.hlp
+Digest-Algorithms: SHA MD5 
+SHA-Digest: vexInI3Qu8xZlnb0vK5324XSE+k=
+MD5-Digest: QdEBW1C7EBRoMgdJ6ZAYlw==
+
+Name: ./which.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: nA9Ig7l1VxtP+ojfDHL76CApIsA=
+MD5-Digest: f9qttYMGCr/lRuzCUNNwAg==
+
+Name: ./whoami.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: EdHLe4Iq1IKe2eeB8wlUTP8rh8Q=
+MD5-Digest: 0WY3TSZ6K0z49eAKvovt8Q==
+
+Name: ./win32gnu.dll
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 0vRU5Vl+vbuTYUEfizlW8YCiXvo=
+MD5-Digest: m9toBnjh+NwUPyI00+9i7w==
+
+Name: ./xargs.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: 2HBp4NBDKgZcDOhA37hhHK9a+E8=
+MD5-Digest: wamGczNUdDIHkfTji6QWZw==
+
+Name: ./yes.exe
+Digest-Algorithms: SHA MD5 
+SHA-Digest: jDbH+XLN0N5hLp8l4gjlIKEOnDs=
+MD5-Digest: geW+vMkigcOesR0237RCWg==
+
