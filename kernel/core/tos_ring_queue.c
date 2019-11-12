@@ -222,7 +222,7 @@ __API__ k_err_t tos_ring_q_flush(k_ring_q_t *ring_q)
 __API__ int tos_ring_q_is_empty(k_ring_q_t *ring_q)
 {
     TOS_CPU_CPSR_ALLOC();
-    int is_empty = 0;
+    int is_empty = K_FALSE;
 
     TOS_PTR_SANITY_CHECK_RC(ring_q, K_FALSE);
     TOS_OBJ_VERIFY_RC(ring_q, KNL_OBJ_TYPE_RING_QUEUE, K_FALSE);
@@ -237,7 +237,7 @@ __API__ int tos_ring_q_is_empty(k_ring_q_t *ring_q)
 __API__ int tos_ring_q_is_full(k_ring_q_t *ring_q)
 {
     TOS_CPU_CPSR_ALLOC();
-    int is_full = 0;
+    int is_full = K_FALSE;
 
     TOS_PTR_SANITY_CHECK_RC(ring_q, K_FALSE);
     TOS_OBJ_VERIFY_RC(ring_q, KNL_OBJ_TYPE_RING_QUEUE, K_FALSE);

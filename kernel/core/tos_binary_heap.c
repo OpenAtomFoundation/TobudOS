@@ -285,7 +285,7 @@ __API__ k_err_t tos_bin_heap_flush(k_bin_heap_t *bin_heap)
 __API__ int tos_bin_heap_is_empty(k_bin_heap_t *bin_heap)
 {
     TOS_CPU_CPSR_ALLOC();
-    int is_empty = 0;
+    int is_empty = K_FALSE;
 
     TOS_PTR_SANITY_CHECK_RC(bin_heap, K_FALSE);
     TOS_OBJ_VERIFY_RC(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP, K_FALSE);
@@ -300,7 +300,7 @@ __API__ int tos_bin_heap_is_empty(k_bin_heap_t *bin_heap)
 __API__ int tos_bin_heap_is_full(k_bin_heap_t *bin_heap)
 {
     TOS_CPU_CPSR_ALLOC();
-    int is_full = 0;
+    int is_full = K_FALSE;
 
     TOS_PTR_SANITY_CHECK_RC(bin_heap, K_FALSE);
     TOS_OBJ_VERIFY_RC(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP, K_FALSE);

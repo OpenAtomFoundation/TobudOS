@@ -39,8 +39,8 @@ extern "C" {
 #define BLE_NPL_TIME_FOREVER    TOS_TIME_FOREVER
 
 /* This should be compatible with k_tick_t */
-typedef uint32_t ble_npl_time_t;
-typedef int32_t ble_npl_stime_t;
+typedef uint64_t ble_npl_time_t;
+typedef int64_t ble_npl_stime_t;
 
 extern volatile int ble_npl_in_critical;
 

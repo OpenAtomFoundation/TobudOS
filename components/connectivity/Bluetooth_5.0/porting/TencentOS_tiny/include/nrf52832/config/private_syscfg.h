@@ -35,6 +35,11 @@
 #define MYNEWT_VAL_OS_CPUTIME_TIMER_NUM (5)
 #endif
 
+/*** sys/log/stub */
+#ifndef MYNEWT_VAL_LOG_LEVEL
+#define MYNEWT_VAL_LOG_LEVEL (10)
+#endif
+
 /*** crypto/tinycrypt */
 #ifndef MYNEWT_VAL_TINYCRYPT_UECC_RNG_TRNG_DEV_NAME
 #define MYNEWT_VAL_TINYCRYPT_UECC_RNG_TRNG_DEV_NAME ("trng")
