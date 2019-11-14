@@ -31,7 +31,7 @@ void char_push(void)
     }
 
     err = tos_chr_fifo_push(&fifo, 'z');
-    if (err == K_ERR_FIFO_FULL) {
+    if (err == K_ERR_RING_Q_FULL) {
         printf("fifo is full: %s\n", tos_chr_fifo_is_full(&fifo) ? "TRUE" : "FALSE");
     } else {
         printf("should never happen\n");
@@ -46,7 +46,7 @@ void char_push(void)
         }
     }
     err = tos_chr_fifo_pop(&fifo, &data);
-    if (err == K_ERR_FIFO_EMPTY) {
+    if (err == K_ERR_RING_Q_EMPTY) {
         printf("fifo is empty: %s\n", tos_chr_fifo_is_empty(&fifo) ? "TRUE" : "FALSE");
     } else {
         printf("should never happen\n");
@@ -106,7 +106,7 @@ int main(void)
 {
     board_init();
     tos_knl_init();
-    (void)tos_task_create(&task_demo, "demo1", entry_task_demo, NULL,
+    (void)tos_task_create(&task_demo, "demo", entry_task_demo, NULL,
                             PRIO_TASK_DEMO, stack_task_demo, STK_SIZE_TASK_DEMO,
                             0);
     tos_knl_start();

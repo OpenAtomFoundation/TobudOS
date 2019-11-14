@@ -86,9 +86,7 @@ __API__ k_err_t tos_completion_pend_timed(k_completion_t *completion, k_tick_t t
  * @param[in]   timeout     how much time(in k_tick_t) we would like to wait.
  *
  * @return  errcode
- * @retval  #K_ERR_PEND_NOWAIT                we get nothing, and we don't wanna wait.
  * @retval  #K_ERR_PEND_SCHED_LOCKED          we can wait, but scheduler is locked.
- * @retval  #K_ERR_PEND_TIMEOUT               the time we wait is up, we get nothing.
  * @retval  #K_ERR_PEND_DESTROY               the completion we are pending is destroyed.
  * @retval  #K_ERR_NONE                       return successfully.
  */
