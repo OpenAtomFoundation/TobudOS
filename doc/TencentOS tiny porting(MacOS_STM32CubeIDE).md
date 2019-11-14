@@ -58,7 +58,7 @@ $ mv TencentOS_tiny tiny
  tiny/osal/cmsis_os/
  ```
 
- ![](./picture/porting/porting_cubeide_006.png)
+ ![](./image/porting/porting_cubeide_006.png)
 
 
 3. 在Inc目录下新建一个头文件`tos_config.h`

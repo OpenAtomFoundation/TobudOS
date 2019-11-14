@@ -31,17 +31,17 @@ make install
 
 ## 配置eclipse
 
-![](./img/riscv/properties.png)
+![](./image/riscv/properties.png)
 
 
 配置toolchain路径
 
-![](./img/riscv/toolchain.png)
+![](./image/riscv/toolchain.png)
 
 
 配置openocd路径
 
-![](./img/riscv/openocd.png)
+![](./image/riscv/openocd.png)
 
 
 ##调试设置
@@ -53,7 +53,7 @@ set arch riscv:rv32
 set remotetimeout 250
 ```
 
-![](./img/riscv/debug.png)
+![](./image/riscv/debug.png)
 
 
 ## 如果用gd-link调试
