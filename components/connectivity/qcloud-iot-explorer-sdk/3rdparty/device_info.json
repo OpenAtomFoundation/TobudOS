@@ -1,0 +1,16 @@
+{
+    "auth_mode":"KEY",
+
+    "productId":"PRODUCT_ID",
+    "productSecret":"YOUR_PRODUCT_SECRET",
+    "deviceName":"YOUR_DEV_NAME",
+
+    "key_deviceinfo":{    
+        "deviceSecret":"YOUR_IOT_PSK"
+    },
+
+    "cert_deviceinfo":{
+        "devCertFile":"YOUR_DEVICE_CERT_FILE_NAME",
+        "devPrivateKeyFile":"YOUR_DEVICE_PRIVATE_KEY_FILE_NAME"
+    }
+}

@@ -49,6 +49,10 @@ __QCLOUD_OSAL__ void *osal_mutex_create(void)
     k_mutex_t *mutex;
 
     mutex = (k_mutex_t *)osal_malloc(sizeof(k_mutex_t));
+    if (!mutex) {
+        return K_NULL;
+    }
+
     tos_mutex_create(mutex);
 
     return (void *)mutex;
