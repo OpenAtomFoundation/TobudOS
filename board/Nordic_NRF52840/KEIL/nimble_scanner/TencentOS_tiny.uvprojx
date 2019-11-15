@@ -642,6 +642,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\tencent_os_tiny_libc.c</FilePath>
             </File>
+            <File>
+              <FileName>console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\console.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

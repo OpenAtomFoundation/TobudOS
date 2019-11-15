@@ -593,14 +593,9 @@
           <GroupName>example</GroupName>
           <Files>
             <File>
-              <FileName>gatt_svr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\nimble_gatt\gatt_svr.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\nimble_gatt\main.c</FilePath>
+              <FilePath>..\..\..\..\examples\nimble_uart\main.c</FilePath>
             </File>
           </Files>
         </Group>

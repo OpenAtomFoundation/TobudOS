@@ -73,6 +73,8 @@ update_ad(void)
     ble_gap_adv_set_data(ad, ad_len);
 }
 
+#if 0
+
 #if 1
 /* UUID = 1bce38b3-d137-48ff-a13e-033e14c7a335 */
 static const ble_uuid128_t gatt_svr_svc_rw_demo_uuid
@@ -157,6 +159,8 @@ void ble_set_fields(void)
     }
 }
 
+#endif
+
 int ble_boot(void)
 {
     int rc = 0;
@@ -190,7 +194,10 @@ int ble_boot(void)
 
     update_ad();
 
+#if 0
     ble_set_fields();
+#endif
+
     start_advertise();
 
     return 0;

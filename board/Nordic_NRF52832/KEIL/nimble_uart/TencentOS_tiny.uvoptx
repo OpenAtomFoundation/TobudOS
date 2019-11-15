@@ -120,12 +120,12 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>UL2CM3</Key>
-          <Name>UL2CM3(-S0 -C0 -P0 )  -FN2 -FC4000 -FD20000000 -FF0nrf52xxx -FF1nrf52xxx_uicr -FL0200000 -FL11000 -FS00 -FS110001000 -FP0($$Device:nRF52840_xxAA$Flash\nrf52xxx.flm) -FP1($$Device:nRF52840_xxAA$Flash\nrf52xxx_uicr.flm)</Name>
+          <Name>UL2CM3(-S0 -C0 -P0 ) -FN2 -FC4000 -FD20000000 -FF0nrf52xxx -FF1nrf52xxx_uicr -FL0200000 -FL11000 -FS00 -FS110001000 -FP0($$Device:nRF52832_xxAA$Flash\nrf52xxx.flm) -FP1($$Device:nRF52832_xxAA$Flash\nrf52xxx_uicr.flm)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
-          <Name>-U303030303030303030303031 -O8398 -SF4000 -C0 -A0 -I0 -HNlocalhost -HP7184 -P1 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC4000 -FN1 -FF0nrf52xxx_sde.flm -FS00 -FL0200000 -FP0($$Device:nRF52840_xxAA$Flash\nrf52xxx_sde.flm)</Name>
+          <Name>-U303030303030303030303031 -O8398 -SF4000 -C0 -A0 -I0 -HNlocalhost -HP7184 -P1 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC4000 -FN1 -FF0nrf52xxx_sde.flm -FS00 -FL0200000 -FP0($$Device:nRF52832_xxAA$Flash\nrf52xxx_sde.flm)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -152,46 +152,57 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>305</LineNumber>
+          <LineNumber>142</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>15550</Address>
+          <Address>14778</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\..\examples\nimble_scanner\main.c</Filename>
+          <Filename>D:\github\ble_dev\TencentOS-tiny\examples\nimble_heart_rate_sensor\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TencentOS_tiny\../../../../examples/nimble_scanner/main.c\305</Expression>
+          <Expression>\\TencentOS_tiny\../../../../examples/nimble_heart_rate_sensor/main.c\142</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>179</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>15126</Address>
+          <LineNumber>249</LineNumber>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>17554</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\..\examples\nimble_scanner\main.c</Filename>
+          <Filename>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\src\npl_os_tencenos_tiny.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TencentOS_tiny\../../../../examples/nimble_scanner/main.c\179</Expression>
+          <Expression>\\TencentOS_tiny\../../../../components/connectivity/Bluetooth_5.0/porting/TencentOS_tiny/src/npl_os_tencenos_tiny.c\249</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>212</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>14924</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>D:\github\ble_dev\TencentOS-tiny\examples\nimble_heart_rate_sensor\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\TencentOS_tiny\../../../../examples/nimble_heart_rate_sensor/main.c\212</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>res</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>tos_systick_get()</ItemText>
+          <ItemText>ev</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -744,7 +755,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\nimble_scanner\main.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\examples\nimble_uart\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -788,7 +799,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\include\nrf52840\config\private_syscfg.h</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\Bluetooth_5.0\porting\TencentOS_tiny\include\nrf52832\config\private_syscfg.h</PathWithFileName>
       <FilenameWithoutPath>private_syscfg.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
