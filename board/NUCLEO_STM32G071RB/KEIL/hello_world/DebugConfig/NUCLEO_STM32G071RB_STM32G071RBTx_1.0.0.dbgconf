@@ -1,0 +1,39 @@
+// File: STM32G0x1.dbgconf
+// Version: 1.0.0
+// Note: refer to STM32G0x1 reference manual (RM0444)
+
+// <<< Use Configuration Wizard in Context Menu >>>
+
+// <h> Debug MCU configuration register (DBGMCU_CR)
+//                                   <i> Reserved bits must be kept at reset value
+//   <o.2>  DBG_STANDBY              <i> Debug Standby Mode
+//   <o.1>  DBG_STOP                 <i> Debug Stop Mode
+// </h>
+DbgMCU_CR = 0x00000006;
+
+// <h> Debug MCU APB freeze register 1 (DBGMCU_APB_FZ1)
+//                                   <i> Reserved bits must be kept at reset value
+//   <o.31> DBG_LPTIM1_STOP          <i> LPTIMER1 counter stopped when core is halted
+//   <o.30> DBG_LPTIM2_STOP          <i> LPTIMER2 counter stopped when core is halted
+//   <o.21> DBG_I2C1_SMBUS_TIMEOUT   <i> I2C1 SMBUS timeout is frozen
+//   <o.12> DBG_IWDG_STOP            <i> Debug independent watchdog stopped when core is halted
+//   <o.11> DBG_WWDG_STOP            <i> Debug window watchdog stopped when core is halted
+//   <o.10> DBG_RTC_STOP             <i> Debug RTC stopped when core is halted
+//   <o.5>  DBG_TIM7_STOP            <i> TIM7 counter stopped when core is halted
+//   <o.4>  DBG_TIM6_STOP            <i> TIM6 counter stopped when core is halted
+//   <o.1>  DBG_TIM3_STOP            <i> TIM3 counter stopped when core is halted
+//   <o.0>  DBG_TIM2_STOP            <i> TIM2 counter stopped when core is halted
+// </h>
+DbgMCU_APB_Fz1 = 0x00000000;
+
+// <h> Debug MCU APB freeze register 2 (DBGMCU_APB_FZ2)
+//                                   <i> Reserved bits must be kept at reset value
+//   <o.18> DBG_TIM17_STOP            <i> TIM17 counter stopped when core is halted
+//   <o.17> DBG_TIM16_STOP            <i> TIM16 counter stopped when core is halted
+//   <o.16> DBG_TIM15_STOP            <i> TIM15 counter stopped when core is halted
+//   <o.15> DBG_TIM14_STOP            <i> TIM14 counter stopped when core is halted
+//   <o.11> DBG_TIM1_STOP             <i> TIM1 counter stopped when core is halted
+// </h>
+DbgMCU_APB_Fz2 = 0x00000000;
+
+// <<< end of configuration section >>>
