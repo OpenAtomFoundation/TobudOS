@@ -3,7 +3,7 @@
 
 typedef struct cpu_context_st {
     cpu_data_t      _R0; //PC
-    cpu_data_t      _R1; //SP
+    //cpu_data_t      _R1; //SP
     cpu_data_t      _R2; //SR
     //cpu_data_t      _R3; 
     cpu_data_t      _R4;
