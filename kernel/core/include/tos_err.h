@@ -21,6 +21,10 @@
 typedef enum k_err_en {
     K_ERR_NONE                                  = 0u,
 
+    K_ERR_BIN_HEAP_FULL                     = 10u,
+    K_ERR_BIN_HEAP_EMPTY,
+    K_ERR_BIN_HEAP_ITEM_SIZE_NOT_MATCH,
+
     K_ERR_COMPLETION_OVERFLOW               = 25u,
 
     K_ERR_COUNTDOWNLATCH_OVERFLOW           = 50u,
@@ -29,9 +33,6 @@ typedef enum k_err_en {
     K_ERR_DELAY_FOREVER,
 
     K_ERR_EVENT_PEND_OPT_INVALID                = 200u,
-
-    K_ERR_FIFO_FULL                             = 300u,
-    K_ERR_FIFO_EMPTY,
 
     K_ERR_IN_IRQ                                    = 400u,
 
@@ -51,32 +52,36 @@ typedef enum k_err_en {
     K_ERR_MMHEAP_POOL_ALREADY_EXIST,
     K_ERR_MMHEAP_POOL_NOT_EXIST,
 
-    K_ERR_MSG_QUEUE_FULL                        = 900u,
-    K_ERR_MSG_QUEUE_EMPTY,
-    K_ERR_MSG_QUEUE_MSG_NOT_EXIST,
-
     K_ERR_MUTEX_NOT_OWNER                       = 1000u,
     K_ERR_MUTEX_NESTING,
     K_ERR_MUTEX_NESTING_OVERFLOW,
 
     K_ERR_OBJ_PTR_NULL                          = 1100u,
     K_ERR_OBJ_INVALID,
+    K_ERR_OBJ_INVALID_ALLOC_TYPE,
 
-    K_ERR_PM_DEVICE_ALREADY_REG                 = 1200u,
-    K_ERR_PM_DEVICE_OVERFLOW                    = 1300u,
-    K_ERR_PM_WKUP_SOURCE_NOT_INSTALL            = 1400u,
+    K_ERR_OUT_OF_MEMORY                         = 1150u,
 
-    K_ERR_QUEUE_EMPTY                           = 1500u,
-    K_ERR_QUEUE_FULL,
-    K_ERR_QUEUE_MSG_NOT_EXIST,
-
-    K_ERR_PEND_NOWAIT                           = 1600u,
+    K_ERR_PEND_NOWAIT                           = 1200u,
     K_ERR_PEND_SCHED_LOCKED,
     K_ERR_PEND_IN_IRQ,
     K_ERR_PEND_ABNORMAL,
     K_ERR_PEND_TIMEOUT,
     K_ERR_PEND_DESTROY,
     K_ERR_PEND_OWNER_DIE,
+
+    K_ERR_PM_DEVICE_ALREADY_REG                 = 1300u,
+    K_ERR_PM_DEVICE_OVERFLOW,
+    K_ERR_PM_WKUP_SOURCE_NOT_INSTALL,
+
+    K_ERR_PRIO_Q_EMPTY                      = 1400u,
+    K_ERR_PRIO_Q_FULL,
+    K_ERR_PRIO_Q_SLOT_NOT_TAKEN,
+    K_ERR_PRIO_Q_ITEM_SIZE_NOT_MATCH,
+
+    K_ERR_RING_Q_FULL                           = 1600u,
+    K_ERR_RING_Q_EMPTY,
+    K_ERR_RING_Q_ITEM_SIZE_NOT_MATCH,
 
     K_ERR_SCHED_LOCKED                          = 1700u,
     K_ERR_SCHED_NOT_LOCKED,
@@ -91,6 +96,7 @@ typedef enum k_err_en {
     K_ERR_TASK_SUSPEND_IDLE,
     K_ERR_TASK_STK_OVERFLOW,
     K_ERR_TASK_STK_SIZE_INVALID,
+    K_ERR_TASK_OUT_OF_MEMORY,
 
     K_ERR_TICKLESS_WKUP_ALARM_NOT_INSTALLED     = 2000u,
     K_ERR_TICKLESS_WKUP_ALARM_NO_INIT,

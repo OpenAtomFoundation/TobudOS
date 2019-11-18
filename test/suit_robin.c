@@ -5,6 +5,8 @@
 #include "test/test.h"
 #include "greatest/greatest.h"
 
+#if TOS_CFG_ROUND_ROBIN_EN > 0u
+
 SUITE(suit_robin);
 
 static const k_timeslice_t test_robin_timeslice_00 = 10;
@@ -71,4 +73,6 @@ SUITE(suit_robin)
 {
     RUN_TEST(test_robin);
 }
+
+#endif
 

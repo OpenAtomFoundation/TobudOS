@@ -34,6 +34,15 @@
 
 
 /////////////////////////////////////////
+// disable dynamic task create
+#ifdef TOS_CFG_TASK_DYNAMIC_CREATE_EN
+#undef  TOS_CFG_TASK_DYNAMIC_CREATE_EN
+#endif
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN      0u
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
 // disable event
 #ifdef TOS_CFG_EVENT_EN
 #undef  TOS_CFG_EVENT_EN
@@ -48,15 +57,6 @@
 #undef  TOS_CFG_MUTEX_EN
 #endif
 #define  TOS_CFG_MUTEX_EN                   0u
-/////////////////////////////////////////
-
-
-/////////////////////////////////////////
-// disable queue
-#ifdef TOS_CFG_QUEUE_EN
-#undef  TOS_CFG_QUEUE_EN
-#endif
-#define TOS_CFG_QUEUE_EN                    0u
 /////////////////////////////////////////
 
 
@@ -167,7 +167,11 @@
 #else /* TOS_CFG_EVENT_DRIVEN_EN */
 
 #ifndef TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN
-#define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  0u
+#define  TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  0u
+#endif
+
+#ifndef TOS_CFG_TASK_DYNAMIC_CREATE_EN
+#define  TOS_CFG_TASK_DYNAMIC_CREATE_EN     0u
 #endif
 
 #ifndef TOS_CFG_ROUND_ROBIN_EN
@@ -182,8 +186,20 @@
 #define  TOS_CFG_MUTEX_EN                   0u
 #endif
 
-#ifndef TOS_CFG_QUEUE_EN
-#define  TOS_CFG_QUEUE_EN                   0u
+#ifndef TOS_CFG_MESSAGE_QUEUE_EN
+#define  TOS_CFG_MESSAGE_QUEUE_EN           0u
+#endif
+
+#ifndef TOS_CFG_MAIL_QUEUE_EN
+#define  TOS_CFG_MAIL_QUEUE_EN              0u
+#endif
+
+#ifndef TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN
+#define  TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN  0u
+#endif
+
+#ifndef TOS_CFG_PRIORITY_MAIL_QUEUE_EN
+#define  TOS_CFG_PRIORITY_MAIL_QUEUE_EN     0u
 #endif
 
 #ifndef TOS_CFG_SEM_EN
@@ -198,22 +214,12 @@
 #define TOS_CFG_COMPLETION_EN               0u
 #endif
 
-#if     (TOS_CFG_QUEUE_EN > 0u) && !defined(TOS_CFG_MSG_EN)
-#define  TOS_CFG_MSG_EN                   1u
-#elif   (TOS_CFG_QUEUE_EN == 0u) && !defined(TOS_CFG_MSG_EN)
-#define  TOS_CFG_MSG_EN                   0u
-#endif
-
 #ifndef TOS_CFG_TIMER_EN
 #define  TOS_CFG_TIMER_EN                   0u
 #endif
 
 #if (TOS_CFG_TIMER_EN > 0u) && !defined(TOS_CFG_TIMER_AS_PROC)
 #define TOS_CFG_TIMER_AS_PROC               0u
-#endif
-
-#ifndef TOS_CFG_MSG_POOL_SIZE
-#define  TOS_CFG_MSG_POOL_SIZE              100u
 #endif
 
 #ifndef TOS_CFG_IDLE_TASK_STK_SIZE
@@ -272,6 +278,13 @@
 #if TOS_CFG_IDLE_TASK_STK_SIZE < 256
 #undef TOS_CFG_IDLE_TASK_STK_SIZE
 #define TOS_CFG_IDLE_TASK_STK_SIZE          256u
+#endif
+#endif
+
+#if (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u)
+#if TOS_CFG_IDLE_TASK_STK_SIZE < 512
+#undef TOS_CFG_IDLE_TASK_STK_SIZE
+#define TOS_CFG_IDLE_TASK_STK_SIZE          512u
 #endif
 #endif
 

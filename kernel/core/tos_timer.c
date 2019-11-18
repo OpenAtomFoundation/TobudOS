@@ -147,12 +147,7 @@ __API__ k_err_t tos_timer_create(k_timer_t *tmr,
 __API__ k_err_t tos_timer_destroy(k_timer_t *tmr)
 {
     TOS_PTR_SANITY_CHECK(tmr);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&tmr->knl_obj, KNL_OBJ_TYPE_TIMER)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(tmr, KNL_OBJ_TYPE_TIMER);
 
     if (tmr->state == TIMER_STATE_UNUSED) {
         return K_ERR_TIMER_INACTIVE;
@@ -169,12 +164,7 @@ __API__ k_err_t tos_timer_destroy(k_timer_t *tmr)
 __API__ k_err_t tos_timer_start(k_timer_t *tmr)
 {
     TOS_PTR_SANITY_CHECK(tmr);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&tmr->knl_obj, KNL_OBJ_TYPE_TIMER)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(tmr, KNL_OBJ_TYPE_TIMER);
 
     if (tmr->state == TIMER_STATE_UNUSED) {
         return K_ERR_TIMER_INACTIVE;
@@ -205,12 +195,7 @@ __API__ k_err_t tos_timer_start(k_timer_t *tmr)
 __API__ k_err_t tos_timer_stop(k_timer_t *tmr)
 {
     TOS_PTR_SANITY_CHECK(tmr);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&tmr->knl_obj, KNL_OBJ_TYPE_TIMER)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(tmr, KNL_OBJ_TYPE_TIMER);
 
     if (tmr->state == TIMER_STATE_UNUSED) {
         return K_ERR_TIMER_INACTIVE;
@@ -232,12 +217,7 @@ __API__ k_err_t tos_timer_stop(k_timer_t *tmr)
 __STATIC__ k_err_t timer_change(k_timer_t *tmr, k_tick_t new_val, timer_change_type_t change_type)
 {
     TOS_PTR_SANITY_CHECK(tmr);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&tmr->knl_obj, KNL_OBJ_TYPE_TIMER)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(tmr, KNL_OBJ_TYPE_TIMER);
 
     if (tmr->state == TIMER_STATE_UNUSED) {
         return K_ERR_TIMER_INACTIVE;

@@ -1,0 +1,19 @@
+config HAL_KV
+    bool
+    default n
+
+config SUPPORT_TLS
+    bool "FEATURE_SUPPORT_TLS"
+    default y if OTA_ENABLED
+
+config HAL_CRYPTO
+    bool
+    default n
+
+config HAL_UDP
+    bool
+    default n
+
+config COAP_DTLS_SUPPORT
+    bool
+    default n

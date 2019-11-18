@@ -69,7 +69,5 @@ nimble_port_tencentos_tiny_init(k_task_entry_t host_task_fn)
     if (err != K_ERR_NONE) {
         return;
     }
-
-    tos_knl_start();
 }
 

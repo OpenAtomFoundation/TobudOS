@@ -105,12 +105,20 @@ void sys_sem_free(sys_sem_t *sem)
 
 int sys_sem_valid(sys_sem_t *sem)
 {
-    return sem->pend_obj.type == PEND_TYPE_SEM;
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    return sem->knl_obj.type == KNL_OBJ_TYPE_SEMAPHORE;
+#else
+    #error  "need TOS_CFG_OBJECT_VERIFY_EN > 0u"
+#endif
 }
 
 void sys_sem_set_invalid(sys_sem_t *sem)
 {
-    sem->pend_obj.type = PEND_TYPE_NONE;
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    sem->knl_obj.type = KNL_OBJ_TYPE_NONE;
+#else
+    #error  "need TOS_CFG_OBJECT_VERIFY_EN > 0u"
+#endif
 }
 
 /*
@@ -178,12 +186,20 @@ void sys_mutex_free(sys_mutex_t *mutex)
 
 int sys_mutex_valid(sys_mutex_t *mutex)
 {
-    return mutex->pend_obj.type == PEND_TYPE_MUTEX;
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    return mutex->knl_obj.type == KNL_OBJ_TYPE_MUTEX;
+#else
+    #error  "need TOS_CFG_OBJECT_VERIFY_EN > 0u"
+#endif
 }
 
 void sys_mutex_set_invalid(sys_mutex_t *mutex)
 {
-    mutex->pend_obj.type = PEND_TYPE_NONE;
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    mutex->knl_obj.type = KNL_OBJ_TYPE_NONE;
+#else
+    #error  "need TOS_CFG_OBJECT_VERIFY_EN > 0u"
+#endif
 }
 
 void sys_mutex_lock(sys_mutex_t *mutex)
@@ -228,8 +244,15 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn function, void *arg
 err_t sys_mbox_new(sys_mbox_t *mbox, int size)
 {
     k_err_t rc;
+    void *msg_q_pool;
 
-    rc = tos_queue_create(mbox);
+#define MBOX_MSG_MAX        32
+    msg_q_pool = tos_mmheap_alloc(sizeof(void *) * MBOX_MSG_MAX);
+    if (!msg_q_pool) {
+        return ERR_MEM;
+    }
+
+    rc = tos_msg_q_create(mbox, msg_q_pool, MBOX_MSG_MAX);
     if (rc != K_ERR_NONE) {
         printf("Create mbox fail! code : %d \r\n", rc);
         return ERR_MEM;
@@ -240,27 +263,36 @@ err_t sys_mbox_new(sys_mbox_t *mbox, int size)
 
 void sys_mbox_free(sys_mbox_t *mbox)
 {
-    tos_queue_destroy(mbox);
+    tos_mmheap_free(mbox->ring_q.pool);
+    tos_msg_q_destroy(mbox);
 }
 
 int sys_mbox_valid(sys_mbox_t *mbox)
 {
-    return mbox->pend_obj.type == PEND_TYPE_QUEUE;
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    return mbox->knl_obj.type == KNL_OBJ_TYPE_MESSAGE_QUEUE;
+#else
+    #error  "need TOS_CFG_OBJECT_VERIFY_EN > 0u"
+#endif
 }
 
 void sys_mbox_set_invalid(sys_mbox_t *mbox)
 {
-    mbox->pend_obj.type = PEND_TYPE_NONE;
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    mbox->knl_obj.type = KNL_OBJ_TYPE_NONE;
+#else
+    #error  "need TOS_CFG_OBJECT_VERIFY_EN > 0u"
+#endif
 }
 
 void sys_mbox_post(sys_mbox_t *q, void *msg)
 {
-    tos_queue_post(q, msg, sizeof(void *));
+    tos_msg_q_post(q, msg);
 }
 
 err_t sys_mbox_trypost(sys_mbox_t *q, void *msg)
 {
-    if (tos_queue_post(q, msg, sizeof(void *)) == K_ERR_NONE) {
+    if (tos_msg_q_post(q, msg) == K_ERR_NONE) {
         return ERR_OK;
     }
 
@@ -277,7 +309,6 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *q, void **msg, u32_t timeout)
     void *dummyptr;
     k_tick_t wait_tick = 0;
     k_tick_t start_tick = 0;
-    size_t size = sizeof(void *);
 
     if (!msg) { // 看看存储消息的地方是否有效
         msg = &dummyptr;
@@ -298,7 +329,7 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *q, void **msg, u32_t timeout)
     }
 
     // 等待成功，计算等待的时间，否则就表示等待超时
-    if (tos_queue_pend(q,&(*msg),&size, wait_tick) == K_ERR_NONE) {
+    if (tos_msg_q_pend(q,&(*msg), wait_tick) == K_ERR_NONE) {
         return ((sys_now() - start_tick) * (1000 / TOS_CFG_CPU_TICK_PER_SECOND));
     }
 
@@ -310,13 +341,12 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t *q, void **msg)
 {
 
     void *dummyptr;
-    size_t size = sizeof(void *);
 
     if (!msg) {
         msg = &dummyptr;
     }
 
-    if (tos_queue_pend(q, &(*msg), &size, 0) == K_ERR_NONE) {
+    if (tos_msg_q_pend(q, &(*msg), 0) == K_ERR_NONE) {
         return ERR_OK;
     }
 

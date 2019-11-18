@@ -1,0 +1,24 @@
+CONFIG_ENV_CFLAGS   += \
+    -Os -Wall \
+    -g3 --coverage \
+    -D_PLATFORM_IS_LINUX_ \
+    -D__UBUNTU_SDK_DEMO__ \
+
+CONFIG_ENV_CFLAGS   += \
+    -DWITH_MQTT_DYN_BUF=1 \
+    -DWITH_MEM_STATS=0 \
+    -DWITH_MEM_STATS_PER_MODULE=0 \
+    -DWITH_MQTT_JSON_FLOW=1 \
+    -DWITH_MQTT_ZIP_TOPIC=1 \
+    -DWITH_MQTT_SUB_SHORTCUT=1 \
+    -DSDK_TEAM_TEST \
+
+CONFIG_ENV_CFLAGS   += \
+    -DCONFIG_MQTT_RX_MAXLEN=5000 \
+    -DCONFIG_MBEDTLS_DEBUG_LEVEL=0 \
+
+
+CONFIG_ENV_CFLAGS   += -rdynamic
+CONFIG_ENV_CFLAGS   += -Werror -Wno-unused
+
+CONFIG_ENV_LDFLAGS  += -lpthread -lrt

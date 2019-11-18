@@ -1,5 +1,5 @@
 ﻿
-![](./doc/picture/introduction/TencentOS_tiny_log.png)
+![](./doc/image/introduction/TencentOS_tiny_log.png)
 
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/TencentOS-tiny/pulls)
@@ -14,7 +14,7 @@
 
 ## 1、The software architecture of TencentOS tiny
 
-![](./doc/picture/introduction/TencentOS_tiny_Architecture_en.png)
+![](./doc/image/introduction/TencentOS_tiny_Architecture_en.png)
 
 TencentOS tiny main architecture diagram, from bottom to top, mainly includes:
 
@@ -77,7 +77,7 @@ The fault scene information is automatically uploaded to the cloud platform, whi
 
 ## 3、TencentOS tiny and partners are committed to building the IoT ecosystem
 
-![](./doc/picture/introduction/Partners_en.png)
+![](./doc/image/introduction/Partners_en.png)
 
 TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
 
@@ -86,9 +86,9 @@ TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semi
 
 # TencentOS tiny reference documentation
 ## 1、Porting guide
-- [TencentOS tiny Porting guide（KEIL version）](./doc/TencentOS-tiny-porting-keil.md)
-- [TencentOS tiny Porting guide（IAR version）](./doc/TencentOS-tiny-porting-iar.md)
-- [TencentOS tiny Porting guide（GCC version）](./doc/TencentOS-tiny-porting-gcc.md)
+- [TencentOS tiny Porting guide（KEIL version）](./doc/TencentOS-tiny-porting-guide-keil.md)
+- [TencentOS tiny Porting guide（IAR version）](./doc/TencentOS-tiny-porting-guide-iar.md)
+- [TencentOS tiny Porting guide（GCC version）](./doc/TencentOS-tiny-porting-guide-gcc.md)
 
 ## 2、Development guide
 - [TencentOS tiny Kernel development guide](./doc/4.TencentOS-tiny开发指南.md)
@@ -106,7 +106,7 @@ TencentOS tiny combines Tencent Cloud IoT development platform IoT Explorer, whi
 
 # TencentOS tiny Quick Start Reference
 TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development board, as shown below:
-![](./doc/picture/introduction/EVB_MX.png)
+![](./doc/image/introduction/EVB_MX.png)
 
 - [TencentOS tiny custom development board introduction page](http://www.holdiot.com/product/showproduct.php?id=8) ,Developers can quickly learn based on custom development boards, click to download reference documentation
 - [TencentOS-tiny Custom Development Board Getting Started Guide](./doc/TencentOS-tiny定制开发板入门指南.pdf)
@@ -122,7 +122,7 @@ TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development b
 
 Scan the QR code to join the qq group, please note the TencentOS tiny developer, the TencentOS tiny staff will review according to the notes:
 
-![](./doc/picture/introduction/qq.png)
+![](./doc/image/introduction/qq.png)
 
 
 

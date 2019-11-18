@@ -21,6 +21,10 @@
 #if TOS_CFG_COUNTDOWNLATCH_EN > 0u
 
 typedef struct k_countdownlatch_st {
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_obj_t               knl_obj;
+#endif
+
     pend_obj_t              pend_obj;
     k_countdownlatch_cnt_t  count;
 } k_countdownlatch_t;

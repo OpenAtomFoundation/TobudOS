@@ -61,15 +61,15 @@
 
 typedef void (*k_task_entry_t)(void *arg);
 
+typedef void (*k_task_walker)(k_task_t *task);
+
 /**
  * task control block
  */
 typedef struct k_task_st {
     k_stack_t          *sp;                 /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t           knl_obj;            /**< just for verification, test whether current object is really a task. */
-#endif
 
     char               *name;               /**< task name */
     k_task_entry_t      entry;              /**< task entry */
@@ -79,6 +79,12 @@ typedef struct k_task_st {
 
     k_stack_t          *stk_base;           /**< task stack base address */
     size_t              stk_size;           /**< stack size of the task */
+
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+    k_list_t            dead_list;          /**< when a dynamic allocated task destroyed, we hook the task's dead_list to the k_dead_task_list */
+#endif
+
+    k_list_t            stat_list;          /**< list for hooking us to the k_stat_list */
 
     k_tick_t            tick_expires;       /**< if we are in k_tick_list, how much time will we wait for? */
 
@@ -104,9 +110,13 @@ typedef struct k_task_st {
     k_timeslice_t       timeslice;          /**< how much time slice left for us? */
 #endif
 
-#if TOS_CFG_MSG_EN > 0u
-    void               *msg_addr;           /**< if we pend a queue successfully, our msg_addr and msg_size will be set by the queue poster */
-    size_t              msg_size;
+#if (TOS_CFG_MESSAGE_QUEUE_EN > 0u) || (TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u)
+    void               *msg;                /**< if we pend a message queue successfully, our msg will be set by the message queue poster */
+#endif
+
+#if (TOS_CFG_MAIL_QUEUE_EN > 0u) || (TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u)
+    void               *mail;               /**< if we pend a mail queue successfully, our mail and mail_size will be set by the message queue poster */
+    size_t              mail_size;
 #endif
 
 #if TOS_CFG_EVENT_EN > 0u
@@ -131,7 +141,6 @@ typedef struct k_task_st {
  * @param[in]   stk_base    stack base address of the task.
  * @param[in]   stk_size    stack size of the task.
  * @param[in]   timeslice   time slice of the task.
- * @param[in]   opt         option for the function call.
  *
  * @return  errcode
  * @retval  #K_ERR_TASK_STK_SIZE_INVALID    stack size is invalid.
@@ -160,6 +169,51 @@ __API__ k_err_t tos_task_create(k_task_t *task,
  * @retval  #K_ERR_NONE                 return successfully.
  */
 __API__ k_err_t tos_task_destroy(k_task_t *task);
+
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+
+/**
+ * @brief Create a task with a dynamic allocated task handler and stack.
+ * create a task with a dynamic allocated task handler and stack.
+ *
+ * @attention a task created by tos_task_create_dyn, should be destroyed by tos_task_destroy_dyn.
+ * @param[out]  task        dynamic allocated task handler.
+ * @param[in]   name        name of the task.
+ * @param[in]   entry       running entry of the task.
+ * @param[in]   arg         argument for the entry of the task.
+ * @param[in]   prio        priority of the task.
+ * @param[in]   stk_size    stack size of the task.
+ * @param[in]   timeslice   time slice of the task.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TASK_STK_SIZE_INVALID    stack size is invalid.
+ * @retval  #K_ERR_TASK_PRIO_INVALID        priority is invalid.
+ * @retval  #K_ERR_TASK_OUT_OF_MEMORY       out of memory(insufficient heap memory).
+ * @retval  #K_ERR_NONE                     return successfully.
+ */
+__API__ k_err_t tos_task_create_dyn(k_task_t **task,
+                                                    char *name,
+                                                    k_task_entry_t entry,
+                                                    void *arg,
+                                                    k_prio_t prio,
+                                                    size_t stk_size,
+                                                    k_timeslice_t timeslice);
+
+/**
+ * @brief Destroy a dynamic created task.
+ * delete a dynamic created task.
+ *
+ * @attention the API to destroy a dynamic created task.
+ *
+ * @param[in]   task        pointer to the handler of the task to be deleted.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TASK_DESTROY_IDLE    attempt to destroy idle task.
+ * @retval  #K_ERR_NONE                 return successfully.
+ */
+__API__ k_err_t tos_task_destroy_dyn(k_task_t *task);
+
+#endif
 
 /**
  * @brief Delay current task for ticks.
@@ -245,6 +299,18 @@ __API__ k_err_t tos_task_prio_change(k_task_t *task, k_prio_t prio_new);
  */
 __API__ void    tos_task_yield(void);
 
+/**
+ * @brief Get current running task.
+ * Get current running task.
+ *
+ * @attention is kernel is not running, you'll get K_NULL
+ *
+ * @param   None
+ *
+ * @return  current running task handler
+ */
+__API__ k_task_t *tos_task_curr_task_get(void);
+
 
 #if TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN > 0u
 
@@ -263,6 +329,30 @@ __API__ void    tos_task_yield(void);
 __API__ k_err_t tos_task_stack_draught_depth(k_task_t *task, int *depth);
 
 #endif
+
+/**
+ * @brief Walk through all the tasks in the statistic list.
+ *
+ * @attention None
+ *
+ * @param[in]   walker      a function involved when meeting each tasks in the list.
+ *
+ * @return  None
+ */
+__API__ void tos_task_walkthru(k_task_walker walker);
+
+/**
+ * @brief A debug API for display all tasks information.
+ *
+ * @attention None
+ *
+ * @param   None
+ *
+ * @return  None
+ */
+__DEBUG__ void tos_task_info_display(void);
+
+__KERNEL__ void task_free_all(void);
 
 __KERNEL__ __STATIC_INLINE__ int task_state_is_ready(k_task_t *task)
 {
@@ -322,6 +412,37 @@ __KERNEL__ __STATIC_INLINE__ void task_state_set_deleted(k_task_t *task)
 __KERNEL__ __STATIC_INLINE__ void task_state_set_sleeping(k_task_t *task)
 {
     task->state |= K_TASK_STATE_SLEEP;
+}
+
+__DEBUG__ __STATIC_INLINE__ void task_default_walker(k_task_t *task)
+{
+    char *state_str;
+
+    tos_kprintln("tsk name: %s", task->name);
+
+    if (task->state == K_TASK_STATE_PENDTIMEOUT_SUSPENDED) {
+        state_str = "PENDTIMEOUT_SUSPENDED";
+    } else if (task->state == K_TASK_STATE_PEND_SUSPENDED) {
+        state_str = "PEND_SUSPENDED";
+    } else if (task->state == K_TASK_STATE_SLEEP_SUSPENDED) {
+        state_str = "SLEEP_SUSPENDED";
+    } else if (task->state == K_TASK_STATE_PENDTIMEOUT) {
+        state_str = "PENDTIMEOUT";
+    } else if (task->state == K_TASK_STATE_SUSPENDED) {
+        state_str = "SUSPENDED";
+    } else if (task->state == K_TASK_STATE_PEND) {
+        state_str = "PEND";
+    } else if (task->state == K_TASK_STATE_SLEEP) {
+        state_str = "SLEEP";
+    } else if (task->state == K_TASK_STATE_READY) {
+        state_str = "READY";
+    }
+    tos_kprintln("tsk stat: %s", state_str);
+
+    tos_kprintln("stk size: %d", task->stk_size);
+    tos_kprintln("stk base: 0x%p", task->stk_base);
+    tos_kprintln("stk top : 0x%p", task->stk_base + task->stk_size);
+    tos_kprintf("\n");
 }
 
 #endif /* _TOS_TASK_H_ */

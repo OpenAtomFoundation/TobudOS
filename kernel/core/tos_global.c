@@ -36,6 +36,12 @@ k_tick_t            k_cpu_tick_per_second       = TOS_CFG_CPU_TICK_PER_SECOND;
 
 k_cycle_t           k_cpu_cycle_per_tick        = (k_cycle_t)0u;
 
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+TOS_LIST_DEFINE(k_dead_task_list);
+#endif
+
+TOS_LIST_DEFINE(k_stat_list);
+
 TOS_LIST_DEFINE(k_tick_list);
 
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
@@ -64,11 +70,6 @@ k_stack_t          *const k_timer_task_stk_addr     = &k_timer_task_stk[0];
 size_t              const k_timer_task_stk_size     = TOS_CFG_TIMER_TASK_STK_SIZE;
 #endif /* TOS_CFG_TIMER_AS_PROC == 0u */
 
-#endif
-
-#if TOS_CFG_MSG_EN > 0u
-TOS_LIST_DEFINE(k_msg_freelist);
-k_msg_t             k_msg_pool[TOS_CFG_MSG_POOL_SIZE];
 #endif
 
 #if TOS_CFG_PWR_MGR_EN > 0u

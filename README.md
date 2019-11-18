@@ -1,5 +1,5 @@
 ﻿
-![](./doc/picture/introduction/TencentOS_tiny_log.png)
+![](./doc/image/introduction/TencentOS_tiny_log.png)
 
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/TencentOS-tiny/pulls)
@@ -14,7 +14,7 @@
 
 ## 1、TencentOS tiny整体架构
 
-![](./doc/picture/introduction/TencentOS_tiny_Architecture.png)
+![](./doc/image/introduction/TencentOS_tiny_Architecture.png)
 TencentOS tiny 主体架构图，从下到上主要包括：
 
 **CPU 库** ：TencentOS tiny 支持的 CPU IP 核架构，当前主要支持 ARM Cortex M0/3/4/7。
@@ -58,18 +58,20 @@ TencentOS tiny 主体架构图，从下到上主要包括：
 
 ## 3、TencentOS tiny携手合作伙伴共建IoT生态
 
-![](./doc/picture/introduction/Partners.png)
+![](./doc/image/introduction/Partners.png)
 
 TencentOS tiny目前支持STM32、NXP、华大半导体、国民技术、GD32、Nordic、TI等主流MCU。当前已完成两套官方定制开发板设计，支持全系列STM32 NUCLEO官方评估板内核移植。TencentOS tiny 将携手合作伙伴为物联网终端厂家提供更优质的IoT终端软件解决方案，方便各种物联网设备快速接入腾讯云，共同扩展IoT生态，更好地支撑智慧城市、智能水表、智能家居、智能穿戴、车联网等多种行业应用。
+
+欢迎IoT相关项目合作，有合作需求的请邮件联系TencentOS tiny官方工作人员，邮箱地址 ： supowang@tencent.com
 
 # 二、TencentOS tiny 代码目录
 - [TencentOS tiny代码目录说明](./doc/TencentOS-tiny-代码目录说明.md)
 
 # 三、TencentOS tiny 参考文档
 ## 1、移植指南
-- [TencentOS tiny移植指南（KEIL版本）](./doc/TencentOS-tiny-porting-keil.md)
-- [TencentOS tiny移植指南（IAR版本）](./doc/TencentOS-tiny-porting-iar.md)
-- [TencentOS tiny移植指南（GCC版本）](./doc/TencentOS-tiny-porting-gcc.md)
+- [TencentOS tiny移植指南（KEIL版本）](./doc/TencentOS-tiny-porting-guide-keil.md)
+- [TencentOS tiny移植指南（IAR版本）](./doc/TencentOS-tiny-porting-guide-iar.md)
+- [TencentOS tiny移植指南（GCC版本）](./doc/TencentOS-tiny-porting-guide-gcc.md)
 
 ## 2、TencentOS tiny 开发指南
 - [TencentOS tiny内核开发指南](./doc/4.TencentOS-tiny开发指南.md)
@@ -87,7 +89,7 @@ TencentOS tiny结合腾讯云物联网开发平台IoT Explorer，已经构筑起
 
 # 六、TencentOS tiny 快速入门参考
 TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板，如下图：
-![](./doc/picture/introduction/EVB_MX.png)
+![](./doc/image/introduction/EVB_MX.png)
 
 - [TencentOS tiny定制开发板介绍页](http://www.holdiot.com/product/showproduct.php?id=8)，开发者可以基于定制开发板进行快速入门学习，点击下载参考文档
 - [TencentOS-tiny定制开发板入门指南](./doc/TencentOS-tiny定制开发板入门指南.pdf)
@@ -103,13 +105,17 @@ TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板�
 
 扫码加群，请备注TencentOS tiny开发者，工作人员会根据备注进行审核：
 
-![](./doc/picture/introduction/qq.png)
+![](./doc/image/introduction/qq.png)
 
 # 九、第三方开发者评测
 
-感谢CSDN博客专家杰杰的贡献
+1.基于TencentOS tiny 的环境监测实战项目
+[【TencentOS tiny】环境监测实战项目最终完整版](https://www.bilibili.com/video/av73782956?from=search&seid=4421984671929108231)
+感谢阿正的贡献
 
-基于野火stm32f103开发板上移植的TencentOS tiny 例程、源码剖析、视频讲解。
+
+2.基于野火stm32f103开发板上移植的TencentOS tiny 例程、源码剖析、视频讲解。
+感谢CSDN博客专家杰杰的贡献
 
 ## 简单上手：
 

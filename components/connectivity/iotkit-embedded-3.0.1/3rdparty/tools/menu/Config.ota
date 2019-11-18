@@ -1,0 +1,8 @@
+config OTA_ENABLED
+    bool "FEATURE_OTA_ENABLED"
+    depends on MQTT_COMM_ENABLED
+    select INFRA_STRING
+    select INFRA_JSON_PARSER
+    select INFRA_HTTPC
+    select INFRA_MD5
+    select INFRA_SHA256
