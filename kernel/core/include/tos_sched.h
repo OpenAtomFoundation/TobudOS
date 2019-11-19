@@ -22,7 +22,7 @@
 #define K_PRIO_TBL_SLOT_SIZE    (32u)
 
 #define K_PRIO_NDX(prio)            ((prio) >> 5u) /* prio / 32u */
-#define K_PRIO_BIT(prio)            (1u << (K_PRIO_TBL_SLOT_SIZE - 1u - ((prio) & (K_PRIO_TBL_SLOT_SIZE - 1u))))
+#define K_PRIO_BIT(prio)            ((uint32_t)1u << (K_PRIO_TBL_SLOT_SIZE - 1u - ((prio) & (K_PRIO_TBL_SLOT_SIZE - 1u))))
 
 typedef struct readyqueue_st {
     k_list_t    task_list_head[TOS_CFG_TASK_PRIO_MAX];

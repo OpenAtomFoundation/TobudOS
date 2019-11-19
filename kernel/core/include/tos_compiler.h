@@ -81,7 +81,7 @@
 #define __NAKED__           __attribute__((naked))
 #define __WEAK__            __attribute__((weak))
 /*------------------ ICC Compiler ----------------------*/
-#elif defined(__ICCARM__)
+#elif defined(__ICCARM__)  || defined(__ICC430__) // __IAR_SYSTEMS_ICC__
 
 #define __ASM__             __asm
 #define __VOLATILE__        volatile
