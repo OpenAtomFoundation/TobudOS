@@ -35,7 +35,7 @@ C:\Program Files\GNU MCU Eclipse\Build Tools\2.9-20170629-1013\bin\bin，在环�
 
 安装STM32CubeMx还需要事先安装好JDK环境，您可以在互联网上查找如何安装和配置JDK环境，此处不再赘述。
 
-CubeMX安装完成后，我们就可以使用CubeMX来给NUCLEO-L037RZ开发板生成裸机工程了，如果您的芯片不是STM32，而是其他厂商的ARM Cortex M系列，您可以根据产商的指导准备裸机工程，后续的内核移植步骤是一致的。
+CubeMX安装完成后，我们就可以使用CubeMX来给NUCLEO-L073RZ开发板生成裸机工程了，如果您的芯片不是STM32，而是其他厂商的ARM Cortex M系列，您可以根据产商的指导准备裸机工程，后续的内核移植步骤是一致的。
 
 ####    3.1 首先启动STM32CubeMX，新建工程
 

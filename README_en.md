@@ -82,18 +82,18 @@ The fault scene information is automatically uploaded to the cloud platform, whi
 TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
 
 # TencentOS tiny code directory
-- [TencentOS tiny code directory description](./doc/TencentOS-tiny-代码目录说明.md)
+- [TencentOS tiny code directory description](./doc/TencentOS tiny 代码目录说明.md)
 
 # TencentOS tiny reference documentation
 ## 1、Porting guide
-- [TencentOS tiny Porting guide（KEIL version）](./doc/TencentOS-tiny-porting-guide-keil.md)
-- [TencentOS tiny Porting guide（IAR version）](./doc/TencentOS-tiny-porting-guide-iar.md)
-- [TencentOS tiny Porting guide（GCC version）](./doc/TencentOS-tiny-porting-guide-gcc.md)
+- [TencentOS tiny Porting guide（KEIL version）](./doc/TencentOS tiny porting guide keil.md)
+- [TencentOS tiny Porting guide（IAR version）](./doc/TencentOS tiny porting guide iar.md)
+- [TencentOS tiny Porting guide（GCC version）](./doc/TencentOS tiny porting guide gcc.md)
 
 ## 2、Development guide
-- [TencentOS tiny Kernel development guide](./doc/4.TencentOS-tiny开发指南.md)
-- [TencentOS tiny API reference](./doc/5.TencentOS-tiny-SDK文档.md)
-- [The development Guide for use TencentOS tiny access to  Tencent Cloud IoTHub ](./doc/8.TencentOS-tiny对接腾讯云IoTHub开发指南.md)
+- [TencentOS tiny Kernel development guide](./doc/4. TencentOS tiny 开发指南.md)
+- [TencentOS tiny API reference](./doc/5. TencentOS tiny SDK文档.md)
+- [The development Guide for use TencentOS tiny access to  Tencent Cloud IoTHub ](./doc/8. TencentOS tiny 对接腾讯云IoTHub开发指南.md)
 
 # TencentOS tiny opensource license
 * TencentOS tiny follow [BSD-3 Open source license agreement](LICENSE)
