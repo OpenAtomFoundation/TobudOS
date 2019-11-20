@@ -1,0 +1,148 @@
+ #include "data_model.h"
+ 
+    ;EXPORT
+    PUBLIC  port_int_disable
+    PUBLIC  port_int_enable
+
+    PUBLIC  port_cpsr_save
+    PUBLIC  port_cpsr_restore
+
+    PUBLIC  port_sched_start
+    PUBLIC  port_context_switch
+    PUBLIC  port_irq_context_switch
+    PUBLIC  port_systick_isr
+      
+    ;IMPORT
+    EXTERN  k_curr_task
+    EXTERN  k_next_task
+    
+    EXTERN  port_setup_systick
+    EXTERN  systick_handler
+    EXTERN  irq_context_switch_flag
+    
+/*-----------------------------------------------------------*/    
+
+PORT_SAVE_CONTEXT macro
+	; Save the remaining registers.
+	pushm_x	#12, r15               
+	mov_x	&k_curr_task, r12      
+	mov_x	sp, 0( r12 )           
+	endm
+
+PORT_RESTORE_CONTEXT macro
+
+	mov_x	&k_curr_task, r12      
+	mov_x	@r12, sp               
+	popm_x	#12, r15              
+	nop
+	pop.w	sr                     
+	nop
+	reta
+	endm
+
+/*-----------------------------------------------------------*/
+;The RTOS systick ISR.
+
+
+    RSEG CODE
+    EVEN
+
+port_systick_isr:
+;	/* The sr is not saved in PORT_SAVE_CONTEXT() because port_context_switch() needs
+;	to save it manually before it gets modified (interrupts get disabled).
+;	Entering through this interrupt means the SR is already on the stack, but
+;	this keeps the stack frames identical. */
+    push.w sr
+    
+    PORT_SAVE_CONTEXT
+
+    calla #systick_handler              
+   
+    cmp.w #0x0,irq_context_switch_flag
+    mov.w #0x0, &irq_context_switch_flag
+    
+    jeq skip_context_switch
+    
+    ;k_next_task  -> k_curr_task
+    mov_x &k_next_task,&k_curr_task
+        
+skip_context_switch:
+
+    PORT_RESTORE_CONTEXT 
+    
+    reti
+
+/*-----------------------------------------------------------*/
+
+port_int_disable:
+    dint
+    nop
+    reta
+
+port_int_enable:
+    nop
+    eint
+    reta
+
+port_cpsr_save:
+    mov.w    SR,R12
+    dint
+    nop
+    reta
+
+port_cpsr_restore:
+    nop
+    mov.w   R12,SR
+    nop
+    reta
+
+
+port_context_switch:
+    
+    ;/* The sr needs saving before it is modified. */
+    push.w sr
+    
+    ;/* Now the SR is stacked interrupts can be disabled. */
+    dint
+    nop
+        
+    PORT_SAVE_CONTEXT
+   
+    ;k_next_task  -> k_curr_task
+    mov_x &k_next_task,&k_curr_task
+
+    PORT_RESTORE_CONTEXT 
+    
+    reti 
+
+port_irq_context_switch:
+
+    reti
+
+/*-----------------------------------------------------------*/
+;/*
+;* Start off the scheduler by initialising the RTOS tick timer, then restoring
+;* the context of the first task.
+;*/
+port_sched_start:
+
+/* Interrupts are turned off here, to ensure a tick does not occur
+    before or during the call to port_sched_start().  The stacks of
+    the created tasks contain a status word with interrupts switched on
+    so interrupts will automatically get re-enabled when the first task
+    starts to run. */
+    dint
+    nop
+
+    ;/* Setup the hardware to generate the tick.  Interrupts are disabled
+    ;when this function is called. */
+    calla #port_setup_systick
+
+    ;mov_x &k_next_task,&k_curr_task
+    
+    ;/* Restore the context of the first task that is going to run. */
+    PORT_RESTORE_CONTEXT
+
+/*-----------------------------------------------------------*/
+    END
+
