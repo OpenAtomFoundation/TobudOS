@@ -82,7 +82,7 @@ The fault scene information is automatically uploaded to the cloud platform, whi
 TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
 
 # TencentOS tiny code directory
-- [TencentOS tiny code directory description](./doc/9.TencentOS_tiny_code_directory_description.md)
+- [TencentOS tiny code directory description](./doc/09.TencentOS_tiny_code_directory_description.md)
 
 # TencentOS tiny reference documentation
 ## 1、Porting guide
@@ -91,9 +91,9 @@ TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semi
 - [TencentOS tiny Porting guide（GCC version）](./doc/12.TencentOS_tiny_porting_guide_gcc.md)
 
 ## 2、Development guide
-- [TencentOS tiny Kernel development guide](./doc/4.TencentOS_tiny_Development_Guide.md)
-- [TencentOS tiny API reference](./doc/5.TencentOS_tiny_SDK_documentation.md)
-- [The development Guide for use TencentOS tiny connect to  Tencent Cloud IoTHub ](./doc/8.The_development_Guide_for_use_TencentOS_tiny_connect_to_Tencent_Cloud_IoTHub.md)
+- [TencentOS tiny Kernel development guide](./doc/04.TencentOS_tiny_Development_Guide.md)
+- [TencentOS tiny API reference](./doc/05.TencentOS_tiny_SDK_documentation.md)
+- [The development Guide for use TencentOS tiny connect to  Tencent Cloud IoTHub ](./doc/08.The_development_Guide_for_use_TencentOS_tiny_connect_to_Tencent_Cloud_IoTHub.md)
 
 # TencentOS tiny opensource license
 * TencentOS tiny follow [BSD-3 Open source license agreement](LICENSE)
