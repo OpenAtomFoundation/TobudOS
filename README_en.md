@@ -109,7 +109,7 @@ TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development b
 ![](./doc/image/introduction/EVB_MX.png)
 
 - [TencentOS tiny custom development board introduction page](http://www.holdiot.com/product/showproduct.php?id=8) ,Developers can quickly learn based on custom development boards, click to download reference documentation
-- [TencentOS-tiny Custom Development Board Getting Started Guide](./doc/TencentOS-tiny定制开发板入门指南.pdf)
+- [TencentOS-tiny Custom Development Board Getting Started Guide](./doc/15.TencentOS_tiny_Custom_Development_Board_Getting_Started_Guide.pdf)
 
 # Contributing
 * 1.  Fork TencentOS tiny open source project under your own GitHub account;
