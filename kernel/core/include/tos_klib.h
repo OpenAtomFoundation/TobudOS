@@ -31,14 +31,14 @@
 
 #define TOS_PTR_SANITY_CHECK(ptr) \
     do {    \
-        if (unlikely((ptr) == K_NULL)) {    \
+        if (unlikely(!(ptr))) {    \
             return K_ERR_OBJ_PTR_NULL;    \
         }   \
     } while(0)
 
 #define TOS_PTR_SANITY_CHECK_RC(ptr, return_code) \
     do {    \
-        if (unlikely((ptr) == K_NULL)) {    \
+        if (unlikely(!(ptr))) {    \
             return return_code;    \
         }   \
     } while(0)
@@ -70,12 +70,18 @@
 #define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code)
 #endif
 
+#if TOS_CFG_LIBC_PRINTF_EN > 0u
+#define LIBC_PRINTF             printf
+#else
+#define LIBC_PRINTF(...)
+#endif
+
 // currently we use default microlib supplied by mdk
-#define tos_kprintf(...)         printf(__VA_ARGS__);
+#define tos_kprintf(...)         LIBC_PRINTF(__VA_ARGS__);
 
 #define tos_kprintln(...)   \
-    printf(__VA_ARGS__); \
-    printf("\n");
+    LIBC_PRINTF(__VA_ARGS__); \
+    LIBC_PRINTF("\n");
 
 #define TOS_ASSERT_AUX(exp, function, line) \
     if (!(exp)) { \

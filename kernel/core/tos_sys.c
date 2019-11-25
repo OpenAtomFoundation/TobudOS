@@ -250,6 +250,10 @@ __KERNEL__ void knl_sched(void)
 {
     TOS_CPU_CPSR_ALLOC();
 
+    if (unlikely(!tos_knl_is_running())) {
+        return;
+    }
+
     if (knl_is_inirq()) {
         return;
     }

@@ -21,9 +21,10 @@
 
 __API__ k_err_t tos_prio_msg_q_create(k_prio_msg_q_t *prio_msg_q, void *pool, size_t msg_cnt)
 {
-    TOS_PTR_SANITY_CHECK(prio_msg_q);
     k_err_t err;
     void *prio_q_mgr_array = K_NULL;
+
+    TOS_PTR_SANITY_CHECK(prio_msg_q);
 
     prio_q_mgr_array = tos_mmheap_alloc(TOS_PRIO_Q_MGR_ARRAY_SIZE(msg_cnt));
     if (!prio_q_mgr_array) {
@@ -89,8 +90,9 @@ __API__ k_err_t tos_prio_msg_q_destroy(k_prio_msg_q_t *prio_msg_q)
 
 __API__ k_err_t tos_prio_msg_q_create_dyn(k_prio_msg_q_t *prio_msg_q, size_t msg_cnt)
 {
-    TOS_PTR_SANITY_CHECK(prio_msg_q);
     k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(prio_msg_q);
 
     err = tos_prio_q_create_dyn(&prio_msg_q->prio_q, msg_cnt, sizeof(void *));
     if (err != K_ERR_NONE) {
@@ -188,10 +190,9 @@ __API__ k_err_t tos_prio_msg_q_pend(k_prio_msg_q_t *prio_msg_q, void **msg_ptr, 
     knl_sched();
 
     err = pend_state2errno(k_curr_task->pend_state);
-
     if (err == K_ERR_NONE) {
-        *msg_ptr = k_curr_task->msg;
-        k_curr_task->msg = K_NULL;
+        *msg_ptr            = k_curr_task->msg;
+        k_curr_task->msg    = K_NULL;
     }
 
     return err;

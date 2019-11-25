@@ -230,6 +230,10 @@
 #define  TOS_CFG_OBJECT_VERIFY_EN               0u
 #endif
 
+#ifndef TOS_CFG_LIBC_PRINTF_EN
+#define  TOS_CFG_LIBC_PRINTF_EN                     1u // we enable this by default
+#endif
+
 #if     (TOS_CFG_TIMER_AS_PROC == 0u) && !defined(TOS_CFG_TIMER_TASK_PRIO)
 #define  TOS_CFG_TIMER_TASK_PRIO            (k_prio_t)(K_TASK_PRIO_IDLE - (k_prio_t)1u)
 #endif

@@ -305,7 +305,7 @@ __STATIC__ void at_parser(void *arg)
             at_echo_buffer_copy(recv_cache, at_echo);
         }
 
-        printf("--->%s\n", recv_cache->buffer);
+        tos_kprintln("--->%s", recv_cache->buffer);
     }
 }
 

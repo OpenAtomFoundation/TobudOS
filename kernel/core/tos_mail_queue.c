@@ -21,8 +21,9 @@
 
 __API__ k_err_t tos_mail_q_create(k_mail_q_t *mail_q, void *pool, size_t mail_cnt, size_t mail_size)
 {
-    TOS_PTR_SANITY_CHECK(mail_q);
     k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(mail_q);
 
     err = tos_ring_q_create(&mail_q->ring_q, pool, mail_cnt, mail_size);
     if (err != K_ERR_NONE) {
@@ -86,8 +87,9 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
 
 __API__ k_err_t tos_mail_q_create_dyn(k_mail_q_t *mail_q, size_t mail_cnt, size_t mail_size)
 {
-    TOS_PTR_SANITY_CHECK(mail_q);
     k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(mail_q);
 
     err = tos_ring_q_create_dyn(&mail_q->ring_q, mail_cnt, mail_size);
     if (err != K_ERR_NONE) {
@@ -178,18 +180,17 @@ __API__ k_err_t tos_mail_q_pend(k_mail_q_t *mail_q, void *mail_buf, size_t *mail
         return K_ERR_PEND_SCHED_LOCKED;
     }
 
+    k_curr_task->mail = mail_buf;
     pend_task_block(k_curr_task, &mail_q->pend_obj, timeout);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     err = pend_state2errno(k_curr_task->pend_state);
-
     if (err == K_ERR_NONE) {
-        memcpy(mail_buf, k_curr_task->mail, k_curr_task->mail_size);
-        *mail_size = k_curr_task->mail_size;
-        k_curr_task->mail = K_NULL;
-        k_curr_task->mail_size = 0;
+        *mail_size              = k_curr_task->mail_size;
+        k_curr_task->mail       = K_NULL;
+        k_curr_task->mail_size  = 0;
     }
 
     return err;
@@ -197,7 +198,7 @@ __API__ k_err_t tos_mail_q_pend(k_mail_q_t *mail_q, void *mail_buf, size_t *mail
 
 __STATIC__ void mail_task_recv(k_task_t *task, void *mail_buf, size_t mail_size)
 {
-    task->mail = mail_buf;
+    memcpy(task->mail, mail_buf, mail_size);
     task->mail_size = mail_size;
     pend_task_wakeup(task, PEND_STATE_POST);
 }

@@ -488,14 +488,14 @@ __API__ k_err_t tos_task_delay(k_tick_t delay)
         return K_ERR_NONE;
     }
 
-    TOS_CPU_INT_DISABLE();
-
-    if (tick_list_add(k_curr_task, delay) != K_ERR_NONE) {
-        TOS_CPU_INT_ENABLE();
+    if (unlikely(delay == TOS_TIME_FOREVER)) {
         // if you wanna delay your task forever, why don't just suspend?
         return K_ERR_DELAY_FOREVER;
     }
 
+    TOS_CPU_INT_DISABLE();
+
+    tick_list_add(k_curr_task, delay);
     readyqueue_remove(k_curr_task);
 
     TOS_CPU_INT_ENABLE();

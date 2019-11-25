@@ -187,7 +187,6 @@ __API__ k_err_t tos_msg_q_pend(k_msg_q_t *msg_q, void **msg_ptr, k_tick_t timeou
     knl_sched();
 
     err = pend_state2errno(k_curr_task->pend_state);
-
     if (err == K_ERR_NONE) {
         *msg_ptr = k_curr_task->msg;
         k_curr_task->msg = K_NULL;

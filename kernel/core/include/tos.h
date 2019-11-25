@@ -32,7 +32,6 @@
 #include <tos_fault.h>
 #include <tos_klib.h>
 #include <tos_list.h>
-#include <tos_pm.h>
 #include <tos_pend.h>
 #include <tos_sys.h>
 #include <tos_ring_queue.h>

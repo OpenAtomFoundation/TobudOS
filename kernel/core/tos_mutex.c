@@ -69,9 +69,8 @@ __KERNEL__ void mutex_release(k_mutex_t *mutex)
 
 __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
 {
-    TOS_PTR_SANITY_CHECK(mutex);
-
     TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(mutex);
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_object_init(&mutex->knl_obj, KNL_OBJ_TYPE_MUTEX);
@@ -90,8 +89,8 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 {
     TOS_CPU_CPSR_ALLOC();
 
-    TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(mutex);
     TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
 
     TOS_CPU_INT_DISABLE();
@@ -120,8 +119,8 @@ __API__ k_err_t tos_mutex_pend_timed(k_mutex_t *mutex, k_tick_t timeout)
 {
     TOS_CPU_CPSR_ALLOC();
 
-    TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(mutex);
     TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
 
     TOS_CPU_INT_DISABLE();
@@ -176,8 +175,8 @@ __API__ k_err_t tos_mutex_post(k_mutex_t *mutex)
     TOS_CPU_CPSR_ALLOC();
     k_task_t *pending_task;
 
-    TOS_PTR_SANITY_CHECK(mutex);
     TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(mutex);
     TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
 
     TOS_CPU_INT_DISABLE();

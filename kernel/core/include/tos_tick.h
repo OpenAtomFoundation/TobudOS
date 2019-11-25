@@ -32,7 +32,7 @@ __API__ void    tos_tick_handler(void);
 
 __KERNEL__ void         tick_update(k_tick_t tick);
 
-__KERNEL__ k_err_t      tick_list_add(k_task_t *task, k_tick_t timeout);
+__KERNEL__ void         tick_list_add(k_task_t *task, k_tick_t timeout);
 
 __KERNEL__ void         tick_list_remove(k_task_t *task);
 

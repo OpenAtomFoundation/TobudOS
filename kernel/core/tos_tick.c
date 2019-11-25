@@ -71,21 +71,10 @@ __STATIC__ void tick_task_takeoff(k_task_t *task)
     TOS_CPU_INT_ENABLE();
 }
 
-__KERNEL__ k_err_t tick_list_add(k_task_t *task, k_tick_t timeout)
+__KERNEL__ void tick_list_add(k_task_t *task, k_tick_t timeout)
 {
-    if (timeout == TOS_TIME_NOWAIT) {
-        return K_ERR_DELAY_ZERO;
-    }
-
-    if (timeout == TOS_TIME_FOREVER) {
-        return K_ERR_DELAY_FOREVER;
-    }
-
-    task->tick_expires = timeout;
-
     tick_task_place(task, timeout);
     task_state_set_sleeping(task);
-    return K_ERR_NONE;
 }
 
 __KERNEL__ void tick_list_remove(k_task_t *task)

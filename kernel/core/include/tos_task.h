@@ -416,8 +416,9 @@ __KERNEL__ __STATIC_INLINE__ void task_state_set_sleeping(k_task_t *task)
 
 __DEBUG__ __STATIC_INLINE__ void task_default_walker(k_task_t *task)
 {
-    char *state_str;
+    char *state_str = "ABNORMAL";
 
+    state_str = state_str;
     tos_kprintln("tsk name: %s", task->name);
 
     if (task->state == K_TASK_STATE_PENDTIMEOUT_SUSPENDED) {

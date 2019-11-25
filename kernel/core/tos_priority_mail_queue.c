@@ -21,9 +21,10 @@
 
 __API__ k_err_t tos_prio_mail_q_create(k_prio_mail_q_t *prio_mail_q, void *pool, size_t mail_cnt, size_t mail_size)
 {
-    TOS_PTR_SANITY_CHECK(prio_mail_q);
     k_err_t err;
     void *prio_q_mgr_array = K_NULL;
+
+    TOS_PTR_SANITY_CHECK(prio_mail_q);
 
     prio_q_mgr_array = tos_mmheap_alloc(TOS_PRIO_Q_MGR_ARRAY_SIZE(mail_cnt));
     if (!prio_q_mgr_array) {
@@ -89,8 +90,9 @@ __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q)
 
 __API__ k_err_t tos_prio_mail_q_create_dyn(k_prio_mail_q_t *prio_mail_q, size_t mail_cnt, size_t mail_size)
 {
-    TOS_PTR_SANITY_CHECK(prio_mail_q);
     k_err_t err;
+
+    TOS_PTR_SANITY_CHECK(prio_mail_q);
 
     err = tos_prio_q_create_dyn(&prio_mail_q->prio_q, mail_cnt, mail_size);
     if (err != K_ERR_NONE) {
@@ -179,18 +181,17 @@ __API__ k_err_t tos_prio_mail_q_pend(k_prio_mail_q_t *prio_mail_q, void *mail_bu
         return K_ERR_PEND_SCHED_LOCKED;
     }
 
+    k_curr_task->mail = mail_buf;
     pend_task_block(k_curr_task, &prio_mail_q->pend_obj, timeout);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     err = pend_state2errno(k_curr_task->pend_state);
-
     if (err == K_ERR_NONE) {
-        memcpy(mail_buf, k_curr_task->mail, k_curr_task->mail_size);
-        *mail_size = k_curr_task->mail_size;
-        k_curr_task->mail = K_NULL;
-        k_curr_task->mail_size = 0;
+        *mail_size              = k_curr_task->mail_size;
+        k_curr_task->mail       = K_NULL;
+        k_curr_task->mail_size  = 0;
     }
 
     return err;
@@ -198,7 +199,7 @@ __API__ k_err_t tos_prio_mail_q_pend(k_prio_mail_q_t *prio_mail_q, void *mail_bu
 
 __STATIC__ void prio_mail_task_recv(k_task_t *task, void *mail_buf, size_t mail_size)
 {
-    task->mail = mail_buf;
+    memcpy(task->mail, mail_buf, mail_size);
     task->mail_size = mail_size;
     pend_task_wakeup(task, PEND_STATE_POST);
 }
