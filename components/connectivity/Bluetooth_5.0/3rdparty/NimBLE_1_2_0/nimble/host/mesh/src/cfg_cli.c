@@ -13,7 +13,7 @@
 #include "mesh/mesh.h"
 
 #include <string.h>
-#include <errno.h>
+#include "errno.h"
 #include <stdbool.h>
 
 #include "net.h"

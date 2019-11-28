@@ -7,7 +7,7 @@
  */
 
 #include <string.h>
-#include <errno.h>
+#include "errno.h"
 #include <stdbool.h>
 
 #include "mesh/mesh.h"

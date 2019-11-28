@@ -21,7 +21,7 @@
 #define _MESH_GLUE_
 
 #include <assert.h>
-#include <errno.h>
+#include "errno.h"
 
 #include "syscfg/syscfg.h"
 #include "nimble/nimble_npl.h"

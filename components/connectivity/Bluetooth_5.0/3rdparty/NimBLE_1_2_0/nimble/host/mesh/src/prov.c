@@ -8,7 +8,7 @@
 #include "syscfg/syscfg.h"
 #if MYNEWT_VAL(BLE_MESH_PROV)
 
-#include <errno.h>
+#include "errno.h"
 
 #define BT_DBG_ENABLED (MYNEWT_VAL(BLE_MESH_DEBUG_PROV))
 #include "host/ble_hs_log.h"

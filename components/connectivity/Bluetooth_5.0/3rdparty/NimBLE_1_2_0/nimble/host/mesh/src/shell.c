@@ -15,8 +15,8 @@
 
 #include <stdlib.h>
 #include <ctype.h>
-#include <errno.h>
-#include "shell/shell.h"
+#include "errno.h"
+#include "shell.h"
 #include "console/console.h"
 #include "mesh/mesh.h"
 #include "mesh/main.h"
@@ -43,10 +43,10 @@
 #define BLE_MESH_SHELL_TASK_PRIO 126
 #define BLE_MESH_SHELL_STACK_SIZE 768
 
-OS_TASK_STACK_DEFINE(g_blemesh_shell_stack, BLE_MESH_SHELL_STACK_SIZE);
+BLE_NPL_OS_TASK_STACK_DEFINE(g_blemesh_shell_stack, BLE_MESH_SHELL_STACK_SIZE);
 
-struct os_task mesh_shell_task;
-static struct os_eventq mesh_shell_queue;
+struct ble_npl_task mesh_shell_task;
+static struct ble_npl_eventq mesh_shell_queue;
 
 #define CID_NVAL   0xffff
 #define CID_VENDOR  0x05C3
@@ -2720,17 +2720,28 @@ static const struct shell_cmd mesh_commands[] = {
 
 static void mesh_shell_thread(void *args)
 {
+#if 0
 	while (1) {
 		os_eventq_run(&mesh_shell_queue);
 	}
+#else
+
+    struct ble_npl_event *ev;
+
+    while (1) {
+        ev = ble_npl_eventq_get(&mesh_shell_queue, BLE_NPL_TIME_FOREVER);
+        ble_npl_event_run(ev);
+    }
+
+#endif
 }
 
 static void bt_mesh_shell_task_init(void)
 {
-	os_eventq_init(&mesh_shell_queue);
+	npl_tencentos_tiny_eventq_init(&mesh_shell_queue);
 
-	os_task_init(&mesh_shell_task, "mesh_sh", mesh_shell_thread, NULL,
-		     BLE_MESH_SHELL_TASK_PRIO, OS_WAIT_FOREVER, g_blemesh_shell_stack,
+	ble_npl_task_init(&mesh_shell_task, "mesh_sh", mesh_shell_thread, NULL,
+		     BLE_MESH_SHELL_TASK_PRIO, BLE_NPL_TIME_FOREVER, g_blemesh_shell_stack,
 		     BLE_MESH_SHELL_STACK_SIZE);
 }
 #endif

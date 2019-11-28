@@ -71,6 +71,11 @@ ble_npl_time_t npl_tencentos_tiny_callout_get_ticks(struct ble_npl_callout *co);
 ble_npl_time_t npl_tencentos_tiny_callout_remaining_ticks(struct ble_npl_callout *co,
 						    ble_npl_time_t now);
 
+ble_npl_error_t
+npl_tencentos_tiny_task_init(struct ble_npl_task *task, char *name, ble_npl_task_entry_t entry,
+                                    void *arg, uint8_t prio, ble_npl_time_t sanity_itvl,
+                                    ble_npl_stack_t *stack_bottom, uint16_t stack_size);
+
 ble_npl_error_t npl_tencentos_tiny_time_ms_to_ticks(uint32_t ms,
                                               ble_npl_time_t *out_ticks);
 

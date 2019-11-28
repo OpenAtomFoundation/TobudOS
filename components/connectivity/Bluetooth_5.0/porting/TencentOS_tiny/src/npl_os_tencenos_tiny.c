@@ -225,6 +225,19 @@ os_callout_timer_cb(void *arg)
     }
 }
 
+ble_npl_error_t
+npl_tencentos_tiny_task_init(struct ble_npl_task *task, char *name, ble_npl_task_entry_t entry,
+                                    void *arg, uint8_t prio, ble_npl_time_t sanity_itvl,
+                                    ble_npl_stack_t *stack_bottom, uint16_t stack_size)
+{
+    k_err_t err;
+
+    err = tos_task_create(&task->handle, name, entry, arg, prio, stack_bottom, stack_size, 0);
+    assert(err == K_ERR_NONE);
+
+    return BLE_NPL_OK;
+}
+
 void
 npl_tencentos_tiny_callout_init(struct ble_npl_callout *co, struct ble_npl_eventq *evq,
                      ble_npl_event_fn *ev_cb, void *ev_arg)

@@ -8,7 +8,7 @@
 
 #include <string.h>
 #include <stdbool.h>
-#include <errno.h>
+#include "errno.h"
 
 #include <tinycrypt/constants.h>
 #include <tinycrypt/utils.h>

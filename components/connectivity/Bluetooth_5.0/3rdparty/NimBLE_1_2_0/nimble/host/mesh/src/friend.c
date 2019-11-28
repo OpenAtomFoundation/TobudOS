@@ -11,7 +11,7 @@
 #if MYNEWT_VAL(BLE_MESH_FRIEND)
 
 #include <stdint.h>
-#include <errno.h>
+#include "errno.h"
 #include <assert.h>
 
 #define BT_DBG_ENABLED (MYNEWT_VAL(BLE_MESH_DEBUG_FRIEND))

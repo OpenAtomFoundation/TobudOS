@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <errno.h>
+#include "errno.h"
 
 #include <os/os_mbuf.h>
 #include "mesh/mesh.h"

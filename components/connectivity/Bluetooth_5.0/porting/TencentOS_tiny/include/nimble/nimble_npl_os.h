@@ -34,13 +34,18 @@ extern "C" {
 #define _Static_assert(...)
 #endif
 
+/* This should be compatible with k_tick_t */
+typedef k_tick_t    ble_npl_time_t;
+typedef int64_t     ble_npl_stime_t;
+
+typedef void (*ble_npl_task_entry_t)(void *args);
+typedef k_stack_t   ble_npl_stack_t;
+
+#define BLE_NPL_OS_TASK_STACK_DEFINE(stk, size) ble_npl_stack_t stk[size]
+
 #define BLE_NPL_OS_ALIGNMENT    4
 
 #define BLE_NPL_TIME_FOREVER    TOS_TIME_FOREVER
-
-/* This should be compatible with k_tick_t */
-typedef uint64_t ble_npl_time_t;
-typedef int64_t ble_npl_stime_t;
 
 extern volatile int ble_npl_in_critical;
 
@@ -66,6 +71,10 @@ struct ble_npl_mutex {
 
 struct ble_npl_sem {
     k_sem_t handle;
+};
+
+struct ble_npl_task {
+    k_task_t handle;
 };
 
 /*
@@ -235,6 +244,14 @@ static inline void
 ble_npl_callout_set_arg(struct ble_npl_callout *co, void *arg)
 {
     co->ev.arg = arg;
+}
+
+static inline ble_npl_error_t
+ble_npl_task_init(struct ble_npl_task *task, char *name, ble_npl_task_entry_t entry,
+                                    void *arg, uint8_t prio, ble_npl_time_t sanity_itvl,
+                                    ble_npl_stack_t *stack_bottom, uint16_t stack_size)
+{
+    return npl_tencentos_tiny_task_init(task, name, entry, arg, prio, sanity_itvl, stack_bottom, stack_size);
 }
 
 static inline ble_npl_time_t
