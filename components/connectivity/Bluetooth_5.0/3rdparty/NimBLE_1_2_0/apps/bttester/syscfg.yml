@@ -1,0 +1,136 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+# Package: apps/blemesh
+
+syscfg.defs:
+    BTTESTER_PIPE_UART:
+        description: 'Set communication pipe to UART'
+        value: 1
+
+    BTTESTER_PIPE_RTT:
+        description: 'Set communication pipe to RTT'
+        value: 0
+
+    BTTESTER_RTT_BUFFER_NAME:
+        description: Bttester rtt pipe buffer name
+        value: '"bttester"'
+
+    BTTESTER_RTT_BUFFER_SIZE_UP:
+        description: Bttester upstream buffer size
+        value: 512
+
+    BTTESTER_RTT_BUFFER_SIZE_DOWN:
+        description: Bttester downstream buffer size
+        value: 512
+
+    BTTESTER_PRIVACY_MODE:
+        description: Enable privacy mode (RPA or NRPA)
+        value: 0
+
+    BTTESTER_USE_NRPA:
+        description: Use Non Resolvable Private Address
+        value: 0
+
+    BTTESTER_LTD_ADV_TIMEOUT:
+        description: Limited advertising timeout
+        value: 30000
+
+    BTTESTER_BTP_DATA_SIZE_MAX:
+        description: Maximum BTP payload
+        value: MYNEWT_VAL_BTTESTER_RTT_BUFFER_SIZE_UP
+
+    BTTESTER_CONN_PARAM_UPDATE:
+        description: Trigger conn param update after connection establish
+        value: 0
+
+    BTTESTER_DEBUG:
+        description: Enable debug logging
+        value: 1
+
+    BTTESTER_BTP_LOG:
+        description: Enable logging BTP traffic
+        value: 0
+
+syscfg.vals:
+    OS_MAIN_STACK_SIZE: 12444
+    SHELL_TASK: 1
+    SHELL_NEWTMGR: 0
+    LOG_LEVEL: 0
+    MSYS_1_BLOCK_COUNT: 48
+
+    BLE_MONITOR_RTT: 1
+    CONSOLE_RTT: 0
+    CONSOLE_UART: 1
+    RTT_NUM_BUFFERS_UP: 1
+    RTT_NUM_BUFFERS_DOWN: 1
+
+    BLE_L2CAP_COC_MAX_NUM: 2
+    # Some testcases require MPS < MTU
+    BLE_L2CAP_COC_MPS: 100
+    BLE_RPA_TIMEOUT: 30
+    BLE_SM_BONDING: 1
+    BLE_SM_MITM: 1
+    BLE_SM_SC: 1
+    BLE_SM_OUR_KEY_DIST: 7
+    BLE_SM_THEIR_KEY_DIST: 7
+    BLE_SVC_GAP_CENTRAL_ADDRESS_RESOLUTION: 1
+    BLE_SVC_GAP_PPCP_MIN_CONN_INTERVAL: 9
+    BLE_SVC_GAP_PPCP_MAX_CONN_INTERVAL: 30
+    BLE_SVC_GAP_PPCP_SUPERVISION_TMO: 2000
+
+    BLE_MESH: 1
+    BLE_MESH_SHELL: 0
+    BLE_MESH_PROV: 1
+    BLE_MESH_RELAY: 1
+    BLE_MESH_PB_ADV: 1
+    BLE_MESH_PB_GATT: 1
+    BLE_MESH_LOW_POWER: 1
+    BLE_MESH_LPN_AUTO: 0
+    BLE_MESH_GATT_PROXY: 1
+    BLE_MESH_LABEL_COUNT: 2
+    BLE_MESH_SUBNET_COUNT: 2
+    BLE_MESH_MODEL_GROUP_COUNT: 2
+    BLE_MESH_APP_KEY_COUNT: 4
+    BLE_MESH_IV_UPDATE_TEST: 1
+    BLE_MESH_TESTING: 1
+    BLE_MESH_FRIEND: 1
+    BLE_MESH_CFG_CLI: 1
+    BLE_MESH_RX_SDU_MAX: 110
+
+    BLE_MESH_ADV_BUF_COUNT: 20
+    BLE_MESH_TX_SEG_MAX: 6
+
+    BLE_MESH_DEBUG: 0
+    BLE_MESH_DEBUG_NET: 0
+    BLE_MESH_DEBUG_TRANS: 0
+    BLE_MESH_DEBUG_BEACON: 0
+    BLE_MESH_DEBUG_CRYPTO: 0
+    BLE_MESH_DEBUG_PROV: 0
+    BLE_MESH_DEBUG_ACCESS: 0
+    BLE_MESH_DEBUG_MODEL: 0
+    BLE_MESH_DEBUG_ADV: 0
+    BLE_MESH_DEBUG_LOW_POWER: 0
+    BLE_MESH_DEBUG_FRIEND: 0
+    BLE_MESH_DEBUG_PROXY: 0
+
+syscfg.vals.BTTESTER_PIPE_UART:
+    CONSOLE_UART: 0
+    CONSOLE_RTT: 1
+    RTT_TERMINAL_BUFFER_SIZE_UP: 8192
+

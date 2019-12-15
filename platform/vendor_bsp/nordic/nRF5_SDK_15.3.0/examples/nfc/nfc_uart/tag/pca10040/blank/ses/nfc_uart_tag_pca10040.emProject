@@ -1,0 +1,103 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="nfc_uart_tag_pca10040" target="8" version="2">
+  <project Name="nfc_uart_tag_pca10040">
+    <configuration
+      Name="Common"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M4"
+      arm_endian="Little"
+      arm_fp_abi="Hard"
+      arm_fpu_type="FPv4-SP-D16"
+      arm_linker_heap_size="8192"
+      arm_linker_process_stack_size="0"
+      arm_linker_stack_size="8192"
+      arm_linker_treat_warnings_as_errors="No"
+      arm_simulator_memory_simulation_parameter="RWX 00000000,00100000,FFFFFFFF;RWX 20000000,00010000,CDCDCDCD"
+      arm_target_device_name="nRF52832_xxAA"
+      arm_target_interface_type="SWD"
+      c_user_include_directories="../../../config;../../../../../../../components;../../../../../../../components/boards;../../../../../../../components/drivers_nrf/nrf_soc_nosd;../../../../../../../components/libraries/atomic;../../../../../../../components/libraries/balloc;../../../../../../../components/libraries/bsp;../../../../../../../components/libraries/delay;../../../../../../../components/libraries/experimental_section_vars;../../../../../../../components/libraries/fifo;../../../../../../../components/libraries/hardfault;../../../../../../../components/libraries/hardfault/nrf52;../../../../../../../components/libraries/log;../../../../../../../components/libraries/log/src;../../../../../../../components/libraries/memobj;../../../../../../../components/libraries/ringbuf;../../../../../../../components/libraries/strerror;../../../../../../../components/libraries/uart;../../../../../../../components/libraries/util;../../../../../../../components/nfc/platform;../../../../../../../components/nfc/t4t_lib;../../../../../../../components/toolchain/cmsis/include;../../..;../../../../../../../external/fprintf;../../../../../../../external/segger_rtt;../../../../../../../integration/nrfx;../../../../../../../integration/nrfx/legacy;../../../../../../../modules/nrfx;../../../../../../../modules/nrfx/drivers/include;../../../../../../../modules/nrfx/hal;../../../../../../../modules/nrfx/mdk;../config;"
+      c_preprocessor_definitions="BOARD_PCA10040;BSP_DEFINES_ONLY;CONFIG_GPIO_AS_PINRESET;FLOAT_ABI_HARD;INITIALIZE_USER_SECTIONS;NO_VTOR_CONFIG;NRF52;NRF52832_XXAA;NRF52_PAN_74;"
+      debug_target_connection="J-Link"
+      gcc_entry_point="Reset_Handler"
+      macros="CMSIS_CONFIG_TOOL=../../../../../../../external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar"
+      debug_register_definition_file="../../../../../../../modules/nrfx/mdk/nrf52.svd"
+      debug_start_from_entry_point_symbol="No"
+      gcc_debugging_level="Level 3"      linker_output_format="hex"
+      linker_printf_width_precision_supported="Yes"
+      linker_printf_fmt_level="long"
+      linker_scanf_fmt_level="long"
+      linker_section_placement_file="flash_placement.xml"
+      linker_section_placement_macros="FLASH_PH_START=0x0;FLASH_PH_SIZE=0x80000;RAM_PH_START=0x20000000;RAM_PH_SIZE=0x10000;FLASH_START=0x0;FLASH_SIZE=0x80000;RAM_START=0x20000000;RAM_SIZE=0x10000"
+      linker_section_placements_segments="FLASH RX 0x0 0x80000;RAM RWX 0x20000000 0x10000"
+      project_directory=""
+      project_type="Executable" />
+      <folder Name="Segger Startup Files">
+        <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+      </folder>
+    <folder Name="nRF_Log">
+      <file file_name="../../../../../../../components/libraries/log/src/nrf_log_backend_rtt.c" />
+      <file file_name="../../../../../../../components/libraries/log/src/nrf_log_backend_serial.c" />
+      <file file_name="../../../../../../../components/libraries/log/src/nrf_log_default_backends.c" />
+      <file file_name="../../../../../../../components/libraries/log/src/nrf_log_frontend.c" />
+      <file file_name="../../../../../../../components/libraries/log/src/nrf_log_str_formatter.c" />
+    </folder>
+    <folder Name="Board Definition">
+      <file file_name="../../../../../../../components/boards/boards.c" />
+    </folder>
+    <folder Name="nRF_Libraries">
+      <file file_name="../../../../../../../components/libraries/util/app_error.c" />
+      <file file_name="../../../../../../../components/libraries/util/app_error_handler_gcc.c" />
+      <file file_name="../../../../../../../components/libraries/util/app_error_weak.c" />
+      <file file_name="../../../../../../../components/libraries/fifo/app_fifo.c" />
+      <file file_name="../../../../../../../components/libraries/uart/app_uart_fifo.c" />
+      <file file_name="../../../../../../../components/libraries/util/app_util_platform.c" />
+      <file file_name="../../../../../../../components/libraries/hardfault/nrf52/handler/hardfault_handler_gcc.c" />
+      <file file_name="../../../../../../../components/libraries/hardfault/hardfault_implementation.c" />
+      <file file_name="../../../../../../../components/libraries/util/nrf_assert.c" />
+      <file file_name="../../../../../../../components/libraries/atomic/nrf_atomic.c" />
+      <file file_name="../../../../../../../components/libraries/balloc/nrf_balloc.c" />
+      <file file_name="../../../../../../../external/fprintf/nrf_fprintf.c" />
+      <file file_name="../../../../../../../external/fprintf/nrf_fprintf_format.c" />
+      <file file_name="../../../../../../../components/libraries/memobj/nrf_memobj.c" />
+      <file file_name="../../../../../../../components/libraries/ringbuf/nrf_ringbuf.c" />
+      <file file_name="../../../../../../../components/libraries/strerror/nrf_strerror.c" />
+    </folder>
+    <folder Name="nRF_Drivers">
+      <file file_name="../../../../../../../integration/nrfx/legacy/nrf_drv_clock.c" />
+      <file file_name="../../../../../../../integration/nrfx/legacy/nrf_drv_uart.c" />
+      <file file_name="../../../../../../../components/drivers_nrf/nrf_soc_nosd/nrf_nvic.c" />
+      <file file_name="../../../../../../../components/drivers_nrf/nrf_soc_nosd/nrf_soc.c" />
+      <file file_name="../../../../../../../modules/nrfx/soc/nrfx_atomic.c" />
+      <file file_name="../../../../../../../modules/nrfx/drivers/src/nrfx_clock.c" />
+      <file file_name="../../../../../../../modules/nrfx/drivers/src/nrfx_nfct.c" />
+      <file file_name="../../../../../../../modules/nrfx/drivers/src/prs/nrfx_prs.c" />
+      <file file_name="../../../../../../../modules/nrfx/drivers/src/nrfx_timer.c" />
+      <file file_name="../../../../../../../modules/nrfx/drivers/src/nrfx_uart.c" />
+      <file file_name="../../../../../../../modules/nrfx/drivers/src/nrfx_uarte.c" />
+    </folder>
+    <folder Name="Application">
+      <file file_name="../../../main.c" />
+      <file file_name="../config/sdk_config.h" />
+    </folder>
+    <folder Name="nRF_Segger_RTT">
+      <file file_name="../../../../../../../external/segger_rtt/SEGGER_RTT.c" />
+      <file file_name="../../../../../../../external/segger_rtt/SEGGER_RTT_Syscalls_SES.c" />
+      <file file_name="../../../../../../../external/segger_rtt/SEGGER_RTT_printf.c" />
+    </folder>
+    <folder Name="None">
+      <file file_name="../../../../../../../modules/nrfx/mdk/ses_startup_nrf52.s" />
+      <file file_name="../../../../../../../modules/nrfx/mdk/ses_startup_nrf_common.s" />
+      <file file_name="../../../../../../../modules/nrfx/mdk/system_nrf52.c" />
+    </folder>
+    <folder Name="nRF_NFC">
+      <file file_name="../../../../../../../components/nfc/platform/nfc_platform.c" />
+      <file file_name="../../../../../../../components/nfc/t4t_lib/nfc_t4t_lib_gcc.a" />
+    </folder>
+  </project>
+  <configuration Name="Release"
+    c_preprocessor_definitions="NDEBUG"
+    gcc_optimization_level="Optimize For Size" />
+  <configuration Name="Debug"
+    c_preprocessor_definitions="DEBUG; DEBUG_NRF"
+    gcc_optimization_level="None"/>
+</solution>

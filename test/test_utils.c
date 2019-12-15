@@ -8,9 +8,10 @@ k_err_t test_err = K_ERR_NONE;
 
 test_context_t test_context = TEST_CONTEXT_NONE;
 
-void *test_msg_addr = K_NULL;
+void *test_msg = K_NULL;
 
-size_t test_msg_size = 0;
+test_mail_t test_mail;
+size_t test_mail_size = 0;
 
 k_event_flag_t test_event_match = 0;
 
@@ -26,14 +27,25 @@ void test_event_set(k_event_flag_t event_match)
 
 void test_msg_reset(void)
 {
-    test_msg_addr = K_NULL;
-    test_msg_size = 0;
+    test_msg = K_NULL;
 }
 
-void test_msg_set(void *msg_addr, size_t msg_size)
+void test_msg_set(void *msg)
 {
-    test_msg_addr = msg_addr;
-    test_msg_size = msg_size;
+    test_msg = msg;
+}
+
+void test_mail_reset(void)
+{
+    test_mail.a = 0;
+    test_mail.b = K_NULL;
+    test_mail.c = 'X';
+}
+
+void test_mail_set(void *mail, size_t mail_size)
+{
+    memcpy(&test_mail, mail, sizeof(test_mail_t));
+    test_mail_size = mail_size;
 }
 
 void test_err_reset(void)

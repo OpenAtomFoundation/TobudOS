@@ -1,0 +1,5 @@
+# Dummy NPL build
+*.o
+/porting/examples/dummy/dummy
+/porting/examples/linux/nimble-linux
+/porting/examples/linux_blemesh/nimble-linux-blemesh

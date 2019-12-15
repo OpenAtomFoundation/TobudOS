@@ -25,11 +25,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Inc</name>
-			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/Inc</locationURI>
-		</link>
-		<link>
 			<name>Src</name>
 			<type>2</type>
 			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/Src</locationURI>
@@ -57,7 +52,28 @@
 		<link>
 			<name>TencentOS_tiny/arch/risc-v</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/arch/risc-v</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>TencentOS_tiny/arch/risc-v/common</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/arch/risc-v/common</locationURI>
+		</link>
+		<link>
+			<name>TencentOS_tiny/arch/risc-v/rv32i</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/arch/risc-v/rv32i</locationURI>
+		</link>
+		<link>
+			<name>TencentOS_tiny/arch/risc-v/spike</name>
+			<type>2</type>
+			<locationURI>TOP_DIR/arch/risc-v/spike/gcc</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>TOP_DIR</name>
+			<value>$%7BPARENT-4-PROJECT_LOC%7D</value>
+		</variable>
+	</variableList>
 </projectDescription>

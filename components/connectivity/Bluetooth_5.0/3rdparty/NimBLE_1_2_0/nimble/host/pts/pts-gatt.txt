@@ -1,0 +1,530 @@
+PTS test results for GATT
+
+PTS version: 7.0
+Tested: 18-Jul-2017
+
+Results:
+PASS	test passed
+FAIL	test failed
+INC	test is inconclusive
+N/A	test is disabled due to PICS setup
+
+-------------------------------------------------------------------------------
+Test Name		Result	Notes
+-------------------------------------------------------------------------------
+GATT/CL/GAC/BV-01-C	PASS	b conn peer_addr=<addr>
+				b mtu conn=<handle>
+				b write conn=<handle> long=1 attr=<val_handle> value=<xx:...>
+				b term conn=<handle>
+-------------------------------------------------------------------------------
+
+GATT/CL/GAD/BV-01-C	PASS	b conn peer_addr=<addr>
+				b disc svc conn=<handle>
+				b show chr
+				<answer YES>
+				b term conn=<handle>
+				<repeat>
+GATT/CL/GAD/BV-02-C	PASS	b conn peer_addr=<addr>
+				b disc svc conn=<handle> uuid=<uuid>
+				b show chr
+				<answer YES>
+				b term conn=<handle>
+				<repeat>
+GATT/CL/GAD/BV-03-C	PASS	b conn peer_addr=<addr>
+				b find inc_svcs conn=<handle> start=1 end=0xffff
+				<answer YES>
+				b term conn=<handle>
+				<repeat>
+GATT/CL/GAD/BV-04-C	PASS	b conn peer_addr=<addr>
+				b disc svc conn=<handle> uuid=<uuid>
+				b disc chr conn=<handle> start=<start hdl> end=<end hdl>
+				b show chr
+				<answer YES>
+				b term conn=<handle>
+				<repeat>
+GATT/CL/GAD/BV-05-C	PASS	b conn peer_addr=<addr>
+				b disc svc conn=<handle>
+				b disc chr conn=<handle> uuid=<uuid> start=<start hdl> end=<end hdl>
+				b show chr
+				<answer YES>
+				b term conn=<handle>
+				<repeat>
+GATT/CL/GAD/BV-06-C	PASS	b conn peer_addr=<addr>
+				b disc svc conn=<handle>
+				b disc chr conn=<handle> start=<start-hdl> end=<end-hdl>
+				b disc dsc conn=<handle> start=<start-hdl> end=<end-hdl>
+				<answer YES>
+				b term conn=<handle>
+				<repeat>
+GATT/CL/GAD/BV-07-C	N/A
+GATT/CL/GAD/BV-08-C	N/A
+-------------------------------------------------------------------------------
+
+GATT/CL/GAR/BV-01-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-01-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-02-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-03-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-04-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-05-C	PASS    b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BV-03-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> uuid=<uuid> start=1 end=0xffff
+				<answer YES>
+				<repeat>
+				b term conn=<handle>
+GATT/CL/GAR/BI-06-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> uuid=<uuid> start=<start hdl> end=<end hdl>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-07-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> uuid=<uuid> start=<start hdl> end=<end hdl>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-09-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> uuid=<uuid> start=<start hdl> end=<end hdl>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-10-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> uuid=<uuid> start=<start hdl> end=<end hdl>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-11-C	PASS    b conn perr_addr=<addr>
+				b read conn=<handle> start=<start_hdl> end=<end_hdl>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BV-04-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				<repeat>
+				b term conn=<handle>
+GATT/CL/GAR/BI-12-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-13-C	PASS	b conn_peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle> offset=<offset>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-14-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-15-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-16-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-17-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BV-05-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle1> attr=<val_handle2>
+				b term conn=<handle>
+GATT/CL/GAR/BI-18-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle1> attr=<val_handle2>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-19-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle1> attr=<val_handle2>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-20-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle1> attr=<val_handle2>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-21-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle1> attr=<val_handle2>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-22-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle1> attr=<val_handle2>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BV-06-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-23-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-24-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-25-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-26-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-27-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BV-07-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				<repeat>
+				b term conn=<handle>
+GATT/CL/GAR/BI-28-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-29-C	PASS	b conn_peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle> offset=<offset>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-30-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-31-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-32-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				b term conn=<handle>
+				<answer YES>
+GATT/CL/GAR/BI-33-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+GATT/CL/GAR/BI-34-C	N/A
+GATT/CL/GAR/BI-35-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> long=1 attr=<val_handle>
+				<answer YES>
+				b term conn=<handle>
+-------------------------------------------------------------------------------
+
+GATT/CL/GAW/BV-01-C	PASS	b conn peer_addr=<addr>
+				b write no_rsp=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BV-02-C	N/A
+GATT/CL/GAW/BV-03-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-02-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-03-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-04-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-05-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-06-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BV-05-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-07-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-08-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-09-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val> offset=<offset>
+				b term conn=1
+GATT/CL/GAW/BI-11-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-12-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-13-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BV-06-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-14-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-15-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-17-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-18-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-19-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BV-08-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-20-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-21-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-22-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-23-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-24-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BV-09-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-25-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-26-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-27-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val> offset=<offset>
+				b term conn=1
+GATT/CL/GAW/BI-29-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-30-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-31-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=aa
+				b term conn=<handle>
+GATT/CL/GAW/BI-32-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val> attr=<val_handle> value=<val>
+GATT/CL/GAW/BI-33-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-34-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-35-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+GATT/CL/GAW/BI-36-C	PASS	b conn peer_addr=<addr>
+				b write long=1 conn=<handle> attr=<val_handle> value=<val>
+				b term conn=<handle>
+-------------------------------------------------------------------------------
+
+GATT/CL/GAN/BV-01-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=01:00
+				Note: verify that the notification was received
+				b term conn=<handle>
+-------------------------------------------------------------------------------
+
+GATT/CL/GAI/BV-01-C	PASS	b adv
+                                b chrup attr=<val_handle>
+-------------------------------------------------------------------------------
+
+GATT/CL/GAS/BV-01-C	PASS	b conn peer_addr=<addr>
+				b term conn=<handle>
+-------------------------------------------------------------------------------
+
+GATT/CL/GAT/BV-01-C	PASS	b conn peer_addr=<addr>
+				b read conn=<handle> attr=<val_handle>
+GATT/CL/GAT/BV-02-C	PASS	b conn peer_addr=<addr>
+				b write conn=<handle> attr=<val_handle> value=<val>
+-------------------------------------------------------------------------------
+
+GATT/CL/GPA/BV-01-C	N/A
+GATT/CL/GPA/BV-02-C	N/A
+GATT/CL/GPA/BV-03-C	N/A
+GATT/CL/GPA/BV-04-C	N/A
+GATT/CL/GPA/BV-05-C	N/A
+GATT/CL/GPA/BV-06-C	N/A
+GATT/CL/GPA/BV-07-C	N/A
+GATT/CL/GPA/BV-08-C	N/A
+GATT/CL/GPA/BV-11-C	N/A
+GATT/CL/GPA/BV-12-C	N/A
+-------------------------------------------------------------------------------
+
+GATT/SR/GAC/BV-01-C	PASS	b set mtu=25
+				b adv
+				b adv
+-------------------------------------------------------------------------------
+
+GATT/SR/GAD/BV-01-C	PASS	b adv
+GATT/SR/GAD/BV-02-C	PASS	b adv
+GATT/SR/GAD/BV-03-C	PASS	b adv
+GATT/SR/GAD/BV-04-C	PASS	b adv
+				<confirm handles range for services>
+GATT/SR/GAD/BV-05-C	PASS	b adv
+GATT/SR/GAD/BV-06-C	PASS	b adv
+GATT/SR/GAD/BV-07-C	N/A
+GATT/SR/GAD/BV-08-C	N/A
+-------------------------------------------------------------------------------
+
+GATT/SR/GAR/BV-01-C	PASS	b adv
+GATT/SR/GAR/BI-01-C	PASS	b adv
+GATT/SR/GAR/BI-02-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAR/BI-03-C	N/A
+GATT/SR/GAR/BI-04-C	PASS	b adv
+GATT/SR/GAR/BI-05-C	PASS	b adv
+GATT/SR/GAR/BV-03-C	PASS	b adv
+GATT/SR/GAR/BI-06-C	PASS	b adv
+				<enter uuid without READ flag>
+				<enter value handle>
+GATT/SR/GAR/BI-07-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAR/BI-08-C	PASS	b adv
+GATT/SR/GAR/BI-09-C	N/A
+GATT/SR/GAR/BI-10-C	PASS	b adv
+				<enter characteristic with READ|READ_AUTH flags>
+GATT/SR/GAR/BI-11-C	PASS	b adv
+				<enter characteristic wit READ|READ_ENC flags>
+GATT/SR/GAR/BV-04-C	PASS	b adv
+GATT/SR/GAR/BI-12-C	PASS	b adv
+				<enter long value handle without READ flag>
+GATT/SR/GAR/BI-13-C	PASS	b adv
+GATT/SR/GAR/BI-14-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAR/BI-15-C	N/A
+GATT/SR/GAR/BI-16-C	PASS	b adv
+GATT/SR/GAR/BI-17-C	PASS	b adv
+GATT/SR/GAR/BV-05-C	PASS	b adv
+GATT/SR/GAR/BI-18-C	PASS	b adv
+				<enter value handle without READ flag>
+GATT/SR/GAR/BI-19-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAR/BI-20-C	N/A
+GATT/SR/GAR/BI-21-C	PASS	b adv
+GATT/SR/GAR/BI-22-C	PASS	b adv
+GATT/SR/GAR/BV-06-C	PASS	b adv
+GATT/SR/GAR/BI-23-C	PASS	b adv
+				<enter value handle without READ flag>
+GATT/SR/GAR/BI-24-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAR/BI-25-C	N/A
+GATT/SR/GAR/BI-26-C	PASS	b adv
+GATT/SR/GAR/BI-27-C	PASS	b adv
+GATT/SR/GAR/BV-07-C	PASS	b adv
+GATT/SR/GAR/BV-08-C	PASS	b adv
+GATT/SR/GAR/BI-28-C	PASS	b adv
+				<enter desc value handle without READ flag>
+GATT/SR/GAR/BI-29-C	PASS	b adv
+GATT/SR/GAR/BI-30-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAR/BI-31-C	N/A
+GATT/SR/GAR/BI-32-C	PASS	b adv
+GATT/SR/GAR/BI-33-C	PASS	b adv
+GATT/SR/GAR/BI-34-C	N/A
+GATT/SR/GAR/BI-35-C	N/A
+-------------------------------------------------------------------------------
+
+GATT/SR/GAW/BV-01-C	PASS	b adv
+GATT/SR/GAW/BV-02-C	N/A
+GATT/SR/GAW/BI-01-C	N/A
+GATT/SR/GAW/BV-03-C	PASS	b adv
+GATT/SR/GAW/BI-02-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAW/BI-03-C	PASS	b adv
+GATT/SR/GAW/BI-04-C	N/A
+GATT/SR/GAW/BI-05-C	PASS	b adv
+GATT/SR/GAW/BI-06-C	PASS	b adv
+GATT/SR/GAW/BV-05-C	PASS	b adv
+GATT/SR/GAW/BI-07-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAW/BI-08-C	PASS	b adv
+				<enter long value handle without WRITE flag>
+GATT/SR/GAW/BI-09-C	PASS	b adv
+GATT/SR/GAW/BI-11-C	N/A
+GATT/SR/GAW/BI-12-C	PASS	b adv
+GATT/SR/GAW/BI-13-C	PASS	b adv
+GATT/SR/GAW/BV-06-C	PASS	b adv
+GATT/SR/GAW/BV-10-C	PASS	b adv
+GATT/SR/GAW/BI-14-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAW/BI-15-C	PASS	b adv
+				<enter value handle without WRITE flag>
+GATT/SR/GAW/BI-17-C	N/A
+GATT/SR/GAW/BI-18-C	PASS	b adv
+GATT/SR/GAW/BI-19-C	PASS	b adv
+GATT/SR/GAW/BV-11-C	PASS	b adv
+GATT/SR/GAW/BV-07-C	PASS	b adv
+GATT/SR/GAW/BV-08-C	INCONC	b adv   Errata 15358
+GATT/SR/GAW/BI-20-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAW/BI-21-C	PASS	b adv
+				<enter dsc value handle without WRITE flag>
+GATT/SR/GAW/BI-22-C	N/A
+GATT/SR/GAW/BI-23-C	PASS	b adv
+GATT/SR/GAW/BI-24-C	PASS	b adv
+GATT/SR/GAW/BV-09-C	PASS	b adv
+GATT/SR/GAW/BI-25-C	PASS	b adv
+				<enter ffff>
+GATT/SR/GAW/BI-26-C	PASS	b adv
+				<enter dsc value handle without WRITE flag>
+GATT/SR/GAW/BI-27-C	PASS	b adv
+GATT/SR/GAW/BI-29-C	N/A
+GATT/SR/GAW/BI-30-C	PASS	b adv
+GATT/SR/GAW/BI-31-C	PASS	b adv
+GATT/SR/GAW/BI-32-C	PASS	b adv
+GATT/SR/GAW/BI-33-C	PASS	b adv
+GATT/SR/GAW/BI-34-C	PASS	b adv
+GATT/SR/GAW/BI-35-C	PASS	b adv
+-------------------------------------------------------------------------------
+
+GATT/SR/GAN/BV-01-C	PASS	b adv
+				b chrup attr=<val_handle>
+-------------------------------------------------------------------------------
+
+GATT/SR/GAI/BV-01-C	PASS	b adv
+				b write conn=<handle> value=02:00 attr=<val_handle>
+-------------------------------------------------------------------------------
+
+GATT/SR/GAS/BV-01-C	PASS	Note: set TSPX_security_enabled to TRUE
+				b set sm_data bonding=1 our_key_dist=7 their_key_dist=7
+				b adv
+				<click OK>
+				b svcchg start=1 end=0xffff
+				b adv
+				b sec start conn=<handle>
+-------------------------------------------------------------------------------
+
+GATT/SR/GAT/BV-01-C	PASS	b adv
+				b chrup attr=<val_handle>
+-------------------------------------------------------------------------------
+
+GATT/SR/GPA/BV-01-C	N/A
+GATT/SR/GPA/BV-02-C	N/A
+GATT/SR/GPA/BV-03-C	N/A
+GATT/SR/GPA/BV-04-C	N/A
+GATT/SR/GPA/BV-05-C	N/A
+GATT/SR/GPA/BV-06-C	N/A
+GATT/SR/GPA/BV-07-C	N/A
+GATT/SR/GPA/BV-08-C	N/A
+GATT/SR/GPA/BV-11-C	N/A
+GATT/SR/GPA/BV-12-C	N/A
+-------------------------------------------------------------------------------

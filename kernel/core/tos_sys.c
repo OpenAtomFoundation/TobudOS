@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include <tos.h>
 
 __API__ k_err_t tos_knl_init(void)
@@ -9,11 +26,14 @@ __API__ k_err_t tos_knl_init(void)
     readyqueue_init();
 
 #if TOS_CFG_MMHEAP_EN > 0
-    mmheap_init(k_mmheap_pool, TOS_CFG_MMHEAP_POOL_SIZE);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+    err = mmheap_init_with_pool(k_mmheap_default_pool, TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE);
+#else
+    err = mmheap_init();
 #endif
-
-#if (TOS_CFG_MSG_EN) > 0
-    msgpool_init();
+    if (err != K_ERR_NONE) {
+        return err;
+    }
 #endif
 
     err = knl_idle_init();
@@ -132,7 +152,7 @@ __API__ k_err_t tos_knl_sched_unlock(void)
 
 __API__ k_err_t tos_knl_start(void)
 {
-    if (tos_knl_is_running()) {
+    if (unlikely(tos_knl_is_running())) {
         return K_ERR_KNL_RUNNING;
     }
 
@@ -178,27 +198,13 @@ __KERNEL__ k_tick_t knl_next_expires_get(void)
 
 #endif
 
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-__KERNEL__ int knl_object_verify(knl_obj_t *object, knl_obj_type_t type)
-{
-    return object->type == type;
-}
-
-__KERNEL__ int knl_object_init(knl_obj_t *object, knl_obj_type_t type)
-{
-    return object->type = type;
-}
-
-__KERNEL__ int knl_object_deinit(knl_obj_t *object)
-{
-    return object->type = KNL_OBJ_TYPE_NONE;
-}
-#endif
-
 __KERNEL__ void knl_sched(void)
 {
     TOS_CPU_CPSR_ALLOC();
+
+    if (unlikely(!tos_knl_is_running())) {
+        return;
+    }
 
     if (knl_is_inirq()) {
         return;
@@ -244,6 +250,10 @@ __STATIC__ void knl_idle_entry(void *arg)
     arg = arg; // make compiler happy
 
     while (K_TRUE) {
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+        task_free_all();
+#endif
+
 #if TOS_CFG_PWR_MGR_EN > 0u
         pm_power_manager();
 #endif

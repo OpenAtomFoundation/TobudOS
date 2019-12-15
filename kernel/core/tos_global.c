@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include <tos.h>
 
 k_nesting_t         k_irq_nest_cnt              = (k_nesting_t)0;
@@ -19,6 +36,12 @@ k_tick_t            k_cpu_tick_per_second       = TOS_CFG_CPU_TICK_PER_SECOND;
 
 k_cycle_t           k_cpu_cycle_per_tick        = (k_cycle_t)0u;
 
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+TOS_LIST_DEFINE(k_dead_task_list);
+#endif
+
+TOS_LIST_DEFINE(k_stat_list);
+
 TOS_LIST_DEFINE(k_tick_list);
 
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
@@ -26,13 +49,14 @@ k_fault_log_writer_t    k_fault_log_writer = fault_default_log_writer;
 #endif
 
 #if TOS_CFG_MMHEAP_EN > 0u
-uint8_t             k_mmheap_pool[TOS_CFG_MMHEAP_POOL_SIZE] __ALIGNED__(4);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+uint8_t             k_mmheap_default_pool[TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE] __ALIGNED__(4);
+#endif
 k_mmheap_ctl_t      k_mmheap_ctl;
 #endif
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 k_timeslice_t       k_robin_default_timeslice       = TOS_CFG_CPU_TICK_PER_SECOND / 10;
-k_robin_state_t     k_robin_state                   = TOS_ROBIN_STATE_DISABLED;
 #endif
 
 #if TOS_CFG_TIMER_EN > 0u
@@ -46,11 +70,6 @@ k_stack_t          *const k_timer_task_stk_addr     = &k_timer_task_stk[0];
 size_t              const k_timer_task_stk_size     = TOS_CFG_TIMER_TASK_STK_SIZE;
 #endif /* TOS_CFG_TIMER_AS_PROC == 0u */
 
-#endif
-
-#if TOS_CFG_MSG_EN > 0u
-TOS_LIST_DEFINE(k_msg_freelist);
-k_msg_t             k_msg_pool[TOS_CFG_MSG_POOL_SIZE];
 #endif
 
 #if TOS_CFG_PWR_MGR_EN > 0u

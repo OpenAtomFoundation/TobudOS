@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056\iar\crypto_test_app_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\iar\crypto_test_app_pca10040.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_noint\iar\crypto_test_app_pca10056_noint.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_optiga\iar\crypto_test_app_pca10056_optiga.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040_optiga\iar\crypto_test_app_pca10040_optiga.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_cc310_bl\iar\crypto_test_app_pca10056_cc310_bl.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_cc310_bl_noint\iar\crypto_test_app_pca10056_cc310_bl_noint.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

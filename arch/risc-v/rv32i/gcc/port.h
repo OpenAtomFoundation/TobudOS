@@ -18,6 +18,8 @@
 #ifndef _PORT_H_
 #define _PORT_H_
 
+#ifndef __ASSEMBLER__
+
 __PORT__ void       port_int_disable(void);
 
 __PORT__ void       port_int_enable(void);
@@ -37,6 +39,14 @@ __PORT__ void       port_irq_context_switch(void);
 __PORT__ void       port_systick_config(uint32_t cycle_per_tick);
 
 __PORT__ void       port_systick_priority_set(uint32_t prio);
+
+
+__PORT__ void       port_cpu_init();
+
+__PORT__ void       port_systick_priority_set(uint32_t priority);
+
+__PORT__ void*      port_get_irq_vector_table();
+
 
 #if TOS_CFG_TICKLESS_EN > 0u
 
@@ -68,5 +78,10 @@ __PORT__ void       HardFault_Handler(void);
 
 __PORT__ void       port_fault_diagnosis(void);
 #endif
+
+#endif /* __ASSEMBLER__ */
+
+
+#define REGBYTES    4
 
 #endif /* _PORT_H_ */

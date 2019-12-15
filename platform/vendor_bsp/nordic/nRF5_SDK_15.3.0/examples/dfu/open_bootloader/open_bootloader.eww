@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056_usb\iar\open_bootloader_usb_mbr_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10059_usb\iar\open_bootloader_usb_mbr_pca10059.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10059_usb_debug\iar\open_bootloader_usb_mbr_pca10059_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_usb_debug\iar\open_bootloader_usb_mbr_pca10056_debug.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include <tos.h>
 
 #if TOS_CFG_MMBLK_EN > 0u
@@ -44,12 +61,7 @@ __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, siz
 __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp)
 {
     TOS_PTR_SANITY_CHECK(mbp);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&mbp->knl_obj, KNL_OBJ_TYPE_MMBLK_POOL)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
 
     mbp->pool_start = K_NULL;
     mbp->free_list  = K_NULL;
@@ -69,12 +81,7 @@ __API__ k_err_t tos_mmblk_alloc(k_mmblk_pool_t *mbp, void **blk)
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(mbp);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&mbp->knl_obj, KNL_OBJ_TYPE_MMBLK_POOL)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
 
     TOS_CPU_INT_DISABLE();
     if (mbp->blk_free == 0) {
@@ -95,12 +102,7 @@ __API__ k_err_t tos_mmblk_free(k_mmblk_pool_t *mbp, void *blk)
 
     TOS_PTR_SANITY_CHECK(mbp);
     TOS_PTR_SANITY_CHECK(blk);
-
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    if (!knl_object_verify(&mbp->knl_obj, KNL_OBJ_TYPE_MMBLK_POOL)) {
-        return K_ERR_OBJ_INVALID;
-    }
-#endif
+    TOS_OBJ_VERIFY(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
 
     TOS_CPU_INT_DISABLE();
     if (mbp->blk_free >= mbp->blk_max) {

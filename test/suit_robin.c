@@ -5,6 +5,8 @@
 #include "test/test.h"
 #include "greatest/greatest.h"
 
+#if TOS_CFG_ROUND_ROBIN_EN > 0u
+
 SUITE(suit_robin);
 
 static const k_timeslice_t test_robin_timeslice_00 = 10;
@@ -34,7 +36,7 @@ TEST test_robin(void)
     int test_count = 0;
     const double deviation = 0.1;
 
-    tos_robin_config(TOS_ROBIN_STATE_ENABLED, (k_timeslice_t)500u);
+    tos_robin_default_timeslice_config((k_timeslice_t)500u);
     err = tos_task_create(&test_task_00, "test_task_00", test_robin_task_00_entry,
                             NULL, k_curr_task->prio + 1,
                             test_task_stack_00, sizeof(test_task_stack_00),
@@ -71,4 +73,6 @@ SUITE(suit_robin)
 {
     RUN_TEST(test_robin);
 }
+
+#endif
 

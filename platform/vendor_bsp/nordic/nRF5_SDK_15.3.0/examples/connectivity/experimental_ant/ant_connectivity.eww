@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10040\ser_s212_uart\iar\ant_connectivity_s212_uart_pca10040.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\d52_starterkit\ser_s212_uart\iar\ant_connectivity_s212_uart_d52_starterkit.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

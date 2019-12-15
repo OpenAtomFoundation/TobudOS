@@ -1,13 +1,20 @@
-﻿# 一、TencentOS Tiny 简介
+﻿
+![](./doc/image/introduction/TencentOS_tiny_log.png)
 
-![](./doc/picture/introduction/TencentOS_tiny_log.png)
+[![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/TencentOS-tiny/pulls)
+[![Build status](https://travis-ci.org/Tencent/TencentOS-tiny.svg?branch=master)](https://travis-ci.org/Tencent/TencentOS-tiny)
+
+[(English Documents Available)](README_en.md)
+
+# 一、TencentOS Tiny 简介
 
 [TencentOS tiny](https://cloud.tencent.com/product/tos-tiny)是腾讯面向物联网领域开发的实时操作系统，具有低功耗，低资源占用，模块化，安全可靠等特点，可有效提升物联网终端产品开发效率。TencentOS tiny 提供精简的 RTOS 内核，内核组件可裁剪可配置，可快速移植到多种主流 MCU (如STM32全系列)及模组芯片上。而且，基于RTOS内核提供了丰富的物联网组件，内部集成主流物联网协议栈（如 CoAP/MQTT/TLS/DTLS/LoRaWAN/NB-IoT 等），可助力物联网终端设备及业务快速接入腾讯云物联网平台。
 
 
 ## 1、TencentOS tiny整体架构
 
-![](./doc/picture/introduction/TencentOS_tiny_Architecture.png)
+![](./doc/image/introduction/TencentOS_tiny_Architecture.png)
 TencentOS tiny 主体架构图，从下到上主要包括：
 
 **CPU 库** ：TencentOS tiny 支持的 CPU IP 核架构，当前主要支持 ARM Cortex M0/3/4/7。
@@ -51,23 +58,25 @@ TencentOS tiny 主体架构图，从下到上主要包括：
 
 ## 3、TencentOS tiny携手合作伙伴共建IoT生态
 
-![](./doc/picture/introduction/Partners.png)
+![](./doc/image/introduction/Partners.png)
 
 TencentOS tiny目前支持STM32、NXP、华大半导体、国民技术、GD32、Nordic、TI等主流MCU。当前已完成两套官方定制开发板设计，支持全系列STM32 NUCLEO官方评估板内核移植。TencentOS tiny 将携手合作伙伴为物联网终端厂家提供更优质的IoT终端软件解决方案，方便各种物联网设备快速接入腾讯云，共同扩展IoT生态，更好地支撑智慧城市、智能水表、智能家居、智能穿戴、车联网等多种行业应用。
 
+欢迎IoT相关项目合作，有合作需求的请邮件联系TencentOS tiny官方工作人员，邮箱地址 ： supowang@tencent.com
+
 # 二、TencentOS tiny 代码目录
-- [TencentOS tiny代码目录说明](./doc/TencentOS-tiny-代码目录说明.md)
+- [TencentOS tiny代码目录说明](./doc/09.TencentOS_tiny_code_directory_description.md)
 
 # 三、TencentOS tiny 参考文档
 ## 1、移植指南
-- [TencentOS tiny移植指南（KEIL版本）](./doc/TencentOS-tiny-porting-keil.md)
-- [TencentOS tiny移植指南（IAR版本）](./doc/TencentOS-tiny-porting-iar.md)
-- [TencentOS tiny移植指南（GCC版本）](./doc/TencentOS-tiny-porting-gcc.md)
+- [TencentOS tiny移植指南（KEIL版本）](./doc/10.TencentOS_tiny_porting_guide_keil.md)
+- [TencentOS tiny移植指南（IAR版本）](./doc/11.TencentOS_tiny_porting_guide_iar.md)
+- [TencentOS tiny移植指南（GCC版本）](./doc/12.TencentOS_tiny_porting_guide_gcc.md)
 
 ## 2、TencentOS tiny 开发指南
-- [TencentOS tiny内核开发指南](./doc/4.TencentOS-tiny开发指南.md)
-- [TencentOS tiny API参考](./doc/5.TencentOS-tiny-SDK文档.md)
-- [TencentOS tiny对接腾讯云IoTHub开发指南](./doc/8.TencentOS-tiny对接腾讯云IoTHub开发指南.md)
+- [TencentOS tiny内核开发指南](./doc/04.TencentOS_tiny_Development_Guide.md)
+- [TencentOS tiny API参考](./doc/05.TencentOS_tiny_SDK_documentation.md)
+- [TencentOS tiny对接腾讯云IoTHub开发指南](./doc/08.The_development_Guide_for_use_TencentOS_tiny_connect_to_Tencent_Cloud_IoTHub.md)
 
 # 四、TencentOS tiny 开源协议
 * TencentOS tiny 遵循 [BSD-3开源许可协议](LICENSE)
@@ -80,10 +89,10 @@ TencentOS tiny结合腾讯云物联网开发平台IoT Explorer，已经构筑起
 
 # 六、TencentOS tiny 快速入门参考
 TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板，如下图：
-![](./doc/picture/introduction/EVB_MX.png)
+![](./doc/image/introduction/EVB_MX.png)
 
 - [TencentOS tiny定制开发板介绍页](http://www.holdiot.com/product/showproduct.php?id=8)，开发者可以基于定制开发板进行快速入门学习，点击下载参考文档
-- [TencentOS-tiny定制开发板入门指南](./doc/TencentOS-tiny定制开发板入门指南.pdf)
+- [TencentOS-tiny定制开发板入门指南](./doc/15.TencentOS_tiny_Custom_Development_Board_Getting_Started_Guide.pdf)
 
 # 七、贡献代码
 * 1.  在您自己的GitHub账户下Fork TencentOS tiny 开源项目；
@@ -96,4 +105,86 @@ TencentOS tiny联合合作伙伴(南京厚德物联网)设计了定制开发板�
 
 扫码加群，请备注TencentOS tiny开发者，工作人员会根据备注进行审核：
 
-![](./doc/picture/introduction/qq.png)
+![](./doc/image/introduction/qq.png)
+
+# 九、第三方开发者评测
+
+1.基于TencentOS tiny 的环境监测实战项目
+[【TencentOS tiny】环境监测实战项目最终完整版](https://www.bilibili.com/video/av73782956?from=search&seid=4421984671929108231)
+感谢阿正的贡献
+
+
+2.基于野火stm32f103开发板上移植的TencentOS tiny 例程、源码剖析、视频讲解。
+感谢CSDN博客专家杰杰的贡献
+
+## 简单上手：
+
+- [超详细的 TencentOS tiny 移植到STM32F103全教程](https://blog.csdn.net/jiejiemcu/article/details/101034426)
+
+## 深度源码分析：
+
+- [【TencentOS tiny学习】源码分析（1）——task](https://blog.csdn.net/jiejiemcu/article/details/99618912)
+
+- [【TencentOS tiny学习】源码分析（2）——调度器](https://blog.csdn.net/jiejiemcu/article/details/99665883)
+
+- [【TencentOS tiny学习】源码分析（3）——队列](https://blog.csdn.net/jiejiemcu/article/details/99687678)
+
+- [【TencentOS tiny学习】源码分析（4）——消息队列](https://blog.csdn.net/jiejiemcu/article/details/99781093)
+
+- [【TencentOS tiny学习】源码分析（5）——信号量](https://blog.csdn.net/jiejiemcu/article/details/100052643)
+
+- [【TencentOS tiny学习】源码分析（6）——互斥锁](https://blog.csdn.net/jiejiemcu/article/details/100056641)
+
+- [【TencentOS tiny学习】源码分析（7）——事件](https://blog.csdn.net/jiejiemcu/article/details/100492219)
+
+- [【TencentOS tiny学习】源码分析（8）——软件定时器](https://blog.csdn.net/jiejiemcu/article/details/101846089)
+
+## 配套例程：
+
+- [【TencentOS tiny学习】例程（0）——hello world](https://github.com/jiejieTop/TencentOS-Demo/tree/master/hello-world)
+
+- [【TencentOS tiny学习】例程（1）——task](https://github.com/jiejieTop/TencentOS-Demo/tree/master/01-task)
+
+- [【TencentOS tiny学习】例程（2）——队列](https://github.com/jiejieTop/TencentOS-Demo/tree/master/02-queue)
+
+- [【TencentOS tiny学习】例程（3）——消息队列](https://github.com/jiejieTop/TencentOS-Demo/tree/master/03-msg_queue)
+
+- [【TencentOS tiny学习】例程（4）——信号量](https://github.com/jiejieTop/TencentOS-Demo/tree/master/04-sem)
+
+- [【TencentOS tiny学习】例程（5）——互斥锁](https://github.com/jiejieTop/TencentOS-Demo/tree/master/05-mutex)
+
+- [【TencentOS tiny学习】例程（6）——事件](https://github.com/jiejieTop/TencentOS-Demo/tree/master/06-event)
+
+- [【TencentOS tiny学习】例程（7）——软件定时器](https://github.com/jiejieTop/TencentOS-Demo/tree/master/07-timer)
+
+- [【TencentOS tiny学习】例程（8）——内存池](https://github.com/jiejieTop/TencentOS-Demo/tree/master/08-mmblk)
+
+- [【TencentOS tiny学习】例程（9）——内存堆](https://github.com/jiejieTop/TencentOS-Demo/tree/master/09-mmheap)
+
+
+## 视频教程：
+
+- [【TencentOS tiny学习】视频汇总](https://www.bilibili.com/video/av70478596?from=search&seid=10160676184801585522)
+- [【视频】01-初识TencentOS tiny](https://www.bilibili.com/video/av70478596/?p=1)
+- [【视频】02-TencentOS tiny基础知识](https://www.bilibili.com/video/av70478596/?p=2)
+- [【视频】03-TencentOS tiny移植](https://www.bilibili.com/video/av70478596/?p=3)
+- [【视频】04-TencentOS tiny任务-1](https://www.bilibili.com/video/av70478596/?p=4)
+- [【视频】05-TencentOS tiny任务-2](https://www.bilibili.com/video/av70478596/?p=5)
+- [【视频】06-TencentOS tiny队列-1](https://www.bilibili.com/video/av70478596/?p=6)
+- [【视频】07-TencentOS tiny队列-2](https://www.bilibili.com/video/av70478596/?p=7)
+- [【视频】08-TencentOS tiny消息队列](https://www.bilibili.com/video/av70478596/?p=8)
+- [【视频】09-TencentOS tiny信号量-1](https://www.bilibili.com/video/av70478596/?p=9)
+- [【视频】10-TencentOS tiny信号量-2](https://www.bilibili.com/video/av70478596/?p=10)
+- [【视频】11-TencentOS tiny互斥锁-1](https://www.bilibili.com/video/av70478596/?p=11)
+- [【视频】12-TencentOS tiny互斥锁-2](https://www.bilibili.com/video/av70478596/?p=12)
+- [【视频】13-TencentOS tiny互斥锁-3](https://www.bilibili.com/video/av70478596/?p=13)
+- [【视频】14-TencentOS tiny事件-1](https://www.bilibili.com/video/av70478596/?p=14)
+- [【视频】15-TencentOS tiny事件-2](https://www.bilibili.com/video/av70478596/?p=15)
+- [【视频】16-TencentOS tiny软件定时器-1](https://www.bilibili.com/video/av70478596/?p=16)
+- [【视频】17-TencentOS tiny软件定时器-2](https://www.bilibili.com/video/av70478596/?p=11)
+- [【视频】18-TencentOS tiny软件定时器-3](https://www.bilibili.com/video/av70478596/?p=18)
+
+## 相关PPT资料：
+- [【TencentOS tiny学习】视频PPT](https://github.com/jiejieTop/TencentOS-Demo/tree/master/PPT)
+
+

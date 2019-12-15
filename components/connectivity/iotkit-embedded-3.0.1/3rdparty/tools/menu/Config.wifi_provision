@@ -1,0 +1,75 @@
+config AWSS_SUPPORT_APLIST
+    bool 
+    default n
+
+config AWSS_DISABLE_ENROLLEE
+    bool
+    default n
+
+config AWSS_DISABLE_REGISTRAR
+    bool
+    default n
+
+config AWSS_SUPPORT_ADHA
+     bool
+     default n
+
+config AWSS_FRAMEWORKS
+     bool
+     default n
+
+config WIFI_PROVISION_ENABLED 
+    bool "FEATURE_WIFI_PROVISION_ENABLED"
+    select DEV_BIND_ENABLED
+    select INFRA_AES if !SUPPORT_TLS
+    select AWSS_FRAMEWORKS if AWSS_SUPPORT_SMARTCONFIG_WPS || AWSS_SUPPORT_SMARTCONFIG
+    select AWSS_FRAMEWORKS if AWSS_SUPPORT_ZEROCONFIG || AWSS_SUPPORT_DEV_AP
+    select AWSS_FRAMEWORKS if AWSS_SUPPORT_AHA || AWSS_SUPPORT_ADHA
+    select AWSS_DISABLE_ENROLLEE if !AWSS_SUPPORT_ZEROCONFIG
+    select AWSS_DISABLE_REGISTRAR if !AWSS_SUPPORT_ZEROCONFIG
+    select AWSS_SUPPORT_APLIST if AWSS_FRAMEWORKS
+    select INFRA_CLASSIC if AWSS_FRAMEWORKS
+    select INFRA_CJSON if AWSS_FRAMEWORKS
+    select INFRA_COMPAT if AWSS_FRAMEWORKS
+    default n 
+    help
+        Enable providing Wifi SSID/PASSWD configration in SDK
+
+config AWSS_SUPPORT_SMARTCONFIG_WPS
+    bool
+    default n
+
+menu "Wifi Provision Configurations"
+    depends on WIFI_PROVISION_ENABLED
+
+    config AWSS_SUPPORT_SMARTCONFIG
+        bool "FEATURE_AWSS_SUPPORT_SMARTCONFIG"
+        select AWSS_SUPPORT_SMARTCONFIG_WPS
+        default y
+        help
+            Switching on a wifi provision method based on len-encoding
+
+    config AWSS_SUPPORT_ZEROCONFIG
+        bool "FEATURE_AWSS_SUPPORT_ZEROCONFIG"
+        select MQTT_COMM_ENABLED
+        default n
+        help
+            Switching on a wifi provision method based on zero-config, which shares ssid/passwd between devices
+
+    config AWSS_SUPPORT_AHA
+        bool "FEATURE_AWSS_SUPPORT_AHA, ADHA"
+        select AWSS_SUPPORT_ADHA
+        default n
+        help
+            Switching on a wifi provision method based on phone-ap, which tells the ssid/passwd to the devices connected to it
+            Switching on a wifi provision method based on router-ap, which tells the ssid/passwd to the devices connected to it
+
+    config AWSS_SUPPORT_DEV_AP
+        bool "FEATURE_AWSS_SUPPORT_DEV_AP"
+        default n
+        help
+            Switching on a wifi provision method based on device-ap, which receives the ssid/passwd from the phones connected to it
+
+endmenu
+
+

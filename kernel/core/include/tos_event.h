@@ -1,12 +1,29 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_EVENT_H_
 #define _TOS_EVENT_H_
 
 #if TOS_CFG_EVENT_EN > 0
 
-// if we are pending an event, for any flag we expect is set is ok, this flag should be passed to tos_event_pend 
+// if we are pending an event, for any flag we expect is set is ok, this flag should be passed to tos_event_pend
 #define TOS_OPT_EVENT_PEND_ANY          (k_opt_t)0x0001
 
-// if we are pending an event, must all the flag we expect is set is ok, this flag should be passed to tos_event_pend 
+// if we are pending an event, must all the flag we expect is set is ok, this flag should be passed to tos_event_pend
 #define TOS_OPT_EVENT_PEND_ALL          (k_opt_t)0x0002
 
 // if we are pending an event, and we wanna clear the event's flag after we read, this flag should be passed to tos_event_pend
@@ -24,6 +41,10 @@ typedef enum opt_event_post_en {
 } opt_event_post_t;
 
 typedef struct k_event_st {
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
+    knl_obj_t       knl_obj;
+#endif
+
     pend_obj_t      pend_obj;
     k_event_flag_t  flag;
 } k_event_t;
@@ -111,6 +132,6 @@ __API__ k_err_t tos_event_post(k_event_t *event, k_event_flag_t flag);
 __API__ k_err_t tos_event_post_keep(k_event_t *event, k_event_flag_t flag);
 
 #endif
-    
+
 #endif /* _TOS_EVENT_H_ */
 

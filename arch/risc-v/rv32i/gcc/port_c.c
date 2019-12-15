@@ -1,10 +1,22 @@
-#include "riscv_encoding.h"
-#include <tos.h>
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
 
-#define CLINT_CTRL_ADDR 0x2000000
-#define CLINT_MSIP      0x0000
-#define CLINT_MTIMECMP  0x4000
-#define CLINT_MTIME     0xBFF8
+#include <tos.h>
+#include "riscv_port.h"
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {
@@ -14,7 +26,7 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     // then mtime_lo == 0 and mtime_hi = 1 at next read
     // the result will be  0x1FFFFFFFF, not 0x100000000
     uint64_t mtime = 0;
-    while(1) {
+    while (1) {
         uint32_t mtime_hi = *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIME + 4);
         uint32_t mtime_lo = *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIME + 0);
         uint32_t mtime_hn = *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIME + 4);
@@ -35,9 +47,4 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF;
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 4) = 0xFFFFFFFF & (mtimecmp >> 32);
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF & (mtimecmp >>  0);
-}
-
-__PORT__ void port_systick_priority_set(uint32_t prio)
-{
-    //NVIC_SetPriority(SysTick_IRQn, prio);
 }

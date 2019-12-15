@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10040\s312\iar\ble_ant_app_hrm_pca10040_s312.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056\s340\iar\ble_ant_app_hrm_pca10056_s340.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040\s332\iar\ble_ant_app_hrm_pca10040_s332.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e\s312\iar\ble_ant_app_hrm_pca10040e_s312.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\d52_starterkit\s312\iar\ble_ant_app_hrm_d52_starterkit_s312.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\d52_starterkit\s332\iar\ble_ant_app_hrm_d52_starterkit_s332.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

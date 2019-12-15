@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_GLOBAL_H_
 #define  _TOS_GLOBAL_H_
 
@@ -27,7 +44,15 @@ extern k_stack_t            k_idle_task_stk[];
 extern k_stack_t           *const k_idle_task_stk_addr;
 extern size_t               const k_idle_task_stk_size;
 
-/* list to hold all the task delayed or pend for timeout */
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+/* list to hold all the destroyed dynamic created tasks */
+extern k_list_t             k_dead_task_list;
+#endif
+
+/* list to hold all the tasks for statistics */
+extern k_list_t             k_stat_list;
+
+/* list to hold all the tasks delayed or pend for timeout */
 extern k_list_t             k_tick_list;
 
 /* how many ticks will be triggered in a second */
@@ -43,13 +68,14 @@ extern k_fault_log_writer_t k_fault_log_writer;
 #endif
 
 #if TOS_CFG_MMHEAP_EN > 0u
-extern uint8_t              k_mmheap_pool[] __ALIGNED__(4);
+#if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
+extern uint8_t              k_mmheap_default_pool[] __ALIGNED__(4);
+#endif
 extern k_mmheap_ctl_t       k_mmheap_ctl;
 #endif
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 extern k_timeslice_t        k_robin_default_timeslice;
-extern k_robin_state_t      k_robin_state;
 #endif
 
 #if TOS_CFG_TIMER_EN > 0u
@@ -62,11 +88,6 @@ extern k_prio_t             const k_timer_task_prio;
 extern k_stack_t           *const k_timer_task_stk_addr;
 extern size_t               const k_timer_task_stk_size;
 #endif
-#endif
-
-#if (TOS_CFG_MSG_EN > 0u)
-extern k_list_t             k_msg_freelist;
-extern k_msg_t              k_msg_pool[];
 #endif
 
 #if TOS_CFG_PWR_MGR_EN > 0u

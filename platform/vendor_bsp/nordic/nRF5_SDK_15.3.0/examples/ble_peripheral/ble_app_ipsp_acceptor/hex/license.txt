@@ -1,0 +1,3 @@
+The provided HEX files were compiled using the projects located in the folders for the respective boards (pca10xxx).
+
+For license and copyright information, see the individual .c and .h files that are included in the projects.

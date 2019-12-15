@@ -1,0 +1,63 @@
+config MQTT_COMM_ENABLED
+    bool "FEATURE_MQTT_COMM_ENABLED"
+    default y
+    select MQTT_PRE_AUTH if !MQTT_DIRECT
+    select DEV_SIGN
+    select INFRA_SHA256
+    select INFRA_LIST
+    select INFRA_TIMER
+    select INFRA_REPORT
+    select INFRA_COMPAT
+
+    help
+        Establish persistent connection with AliCloud via MQTT-based protocol
+
+        Switching to "y" leads to building MQTT related implementation into SDK and MQTT_COMM_ENABLED included into CFLAGS
+        Switching to "n" seldom happens unless you're connecting to AliCloud via CoAP/HTTP channel
+
+menu "MQTT Configurations"
+    depends on MQTT_COMM_ENABLED
+
+    config MQTT_DEFAULT_IMPL
+        bool "FEATURE_MQTT_DEFAULT_IMPL"
+        default y
+
+        select INFRA_SHA256
+        select INFRA_NET
+        select INFRA_TIMER
+
+        help
+            Use SDK default MQTT implementation
+
+            Switching to "y" leads to building MQTT related implementation into SDK and MQTT_DEFAULT_IMPL included into CFLAGS
+            Switching to "n" seldom happens unless you're using other MQTT implementations
+
+    config MQTT_PRE_AUTH
+        bool
+        default n
+        select SUPPORT_TLS
+        select INFRA_HTTPC
+        select INFRA_PREAUTH
+
+    config MQTT_DIRECT
+        bool "FEATURE_MQTT_DIRECT"
+        default y
+
+        help
+            Directly connect MQTT server without perform HTTP authenticate to another HTTP server ahead
+
+            Switching to "y" leads to connect MQTT server directly and MQTT_DIRECT included into CFLAGS
+            Switching to "n" leads to legacy authenticate mode: connnect HTTP server first, then connect MQTT server afterwards
+
+    config ASYNC_PROTOCOL_STACK
+        bool "FEATURE_ASYNC_PROTOCOL_STACK"
+        default n
+
+        help
+            Use async protocol stack for SDK default MQTT implementation
+
+            Switching to "y" leads to building MQTT async protocol stack related implementation into SDK and ASYNC_PROTOCOL_STACK included into CFLAGS
+            Switching to "n" seldom happens unless you're not using async protocol stack
+
+endmenu
+

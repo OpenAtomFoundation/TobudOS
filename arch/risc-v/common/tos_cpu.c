@@ -1,6 +1,30 @@
-#include <tos.h>
-#include <riscv_encoding.h>
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
 
+#include <tos.h>
+#include <riscv_port.h>
+
+#ifndef TOS_CFG_IRQ_STK_SIZE
+#warning "did not specify the irq stack size, use default value"
+#define TOS_CFG_IRQ_STK_SIZE 128
+#endif
+
+k_stack_t k_irq_stk[TOS_CFG_IRQ_STK_SIZE];
+k_stack_t *k_irq_stk_top = k_irq_stk + TOS_CFG_IRQ_STK_SIZE;
 
 __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
@@ -9,8 +33,27 @@ __KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 }
 
 __KERNEL__ void cpu_init(void) {
+
+    // reserve storage space for sp registers
+    k_irq_stk_top = (k_stack_t *)(((cpu_addr_t) k_irq_stk_top) - sizeof(cpu_data_t));
+
+    k_irq_stk_top = (k_stack_t *)(((cpu_addr_t) k_irq_stk_top) & 0xFFFFFFFC);
+
     k_cpu_cycle_per_tick = TOS_CFG_CPU_CLOCK / k_cpu_tick_per_second;
+
     cpu_systick_init(k_cpu_cycle_per_tick);
+
+    port_cpu_init();
+}
+
+__API__ void tos_cpu_int_disable(void)
+{
+    port_int_disable();
+}
+
+__API__ void tos_cpu_int_enable(void)
+{
+    port_int_enable();
 }
 
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)
@@ -31,7 +74,7 @@ __KERNEL__ void cpu_context_switch(void)
 
 __KERNEL__ void cpu_irq_context_switch(void)
 {
-    port_irq_context_switch();
+    // DO NOTHING
 }
 
 __KERNEL__ void cpu_sched_start(void)
@@ -73,7 +116,7 @@ Inx Offset Register
 03    012    x3         gp
 02    008    x1         ra
 01    004    mstatus
-00    000    epc
+00    000    mepc
 
 */
 
@@ -87,64 +130,45 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     cpu_context_t *regs = 0;
 
     sp = (cpu_data_t *)&stk_base[stk_size];
-    sp = (cpu_data_t *)((cpu_addr_t)(sp) & 0xFFFFFFF8);
+    sp = (cpu_data_t *)((cpu_addr_t)(sp) & 0xFFFFFFFC);
 
     sp  -= (sizeof(cpu_context_t)/sizeof(cpu_data_t));
 
     regs = (cpu_context_t*) sp;
 
-#if 1
-    for(int i=0; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i++) {
-        #define _V(v) ((unsigned int)((v/10) << 4 | (v % 10)))
-        *(sp + i) = (_V(i) << 24) | (_V(i) << 16) | (_V(i) << 8) | _V(i);
-        #undef _V
+    for(int i=1; i<(sizeof(cpu_context_t)/sizeof(cpu_data_t)); i++) {
+        *(sp + i) = 0xACEADD00 | ((i / 10) << 4) | (i % 10);
     }
-#endif
 
-    regs->a0        = (cpu_data_t)arg;                          // a0: argument
-    regs->ra        = (cpu_data_t)0xACE00ACE;                   // ra: return address
-    regs->mstatus   = (cpu_data_t)(MSTATUS_MPP | MSTATUS_MPIE); // return to machine mode and enable interrupt
-    regs->epc       = (cpu_data_t)entry;
+    cpu_data_t gp = 0;
+    __ASM__ __VOLATILE__ ("mv %0, gp":"=r"(gp));
 
+    regs->gp        = (cpu_data_t)gp;           // global pointer
+    regs->a0        = (cpu_data_t)arg;          // argument
+    regs->ra        = (cpu_data_t)exit;         // return address
+    regs->mstatus   = (cpu_data_t)0x00001880;   // return to machine mode and enable interrupt
+    regs->mepc      = (cpu_data_t)entry;        // task entry
 
     return (k_stack_t*)sp;
 }
 
 void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
 {
-    while(1) {
+    while (1) {
         // TODO
     }
 }
 
-void SysTick_IRQHandler() {
-    port_systick_config(k_cpu_cycle_per_tick);
-    if(tos_knl_is_running()) {
-        tos_knl_irq_enter();
-        tos_tick_handler();
-        tos_knl_irq_leave();
-    }
-}
-
-void cpu_irq_entry(cpu_data_t irq, cpu_context_t *regs)
+void cpu_irq_entry(cpu_data_t irq)
 {
-#if 1
-    if(irq != 7) {
-        return;
-    }
-
-    SysTick_IRQHandler();
-#else
     void (*irq_handler)();
-    extern void (*handler_vector_table[])();
 
-    irq_handler = handler_vector_table[irq];
+    irq_handler = *((void (**)())(port_get_irq_vector_table() + irq*sizeof(cpu_addr_t)));
     if((*irq_handler) == 0) {
         return;
     }
 
     (*irq_handler)();
-#endif
 }
 
 __API__ uint32_t tos_cpu_clz(uint32_t val)
@@ -181,3 +205,4 @@ __API__ uint32_t tos_cpu_clz(uint32_t val)
 
     return (nbr_lead_zeros);
 }
+

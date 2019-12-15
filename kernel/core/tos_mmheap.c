@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 /*
 ** Two Level Segregated Fit memory allocator, version 3.1.
 ** Written by Matthew Conte
@@ -118,37 +135,42 @@ __STATIC__ void mapping_search(size_t size, int *fli, int *sli)
     mapping_insert(size, fli, sli);
 }
 
-__STATIC__ size_t blk_size(const mmheap_blk_t *blk)
+__STATIC_INLINE__ size_t blk_size(const mmheap_blk_t *blk)
 {
     return blk->size & K_MMHEAP_BLOCK_SIZE_MASK;
 }
 
-__STATIC__ void blk_set_size(mmheap_blk_t *blk, size_t size)
+__STATIC_INLINE__ int blk_is_last(const mmheap_blk_t* blk)
+{
+	return blk_size(blk) == 0;
+}
+
+__STATIC_INLINE__ void blk_set_size(mmheap_blk_t *blk, size_t size)
 {
     blk->size = size | (blk->size & K_MMHEAP_BLOCK_STATE_MASK);
 }
 
-__STATIC__ int blk_is_free(const mmheap_blk_t *blk)
+__STATIC_INLINE__ int blk_is_free(const mmheap_blk_t *blk)
 {
     return blk->size & K_MMHEAP_BLOCK_CURR_FREE;
 }
 
-__STATIC__ void blk_set_free(mmheap_blk_t *blk)
+__STATIC_INLINE__ void blk_set_free(mmheap_blk_t *blk)
 {
     blk->size |= K_MMHEAP_BLOCK_CURR_FREE;
 }
 
-__STATIC__ void blk_set_used(mmheap_blk_t *blk)
+__STATIC_INLINE__ void blk_set_used(mmheap_blk_t *blk)
 {
     blk->size &= ~K_MMHEAP_BLOCK_CURR_FREE;
 }
 
-__STATIC__ int blk_is_prev_free(const mmheap_blk_t *blk)
+__STATIC_INLINE__ int blk_is_prev_free(const mmheap_blk_t *blk)
 {
     return blk->size & K_MMHEAP_BLOCK_PREV_FREE;
 }
 
-__STATIC__ void blk_set_prev_free(mmheap_blk_t *blk)
+__STATIC_INLINE__ void blk_set_prev_free(mmheap_blk_t *blk)
 {
     blk->size |= K_MMHEAP_BLOCK_PREV_FREE;
 }
@@ -158,24 +180,24 @@ __STATIC__ void blk_set_prev_used(mmheap_blk_t *blk)
     blk->size &= ~K_MMHEAP_BLOCK_PREV_FREE;
 }
 
-__STATIC__ mmheap_blk_t *blk_from_ptr(const void *ptr)
+__STATIC_INLINE__ mmheap_blk_t *blk_from_ptr(const void *ptr)
 {
     return (mmheap_blk_t *)((cpu_addr_t)ptr - K_MMHEAP_BLK_START_OFFSET);
 }
 
-__STATIC__ void *blk_to_ptr(const mmheap_blk_t *blk)
+__STATIC_INLINE__ void *blk_to_ptr(const mmheap_blk_t *blk)
 {
     return (void *)((cpu_addr_t)blk + K_MMHEAP_BLK_START_OFFSET);
 }
 
 /* Return location of next block after block of given size. */
-__STATIC__ mmheap_blk_t *offset_to_block(const void *ptr, int diff)
+__STATIC_INLINE__ mmheap_blk_t *offset_to_block(const void *ptr, int diff)
 {
     return (mmheap_blk_t *)((cpu_addr_t)ptr + diff);
 }
 
 /* Return location of previous block. */
-__STATIC__ mmheap_blk_t *blk_prev(const mmheap_blk_t *blk)
+__STATIC_INLINE__ mmheap_blk_t *blk_prev(const mmheap_blk_t *blk)
 {
     return blk->prev_phys_blk;
 }
@@ -218,17 +240,17 @@ __STATIC__ void blk_mark_as_used(mmheap_blk_t *blk)
     blk_set_used(blk);
 }
 
-__STATIC__ size_t align_up(size_t x, size_t align)
+__STATIC_INLINE__ size_t align_up(size_t x, size_t align)
 {
     return (x + (align - 1)) & ~(align - 1);
 }
 
-__STATIC__ size_t align_down(size_t x, size_t align)
+__STATIC_INLINE__ size_t align_down(size_t x, size_t align)
 {
     return x - (x & (align - 1));
 }
 
-__STATIC__ void *align_ptr(const void *ptr, size_t align)
+__STATIC_INLINE__ void *align_ptr(const void *ptr, size_t align)
 {
     return (void *)(((cpu_addr_t)ptr + (align -1)) & ~(align -1));
 }
@@ -492,9 +514,51 @@ __STATIC__ void *blk_prepare_used(mmheap_blk_t *blk, size_t size)
     return blk_to_ptr(blk);
 }
 
+__STATIC_INLINE__ int mmheap_pool_is_full(void)
+{
+    return k_mmheap_ctl.pool_cnt == K_MMHEAP_POOL_MAX;
+}
+
+__STATIC__ int mmheap_pool_is_exist(void *pool_start)
+{
+    int i = 0;
+
+    for (i = 0; i < k_mmheap_ctl.pool_cnt; ++i) {
+        if (k_mmheap_ctl.pool_start[i] == pool_start) {
+            return K_TRUE;
+        }
+    }
+    return K_FALSE;
+}
+
+__STATIC_INLINE__ void mmheap_pool_record(void *pool_start)
+{
+    k_mmheap_ctl.pool_start[k_mmheap_ctl.pool_cnt++] = pool_start;
+}
+
+__STATIC__ void mmheap_pool_unrecord(void *pool_start)
+{
+    int i = 0;
+
+    for (i = 0; i < k_mmheap_ctl.pool_cnt; ++i) {
+        if (k_mmheap_ctl.pool_start[i] == pool_start) {
+            break;
+        }
+    }
+    if (i != k_mmheap_ctl.pool_cnt - 1) {
+        k_mmheap_ctl.pool_start[i] = k_mmheap_ctl.pool_start[k_mmheap_ctl.pool_cnt - 1];
+    }
+    --k_mmheap_ctl.pool_cnt;
+}
+
 __STATIC__ void mmheap_ctl_init(void)
 {
     int i, j;
+
+    k_mmheap_ctl.pool_cnt = 0u;
+    for (i = 0; i < K_MMHEAP_POOL_MAX; ++i) {
+        k_mmheap_ctl.pool_start[i] = (void *)K_NULL;
+    }
 
     k_mmheap_ctl.block_null.next_free = &k_mmheap_ctl.block_null;
     k_mmheap_ctl.block_null.prev_free = &k_mmheap_ctl.block_null;
@@ -508,7 +572,13 @@ __STATIC__ void mmheap_ctl_init(void)
     }
 }
 
-__KERNEL__ k_err_t mmheap_init(void *pool_start, size_t pool_size)
+__KERNEL__ k_err_t mmheap_init(void)
+{
+    mmheap_ctl_init();
+    return K_ERR_NONE;
+}
+
+__KERNEL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size)
 {
     mmheap_ctl_init();
 
@@ -641,6 +711,14 @@ __API__ k_err_t tos_mmheap_pool_add(void *pool_start, size_t pool_size)
     mmheap_blk_t   *next_blk;
     size_t          size_aligned;
 
+    if (mmheap_pool_is_full()) {
+        return K_ERR_MMHEAP_POOL_OVERFLOW;
+    }
+
+    if (mmheap_pool_is_exist(pool_start)) {
+        return K_ERR_MMHEAP_POOL_ALREADY_EXIST;
+    }
+
     size_aligned = align_down(pool_size - 2 * K_MMHEAP_BLK_HEADER_OVERHEAD, K_MMHEAP_ALIGN_SIZE);
 
     if (((cpu_addr_t)pool_start % K_MMHEAP_ALIGN_SIZE) != 0u) {
@@ -652,11 +730,11 @@ __API__ k_err_t tos_mmheap_pool_add(void *pool_start, size_t pool_size)
         return K_ERR_MMHEAP_INVALID_POOL_SIZE;
     }
 
-	/*
-	** Create the main free block. Offset the start of the block slightly
-	** so that the prev_phys_block field falls outside of the pool -
-	** it will never be used.
-	*/
+    /*
+     ** Create the main free block. Offset the start of the block slightly
+     ** so that the prev_phys_block field falls outside of the pool -
+     ** it will never be used.
+     */
     curr_blk = offset_to_block(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
     blk_set_size(curr_blk, size_aligned);
     blk_set_free(curr_blk);
@@ -668,17 +746,75 @@ __API__ k_err_t tos_mmheap_pool_add(void *pool_start, size_t pool_size)
     blk_set_size(next_blk, 0);
     blk_set_used(next_blk);
     blk_set_prev_free(next_blk);
+
+    mmheap_pool_record(pool_start);
+
     return K_ERR_NONE;
 }
 
-__API__ void tos_mmheap_pool_rmv(void *pool_start)
+__API__ k_err_t tos_mmheap_pool_rmv(void *pool_start)
 {
     int fl = 0, sl = 0;
     mmheap_blk_t *blk;
 
+    TOS_PTR_SANITY_CHECK(pool_start);
+
+    if (!mmheap_pool_is_exist(pool_start)) {
+        return K_ERR_MMHEAP_POOL_NOT_EXIST;
+    }
+
     blk = offset_to_block(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
     mapping_insert(blk_size(blk), &fl, &sl);
     remove_free_block(blk, fl, sl);
+
+    mmheap_pool_unrecord(pool_start);
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_mmheap_pool_check(void *pool_start, k_mmheap_info_t *info)
+{
+    mmheap_blk_t* blk;
+
+    TOS_PTR_SANITY_CHECK(pool_start);
+    TOS_PTR_SANITY_CHECK(info);
+
+    memset(info, 0, sizeof(k_mmheap_info_t));
+
+    blk = offset_to_block(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
+
+    while (blk && !blk_is_last(blk)) {
+        if (blk_is_free(blk)) {
+            info->free += blk_size(blk);
+        } else {
+            info->used += blk_size(blk);
+        }
+        blk = blk_next(blk);
+    }
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_mmheap_check(k_mmheap_info_t *info)
+{
+    int i;
+    k_err_t err;
+    k_mmheap_info_t pool_info;
+
+    TOS_PTR_SANITY_CHECK(info);
+
+    memset(info, 0, sizeof(k_mmheap_info_t));
+
+    for (i = 0; i < k_mmheap_ctl.pool_cnt; ++i) {
+        err = tos_mmheap_pool_check(k_mmheap_ctl.pool_start[i], &pool_info);
+        if (err != K_ERR_NONE) {
+            return err;
+        }
+
+        info->free += pool_info.free;
+        info->used += pool_info.used;
+    }
+
+    return K_ERR_NONE;
 }
 
 #endif

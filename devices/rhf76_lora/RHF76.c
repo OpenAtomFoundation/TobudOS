@@ -249,8 +249,8 @@ __STATIC__ void __asciistr2hex(char *in, uint8_t *out, int len) {
     }
 }
 
-__STATIC__ char incoming_data_buffer[512]; 
-__STATIC__ uint8_t hex_stream[256];
+__STATIC__ char incoming_data_buffer[128]; 
+__STATIC__ uint8_t hex_stream[128];
 
 __STATIC__ void rhf76_incoming_data_process(void)
 {

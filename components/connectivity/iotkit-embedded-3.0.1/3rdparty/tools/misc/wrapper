@@ -1,0 +1,700 @@
+WRAPPER_NOTE:
+/**
+ * NOTE:
+ *
+ * HAL_TCP_xxx API reference implementation: wrappers/os/ubuntu/HAL_TCP_linux.c
+ *
+ */
+
+WRAPPER_FUNC_REFERENCE:
+/**
+ *
+ * 函数 FUNC_NAME() 需要SDK的使用者针对SDK将运行的硬件平台填充实现, 供SDK调用
+ * ---
+ * Interface of FUNC_NAME() requires to be implemented by user of SDK, according to target device platform
+ *
+ * 如果需要参考如何实现函数 FUNC_NAME(), 可以查阅SDK移植到 Ubuntu Linux 上时的示例代码
+ * ---
+ * If you need guidance about how to implement FUNC_NAME, you can check its reference implementation for Ubuntu platform
+ *
+ * https://code.aliyun.com/linkkit/c-sdk/blob/v3.0.1/wrappers/FUNC_FILE
+ *
+ *
+ * 注意! HAL_XXX() 系列的函数虽然有阿里提供的对应参考实现, 但不建议您不做任何修改/检视的应用于您的商用设备!
+ * 
+ * 注意! 参考示例实现仅用于解释各个 HAL_XXX() 系列函数的语义!
+ * 
+ */
+
+HAL_Malloc:
+/**
+ * @brief Allocates a block of size bytes of memory, returning a pointer to the beginning of the block.
+ *
+ * @param [in] size @n specify block size in bytes.
+ * @return A pointer to the beginning of the block.
+ * @see None.
+ * @note Block value is indeterminate.
+ */
+
+HAL_Free:
+/**
+ * @brief Deallocate memory block
+ *
+ * @param[in] ptr @n Pointer to a memory block previously allocated with platform_malloc.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_Printf:
+/**
+ * @brief Writes formatted data to stream.
+ *
+ * @param [in] fmt: @n String that contains the text to be written, it can optionally contain embedded format specifiers
+     that specifies how subsequent arguments are converted for output.
+ * @param [in] ...: @n the variable argument list, for formatted and inserted in the resulting string replacing their respective specifiers.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_Snprintf:
+/**
+ * @brief Writes formatted data to string.
+ *
+ * @param [out] str: @n String that holds written text.
+ * @param [in] len: @n Maximum length of character will be written
+ * @param [in] fmt: @n Format that contains the text to be written, it can optionally contain embedded format specifiers
+     that specifies how subsequent arguments are converted for output.
+ * @param [in] ...: @n the variable argument list, for formatted and inserted in the resulting string replacing their respective specifiers.
+ * @return bytes of character successfully written into string.
+ * @see None.
+ * @note None.
+ */
+
+HAL_SleepMs:
+/**
+ * @brief Sleep thread itself.
+ *
+ * @param [in] ms @n the time interval for which execution is to be suspended, in milliseconds.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_UptimeMs:
+/**
+ * @brief Retrieves the number of milliseconds that have elapsed since the system was boot.
+ *
+ * @return the number of milliseconds.
+ * @see None.
+ * @note None.
+ */
+
+HAL_MutexCreate:
+/**
+ * @brief Create a mutex.
+ *
+ * @retval NULL : Initialize mutex failed.
+ * @retval NOT_NULL : The mutex handle.
+ * @see None.
+ * @note None.
+ */
+
+HAL_MutexDestroy:
+/**
+ * @brief Destroy the specified mutex object, it will release related resource.
+ *
+ * @param [in] mutex @n The specified mutex.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_MutexLock:
+/**
+ * @brief Waits until the specified mutex is in the signaled state.
+ *
+ * @param [in] mutex @n the specified mutex.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_MutexUnlock:
+/**
+ * @brief Releases ownership of the specified mutex object..
+ *
+ * @param [in] mutex @n the specified mutex.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_GetProductKey:
+/**
+ * @brief Get product key from user's system persistent storage
+ *
+ * @param [ou] product_key: array to store product key, max length is IOTX_PRODUCT_KEY_LEN
+ * @return  the actual length of product key
+ */
+
+HAL_GetDeviceName:
+/**
+ * @brief Get device name from user's system persistent storage
+ *
+ * @param [ou] device_name: array to store device name, max length is IOTX_DEVICE_NAME_LEN
+ * @return the actual length of device name
+ */
+
+HAL_GetDeviceSecret:
+/**
+ * @brief Get device secret from user's system persistent storage
+ *
+ * @param [ou] device_secret: array to store device secret, max length is IOTX_DEVICE_SECRET_LEN
+ * @return the actual length of device secret
+ */
+
+HAL_GetFirmwareVersion:
+/**
+ * @brief Get firmware version
+ *
+ * @param [ou] version: array to store firmware version, max length is IOTX_FIRMWARE_VER_LEN
+ * @return the actual length of firmware version
+ */
+
+HAL_TCP_Establish:
+/**
+ * @brief Establish a TCP connection.
+ *
+ * @param [in] host: @n Specify the hostname(IP) of the TCP server
+ * @param [in] port: @n Specify the TCP port of TCP server
+ *
+ * @return The handle of TCP connection.
+   @retval (uintptr_t)(-1): Fail.
+   @retval All other values(0 included): Success, the value is handle of this TCP connection.
+ */
+
+HAL_TCP_Destroy:
+/**
+ * @brief Destroy the specific TCP connection.
+ *
+ * @param [in] fd: @n Specify the TCP connection by handle.
+ *
+ * @return The result of destroy TCP connection.
+ * @retval < 0 : Fail.
+ * @retval   0 : Success.
+ */
+
+HAL_TCP_Write:
+/**
+ * @brief Write data into the specific TCP connection.
+ *        The API will return immediately if 'len' be written into the specific TCP connection.
+ *
+ * @param [in] fd @n A descriptor identifying a connection.
+ * @param [in] buf @n A pointer to a buffer containing the data to be transmitted.
+ * @param [in] len @n The length, in bytes, of the data pointed to by the 'buf' parameter.
+ * @param [in] timeout_ms @n Specify the timeout value in millisecond. In other words, the API block 'timeout_ms' millisecond maximumly.
+ *
+ * @retval      < 0 : TCP connection error occur..
+ * @retval        0 : No any data be write into the TCP connection in 'timeout_ms' timeout period.
+ * @retval (0, len] : The total number of bytes be written in 'timeout_ms' timeout period.
+
+ * @see None.
+ */
+
+HAL_TCP_Read:
+/**
+ * @brief Read data from the specific TCP connection with timeout parameter.
+ *        The API will return immediately if 'len' be received from the specific TCP connection.
+ *
+ * @param [in] fd @n A descriptor identifying a TCP connection.
+ * @param [out] buf @n A pointer to a buffer to receive incoming data.
+ * @param [out] len @n The length, in bytes, of the data pointed to by the 'buf' parameter.
+ * @param [in] timeout_ms @n Specify the timeout value in millisecond. In other words, the API block 'timeout_ms' millisecond maximumly.
+ *
+ * @retval       -2 : TCP connection error occur.
+ * @retval       -1 : TCP connection be closed by remote server.
+ * @retval        0 : No any data be received in 'timeout_ms' timeout period.
+ * @retval (0, len] : The total number of bytes be received in 'timeout_ms' timeout period.
+
+ * @see None.
+ */
+
+wrapper_mqtt_init:
+/**
+ * @brief Init the MQTT client
+ *        This function initialize the data structures.
+ *
+ * @param [in] mqtt_params: specify the MQTT client parameter.
+ *
+ * @retval     NULL : Init failed.
+ * @retval NOT_NULL : The handle of MQTT client.
+ * @see None.
+ */
+
+wrapper_mqtt_connect:
+/**
+ * @brief Establish MQTT connection.
+ *        This function establish MQTT connection.
+ *
+ * @param [in] client: The handle of MQTT client.
+ *
+ * @retval     0 : MQTT connect seccuss.
+ * @retval   < 0 : MQTT connect failed.
+ * @see None.
+ */
+
+
+wrapper_mqtt_yield:
+/**
+ * @brief Handle MQTT packet from remote server and process timeout request
+ *        which include the MQTT subscribe, unsubscribe, publish(QOS >= 1), reconnect, etc..
+ *
+ * @param [in] client: specify the MQTT client.
+ * @param [in] timeout_ms: specify the timeout in millisecond in this loop.
+ *
+ * @return status.
+ * @see None.
+ */
+
+wrapper_mqtt_check_state:
+/**
+ * @brief check whether MQTT connection is established or not.
+ *
+ * @param [in] client: specify the MQTT client.
+ *
+ * @retval  1 : MQTT in abnormal state.
+ * @retval  0 : MQTT in normal state.
+ * @see None.
+ */
+
+wrapper_mqtt_subscribe:
+/**
+ * @brief Subscribe MQTT topic.
+ *
+ * @param [in] client: specify the MQTT client.
+ * @param [in] topic_filter: specify the topic filter.
+ * @param [in] qos: specify the MQTT Requested QoS.
+ * @param [in] topic_handle_func: specify the topic handle callback-function.
+ * @param [in] pcontext: specify context. When call 'topic_handle_func', it will be passed back.
+ *
+ * @retval -1  : Subscribe failed.
+ * @retval >=0 : Subscribe successful.
+          The value is a unique ID of this request.
+          The ID will be passed back when callback 'iotx_mqtt_param_t:handle_event'.
+ * @see None.
+ */
+
+
+wrapper_mqtt_subscribe_sync:
+/**
+ * @brief Subscribe MQTT topic and wait suback.
+ *
+ * @param [in] client: specify the MQTT client.
+ * @param [in] topic_filter: specify the topic filter.
+ * @param [in] qos: specify the MQTT Requested QoS.
+ * @param [in] topic_handle_func: specify the topic handle callback-function.
+ * @param [in] pcontext: specify context. When call 'topic_handle_func', it will be passed back.
+ * @param [in] timeout_ms: time in ms to wait.
+ *
+ * @retval -1  : Subscribe failed.
+ * @retval >=0 : Subscribe successful.
+          The value is a unique ID of this request.
+          The ID will be passed back when callback 'iotx_mqtt_param_t:handle_event'.
+ * @see None.
+ */
+
+wrapper_mqtt_unsubscribe:
+/**
+ * @brief Unsubscribe MQTT topic.
+ *
+ * @param [in] client: specify the MQTT client.
+ * @param [in] topic_filter: specify the topic filter.
+ *
+ * @retval -1  : Unsubscribe failed.
+ * @retval >=0 : Unsubscribe successful.
+          The value is a unique ID of this request.
+          The ID will be passed back when callback 'iotx_mqtt_param_t:handle_event'.
+ * @see None.
+ */
+
+wrapper_mqtt_publish:
+/**
+ * @brief Publish message to specific topic.
+ *
+ * @param [in] client: specify the MQTT client.
+ * @param [in] topic_name: specify the topic name.
+ * @param [in] topic_msg: specify the topic message.
+ *
+ * @retval -1 :  Publish failed.
+ * @retval  0 :  Publish successful, where QoS is 0.
+ * @retval >0 :  Publish successful, where QoS is >= 0.
+        The value is a unique ID of this request.
+        The ID will be passed back when callback 'iotx_mqtt_param_t:handle_event'.
+ * @see None.
+ */
+
+wrapper_mqtt_release:
+/**
+ * @brief Release the MQTT client
+ *        This function disconnect MQTT connection and release the related resource.
+ *
+ * @param [in] client: pointer of handle, specify the MQTT client.
+ *
+ * @retval  0 : Release success.
+ * @retval -1 : Release failed.
+ * @see None.
+ */
+
+ wrapper_mqtt_nwk_event_handler:
+ /**
+ * @brief Only used in async network stack and FEATURE_ASYNC_PROTOCOL_STACK must be selected
+ *
+ * @param [in] client: specify the MQTT client.
+ * @param [in] event: specify the network event.
+ * @param [in] param: specify the network params.
+ *
+ * @retval -1 :  Handle failed.
+ * @retval  0 :  Handle successful.
+ *
+ */
+ 
+HAL_SemaphoreCreate:
+/**
+ * @brief   create a semaphore
+ *
+ * @return semaphore handle.
+ * @see None.
+ * @note The recommended value of maximum count of the semaphore is 255.
+ */
+
+HAL_SemaphoreDestroy:
+/**
+ * @brief   destory a semaphore
+ *
+ * @param[in] sem @n the specified sem.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_SemaphorePost:
+/**
+ * @brief   signal thread wait on a semaphore
+ *
+ * @param[in] sem @n the specified semaphore.
+ * @return None.
+ * @see None.
+ * @note None.
+ */
+
+HAL_SemaphoreWait:
+/**
+ * @brief   wait on a semaphore
+ *
+ * @param[in] sem @n the specified semaphore.
+ * @param[in] timeout_ms @n timeout interval in millisecond.
+     If timeout_ms is PLATFORM_WAIT_INFINITE, the function will return only when the semaphore is signaled.
+ * @return
+   @verbatim
+   =  0: The state of the specified object is signaled.
+   =  -1: The time-out interval elapsed, and the object's state is nonsignaled.
+   @endverbatim
+ * @see None.
+ * @note None.
+ */
+
+HAL_ThreadCreate:
+/**
+ * @brief  create a thread
+ *
+ * @param[out] thread_handle @n The new thread handle, memory allocated before thread created and return it, free it after thread joined or exit.
+ * @param[in] start_routine @n A pointer to the application-defined function to be executed by the thread.
+        This pointer represents the starting address of the thread.
+ * @param[in] arg @n A pointer to a variable to be passed to the start_routine.
+ * @param[in] hal_os_thread_param @n A pointer to stack params.
+ * @param[out] stack_used @n if platform used stack buffer, set stack_used to 1, otherwise set it to 0.
+ * @return
+   @verbatim
+     = 0: on success.
+     = -1: error occur.
+   @endverbatim
+ * @see None.
+ * @note None.
+ */
+
+HAL_AT_Uart_Init:
+/**
+ * Initialises a UART interface
+ *
+ *
+ * @param[in]  uart  the interface which should be initialised
+ *
+ * @return  0 : on success, EIO : if an error occurred with any step
+ */
+
+HAL_AT_Uart_Deinit:
+/**
+ * Deinitialises a UART interface
+ *
+ * @param[in]  uart  the interface which should be deinitialised
+ *
+ * @return  0 : on success, EIO : if an error occurred with any step
+ */
+
+HAL_AT_Uart_Send:
+/**
+ * Transmit data on a UART interface
+ *
+ * @param[in]  uart     the UART interface
+ * @param[in]  data     pointer to the start of data
+ * @param[in]  size     number of bytes to transmit
+ * @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER
+ *                      if you want to wait forever
+ *
+ * @return  0 : on success, EIO : if an error occurred with any step
+ */
+
+HAL_AT_Uart_Recv:
+/**
+ * Receive data on a UART interface
+ *
+ * @param[in]   uart         the UART interface
+ * @param[out]  data         pointer to the buffer which will store incoming data
+ * @param[in]   expect_size  number of bytes to receive
+ * @param[out]  recv_size    number of bytes received
+ * @param[in]   timeout      timeout in milisecond, set this value to HAL_WAIT_FOREVER
+ *                           if you want to wait forever
+ *
+ * @return  0 : on success, EIO : if an error occurred with any step
+ */
+
+HAL_AT_CONN_Init:
+/**
+ * Module low level init so that it's ready to setup socket connection.
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_CONN_Start:
+/**
+ * Start a socket connection via module.
+ *
+ * @param[in]  conn - connect parameters which are used to setup
+ *                 the socket connection.
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_CONN_Send:
+/**
+ * Send data via module.
+ * This function does not return until all data sent.
+ *
+ * @param[in]  fd - the file descripter to operate on.
+ * @param[in]  data - pointer to data to send.
+ * @param[in]  len - length of the data.
+ * @param[in]  remote_ip - remote port number (optional).
+ * @param[in]  remote_port - remote port number (optional).
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_CONN_DomainToIp:
+/**
+ * Get IP information of the corresponding domain.
+ * Currently only one IP string is returned (even when the domain
+ * coresponses to mutliple IPs). Note: only IPv4 is supported.
+ *
+ * @param[in]   domain - the domain string.
+ * @param[out]  ip - the place to hold the dot-formatted ip string.
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_CONN_Close:
+/**
+ * Close the socket connection.
+ *
+ * @param[in]  fd - the file descripter to operate on.
+ * @param[in]  remote_port - remote port number (optional).
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_CONN_Deinit:
+/**
+ * Destroy or exit low level state if necessary.
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_CONN_RegInputCb:
+/**
+ * Register network connection data input function
+ * Input data from module.
+ * This callback should be called when the data is received from the module
+ * It should tell the sal where the data comes from.
+ * @param[in]  fd - the file descripter to operate on.
+ * @param[in]  data - the received data.
+ * @param[in]  len - expected length of the data when IN,
+ *                    and real read len when OUT.
+ * @param[in]  addr - remote ip address. Caller manages the
+                            memory (optional).
+ * @param[in]  port - remote port number (optional).
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+
+HAL_AT_MQTT_Init:
+/**
+ * Initialize low layer
+ *
+ * @param[in]  iotx_mqtt_param_t a struct contain usename, password, etc.
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+int HAL_AT_MQTT_Deinit:
+/**
+ * Deinit low layer
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+int HAL_AT_MQTT_Connect:
+/**
+ * Setup MQTT Connection
+ *
+ * @param[in] product key (optional).
+ * @param[in] device name (optional).
+ * @param[in] device Secret (optional).
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_MQTT_Disconnect:
+/**
+ * Close MQTT connection
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_MQTT_Subscribe:
+/**
+ * Subscribe topic
+ *
+ * @param[in]  topic
+ * @param[in]  qos
+ * @param[in]  mqtt_packet_id
+ * @param[out] mqtt_status
+ * @param[in]  timeout_ms
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_MQTT_Unsubscribe:
+/**
+ * Unsubscribe topic
+ *
+ * @param[in]  topic
+ * @param[in]  mqtt_packet_id
+ * @param[out] mqtt_status
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_MQTT_Publish:
+/**
+ * Publish message
+ *
+ * @param[in] topic
+ * @param[in] qos
+ * @param[in] message
+ * @param[in] msg_len
+ *
+ * @return  0 - success, -1 - failure
+ */
+
+HAL_AT_MQTT_State:
+/**
+ * Check connection status
+ *
+ * @return  0 - invalid, 1 - initialized, 2 - connected, 3 - disconnected, 4 - disconnect-reconnecting
+ */
+
+HAL_DTLSHooks_set:
+/**
+ * @brief Set malloc/free function.
+ *
+ * @param [in] hooks: @n Specify malloc/free function you want to use
+ *
+ * @retval DTLS_SUCCESS : Success.
+   @retval        other : Fail.
+ * @see None.
+ * @note None.
+ */
+
+ HAL_DTLSSession_create:
+ /**
+ * @brief Establish a DSSL connection.
+ *
+ * @param [in] p_options: @n Specify paramter of DTLS
+   @verbatim
+           p_host : @n Specify the hostname(IP) of the DSSL server
+             port : @n Specify the DSSL port of DSSL server
+    p_ca_cert_pem : @n Specify the root certificate which is PEM format.
+   @endverbatim
+ * @return DSSL handle.
+ * @see None.
+ * @note None.
+ */
+
+ HAL_DTLSSession_write:
+ /**
+ * @brief Write data into the specific DSSL connection.
+ *
+ * @param [in] context @n A descriptor identifying a connection.
+ * @param [in] p_data @n A pointer to a buffer containing the data to be transmitted.
+ * @param [in] p_datalen @n The length, in bytes, of the data pointed to by the 'p_data' parameter.
+ * @retval DTLS_SUCCESS : Success.
+   @retval        other : Fail.
+ * @see None.
+ */
+
+ HAL_DTLSSession_read:
+ /**
+ * @brief Read data from the specific DSSL connection with timeout parameter.
+ *        The API will return immediately if len be received from the specific DSSL connection.
+ *
+ * @param [in] context @n A descriptor identifying a DSSL connection.
+ * @param [in] p_data @n A pointer to a buffer to receive incoming data.
+ * @param [in] p_datalen @n The length, in bytes, of the data pointed to by the 'p_data' parameter.
+ * @param [in] timeout_ms @n Specify the timeout value in millisecond. In other words, the API block 'timeout_ms' millisecond maximumly.
+ * @return The result of read data from DSSL connection
+ * @retval DTLS_SUCCESS : Read success.
+ * @retval DTLS_FATAL_ALERT_MESSAGE : Recv peer fatal alert message.
+ * @retval DTLS_PEER_CLOSE_NOTIFY : The DTLS session was closed by peer.
+ * @retval DTLS_READ_DATA_FAILED : Read data fail.
+ * @see None.
+ */
+
+ HAL_DTLSSession_free:
+ /**
+ * @brief Destroy the specific DSSL connection.
+ *
+ * @param[in] context: @n Handle of the specific connection.
+ *
+ * @return The result of free dtls session
+ * @retval DTLS_SUCCESS : Read success.
+ * @retval DTLS_INVALID_PARAM : Invalid parameter.
+ * @retval DTLS_INVALID_CA_CERTIFICATE : Invalid CA Certificate.
+ * @retval DTLS_HANDSHAKE_IN_PROGRESS : Handshake in progress.
+ * @retval DTLS_HANDSHAKE_FAILED : Handshake failed.
+ * @retval DTLS_FATAL_ALERT_MESSAGE : Recv peer fatal alert message.
+ * @retval DTLS_PEER_CLOSE_NOTIFY : The DTLS session was closed by peer.
+ * @retval DTLS_SESSION_CREATE_FAILED : Create session fail.
+ * @retval DTLS_READ_DATA_FAILED : Read data fail.
+ */

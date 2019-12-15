@@ -41,18 +41,21 @@ KERNEL_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/risc-v/rv32i/gcc/*.c} \
+        ${wildcard $(TOP_DIR)/arch/risc-v/spike/gcc/*.c} \
         ${wildcard $(TOP_DIR)/arch/risc-v/common/*.c}
         C_SOURCES += $(ARCH_SRC)
 
 HAL_DRIVER_SRC =  \
-		$(TOP_DIR)/board/QEMU_Spike/Src/main.c 
+		$(TOP_DIR)/board/QEMU_Spike/Src/main.c 	\
+		$(TOP_DIR)/board/QEMU_Spike/Src/gd32vf103_it.c
         C_SOURCES += $(HAL_DRIVER_SRC) 
 
 # ASM sources
 ASM_SOURCES = 
 
 ASM_SOURCES_S =  \
-$(TOP_DIR)/arch/risc-v/rv32i/gcc/port_s.S	\
+$(TOP_DIR)/arch/risc-v/rv32i/gcc/port_s.S		\
+$(TOP_DIR)/arch/risc-v/spike/gcc/riscv_port_s.S	\
 start.S
 
 
@@ -108,6 +111,8 @@ KERNEL_INC = \
         -I $(TOP_DIR)/kernel/hal/include \
         -I $(TOP_DIR)/arch/risc-v/common/include \
         -I $(TOP_DIR)/arch/risc-v/rv32i/gcc \
+        -I $(TOP_DIR)/arch/risc-v/spike/gcc \
+		-I $(TOP_DIR)/platform/vendor_bsp/gd/GD32VF103_Firmware_Library/RISCV/drivers \
         -I $(TOP_DIR)/board/QEMU_Spike/TOS-CONFIG
         C_INCLUDES += $(KERNEL_INC)
 CMSIS_INC = 

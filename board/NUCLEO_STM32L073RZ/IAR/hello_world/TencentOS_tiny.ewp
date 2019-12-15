@@ -1168,13 +1168,28 @@
     <group>
         <name>tos/kernel</name>
         <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_binary_heap.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_char_fifo.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_completion.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_countdownlatch.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_event.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_fifo.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_global.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_global.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mail_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_message_queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mmblk.c</name>
@@ -1183,16 +1198,22 @@
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mmheap.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_msg.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_mutex.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_pend.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_queue.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_priority_mail_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_priority_message_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_priority_queue.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_ring_queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_robin.c</name>

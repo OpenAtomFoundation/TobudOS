@@ -5,13 +5,13 @@ void lorawan_demo(void)
     int count = 1;
     extern int rhf76_lora_init(hal_uart_port_t uart_port);
 
-    rhf76_lora_init(HAL_UART_PORT_0);
+    rhf76_lora_init(HAL_UART_PORT_1);
     tos_lora_module_join();
 
     while (1) {
         if (count % 20 == 0) {
             
-            // printf("############task1 count is %d \r\n",count++);
+            printf("############task1 count is %d \r\n",count++);
             tos_lora_module_send("test data",sizeof("test data"));
         }
         count++;

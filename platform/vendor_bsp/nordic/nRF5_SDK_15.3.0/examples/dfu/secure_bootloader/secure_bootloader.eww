@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>  <project>
+    <path>$WS_DIR$\pca10056_usb\iar\secure_bootloader_usb_mbr_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040_ble\iar\secure_bootloader_ble_s132_pca10040.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_ble\iar\secure_bootloader_ble_s140_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_uart\iar\secure_bootloader_uart_mbr_pca10056.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040_uart\iar\secure_bootloader_uart_mbr_pca10040.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e_ble\iar\secure_bootloader_ble_s112_pca10040e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e_ble\iar\secure_bootloader_ble_s112_pca10056e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e_uart\iar\secure_bootloader_uart_mbr_pca10040e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e_uart\iar\secure_bootloader_uart_mbr_pca10056e.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_usb_debug\iar\secure_bootloader_usb_mbr_pca10056_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_ble_debug\iar\secure_bootloader_ble_s140_pca10056_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040_ble_debug\iar\secure_bootloader_ble_s132_pca10040_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056_uart_debug\iar\secure_bootloader_uart_mbr_pca10056_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040_uart_debug\iar\secure_bootloader_uart_mbr_pca10040_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10040e_ble_debug\iar\secure_bootloader_ble_s112_pca10040e_debug.ewp</path>
+  </project>  <project>
+    <path>$WS_DIR$\pca10056e_ble_debug\iar\secure_bootloader_ble_s112_pca10056e_debug.ewp</path>
+  </project>  <batchBuild/>
+</workspace>

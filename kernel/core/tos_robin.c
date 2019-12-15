@@ -1,19 +1,36 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include "tos.h"
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 
-__API__ void tos_robin_config(k_robin_state_t robin_state, k_timeslice_t default_timeslice)
+__API__ void tos_robin_default_timeslice_config(k_timeslice_t default_timeslice)
 {
     TOS_CPU_CPSR_ALLOC();
-    TOS_CPU_INT_DISABLE();
 
-    k_robin_state = robin_state;
+    TOS_CPU_INT_DISABLE();
 
     if (default_timeslice > (k_timeslice_t)0u) {
         k_robin_default_timeslice = default_timeslice;
     } else {
         k_robin_default_timeslice = TOS_CFG_CPU_TICK_PER_SECOND / 10;
     }
+
     TOS_CPU_INT_ENABLE();
 }
 
@@ -43,10 +60,6 @@ __KERNEL__ void robin_sched(k_prio_t prio)
 {
     TOS_CPU_CPSR_ALLOC();
     k_task_t *task;
-
-    if (k_robin_state != TOS_ROBIN_STATE_ENABLED) {
-        return;
-    }
 
     TOS_CPU_INT_DISABLE();
 

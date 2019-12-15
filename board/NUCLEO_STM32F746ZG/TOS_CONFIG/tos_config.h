@@ -7,7 +7,9 @@
 
 #define TOS_CFG_ROUND_ROBIN_EN      1u
 
-#define TOS_CFG_OBJECT_VERIFY_EN       0u
+#define TOS_CFG_OBJECT_VERIFY_EN       1u
+
+#define TOS_CFG_TASK_DYNAMIC_CREATE_EN  0u
 
 #define TOS_CFG_EVENT_EN            1u
 
@@ -15,11 +17,17 @@
 
 #define TOS_CFG_MMHEAP_EN           1u
 
-#define TOS_CFG_MMHEAP_POOL_SIZE    0x6000
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE    0x6000
+
+#define TOS_CFG_MESSAGE_QUEUE_EN        1u
+
+#define TOS_CFG_MAIL_QUEUE_EN           0u
+
+#define TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN   0u
+
+#define TOS_CFG_PRIORITY_MAIL_QUEUE_EN      0u
 
 #define TOS_CFG_MUTEX_EN            1u
-
-#define TOS_CFG_QUEUE_EN            1u
 
 #define TOS_CFG_TIMER_EN            1u
 
@@ -29,15 +37,7 @@
 
 #define TOS_CFG_TICKLESS_EN         0u
 
-#define TOS_CFG_VFS_EN				0u
-
-#if (TOS_CFG_QUEUE_EN > 0u)
-#define TOS_CFG_MSG_EN     1u
-#else
-#define TOS_CFG_MSG_EN     0u
-#endif
-
-#define TOS_CFG_MSG_POOL_SIZE               10u
+#define TOS_CFG_VFS_EN              0u
 
 #define TOS_CFG_IDLE_TASK_STK_SIZE          128u
 
