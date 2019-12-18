@@ -3,6 +3,21 @@
 
 static mcps_indication_t rhf76_mcps_indication;
 
+static int rhf76_exit_low_power(void)
+{
+    int try = 0;
+    at_echo_t echo;
+
+    tos_at_echo_create(&echo, NULL, 0, "+LOWPOWER: AUTOOFF");
+    while (try++ < 10) {
+        tos_at_cmd_exec(&echo, 3000, RHF76_LOWPOWER_SET);
+        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+            return 0;
+        }
+    }
+    return -1;
+}
+
 static int rhf76_reset(void)
 {
     int try = 0;
@@ -186,6 +201,10 @@ static int rhf76_init(void)
     printf("Init RHF76 LoRa ...\n" );
 
     at_delay_ms(1000);
+    if (rhf76_exit_low_power() != 0) {
+        printf("rhf76 reset FAILED\n");
+        return -1;
+    }
 
     if (rhf76_reset() != 0) {
         printf("rhf76 reset FAILED\n");

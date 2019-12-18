@@ -11,16 +11,18 @@ static void led_config(void)
 	gpio_bit_set(LED_GPIO_PORT, LED_PIN);
 }
 
-void board_init() {
+void board_init()
+{
 	char *str = "Tencent";
     SystemInit();
     led_config();
-    uart3_init(115200);
+    usart0_init(115200);
+    usart1_init(115200);
+    usart2_init(115200);
     OLED_Init();
     OLED_Clear();
     OLED_ShowChinese(36,0,0);
     OLED_ShowChinese(54,0,1);
     OLED_ShowChinese(72,0,2);
     OLED_ShowString(36,2,(uint8_t*)str,8);
-
 }

@@ -5,9 +5,16 @@
 #define USART0_GPIO_RX_PIN  GPIO_PIN_10
 #define USART0_GPIO_PORT    GPIOA
 
-#define USART3_GPIO_TX_PIN  GPIO_PIN_10
-#define USART3_GPIO_RX_PIN  GPIO_PIN_11
-#define USART3_GPIO_PORT    GPIOC
+#define USART1_GPIO_TX_PIN  GPIO_PIN_2
+#define USART1_GPIO_RX_PIN  GPIO_PIN_3
+#define USART1_GPIO_PORT    GPIOA
+
+#define USART2_GPIO_TX_PIN  GPIO_PIN_10
+#define USART2_GPIO_RX_PIN  GPIO_PIN_11
+#define USART2_GPIO_PORT    GPIOC
+
+
 void usart0_init(int baud);
-void uart3_init(int baud);
+void usart1_init(int baud);
+void usart2_init(int baud);
 #endif // __USART_H
