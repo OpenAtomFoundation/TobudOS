@@ -61,7 +61,7 @@
 
 typedef void (*k_task_entry_t)(void *arg);
 
-typedef void (*k_task_walker)(k_task_t *task);
+typedef void (*k_task_walker_t)(k_task_t *task);
 
 /**
  * task control block
@@ -339,7 +339,7 @@ __API__ k_err_t tos_task_stack_draught_depth(k_task_t *task, int *depth);
  *
  * @return  None
  */
-__API__ void tos_task_walkthru(k_task_walker walker);
+__API__ void tos_task_walkthru(k_task_walker_t walker);
 
 /**
  * @brief A debug API for display all tasks information.

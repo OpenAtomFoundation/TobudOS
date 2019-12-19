@@ -547,7 +547,7 @@ __API__ k_task_t *tos_task_curr_task_get(void)
     return curr_task;
 }
 
-__API__ void tos_task_walkthru(k_task_walker walker)
+__API__ void tos_task_walkthru(k_task_walker_t walker)
 {
     TOS_CPU_CPSR_ALLOC();
     k_task_t *task;

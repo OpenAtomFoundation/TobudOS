@@ -191,7 +191,7 @@ __STATIC_INLINE__ void *blk_to_ptr(const mmheap_blk_t *blk)
 }
 
 /* Return location of next block after block of given size. */
-__STATIC_INLINE__ mmheap_blk_t *offset_to_block(const void *ptr, int diff)
+__STATIC_INLINE__ mmheap_blk_t *offset_to_blk(const void *ptr, int diff)
 {
     return (mmheap_blk_t *)((cpu_addr_t)ptr + diff);
 }
@@ -207,7 +207,7 @@ __STATIC__ mmheap_blk_t *blk_next(const mmheap_blk_t *blk)
 {
     mmheap_blk_t *next_blk;
 
-    next_blk = offset_to_block(blk_to_ptr(blk), blk_size(blk) - K_MMHEAP_BLK_HEADER_OVERHEAD);
+    next_blk = offset_to_blk(blk_to_ptr(blk), blk_size(blk) - K_MMHEAP_BLK_HEADER_OVERHEAD);
     return next_blk;
 }
 
@@ -331,7 +331,7 @@ __STATIC__ mmheap_blk_t *blk_split(mmheap_blk_t *blk, size_t size)
     size_t          remain_size;
 
     /* Calculate the amount of space left in the remaining block. */
-    remaining   = offset_to_block(blk_to_ptr(blk), size - K_MMHEAP_BLK_HEADER_OVERHEAD);
+    remaining   = offset_to_blk(blk_to_ptr(blk), size - K_MMHEAP_BLK_HEADER_OVERHEAD);
     remain_size = blk_size(blk) - (size + K_MMHEAP_BLK_HEADER_OVERHEAD);
 
     blk_set_size(remaining, remain_size);
@@ -735,7 +735,7 @@ __API__ k_err_t tos_mmheap_pool_add(void *pool_start, size_t pool_size)
      ** so that the prev_phys_block field falls outside of the pool -
      ** it will never be used.
      */
-    curr_blk = offset_to_block(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
+    curr_blk = offset_to_blk(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
     blk_set_size(curr_blk, size_aligned);
     blk_set_free(curr_blk);
     blk_set_prev_used(curr_blk);
@@ -763,7 +763,7 @@ __API__ k_err_t tos_mmheap_pool_rmv(void *pool_start)
         return K_ERR_MMHEAP_POOL_NOT_EXIST;
     }
 
-    blk = offset_to_block(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
+    blk = offset_to_blk(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
     mapping_insert(blk_size(blk), &fl, &sl);
     remove_free_block(blk, fl, sl);
 
@@ -780,7 +780,7 @@ __API__ k_err_t tos_mmheap_pool_check(void *pool_start, k_mmheap_info_t *info)
 
     memset(info, 0, sizeof(k_mmheap_info_t));
 
-    blk = offset_to_block(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
+    blk = offset_to_blk(pool_start, -K_MMHEAP_BLK_HEADER_OVERHEAD);
 
     while (blk && !blk_is_last(blk)) {
         if (blk_is_free(blk)) {
