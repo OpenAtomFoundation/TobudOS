@@ -79,7 +79,8 @@ int parse_data(uint8_t *data) {
         printf("motor=%d\n", motor);
         if(motor == 1) {
             //power on relay
-            motor_control(OPEN);
+            turnon_fan();
+            // motor_control(OPEN);
         } else if(motor == 0) {
             //power off relay
             motor_control(CLOSE);
@@ -154,8 +155,9 @@ int network_init() {
     extern int esp8266_sal_init(hal_uart_port_t uart_port);
     extern int esp8266_join_ap(const char *ssid, const char *pwd);
     esp8266_sal_init(HAL_UART_PORT_0);
-    // int ret = esp8266_join_ap("royye", "Gch626262");
-    int ret = esp8266_join_ap("iottest", "iot12345");
+    int ret = esp8266_join_ap("Tencent-StaffWiFi", "");
+    //int ret = esp8266_join_ap("Tencent-StaffWiFi", "");
+    //int ret = esp8266_join_ap("Tencent-GuestWiFi", "252901");
     return ret;
 #endif
 }
@@ -204,7 +206,7 @@ int mqtt_subscribe(void) {
 }
 
 void qcloud_agent(void) {
-    // 网络初始化
+    // 通过通信模组实现网络连接
     int ret = network_init();
     if (ret < 0) {
         printf("network_init fail\n");
@@ -218,7 +220,7 @@ void qcloud_agent(void) {
         return;
     }
 
-    // 订阅设备主题
+    // 订阅设备主题，用于接收下行消息
     ret = mqtt_subscribe();
     if (ret < 0) {
         printf("mqtt_subscribe fail\n");
@@ -228,9 +230,9 @@ void qcloud_agent(void) {
     sensor_init();
     while(1) {
         sensor_read();
-        // 发布传感器数据 
+        // 上报传感器数据 
         publish_data();
-        // 接收控制消息
+        // 接收下行控制消息
         receive_data();
         osDelay(1000);
     }
@@ -263,9 +265,11 @@ void monitor_task(void) {
         // 光照强度太低 => 打开补光灯
         if (light_intensity_low()) {
             turnon_light();
+            turnon_fan();
         // 光照强度过高 => 关闭补光灯 
         } else if (light_intensity_high()) {
             turnoff_light();
+            turnoff_fan();
         }
         osDelay(100);
     }
@@ -281,10 +285,7 @@ void normal_task() {
 
 void network_test_task() {
     // 初始化WiFi模组，连接AP
-    extern int esp8266_sal_init(hal_uart_port_t uart_port);
-    extern int esp8266_join_ap(const char *ssid, const char *pwd);
-    esp8266_sal_init(HAL_UART_PORT_0);
-    int ret = esp8266_join_ap("iottest", "iot12345");
+    int ret = network_init();
     if (ret < 0) {
         printf("network_init fail\n");
         return;
@@ -320,31 +321,6 @@ void network_test_task() {
     }
 }
 
-void entry_task1(void *arg)
-{
-    while (K_TRUE) {
-        printf("entry_task1\n");
-        tos_task_delay(1000);
-    }
-}
-
-void entry_task2(void *arg)
-{
-    while (K_TRUE) {
-        printf("entry_task2\n");
-        osDelay(2000);	
-    }
-}
-
-void entry_task1(void *arg);
-#define TASK1_STK_SIZE          512    
-k_stack_t stack_task1[TASK1_STK_SIZE];
-k_task_t task1;
-
-#define TASK2_STK_SIZE          512
-void entry_task2(void *arg);
-osThreadDef(entry_task2, osPriorityNormal, 1, TASK2_STK_SIZE);
-
 // 联网测试
 osThreadDef(network_test_task, osPriorityNormal, 1, 1024);
 
@@ -362,24 +338,24 @@ osThreadDef(monitor_task, osPriorityHigh, 1, MONITOR_STK_SIZE);
 #define NORMAL_STK_SIZE 512
 osThreadDef(normal_task, osPriorityNormal, 1, NORMAL_STK_SIZE);
 
-void application_entry(void *arg) {
-    // 端云对接
-    osThreadCreate(osThread(qcloud_agent), NULL);
+void helloworld(void *arg)
+{
+	while(1) {
+		printf("helloworld\n");
+		osDelay(1000);
+	}
+}
+
+#define TASK2_STK_SIZE          512
+osThreadDef(helloworld, osPriorityNormal, 1, TASK2_STK_SIZE);
+
+void application_entry(void *arg) {    
+    osThreadCreate(osThread(helloworld), NULL);
 }
 
 /*
-// tos_task_create 创建任务1
-(void)tos_task_create(&task1, 
-                      "task1",       // 任务名称
-                      entry_task1,   // 任务入口
-                      NULL,          // 任务参数
-                      4,             // 优先级
-                      stack_task1,   // 任务栈空间 
-                      TASK1_STK_SIZE,// 任务栈大小 
-                      0);            // 时间片
-
-// cmsis api 创建任务2
-osThreadCreate(osThread(entry_task2), NULL);
+// 创建任务
+osThreadCreate(osThread(helloworld), NULL);
 
 // 大循环的方式
 sensor_init();
@@ -411,7 +387,7 @@ osThreadCreate(osThread(normal_task), NULL);
 osThreadCreate(osThread(network_test_task), NULL);
 
 // 端云对接
-osThreadCreate(osThread(agent_task), NULL);
+osThreadCreate(osThread(qcloud_agent), NULL);
 
 */
 
