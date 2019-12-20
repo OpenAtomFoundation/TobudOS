@@ -188,8 +188,7 @@ __STATIC__ uint32_t kv_blk_search_suitable(uint32_t item_size)
 
         // no more fresh block, cannot allocate new block and cannot do gc neither.
         if (KV_MGR_BLK_NUM_FRESH < 1) {
-            KV_MGR_WORKSPACE = KV_BLK_INVALID;
-            return KV_MGR_WORKSPACE;
+            return KV_BLK_INVALID;
         }
 
         // if we have more than one fresh block, just give it out
