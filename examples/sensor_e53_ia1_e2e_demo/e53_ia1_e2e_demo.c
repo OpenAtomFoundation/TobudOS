@@ -350,7 +350,7 @@ void helloworld(void *arg)
 osThreadDef(helloworld, osPriorityNormal, 1, TASK2_STK_SIZE);
 
 void application_entry(void *arg) {    
-    osThreadCreate(osThread(helloworld), NULL);
+    osThreadCreate(osThread(qcloud_agent), NULL);
 }
 
 /*
