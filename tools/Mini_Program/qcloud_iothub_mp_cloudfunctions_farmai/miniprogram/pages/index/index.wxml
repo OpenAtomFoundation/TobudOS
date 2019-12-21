@@ -1,0 +1,65 @@
+<view style="display:flex; flex-direction:column; align-items:center;">
+  <image style="width:200px; height:60px;" src="../../images/TencentOS_tiny_log.png" mode="cover"></image>
+</view>
+
+<view class="body">
+  <view style="font-weight: bold;">
+    设备信息
+  </view>
+  <view class="box">
+    <view class="cell">
+      <view class="status-left">产品ID</view>
+      <view class="status-right">{{productId}}</view>
+    </view>
+    <view class="cell">
+      <view class="status-left">设备名称</view>
+      <view class="status-right">{{deviceName}}</view>
+    </view>
+  </view>
+
+  <text>\n</text>
+
+  <form bindsubmit="">
+    <view style="display:flex; flex-direction:row; justify-content: space-between;">
+      <view style="font-weight: bold;">
+        农业Demo
+      </view>
+      <view>
+        <button type="primary" size="mini" bindtap="update">刷新</button>
+      </view>
+    </view>
+    <view class="box">
+      <view class="cell">
+        <view>照明</view>
+        <view>
+          <switch name="light" data-item="light" checked="{{stateReported.light}}" bindchange="switchChange"/>
+        </view>
+      </view>
+      <view class="cell">
+        <view>风扇</view>
+        <view>
+          <switch name="motor" data-item="motor" checked="{{stateReported.motor}}" bindchange="switchChange"/>
+        </view>
+      </view>
+      <view class="cell">
+        <view class="left">温度</view>
+        <view class="right">
+          {{stateReported.temperature}}
+        </view>
+        <view class="unit">℃</view>
+      </view>
+      <view class="cell">
+        <view class="left">湿度</view>
+        <view class="right">
+          {{stateReported.humidity}}
+        </view>
+        <view class="unit">%</view>
+      </view>
+      <view class="cell">
+        <view class="left">光照强度</view>
+        <view class="right">{{stateReported.light_intensity}}</view>
+        <view class="unit">lux</view>
+      </view>
+    </view>
+  </form>
+</view>
