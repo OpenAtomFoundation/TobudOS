@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L073xx,USE_HAL_DRIVER,STM32L073xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;../../../../platform/vendor_bsp/st/STM32L0xx_HAL_Driver/Inc;../../../../platform/vendor_bsp/st/STM32L0xx_HAL_Driver/Inc/Legacy;../../../../platform/vendor_bsp/st/CMSIS/Device/ST/STM32L0xx/Include;../../../../platform/vendor_bsp/st/CMSIS/Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m0+\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\hal\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\devices\rhf76_lora;..\..\..\..\net\at\include;..\..\..\..\net\lora_module_wrapper</IncludePath>
+              <IncludePath>..\..\BSP\Inc;../../../../platform/vendor_bsp/st/STM32L0xx_HAL_Driver/Inc;../../../../platform/vendor_bsp/st/STM32L0xx_HAL_Driver/Inc/Legacy;../../../../platform/vendor_bsp/st/CMSIS/Device/ST/STM32L0xx/Include;../../../../platform/vendor_bsp/st/CMSIS/Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m0+\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\hal\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\devices\rhf76_lora;..\..\..\..\net\at\include;..\..\..\..\net\lora_module_wrapper;..\..\BSP\HardWare\HTS221</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -421,6 +421,16 @@
               <FileName>stm32l0xx_it_lorawan.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\stm32l0xx_it_lorawan.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>HTS221.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\HardWare\HTS221\HTS221.c</FilePath>
             </File>
           </Files>
         </Group>
