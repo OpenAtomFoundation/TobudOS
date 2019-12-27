@@ -1,6 +1,6 @@
 #include "mqtt_wrapper.h"
 
-#define BUFFER_LEN      200
+#define BUFFER_LEN      256
 
 static MQTTPacket_connectData mqtt_form_connect_packet(mqtt_con_opt_t *opt)
 {

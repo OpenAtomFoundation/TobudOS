@@ -51,6 +51,9 @@ typedef enum lora_key_type {
 } lora_key_type_t;
 
 
+const char RHF76_LOWPOWER_SET[] = {
+    0xFF,0xFF,0xFF,0xFF,'A','T','+','L','O','W','P','O','W','E','R','=','a','u','t','o','o','f','f','\r','\n'
+};
 #define RHF76_ATCMD_SET_CLASS_A                 "AT+CLASS=A\r\n"
 #define RHF76_ATCMD_SET_CLASS_B                 "AT+CLASS=B\r\n"
 #define RHF76_ATCMD_SET_CLASS_C                 "AT+CLASS=C\r\n"
