@@ -9,6 +9,7 @@
 #include "usart.h"
 #include "gpio.h"
 #include "tos.h"
+#include "i2c.h"
 
 void board_init(void);
 void SystemClock_Config(void);
