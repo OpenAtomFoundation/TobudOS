@@ -120,6 +120,22 @@ static int rhf76_set_class(lora_class_t lora_class)
     return -1;
 }
 
+static int rhf76_set_band(void)
+{
+    int try = 0;
+    at_echo_t echo;
+
+    tos_at_echo_create(&echo, NULL, 0, RHF76_ATCMD_REPLY_BAND_CN470);
+   
+    while (try++ < 10) {
+        tos_at_cmd_exec(&echo, 3000, RHF76_ATCMD_SET_BAND_CN470);
+        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+            return 0;
+        }
+    }
+    return -1;
+}
+
 static int rhf76_set_chanel(void)
 {
     int try = 0;
@@ -195,6 +211,7 @@ int rhf76_join(void)
 
 static int rhf76_init(void)
 {
+    char *deveui = "1234567812345678";
     char *key = "2B7E151628AED2A6ABF7158809CF4F3C";
     char *appeui = "70B3D57ED00E0017";
 
@@ -216,6 +233,11 @@ static int rhf76_init(void)
         return -1;
     }
 
+    if (rhf76_set_band() != 0) {
+        printf("rhf76 set band FAILED\n");
+        return -1;
+    }
+
     if (rhf76_set_chanel() != 0) {
         printf("rhf76 set chanel FAILED\n");
         return -1;
@@ -228,6 +250,11 @@ static int rhf76_init(void)
 
     if (rhf76_set_mode(LORA_MODE_LWOTAA) != 0) {
         printf("rhf76 set mode FAILED\n");
+        return -1;
+    }
+
+    if (rhf76_set_id(LORA_ID_TYPE_DEVEUI, deveui) != 0) {
+        printf("rhf76 set deveui FAILED\n");
         return -1;
     }
 
