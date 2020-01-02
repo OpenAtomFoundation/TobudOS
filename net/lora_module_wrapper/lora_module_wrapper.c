@@ -20,10 +20,18 @@ int tos_lora_module_init(void)
     return -1;
 }
 
-int tos_lora_module_join(void)
+int tos_lora_module_join_otaa(const char *deveui, const char *appkey)
 {
-    if (g_lora_module && g_lora_module->join) {
-        return g_lora_module->join();
+    if (g_lora_module && g_lora_module->join_otaa) {
+        return g_lora_module->join_otaa(deveui, appkey);
+    }
+    return -1;
+}
+
+int tos_lora_module_join_abp(const char *deveui, const char *devaddr, const char *nwkskey, const char *appskey)
+{
+    if (g_lora_module && g_lora_module->join_abp) {
+        return g_lora_module->join_abp(deveui, devaddr, nwkskey, appskey);
     }
     return -1;
 }
@@ -36,10 +44,11 @@ int tos_lora_module_send(const void *buf, size_t len)
     return -1;
 }
 
-int tos_lora_module_recv_register(void* mcps_indication)
+int tos_lora_module_recvcb_register(lora_recv_callback_t recv_callback)
 {
-    if (g_lora_module && g_lora_module->recv_register) {
-        return g_lora_module->recv_register(mcps_indication);
+    if (g_lora_module) {
+        g_lora_module->recv_callback = recv_callback;
+        return 0;
     }
     return -1;
 }
