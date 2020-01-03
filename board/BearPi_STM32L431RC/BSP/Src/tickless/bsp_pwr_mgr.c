@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "tickless/bsp_pm_device.h"
 #include "tickless/bsp_tickless_alarm.h"
 

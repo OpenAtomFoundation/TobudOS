@@ -13,7 +13,7 @@
 #define MAIN_H
 
 
-#include "tos.h"
+#include "tos_k.h"
 #include "nrf_gpio.h"
 
 #define LED_START      18

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include "tos_k.h"
 
 __STATIC_INLINE__ void task_reset(k_task_t *task)
 {
@@ -59,26 +59,25 @@ __STATIC__ void task_exit(void)
 #if TOS_CFG_MUTEX_EN > 0u
 __STATIC__ k_prio_t task_highest_pending_prio_get(k_task_t *task)
 {
-    k_list_t *curr;
     k_mutex_t *mutex;
     k_prio_t prio, highest_prio_pending = K_TASK_PRIO_INVALID;
 
-    TOS_LIST_FOR_EACH(curr, &task->mutex_own_list) {
-        mutex   = TOS_LIST_ENTRY(curr, k_mutex_t, owner_anchor);
-        prio    = pend_highest_pending_prio_get(&mutex->pend_obj);
+    TOS_LIST_FOR_EACH_ENTRY(mutex, k_mutex_t, owner_anchor, &task->mutex_own_list) {
+        prio = pend_highest_pending_prio_get(&mutex->pend_obj);
         if (prio < highest_prio_pending) {
             highest_prio_pending = prio;
         }
     }
+
     return highest_prio_pending;
 }
 
 __STATIC__ void task_mutex_release(k_task_t *task)
 {
-    k_list_t *curr, *next;
+    k_mutex_t *mutex, *tmp;
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &task->mutex_own_list) {
-        mutex_release(TOS_LIST_ENTRY(curr, k_mutex_t, owner_anchor));
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(mutex, tmp, k_mutex_t, owner_anchor, &task->mutex_own_list) {
+        mutex_release(mutex);
     }
 }
 #endif
@@ -225,13 +224,11 @@ __STATIC__ void task_free(k_task_t *task)
 __KERNEL__ void task_free_all(void)
 {
     TOS_CPU_CPSR_ALLOC();
-    k_task_t *task;
-    k_list_t *curr, *next;
+    k_task_t *task, *tmp;
 
     TOS_CPU_INT_DISABLE();
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &k_dead_task_list) {
-        task = TOS_LIST_ENTRY(curr, k_task_t, dead_list);
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(task, tmp, k_task_t, dead_list, &k_dead_task_list) {
         tos_list_del(&task->dead_list);
         task_free(task);
     }
@@ -551,7 +548,6 @@ __API__ void tos_task_walkthru(k_task_walker_t walker)
 {
     TOS_CPU_CPSR_ALLOC();
     k_task_t *task;
-    k_list_t *curr;
 
     if (!walker) {
         return;
@@ -559,8 +555,7 @@ __API__ void tos_task_walkthru(k_task_walker_t walker)
 
     TOS_CPU_INT_DISABLE();
 
-    TOS_LIST_FOR_EACH(curr, &k_stat_list) {
-        task = TOS_LIST_ENTRY(curr, k_task_t, stat_list);
+    TOS_LIST_FOR_EACH_ENTRY(task, k_task_t, stat_list, &k_stat_list) {
         walker(task);
     }
 

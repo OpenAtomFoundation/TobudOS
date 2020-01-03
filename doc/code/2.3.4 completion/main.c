@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "mcu_init.h"
 
 #define STK_SIZE_TASK_WAIT      512

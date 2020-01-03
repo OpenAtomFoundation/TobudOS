@@ -18,7 +18,7 @@
 #ifndef _TOS_EVTDRV_H_
 #define  _TOS_EVTDRV_H_
 
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_evtdrv_err.h"
 #include "tos_evtdrv_types.h"
 #include "tos_evtdrv_event.h"

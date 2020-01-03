@@ -15,8 +15,8 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _TOS_H_
-#define  _TOS_H_
+#ifndef _TOS_K_H_
+#define  _TOS_K_H_
 
 #include <tos_compiler.h>
 #include <tos_err.h>
@@ -32,6 +32,7 @@
 #include <tos_fault.h>
 #include <tos_klib.h>
 #include <tos_list.h>
+#include <tos_slist.h>
 #include <tos_pend.h>
 #include <tos_sys.h>
 #include <tos_ring_queue.h>
@@ -59,5 +60,5 @@
 #include <tos_tickless.h>
 #include <tos_global.h>
 
-#endif /* _TOS_H_ */
+#endif /* _TOS_K_H_ */
 

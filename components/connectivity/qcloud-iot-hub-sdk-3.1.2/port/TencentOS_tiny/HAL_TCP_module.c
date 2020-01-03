@@ -22,7 +22,7 @@
 #include "qcloud_iot_export_error.h"
 #include "qcloud_iot_common.h"
 
-#include "tos.h"
+#include "tos_k.h"
 #include "sal_module_wrapper.h"
 
 #define PORT_BUFF_LEN	16

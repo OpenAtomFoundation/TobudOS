@@ -13,7 +13,7 @@
  *
  */
 
-#include "tos.h"
+#include "tos_k.h"
 #include "qcloud.h"
 
 static void response_message_callback(void *msg, void *context)

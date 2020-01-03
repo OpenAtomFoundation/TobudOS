@@ -17,9 +17,9 @@
 
 /*
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2016-2018 Armink (armink.ztl@gmail.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * 'Software'), to deal in the Software without restriction, including
@@ -27,10 +27,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -40,7 +40,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "tos.h"
+#include "tos_k.h"
 
 #include <pthread.h>
 #include <sched.h>
@@ -131,7 +131,7 @@ __PORT__ pthread_t  port_create_thread(void *arg)
     return thread_id;
 }
 
-__PORT__ void port_sched_start(void) 
+__PORT__ void port_sched_start(void)
 {
     k_curr_task = k_next_task;
     _resume_task(k_curr_task);
@@ -196,8 +196,8 @@ __PORT__ void port_init(void)
     _install_signal(SIG_CONTEXT_SWITCH, _handle_context_switch);
 }
 
-__PORT__ void port_delay_ms(uint32_t ms) 
-{   
+__PORT__ void port_delay_ms(uint32_t ms)
+{
     uint64_t start_time = _get_time_ms();
     do{
         usleep(100);
@@ -352,7 +352,7 @@ __PORT__ void port_standby_mode_enter(void)
 __STATIC__ void port_fault_do_diagnosis(port_fault_regs_t *regs)
 {
     k_fault_log_writer("\n\n====================== Fault Diagnosis =====================\n");
-    
+
 }
 
 __PORT__ void port_fault_diagnosis(void)

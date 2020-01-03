@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "tos.h"
+#include "tos_k.h"
 #include "qcloud.h"
 
 #include "lwip/api.h"

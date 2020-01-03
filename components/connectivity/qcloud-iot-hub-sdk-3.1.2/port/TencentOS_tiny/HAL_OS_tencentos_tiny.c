@@ -17,7 +17,7 @@
 #include <stdarg.h>
 
 #include "qcloud_iot_import.h"
-#include "tos.h"
+#include "tos_k.h"
 
 //#define PLATFORM_HAS_CMSIS
 

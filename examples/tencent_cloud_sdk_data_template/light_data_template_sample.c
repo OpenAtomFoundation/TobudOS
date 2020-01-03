@@ -14,7 +14,7 @@
  */
 
 #include "qcloud.h"
-#include "tos.h"
+#include "tos_k.h"
 
 #if (QCLOUD_CFG_EVENT_EN > 0u)
 

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include <tos_k.h>
 
 k_nesting_t         k_irq_nest_cnt              = (k_nesting_t)0;
 k_nesting_t         k_sched_lock_nest_cnt       = (k_nesting_t)0;

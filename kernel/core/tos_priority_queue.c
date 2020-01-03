@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC_INLINE__ void prio_q_item_copy_to(k_prio_q_t *prio_q, void *item_out, size_t *item_size, prio_q_slot_t slot)
 {

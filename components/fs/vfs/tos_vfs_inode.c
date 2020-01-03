@@ -20,15 +20,13 @@ __STATIC__ TOS_LIST_DEFINE(k_vfs_inode_list);
  */
 __STATIC__ vfs_inode_t *vfs_inode_search(const char *path, const char **relative_path)
 {
-    k_list_t *curr;
     char *name = K_NULL;
     int path_len, name_len;
     vfs_inode_t *inode = K_NULL;
 
     path_len = strlen(path);
 
-    TOS_LIST_FOR_EACH(curr, &k_vfs_inode_list) {
-        inode = TOS_LIST_ENTRY(curr, vfs_inode_t, list);
+    TOS_LIST_FOR_EACH_ENTRY(inode, vfs_inode_t, list, &k_vfs_inode_list) {
         name = (char *)inode->name;
         name_len = strlen(name);
 

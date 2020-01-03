@@ -17,10 +17,10 @@
 extern "C" {
 #endif
 
-#include <tos.h>
+#include <tos_k.h>
 #include <string.h>
 
-#include "tos.h"
+#include "tos_k.h"
 #include "qcloud.h"
 
 static char now_time_str[20] = {0};

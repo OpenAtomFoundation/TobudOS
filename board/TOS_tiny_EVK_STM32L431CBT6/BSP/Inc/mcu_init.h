@@ -12,7 +12,7 @@
 #include "i2c.h"
 #include "bh1750.h"
 #include "DHT11_BUS.h"
-#include "tos.h"
+#include "tos_k.h"
 
 void board_init(void);
 void SystemClock_Config(void);

@@ -33,7 +33,7 @@
 #include "rtc-board.h"
 #include "sx1276-board.h"
 #include "board.h"
-#include "tos.h"
+#include "tos_k.h"
 /*!
  * Unique Devices IDs register set ( STM32L0xxx )
  */
@@ -335,7 +335,7 @@ void SysTick_Handler( void )
 		if(tos_knl_is_running())
 		{
 			tos_knl_irq_enter();
-			tos_tick_handler();              
+			tos_tick_handler();
 			tos_knl_irq_leave();
 		}
     //HAL_SYSTICK_IRQHandler( );
@@ -410,7 +410,7 @@ void BoardLowPowerHandler( void )
 {
     __disable_irq( );
     /*!
-     * If an interrupt has occurred after __disable_irq( ), it is kept pending 
+     * If an interrupt has occurred after __disable_irq( ), it is kept pending
      * and cortex will not enter low power anyway
      */
 

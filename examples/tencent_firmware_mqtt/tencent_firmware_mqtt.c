@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "esp8266_tencent_firmware.h"
 #include "tencent_firmware_module_wrapper.h"
 

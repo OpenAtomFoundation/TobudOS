@@ -31,7 +31,7 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at.h"
 #include "usart.h"
 
@@ -48,7 +48,7 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
 /******************************************************************************/
-/*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M3 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
 
 /**
@@ -187,7 +187,7 @@ void SysTick_Handler(void)
 	if(tos_knl_is_running())
 	{
 		tos_knl_irq_enter();
-		tos_tick_handler();               
+		tos_tick_handler();
 		tos_knl_irq_leave();
 	}
   //HAL_SYSTICK_IRQHandler();

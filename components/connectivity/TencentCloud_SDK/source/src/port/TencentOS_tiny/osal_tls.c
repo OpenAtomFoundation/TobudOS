@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include "tos.h"
+#include "tos_k.h"
 #include "qcloud.h"
 
 #include "mbedtls/ssl.h"

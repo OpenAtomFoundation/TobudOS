@@ -18,7 +18,7 @@
 #ifndef _TOS_AT_H_
 #define _TOS_AT_H_
 
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at_utils.h"
 #include "tos_hal.h"
 

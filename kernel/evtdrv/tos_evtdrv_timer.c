@@ -22,20 +22,17 @@
 __STATIC__ void evtdrv_timer_place(evtdrv_timer_t *tmr, evtdrv_tick_t timeout)
 {
     TOS_CPU_CPSR_ALLOC();
-    k_list_t *curr;
     evtdrv_timer_t *curr_tmr;
 
     TOS_CPU_INT_DISABLE();
     tmr->expires = tos_evtdrv_systick_get() + timeout;
 
-    TOS_LIST_FOR_EACH(curr, &evtdrv_timer_list) {
-        curr_tmr = TOS_LIST_ENTRY(curr, evtdrv_timer_t, list);
-
+    TOS_LIST_FOR_EACH_ENTRY(curr_tmr, evtdrv_timer_t, list, &evtdrv_timer_list) {
         if (tmr->expires < curr_tmr->expires) {
             break;
         }
     }
-    tos_list_add_tail(&tmr->list, curr);
+    tos_list_add_tail(&tmr->list, &curr_tmr->list);
 
     TOS_CPU_INT_ENABLE();
 }
@@ -101,13 +98,11 @@ __API__ evtdrv_err_t tos_evtdrv_timer_stop(evtdrv_timer_t *tmr)
 __KERNEL__ void evtdrv_timer_update(void)
 {
     TOS_CPU_CPSR_ALLOC();
-    evtdrv_timer_t *tmr;
-    k_list_t *curr, *next;
+    evtdrv_timer_t *tmr, *tmp;
 
     TOS_CPU_INT_DISABLE();
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &evtdrv_timer_list) {
-        tmr = TOS_LIST_ENTRY(curr, evtdrv_timer_t, list);
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(tmr, tmp, evtdrv_timer_t, list, &evtdrv_timer_list) {
         if (tmr->expires > tos_evtdrv_systick_get()) {
             break;
         }

@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "tos.h"
+#include "tos_k.h"
 #include "sal_module_wrapper.h"
 
 #define PORT_BUFF_LEN	16

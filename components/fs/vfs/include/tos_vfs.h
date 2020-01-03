@@ -1,7 +1,7 @@
 #ifndef _TOS_VFS_H_
 #define  _TOS_VFS_H_
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_VFS_EN > 0u
 

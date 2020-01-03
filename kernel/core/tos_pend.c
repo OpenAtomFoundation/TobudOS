@@ -15,24 +15,21 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC__ void pend_list_add(k_task_t *task, pend_obj_t *pend_obj)
 {
-    k_list_t *curr, *pend_list;
     k_task_t *iter;
 
-    pend_list = &pend_obj->list;
     /* keep priority in descending order, the boss(task with highest priority,
        numerically smallest) always comes first
     */
-    TOS_LIST_FOR_EACH(curr, pend_list) {
-        iter = TOS_LIST_ENTRY(curr, k_task_t, pend_list);
+    TOS_LIST_FOR_EACH_ENTRY(iter, k_task_t, pend_list, &pend_obj->list) {
         if (task->prio < iter->prio) {
             break;
         }
     }
-    tos_list_add_tail(&task->pend_list, curr);
+    tos_list_add_tail(&task->pend_list, &iter->pend_list);
 
     // remember me, you may use me someday
     task->pending_obj = pend_obj;
@@ -137,10 +134,10 @@ __KERNEL__ void pend_wakeup_one(pend_obj_t *object, pend_state_t state)
 
 __KERNEL__ void pend_wakeup_all(pend_obj_t *object, pend_state_t state)
 {
-    k_list_t *curr, *next;
+    k_task_t *task, *tmp;
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &object->list) {
-        pend_task_wakeup(TOS_LIST_ENTRY(curr, k_task_t, pend_list), state);
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(task, tmp, k_task_t, pend_list, &object->list) {
+        pend_task_wakeup(task, state);
     }
 }
 

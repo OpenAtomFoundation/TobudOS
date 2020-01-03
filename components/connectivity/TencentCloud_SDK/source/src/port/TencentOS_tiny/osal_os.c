@@ -15,7 +15,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include "tos.h"
+#include "tos_k.h"
 #include "qcloud.h"
 
 __QCLOUD_OSAL__ void osal_printf(const char *fmt, ...)

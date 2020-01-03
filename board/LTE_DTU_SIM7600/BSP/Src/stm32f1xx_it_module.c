@@ -21,7 +21,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f1xx_it.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -34,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
- 
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -66,7 +66,7 @@ extern UART_HandleTypeDef huart3;
 /* USER CODE END EV */
 
 /******************************************************************************/
-/*           Cortex-M3 Processor Interruption and Exception Handlers          */ 
+/*           Cortex-M3 Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
   * @brief This function handles Non maskable interrupt.
@@ -191,8 +191,8 @@ void SysTick_Handler(void)
   HAL_IncTick();
   if(tos_knl_is_running())
   {
-      tos_knl_irq_enter();			
-      tos_tick_handler();	           
+      tos_knl_irq_enter();
+      tos_tick_handler();
       tos_knl_irq_leave();
   }
   /* USER CODE BEGIN SysTick_IRQn 1 */

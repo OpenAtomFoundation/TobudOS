@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_hal.h"
 #include "n32g020xx_common.h"
 #include "n32g020xx.h"
@@ -53,7 +53,7 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
         uart->private_uart = &huart2;
         huart0.channel = UART_CH2;
         uart->private_uart = &huart2;
-    } 
+    }
     return 0;
 }
 

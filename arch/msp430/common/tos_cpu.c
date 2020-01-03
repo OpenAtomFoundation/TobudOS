@@ -1,4 +1,21 @@
-#include <tos.h>
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
+#include <tos_k.h>
 
 uint8_t irq_context_switch_flag = 0;
 
@@ -183,12 +200,12 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     uint32_t *pul_top_of_stack;
 
     #define PORT_BYTE_ALIGNMENT_MASK	( 0x0001 )
-    
+
     /* The stack type changes depending on the data model. */
 
     sp = (cpu_data_t *)&( stk_base[ stk_size - ( uint32_t ) 1 ] );
-    sp = ( cpu_data_t * ) ( ( ( cpu_data_t ) sp ) & ( ~( ( cpu_data_t ) PORT_BYTE_ALIGNMENT_MASK ) ) ); 
-    
+    sp = ( cpu_data_t * ) ( ( ( cpu_data_t ) sp ) & ( ~( ( cpu_data_t ) PORT_BYTE_ALIGNMENT_MASK ) ) );
+
     /* cpu_data_t is either 16 bits or 32 bits depending on the data model.
     Some stacked items do not change size depending on the data model so have
     to be explicitly cast to the correct size so this function will work
@@ -207,20 +224,20 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     }
 
     /* PC - Interrupt return pointer */
-    *pul_top_of_stack = ( uint32_t ) entry;           
-        
+    *pul_top_of_stack = ( uint32_t ) entry;
+
     pus_top_of_stack = ( uint16_t * ) pul_top_of_stack;
     pus_top_of_stack--;
-    
+
     /* R2 - SR.GIE - bit8,golbal interrupt enable */
     *pus_top_of_stack = 0x08;
-    /* SR size is 16-bits */                       
+    /* SR size is 16-bits */
     pus_top_of_stack -= ( sizeof( cpu_data_t ) / 2 );
-    
+
 
     /* From here on the size of stacked items depends on the memory model. */
     sp = ( cpu_data_t * ) pus_top_of_stack;
-    
+
 #if 0 // enable for debug
     *sp = ( cpu_data_t ) 0xffff;
     sp--;
@@ -237,7 +254,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     *sp = ( cpu_data_t ) 0x9999;
     sp--;
     *sp = ( cpu_data_t ) 0x8888;
-    sp--;	
+    sp--;
     *sp = ( cpu_data_t ) 0x5555;
     sp--;
     *sp = ( cpu_data_t ) 0x6666;
@@ -249,8 +266,8 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
     sp -= 3;
     *sp = ( cpu_data_t ) arg;
     sp -= 8;// R11-R4
-#endif   
-        
+#endif
+
     return (k_stack_t *)sp;
 }
 

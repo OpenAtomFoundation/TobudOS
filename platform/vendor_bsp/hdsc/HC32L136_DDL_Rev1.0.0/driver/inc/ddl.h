@@ -60,7 +60,7 @@
 #include "system_hc32l136.h"
 #include "sysctrl.h"
 //#include "gpio.h"
-#include "tos.h"
+#include "tos_k.h"
 /* C binding of definitions if building with C++ compiler                     */
 #ifdef __cplusplus
 extern "C"
@@ -110,7 +110,7 @@ extern "C"
  ******************************************************************************
  ** \brief IRQ name definition for all type MCUs
  ******************************************************************************/
-    
+
     #define PORTA_IRQHandler(void)              IRQ000_Handler(void)
     #define PORTB_IRQHandler(void)              IRQ001_Handler(void)
     #define PORTC_IRQHandler(void)              IRQ002_Handler(void)

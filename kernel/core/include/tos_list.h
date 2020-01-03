@@ -29,8 +29,8 @@ typedef struct k_list_node_st {
 #define TOS_LIST_DEFINE(list) \
     k_list_t list = { &(list), &(list) }
 
-#define TOS_LIST_ENTRY(list, type, field) \
-    TOS_CONTAINER_OF_FIELD(list, type, field)
+#define TOS_LIST_ENTRY(node, type, field) \
+    TOS_CONTAINER_OF_FIELD(node, type, field)
 
 #define TOS_LIST_FIRST_ENTRY(list, type, field) \
     TOS_LIST_ENTRY((list)->next, type, field)
@@ -53,6 +53,28 @@ typedef struct k_list_node_st {
             curr != (list); \
             curr = next, next = curr->prev)
 
+#define TOS_LIST_FOR_EACH_ENTRY(entry, type, field, list) \
+    for (entry = TOS_LIST_ENTRY((list)->next, type, field); \
+        &entry->field != (list); \
+        entry = TOS_LIST_ENTRY(entry->field.next, type, field))
+
+#define TOS_LIST_FOR_EACH_ENTRY_REVERSE(entry, type, field, list) \
+    for (entry = TOS_LIST_ENTRY((list)->prev, type, field); \
+            &entry->field != (list); \
+            entry = TOS_LIST_ENTRY(entry->field.prev, type, field))
+
+#define TOS_LIST_FOR_EACH_ENTRY_SAFE(entry, tmp, type, field, list) \
+    for (entry = TOS_LIST_ENTRY((list)->next, type, field), \
+            tmp = TOS_LIST_ENTRY(entry->field.next, type, field); \
+            &entry->field != (list); \
+            entry = tmp, tmp = TOS_LIST_ENTRY(entry->field.next, type, field))
+
+#define TOS_LIST_FOR_EACH_ENTRY_SAFE_REVERSE(entry, tmp, type, field, list) \
+    for (entry = TOS_LIST_ENTRY((list)->prev, type, field), \
+            tmp = TOS_LIST_ENTRY(entry->field.prev, type, field); \
+            &entry->field != (list); \
+            entry = tmp, tmp = TOS_LIST_ENTRY(entry->field.prev, type, field))
+
 __STATIC_INLINE__ void _list_add(k_list_t *node, k_list_t *prev, k_list_t *next)
 {
     next->prev = node;
@@ -67,9 +89,9 @@ __STATIC_INLINE__ void _list_del(k_list_t *prev, k_list_t *next)
     prev->next = next;
 }
 
-__STATIC_INLINE__ void _list_del_entry(k_list_t *entry)
+__STATIC_INLINE__ void _list_del_node(k_list_t *node)
 {
-    _list_del(entry->prev, entry->next);
+    _list_del(node->prev, node->next);
 }
 
 __API__ __STATIC_INLINE__ void tos_list_init(k_list_t *list)
@@ -88,26 +110,26 @@ __API__ __STATIC_INLINE__ void tos_list_add_tail(k_list_t *node, k_list_t *list)
     _list_add(node, list->prev, list);
 }
 
-__API__ __STATIC_INLINE__ void tos_list_del(k_list_t *entry)
+__API__ __STATIC_INLINE__ void tos_list_del(k_list_t *node)
 {
-    _list_del(entry->prev, entry->next);
+    _list_del(node->prev, node->next);
 }
 
-__API__ __STATIC_INLINE__ void tos_list_del_init(k_list_t *entry)
+__API__ __STATIC_INLINE__ void tos_list_del_init(k_list_t *node)
 {
-    _list_del_entry(entry);
-    tos_list_init(entry);
+    _list_del_node(node);
+    tos_list_init(node);
 }
 
 __API__ __STATIC_INLINE__ void tos_list_move(k_list_t *node, k_list_t *list)
 {
-    _list_del_entry(node);
+    _list_del_node(node);
     tos_list_add(node, list);
 }
 
 __API__ __STATIC_INLINE__ void tos_list_move_tail(k_list_t *node, k_list_t *list)
 {
-    _list_del_entry(node);
+    _list_del_node(node);
     tos_list_add_tail(node, list);
 }
 

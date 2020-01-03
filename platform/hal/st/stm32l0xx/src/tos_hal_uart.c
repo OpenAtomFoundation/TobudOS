@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_hal.h"
 #include "stm32l0xx_hal.h"
 #include "usart.h"
@@ -14,7 +14,7 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
     } else if (port == HAL_UART_PORT_2) {
         uart->private_uart = &huart2;
         MX_USART2_UART_Init();
-    } 
+    }
     return 0;
 }
 

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC_INLINE__ void bin_heap_item_copy_to(k_bin_heap_t *bin_heap, void *item_out, size_t *item_size)
 {

@@ -7,7 +7,7 @@
 #include "nrf.h"
 #include "nrfx_glue.h"
 
-#include <tos.h>
+#include <tos_k.h>
 
 #define NUM_IRQS_PER_REG 32
 #define REG_FROM_IRQ(irq) (irq / NUM_IRQS_PER_REG)

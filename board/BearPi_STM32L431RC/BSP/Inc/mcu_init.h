@@ -12,7 +12,7 @@
 #include "gpio.h"
 #include "lcd_spi2_drv.h"
 #include "bh1750.h"
-#include "tos.h"
+#include "tos_k.h"
 
 void m26_power_on(void);
 void board_init(void);

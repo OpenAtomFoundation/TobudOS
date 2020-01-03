@@ -124,11 +124,9 @@ void nimble_scan_item_display(nimble_scan_item_t *item)
 
 void nimble_scan_info_list_display(void)
 {
-    k_list_t *curr;
     nimble_scan_item_t *iter;
 
-    TOS_LIST_FOR_EACH(curr, &scan_entry) {
-        iter = TOS_LIST_ENTRY(curr, nimble_scan_item_t, list);
+    TOS_LIST_FOR_EACH_ENTRY(iter, nimble_scan_item_t, list, &scan_entry) {
         nimble_scan_item_display(iter);
     }
 }
@@ -140,11 +138,9 @@ nimble_scan_item_t *nimble_scan_item_alloc(void)
 
 int nimble_scan_item_is_exist(ble_addr_t *addr)
 {
-    k_list_t *curr;
     nimble_scan_item_t *iter;
 
-    TOS_LIST_FOR_EACH(curr, &free_entry) {
-        iter = TOS_LIST_ENTRY(curr, nimble_scan_item_t, list);
+    TOS_LIST_FOR_EACH_ENTRY(iter, nimble_scan_item_t, list, &free_entry) {
         if (ble_addr_cmp(&addr, &iter->addr) == 0) {
             return K_TRUE;
         }

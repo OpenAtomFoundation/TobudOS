@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "tos.h"
+#include "tos_k.h"
 #include "sal_module_wrapper.h"
 #include "qcloud.h"
 

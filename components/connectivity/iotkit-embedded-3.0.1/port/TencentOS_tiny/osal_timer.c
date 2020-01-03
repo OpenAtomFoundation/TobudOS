@@ -17,10 +17,10 @@
 extern "C" {
 #endif
 
-#include <tos.h>
+#include <tos_k.h>
 #include <string.h>
 
-#include "tos.h"
+#include "tos_k.h"
 
 uint32_t HAL_UptimeMs(void)
 {

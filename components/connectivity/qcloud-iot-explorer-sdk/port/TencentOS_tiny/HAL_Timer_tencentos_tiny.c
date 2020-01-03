@@ -23,7 +23,7 @@ extern "C" {
 #include <string.h>
 #include "qcloud_iot_import.h"
 
-#include "tos.h"
+#include "tos_k.h"
 
 static char now_time_str[20] = {0};
 

@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 
 // systick handler
 void eclic_mtip_handler() {

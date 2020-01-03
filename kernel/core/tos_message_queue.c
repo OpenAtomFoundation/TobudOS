@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
- #include "tos.h"
+ #include "tos_k.h"
 
 #if TOS_CFG_MESSAGE_QUEUE_EN > 0u
 
@@ -205,7 +205,7 @@ __STATIC__ k_err_t msg_q_do_post(k_msg_q_t *msg_q, void *msg_ptr, opt_post_t opt
 {
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
-    k_list_t *curr, *next;
+    k_task_t *task, *tmp;
 
     TOS_PTR_SANITY_CHECK(msg_q);
     TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
@@ -225,8 +225,8 @@ __STATIC__ k_err_t msg_q_do_post(k_msg_q_t *msg_q, void *msg_ptr, opt_post_t opt
     if (opt == OPT_POST_ONE) {
         msg_q_task_recv(TOS_LIST_FIRST_ENTRY(&msg_q->pend_obj.list, k_task_t, pend_list), msg_ptr);
     } else { // OPT_POST_ALL
-        TOS_LIST_FOR_EACH_SAFE(curr, next, &msg_q->pend_obj.list) {
-            msg_q_task_recv(TOS_LIST_ENTRY(curr, k_task_t, pend_list), msg_ptr);
+        TOS_LIST_FOR_EACH_ENTRY_SAFE(task, tmp, k_task_t, pend_list, &msg_q->pend_obj.list) {
+            msg_q_task_recv(task, msg_ptr);
         }
     }
 

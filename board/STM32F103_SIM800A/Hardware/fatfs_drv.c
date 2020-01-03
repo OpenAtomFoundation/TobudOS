@@ -2,7 +2,7 @@
 
 //#include "fatfs.h"
 #include "fatfs_drv.h"
-#include "tos.h"
+#include "tos_k.h"
 #include <hal_spi_flash.h>
 /* Defines ------------------------------------------------------------------*/
 

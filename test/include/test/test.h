@@ -1,7 +1,7 @@
 #ifndef _TEST_H_
 #define  _TEST_H_
 
-#include "tos.h"
+#include "tos_k.h"
 #include "test/test_utils.h"
 #include "test/test_task.h"
 #include "test/test_mutex.h"

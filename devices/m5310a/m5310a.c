@@ -1,5 +1,5 @@
 #include "m5310a.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at.h"
 #include "tos_hal.h"
 #include "sal_module_wrapper.h"

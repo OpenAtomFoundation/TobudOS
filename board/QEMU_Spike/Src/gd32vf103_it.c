@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 void SysTick_IRQHandler() {
     port_systick_config((uint32_t)k_cpu_cycle_per_tick);
     if (tos_knl_is_running()) {

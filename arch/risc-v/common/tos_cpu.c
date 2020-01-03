@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include <tos_k.h>
 #include <riscv_port.h>
 
 #ifndef TOS_CFG_IRQ_STK_SIZE

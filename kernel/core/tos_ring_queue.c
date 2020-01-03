@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC_INLINE__ void ring_q_item_copy_to(k_ring_q_t *ring_q, void *item_out, size_t *item_size)
 {

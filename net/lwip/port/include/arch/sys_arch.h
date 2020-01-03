@@ -38,7 +38,7 @@
 #error "NO_SYS need to be set to 0 to use threaded API"
 #endif
 
-#include <tos.h>
+#include <tos_k.h>
 
 #ifdef  __cplusplus
 extern "C" {

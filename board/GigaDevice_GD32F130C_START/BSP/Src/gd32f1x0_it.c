@@ -15,7 +15,7 @@
 #include "gd32f1x0_it.h"
 #include "main.h"
 #include "systick.h"
-#include "tos.h"
+#include "tos_k.h"
 /*!
     \brief      this function handles NMI exception
     \param[in]  none
@@ -110,7 +110,7 @@ void SysTick_Handler(void)
 	if(tos_knl_is_running())
 	{
 		tos_knl_irq_enter();
-		tos_tick_handler();          
+		tos_tick_handler();
 		tos_knl_irq_leave();
 	}
     delay_decrement();

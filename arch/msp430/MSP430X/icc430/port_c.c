@@ -1,8 +1,8 @@
-#include "tos.h"
+#include "tos_k.h"
 
 __PORT__ void port_cpu_reset(void)
 {
-    WDTCTL = WDTPW | 0xff00; // write a wrong Watchdog timer password will cause a PUC(reset) 
+    WDTCTL = WDTPW | 0xff00; // write a wrong Watchdog timer password will cause a PUC(reset)
 }
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
@@ -42,7 +42,7 @@ __PORT__ void port_setup_systick(void)
 
 /* The MSP430X port uses a callback function to configure its tick interrupt.
  */
-#pragma vector=TIMER0_A0_VECTOR 
+#pragma vector=TIMER0_A0_VECTOR
 __PORT__ __interrupt __raw void timer0_isr( void )
 {
     extern void port_systick_isr( void );
@@ -110,7 +110,7 @@ __PORT__ void port_fault_diagnosis(void)
 /*------------------ 430 IAR Compiler-------------------*/
 #if defined (__ICC430__) // __IAR_SYSTEMS_ICC__
 
-#endif 
+#endif
 
 #endif /* TOS_CFG_FAULT_BACKTRACE_EN */
 

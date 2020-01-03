@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at.h"
 
 void at_delay(k_tick_t tick)

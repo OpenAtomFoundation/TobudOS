@@ -20,7 +20,7 @@
 #include <string.h>
 #include <signal.h>
 
-#include "tos.h"
+#include "tos_k.h"
 #include "qcloud.h"
 
 

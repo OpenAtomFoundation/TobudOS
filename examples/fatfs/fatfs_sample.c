@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_hal.h"
 #include "ff.h"
 
@@ -51,7 +51,7 @@ void application_entry(void *arg)
         printf("read error: %d\n", res);
     }
     f_close(&file);
-		
+
     f_sync(&file);
 }
 
