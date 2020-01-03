@@ -51,7 +51,7 @@
 
  */
 
-uint16_t report_period = 3000;
+uint16_t report_period = 10;
 
 typedef struct device_data_st {
     uint8_t     temperature;
@@ -110,7 +110,7 @@ void application_entry(void *arg)
         dev_data_wrapper.u.dev_data.period      = report_period;
 
         tos_lora_module_send(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
-        tos_task_delay(report_period);
+        tos_task_delay(report_period * 1000);
     }
 }
 
