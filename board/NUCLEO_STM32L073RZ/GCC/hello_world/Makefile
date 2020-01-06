@@ -54,6 +54,7 @@ HAL_DRIVER_SRC =  \
 		$(TOP_DIR)/examples/hello_world/hello_world.c \
 		$(TOP_DIR)/board/NUCLEO_STM32L073RZ/BSP/gpio.c \
 		$(TOP_DIR)/board/NUCLEO_STM32L073RZ/BSP/usart.c \
+		$(TOP_DIR)/board/NUCLEO_STM32L073RZ/BSP/i2c.c \
 		$(TOP_DIR)/board/NUCLEO_STM32L073RZ/BSP/stm32l0xx_it.c \
 		$(TOP_DIR)/board/NUCLEO_STM32L073RZ/BSP/stm32l0xx_hal_msp.c \
 		$(TOP_DIR)/board/NUCLEO_STM32L073RZ/BSP/mcu_init.c \
