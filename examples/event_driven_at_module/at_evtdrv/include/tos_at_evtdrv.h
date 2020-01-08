@@ -334,7 +334,7 @@ int tos_at_raw_data_send(at_echo_t *echo, uint32_t timeout, const uint8_t *buf, 
  *
  * @return  None
  */
-void tos_at_uart_write_byte(uint8_t data);
+void tos_at_uart_input_byte(uint8_t data);
 
 /**
  * @brief Read data from the uart.

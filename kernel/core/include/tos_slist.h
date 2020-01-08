@@ -22,7 +22,7 @@ typedef struct k_slist_node_st {
 	struct k_slist_node_st *next;
 } k_slist_t;
 
-#define TOS_SLIST_NODE(node) \
+#define TOS_SLIST_NODE(dummy) \
     { K_NULL }
 
 #define TOS_SLIST_DEFINE(slist) \
@@ -164,6 +164,18 @@ __API__ __STATIC_INLINE__ int tos_slist_length(k_slist_t *slist)
     return len;
 }
 
+__API__ __STATIC_INLINE__ int tos_slist_contains(k_slist_t *node, k_slist_t *slist)
+{
+    while (slist->next) {
+        if (slist->next == node) {
+            return K_TRUE;
+        }
+
+        slist = slist->next;
+    }
+
+    return K_FALSE;
+}
 __API__ __STATIC_INLINE__ int tos_slist_empty(k_slist_t *slist)
 {
     return !slist->next;

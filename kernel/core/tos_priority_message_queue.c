@@ -40,9 +40,7 @@ __API__ k_err_t tos_prio_msg_q_create(k_prio_msg_q_t *prio_msg_q, void *pool, si
     prio_msg_q->prio_q_mgr_array = prio_q_mgr_array;
     pend_object_init(&prio_msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&prio_msg_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_MESSAGE_QUEUE);
-#endif
+    TOS_OBJ_INIT(prio_msg_q, KNL_OBJ_TYPE_PRIORITY_MESSAGE_QUEUE);
     knl_object_alloc_set_static(&prio_msg_q->knl_obj);
 
     return K_ERR_NONE;
@@ -77,9 +75,7 @@ __API__ k_err_t tos_prio_msg_q_destroy(k_prio_msg_q_t *prio_msg_q)
 
     pend_object_deinit(&prio_msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&prio_msg_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(prio_msg_q);
     knl_object_alloc_reset(&prio_msg_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();
@@ -101,9 +97,7 @@ __API__ k_err_t tos_prio_msg_q_create_dyn(k_prio_msg_q_t *prio_msg_q, size_t msg
 
     pend_object_init(&prio_msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&prio_msg_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_MESSAGE_QUEUE);
-#endif
+    TOS_OBJ_INIT(prio_msg_q, KNL_OBJ_TYPE_PRIORITY_MESSAGE_QUEUE);
     knl_object_alloc_set_dynamic(&prio_msg_q->knl_obj);
 
     return K_ERR_NONE;
@@ -138,9 +132,7 @@ __API__ k_err_t tos_prio_msg_q_destroy_dyn(k_prio_msg_q_t *prio_msg_q)
 
     pend_object_deinit(&prio_msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&prio_msg_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(prio_msg_q);
     knl_object_alloc_reset(&prio_msg_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();

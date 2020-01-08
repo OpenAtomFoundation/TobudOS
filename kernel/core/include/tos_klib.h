@@ -51,6 +51,10 @@
     } while(0)
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
+
+#define TOS_OBJ_INIT(obj, obj_type)     knl_object_init(&obj->knl_obj, obj_type)
+#define TOS_OBJ_DEINIT(obj)             knl_object_deinit(&obj->knl_obj)
+
 #define TOS_OBJ_VERIFY(obj, obj_type) \
     do {    \
         if (!knl_object_verify(&obj->knl_obj, obj_type)) {    \
@@ -66,8 +70,12 @@
     } while (0)
 
 #else
+
+#define TOS_OBJ_INIT(obj, obj_type)
+#define TOS_OBJ_DEINIT(obj)
 #define TOS_OBJ_VERIFY(obj, obj_type)
 #define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code)
+
 #endif
 
 #if TOS_CFG_LIBC_PRINTF_EN > 0u

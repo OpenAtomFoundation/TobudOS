@@ -33,9 +33,7 @@ __API__ k_err_t tos_msg_q_create(k_msg_q_t *msg_q, void *pool, size_t msg_cnt)
 
     pend_object_init(&msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&msg_q->knl_obj, KNL_OBJ_TYPE_MESSAGE_QUEUE);
-#endif
+    TOS_OBJ_INIT(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&msg_q->knl_obj);
 #endif
@@ -71,9 +69,7 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
 
     pend_object_deinit(&msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&msg_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(msg_q);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&msg_q->knl_obj);
 #endif
@@ -99,9 +95,7 @@ __API__ k_err_t tos_msg_q_create_dyn(k_msg_q_t *msg_q, size_t msg_cnt)
 
     pend_object_init(&msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&msg_q->knl_obj, KNL_OBJ_TYPE_MESSAGE_QUEUE);
-#endif
+    TOS_OBJ_INIT(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
     knl_object_alloc_set_dynamic(&msg_q->knl_obj);
 
     return K_ERR_NONE;
@@ -133,9 +127,7 @@ __API__ k_err_t tos_msg_q_destroy_dyn(k_msg_q_t *msg_q)
 
     pend_object_deinit(&msg_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&msg_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(msg_q);
     knl_object_alloc_reset(&msg_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();

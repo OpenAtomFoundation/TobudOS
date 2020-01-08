@@ -19,10 +19,6 @@
 
 __STATIC_INLINE__ void task_reset(k_task_t *task)
 {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&task->knl_obj);
-#endif
-
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_reset(&task->knl_obj);
 
@@ -49,6 +45,7 @@ __STATIC_INLINE__ void task_reset(k_task_t *task)
     task->mail_size     = 0;
 #endif
 
+    TOS_OBJ_DEINIT(task);
 }
 
 __STATIC__ void task_exit(void)
@@ -114,10 +111,7 @@ __API__ k_err_t tos_task_create(k_task_t *task,
     task_reset(task);
     tos_list_add(&task->stat_list, &k_stat_list);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&task->knl_obj, KNL_OBJ_TYPE_TASK);
-#endif
-
+    TOS_OBJ_INIT(task, KNL_OBJ_TYPE_TASK);
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_set_static(&task->knl_obj);
 #endif

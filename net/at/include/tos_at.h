@@ -362,7 +362,7 @@ __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const 
  *
  * @return  None
  */
-__API__ void tos_at_uart_write_byte(uint8_t data);
+__API__ void tos_at_uart_input_byte(uint8_t data);
 
 /**
  * @brief A global lock provided by at framework.

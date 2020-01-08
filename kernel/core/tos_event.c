@@ -23,12 +23,10 @@ __API__ k_err_t tos_event_create(k_event_t *event, k_event_flag_t init_flag)
 {
     TOS_PTR_SANITY_CHECK(event);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&event->knl_obj, KNL_OBJ_TYPE_EVENT);
-#endif
-
-    pend_object_init(&event->pend_obj);
     event->flag = init_flag;
+    pend_object_init(&event->pend_obj);
+    TOS_OBJ_INIT(event, KNL_OBJ_TYPE_EVENT);
+
     return K_ERR_NONE;
 }
 
@@ -45,12 +43,11 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
         pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
     }
 
-    pend_object_deinit(&event->pend_obj);
     event->flag = (k_event_flag_t)0u;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&event->knl_obj);
-#endif
+    pend_object_deinit(&event->pend_obj);
+
+    TOS_OBJ_DEINIT(event);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

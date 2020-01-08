@@ -100,7 +100,7 @@ void SysTick_Handler(void) {
 
 void AT_UART_DataParse(char byte)
 {
-    tos_at_uart_write_byte(byte);
+    tos_at_uart_input_byte(byte);
 }
 /* USER CODE BEGIN 1 */
 

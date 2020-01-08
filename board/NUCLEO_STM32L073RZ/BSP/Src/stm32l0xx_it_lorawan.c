@@ -182,7 +182,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t data;
     if (huart->Instance == USART1) {
         HAL_UART_Receive_IT(&huart1, &data, 1);
-        tos_at_uart_write_byte(data);
+        tos_at_uart_input_byte(data);
     }
 }
 /* USER CODE END 1 */
