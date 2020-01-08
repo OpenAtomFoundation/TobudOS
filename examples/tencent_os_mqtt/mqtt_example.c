@@ -73,7 +73,7 @@ void mqtt_demo(void)
         }
 
         count++;
-        osDelay(1000);
+        tos_task_delay(1000);
     }
 }
 

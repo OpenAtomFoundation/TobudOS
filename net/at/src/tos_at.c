@@ -347,7 +347,7 @@ __STATIC_INLINE__ void at_echo_flush(at_echo_t *echo)
     echo->__w_idx   = 0;
 }
 
-__STATIC_INLINE void at_echo_attach(at_echo_t *echo)
+__STATIC_INLINE__ void at_echo_attach(at_echo_t *echo)
 {
     at_echo_flush(echo);
     AT_AGENT->echo = echo;
