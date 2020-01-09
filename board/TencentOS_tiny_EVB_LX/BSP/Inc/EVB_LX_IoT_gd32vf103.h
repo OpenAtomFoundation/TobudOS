@@ -104,10 +104,10 @@ typedef enum
 
 #define COMn                             2U
 
-#define EVAL_COM0                        USART2
-#define EVAL_COM0_CLK                    RCU_USART2
-#define EVAL_COM0_TX_PIN                 GPIO_PIN_2
-#define EVAL_COM0_RX_PIN                 GPIO_PIN_3
+#define EVAL_COM0                        USART0
+#define EVAL_COM0_CLK                    RCU_USART0
+#define EVAL_COM0_TX_PIN                 GPIO_PIN_9
+#define EVAL_COM0_RX_PIN                 GPIO_PIN_10
 #define EVAL_COM0_GPIO_PORT              GPIOA
 #define EVAL_COM0_GPIO_CLK               RCU_GPIOA
 
@@ -123,7 +123,7 @@ typedef enum
 #define EVAL_COM3_TX_PIN                 GPIO_PIN_10
 #define EVAL_COM3_RX_PIN                 GPIO_PIN_11
 #define EVAL_COM3_GPIO_PORT              GPIOC
-#define EVAL_COM3_GPIO_CLK               RCU_GPIOC
+#define EVAL_COM3_GPIO_CLK               RCU_GPIOB
 
 #define KEYn                             3U
 

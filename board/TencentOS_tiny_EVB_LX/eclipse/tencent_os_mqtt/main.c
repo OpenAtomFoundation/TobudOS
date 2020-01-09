@@ -1,11 +1,38 @@
 #include "mcu_init.h"
 #include "tos_k.h"
 
-#define TASK_SIZE 1024
+#define BLED_TASK_SIZE 1024
+#define WIFI_TASK_SIZE 4096
 k_task_t k_task_bled;
 k_task_t k_task_wifi;
-uint8_t k_bled_stk[TASK_SIZE];
-uint8_t k_wifi_stk[TASK_SIZE];
+uint8_t k_bled_stk[BLED_TASK_SIZE];
+uint8_t k_wifi_stk[WIFI_TASK_SIZE];
+
+
+void USART0_IRQHandler() {
+#if 0
+    if(RESET != usart_interrupt_flag_get(USART0, USART_INT_FLAG_RBNE)){
+        uint8_t data = usart_data_receive(USART0);
+    	printf("%c\n", data);
+    }
+#endif
+}
+
+void USART1_IRQHandler() {
+    if(RESET != usart_interrupt_flag_get(USART1, USART_INT_FLAG_RBNE)){
+        uint8_t data = usart_data_receive(USART1);
+        //tos_at_uart_input_byte(data);
+        printf("-%c\n", data);
+    }
+}
+
+void USART2_IRQHandler() {
+    if(RESET != usart_interrupt_flag_get(USART2, USART_INT_FLAG_RBNE)){
+        uint8_t data = usart_data_receive(USART2);
+        tos_at_uart_input_byte(data);
+    }
+	//printf("usart2\n");
+}
 
 void task_bled(void *pdata)
 {
@@ -33,8 +60,10 @@ void main(void) {
 
     tos_knl_init();
 
-    tos_task_create(&k_task_bled, "bled", task_bled, NULL, 5, k_bled_stk, TASK_SIZE, 0);
-    tos_task_create(&k_task_wifi, "wifi", task_wifi, NULL, 3, k_wifi_stk, TASK_SIZE, 0);
+    usart0_init(115200);
+
+    tos_task_create(&k_task_bled, "bled", task_bled, NULL, 5, k_bled_stk, BLED_TASK_SIZE, 0);
+    tos_task_create(&k_task_wifi, "wifi", task_wifi, NULL, 3, k_wifi_stk, WIFI_TASK_SIZE, 0);
 
     tos_knl_start();
 

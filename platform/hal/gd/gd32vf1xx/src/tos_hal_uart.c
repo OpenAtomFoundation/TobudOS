@@ -19,14 +19,22 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
     }
 
     if (port == HAL_UART_PORT_0) {
+    	uart->private_uart = &huart0;
     	usart0_init(115200);
     } else if (port == HAL_UART_PORT_1) {
+    	uart->private_uart = &huart1;
     	usart1_init(115200);
     } else if (port == HAL_UART_PORT_2) {
+    	uart->private_uart = &huart2;
     	usart2_init(115200);
     } else {
     	return -1;
     }
+
+
+	uart->port = ((UART_HandleTypeDef*)(uart->private_uart))->port;
+
+
 
     return 0;
 }

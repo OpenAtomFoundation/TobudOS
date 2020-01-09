@@ -35,8 +35,8 @@ void mqtt_demo(void)
     sub_opt.topic = MQTT_SUBSCRIBE_TOPIC;
 
 #ifdef USE_ESP8266 
-    esp8266_sal_init(HAL_UART_PORT_0);
-    esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
+    esp8266_sal_init(HAL_UART_PORT_1);
+    esp8266_join_ap("AceiPhone", "12345678");
 #endif
 
 #ifdef USE_NB_BC35
