@@ -134,7 +134,7 @@ __PORT__ void port_systick_priority_set(uint32_t priority) {
 
 
 __PORT__ void *port_get_irq_vector_table() {
-    unsigned int *base = 0;
+    void *base = 0;
 
     // MTVT:  0x307
     __ASM__ __VOLATILE__("csrr %0, 0x307":"=r"(base));
