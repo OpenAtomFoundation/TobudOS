@@ -4,7 +4,7 @@
 #include "usart.h"
 
 typedef struct __UART_HandleTypeDef {
-	hal_uart_port_t port;
+    hal_uart_port_t port;
 } UART_HandleTypeDef;
 
 
@@ -19,20 +19,20 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
     }
 
     if (port == HAL_UART_PORT_0) {
-    	uart->private_uart = &huart0;
-    	usart0_init(115200);
+        uart->private_uart = &huart0;
+        usart0_init(115200);
     } else if (port == HAL_UART_PORT_1) {
-    	uart->private_uart = &huart1;
-    	usart1_init(115200);
+        uart->private_uart = &huart1;
+        usart1_init(115200);
     } else if (port == HAL_UART_PORT_2) {
-    	uart->private_uart = &huart2;
-    	usart2_init(115200);
+        uart->private_uart = &huart2;
+        usart2_init(115200);
     } else {
-    	return -1;
+        return -1;
     }
 
 
-	uart->port = ((UART_HandleTypeDef*)(uart->private_uart))->port;
+    uart->port = ((UART_HandleTypeDef*)(uart->private_uart))->port;
 
 
 
@@ -54,7 +54,8 @@ __API__ int tos_hal_uart_write(hal_uart_t *uart, const uint8_t *buf, size_t size
     uart_handle = (UART_HandleTypeDef *)uart->private_uart;
 
     for(size_t i=0; i<size; i++) {
-    	usart_data_transmit(uart_handle->port, buf[i]);
+        usart_data_transmit(uart_handle->port, buf[i]);
+        tos_task_delay(1);
     }
 
 

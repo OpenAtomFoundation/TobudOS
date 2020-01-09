@@ -69,7 +69,7 @@ void usart1_init(int baud)
 
 void usart2_init(int baud)
 {
-    eclic_irq_enable(USART2_IRQn, 1, 0);
+    //eclic_irq_enable(USART2_IRQn, 1, 0);
 
     /* enable GPIO clock */
     rcu_periph_clock_enable(RCU_GPIOB);
@@ -98,7 +98,7 @@ void usart2_init(int baud)
     usart_enable(USART2);
 
 
-    usart_interrupt_enable(USART2, USART_INT_RBNE);
+    //usart_interrupt_enable(USART2, USART_INT_RBNE);
 }
 
 
