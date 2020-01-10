@@ -52,7 +52,7 @@
 		<link>
 			<name>Application/tencent_os_mqtt</name>
 			<type>2</type>
-			<location>/Users/ace/workspace/TencentOS-tiny/examples/tencent_os_mqtt</location>
+			<locationURI>TOP_DIR/examples/tencent_os_mqtt</locationURI>
 		</link>
 		<link>
 			<name>Application/tos_config.h</name>
