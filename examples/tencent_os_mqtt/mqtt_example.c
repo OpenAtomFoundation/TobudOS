@@ -4,6 +4,13 @@
 
 #define USE_ESP8266
 
+static hal_uart_port_t esp8266_port = HAL_UART_PORT_0;
+
+void mqtt_set_esp8266_port(hal_uart_port_t port) {
+    esp8266_port = port;
+}
+
+
 void mqtt_demo(void)
 {
     int count = 1;
@@ -35,7 +42,7 @@ void mqtt_demo(void)
     sub_opt.topic = MQTT_SUBSCRIBE_TOPIC;
 
 #ifdef USE_ESP8266 
-    esp8266_sal_init(HAL_UART_PORT_0);
+    esp8266_sal_init(esp8266_port);
     esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
 #endif
 
@@ -73,7 +80,7 @@ void mqtt_demo(void)
         }
 
         count++;
-        osDelay(1000);
+        tos_task_delay(1000);
     }
 }
 

@@ -2,6 +2,10 @@
 #include "usart.h"
 void usart0_init(int baud)
 {
+    eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL3_PRIO1);
+    eclic_irq_enable(USART0_IRQn, 1, 0);
+
+
     /* enable GPIO clock */
     rcu_periph_clock_enable(RCU_GPIOA);
 
@@ -25,10 +29,14 @@ void usart0_init(int baud)
     usart_receive_config(USART0, USART_RECEIVE_ENABLE);
     usart_transmit_config(USART0, USART_TRANSMIT_ENABLE);
     usart_enable(USART0);
+
+    usart_interrupt_enable(USART0, USART_INT_RBNE);
 }
 
 void usart1_init(int baud)
 {
+    eclic_irq_enable(USART1_IRQn, 1, 0);
+
     /* enable GPIO clock */
     rcu_periph_clock_enable(RCU_GPIOA);
 
@@ -52,14 +60,19 @@ void usart1_init(int baud)
     usart_receive_config(USART1, USART_RECEIVE_ENABLE);
     usart_transmit_config(USART1, USART_TRANSMIT_ENABLE);
     usart_enable(USART1);
+
+    usart_interrupt_enable(USART1, USART_INT_RBNE);
+
 }
 
 
 
 void usart2_init(int baud)
 {
+    //eclic_irq_enable(USART2_IRQn, 1, 0);
+
     /* enable GPIO clock */
-    rcu_periph_clock_enable(RCU_GPIOC);
+    rcu_periph_clock_enable(RCU_GPIOB);
 
     /* enable USART2 clock */
     rcu_periph_clock_enable(RCU_USART2);
@@ -70,7 +83,7 @@ void usart2_init(int baud)
     /* connect port to USART0_Rx */
     gpio_init(USART2_GPIO_PORT, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, USART2_GPIO_RX_PIN);
 
-    gpio_pin_remap_config(GPIO_USART2_FULL_REMAP,ENABLE);
+    //gpio_pin_remap_config(GPIO_USART2_FULL_REMAP,ENABLE);
 
     /* USART1 configure */
     usart_deinit(USART2);
@@ -83,6 +96,9 @@ void usart2_init(int baud)
     usart_receive_config(USART2, USART_RECEIVE_ENABLE);
     usart_transmit_config(USART2, USART_TRANSMIT_ENABLE);
     usart_enable(USART2);
+
+
+    //usart_interrupt_enable(USART2, USART_INT_RBNE);
 }
 
 
