@@ -108,8 +108,6 @@ static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
     eclic_set_intctrl(source, intctrl_val);
 }
 
-#define USE_DEFAULT_IRQ_ENTRY    1
-
 __PORT__ void port_cpu_init() {
 
     void rv32_exception_entry();
