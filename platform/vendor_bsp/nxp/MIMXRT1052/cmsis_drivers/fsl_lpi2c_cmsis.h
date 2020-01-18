@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-
 #ifndef _FSL_LPI2C_CMSIS_H_
 #define _FSL_LPI2C_CMSIS_H_
 

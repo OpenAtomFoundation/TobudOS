@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_FLEXIO_I2S_H_
 #define _FSL_FLEXIO_I2S_H_
@@ -48,18 +22,25 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO I2S driver version 2.1.1. */
-#define FSL_FLEXIO_I2S_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief FlexIO I2S driver version 2.2.0. */
+#define FSL_FLEXIO_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
+/*! @brief Retry times for waiting flag. */
+#ifndef I2S_RETRY_TIMES
+#define I2S_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
+
 /*! @brief FlexIO I2S transfer status */
-enum _flexio_i2s_status
+enum
 {
-    kStatus_FLEXIO_I2S_Idle = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 0),      /*!< FlexIO I2S is in idle state */
-    kStatus_FLEXIO_I2S_TxBusy = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 1),    /*!< FlexIO I2S Tx is busy */
-    kStatus_FLEXIO_I2S_RxBusy = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 2),    /*!< FlexIO I2S Tx is busy */
-    kStatus_FLEXIO_I2S_Error = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 3),     /*!< FlexIO I2S error occurred */
+    kStatus_FLEXIO_I2S_Idle      = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 0), /*!< FlexIO I2S is in idle state */
+    kStatus_FLEXIO_I2S_TxBusy    = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 1), /*!< FlexIO I2S Tx is busy */
+    kStatus_FLEXIO_I2S_RxBusy    = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 2), /*!< FlexIO I2S Tx is busy */
+    kStatus_FLEXIO_I2S_Error     = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 3), /*!< FlexIO I2S error occurred */
     kStatus_FLEXIO_I2S_QueueFull = MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 4), /*!< FlexIO I2S transfer queue is full. */
+    kStatus_FLEXIO_I2S_Timeout =
+        MAKE_STATUS(kStatusGroup_FLEXIO_I2S, 5), /*!< FlexIO I2S timeout polling status flags. */
 };
 
 /*! @brief Define FlexIO I2S access structure typedef */
@@ -80,21 +61,21 @@ typedef struct _flexio_i2s_type
 typedef enum _flexio_i2s_master_slave
 {
     kFLEXIO_I2S_Master = 0x0U, /*!< Master mode */
-    kFLEXIO_I2S_Slave = 0x1U   /*!< Slave mode */
+    kFLEXIO_I2S_Slave  = 0x1U  /*!< Slave mode */
 } flexio_i2s_master_slave_t;
 
-/*! @brief Define FlexIO FlexIO I2S interrupt mask. */
-enum _flexio_i2s_interrupt_enable
+/*! @brief _flexio_i2s_interrupt_enable Define FlexIO FlexIO I2S interrupt mask. */
+enum
 {
     kFLEXIO_I2S_TxDataRegEmptyInterruptEnable = 0x1U, /*!< Transmit buffer empty interrupt enable. */
-    kFLEXIO_I2S_RxDataRegFullInterruptEnable = 0x2U,  /*!< Receive buffer full interrupt enable. */
+    kFLEXIO_I2S_RxDataRegFullInterruptEnable  = 0x2U, /*!< Receive buffer full interrupt enable. */
 };
 
-/*! @brief Define FlexIO FlexIO I2S status mask. */
-enum _flexio_i2s_status_flags
+/*! @brief _flexio_i2s_status_flags Define FlexIO FlexIO I2S status mask. */
+enum
 {
     kFLEXIO_I2S_TxDataRegEmptyFlag = 0x1U, /*!< Transmit buffer empty flag. */
-    kFLEXIO_I2S_RxDataRegFullFlag = 0x2U,  /*!< Receive buffer full flag. */
+    kFLEXIO_I2S_RxDataRegFullFlag  = 0x2U, /*!< Receive buffer full flag. */
 };
 
 /*! @brief FlexIO I2S configure structure */
@@ -118,27 +99,27 @@ typedef struct _flexio_i2s_format
 } flexio_i2s_format_t;
 
 /*!@brief FlexIO I2S transfer queue size, user can refine it according to use case. */
-#define FLEXIO_I2S_XFER_QUEUE_SIZE (4)
+#define FLEXIO_I2S_XFER_QUEUE_SIZE (4U)
 
 /*! @brief Audio sample rate */
 typedef enum _flexio_i2s_sample_rate
 {
-    kFLEXIO_I2S_SampleRate8KHz = 8000U,     /*!< Sample rate 8000Hz */
+    kFLEXIO_I2S_SampleRate8KHz    = 8000U,  /*!< Sample rate 8000Hz */
     kFLEXIO_I2S_SampleRate11025Hz = 11025U, /*!< Sample rate 11025Hz */
-    kFLEXIO_I2S_SampleRate12KHz = 12000U,   /*!< Sample rate 12000Hz */
-    kFLEXIO_I2S_SampleRate16KHz = 16000U,   /*!< Sample rate 16000Hz */
+    kFLEXIO_I2S_SampleRate12KHz   = 12000U, /*!< Sample rate 12000Hz */
+    kFLEXIO_I2S_SampleRate16KHz   = 16000U, /*!< Sample rate 16000Hz */
     kFLEXIO_I2S_SampleRate22050Hz = 22050U, /*!< Sample rate 22050Hz */
-    kFLEXIO_I2S_SampleRate24KHz = 24000U,   /*!< Sample rate 24000Hz */
-    kFLEXIO_I2S_SampleRate32KHz = 32000U,   /*!< Sample rate 32000Hz */
+    kFLEXIO_I2S_SampleRate24KHz   = 24000U, /*!< Sample rate 24000Hz */
+    kFLEXIO_I2S_SampleRate32KHz   = 32000U, /*!< Sample rate 32000Hz */
     kFLEXIO_I2S_SampleRate44100Hz = 44100U, /*!< Sample rate 44100Hz */
-    kFLEXIO_I2S_SampleRate48KHz = 48000U,   /*!< Sample rate 48000Hz */
-    kFLEXIO_I2S_SampleRate96KHz = 96000U    /*!< Sample rate 96000Hz */
+    kFLEXIO_I2S_SampleRate48KHz   = 48000U, /*!< Sample rate 48000Hz */
+    kFLEXIO_I2S_SampleRate96KHz   = 96000U  /*!< Sample rate 96000Hz */
 } flexio_i2s_sample_rate_t;
 
 /*! @brief Audio word width */
 typedef enum _flexio_i2s_word_width
 {
-    kFLEXIO_I2S_WordWidth8bits = 8U,   /*!< Audio data width 8 bits */
+    kFLEXIO_I2S_WordWidth8bits  = 8U,  /*!< Audio data width 8 bits */
     kFLEXIO_I2S_WordWidth16bits = 16U, /*!< Audio data width 16 bits */
     kFLEXIO_I2S_WordWidth24bits = 24U, /*!< Audio data width 24 bits */
     kFLEXIO_I2S_WordWidth32bits = 32U  /*!< Audio data width 32 bits */
@@ -198,7 +179,7 @@ extern "C" {
  *
  * @param base FlexIO I2S base pointer
  * @param config FlexIO I2S configure structure.
-*/
+ */
 void FLEXIO_I2S_Init(FLEXIO_I2S_Type *base, const flexio_i2s_config_t *config);
 
 /*!
@@ -219,7 +200,7 @@ void FLEXIO_I2S_GetDefaultConfig(flexio_i2s_config_t *config);
  * call the FLEXO_I2S_Init to use the FlexIO I2S module.
  *
  * @param base FlexIO I2S base pointer
-*/
+ */
 void FLEXIO_I2S_Deinit(FLEXIO_I2S_Type *base);
 
 /*!
@@ -227,7 +208,7 @@ void FLEXIO_I2S_Deinit(FLEXIO_I2S_Type *base);
  *
  * @param base Pointer to FLEXIO_I2S_Type
  * @param enable True to enable, false dose not have any effect.
-*/
+ */
 static inline void FLEXIO_I2S_Enable(FLEXIO_I2S_Type *base, bool enable)
 {
     if (enable)
@@ -248,7 +229,7 @@ static inline void FLEXIO_I2S_Enable(FLEXIO_I2S_Type *base, bool enable)
  *
  * @param base Pointer to FLEXIO_I2S_Type structure
  * @return Status flag, which are ORed by the enumerators in the _flexio_i2s_status_flags.
-*/
+ */
 uint32_t FLEXIO_I2S_GetStatusFlags(FLEXIO_I2S_Type *base);
 
 /*! @} */
@@ -293,7 +274,7 @@ void FLEXIO_I2S_DisableInterrupts(FLEXIO_I2S_Type *base, uint32_t mask);
  */
 static inline void FLEXIO_I2S_TxEnableDMA(FLEXIO_I2S_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1 << base->txShifterIndex, enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL << base->txShifterIndex, enable);
 }
 
 /*!
@@ -304,7 +285,7 @@ static inline void FLEXIO_I2S_TxEnableDMA(FLEXIO_I2S_Type *base, bool enable)
  */
 static inline void FLEXIO_I2S_RxEnableDMA(FLEXIO_I2S_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1 << base->rxShifterIndex, enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL << base->rxShifterIndex, enable);
 }
 
 /*!
@@ -349,7 +330,7 @@ static inline uint32_t FLEXIO_I2S_RxGetDataRegisterAddress(FLEXIO_I2S_Type *base
  * @param base Pointer to FLEXIO_I2S_Type structure
  * @param format Pointer to FlexIO I2S audio data format structure.
  * @param srcClock_Hz I2S master clock source frequency in Hz.
-*/
+ */
 void FLEXIO_I2S_MasterSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *format, uint32_t srcClock_Hz);
 
 /*!
@@ -360,7 +341,7 @@ void FLEXIO_I2S_MasterSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *form
  *
  * @param base Pointer to FLEXIO_I2S_Type structure
  * @param format Pointer to FlexIO I2S audio data format structure.
-*/
+ */
 void FLEXIO_I2S_SlaveSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *format);
 
 /*!
@@ -372,8 +353,10 @@ void FLEXIO_I2S_SlaveSetFormat(FLEXIO_I2S_Type *base, flexio_i2s_format_t *forma
  * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
  * @param txData Pointer to the data to be written.
  * @param size Bytes to be written.
+ * @retval kStatus_Success Successfully write data.
+ * @retval kStatus_FLEXIO_I2C_Timeout Timeout polling status flags.
  */
-void FLEXIO_I2S_WriteBlocking(FLEXIO_I2S_Type *base, uint8_t bitWidth, uint8_t *txData, size_t size);
+status_t FLEXIO_I2S_WriteBlocking(FLEXIO_I2S_Type *base, uint8_t bitWidth, uint8_t *txData, size_t size);
 
 /*!
  * @brief Writes data into a data register.
@@ -396,8 +379,10 @@ static inline void FLEXIO_I2S_WriteData(FLEXIO_I2S_Type *base, uint8_t bitWidth,
  * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
  * @param rxData Pointer to the data to be read.
  * @param size Bytes to be read.
+ * @retval kStatus_Success Successfully read data.
+ * @retval kStatus_FLEXIO_I2C_Timeout Timeout polling status flags.
  */
-void FLEXIO_I2S_ReadBlocking(FLEXIO_I2S_Type *base, uint8_t bitWidth, uint8_t *rxData, size_t size);
+status_t FLEXIO_I2S_ReadBlocking(FLEXIO_I2S_Type *base, uint8_t bitWidth, uint8_t *rxData, size_t size);
 
 /*!
  * @brief Reads a data from the data register.
@@ -444,7 +429,7 @@ void FLEXIO_I2S_TransferTxCreateHandle(FLEXIO_I2S_Type *base,
  * @param handle FlexIO I2S handle pointer.
  * @param format Pointer to audio data format structure.
  * @param srcClock_Hz FlexIO I2S bit clock source frequency in Hz. This parameter should be 0 while in slave mode.
-*/
+ */
 void FLEXIO_I2S_TransferSetFormat(FLEXIO_I2S_Type *base,
                                   flexio_i2s_handle_t *handle,
                                   flexio_i2s_format_t *format,

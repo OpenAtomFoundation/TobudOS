@@ -1,36 +1,10 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_GPC_H_
@@ -49,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPC driver version 2.1.0. */
-#define FSL_GPC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief GPC driver version 2.1.1. */
+#define FSL_GPC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #if defined(__cplusplus)
@@ -87,7 +61,7 @@ static inline void GPC_DisallowIRQs(GPC_Type *base)
  * @brief Enable the IRQ.
  *
  * @param base GPC peripheral base address.
- * @param irqId ID number of IRQ to be enabled, available range is 32-159.
+ * @param irqId ID number of IRQ to be enabled, available range is 32-159. 0-31 is available in some platforms.
  */
 void GPC_EnableIRQ(GPC_Type *base, uint32_t irqId);
 
@@ -95,7 +69,7 @@ void GPC_EnableIRQ(GPC_Type *base, uint32_t irqId);
  * @brief Disable the IRQ.
  *
  * @param base GPC peripheral base address.
- * @param irqId ID number of IRQ to be disabled, available range is 32-159.
+ * @param irqId ID number of IRQ to be disabled, available range is 32-159. 0-31 is available in some platforms.
  */
 void GPC_DisableIRQ(GPC_Type *base, uint32_t irqId);
 
@@ -103,7 +77,7 @@ void GPC_DisableIRQ(GPC_Type *base, uint32_t irqId);
  * @brief Get the IRQ/Event flag.
  *
  * @param base GPC peripheral base address.
- * @param irqId ID number of IRQ to be enabled, available range is 32-159.
+ * @param irqId ID number of IRQ to be enabled, available range is 32-159. 0-31 is available in some platforms.
  * @return Indicated IRQ/Event is asserted or not.
  */
 bool GPC_GetIRQStatusFlag(GPC_Type *base, uint32_t irqId);

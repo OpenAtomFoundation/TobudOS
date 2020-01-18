@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_ENC_H_
@@ -44,20 +18,20 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 
 /*!
  * @brief Interrupt enable/disable mask.
  */
 enum _enc_interrupt_enable
 {
-    kENC_HOMETransitionInterruptEnable = (1U << 0U),  /*!< HOME interrupt enable. */
-    kENC_INDEXPulseInterruptEnable = (1U << 1U),      /*!< INDEX pulse interrupt enable. */
+    kENC_HOMETransitionInterruptEnable  = (1U << 0U), /*!< HOME interrupt enable. */
+    kENC_INDEXPulseInterruptEnable      = (1U << 1U), /*!< INDEX pulse interrupt enable. */
     kENC_WatchdogTimeoutInterruptEnable = (1U << 2U), /*!< Watchdog timeout interrupt enable. */
-    kENC_PositionCompareInerruptEnable = (1U << 3U),  /*!< Position compare interrupt enable. */
+    kENC_PositionCompareInerruptEnable  = (1U << 3U), /*!< Position compare interrupt enable. */
     kENC_SimultBothPhaseChangeInterruptEnable =
         (1U << 4U),                                     /*!< Simultaneous PHASEA and PHASEB change interrupt enable. */
-    kENC_PositionRollOverInterruptEnable = (1U << 5U),  /*!< Roll-over interrupt enable. */
+    kENC_PositionRollOverInterruptEnable  = (1U << 5U), /*!< Roll-over interrupt enable. */
     kENC_PositionRollUnderInterruptEnable = (1U << 6U), /*!< Roll-under interrupt enable. */
 };
 
@@ -68,14 +42,14 @@ enum _enc_interrupt_enable
  */
 enum _enc_status_flags
 {
-    kENC_HOMETransitionFlag = (1U << 0U),        /*!< HOME signal transition interrupt request. */
-    kENC_INDEXPulseFlag = (1U << 1U),            /*!< INDEX Pulse Interrupt Request. */
-    kENC_WatchdogTimeoutFlag = (1U << 2U),       /*!< Watchdog timeout interrupt request. */
-    kENC_PositionCompareFlag = (1U << 3U),       /*!< Position compare interrupt request. */
+    kENC_HOMETransitionFlag        = (1U << 0U), /*!< HOME signal transition interrupt request. */
+    kENC_INDEXPulseFlag            = (1U << 1U), /*!< INDEX Pulse Interrupt Request. */
+    kENC_WatchdogTimeoutFlag       = (1U << 2U), /*!< Watchdog timeout interrupt request. */
+    kENC_PositionCompareFlag       = (1U << 3U), /*!< Position compare interrupt request. */
     kENC_SimultBothPhaseChangeFlag = (1U << 4U), /*!< Simultaneous PHASEA and PHASEB change interrupt request. */
-    kENC_PositionRollOverFlag = (1U << 5U),      /*!< Roll-over interrupt request. */
-    kENC_PositionRollUnderFlag = (1U << 6U),     /*!< Roll-under interrupt request. */
-    kENC_LastCountDirectionFlag = (1U << 7U),    /*!< Last count was in the up direction, or the down direction. */
+    kENC_PositionRollOverFlag      = (1U << 5U), /*!< Roll-over interrupt request. */
+    kENC_PositionRollUnderFlag     = (1U << 6U), /*!< Roll-under interrupt request. */
+    kENC_LastCountDirectionFlag    = (1U << 7U), /*!< Last count was in the up direction, or the down direction. */
 };
 
 /*!
@@ -85,14 +59,14 @@ enum _enc_status_flags
  */
 enum _enc_signal_status_flags
 {
-    kENC_RawHOMEStatusFlag = ENC_IMR_HOME_MASK,       /*!< Raw HOME input. */
-    kENC_RawINDEXStatusFlag = ENC_IMR_INDEX_MASK,     /*!< Raw INDEX input. */
-    kENC_RawPHBStatusFlag = ENC_IMR_PHB_MASK,         /*!< Raw PHASEB input. */
-    kENC_RawPHAEXStatusFlag = ENC_IMR_PHA_MASK,       /*!< Raw PHASEA input. */
-    kENC_FilteredHOMEStatusFlag = ENC_IMR_FHOM_MASK,  /*!< The filtered version of HOME input. */
-    kENC_FilteredINDEXStatusFlag = ENC_IMR_FIND_MASK, /*!< The filtered version of INDEX input. */
-    kENC_FilteredPHBStatusFlag = ENC_IMR_FPHB_MASK,   /*!< The filtered version of PHASEB input. */
-    kENC_FilteredPHAStatusFlag = ENC_IMR_FPHA_MASK,   /*!< The filtered version of PHASEA input. */
+    kENC_RawHOMEStatusFlag       = ENC_IMR_HOME_MASK,  /*!< Raw HOME input. */
+    kENC_RawINDEXStatusFlag      = ENC_IMR_INDEX_MASK, /*!< Raw INDEX input. */
+    kENC_RawPHBStatusFlag        = ENC_IMR_PHB_MASK,   /*!< Raw PHASEB input. */
+    kENC_RawPHAEXStatusFlag      = ENC_IMR_PHA_MASK,   /*!< Raw PHASEA input. */
+    kENC_FilteredHOMEStatusFlag  = ENC_IMR_FHOM_MASK,  /*!< The filtered version of HOME input. */
+    kENC_FilteredINDEXStatusFlag = ENC_IMR_FIND_MASK,  /*!< The filtered version of INDEX input. */
+    kENC_FilteredPHBStatusFlag   = ENC_IMR_FPHB_MASK,  /*!< The filtered version of PHASEB input. */
+    kENC_FilteredPHAStatusFlag   = ENC_IMR_FPHA_MASK,  /*!< The filtered version of PHASEA input. */
 };
 
 /*!
@@ -177,7 +151,7 @@ typedef struct _enc_config
     enc_index_trigger_mode_t INDEXTriggerMode; /*!< Enable INDEX to initialize position counters. */
     bool enableTRIGGERClearPositionCounter;    /*!< Clear POSD, REV, UPOS and LPOS on rising edge of TRIGGER, or not. */
     bool enableTRIGGERClearHoldPositionCounter; /*!< Enable update of hold registers on rising edge of TRIGGER, or not.
-                                                   */
+                                                 */
 
     /* Watchdog. */
     bool enableWatchdog;           /*!< Enable the watchdog to detect if the target is moving or not. */
@@ -306,6 +280,22 @@ void ENC_DoSoftwareLoadInitialPositionValue(ENC_Type *base);
  * @param config Pointer to configuration structure. See to "enc_self_test_config_t". Pass "NULL" to disable.
  */
 void ENC_SetSelfTestConfig(ENC_Type *base, const enc_self_test_config_t *config);
+
+/*!
+ * @brief Enable watchdog for ENC module.
+ *
+ * @param base ENC peripheral base address
+ * @param enable Enables or disables the watchdog
+ */
+void ENC_EnableWatchdog(ENC_Type *base, bool enable);
+
+/*!
+ * @brief Set initial position value for ENC module.
+ *
+ * @param base ENC peripheral base address
+ * @param value Positive initial value
+ */
+void ENC_SetInitialPositionValue(ENC_Type *base, uint32_t value);
 
 /* @} */
 

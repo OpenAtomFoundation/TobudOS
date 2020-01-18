@@ -1,34 +1,8 @@
 /*
- * The Clear BSD License
- * Copyright 2017 NXP
+ * Copyright 2017, 2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_KPP_H_
 #define _FSL_KPP_H_
@@ -58,15 +32,17 @@
  * members. Members usually map to interrupt enable bits in one or more
  * peripheral registers.
  */
-typedef enum _kpp_interrupt_enable {
+typedef enum _kpp_interrupt_enable
+{
     kKPP_keyDepressInterrupt = KPP_KPSR_KDIE_MASK, /*!< Keypad depress interrupt source */
     kKPP_keyReleaseInterrupt = KPP_KPSR_KRIE_MASK  /*!< Keypad release interrupt source */
 } kpp_interrupt_enable_t;
 
 /*! @brief Lists of KPP synchronize chain operation. */
-typedef enum _kpp_sync_operation {
+typedef enum _kpp_sync_operation
+{
     kKPP_ClearKeyDepressSyncChain = KPP_KPSR_KDSC_MASK, /*!< Keypad depress interrupt status. */
-    kKPP_SetKeyReleasesSyncChain = KPP_KPSR_KRSS_MASK,  /*!< Keypad release interrupt status. */
+    kKPP_SetKeyReleasesSyncChain  = KPP_KPSR_KRSS_MASK, /*!< Keypad release interrupt status. */
 } kpp_sync_operation_t;
 
 /*! @brief Lists of KPP status. */
@@ -86,9 +62,9 @@ extern "C" {
 #endif
 
 /*!
-  * @name Initialization and De-initialization
-  * @{
-  */
+ * @name Initialization and De-initialization
+ * @{
+ */
 
 /*!
  * @brief KPP initialize.
@@ -125,8 +101,8 @@ void KPP_Deinit(KPP_Type *base);
  */
 static inline void KPP_EnableInterrupts(KPP_Type *base, uint16_t mask)
 {
-    uint16_t data = base->KPSR & ~(KPP_KPSR_KPKR_MASK | KPP_KPSR_KPKD_MASK);
-    base->KPSR = data | mask;
+    uint16_t data = (uint16_t)(base->KPSR & ~(KPP_KPSR_KPKR_MASK | KPP_KPSR_KPKD_MASK));
+    base->KPSR    = data | mask;
 }
 
 /*!
@@ -175,7 +151,7 @@ static inline void KPP_ClearStatusFlag(KPP_Type *base, uint16_t mask)
 static inline void KPP_SetSynchronizeChain(KPP_Type *base, uint16_t mask)
 {
     uint16_t data = base->KPSR & (KPP_KPSR_KRSS_MASK | KPP_KPSR_KDSC_MASK | KPP_KPSR_KRIE_MASK | KPP_KPSR_KDIE_MASK);
-    base->KPSR = data | mask;
+    base->KPSR    = data | mask;
 }
 
 /*!

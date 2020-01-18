@@ -1,44 +1,16 @@
 /*
 ** ###################################################################
-**     Version:             rev. 0.1, 2017-01-10
-**     Build:               b180312
+**     Version:             rev. 1.1, 2018-11-16
+**     Build:               b191008
 **
 **     Abstract:
 **         Chip specific module features.
 **
-**     The Clear BSD License
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
-**     Redistribution and use in source and binary forms, with or without
-**     modification, are permitted (subject to the limitations in the
-**     disclaimer below) provided that the following conditions are met:
-**
-**     * Redistributions of source code must retain the above copyright
-**       notice, this list of conditions and the following disclaimer.
-**
-**     * Redistributions in binary form must reproduce the above copyright
-**       notice, this list of conditions and the following disclaimer in the
-**       documentation and/or other materials provided with the distribution.
-**
-**     * Neither the name of the copyright holder nor the names of its
-**       contributors may be used to endorse or promote products derived from
-**       this software without specific prior written permission.
-**
-**     NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
-**     GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
-**     HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-**     WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-**     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-**     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-**     LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-**     CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-**     SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-**     BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-**     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-**     OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-**     IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
@@ -46,6 +18,12 @@
 **     Revisions:
 **     - rev. 0.1 (2017-01-10)
 **         Initial version.
+**     - rev. 1.0 (2018-09-21)
+**         Update interrupt vector table and dma request source.
+**         Update register BEE_ADDR_OFFSET1's bitfield name to ADDR_OFFSET1.
+**         Split GPIO_COMBINED_IRQS to GPIO_COMBINED_LOW_IRQS and GPIO_COMBINED_HIGH_IRQS.
+**     - rev. 1.1 (2018-11-16)
+**         Update feature files to align with IMXRT1050RM Rev.1.
 **
 ** ###################################################################
 */
@@ -149,6 +127,8 @@
 #define FSL_FEATURE_SOC_USBNC_COUNT (2)
 /* @brief USBPHY availability on the SoC. */
 #define FSL_FEATURE_SOC_USBPHY_COUNT (2)
+/* @brief USB_ANALOG availability on the SoC. */
+#define FSL_FEATURE_SOC_USB_ANALOG_COUNT (1)
 /* @brief USDHC availability on the SoC. */
 #define FSL_FEATURE_SOC_USDHC_COUNT (2)
 /* @brief WDOG availability on the SoC. */
@@ -166,6 +146,8 @@
 #define FSL_FEATURE_ADC_SUPPORT_HARDWARE_TRIGGER_REMOVE (0)
 /* @brief Remove ALT Clock selection feature. */
 #define FSL_FEATURE_ADC_SUPPORT_ALTCLK_REMOVE (1)
+/* @brief Conversion control count (related to number of registers HCn and Rn). */
+#define FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT (8)
 
 /* ADC_ETC module features */
 
@@ -185,22 +167,43 @@
 #define FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(x) (64)
 /* @brief Has doze mode support (register bit field MCR[DOZE]). */
 #define FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT (0)
+/* @brief Insatnce has doze mode support (register bit field MCR[DOZE]). */
+#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_DOZE_MODE_SUPPORTn(x) (0)
 /* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
 #define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (1)
 /* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
 #define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (1)
-/* @brief Has extended bit timing register (register CBT). */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_TIMING_REGISTER (0)
+/* @brief Instance has extended bit timing register (register CBT). */
+#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (0)
 /* @brief Has a receive FIFO DMA feature (register bit field MCR[DMA]). */
 #define FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA (0)
+/* @brief Instance has a receive FIFO DMA feature (register bit field MCR[DMA]). */
+#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_RX_FIFO_DMAn(x) (0)
 /* @brief Remove CAN Engine Clock Source Selection from unsupported part. */
 #define FSL_FEATURE_FLEXCAN_SUPPORT_ENGINE_CLK_SEL_REMOVE (1)
+/* @brief Instance remove CAN Engine Clock Source Selection from unsupported part. */
+#define FSL_FEATURE_FLEXCAN_INSTANCE_SUPPORT_ENGINE_CLK_SEL_REMOVEn(x) (1)
 /* @brief Is affected by errata with ID 5641 (Module does not transmit a message that is enabled to be transmitted at a specific moment during the arbitration process). */
 #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5641 (0)
+/* @brief Is affected by errata with ID 5829 (FlexCAN: FlexCAN does not transmit a message that is enabled to be transmitted in a specific moment during the arbitration process). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5829 (1)
+/* @brief Is affected by errata with ID 6032 (FlexCAN: A frame with wrong ID or payload is transmitted into the CAN bus when the Message Buffer under transmission is either aborted or deactivated while the CAN bus is in the Bus Idle state). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_6032 (1)
+/* @brief Is affected by errata with ID 9595 (FlexCAN: Corrupt frame possible if the Freeze Mode or the Low-Power Mode are entered during a Bus-Off state). */
+#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595 (1)
 /* @brief Has CAN with Flexible Data rate (CAN FD) protocol. */
 #define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (0)
+/* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
+#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (0)
 /* @brief Has extra MB interrupt or common one. */
 #define FSL_FEATURE_FLEXCAN_HAS_EXTRA_MB_INT (1)
+/* @brief Has memory error control (register MECR). */
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (0)
+
+/* CCM module features */
+
+/* @brief Is affected by errata with ID 50235 (Incorrect clock setting for CAN affects by LPUART clock gate). */
+#define FSL_FEATURE_CCM_HAS_ERRATA_50235 (1)
 
 /* CMP module features */
 
@@ -229,6 +232,12 @@
 #define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (1)
 /* @brief Number of DMA channels with asynchronous request capability (register EARS). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (32)
+/* @brief Channel IRQ entry shared offset. */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SHARED_OFFSET (16)
+/* @brief If 8 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
+/* @brief If 16 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (0)
 
 /* DMAMUX module features */
 
@@ -256,12 +265,46 @@
 /* @brief Has Additional 1588 Timer Channel Interrupt. */
 #define FSL_FEATURE_ENET_HAS_ADD_1588_TIMER_CHN_INT (0)
 
+/* EWM module features */
+
+/* @brief Has clock select (register CLKCTRL). */
+#define FSL_FEATURE_EWM_HAS_CLOCK_SELECT (1)
+/* @brief Has clock prescaler (register CLKPRESCALER). */
+#define FSL_FEATURE_EWM_HAS_PRESCALER (1)
+
+/* FLEXIO module features */
+
+/* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
+#define FSL_FEATURE_FLEXIO_HAS_SHIFTER_STATUS (1)
+/* @brief Has Pin Data Input Register (FLEXIO_PIN) */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_STATUS (1)
+/* @brief Has Shifter Buffer N Nibble Byte Swapped Register (FLEXIO_SHIFTBUFNBSn) */
+#define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_BYTE_SWAP (1)
+/* @brief Has Shifter Buffer N Half Word Swapped Register (FLEXIO_SHIFTBUFHWSn) */
+#define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_HALF_WORD_SWAP (1)
+/* @brief Has Shifter Buffer N Nibble Swapped Register (FLEXIO_SHIFTBUFNISn) */
+#define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_SWAP (1)
+/* @brief Supports Shifter State Mode (FLEXIO_SHIFTCTLn[SMOD]) */
+#define FSL_FEATURE_FLEXIO_HAS_STATE_MODE (1)
+/* @brief Supports Shifter Logic Mode (FLEXIO_SHIFTCTLn[SMOD]) */
+#define FSL_FEATURE_FLEXIO_HAS_LOGIC_MODE (1)
+/* @brief Supports paralle width (FLEXIO_SHIFTCFGn[PWIDTH]) */
+#define FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH (1)
+/* @brief Reset value of the FLEXIO_VERID register */
+#define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x1010001)
+/* @brief Reset value of the FLEXIO_PARAM register */
+#define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x2200404)
+/* @brief Flexio DMA request base channel */
+#define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
+
 /* FLEXRAM module features */
 
 /* @brief Bank size */
-#define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_BANK_SIZE (32 * 1024)
+#define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_BANK_SIZE (32768)
 /* @brief Total Bank numbers */
 #define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS (16)
+/* @brief Has FLEXRAM_MAGIC_ADDR. */
+#define FSL_FEATURE_FLEXRAM_HAS_MAGIC_ADDR (0)
 
 /* FLEXSPI module features */
 
@@ -269,6 +312,8 @@
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (4)
 /* @brief FlexSPI has no data learn. */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (1)
+/* @brief There is AHBBUSERROREN bit in INTEN register. */
+#define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
 
 /* GPC module features */
 
@@ -395,7 +440,7 @@
 /* @brief Lowest interrupt request number. */
 #define FSL_FEATURE_INTERRUPT_IRQ_MIN (-14)
 /* @brief Highest interrupt request number. */
-#define FSL_FEATURE_INTERRUPT_IRQ_MAX (159)
+#define FSL_FEATURE_INTERRUPT_IRQ_MAX (151)
 
 /* OCOTP module features */
 
@@ -465,7 +510,10 @@
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
 #define FSL_FEATURE_SAI_FIFO_COUNT (32)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
-#define FSL_FEATURE_SAI_CHANNEL_COUNT (4)
+#define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) \
+    (((x) == SAI1) ? (4) : \
+    (((x) == SAI2) ? (1) : \
+    (((x) == SAI3) ? (1) : (-1))))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (32)
 /* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
@@ -484,8 +532,23 @@
 #define FSL_FEATURE_SAI_INT_SOURCE_NUM (2)
 /* @brief Has register of MCR. */
 #define FSL_FEATURE_SAI_HAS_MCR (0)
+/* @brief Has bit field MICS of the MCR register. */
+#define FSL_FEATURE_SAI_HAS_NO_MCR_MICS (1)
 /* @brief Has register of MDR */
 #define FSL_FEATURE_SAI_HAS_MDR (0)
+/* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
+#define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (0)
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+#define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
+/* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
+#define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+
+/* SEMC module features */
+
+/* @brief Has WDH time in NOR controller (register bit field NORCR2[WDH]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_WDH_TIME (1)
+/* @brief Has WDS time in NOR controller (register bit field NORCR2[WDS]).) */
+#define FSL_FEATURE_SEMC_HAS_NOR_WDS_TIME (1)
 
 /* SNVS module features */
 
@@ -528,6 +591,8 @@
 #define FSL_FEATURE_SRC_HAS_SRSR_RESET_OUT (0)
 /* @brief There is WDOG3_RST_B bit in SRSR register. */
 #define FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B (1)
+/* @brief There is JTAG_SW_RST bit in SRSR register. */
+#define FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST (1)
 /* @brief There is SW bit in SRSR register. */
 #define FSL_FEATURE_SRC_HAS_SRSR_SW (0)
 /* @brief There is IPP_USER_RESET_B bit in SRSR register. */
@@ -576,17 +641,15 @@
 #define FSL_FEATURE_USDHC_HAS_SDR50_MODE (1)
 /* @brief Has SDR104 support (HOST_CTRL_CAP[SDR104_SUPPORT]) */
 #define FSL_FEATURE_USDHC_HAS_SDR104_MODE (1)
+/* @brief USDHC has reset control */
+#define FSL_FEATURE_USDHC_HAS_RESET (0)
+/* @brief USDHC has no bitfield WTMK_LVL[WR_BRST_LEN] and WTMK_LVL[RD_BRST_LEN] */
+#define FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN (0)
 
 /* XBARA module features */
 
-/* @brief DMA_CH_MUX_REQ_30. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_30 (1)
-/* @brief DMA_CH_MUX_REQ_31. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_31 (1)
-/* @brief DMA_CH_MUX_REQ_94. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_94 (1)
-/* @brief DMA_CH_MUX_REQ_95. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_95 (1)
+/* @brief Number of interrupt requests. */
+#define FSL_FEATURE_XBARA_INTERRUPT_COUNT (4)
 
 #endif /* _MIMXRT1052_FEATURES_H_ */
 

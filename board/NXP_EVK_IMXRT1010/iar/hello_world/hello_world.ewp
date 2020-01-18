@@ -32,11 +32,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Automatic choice of formatter.</state>
+                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Automatic choice of formatter.</state>
+                    <state>No specifier a, A, no specifier n, no float nor long long, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -58,7 +58,7 @@
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state>0</state>
+                    <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -229,15 +229,15 @@
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCPreprocComments</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCPreprocLine</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCListCFile</name>
@@ -6474,21 +6474,6 @@
         </settings>
     </configuration>
     <group>
-        <name>user</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\bsp\Src\board.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\bsp\Src\clock_config.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\bsp\Src\hello_world.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\bsp\Src\pin_mux.c</name>
-        </file>
-    </group>
-    <group>
         <name>CMSIS</name>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1011\CMSIS\Include\arm_common_tables.h</name>
@@ -6816,6 +6801,21 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\include\tos_timer.h</name>
+        </file>
+    </group>
+    <group>
+        <name>user</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\bsp\Src\board.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\bsp\Src\clock_config.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\bsp\Src\hello_world.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\bsp\Src\pin_mux.c</name>
         </file>
     </group>
     <group>

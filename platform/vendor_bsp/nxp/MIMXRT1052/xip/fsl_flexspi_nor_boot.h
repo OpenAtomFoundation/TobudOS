@@ -1,34 +1,8 @@
 /*
- * The Clear BSD License
  * Copyright 2017 NXP
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- * that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef __FLEXSPI_NOR_BOOT_H__
@@ -36,6 +10,12 @@
 
 #include <stdint.h>
 #include "board.h"
+
+/*! @name Driver version */
+/*@{*/
+/*! @brief XIP_DEVICE driver version 2.0.0. */
+#define FSL_XIP_DEVICE_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*@}*/
 
 /************************************* 
  *  IVT Data 
@@ -83,7 +63,7 @@ typedef struct _ivt_ {
 #define IVT_HEADER           (IVT_TAG_HEADER | (IVT_SIZE << 8) | (IVT_PAR << 24))
 
 /* Set resume entry */
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION) 
     extern uint32_t __Vectors[];
     extern uint32_t Image$$RW_m_config_text$$Base[];
 #define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors) 
@@ -105,7 +85,12 @@ typedef struct _ivt_ {
 #define FLASH_BASE ((uint32_t)__FLASH_BASE)   
 #endif
 
-#define DCD_ADDRESS           dcd_data
+#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (1 == XIP_BOOT_HEADER_DCD_ENABLE)
+#define DCD_ADDRESS dcd_data
+#else
+#define DCD_ADDRESS 0
+#endif
+
 #define BOOT_DATA_ADDRESS     &boot_data
 #define CSF_ADDRESS           0
 #define IVT_RSVD             (uint32_t)(0x00000000)
@@ -120,12 +105,18 @@ typedef struct _boot_data_ {
   uint32_t placeholder;		/* placehoder to make even 0x10 size */
 }BOOT_DATA_T;
 
+#if defined(BOARD_FLASH_SIZE)
 #define FLASH_SIZE            BOARD_FLASH_SIZE
+#else
+#error "Please define macro BOARD_FLASH_SIZE"
+#endif
 #define PLUGIN_FLAG           (uint32_t)0
 
 /* External Variables */
 const BOOT_DATA_T boot_data;
+#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (1 == XIP_BOOT_HEADER_DCD_ENABLE)
 extern const uint8_t dcd_data[];
+#endif
 
 #endif /* __FLEXSPI_NOR_BOOT_H__ */
 

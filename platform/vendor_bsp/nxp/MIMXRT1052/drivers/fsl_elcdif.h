@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
- * Copyright (c) 2017, NXP Semiconductors, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_ELCDIF_H_
@@ -49,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eLCDIF driver version */
-#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /* All IRQ flags in CTRL1 register. */
@@ -81,21 +55,21 @@
 #endif
 
 /* LUT memory entery number. */
-#define ELCDIF_LUT_ENTRY_NUM 256
+#define ELCDIF_LUT_ENTRY_NUM 256U
 
 /*!
  * @brief eLCDIF signal polarity flags
  */
 enum _elcdif_polarity_flags
 {
-    kELCDIF_VsyncActiveLow = 0U,                                  /*!< VSYNC active low. */
-    kELCDIF_VsyncActiveHigh = LCDIF_VDCTRL0_VSYNC_POL_MASK,       /*!< VSYNC active high. */
-    kELCDIF_HsyncActiveLow = 0U,                                  /*!< HSYNC active low. */
-    kELCDIF_HsyncActiveHigh = LCDIF_VDCTRL0_HSYNC_POL_MASK,       /*!< HSYNC active high. */
-    kELCDIF_DataEnableActiveLow = 0U,                             /*!< Data enable line active low. */
-    kELCDIF_DataEnableActiveHigh = LCDIF_VDCTRL0_ENABLE_POL_MASK, /*!< Data enable line active high. */
-    kELCDIF_DriveDataOnFallingClkEdge = 0U,                       /*!< Drive data on falling clock edge, capture data
-                                                                       on rising clock edge. */
+    kELCDIF_VsyncActiveLow            = 0U,                            /*!< VSYNC active low. */
+    kELCDIF_VsyncActiveHigh           = LCDIF_VDCTRL0_VSYNC_POL_MASK,  /*!< VSYNC active high. */
+    kELCDIF_HsyncActiveLow            = 0U,                            /*!< HSYNC active low. */
+    kELCDIF_HsyncActiveHigh           = LCDIF_VDCTRL0_HSYNC_POL_MASK,  /*!< HSYNC active high. */
+    kELCDIF_DataEnableActiveLow       = 0U,                            /*!< Data enable line active low. */
+    kELCDIF_DataEnableActiveHigh      = LCDIF_VDCTRL0_ENABLE_POL_MASK, /*!< Data enable line active high. */
+    kELCDIF_DriveDataOnFallingClkEdge = 0U, /*!< Drive data on falling clock edge, capture data
+                                                 on rising clock edge. */
     kELCDIF_DriveDataOnRisingClkEdge = LCDIF_VDCTRL0_DOTCLK_POL_MASK, /*!< Drive data on falling
                                                                         clock edge, capture data
                                                                         on rising clock edge. */
@@ -106,8 +80,8 @@ enum _elcdif_polarity_flags
  */
 enum _elcdif_interrupt_enable
 {
-    kELCDIF_BusMasterErrorInterruptEnable = LCDIF_CTRL1_BM_ERROR_IRQ_EN_MASK,   /*!< Bus master error interrupt. */
-    kELCDIF_TxFifoOverflowInterruptEnable = LCDIF_CTRL1_OVERFLOW_IRQ_EN_MASK,   /*!< TXFIFO overflow interrupt. */
+    kELCDIF_BusMasterErrorInterruptEnable  = LCDIF_CTRL1_BM_ERROR_IRQ_EN_MASK,  /*!< Bus master error interrupt. */
+    kELCDIF_TxFifoOverflowInterruptEnable  = LCDIF_CTRL1_OVERFLOW_IRQ_EN_MASK,  /*!< TXFIFO overflow interrupt. */
     kELCDIF_TxFifoUnderflowInterruptEnable = LCDIF_CTRL1_UNDERFLOW_IRQ_EN_MASK, /*!< TXFIFO underflow interrupt. */
     kELCDIF_CurFrameDoneInterruptEnable =
         LCDIF_CTRL1_CUR_FRAME_DONE_IRQ_EN_MASK, /*!< Interrupt when hardware enters vertical blanking state. */
@@ -124,8 +98,8 @@ enum _elcdif_interrupt_enable
  */
 enum _elcdif_interrupt_flags
 {
-    kELCDIF_BusMasterError = LCDIF_CTRL1_BM_ERROR_IRQ_MASK,   /*!< Bus master error interrupt. */
-    kELCDIF_TxFifoOverflow = LCDIF_CTRL1_OVERFLOW_IRQ_MASK,   /*!< TXFIFO overflow interrupt. */
+    kELCDIF_BusMasterError  = LCDIF_CTRL1_BM_ERROR_IRQ_MASK,  /*!< Bus master error interrupt. */
+    kELCDIF_TxFifoOverflow  = LCDIF_CTRL1_OVERFLOW_IRQ_MASK,  /*!< TXFIFO overflow interrupt. */
     kELCDIF_TxFifoUnderflow = LCDIF_CTRL1_UNDERFLOW_IRQ_MASK, /*!< TXFIFO underflow interrupt. */
     kELCDIF_CurFrameDone =
         LCDIF_CTRL1_CUR_FRAME_DONE_IRQ_MASK,             /*!< Interrupt when hardware enters vertical blanking state. */
@@ -140,9 +114,9 @@ enum _elcdif_interrupt_flags
  */
 enum _elcdif_status_flags
 {
-    kELCDIF_LFifoFull = LCDIF_STAT_LFIFO_FULL_MASK,     /*!< LFIFO full. */
-    kELCDIF_LFifoEmpty = LCDIF_STAT_LFIFO_EMPTY_MASK,   /*!< LFIFO empty. */
-    kELCDIF_TxFifoFull = LCDIF_STAT_TXFIFO_FULL_MASK,   /*!< TXFIFO full. */
+    kELCDIF_LFifoFull   = LCDIF_STAT_LFIFO_FULL_MASK,   /*!< LFIFO full. */
+    kELCDIF_LFifoEmpty  = LCDIF_STAT_LFIFO_EMPTY_MASK,  /*!< LFIFO empty. */
+    kELCDIF_TxFifoFull  = LCDIF_STAT_TXFIFO_FULL_MASK,  /*!< TXFIFO full. */
     kELCDIF_TxFifoEmpty = LCDIF_STAT_TXFIFO_EMPTY_MASK, /*!< TXFIFO empty. */
 #if defined(LCDIF_STAT_BUSY_MASK)
     kELCDIF_LcdControllerBusy = LCDIF_STAT_BUSY_MASK, /*!< The external LCD controller busy signal. */
@@ -161,18 +135,18 @@ enum _elcdif_status_flags
  */
 typedef enum _elcdif_pixel_format
 {
-    kELCDIF_PixelFormatRAW8 = 0,     /*!< RAW 8 bit, four data use 32 bits. */
+    kELCDIF_PixelFormatRAW8   = 0,   /*!< RAW 8 bit, four data use 32 bits. */
     kELCDIF_PixelFormatRGB565 = 1,   /*!< RGB565, two pixel use 32 bits. */
     kELCDIF_PixelFormatRGB666 = 2,   /*!< RGB666 unpacked, one pixel uses 32 bits, high byte unused,
                                           upper 2 bits of other bytes unused. */
     kELCDIF_PixelFormatXRGB8888 = 3, /*!< XRGB8888 unpacked, one pixel uses 32 bits, high byte unused. */
-    kELCDIF_PixelFormatRGB888 = 4,   /*!< RGB888 packed, one pixel uses 24 bits. */
+    kELCDIF_PixelFormatRGB888   = 4, /*!< RGB888 packed, one pixel uses 24 bits. */
 } elcdif_pixel_format_t;
 
 /*! @brief The LCD data bus type.  */
 typedef enum _elcdif_lcd_data_bus
 {
-    kELCDIF_DataBus8Bit = LCDIF_CTRL_LCD_DATABUS_WIDTH(1),  /*!< 8-bit data bus. */
+    kELCDIF_DataBus8Bit  = LCDIF_CTRL_LCD_DATABUS_WIDTH(1), /*!< 8-bit data bus. */
     kELCDIF_DataBus16Bit = LCDIF_CTRL_LCD_DATABUS_WIDTH(0), /*!< 16-bit data bus, support RGB565. */
     kELCDIF_DataBus18Bit = LCDIF_CTRL_LCD_DATABUS_WIDTH(2), /*!< 18-bit data bus, support RGB666. */
     kELCDIF_DataBus24Bit = LCDIF_CTRL_LCD_DATABUS_WIDTH(3), /*!< 24-bit data bus, support RGB888. */
@@ -219,12 +193,12 @@ typedef struct _elcdif_rgb_mode_config
 typedef enum _elcdif_as_pixel_format
 {
     kELCDIF_AsPixelFormatARGB8888 = 0x0, /*!< 32-bit pixels with alpha. */
-    kELCDIF_AsPixelFormatRGB888 = 0x4,   /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
+    kELCDIF_AsPixelFormatRGB888   = 0x4, /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
     kELCDIF_AsPixelFormatARGB1555 = 0x8, /*!< 16-bit pixels with alpha. */
     kELCDIF_AsPixelFormatARGB4444 = 0x9, /*!< 16-bit pixels with alpha. */
-    kELCDIF_AsPixelFormatRGB555 = 0xC,   /*!< 16-bit pixels without alpha. */
-    kELCDIF_AsPixelFormatRGB444 = 0xD,   /*!< 16-bit pixels without alpha. */
-    kELCDIF_AsPixelFormatRGB565 = 0xE,   /*!< 16-bit pixels without alpha. */
+    kELCDIF_AsPixelFormatRGB555   = 0xC, /*!< 16-bit pixels without alpha. */
+    kELCDIF_AsPixelFormatRGB444   = 0xD, /*!< 16-bit pixels without alpha. */
+    kELCDIF_AsPixelFormatRGB565   = 0xE, /*!< 16-bit pixels without alpha. */
 } elcdif_as_pixel_format_t;
 
 /*!
@@ -261,18 +235,18 @@ typedef enum _elcdif_alpha_mode
  */
 typedef enum _elcdif_rop_mode
 {
-    kELCDIF_RopMaskAs = 0x0,     /*!< AS AND PS. */
-    kELCDIF_RopMaskNotAs = 0x1,  /*!< nAS AND PS. */
-    kELCDIF_RopMaskAsNot = 0x2,  /*!< AS AND nPS. */
-    kELCDIF_RopMergeAs = 0x3,    /*!< AS OR PS. */
+    kELCDIF_RopMaskAs     = 0x0, /*!< AS AND PS. */
+    kELCDIF_RopMaskNotAs  = 0x1, /*!< nAS AND PS. */
+    kELCDIF_RopMaskAsNot  = 0x2, /*!< AS AND nPS. */
+    kELCDIF_RopMergeAs    = 0x3, /*!< AS OR PS. */
     kELCDIF_RopMergeNotAs = 0x4, /*!< nAS OR PS. */
     kELCDIF_RopMergeAsNot = 0x5, /*!< AS OR nPS. */
-    kELCDIF_RopNotCopyAs = 0x6,  /*!< nAS. */
-    kELCDIF_RopNot = 0x7,        /*!< nPS. */
-    kELCDIF_RopNotMaskAs = 0x8,  /*!< AS NAND PS. */
+    kELCDIF_RopNotCopyAs  = 0x6, /*!< nAS. */
+    kELCDIF_RopNot        = 0x7, /*!< nPS. */
+    kELCDIF_RopNotMaskAs  = 0x8, /*!< AS NAND PS. */
     kELCDIF_RopNotMergeAs = 0x9, /*!< AS NOR PS. */
-    kELCDIF_RopXorAs = 0xA,      /*!< AS XOR PS. */
-    kELCDIF_RopNotXorAs = 0xB    /*!< AS XNOR PS. */
+    kELCDIF_RopXorAs      = 0xA, /*!< AS XOR PS. */
+    kELCDIF_RopNotXorAs   = 0xB  /*!< AS XNOR PS. */
 } elcdif_rop_mode_t;
 
 /*!
@@ -366,6 +340,14 @@ void ELCDIF_Deinit(LCDIF_Type *base);
  * @name Module operation
  * @{
  */
+
+/*!
+ * @brief Set the pixel format in RGB (DOTCLK) mode.
+ *
+ * @param base eLCDIF peripheral base address.
+ * @param pixelFormat The pixel format.
+ */
+void ELCDIF_RgbModeSetPixelFormat(LCDIF_Type *base, elcdif_pixel_format_t pixelFormat);
 
 /*!
  * @brief Start to display in RGB (DOTCLK) mode.
@@ -488,15 +470,12 @@ static inline uint32_t ELCDIF_GetBusMasterErrorAddr(LCDIF_Type *base)
    uint32_t statusFlags;
    statusFlags = ELCDIF_GetStatus(LCDIF);
 
-   // If LFIFO is full.
    if (kELCDIF_LFifoFull & statusFlags)
    {
-       // ...;
    }
-   // If TXFIFO is empty.
+
    if (kELCDIF_TxFifoEmpty & statusFlags)
    {
-       // ...;
    }
    @endcode
  *
@@ -513,7 +492,7 @@ static inline uint32_t ELCDIF_GetStatus(LCDIF_Type *base)
 #if defined(LCDIF_STAT_DVI_CURRENT_FIELD_MASK)
                          | LCDIF_STAT_DVI_CURRENT_FIELD_MASK
 #endif
-                         );
+                        );
 }
 
 /*!
@@ -644,7 +623,7 @@ static inline void ELCDIF_SetNextAlphaSurfaceBufferAddr(LCDIF_Type *base, uint32
  */
 static inline void ELCDIF_SetOverlayColorKey(LCDIF_Type *base, uint32_t colorKeyLow, uint32_t colorKeyHigh)
 {
-    base->AS_CLRKEYLOW = colorKeyLow;
+    base->AS_CLRKEYLOW  = colorKeyLow;
     base->AS_CLRKEYHIGH = colorKeyHigh;
 }
 

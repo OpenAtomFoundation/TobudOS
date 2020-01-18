@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_flexio.h"
@@ -38,12 +12,24 @@
  * Definitions
  ******************************************************************************/
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.flexio"
+#endif
+
 /*< @brief user configurable flexio handle count. */
 #define FLEXIO_HANDLE_COUNT 2
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+/*! @brief Pointers to flexio bases for each instance. */
+FLEXIO_Type *const s_flexioBases[] = FLEXIO_BASE_PTRS;
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+/*! @brief Pointers to flexio clocks for each instance. */
+const clock_ip_name_t s_flexioClocks[] = FLEXIO_CLOCKS;
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*< @brief pointer to array of FLEXIO handle. */
 static void *s_flexioHandle[FLEXIO_HANDLE_COUNT];
@@ -54,18 +40,15 @@ static void *s_flexioType[FLEXIO_HANDLE_COUNT];
 /*< @brief pointer to array of FLEXIO Isr. */
 static flexio_isr_t s_flexioIsr[FLEXIO_HANDLE_COUNT];
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-/*! @brief Pointers to flexio clocks for each instance. */
-const clock_ip_name_t s_flexioClocks[] = FLEXIO_CLOCKS;
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-/*! @brief Pointers to flexio bases for each instance. */
-FLEXIO_Type *const s_flexioBases[] = FLEXIO_BASE_PTRS;
-
 /*******************************************************************************
  * Codes
  ******************************************************************************/
 
+/*!
+ * brief Get instance number for FLEXIO module.
+ *
+ * param base FLEXIO peripheral base address.
+ */
 uint32_t FLEXIO_GetInstance(FLEXIO_Type *base)
 {
     uint32_t instance;
@@ -84,6 +67,24 @@ uint32_t FLEXIO_GetInstance(FLEXIO_Type *base)
     return instance;
 }
 
+/*!
+ * brief Configures the FlexIO with a FlexIO configuration. The configuration structure
+ * can be filled by the user or be set with default values by FLEXIO_GetDefaultConfig().
+ *
+ * Example
+   code
+   flexio_config_t config = {
+   .enableFlexio = true,
+   .enableInDoze = false,
+   .enableInDebug = true,
+   .enableFastAccess = false
+   };
+   FLEXIO_Configure(base, &config);
+   endcode
+ *
+ * param base FlexIO peripheral base address
+ * param userConfig pointer to flexio_config_t structure
+*/
 void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
 {
     uint32_t ctrlReg = 0;
@@ -106,6 +107,13 @@ void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
     base->CTRL = ctrlReg;
 }
 
+/*!
+ * brief Gates the FlexIO clock. Call this API to stop the FlexIO clock.
+ *
+ * note After calling this API, call the FLEXO_Init to use the FlexIO module.
+ *
+ * param base FlexIO peripheral base address
+ */
 void FLEXIO_Deinit(FLEXIO_Type *base)
 {
     FLEXIO_Enable(base, false);
@@ -114,16 +122,36 @@ void FLEXIO_Deinit(FLEXIO_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Gets the default configuration to configure the FlexIO module. The configuration
+ * can used directly to call the FLEXIO_Configure().
+ *
+ * Example:
+   code
+   flexio_config_t config;
+   FLEXIO_GetDefaultConfig(&config);
+   endcode
+ *
+ * param userConfig pointer to flexio_config_t structure
+*/
 void FLEXIO_GetDefaultConfig(flexio_config_t *userConfig)
 {
     assert(userConfig);
 
-    userConfig->enableFlexio = true;
-    userConfig->enableInDoze = false;
-    userConfig->enableInDebug = true;
+    /* Initializes the configure structure to zero. */
+    (void)memset(userConfig, 0, sizeof(*userConfig));
+
+    userConfig->enableFlexio     = true;
+    userConfig->enableInDoze     = false;
+    userConfig->enableInDebug    = true;
     userConfig->enableFastAccess = false;
 }
 
+/*!
+ * brief Resets the FlexIO module.
+ *
+ * param base FlexIO peripheral base address
+ */
 void FLEXIO_Reset(FLEXIO_Type *base)
 {
     /*do software reset, software reset operation affect all other FLEXIO registers except CTRL*/
@@ -131,6 +159,14 @@ void FLEXIO_Reset(FLEXIO_Type *base)
     base->CTRL = 0;
 }
 
+/*!
+ * brief Gets the shifter buffer address for the DMA transfer usage.
+ *
+ * param base FlexIO peripheral base address
+ * param type Shifter type of flexio_shifter_buffer_type_t
+ * param index Shifter index
+ * return Corresponding shifter buffer index
+ */
 uint32_t FLEXIO_GetShifterBufferAddress(FLEXIO_Type *base, flexio_shifter_buffer_type_t type, uint8_t index)
 {
     assert(index < FLEXIO_SHIFTBUF_COUNT);
@@ -174,15 +210,41 @@ uint32_t FLEXIO_GetShifterBufferAddress(FLEXIO_Type *base, flexio_shifter_buffer
 
 #endif
         default:
+            address = (uint32_t) & (base->SHIFTBUF[index]);
             break;
     }
     return address;
 }
 
+/*!
+ * brief Configures the shifter with the shifter configuration. The configuration structure
+ * covers both the SHIFTCTL and SHIFTCFG registers. To configure the shifter to the proper
+ * mode, select which timer controls the shifter to shift, whether to generate start bit/stop
+ *  bit, and the polarity of start bit and stop bit.
+ *
+ * Example
+   code
+   flexio_shifter_config_t config = {
+   .timerSelect = 0,
+   .timerPolarity = kFLEXIO_ShifterTimerPolarityOnPositive,
+   .pinConfig = kFLEXIO_PinConfigOpenDrainOrBidirection,
+   .pinPolarity = kFLEXIO_PinActiveLow,
+   .shifterMode = kFLEXIO_ShifterModeTransmit,
+   .inputSource = kFLEXIO_ShifterInputFromPin,
+   .shifterStop = kFLEXIO_ShifterStopBitHigh,
+   .shifterStart = kFLEXIO_ShifterStartBitLow
+   };
+   FLEXIO_SetShifterConfig(base, &config);
+   endcode
+ *
+ * param base FlexIO peripheral base address
+ * param index Shifter index
+ * param shifterConfig Pointer to flexio_shifter_config_t structure
+*/
 void FLEXIO_SetShifterConfig(FLEXIO_Type *base, uint8_t index, const flexio_shifter_config_t *shifterConfig)
 {
     base->SHIFTCFG[index] = FLEXIO_SHIFTCFG_INSRC(shifterConfig->inputSource)
-#if defined(FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH) && FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH
+#if FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH
                             | FLEXIO_SHIFTCFG_PWIDTH(shifterConfig->parallelWidth)
 #endif /* FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH */
                             | FLEXIO_SHIFTCFG_SSTOP(shifterConfig->shifterStop) |
@@ -194,6 +256,36 @@ void FLEXIO_SetShifterConfig(FLEXIO_Type *base, uint8_t index, const flexio_shif
         FLEXIO_SHIFTCTL_PINPOL(shifterConfig->pinPolarity) | FLEXIO_SHIFTCTL_SMOD(shifterConfig->shifterMode);
 }
 
+/*!
+ * brief Configures the timer with the timer configuration. The configuration structure
+ * covers both the TIMCTL and TIMCFG registers. To configure the timer to the proper
+ * mode, select trigger source for timer and the timer pin output and the timing for timer.
+ *
+ * Example
+   code
+   flexio_timer_config_t config = {
+   .triggerSelect = FLEXIO_TIMER_TRIGGER_SEL_SHIFTnSTAT(0),
+   .triggerPolarity = kFLEXIO_TimerTriggerPolarityActiveLow,
+   .triggerSource = kFLEXIO_TimerTriggerSourceInternal,
+   .pinConfig = kFLEXIO_PinConfigOpenDrainOrBidirection,
+   .pinSelect = 0,
+   .pinPolarity = kFLEXIO_PinActiveHigh,
+   .timerMode = kFLEXIO_TimerModeDual8BitBaudBit,
+   .timerOutput = kFLEXIO_TimerOutputZeroNotAffectedByReset,
+   .timerDecrement = kFLEXIO_TimerDecSrcOnFlexIOClockShiftTimerOutput,
+   .timerReset = kFLEXIO_TimerResetOnTimerPinEqualToTimerOutput,
+   .timerDisable = kFLEXIO_TimerDisableOnTimerCompare,
+   .timerEnable = kFLEXIO_TimerEnableOnTriggerHigh,
+   .timerStop = kFLEXIO_TimerStopBitEnableOnTimerDisable,
+   .timerStart = kFLEXIO_TimerStartBitEnabled
+   };
+   FLEXIO_SetTimerConfig(base, &config);
+   endcode
+ *
+ * param base FlexIO peripheral base address
+ * param index Timer index
+ * param timerConfig Pointer to the flexio_timer_config_t structure
+*/
 void FLEXIO_SetTimerConfig(FLEXIO_Type *base, uint8_t index, const flexio_timer_config_t *timerConfig)
 {
     base->TIMCFG[index] =
@@ -211,28 +303,37 @@ void FLEXIO_SetTimerConfig(FLEXIO_Type *base, uint8_t index, const flexio_timer_
                           FLEXIO_TIMCTL_PINPOL(timerConfig->pinPolarity) | FLEXIO_TIMCTL_TIMOD(timerConfig->timerMode);
 }
 
+/*!
+ * brief Registers the handle and the interrupt handler for the FlexIO-simulated peripheral.
+ *
+ * param base Pointer to the FlexIO simulated peripheral type.
+ * param handle Pointer to the handler for FlexIO simulated peripheral.
+ * param isr FlexIO simulated peripheral interrupt handler.
+ * retval kStatus_Success Successfully create the handle.
+ * retval kStatus_OutOfRange The FlexIO type/handle/ISR table out of range.
+ */
 status_t FLEXIO_RegisterHandleIRQ(void *base, void *handle, flexio_isr_t isr)
 {
     assert(base);
     assert(handle);
     assert(isr);
 
-    uint8_t index = 0;
+    uint8_t index;
 
     /* Find the an empty handle pointer to store the handle. */
-    for (index = 0; index < FLEXIO_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
     {
         if (s_flexioHandle[index] == NULL)
         {
             /* Register FLEXIO simulated driver base, handle and isr. */
-            s_flexioType[index] = base;
+            s_flexioType[index]   = base;
             s_flexioHandle[index] = handle;
-            s_flexioIsr[index] = isr;
+            s_flexioIsr[index]    = isr;
             break;
         }
     }
 
-    if (index == FLEXIO_HANDLE_COUNT)
+    if (index == (uint8_t)FLEXIO_HANDLE_COUNT)
     {
         return kStatus_OutOfRange;
     }
@@ -242,26 +343,33 @@ status_t FLEXIO_RegisterHandleIRQ(void *base, void *handle, flexio_isr_t isr)
     }
 }
 
+/*!
+ * brief Unregisters the handle and the interrupt handler for the FlexIO-simulated peripheral.
+ *
+ * param base Pointer to the FlexIO simulated peripheral type.
+ * retval kStatus_Success Successfully create the handle.
+ * retval kStatus_OutOfRange The FlexIO type/handle/ISR table out of range.
+ */
 status_t FLEXIO_UnregisterHandleIRQ(void *base)
 {
     assert(base);
 
-    uint8_t index = 0;
+    uint8_t index;
 
     /* Find the index from base address mappings. */
-    for (index = 0; index < FLEXIO_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
     {
         if (s_flexioType[index] == base)
         {
             /* Unregister FLEXIO simulated driver handle and isr. */
-            s_flexioType[index] = NULL;
+            s_flexioType[index]   = NULL;
             s_flexioHandle[index] = NULL;
-            s_flexioIsr[index] = NULL;
+            s_flexioIsr[index]    = NULL;
             break;
         }
     }
 
-    if (index == FLEXIO_HANDLE_COUNT)
+    if (index == (uint8_t)FLEXIO_HANDLE_COUNT)
     {
         return kStatus_OutOfRange;
     }
@@ -275,9 +383,9 @@ void FLEXIO_CommonIRQHandler(void)
 {
     uint8_t index;
 
-    for (index = 0; index < FLEXIO_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
     {
-        if (s_flexioHandle[index])
+        if (s_flexioHandle[index] != NULL)
         {
             s_flexioIsr[index](s_flexioType[index], s_flexioHandle[index]);
         }
@@ -310,6 +418,11 @@ void UART2_FLEXIO_DriverIRQHandler(void)
 }
 
 void FLEXIO2_DriverIRQHandler(void)
+{
+    FLEXIO_CommonIRQHandler();
+}
+
+void FLEXIO3_DriverIRQHandler(void)
 {
     FLEXIO_CommonIRQHandler();
 }

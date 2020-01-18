@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_EDMA_H_
@@ -49,22 +23,19 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
 /*@}*/
 
 /*! @brief Compute the offset unit from DCHPRI3 */
-#define DMA_DCHPRI_INDEX(channel) (((channel) & ~0x03U) | (3 - ((channel)&0x03U)))
-
-/*! @brief Get the pointer of DCHPRIn */
-#define DMA_DCHPRIn(base, channel) ((volatile uint8_t *)&(base->DCHPRI3))[DMA_DCHPRI_INDEX(channel)]
+#define DMA_DCHPRI_INDEX(channel) (((channel) & ~0x03U) | (3U - ((channel)&0x03U)))
 
 /*! @brief eDMA transfer configuration */
 typedef enum _edma_transfer_size
 {
-    kEDMA_TransferSize1Bytes = 0x0U,  /*!< Source/Destination data transfer size is 1 byte every time */
-    kEDMA_TransferSize2Bytes = 0x1U,  /*!< Source/Destination data transfer size is 2 bytes every time */
-    kEDMA_TransferSize4Bytes = 0x2U,  /*!< Source/Destination data transfer size is 4 bytes every time */
-    kEDMA_TransferSize8Bytes = 0x3U,  /*!< Source/Destination data transfer size is 8 bytes every time */
+    kEDMA_TransferSize1Bytes  = 0x0U, /*!< Source/Destination data transfer size is 1 byte every time */
+    kEDMA_TransferSize2Bytes  = 0x1U, /*!< Source/Destination data transfer size is 2 bytes every time */
+    kEDMA_TransferSize4Bytes  = 0x2U, /*!< Source/Destination data transfer size is 4 bytes every time */
+    kEDMA_TransferSize8Bytes  = 0x3U, /*!< Source/Destination data transfer size is 8 bytes every time */
     kEDMA_TransferSize16Bytes = 0x4U, /*!< Source/Destination data transfer size is 16 bytes every time */
     kEDMA_TransferSize32Bytes = 0x5U, /*!< Source/Destination data transfer size is 32 bytes every time */
 } edma_transfer_size_t;
@@ -109,7 +80,7 @@ typedef enum _edma_modulo
 /*! @brief Bandwidth control */
 typedef enum _edma_bandwidth
 {
-    kEDMA_BandwidthStallNone = 0x0U,   /*!< No eDMA engine stalls. */
+    kEDMA_BandwidthStallNone   = 0x0U, /*!< No eDMA engine stalls. */
     kEDMA_BandwidthStall4Cycle = 0x2U, /*!< eDMA engine stalls for 4 cycles after each read/write. */
     kEDMA_BandwidthStall8Cycle = 0x3U, /*!< eDMA engine stalls for 8 cycles after each read/write. */
 } edma_bandwidth_t;
@@ -122,32 +93,32 @@ typedef enum _edma_channel_link_type
     kEDMA_MajorLink,       /*!< Channel link while major loop count exhausted */
 } edma_channel_link_type_t;
 
-/*!@brief eDMA channel status flags. */
-enum _edma_channel_status_flags
+/*!@brief _edma_channel_status_flags eDMA channel status flags. */
+enum
 {
-    kEDMA_DoneFlag = 0x1U,      /*!< DONE flag, set while transfer finished, CITER value exhausted*/
-    kEDMA_ErrorFlag = 0x2U,     /*!< eDMA error flag, an error occurred in a transfer */
+    kEDMA_DoneFlag      = 0x1U, /*!< DONE flag, set while transfer finished, CITER value exhausted*/
+    kEDMA_ErrorFlag     = 0x2U, /*!< eDMA error flag, an error occurred in a transfer */
     kEDMA_InterruptFlag = 0x4U, /*!< eDMA interrupt flag, set while an interrupt occurred of this channel */
 };
 
-/*! @brief eDMA channel error status flags. */
-enum _edma_error_status_flags
+/*! @brief _edma_error_status_flags eDMA channel error status flags. */
+enum
 {
-    kEDMA_DestinationBusErrorFlag = DMA_ES_DBE_MASK,    /*!< Bus error on destination address */
-    kEDMA_SourceBusErrorFlag = DMA_ES_SBE_MASK,         /*!< Bus error on the source address */
-    kEDMA_ScatterGatherErrorFlag = DMA_ES_SGE_MASK,     /*!< Error on the Scatter/Gather address, not 32byte aligned. */
-    kEDMA_NbytesErrorFlag = DMA_ES_NCE_MASK,            /*!< NBYTES/CITER configuration error */
+    kEDMA_DestinationBusErrorFlag    = DMA_ES_DBE_MASK, /*!< Bus error on destination address */
+    kEDMA_SourceBusErrorFlag         = DMA_ES_SBE_MASK, /*!< Bus error on the source address */
+    kEDMA_ScatterGatherErrorFlag     = DMA_ES_SGE_MASK, /*!< Error on the Scatter/Gather address, not 32byte aligned. */
+    kEDMA_NbytesErrorFlag            = DMA_ES_NCE_MASK, /*!< NBYTES/CITER configuration error */
     kEDMA_DestinationOffsetErrorFlag = DMA_ES_DOE_MASK, /*!< Destination offset not aligned with destination size */
     kEDMA_DestinationAddressErrorFlag = DMA_ES_DAE_MASK, /*!< Destination address not aligned with destination size */
-    kEDMA_SourceOffsetErrorFlag = DMA_ES_SOE_MASK,       /*!< Source offset not aligned with source size */
-    kEDMA_SourceAddressErrorFlag = DMA_ES_SAE_MASK,      /*!< Source address not aligned with source size*/
-    kEDMA_ErrorChannelFlag = DMA_ES_ERRCHN_MASK,         /*!< Error channel number of the cancelled channel number */
-    kEDMA_ChannelPriorityErrorFlag = DMA_ES_CPE_MASK,    /*!< Channel priority is not unique. */
-    kEDMA_TransferCanceledFlag = DMA_ES_ECX_MASK,        /*!< Transfer cancelled */
-#if defined(FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT) && FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT > 1
+    kEDMA_SourceOffsetErrorFlag       = DMA_ES_SOE_MASK, /*!< Source offset not aligned with source size */
+    kEDMA_SourceAddressErrorFlag      = DMA_ES_SAE_MASK, /*!< Source address not aligned with source size*/
+    kEDMA_ErrorChannelFlag            = DMA_ES_ERRCHN_MASK, /*!< Error channel number of the cancelled channel number */
+    kEDMA_ChannelPriorityErrorFlag    = DMA_ES_CPE_MASK,    /*!< Channel priority is not unique. */
+    kEDMA_TransferCanceledFlag        = DMA_ES_ECX_MASK,    /*!< Transfer cancelled */
+#if defined(FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT) && (FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT > 1)
     kEDMA_GroupPriorityErrorFlag = DMA_ES_GPE_MASK, /*!< Group priority is not unique. */
 #endif
-    kEDMA_ValidFlag = DMA_ES_VLD_MASK, /*!< No error occurred, this bit is 0. Otherwise, it is 1. */
+    kEDMA_ValidFlag = (int)DMA_ES_VLD_MASK, /*!< No error occurred, this bit is 0. Otherwise, it is 1. */
 };
 
 /*! @brief eDMA interrupt source */
@@ -155,22 +126,23 @@ typedef enum _edma_interrupt_enable
 {
     kEDMA_ErrorInterruptEnable = 0x1U,                  /*!< Enable interrupt while channel error occurs. */
     kEDMA_MajorInterruptEnable = DMA_CSR_INTMAJOR_MASK, /*!< Enable interrupt while major count exhausted. */
-    kEDMA_HalfInterruptEnable = DMA_CSR_INTHALF_MASK,   /*!< Enable interrupt while major count to half value. */
+    kEDMA_HalfInterruptEnable  = DMA_CSR_INTHALF_MASK,  /*!< Enable interrupt while major count to half value. */
 } edma_interrupt_enable_t;
 
 /*! @brief eDMA transfer type */
 typedef enum _edma_transfer_type
 {
-    kEDMA_MemoryToMemory = 0x0U, /*!< Transfer from memory to memory */
-    kEDMA_PeripheralToMemory,    /*!< Transfer from peripheral to memory */
-    kEDMA_MemoryToPeripheral,    /*!< Transfer from memory to peripheral */
+    kEDMA_MemoryToMemory = 0x0U,  /*!< Transfer from memory to memory */
+    kEDMA_PeripheralToMemory,     /*!< Transfer from peripheral to memory */
+    kEDMA_MemoryToPeripheral,     /*!< Transfer from memory to peripheral */
+    kEDMA_PeripheralToPeripheral, /*!< Transfer from Peripheral to peripheral */
 } edma_transfer_type_t;
 
-/*! @brief eDMA transfer status */
-enum _edma_transfer_status
+/*! @brief _edma_transfer_status eDMA transfer status */
+enum
 {
     kStatus_EDMA_QueueFull = MAKE_STATUS(kStatusGroup_EDMA, 0), /*!< TCD queue is full. */
-    kStatus_EDMA_Busy = MAKE_STATUS(kStatusGroup_EDMA, 1),      /*!< Channel is busy and can't handle the
+    kStatus_EDMA_Busy      = MAKE_STATUS(kStatusGroup_EDMA, 1), /*!< Channel is busy and can't handle the
                                                                      transfer request. */
 };
 
@@ -239,7 +211,7 @@ typedef struct _edma_tcd
     __IO uint32_t DADDR;     /*!< DADDR register, used for destination address */
     __IO uint16_t DOFF;      /*!< DOFF register, used for destination offset */
     __IO uint16_t CITER;     /*!< CITER register, current minor loop numbers, for unfinished minor loop.*/
-    __IO uint32_t DLAST_SGA; /*!< DLASTSGA register, next stcd address used in scatter-gather mode */
+    __IO uint32_t DLAST_SGA; /*!< DLASTSGA register, next tcd address used in scatter-gather mode */
     __IO uint16_t CSR;       /*!< CSR register, for TCD control status */
     __IO uint16_t BITER;     /*!< BITER register, begin minor loop count. */
 } edma_tcd_t;
@@ -247,7 +219,24 @@ typedef struct _edma_tcd
 /*! @brief Callback for eDMA */
 struct _edma_handle;
 
-/*! @brief Define callback function for eDMA. */
+/*! @brief Define callback function for eDMA.
+ *
+ * This callback function is called in the EDMA interrupt handle.
+ * In normal mode, run into callback function means the transfer users need is done.
+ * In scatter gather mode, run into callback function means a transfer control block (tcd) is finished. Not
+ * all transfer finished, users can get the finished tcd numbers using interface EDMA_GetUnusedTCDNumber.
+ *
+ * @param handle EDMA handle pointer, users shall not touch the values inside.
+ * @param userData The callback user parameter pointer. Users can use this parameter to involve things users need to
+ *                 change in EDMA callback function.
+ * @param transferDone If the current loaded transfer done. In normal mode it means if all transfer done. In scatter
+ *                     gather mode, this parameter shows is the current transfer block in EDMA register is done. As the
+ *                     load of core is different, it will be different if the new tcd loaded into EDMA registers while
+ *                     this callback called. If true, it always means new tcd still not loaded into registers, while
+ *                     false means new tcd already loaded into registers.
+ * @param tcds How many tcds are done from the last callback. This parameter only used in scatter gather mode. It
+ *             tells user how many tcds are finished between the last callback and this.
+ */
 typedef void (*edma_callback)(struct _edma_handle *handle, void *userData, bool transferDone, uint32_t tcds);
 
 /*! @brief eDMA transfer handle structure */
@@ -394,17 +383,7 @@ void EDMA_SetMinorOffsetConfig(DMA_Type *base, uint32_t channel, const edma_mino
  * @param channel eDMA channel number
  * @param config A pointer to the channel preemption configuration structure.
  */
-static inline void EDMA_SetChannelPreemptionConfig(DMA_Type *base,
-                                                   uint32_t channel,
-                                                   const edma_channel_Preemption_config_t *config)
-{
-    assert(channel < FSL_FEATURE_EDMA_MODULE_CHANNEL);
-    assert(config != NULL);
-
-    DMA_DCHPRIn(base, channel) =
-        (DMA_DCHPRI0_DPA(!config->enablePreemptAbility) | DMA_DCHPRI0_ECP(config->enableChannelPreemption) |
-         DMA_DCHPRI0_CHPRI(config->channelPriority));
-}
+void EDMA_SetChannelPreemptionConfig(DMA_Type *base, uint32_t channel, const edma_channel_Preemption_config_t *config);
 
 /*!
  * @brief Sets the channel link for the eDMA transfer.
@@ -464,9 +443,10 @@ void EDMA_SetModulo(DMA_Type *base, uint32_t channel, edma_modulo_t srcModulo, e
  */
 static inline void EDMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, bool enable)
 {
-    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
-    base->EARS = (base->EARS & (~(1U << channel))) | ((uint32_t)enable << channel);
+    base->EARS &= ~((uint32_t)1U << channel);
+    base->EARS |= ((uint32_t)(true == enable ? 1U : 0U) << channel);
 }
 #endif /* FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT */
 
@@ -481,9 +461,10 @@ static inline void EDMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, boo
  */
 static inline void EDMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, bool enable)
 {
-    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
-    base->TCD[channel].CSR = (base->TCD[channel].CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ(enable);
+    base->TCD[channel].CSR =
+        (uint16_t)((base->TCD[channel].CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ((true == enable ? 1U : 0U)));
 }
 
 /*!
@@ -594,9 +575,9 @@ void EDMA_TcdSetChannelLink(edma_tcd_t *tcd, edma_channel_link_type_t type, uint
 static inline void EDMA_TcdSetBandWidth(edma_tcd_t *tcd, edma_bandwidth_t bandWidth)
 {
     assert(tcd != NULL);
-    assert(((uint32_t)tcd & 0x1FU) == 0);
+    assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (tcd->CSR & (~DMA_CSR_BWC_MASK)) | DMA_CSR_BWC(bandWidth);
+    tcd->CSR = (uint16_t)((tcd->CSR & (~DMA_CSR_BWC_MASK)) | DMA_CSR_BWC(bandWidth));
 }
 
 /*!
@@ -623,9 +604,9 @@ void EDMA_TcdSetModulo(edma_tcd_t *tcd, edma_modulo_t srcModulo, edma_modulo_t d
 static inline void EDMA_TcdEnableAutoStopRequest(edma_tcd_t *tcd, bool enable)
 {
     assert(tcd != NULL);
-    assert(((uint32_t)tcd & 0x1FU) == 0);
+    assert(((uint32_t)tcd & 0x1FU) == 0U);
 
-    tcd->CSR = (tcd->CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ(enable);
+    tcd->CSR = (uint16_t)((tcd->CSR & (~DMA_CSR_DREQ_MASK)) | DMA_CSR_DREQ((true == enable ? 1U : 0U)));
 }
 
 /*!
@@ -662,7 +643,7 @@ void EDMA_TcdDisableInterrupts(edma_tcd_t *tcd, uint32_t mask);
  */
 static inline void EDMA_EnableChannelRequest(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
     base->SERQ = DMA_SERQ_SERQ(channel);
 }
@@ -677,7 +658,7 @@ static inline void EDMA_EnableChannelRequest(DMA_Type *base, uint32_t channel)
  */
 static inline void EDMA_DisableChannelRequest(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
     base->CERQ = DMA_CERQ_CERQ(channel);
 }
@@ -692,7 +673,7 @@ static inline void EDMA_DisableChannelRequest(DMA_Type *base, uint32_t channel)
  */
 static inline void EDMA_TriggerChannelStart(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
     base->SSRT = DMA_SSRT_SSRT(channel);
 }
@@ -707,7 +688,7 @@ static inline void EDMA_TriggerChannelStart(DMA_Type *base, uint32_t channel)
  * @brief Gets the remaining major loop count from the eDMA current channel TCD.
  *
  * This function checks the TCD (Task Control Descriptor) status for a specified
- * eDMA channel and returns the the number of major loop count that has not finished.
+ * eDMA channel and returns the number of major loop count that has not finished.
  *
  * @param base eDMA peripheral base address.
  * @param channel eDMA channel number.
@@ -731,7 +712,7 @@ uint32_t EDMA_GetRemainingMajorLoopCount(DMA_Type *base, uint32_t channel);
  *
  * @param base eDMA peripheral base address.
  * @return The mask of error status flags. Users need to use the
-*         _edma_error_status_flags type to decode the return variables.
+ *         _edma_error_status_flags type to decode the return variables.
  */
 static inline uint32_t EDMA_GetErrorStatusFlags(DMA_Type *base)
 {
@@ -779,7 +760,10 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel);
 /*!
  * @brief Installs the TCDs memory pool into the eDMA handle.
  *
- * This function is called after the EDMA_CreateHandle to use scatter/gather feature.
+ * This function is called after the EDMA_CreateHandle to use scatter/gather feature. This function shall only be used
+ * while users need to use scatter gather mode. Scatter gather mode enables EDMA to load a new transfer control block
+ * (tcd) in hardware, and automatically reconfigure that DMA channel for a new transfer.
+ * Users need to prepare tcd memory and also configure tcds using interface EDMA_SubmitTransfer.
  *
  * @param handle eDMA handle pointer.
  * @param tcdPool A memory pool to store TCDs. It must be 32 bytes aligned.
@@ -791,13 +775,41 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
  * @brief Installs a callback function for the eDMA transfer.
  *
  * This callback is called in the eDMA IRQ handler. Use the callback to do something after
- * the current major loop transfer completes.
+ * the current major loop transfer completes. This function will be called every time one tcd finished transfer.
  *
  * @param handle eDMA handle pointer.
  * @param callback eDMA callback function pointer.
  * @param userData A parameter for the callback function.
  */
 void EDMA_SetCallback(edma_handle_t *handle, edma_callback callback, void *userData);
+
+/*!
+ * @brief Prepares the eDMA transfer structure configurations.
+ *
+ * This function prepares the transfer configuration structure according to the user input.
+ *
+ * @param config The user configuration structure of type edma_transfer_t.
+ * @param srcAddr eDMA transfer source address.
+ * @param srcWidth eDMA transfer source address width(bytes).
+ * @param srcOffset source address offset.
+ * @param destAddr eDMA transfer destination address.
+ * @param destWidth eDMA transfer destination address width(bytes).
+ * @param destOffset destination address offset.
+ * @param bytesEachRequest eDMA transfer bytes per channel request.
+ * @param transferBytes eDMA transfer bytes to be transferred.
+ * @note The data address and the data width must be consistent. For example, if the SRC
+ *       is 4 bytes, the source address must be 4 bytes aligned, or it results in
+ *       source address error (SAE).
+ */
+void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
+                                void *srcAddr,
+                                uint32_t srcWidth,
+                                int16_t srcOffset,
+                                void *destAddr,
+                                uint32_t destWidth,
+                                int16_t destOffset,
+                                uint32_t bytesEachRequest,
+                                uint32_t transferBytes);
 
 /*!
  * @brief Prepares the eDMA transfer structure.
@@ -829,8 +841,8 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
  * @brief Submits the eDMA transfer request.
  *
  * This function submits the eDMA transfer request according to the transfer configuration structure.
- * If submitting the transfer request repeatedly, this function packs an unprocessed request as
- * a TCD and enables scatter/gather feature to process it in the next time.
+ * In scatter gather mode, call this function will add a configured tcd to the circular list of tcd pool.
+ * The tcd pools is setup by call function EDMA_InstallTCDMemory before.
  *
  * @param handle eDMA handle pointer.
  * @param config Pointer to eDMA transfer configuration structure.
@@ -880,7 +892,9 @@ void EDMA_AbortTransfer(edma_handle_t *handle);
  */
 static inline uint32_t EDMA_GetUnusedTCDNumber(edma_handle_t *handle)
 {
-    return (handle->tcdSize - handle->tcdUsed);
+    int8_t tmpTcdSize = handle->tcdSize;
+    int8_t tmpTcdUsed = handle->tcdUsed;
+    return ((uint32_t)tmpTcdSize - (uint32_t)tmpTcdUsed);
 }
 
 /*!

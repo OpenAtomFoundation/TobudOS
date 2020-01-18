@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_FLEXIO_SPI_H_
@@ -49,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO SPI driver version 2.1.1. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief FlexIO SPI driver version 2.1.3. */
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 #ifndef FLEXIO_SPI_DUMMYDATA
@@ -59,10 +33,10 @@
 #endif
 
 /*! @brief Error codes for the FlexIO SPI driver. */
-enum _flexio_spi_status
+enum
 {
-    kStatus_FLEXIO_SPI_Busy = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 1),  /*!< FlexIO SPI is busy. */
-    kStatus_FLEXIO_SPI_Idle = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 2),  /*!< SPI is idle */
+    kStatus_FLEXIO_SPI_Busy  = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 1), /*!< FlexIO SPI is busy. */
+    kStatus_FLEXIO_SPI_Idle  = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 2), /*!< SPI is idle */
     kStatus_FLEXIO_SPI_Error = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 3), /*!< FlexIO SPI error. */
 };
 
@@ -70,9 +44,9 @@ enum _flexio_spi_status
 typedef enum _flexio_spi_clock_phase
 {
     kFLEXIO_SPI_ClockPhaseFirstEdge = 0x0U,  /*!< First edge on SPSCK occurs at the middle of the first
-                                   *   cycle of a data transfer. */
+                                              *   cycle of a data transfer. */
     kFLEXIO_SPI_ClockPhaseSecondEdge = 0x1U, /*!< First edge on SPSCK occurs at the start of the
-                                   *   first cycle of a data transfer. */
+                                              *   first cycle of a data transfer. */
 } flexio_spi_clock_phase_t;
 
 /*! @brief FlexIO SPI data shifter direction options. */
@@ -85,7 +59,7 @@ typedef enum _flexio_spi_shift_direction
 /*! @brief FlexIO SPI data length mode options. */
 typedef enum _flexio_spi_data_bitcount_mode
 {
-    kFLEXIO_SPI_8BitMode = 0x08U,  /*!< 8-bit data transmission mode. */
+    kFLEXIO_SPI_8BitMode  = 0x08U, /*!< 8-bit data transmission mode. */
     kFLEXIO_SPI_16BitMode = 0x10U, /*!< 16-bit data transmission mode. */
 } flexio_spi_data_bitcount_mode_t;
 
@@ -93,29 +67,29 @@ typedef enum _flexio_spi_data_bitcount_mode
 enum _flexio_spi_interrupt_enable
 {
     kFLEXIO_SPI_TxEmptyInterruptEnable = 0x1U, /*!< Transmit buffer empty interrupt enable. */
-    kFLEXIO_SPI_RxFullInterruptEnable = 0x2U,  /*!< Receive buffer full interrupt enable. */
+    kFLEXIO_SPI_RxFullInterruptEnable  = 0x2U, /*!< Receive buffer full interrupt enable. */
 };
 
 /*! @brief Define FlexIO SPI status mask. */
 enum _flexio_spi_status_flags
 {
     kFLEXIO_SPI_TxBufferEmptyFlag = 0x1U, /*!< Transmit buffer empty flag. */
-    kFLEXIO_SPI_RxBufferFullFlag = 0x2U,  /*!< Receive buffer full flag. */
+    kFLEXIO_SPI_RxBufferFullFlag  = 0x2U, /*!< Receive buffer full flag. */
 };
 
 /*! @brief Define FlexIO SPI DMA mask. */
 enum _flexio_spi_dma_enable
 {
-    kFLEXIO_SPI_TxDmaEnable = 0x1U,  /*!< Tx DMA request source */
-    kFLEXIO_SPI_RxDmaEnable = 0x2U,  /*!< Rx DMA request source */
+    kFLEXIO_SPI_TxDmaEnable  = 0x1U, /*!< Tx DMA request source */
+    kFLEXIO_SPI_RxDmaEnable  = 0x2U, /*!< Rx DMA request source */
     kFLEXIO_SPI_DmaAllEnable = 0x3U, /*!< All DMA request source*/
 };
 
 /*! @brief Define FlexIO SPI transfer flags. */
 enum _flexio_spi_transfer_flags
 {
-    kFLEXIO_SPI_8bitMsb = 0x1U,  /*!< FlexIO SPI 8-bit MSB first */
-    kFLEXIO_SPI_8bitLsb = 0x2U,  /*!< FlexIO SPI 8-bit LSB first */
+    kFLEXIO_SPI_8bitMsb  = 0x1U, /*!< FlexIO SPI 8-bit MSB first */
+    kFLEXIO_SPI_8bitLsb  = 0x2U, /*!< FlexIO SPI 8-bit LSB first */
     kFLEXIO_SPI_16bitMsb = 0x9U, /*!< FlexIO SPI 16-bit MSB first */
     kFLEXIO_SPI_16bitLsb = 0xaU, /*!< FlexIO SPI 16-bit LSB first */
 };
@@ -256,7 +230,7 @@ void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *ma
  * @brief Resets the FlexIO SPI timer and shifter config.
  *
  * @param base Pointer to the FLEXIO_SPI_Type.
-*/
+ */
 void FLEXIO_SPI_MasterDeinit(FLEXIO_SPI_Type *base);
 
 /*!
@@ -310,7 +284,7 @@ void FLEXIO_SPI_SlaveInit(FLEXIO_SPI_Type *base, flexio_spi_slave_config_t *slav
  * @brief Gates the FlexIO clock.
  *
  * @param base Pointer to the FLEXIO_SPI_Type.
-*/
+ */
 void FLEXIO_SPI_SlaveDeinit(FLEXIO_SPI_Type *base);
 
 /*!
@@ -339,7 +313,7 @@ void FLEXIO_SPI_SlaveGetDefaultConfig(flexio_spi_slave_config_t *slaveConfig);
  * @return status flag; Use the status flag to AND the following flag mask and get the status.
  *          @arg kFLEXIO_SPI_TxEmptyFlag
  *          @arg kFLEXIO_SPI_RxEmptyFlag
-*/
+ */
 
 uint32_t FLEXIO_SPI_GetStatusFlags(FLEXIO_SPI_Type *base);
 
@@ -351,7 +325,7 @@ uint32_t FLEXIO_SPI_GetStatusFlags(FLEXIO_SPI_Type *base);
  *      The parameter can be any combination of the following values:
  *          @arg kFLEXIO_SPI_TxEmptyFlag
  *          @arg kFLEXIO_SPI_RxEmptyFlag
-*/
+ */
 
 void FLEXIO_SPI_ClearStatusFlags(FLEXIO_SPI_Type *base, uint32_t mask);
 
@@ -461,7 +435,7 @@ static inline uint32_t FLEXIO_SPI_GetRxDataRegisterAddress(FLEXIO_SPI_Type *base
  *
  * @param base Pointer to the FLEXIO_SPI_Type.
  * @param enable True to enable, false does not have any effect.
-*/
+ */
 static inline void FLEXIO_SPI_Enable(FLEXIO_SPI_Type *base, bool enable)
 {
     if (enable)
@@ -516,11 +490,11 @@ static inline uint16_t FLEXIO_SPI_ReadData(FLEXIO_SPI_Type *base, flexio_spi_shi
 {
     if (direction == kFLEXIO_SPI_MsbFirst)
     {
-        return base->flexioBase->SHIFTBUFBIS[base->shifterIndex[1]];
+        return (uint16_t)(base->flexioBase->SHIFTBUFBIS[base->shifterIndex[1]]);
     }
     else
     {
-        return base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]];
+        return (uint16_t)(base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]]);
     }
 }
 

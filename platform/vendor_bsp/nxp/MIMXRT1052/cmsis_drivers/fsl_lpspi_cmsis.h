@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-
 #ifndef _FSL_LPSPI_CMSISI_H_
 #define _FSL_LPSPI_CMSISI_H_
 
 #include "fsl_common.h"
 #include "RTE_Device.h"
 #include "Driver_SPI.h"
+#include "fsl_lpspi.h"
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 #include "fsl_lpspi_edma.h"
 #endif

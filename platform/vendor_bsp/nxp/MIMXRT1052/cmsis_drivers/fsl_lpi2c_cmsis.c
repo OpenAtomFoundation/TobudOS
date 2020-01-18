@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-
 #include "fsl_lpi2c_cmsis.h"
 
 #if ((RTE_I2C0 && defined(LPI2C0)) || (RTE_I2C1 && defined(LPI2C1)) || (RTE_I2C2 && defined(LPI2C2)) || \
@@ -31,13 +30,18 @@
  * ARMCC does not support split the data section automatically, so the driver
  * needs to split the data to separate sections explicitly, to reduce codesize.
  */
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 #define ARMCC_SECTION(section_name) __attribute__((section(section_name)))
 #endif
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.lpi2c_cmsis"
+#endif
 
 /*! @brief Common sets of flags used by the driver. */
 enum _lpi2c_flag_constants
@@ -108,7 +112,7 @@ typedef struct _cmsis_lpi2c_edma_driver_state
  * Prototypes
  ******************************************************************************/
 
-static const ARM_DRIVER_VERSION s_lpi2cDriverVersion = {ARM_I2C_API_VERSION, ARM_LPI2C_DRV_VERSION};
+static const ARM_DRIVER_VERSION s_lpi2cDriverVersion        = {ARM_I2C_API_VERSION, ARM_LPI2C_DRV_VERSION};
 static const ARM_I2C_CAPABILITIES s_lpi2cDriverCapabilities = {
     0, /* Do not support 10-bit addressing.*/
 };
@@ -131,7 +135,7 @@ static ARM_I2C_CAPABILITIES LPI2Cx_GetCapabilities(void)
 
 #endif
 
-#if (RTE_I2C0_DMA_EN || RTE_I2C1_DMA_EN || RTE_I2C2_DMA_EN || RT_I2C3_DMA_EN || RTE_I2C4_DMA_EN || RTE_I2C5_DMA_EN || \
+#if (RTE_I2C0_DMA_EN || RTE_I2C1_DMA_EN || RTE_I2C2_DMA_EN || RTE_I2C3_DMA_EN || RTE_I2C4_DMA_EN || RTE_I2C5_DMA_EN || \
      RTE_I2C6_DMA_EN)
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
@@ -198,13 +202,13 @@ int32_t LPI2C_Master_EdmaTransmit(
     lpi2c_master_transfer_t masterXfer;
 
     /* Setup the master transfer */
-    masterXfer.slaveAddress = addr;
-    masterXfer.direction = kLPI2C_Write;
-    masterXfer.subaddress = 0;
+    masterXfer.slaveAddress   = addr;
+    masterXfer.direction      = kLPI2C_Write;
+    masterXfer.subaddress     = 0;
     masterXfer.subaddressSize = 0;
-    masterXfer.data = (uint8_t *)data;
-    masterXfer.dataSize = num;
-    masterXfer.flags = kLPI2C_TransferDefaultFlag;
+    masterXfer.data           = (uint8_t *)data;
+    masterXfer.dataSize       = num;
+    masterXfer.flags          = kLPI2C_TransferDefaultFlag;
 
     if (xfer_pending)
     {
@@ -241,13 +245,13 @@ int32_t LPI2C_Master_EdmaReceive(
     lpi2c_master_transfer_t masterXfer;
 
     /* Setup the master transfer */
-    masterXfer.slaveAddress = addr;
-    masterXfer.direction = kLPI2C_Read;
-    masterXfer.subaddress = 0;
+    masterXfer.slaveAddress   = addr;
+    masterXfer.direction      = kLPI2C_Read;
+    masterXfer.subaddress     = 0;
     masterXfer.subaddressSize = 0;
-    masterXfer.data = data;
-    masterXfer.dataSize = num;
-    masterXfer.flags = kLPI2C_TransferDefaultFlag;
+    masterXfer.data           = data;
+    masterXfer.dataSize       = num;
+    masterXfer.flags          = kLPI2C_TransferDefaultFlag;
 
     if (xfer_pending)
     {
@@ -329,7 +333,7 @@ int32_t LPI2C_Master_EdmaControl(uint32_t control, uint32_t arg, cmsis_lpi2c_edm
                 {
                     LPI2C_MasterTransferAbortEDMA(lpi2c->resource->base, lpi2c->master_edma_handle);
 
-                    lpi2c->master_edma_handle->transfer.data = NULL;
+                    lpi2c->master_edma_handle->transfer.data     = NULL;
                     lpi2c->master_edma_handle->transfer.dataSize = 0;
                 }
             }
@@ -406,12 +410,12 @@ int32_t LPI2C_Master_EdmaPowerControl(ARM_POWER_STATE state, cmsis_lpi2c_edma_dr
 
 ARM_I2C_STATUS LPI2C_Master_EdmaGetStatus(cmsis_lpi2c_edma_driver_state_t *lpi2c)
 {
-    ARM_I2C_STATUS stat = {0};
+    ARM_I2C_STATUS stat               = {0};
     uint32_t ksdk_lpi2c_master_status = LPI2C_MasterGetStatusFlags(lpi2c->resource->base);
 
-    stat.busy = !(!(ksdk_lpi2c_master_status & kLPI2C_MasterBusyFlag)); /* Busy flag */
-    stat.mode = 1;                                                      /* Mode: 0=Slave, 1=Master */
-    stat.direction = lpi2c->master_edma_handle->transfer.direction;     /* Direction: 0=Transmitter, 1=Receiver */
+    stat.busy      = !(!(ksdk_lpi2c_master_status & kLPI2C_MasterBusyFlag)); /* Busy flag */
+    stat.mode      = 1;                                                      /* Mode: 0=Slave, 1=Master */
+    stat.direction = lpi2c->master_edma_handle->transfer.direction;          /* Direction: 0=Transmitter, 1=Receiver */
     stat.arbitration_lost =
         !(!(ksdk_lpi2c_master_status & kLPI2C_MasterArbitrationLostFlag)); /* Master lost arbitration */
 
@@ -441,13 +445,13 @@ static void KSDK_LPI2C_SLAVE_InterruptCallback(LPI2C_Type *base,
 
         /* Setup the slave receive buffer */
         case kLPI2C_SlaveReceiveEvent:
-            xfer->data = lpi2c->slave_data;
+            xfer->data     = lpi2c->slave_data;
             xfer->dataSize = lpi2c->slave_dataSize;
             break;
 
         /* Setup the slave transmit buffer */
         case kLPI2C_SlaveTransmitEvent:
-            xfer->data = lpi2c->slave_data;
+            xfer->data     = lpi2c->slave_data;
             xfer->dataSize = lpi2c->slave_dataSize;
             break;
 
@@ -498,7 +502,7 @@ static int32_t LPI2C_InterruptInitialize(ARM_I2C_SignalEvent_t cb_event, cmsis_l
     if (!(lpi2c->flags & I2C_FLAG_INIT))
     {
         lpi2c->cb_event = cb_event; /* Call back function */
-        lpi2c->flags = I2C_FLAG_INIT;
+        lpi2c->flags    = I2C_FLAG_INIT;
     }
 
     return ARM_DRIVER_OK;
@@ -527,13 +531,13 @@ int32_t LPI2C_Master_InterruptTransmit(
                                      KSDK_LPI2C_MASTER_InterruptCallback, (void *)lpi2c->cb_event);
 
     /* Setup the master transfer */
-    masterXfer.slaveAddress = addr;
-    masterXfer.direction = kLPI2C_Write;
-    masterXfer.subaddress = (uint32_t)NULL;
+    masterXfer.slaveAddress   = addr;
+    masterXfer.direction      = kLPI2C_Write;
+    masterXfer.subaddress     = (uint32_t)NULL;
     masterXfer.subaddressSize = 0;
-    masterXfer.data = (uint8_t *)data;
-    masterXfer.dataSize = num;
-    masterXfer.flags = kLPI2C_TransferDefaultFlag;
+    masterXfer.data           = (uint8_t *)data;
+    masterXfer.dataSize       = num;
+    masterXfer.flags          = kLPI2C_TransferDefaultFlag;
 
     if (xfer_pending)
     {
@@ -580,13 +584,13 @@ int32_t LPI2C_Master_InterruptReceive(
                                      KSDK_LPI2C_MASTER_InterruptCallback, (void *)lpi2c->cb_event);
 
     /* Setup the master transfer */
-    masterXfer.slaveAddress = addr;
-    masterXfer.direction = kLPI2C_Read;
-    masterXfer.subaddress = (uint32_t)NULL;
+    masterXfer.slaveAddress   = addr;
+    masterXfer.direction      = kLPI2C_Read;
+    masterXfer.subaddress     = (uint32_t)NULL;
     masterXfer.subaddressSize = 0;
-    masterXfer.data = data;
-    masterXfer.dataSize = num;
-    masterXfer.flags = kLPI2C_TransferDefaultFlag;
+    masterXfer.data           = data;
+    masterXfer.dataSize       = num;
+    masterXfer.flags          = kLPI2C_TransferDefaultFlag;
 
     if (xfer_pending)
     {
@@ -628,9 +632,9 @@ int32_t LPI2C_Slave_InterruptTransmit(const uint8_t *data, uint32_t num, cmsis_l
     status = LPI2C_SlaveTransferNonBlocking(lpi2c->resource->base, &(lpi2c->handle->slave_handle),
                                             kLPI2C_SlaveCompletionEvent);
 
-    lpi2c->slave_data = (uint8_t *)data;              /*!< slave Transfer buffer */
-    lpi2c->slave_dataSize = num;                      /*!< slave Transfer data size */
-    lpi2c->handle->slave_handle.transferredCount = 0; /*!< slave Transfered data count */
+    lpi2c->slave_data                            = (uint8_t *)data; /*!< slave Transfer buffer */
+    lpi2c->slave_dataSize                        = num;             /*!< slave Transfer data size */
+    lpi2c->handle->slave_handle.transferredCount = 0;               /*!< slave Transfered data count */
 
     switch (status)
     {
@@ -663,9 +667,9 @@ int32_t LPI2C_Slave_InterruptReceive(uint8_t *data, uint32_t num, cmsis_lpi2c_in
     status = LPI2C_SlaveTransferNonBlocking(lpi2c->resource->base, &(lpi2c->handle->slave_handle),
                                             kLPI2C_SlaveCompletionEvent);
 
-    lpi2c->slave_data = data;                         /*!< slave Transfer buffer */
-    lpi2c->slave_dataSize = num;                      /*!< slave Transfer data size */
-    lpi2c->handle->slave_handle.transferredCount = 0; /*!< slave Transfered data count */
+    lpi2c->slave_data                            = data; /*!< slave Transfer buffer */
+    lpi2c->slave_dataSize                        = num;  /*!< slave Transfer data size */
+    lpi2c->handle->slave_handle.transferredCount = 0;    /*!< slave Transfered data count */
 
     switch (status)
     {
@@ -763,8 +767,8 @@ int32_t LPI2C_InterruptControl(uint32_t control, uint32_t arg, cmsis_lpi2c_inter
                 /* Disable master interrupt and send stop */
                 LPI2C_MasterTransferAbort(lpi2c->resource->base, &(lpi2c->handle->master_handle));
 
-                lpi2c->handle->master_handle.remainingBytes = 0;
-                lpi2c->handle->master_handle.transfer.data = NULL;
+                lpi2c->handle->master_handle.remainingBytes    = 0;
+                lpi2c->handle->master_handle.transfer.data     = NULL;
                 lpi2c->handle->master_handle.transfer.dataSize = 0;
             }
 
@@ -858,9 +862,9 @@ static int32_t LPI2C_InterruptPowerControl(ARM_POWER_STATE state, cmsis_lpi2c_in
 
 ARM_I2C_STATUS LPI2C_InterruptGetStatus(cmsis_lpi2c_interrupt_driver_state_t *lpi2c)
 {
-    ARM_I2C_STATUS stat = {0};
+    ARM_I2C_STATUS stat               = {0};
     uint32_t ksdk_lpi2c_master_status = LPI2C_MasterGetStatusFlags(lpi2c->resource->base);
-    uint32_t ksdk_lpi2c_slave_status = LPI2C_SlaveGetStatusFlags(lpi2c->resource->base);
+    uint32_t ksdk_lpi2c_slave_status  = LPI2C_SlaveGetStatusFlags(lpi2c->resource->base);
 
     /* Busy flag */
     stat.busy =
@@ -911,7 +915,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C0_EdmaHandle);
 edma_handle_t LPI2C0_EdmaTxHandle;
 edma_handle_t LPI2C0_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c0_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C0_EdmaDriverState = {
 #else
@@ -968,13 +972,14 @@ ARM_I2C_STATUS LPI2C0_Master_EdmaGetStatus(void)
 
 cmsis_i2c_handle_t LPI2C0_Handle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c0_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C0_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C0_InterruptDriverState = {
 #endif
-    &LPI2C0_Resource, &LPI2C0_Handle,
+    &LPI2C0_Resource,
+    &LPI2C0_Handle,
 
 };
 
@@ -1039,17 +1044,30 @@ ARM_I2C_STATUS LPI2C0_InterruptGetStatus(void)
 
 #endif
 
-ARM_DRIVER_I2C Driver_I2C0 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C0 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C0_DMA_EN
-                              LPI2C0_Master_EdmaInitialize, LPI2C0_Master_EdmaUninitialize,
-                              LPI2C0_Master_EdmaPowerControl, LPI2C0_Master_EdmaTransmit, LPI2C0_Master_EdmaReceive,
-                              NULL, NULL, LPI2C0_Master_EdmaGetDataCount, LPI2C0_Master_EdmaControl,
+                              LPI2C0_Master_EdmaInitialize,
+                              LPI2C0_Master_EdmaUninitialize,
+                              LPI2C0_Master_EdmaPowerControl,
+                              LPI2C0_Master_EdmaTransmit,
+                              LPI2C0_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C0_Master_EdmaGetDataCount,
+                              LPI2C0_Master_EdmaControl,
                               LPI2C0_Master_EdmaGetStatus
 #else
-                              LPI2C0_InterruptInitialize, LPI2C0_InterruptUninitialize, LPI2C0_InterruptPowerControl,
-                              LPI2C0_Master_InterruptTransmit, LPI2C0_Master_InterruptReceive,
-                              LPI2C0_Slave_InterruptTransmit, LPI2C0_Slave_InterruptReceive,
-                              LPI2C0_InterruptGetDataCount, LPI2C0_InterruptControl, LPI2C0_InterruptGetStatus
+                              LPI2C0_InterruptInitialize,
+                              LPI2C0_InterruptUninitialize,
+                              LPI2C0_InterruptPowerControl,
+                              LPI2C0_Master_InterruptTransmit,
+                              LPI2C0_Master_InterruptReceive,
+                              LPI2C0_Slave_InterruptTransmit,
+                              LPI2C0_Slave_InterruptReceive,
+                              LPI2C0_InterruptGetDataCount,
+                              LPI2C0_InterruptControl,
+                              LPI2C0_InterruptGetStatus
 #endif
 };
 
@@ -1079,7 +1097,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C1_EdmaHandle);
 edma_handle_t LPI2C1_EdmaTxHandle;
 edma_handle_t LPI2C1_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c1_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C1_EdmaDriverState = {
 #else
@@ -1136,13 +1154,14 @@ ARM_I2C_STATUS LPI2C1_Master_EdmaGetStatus(void)
 
 cmsis_i2c_handle_t LPI2C1_Handle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c1_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C1_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C1_InterruptDriverState = {
 #endif
-    &LPI2C1_Resource, &LPI2C1_Handle,
+    &LPI2C1_Resource,
+    &LPI2C1_Handle,
 };
 
 static void KSDK_LPI2C1_SLAVE_InterruptCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *userData)
@@ -1206,17 +1225,30 @@ ARM_I2C_STATUS LPI2C1_InterruptGetStatus(void)
 
 #endif
 
-ARM_DRIVER_I2C Driver_I2C1 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C1 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C1_DMA_EN
-                              LPI2C1_Master_EdmaInitialize, LPI2C1_Master_EdmaUninitialize,
-                              LPI2C1_Master_EdmaPowerControl, LPI2C1_Master_EdmaTransmit, LPI2C1_Master_EdmaReceive,
-                              NULL, NULL, LPI2C1_Master_EdmaGetDataCount, LPI2C1_Master_EdmaControl,
+                              LPI2C1_Master_EdmaInitialize,
+                              LPI2C1_Master_EdmaUninitialize,
+                              LPI2C1_Master_EdmaPowerControl,
+                              LPI2C1_Master_EdmaTransmit,
+                              LPI2C1_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C1_Master_EdmaGetDataCount,
+                              LPI2C1_Master_EdmaControl,
                               LPI2C1_Master_EdmaGetStatus
 #else
-                              LPI2C1_InterruptInitialize, LPI2C1_InterruptUninitialize, LPI2C1_InterruptPowerControl,
-                              LPI2C1_Master_InterruptTransmit, LPI2C1_Master_InterruptReceive,
-                              LPI2C1_Slave_InterruptTransmit, LPI2C1_Slave_InterruptReceive,
-                              LPI2C1_InterruptGetDataCount, LPI2C1_InterruptControl, LPI2C1_InterruptGetStatus
+                              LPI2C1_InterruptInitialize,
+                              LPI2C1_InterruptUninitialize,
+                              LPI2C1_InterruptPowerControl,
+                              LPI2C1_Master_InterruptTransmit,
+                              LPI2C1_Master_InterruptReceive,
+                              LPI2C1_Slave_InterruptTransmit,
+                              LPI2C1_Slave_InterruptReceive,
+                              LPI2C1_InterruptGetDataCount,
+                              LPI2C1_InterruptControl,
+                              LPI2C1_InterruptGetStatus
 #endif
 };
 
@@ -1246,7 +1278,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C2_EdmaHandle);
 edma_handle_t LPI2C2_EdmaTxHandle;
 edma_handle_t LPI2C2_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c2_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C2_EdmaDriverState = {
 #else
@@ -1303,13 +1335,14 @@ ARM_I2C_STATUS LPI2C2_Master_EdmaGetStatus(void)
 
 cmsis_i2c_handle_t LPI2C2_Handle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c2_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C2_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C2_InterruptDriverState = {
 #endif
-    &LPI2C2_Resource, &LPI2C2_Handle,
+    &LPI2C2_Resource,
+    &LPI2C2_Handle,
 
 };
 
@@ -1374,17 +1407,30 @@ ARM_I2C_STATUS LPI2C2_InterruptGetStatus(void)
 
 #endif
 
-ARM_DRIVER_I2C Driver_I2C2 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C2 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C2_DMA_EN
-                              LPI2C2_Master_EdmaInitialize, LPI2C2_Master_EdmaUninitialize,
-                              LPI2C2_Master_EdmaPowerControl, LPI2C2_Master_EdmaTransmit, LPI2C2_Master_EdmaReceive,
-                              NULL, NULL, LPI2C2_Master_EdmaGetDataCount, LPI2C2_Master_EdmaControl,
+                              LPI2C2_Master_EdmaInitialize,
+                              LPI2C2_Master_EdmaUninitialize,
+                              LPI2C2_Master_EdmaPowerControl,
+                              LPI2C2_Master_EdmaTransmit,
+                              LPI2C2_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C2_Master_EdmaGetDataCount,
+                              LPI2C2_Master_EdmaControl,
                               LPI2C2_Master_EdmaGetStatus
 #else
-                              LPI2C2_InterruptInitialize, LPI2C2_InterruptUninitialize, LPI2C2_InterruptPowerControl,
-                              LPI2C2_Master_InterruptTransmit, LPI2C2_Master_InterruptReceive,
-                              LPI2C2_Slave_InterruptTransmit, LPI2C2_Slave_InterruptReceive,
-                              LPI2C2_InterruptGetDataCount, LPI2C2_InterruptControl, LPI2C2_InterruptGetStatus
+                              LPI2C2_InterruptInitialize,
+                              LPI2C2_InterruptUninitialize,
+                              LPI2C2_InterruptPowerControl,
+                              LPI2C2_Master_InterruptTransmit,
+                              LPI2C2_Master_InterruptReceive,
+                              LPI2C2_Slave_InterruptTransmit,
+                              LPI2C2_Slave_InterruptReceive,
+                              LPI2C2_InterruptGetDataCount,
+                              LPI2C2_InterruptControl,
+                              LPI2C2_InterruptGetStatus
 #endif
 };
 
@@ -1414,7 +1460,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C3_EdmaHandle);
 edma_handle_t LPI2C3_EdmaTxHandle;
 edma_handle_t LPI2C3_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c3_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C3_EdmaDriverState = {
 #else
@@ -1470,13 +1516,14 @@ ARM_I2C_STATUS LPI2C3_Master_EdmaGetStatus(void)
 #else
 
 cmsis_i2c_handle_t LPI2C3_Handle;
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c3_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C3_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C3_InterruptDriverState = {
 #endif
-    &LPI2C3_Resource, &LPI2C3_Handle,
+    &LPI2C3_Resource,
+    &LPI2C3_Handle,
 };
 
 static void KSDK_LPI2C3_SLAVE_InterruptCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *userData)
@@ -1540,17 +1587,30 @@ ARM_I2C_STATUS LPI2C3_InterruptGetStatus(void)
 
 #endif /* RTE_I2C3_DMA_EN */
 
-ARM_DRIVER_I2C Driver_I2C3 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C3 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C3_DMA_EN
-                              LPI2C3_Master_EdmaInitialize, LPI2C3_Master_EdmaUninitialize,
-                              LPI2C3_Master_EdmaPowerControl, LPI2C3_Master_EdmaTransmit, LPI2C3_Master_EdmaReceive,
-                              NULL, NULL, LPI2C3_Master_EdmaGetDataCount, LPI2C3_Master_EdmaControl,
+                              LPI2C3_Master_EdmaInitialize,
+                              LPI2C3_Master_EdmaUninitialize,
+                              LPI2C3_Master_EdmaPowerControl,
+                              LPI2C3_Master_EdmaTransmit,
+                              LPI2C3_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C3_Master_EdmaGetDataCount,
+                              LPI2C3_Master_EdmaControl,
                               LPI2C3_Master_EdmaGetStatus
 #else
-                              LPI2C3_InterruptInitialize, LPI2C3_InterruptUninitialize, LPI2C3_InterruptPowerControl,
-                              LPI2C3_Master_InterruptTransmit, LPI2C3_Master_InterruptReceive,
-                              LPI2C3_Slave_InterruptTransmit, LPI2C3_Slave_InterruptReceive,
-                              LPI2C3_InterruptGetDataCount, LPI2C3_InterruptControl, LPI2C3_InterruptGetStatus
+                              LPI2C3_InterruptInitialize,
+                              LPI2C3_InterruptUninitialize,
+                              LPI2C3_InterruptPowerControl,
+                              LPI2C3_Master_InterruptTransmit,
+                              LPI2C3_Master_InterruptReceive,
+                              LPI2C3_Slave_InterruptTransmit,
+                              LPI2C3_Slave_InterruptReceive,
+                              LPI2C3_InterruptGetDataCount,
+                              LPI2C3_InterruptControl,
+                              LPI2C3_InterruptGetStatus
 #endif /* RTE_I2C3_DMA_EN */
 };
 
@@ -1580,7 +1640,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C4_EdmaHandle);
 edma_handle_t LPI2C4_EdmaTxHandle;
 edma_handle_t LPI2C4_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c4_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C4_EdmaDriverState = {
 #else
@@ -1636,13 +1696,14 @@ ARM_I2C_STATUS LPI2C4_Master_EdmaGetStatus(void)
 #else
 
 cmsis_i2c_handle_t LPI2C4_Handle;
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c4_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C4_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C4_InterruptDriverState = {
 #endif
-    &LPI2C4_Resource, &LPI2C4_Handle,
+    &LPI2C4_Resource,
+    &LPI2C4_Handle,
 };
 
 static void KSDK_LPI2C4_SLAVE_InterruptCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *userData)
@@ -1706,17 +1767,30 @@ ARM_I2C_STATUS LPI2C4_InterruptGetStatus(void)
 
 #endif /* RTE_I2C4_DMA_EN */
 
-ARM_DRIVER_I2C Driver_I2C4 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C4 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C4_DMA_EN
-                              LPI2C4_Master_EdmaInitialize, LPI2C4_Master_EdmaUninitialize,
-                              LPI2C4_Master_EdmaPowerControl, LPI2C4_Master_EdmaTransmit, LPI2C4_Master_EdmaReceive,
-                              NULL, NULL, LPI2C4_Master_EdmaGetDataCount, LPI2C4_Master_EdmaControl,
+                              LPI2C4_Master_EdmaInitialize,
+                              LPI2C4_Master_EdmaUninitialize,
+                              LPI2C4_Master_EdmaPowerControl,
+                              LPI2C4_Master_EdmaTransmit,
+                              LPI2C4_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C4_Master_EdmaGetDataCount,
+                              LPI2C4_Master_EdmaControl,
                               LPI2C4_Master_EdmaGetStatus
 #else
-                              LPI2C4_InterruptInitialize, LPI2C4_InterruptUninitialize, LPI2C4_InterruptPowerControl,
-                              LPI2C4_Master_InterruptTransmit, LPI2C4_Master_InterruptReceive,
-                              LPI2C4_Slave_InterruptTransmit, LPI2C4_Slave_InterruptReceive,
-                              LPI2C4_InterruptGetDataCount, LPI2C4_InterruptControl, LPI2C4_InterruptGetStatus
+                              LPI2C4_InterruptInitialize,
+                              LPI2C4_InterruptUninitialize,
+                              LPI2C4_InterruptPowerControl,
+                              LPI2C4_Master_InterruptTransmit,
+                              LPI2C4_Master_InterruptReceive,
+                              LPI2C4_Slave_InterruptTransmit,
+                              LPI2C4_Slave_InterruptReceive,
+                              LPI2C4_InterruptGetDataCount,
+                              LPI2C4_InterruptControl,
+                              LPI2C4_InterruptGetStatus
 #endif /* RTE_I2C4_DMA_EN */
 };
 
@@ -1746,7 +1820,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C5_EdmaHandle);
 edma_handle_t LPI2C5_EdmaTxHandle;
 edma_handle_t LPI2C5_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c5_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C5_EdmaDriverState = {
 #else
@@ -1802,13 +1876,14 @@ ARM_I2C_STATUS LPI2C5_Master_EdmaGetStatus(void)
 #else
 
 cmsis_i2c_handle_t LPI2C5_Handle;
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c5_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C5_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C5_InterruptDriverState = {
 #endif
-    &LPI2C5_Resource, &LPI2C5_Handle,
+    &LPI2C5_Resource,
+    &LPI2C5_Handle,
 };
 
 static void KSDK_LPI2C5_SLAVE_InterruptCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *userData)
@@ -1872,17 +1947,30 @@ ARM_I2C_STATUS LPI2C5_InterruptGetStatus(void)
 
 #endif /* RTE_I2C5_DMA_EN */
 
-ARM_DRIVER_I2C Driver_I2C5 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C5 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C5_DMA_EN
-                              LPI2C5_Master_EdmaInitialize, LPI2C5_Master_EdmaUninitialize,
-                              LPI2C5_Master_EdmaPowerControl, LPI2C5_Master_EdmaTransmit, LPI2C5_Master_EdmaReceive,
-                              NULL, NULL, LPI2C5_Master_EdmaGetDataCount, LPI2C5_Master_EdmaControl,
+                              LPI2C5_Master_EdmaInitialize,
+                              LPI2C5_Master_EdmaUninitialize,
+                              LPI2C5_Master_EdmaPowerControl,
+                              LPI2C5_Master_EdmaTransmit,
+                              LPI2C5_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C5_Master_EdmaGetDataCount,
+                              LPI2C5_Master_EdmaControl,
                               LPI2C5_Master_EdmaGetStatus
 #else
-                              LPI2C5_InterruptInitialize, LPI2C5_InterruptUninitialize, LPI2C5_InterruptPowerControl,
-                              LPI2C5_Master_InterruptTransmit, LPI2C5_Master_InterruptReceive,
-                              LPI2C5_Slave_InterruptTransmit, LPI2C5_Slave_InterruptReceive,
-                              LPI2C5_InterruptGetDataCount, LPI2C5_InterruptControl, LPI2C5_InterruptGetStatus
+                              LPI2C5_InterruptInitialize,
+                              LPI2C5_InterruptUninitialize,
+                              LPI2C5_InterruptPowerControl,
+                              LPI2C5_Master_InterruptTransmit,
+                              LPI2C5_Master_InterruptReceive,
+                              LPI2C5_Slave_InterruptTransmit,
+                              LPI2C5_Slave_InterruptReceive,
+                              LPI2C5_InterruptGetDataCount,
+                              LPI2C5_InterruptControl,
+                              LPI2C5_InterruptGetStatus
 #endif /* RTE_I2C5_DMA_EN */
 };
 
@@ -1912,7 +2000,7 @@ AT_NONCACHEABLE_SECTION(lpi2c_master_edma_handle_t LPI2C6_EdmaHandle);
 edma_handle_t LPI2C6_EdmaTxHandle;
 edma_handle_t LPI2C6_EdmaRxHandle;
 
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c6_edma_driver_state")
 cmsis_lpi2c_edma_driver_state_t LPI2C6_EdmaDriverState = {
 #else
@@ -1968,13 +2056,14 @@ ARM_I2C_STATUS LPI2C6_Master_EdmaGetStatus(void)
 #else
 
 cmsis_i2c_handle_t LPI2C6_Handle;
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 ARMCC_SECTION("lpi2c6_interrupt_driver_state")
 cmsis_lpi2c_interrupt_driver_state_t LPI2C6_InterruptDriverState = {
 #else
 cmsis_lpi2c_interrupt_driver_state_t LPI2C6_InterruptDriverState = {
 #endif
-    &LPI2C6_Resource, &LPI2C6_Handle,
+    &LPI2C6_Resource,
+    &LPI2C6_Handle,
 };
 
 static void KSDK_LPI2C6_SLAVE_InterruptCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *userData)
@@ -2038,17 +2127,30 @@ ARM_I2C_STATUS LPI2C6_InterruptGetStatus(void)
 
 #endif /* RTE_I2C6_DMA_EN */
 
-ARM_DRIVER_I2C Driver_I2C6 = {LPI2Cx_GetVersion, LPI2Cx_GetCapabilities,
+ARM_DRIVER_I2C Driver_I2C6 = {LPI2Cx_GetVersion,
+                              LPI2Cx_GetCapabilities,
 #if RTE_I2C6_DMA_EN
-                              LPI2C6_Master_EdmaInitialize, LPI2C6_Master_EdmaUninitialize,
-                              LPI2C6_Master_EdmaPowerControl, LPI2C6_Master_EdmaTransmit, LPI2C6_Master_EdmaReceive,
-                              NULL, NULL, LPI2C6_Master_EdmaGetDataCount, LPI2C6_Master_EdmaControl,
+                              LPI2C6_Master_EdmaInitialize,
+                              LPI2C6_Master_EdmaUninitialize,
+                              LPI2C6_Master_EdmaPowerControl,
+                              LPI2C6_Master_EdmaTransmit,
+                              LPI2C6_Master_EdmaReceive,
+                              NULL,
+                              NULL,
+                              LPI2C6_Master_EdmaGetDataCount,
+                              LPI2C6_Master_EdmaControl,
                               LPI2C6_Master_EdmaGetStatus
 #else
-                              LPI2C6_InterruptInitialize, LPI2C6_InterruptUninitialize, LPI2C6_InterruptPowerControl,
-                              LPI2C6_Master_InterruptTransmit, LPI2C6_Master_InterruptReceive,
-                              LPI2C6_Slave_InterruptTransmit, LPI2C6_Slave_InterruptReceive,
-                              LPI2C6_InterruptGetDataCount, LPI2C6_InterruptControl, LPI2C6_InterruptGetStatus
+                              LPI2C6_InterruptInitialize,
+                              LPI2C6_InterruptUninitialize,
+                              LPI2C6_InterruptPowerControl,
+                              LPI2C6_Master_InterruptTransmit,
+                              LPI2C6_Master_InterruptReceive,
+                              LPI2C6_Slave_InterruptTransmit,
+                              LPI2C6_Slave_InterruptReceive,
+                              LPI2C6_InterruptGetDataCount,
+                              LPI2C6_InterruptControl,
+                              LPI2C6_InterruptGetStatus
 #endif /* RTE_I2C6_DMA_EN */
 };
 

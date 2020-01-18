@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_xbarb.h"
@@ -37,6 +11,17 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.xbarb"
+#endif
+
+typedef union
+{
+    uint8_t _u8[2];
+    uint16_t _u16;
+} xbarb_u8_u16_t;
 
 /*******************************************************************************
  * Prototypes
@@ -84,6 +69,13 @@ static uint32_t XBARB_GetInstance(XBARB_Type *base)
     return instance;
 }
 
+/*!
+ * brief Initializes the XBARB module.
+ *
+ * This function un-gates the XBARB clock.
+ *
+ * param base XBARB peripheral address.
+ */
 void XBARB_Init(XBARB_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -92,6 +84,13 @@ void XBARB_Init(XBARB_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Shuts down the XBARB module.
+ *
+ * This function disables XBARB clock.
+ *
+ * param base XBARB peripheral address.
+ */
 void XBARB_Deinit(XBARB_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -100,7 +99,28 @@ void XBARB_Deinit(XBARB_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Configures a connection between the selected XBARB_IN[*] input and the XBARB_OUT[*] output signal.
+ *
+ * This function configures which XBARB input is connected to the selected XBARB output.
+ * If more than one XBARB module is available, only the inputs and outputs from the same module
+ * can be connected.
+ *
+ * param base XBARB peripheral address.
+ * param input XBARB input signal.
+ * param output XBARB output signal.
+ */
 void XBARB_SetSignalsConnection(XBARB_Type *base, xbar_input_signal_t input, xbar_output_signal_t output)
 {
-    XBARB_WR_SELx_SELx(base, (((uint16_t)input) & 0xFFU), (((uint16_t)output) & 0xFFU));
+    xbarb_u8_u16_t regVal;
+    uint8_t byteInReg;
+    uint8_t outputIndex = (uint8_t)output;
+
+    byteInReg = outputIndex % 2U;
+
+    regVal._u16 = XBARB_SELx(base, outputIndex);
+
+    regVal._u8[byteInReg] = (uint8_t)input;
+
+    XBARB_SELx(base, outputIndex) = regVal._u16;
 }

@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_aipstz.h"
@@ -38,23 +12,40 @@
  * Definitions
  ******************************************************************************/
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.aipstz"
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
+/*!
+ * brief Configure the privilege level for master.
+ *
+ * param base    AIPSTZ peripheral base pointer
+ * param master  Masters for AIPSTZ.
+ * param privilegeConfig Configuration is ORed from aipstz_master_privilege_level_t.
+ */
 void AIPSTZ_SetMasterPriviledgeLevel(AIPSTZ_Type *base, aipstz_master_t master, uint32_t privilegeConfig)
 {
-    uint32_t mask = ((uint32_t)master >> 8) - 1;
-    uint32_t shift = (uint32_t)master & 0xFF;
-    base->MPR = (base->MPR & (~(mask << shift))) | (privilegeConfig << shift);
+    uint32_t mask  = ((uint32_t)master >> 8U) - 1U;
+    uint32_t shift = (uint32_t)master & 0xFFU;
+    base->MPR      = (base->MPR & (~(mask << shift))) | (privilegeConfig << shift);
 }
 
+/*!
+ * brief Configure the access for peripheral.
+ *
+ * param base    AIPSTZ peripheral base pointer
+ * param master  Peripheral for AIPSTZ.
+ * param accessControl Configuration is ORed from aipstz_peripheral_access_control_t.
+ */
 void AIPSTZ_SetPeripheralAccessControl(AIPSTZ_Type *base, aipstz_peripheral_t peripheral, uint32_t accessControl)
 {
-    volatile uint32_t *reg = (uint32_t *)((uint32_t)base + ((uint32_t)peripheral >> 16));
-    uint32_t mask = (((uint32_t)peripheral & 0xFF00U) >> 8) - 1;
-    uint32_t shift = (uint32_t)peripheral & 0xFF;
+    volatile uint32_t *reg = (uint32_t *)((uint32_t)base + ((uint32_t)peripheral >> 16U));
+    uint32_t mask          = (((uint32_t)peripheral & 0xFF00U) >> 8U) - 1U;
+    uint32_t shift         = (uint32_t)peripheral & 0xFFU;
 
     *reg = (*reg & (~(mask << shift))) | ((accessControl & mask) << shift);
 }
-
-

@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_SRC_H_
@@ -48,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SRC driver version 2.0.0. */
-#define FSL_SRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief SRC driver version 2.0.1. */
+#define FSL_SRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*!
@@ -62,25 +36,29 @@ enum _src_reset_status_flags
                                                                driven out on PTE0 pin. */
 #endif                                                    /* FSL_FEATURE_SRC_HAS_SRSR_RESET_OUT */
 #if !(defined(FSL_FEATURE_SRC_HAS_NO_SRSR_WBI) && FSL_FEATURE_SRC_HAS_NO_SRSR_WBI)
-    kSRC_WarmBootIndicationFlag = SRC_SRSR_WBI_MASK,      /*!< WARM boot indication shows that WARM boot
-                                                               was initiated by software. */
-#endif                                                    /* FSL_FEATURE_SRC_HAS_NO_SRSR_WBI */
-    kSRC_TemperatureSensorResetFlag = SRC_SRSR_TSR_MASK,  /*!< Indicates whether the reset was the
-                                                               result of software reset from on-chip
-                                                               Temperature Sensor. Temperature Sensor
-                                                               Interrupt need be served before this
-                                                               bit can be cleaned.*/
+    kSRC_WarmBootIndicationFlag = SRC_SRSR_WBI_MASK,     /*!< WARM boot indication shows that WARM boot
+                                                              was initiated by software. */
+#endif                                                   /* FSL_FEATURE_SRC_HAS_NO_SRSR_WBI */
+    kSRC_TemperatureSensorResetFlag = SRC_SRSR_TSR_MASK, /*!< Indicates whether the reset was the
+                                                              result of software reset from on-chip
+                                                              Temperature Sensor. Temperature Sensor
+                                                              Interrupt needs to be served before this
+                                                              bit can be cleaned.*/
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B) && FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B)
     kSRC_Wdog3ResetFlag = SRC_SRSR_WDOG3_RST_B_MASK, /*!< IC Watchdog3 Time-out reset. Indicates
                                                           whether the reset was the result of the
                                                           watchdog3 time-out event. */
 #endif                                               /* FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B */
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_SW) && FSL_FEATURE_SRC_HAS_SRSR_SW)
-    kSRC_SoftwareResetFlag = SRC_SRSR_SW_MASK,        /*!< Indicates a reset has been caused by software
-                                                           setting of SYSRESETREQ bit in Application
-                                                           Interrupt and Reset Control Register in the
-                                                           ARM core. */
-#endif                                                /* FSL_FEATURE_SRC_HAS_SRSR_SW */
+    kSRC_SoftwareResetFlag = SRC_SRSR_SW_MASK, /*!< Indicates a reset has been caused by software
+                                                    setting of SYSRESETREQ bit in Application
+                                                    Interrupt and Reset Control Register in the
+                                                    ARM core. */
+#endif                                         /* FSL_FEATURE_SRC_HAS_SRSR_SW */
+#if (defined(FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST) && FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST)
+    kSRC_JTAGSystemResetFlag =
+        SRC_SRSR_JTAG_SW_RST_MASK, /*!< Indicates whether the reset was the result of software reset form JTAG */
+#endif                             /* FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST */
     kSRC_JTAGSoftwareResetFlag = SRC_SRSR_SJC_MASK,   /*!< Indicates whether the reset was the result of
                                                       setting SJC_GPCCR bit 31. */
     kSRC_JTAGGeneratedResetFlag = SRC_SRSR_JTAG_MASK, /*!< Indicates a reset has been caused by JTAG
@@ -112,10 +90,11 @@ enum _src_reset_status_flags
                                                     power-on detection logic. */
 #endif                                         /* FSL_FEATURE_SRC_HAS_SRSR_POR */
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_LOCKUP_SYSRESETREQ) && FSL_FEATURE_SRC_HAS_SRSR_LOCKUP_SYSRESETREQ)
-    kSRC_LockupSysResetFlag = SRC_SRSR_LOCKUP_SYSRESETREQ_MASK, /*!< Indicates a reset has been caused by CPU lockup or software 
-                                                                     setting of SYSRESETREQ bit in Application Interrupt and 
-                                                                     Reset Control Register of the ARM core. */
-#endif                                         /* FSL_FEATURE_SRC_HAS_SRSR_LOCKUP_SYSRESETREQ */
+    kSRC_LockupSysResetFlag =
+        SRC_SRSR_LOCKUP_SYSRESETREQ_MASK, /*!< Indicates a reset has been caused by CPU lockup or software
+                                               setting of SYSRESETREQ bit in Application Interrupt and
+                                               Reset Control Register of the ARM core. */
+#endif                                    /* FSL_FEATURE_SRC_HAS_SRSR_LOCKUP_SYSRESETREQ */
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_IPP_RESET_B) && FSL_FEATURE_SRC_HAS_SRSR_IPP_RESET_B)
     kSRC_IppResetPinFlag = SRC_SRSR_IPP_RESET_B_MASK, /*!< Indicates whether reset was the result of
                                                            ipp_reset_b pin (Power-up sequence). */
@@ -170,9 +149,9 @@ typedef enum _src_wdog3_reset_option
 typedef enum _src_warm_reset_bypass_count
 {
     kSRC_WarmResetWaitAlways = 0U, /*!< System will wait until MMDC acknowledge is asserted. */
-    kSRC_WarmResetWaitClk16 = 1U,  /*!< Wait 16 32KHz clock cycles before switching the reset. */
-    kSRC_WarmResetWaitClk32 = 2U,  /*!< Wait 32 32KHz clock cycles before switching the reset. */
-    kSRC_WarmResetWaitClk64 = 3U,  /*!< Wait 64 32KHz clock cycles before switching the reset. */
+    kSRC_WarmResetWaitClk16  = 1U, /*!< Wait 16 32KHz clock cycles before switching the reset. */
+    kSRC_WarmResetWaitClk32  = 2U, /*!< Wait 32 32KHz clock cycles before switching the reset. */
+    kSRC_WarmResetWaitClk64  = 3U, /*!< Wait 64 32KHz clock cycles before switching the reset. */
 } src_warm_reset_bypass_count_t;
 
 #if defined(__cplusplus)

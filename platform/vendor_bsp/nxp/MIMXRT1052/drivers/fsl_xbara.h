@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_XBARA_H_
@@ -46,25 +20,23 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBARA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
+#define FSL_XBARA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 
 /* Macros for entire XBARA_SELx register.  */
-#define XBARA_SELx(base, output) (*(volatile uint16_t *)((uintptr_t) & (base->SEL0) + ((output) / 2U) * 2U))
+#define XBARA_SELx(base, output) (((volatile uint16_t *)(&((base)->SEL0)))[(uint32_t)(output) / 2UL])
+
 /* Set the XBARA_SELx_SELx field to a new value. */
-#define XBARA_WR_SELx_SELx(base, input, output)                                                    \
-    (XBARA_SELx((base), (output)) =                                                                \
-         ((XBARA_SELx((base), (output)) & ~(0xFFU << (XBARA_SEL0_SEL1_SHIFT * ((output) % 2U)))) | \
-          ((input) << (XBARA_SEL0_SEL1_SHIFT * ((output) % 2U)))))
+#define XBARA_WR_SELx_SELx(base, input, output) XBARA_SetSignalsConnection((base), (input), (output))
 
 /*!
  * @brief XBARA active edge for detection
  */
 typedef enum _xbara_active_edge
 {
-    kXBARA_EdgeNone = 0U,            /*!< Edge detection status bit never asserts. */
-    kXBARA_EdgeRising = 1U,          /*!< Edge detection status bit asserts on rising edges. */
-    kXBARA_EdgeFalling = 2U,         /*!< Edge detection status bit asserts on falling edges. */
-    kXBARA_EdgeRisingAndFalling = 3U /*!< Edge detection status bit asserts on rising and falling edges. */
+    kXBARA_EdgeNone             = 0U, /*!< Edge detection status bit never asserts. */
+    kXBARA_EdgeRising           = 1U, /*!< Edge detection status bit asserts on rising edges. */
+    kXBARA_EdgeFalling          = 2U, /*!< Edge detection status bit asserts on falling edges. */
+    kXBARA_EdgeRisingAndFalling = 3U  /*!< Edge detection status bit asserts on rising and falling edges. */
 } xbara_active_edge_t;
 
 /*!
@@ -72,9 +44,9 @@ typedef enum _xbara_active_edge
  */
 typedef enum _xbar_request
 {
-    kXBARA_RequestDisable = 0U,        /*!< Interrupt and DMA are disabled. */
-    kXBARA_RequestDMAEnable = 1U,      /*!< DMA enabled, interrupt disabled. */
-    kXBARA_RequestInterruptEnalbe = 2U /*!< Interrupt enabled, DMA disabled. */
+    kXBARA_RequestDisable         = 0U, /*!< Interrupt and DMA are disabled. */
+    kXBARA_RequestDMAEnable       = 1U, /*!< DMA enabled, interrupt disabled. */
+    kXBARA_RequestInterruptEnalbe = 2U  /*!< Interrupt enabled, DMA disabled. */
 } xbara_request_t;
 
 /*!
@@ -171,7 +143,7 @@ void XBARA_SetSignalsConnection(XBARA_Type *base, xbar_input_signal_t input, xba
 uint32_t XBARA_GetStatusFlags(XBARA_Type *base);
 
 /*!
- * @brief Clears the the edge detection status flags of relative mask.
+ * @brief Clears the edge detection status flags of relative mask.
  *
  * @param base XBARA peripheral address.
  * @param mask the status flags to clear.

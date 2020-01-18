@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_NOTIFIER_H_
@@ -78,8 +52,8 @@ typedef enum _notifier_policy
 typedef enum _notifier_notification_type
 {
     kNOTIFIER_NotifyRecover = 0x00U, /*!< Notify IP to recover to previous work state. */
-    kNOTIFIER_NotifyBefore = 0x01U,  /*!< Notify IP that configuration setting is going to change. */
-    kNOTIFIER_NotifyAfter = 0x02U,   /*!< Notify IP that configuration setting has been changed. */
+    kNOTIFIER_NotifyBefore  = 0x01U, /*!< Notify IP that configuration setting is going to change. */
+    kNOTIFIER_NotifyAfter   = 0x02U, /*!< Notify IP that configuration setting has been changed. */
 } notifier_notification_type_t;
 
 /*!
@@ -96,8 +70,8 @@ typedef enum _notifier_notification_type
  */
 typedef enum _notifier_callback_type
 {
-    kNOTIFIER_CallbackBefore = 0x01U,      /*!< Callback handles BEFORE notification. */
-    kNOTIFIER_CallbackAfter = 0x02U,       /*!< Callback handles AFTER notification. */
+    kNOTIFIER_CallbackBefore      = 0x01U, /*!< Callback handles BEFORE notification. */
+    kNOTIFIER_CallbackAfter       = 0x02U, /*!< Callback handles AFTER notification. */
     kNOTIFIER_CallbackBeforeAfter = 0x03U, /*!< Callback handles BEFORE and AFTER notification. */
 } notifier_callback_type_t;
 
@@ -135,11 +109,11 @@ typedef struct _notifier_notification_block
  * Depending on callback type, function of this prototype is called (see NOTIFIER_SwitchConfig())
  * before configuration switch, after it or in both use cases to notify about
  * the switch progress (see notifier_callback_type_t). When called, the type of the notification
- * is passed as a parameter along with the reference to the target configuration structure (see notifier_notification_block_t)
- * and any data passed during the callback registration.
- * When notified before the configuration switch, depending on the configuration switch policy (see
- * notifier_policy_t), the callback may deny the execution of the user function by returning an error code different
- * than kStatus_Success (see NOTIFIER_SwitchConfig()).
+ * is passed as a parameter along with the reference to the target configuration structure (see
+ * notifier_notification_block_t) and any data passed during the callback registration. When notified before the
+ * configuration switch, depending on the configuration switch policy (see notifier_policy_t), the callback may deny the
+ * execution of the user function by returning an error code different than kStatus_Success (see
+ * NOTIFIER_SwitchConfig()).
  *
  * @param notify Notification block.
  * @param data Callback data. Refers to the data passed during callback registration. Intended to

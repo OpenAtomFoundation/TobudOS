@@ -1,38 +1,17 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_tsc.h"
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.tsc"
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -50,8 +29,10 @@ static uint32_t TSC_GetInstance(TSC_Type *base);
 /*! @brief Pointers to TSC bases for each instance. */
 static TSC_Type *const s_tscBases[] = TSC_BASE_PTRS;
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to ADC clocks for each instance. */
 static const clock_ip_name_t s_tscClocks[] = TSC_CLOCKS;
+#endif
 
 /*******************************************************************************
  * Code
@@ -74,6 +55,12 @@ static uint32_t TSC_GetInstance(TSC_Type *base)
     return instance;
 }
 
+/*!
+ * brief Initialize the TSC module.
+ *
+ * param base TSC peripheral base address.
+ * param config Pointer to "tsc_config_t" structure.
+ */
 void TSC_Init(TSC_Type *base, const tsc_config_t *config)
 {
     assert(NULL != config);
@@ -97,6 +84,11 @@ void TSC_Init(TSC_Type *base, const tsc_config_t *config)
     base->PRE_CHARGE_TIME = TSC_PRE_CHARGE_TIME_PRE_CHARGE_TIME(config->prechargeTime);
 }
 
+/*!
+ * brief De-initializes the TSC module.
+ *
+ * param base TSC peripheral base address.
+ */
 void TSC_Deinit(TSC_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -105,17 +97,43 @@ void TSC_Deinit(TSC_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Gets an available pre-defined settings for the controller's configuration.
+ *
+ * This function initializes the converter configuration structure with available settings.
+ * The default values of measureDelayTime and prechargeTime is tested on LCD8000-43T screen and work normally.
+ * The default values are:
+ * code
+ *    config->enableAutoMeausre = false;
+ *    config->measureDelayTime = 0xFFFFU;
+ *    config->prechargeTime = 0xFFFFU;
+ *    config->detectionMode = kTSC_4WireDetectionMode;
+ * endCode
+ * param config Pointer to "tsc_config_t" structure.
+ */
 void TSC_GetDefaultConfig(tsc_config_t *config)
 {
+    /* Initializes the configure structure to zero. */
+    (void)memset(config, 0, sizeof(*config));
+
     config->enableAutoMeasure = false;
-    config->measureDelayTime = 0xFFFFU;
-    config->prechargeTime = 0xFFFFU;
-    config->detectionMode = kTSC_Detection4WireMode;
+    config->measureDelayTime  = 0xFFFFU;
+    config->prechargeTime     = 0xFFFFU;
+    config->detectionMode     = kTSC_Detection4WireMode;
 }
 
+/*!
+ * brief Get Y coordinate value or X coordinate value. The value is an ADC conversion value.
+ *
+ * param base TSC peripheral base address.
+ * param selection Select alternative measure value which is Y coordinate value or X coordinate value.
+ *        See "tsc_corrdinate_value_selection_t".
+ * return If selection is "kTSC_XCoordinateValueSelection", the API returns x-coordinate vlaue.
+ *         If selection is "kTSC_YCoordinateValueSelection", the API returns y-coordinate vlaue.
+ */
 uint32_t TSC_GetMeasureValue(TSC_Type *base, tsc_corrdinate_value_selection_t selection)
 {
-    uint32_t tmp32 = 0U;
+    uint32_t tmp32 = 0;
 
     if (selection == kTSC_XCoordinateValueSelection)
     {
@@ -127,10 +145,21 @@ uint32_t TSC_GetMeasureValue(TSC_Type *base, tsc_corrdinate_value_selection_t se
     }
     else
     {
+        /* Intentional empty */
     }
+
     return tmp32;
 }
 
+/*!
+ * brief Send hardware trigger signal to ADC in debug mode. The trigger signal must last at least 1 ips clock period.
+ *
+ * param base TSC peripheral base address.
+ * param hwts Hardware trigger select signal, select which channel to start conversion. See "tsc_trigger_signal_t".
+ *             On ADC side, HWTS = 1 << x indicates the x logic channel is selected to start hardware ADC conversion.
+ * param enable Switcher of the trigger signal. "true" means generate trigger signal, "false" means don't generate
+ *               trigger signal.
+ */
 void TSC_DebugTriggerSignalToADC(TSC_Type *base, tsc_trigger_signal_t hwts, bool enable)
 {
     if (enable)
@@ -147,6 +176,13 @@ void TSC_DebugTriggerSignalToADC(TSC_Type *base, tsc_trigger_signal_t hwts, bool
     }
 }
 
+/*!
+ * brief Enable/Disable detection in debug mode.
+ *
+ * param base TSC peripheral base address.
+ * param detectionMode Set detect mode. See "tsc_detection_mode_t"
+ * param enable Switcher of detect enable. "true" means enable detection, "false" means disable detection.
+ */
 void TSC_DebugEnableDetection(TSC_Type *base, tsc_detection_mode_t detectionMode, bool enable)
 {
     if (detectionMode == kTSC_Detection4WireMode)
@@ -173,9 +209,17 @@ void TSC_DebugEnableDetection(TSC_Type *base, tsc_detection_mode_t detectionMode
     }
     else
     {
+        /* Intentional empty */
     }
 }
 
+/*!
+ * brief Set TSC port mode in debug mode.(pull down, pull up and 200k-pull up)
+ *
+ * param base TSC peripheral base address.
+ * param port TSC controller ports.
+ * param mode TSC port mode.(pull down, pull up and 200k-pull up)
+ */
 void TSC_DebugSetPortMode(TSC_Type *base, tsc_port_source_t port, tsc_port_mode_t mode)
 {
     uint32_t tmp32;
@@ -209,6 +253,7 @@ void TSC_DebugSetPortMode(TSC_Type *base, tsc_port_source_t port, tsc_port_mode_
             tmp32 |= ((uint32_t)mode << TSC_DEBUG_MODE2_XPUL_PULL_DOWN_SHIFT);
             break;
         default:
+            assert(false);
             break;
     }
     base->DEBUG_MODE2 = tmp32;

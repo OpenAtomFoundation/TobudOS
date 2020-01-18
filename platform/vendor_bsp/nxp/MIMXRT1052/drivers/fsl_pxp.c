@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
- * Copyright (c) 2017, NXP Semiconductors, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_pxp.h"
@@ -37,6 +11,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.pxp"
+#endif
+
 /* The CSC2 coefficient is ###.####_#### */
 #define PXP_CSC2_COEF_INT_WIDTH 2
 #define PXP_CSC2_COEF_FRAC_WIDTH 8
@@ -56,6 +36,12 @@ typedef union _u32_f32
     float f32;
     uint32_t u32;
 } u32_f32_t;
+
+typedef union _pxp_pvoid_u32
+{
+    void *pvoid;
+    uint32_t u32;
+} pxp_pvoid_u32_t;
 
 /*******************************************************************************
  * Prototypes
@@ -142,9 +128,9 @@ static uint32_t PXP_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
     u32_f32_t u32_f32;
     uint32_t ret;
 
-    u32_f32.f32 = floatValue;
+    u32_f32.f32        = floatValue;
     uint32_t floatBits = u32_f32.u32;
-    int32_t expValue = (int32_t)((floatBits & 0x7F800000U) >> 23U) - 127;
+    int32_t expValue   = (int32_t)((floatBits & 0x7F800000U) >> 23U) - 127;
 
     ret = (floatBits & 0x007FFFFFU) | 0x00800000U;
     expValue += fracBits;
@@ -178,23 +164,23 @@ static void PXP_GetScalerParam(uint16_t inputDimension, uint16_t outputDimension
 {
     uint32_t scaleFact = ((uint32_t)inputDimension << 12U) / outputDimension;
 
-    if (scaleFact >= (16U << 12U))
+    if (scaleFact >= (16UL << 12U))
     {
         /* Desired fact is two large, use the largest support value. */
-        *dec = 3U;
+        *dec   = 3U;
         *scale = 0x2000U;
     }
     else
     {
-        if (scaleFact > (8U << 12U))
+        if (scaleFact > (8UL << 12U))
         {
             *dec = 3U;
         }
-        else if (scaleFact > (4U << 12U))
+        else if (scaleFact > (4UL << 12U))
         {
             *dec = 2U;
         }
-        else if (scaleFact > (2U << 12U))
+        else if (scaleFact > (2UL << 12U))
         {
             *dec = 1U;
         }
@@ -212,6 +198,14 @@ static void PXP_GetScalerParam(uint16_t inputDimension, uint16_t outputDimension
     }
 }
 
+/*!
+ * brief Initialize the PXP.
+ *
+ * This function enables the PXP peripheral clock, and resets the PXP registers
+ * to default status.
+ *
+ * param base PXP peripheral base address.
+ */
 void PXP_Init(PXP_Type *base)
 {
     uint32_t ctrl = 0U;
@@ -242,6 +236,13 @@ void PXP_Init(PXP_Type *base)
     base->CTRL = ctrl;
 }
 
+/*!
+ * brief De-initialize the PXP.
+ *
+ * This function disables the PXP peripheral clock.
+ *
+ * param base PXP peripheral base address.
+ */
 void PXP_Deinit(PXP_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -250,25 +251,44 @@ void PXP_Deinit(PXP_Type *base)
 #endif
 }
 
+/*!
+ * brief Reset the PXP.
+ *
+ * This function resets the PXP peripheral registers to default status.
+ *
+ * param base PXP peripheral base address.
+ */
 void PXP_Reset(PXP_Type *base)
 {
     base->CTRL_SET = PXP_CTRL_SFTRST_MASK;
     base->CTRL_CLR = (PXP_CTRL_SFTRST_MASK | PXP_CTRL_CLKGATE_MASK);
 }
 
+/*!
+ * brief Set the alpha surface input buffer configuration.
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration.
+ */
 void PXP_SetAlphaSurfaceBufferConfig(PXP_Type *base, const pxp_as_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->AS_CTRL = (base->AS_CTRL & ~PXP_AS_CTRL_FORMAT_MASK) | PXP_AS_CTRL_FORMAT(config->pixelFormat);
 
-    base->AS_BUF = config->bufferAddr;
+    base->AS_BUF   = config->bufferAddr;
     base->AS_PITCH = config->pitchBytes;
 }
 
+/*!
+ * brief Set the alpha surface blending configuration.
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration structure.
+ */
 void PXP_SetAlphaSurfaceBlendConfig(PXP_Type *base, const pxp_as_blend_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
     uint32_t reg;
 
     reg = base->AS_CTRL;
@@ -285,6 +305,15 @@ void PXP_SetAlphaSurfaceBlendConfig(PXP_Type *base, const pxp_as_blend_config_t 
     base->AS_CTRL = reg;
 }
 
+/*!
+ * brief Set the alpha surface position in output buffer.
+ *
+ * param base PXP peripheral base address.
+ * param upperLeftX X of the upper left corner.
+ * param upperLeftY Y of the upper left corner.
+ * param lowerRightX X of the lower right corner.
+ * param lowerRightY Y of the lower right corner.
+ */
 void PXP_SetAlphaSurfacePosition(
     PXP_Type *base, uint16_t upperLeftX, uint16_t upperLeftY, uint16_t lowerRightX, uint16_t lowerRightY)
 {
@@ -292,25 +321,56 @@ void PXP_SetAlphaSurfacePosition(
     base->OUT_AS_LRC = PXP_OUT_AS_LRC_Y(lowerRightY) | PXP_OUT_AS_LRC_X(lowerRightX);
 }
 
+/*!
+ * brief Set the alpha surface overlay color key.
+ *
+ * If a pixel in the current overlay image with a color that falls in the range
+ * from the p colorKeyLow to p colorKeyHigh range, it will use the process surface
+ * pixel value for that location. If no PS image is present or if the PS image also
+ * matches its colorkey range, the PS background color is used.
+ *
+ * param base PXP peripheral base address.
+ * param colorKeyLow Color key low range.
+ * param colorKeyHigh Color key high range.
+ *
+ * note Colorkey operations are higher priority than alpha or ROP operations
+ */
 void PXP_SetAlphaSurfaceOverlayColorKey(PXP_Type *base, uint32_t colorKeyLow, uint32_t colorKeyHigh)
 {
-    base->AS_CLRKEYLOW = colorKeyLow;
+    base->AS_CLRKEYLOW  = colorKeyLow;
     base->AS_CLRKEYHIGH = colorKeyHigh;
 }
 
+/*!
+ * brief Set the process surface input buffer configuration.
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration.
+ */
 void PXP_SetProcessSurfaceBufferConfig(PXP_Type *base, const pxp_ps_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->PS_CTRL = ((base->PS_CTRL & ~(PXP_PS_CTRL_FORMAT_MASK | PXP_PS_CTRL_WB_SWAP_MASK)) |
                      PXP_PS_CTRL_FORMAT(config->pixelFormat) | PXP_PS_CTRL_WB_SWAP(config->swapByte));
 
-    base->PS_BUF = config->bufferAddr;
-    base->PS_UBUF = config->bufferAddrU;
-    base->PS_VBUF = config->bufferAddrV;
+    base->PS_BUF   = config->bufferAddr;
+    base->PS_UBUF  = config->bufferAddrU;
+    base->PS_VBUF  = config->bufferAddrV;
     base->PS_PITCH = config->pitchBytes;
 }
 
+/*!
+ * brief Set the process surface scaler configuration.
+ *
+ * The valid down scale fact is 1/(2^12) ~ 16.
+ *
+ * param base PXP peripheral base address.
+ * param inputWidth Input image width.
+ * param inputHeight Input image height.
+ * param outputWidth Output image width.
+ * param outputHeight Output image height.
+ */
 void PXP_SetProcessSurfaceScaler(
     PXP_Type *base, uint16_t inputWidth, uint16_t inputHeight, uint16_t outputWidth, uint16_t outputHeight)
 {
@@ -326,6 +386,15 @@ void PXP_SetProcessSurfaceScaler(
     base->PS_SCALE = PXP_PS_SCALE_XSCALE(scaleX) | PXP_PS_SCALE_YSCALE(scaleY);
 }
 
+/*!
+ * brief Set the process surface position in output buffer.
+ *
+ * param base PXP peripheral base address.
+ * param upperLeftX X of the upper left corner.
+ * param upperLeftY Y of the upper left corner.
+ * param lowerRightX X of the lower right corner.
+ * param lowerRightY Y of the lower right corner.
+ */
 void PXP_SetProcessSurfacePosition(
     PXP_Type *base, uint16_t upperLeftX, uint16_t upperLeftY, uint16_t lowerRightX, uint16_t lowerRightY)
 {
@@ -333,24 +402,40 @@ void PXP_SetProcessSurfacePosition(
     base->OUT_PS_LRC = PXP_OUT_PS_LRC_Y(lowerRightY) | PXP_OUT_PS_LRC_X(lowerRightX);
 }
 
+/*!
+ * brief Set the process surface color key.
+ *
+ * If the PS image matches colorkey range, the PS background color is output. Set
+ * p colorKeyLow to 0xFFFFFFFF and p colorKeyHigh to 0 will disable the colorkeying.
+ *
+ * param base PXP peripheral base address.
+ * param colorKeyLow Color key low range.
+ * param colorKeyHigh Color key high range.
+ */
 void PXP_SetProcessSurfaceColorKey(PXP_Type *base, uint32_t colorKeyLow, uint32_t colorKeyHigh)
 {
-    base->PS_CLRKEYLOW = colorKeyLow;
+    base->PS_CLRKEYLOW  = colorKeyLow;
     base->PS_CLRKEYHIGH = colorKeyHigh;
 }
 
+/*!
+ * brief Set the PXP outpt buffer configuration.
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration.
+ */
 void PXP_SetOutputBufferConfig(PXP_Type *base, const pxp_output_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->OUT_CTRL = (base->OUT_CTRL & ~(PXP_OUT_CTRL_FORMAT_MASK | PXP_OUT_CTRL_INTERLACED_OUTPUT_MASK)) |
                      PXP_OUT_CTRL_FORMAT(config->pixelFormat) | PXP_OUT_CTRL_INTERLACED_OUTPUT(config->interlacedMode);
 
-    base->OUT_BUF = config->buffer0Addr;
+    base->OUT_BUF  = config->buffer0Addr;
     base->OUT_BUF2 = config->buffer1Addr;
 
     base->OUT_PITCH = config->pitchBytes;
-    base->OUT_LRC = PXP_OUT_LRC_Y(config->height - 1U) | PXP_OUT_LRC_X(config->width - 1U);
+    base->OUT_LRC   = PXP_OUT_LRC_Y((uint32_t)config->height - 1U) | PXP_OUT_LRC_X((uint32_t)config->width - 1U);
 
 /*
  * The dither store size must be set to the same with the output buffer size,
@@ -362,10 +447,52 @@ void PXP_SetOutputBufferConfig(PXP_Type *base, const pxp_output_buffer_config_t 
 #endif
 }
 
+/*!
+ * brief Set the next command.
+ *
+ * The PXP supports a primitive ability to queue up one operation while the current
+ * operation is running. Workflow:
+ *
+ * 1. Prepare the PXP register values except STAT, CSCCOEFn, NEXT in the memory
+ * in the order they appear in the register map.
+ * 2. Call this function sets the new operation to PXP.
+ * 3. There are two methods to check whether the PXP has loaded the new operation.
+ * The first method is using ref PXP_IsNextCommandPending. If there is new operation
+ * not loaded by the PXP, this function returns true. The second method is checking
+ * the flag ref kPXP_CommandLoadFlag, if command loaded, this flag asserts. User
+ * could enable interrupt ref kPXP_CommandLoadInterruptEnable to get the loaded
+ * signal in interrupt way.
+ * 4. When command loaded by PXP, a new command could be set using this function.
+ *
+ * param base PXP peripheral base address.
+ * param commandAddr Address of the new command.
+ */
+void PXP_SetNextCommand(PXP_Type *base, void *commandAddr)
+{
+    pxp_pvoid_u32_t addr;
+
+    /* Make sure commands have been saved to memory. */
+    __DSB();
+
+    addr.pvoid = commandAddr;
+
+    base->NEXT = addr.u32 & PXP_NEXT_POINTER_MASK;
+}
+
 #if !(defined(FSL_FEATURE_PXP_HAS_NO_CSC2) && FSL_FEATURE_PXP_HAS_NO_CSC2)
+/*!
+ * brief Set the CSC2 configuration.
+ *
+ * The CSC2 module receives pixels in any color space and can convert the pixels
+ * into any of RGB, YUV, or YCbCr color spaces. The output pixels are passed
+ * onto the LUT and rotation engine for further processing
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration.
+ */
 void PXP_SetCsc2Config(PXP_Type *base, const pxp_csc2_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->CSC2_CTRL = (base->CSC2_CTRL & ~PXP_CSC2_CTRL_CSC_MODE_MASK) | PXP_CSC2_CTRL_CSC_MODE(config->mode);
 
@@ -393,6 +520,16 @@ void PXP_SetCsc2Config(PXP_Type *base, const pxp_csc2_config_t *config)
 }
 #endif
 
+/*!
+ * brief Set the CSC1 mode.
+ *
+ * The CSC1 module receives scaled YUV/YCbCr444 pixels from the scale engine and
+ * converts the pixels to the RGB888 color space. It could only be used by process
+ * surface.
+ *
+ * param base PXP peripheral base address.
+ * param mode The conversion mode.
+ */
 void PXP_SetCsc1Mode(PXP_Type *base, pxp_csc1_mode_t mode)
 {
     /*
@@ -405,9 +542,8 @@ void PXP_SetCsc1Mode(PXP_Type *base, pxp_csc1_mode_t mode)
 
     if (kPXP_Csc1YUV2RGB == mode)
     {
-        base->CSC1_COEF0 = (base->CSC1_COEF0 &
-                            ~(PXP_CSC1_COEF0_C0_MASK | PXP_CSC1_COEF0_Y_OFFSET_MASK | PXP_CSC1_COEF0_UV_OFFSET_MASK |
-                              PXP_CSC1_COEF0_YCBCR_MODE_MASK)) |
+        base->CSC1_COEF0 = (base->CSC1_COEF0 & ~(PXP_CSC1_COEF0_C0_MASK | PXP_CSC1_COEF0_Y_OFFSET_MASK |
+                                                 PXP_CSC1_COEF0_UV_OFFSET_MASK | PXP_CSC1_COEF0_YCBCR_MODE_MASK)) |
                            PXP_CSC1_COEF0_C0(0x100U)         /* 1.00. */
                            | PXP_CSC1_COEF0_Y_OFFSET(0x0U)   /* 0. */
                            | PXP_CSC1_COEF0_UV_OFFSET(0x0U); /* 0. */
@@ -431,6 +567,19 @@ void PXP_SetCsc1Mode(PXP_Type *base, pxp_csc1_mode_t mode)
 }
 
 #if !(defined(FSL_FEATURE_PXP_HAS_NO_LUT) && FSL_FEATURE_PXP_HAS_NO_LUT)
+/*!
+ * brief Set the LUT configuration.
+ *
+ * The lookup table (LUT) is used to modify pixels in a manner that is not linear
+ * and that cannot be achieved by the color space conversion modules. To setup
+ * the LUT, the complete workflow is:
+ * 1. Use ref PXP_SetLutConfig to set the configuration, such as the lookup mode.
+ * 2. Use ref PXP_LoadLutTable to load the lookup table to PXP.
+ * 3. Use ref PXP_EnableLut to enable the function.
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration.
+ */
 void PXP_SetLutConfig(PXP_Type *base, const pxp_lut_config_t *config)
 {
     base->LUT_CTRL = (base->LUT_CTRL & ~(PXP_LUT_CTRL_OUT_MODE_MASK | PXP_LUT_CTRL_LOOKUP_MODE_MASK)) |
@@ -443,6 +592,28 @@ void PXP_SetLutConfig(PXP_Type *base, const pxp_lut_config_t *config)
     }
 }
 
+/*!
+ * brief Set the look up table to PXP.
+ *
+ * If lookup mode is DIRECT mode, this function loads p bytesNum of values
+ * from the address p memAddr into PXP LUT address p lutStartAddr. So this
+ * function allows only update part of the PXP LUT.
+ *
+ * If lookup mode is CACHE mode, this function sets the new address to p memAddr
+ * and invalid the PXP LUT cache.
+ *
+ * param base PXP peripheral base address.
+ * param lookupMode Which lookup mode is used. Note that this parameter is only
+ * used to distinguish DIRECT mode and CACHE mode, it does not change the register
+ * value PXP_LUT_CTRL[LOOKUP_MODE]. To change that value, use function ref PXP_SetLutConfig.
+ * param bytesNum How many bytes to set. This value must be divisable by 8.
+ * param memAddr Address of look up table to set.
+ * param lutStartAddr The LUT value will be loaded to LUT from index lutAddr. It should
+ * be 8 bytes aligned.
+ *
+ * retval kStatus_Success Load successfully.
+ * retval kStatus_InvalidArgument Failed because of invalid argument.
+ */
 status_t PXP_LoadLutTable(
     PXP_Type *base, pxp_lut_lookup_mode_t lookupMode, uint32_t bytesNum, uint32_t memAddr, uint16_t lutStartAddr)
 {
@@ -465,7 +636,7 @@ status_t PXP_LoadLutTable(
         }
 
         base->LUT_EXTMEM = memAddr;
-        base->LUT_ADDR = PXP_LUT_ADDR_ADDR(lutStartAddr) | PXP_LUT_ADDR_NUM_BYTES(bytesNum);
+        base->LUT_ADDR   = PXP_LUT_ADDR_ADDR(lutStartAddr) | PXP_LUT_ADDR_NUM_BYTES(bytesNum);
 
         base->STAT_CLR = PXP_STAT_LUT_DMA_LOAD_DONE_IRQ_MASK;
 
@@ -485,6 +656,15 @@ status_t PXP_LoadLutTable(
 #endif /* FSL_FEATURE_PXP_HAS_NO_LUT */
 
 #if (defined(FSL_FEATURE_PXP_HAS_DITHER) && FSL_FEATURE_PXP_HAS_DITHER)
+/*!
+ * brief Write data to the PXP internal memory.
+ *
+ * param base PXP peripheral base address.
+ * param ram Which internal memory to write.
+ * param bytesNum How many bytes to write.
+ * param data Pointer to the data to write.
+ * param memStartAddr The start address in the internal memory to write the data.
+ */
 void PXP_SetInternalRamData(PXP_Type *base, pxp_ram_t ram, uint32_t bytesNum, uint8_t *data, uint16_t memStartAddr)
 {
     assert((memStartAddr + bytesNum) <= PXP_INTERNAL_RAM_LUT_BYTE);
@@ -501,6 +681,16 @@ void PXP_SetInternalRamData(PXP_Type *base, pxp_ram_t ram, uint32_t bytesNum, ui
     base->INIT_MEM_CTRL = 0U;
 }
 
+/*!
+ * brief Set the dither final LUT data.
+ *
+ * The dither final LUT is only applicble to dither engine 0. It takes the bits[7:4]
+ * of the output pixel and looks up and 8 bit value from the 16 value LUT to generate
+ * the final output pixel to the next process module.
+ *
+ * param base PXP peripheral base address.
+ * param data Pointer to the LUT data to set.
+ */
 void PXP_SetDitherFinalLutData(PXP_Type *base, const pxp_dither_final_lut_data_t *data)
 {
     base->DITHER_FINAL_LUT_DATA0 = data->data_3_0;
@@ -509,6 +699,19 @@ void PXP_SetDitherFinalLutData(PXP_Type *base, const pxp_dither_final_lut_data_t
     base->DITHER_FINAL_LUT_DATA3 = data->data_15_12;
 }
 
+/*!
+ * brief Enable or disable dither engine in the PXP process path.
+ *
+ * After the initialize function ref PXP_Init, the dither engine is disabled and not
+ * use in the PXP processing path. This function enables the dither engine and
+ * routes the dither engine output to the output buffer. When the dither engine
+ * is enabled using this function, ref PXP_SetDitherConfig must be called to
+ * configure dither engine correctly, otherwise there is not output to the output
+ * buffer.
+ *
+ * param base PXP peripheral base address.
+ * param enable Pass in true to enable, false to disable.
+ */
 void PXP_EnableDither(PXP_Type *base, bool enable)
 {
     if (enable)

@@ -1,38 +1,17 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_gpio.h"
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.igpio"
+#endif
 
 /*******************************************************************************
  * Variables
@@ -47,15 +26,15 @@ static const clock_ip_name_t s_gpioClock[] = GPIO_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
-* Prototypes
-******************************************************************************/
+ * Prototypes
+ ******************************************************************************/
 
 /*!
-* @brief Gets the GPIO instance according to the GPIO base
-*
-* @param base    GPIO peripheral base pointer(PTA, PTB, PTC, etc.)
-* @retval GPIO instance
-*/
+ * @brief Gets the GPIO instance according to the GPIO base
+ *
+ * @param base    GPIO peripheral base pointer(PTA, PTB, PTC, etc.)
+ * @retval GPIO instance
+ */
 static uint32_t GPIO_GetInstance(GPIO_Type *base);
 
 /*******************************************************************************
@@ -67,7 +46,7 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_gpioBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_gpioBases); instance++)
     {
         if (s_gpioBases[instance] == base)
         {
@@ -80,44 +59,76 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
     return instance;
 }
 
+/*!
+ * brief Initializes the GPIO peripheral according to the specified
+ *        parameters in the initConfig.
+ *
+ * param base GPIO base pointer.
+ * param pin Specifies the pin number
+ * param initConfig pointer to a ref gpio_pin_config_t structure that
+ *        contains the configuration information.
+ */
 void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *Config)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable GPIO clock. */
-    CLOCK_EnableClock(s_gpioClock[GPIO_GetInstance(base)]);
+    uint32_t instance = GPIO_GetInstance(base);
+
+    /* If The clock IP is valid, enable the clock gate. */
+    if ((instance < ARRAY_SIZE(s_gpioClock)) && (kCLOCK_IpInvalid != s_gpioClock[instance]))
+    {
+        CLOCK_EnableClock(s_gpioClock[instance]);
+    }
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Register reset to default value */
-    base->IMR &= ~(1U << pin);
+    base->IMR &= ~(1UL << pin);
 
     /* Configure GPIO pin direction */
     if (Config->direction == kGPIO_DigitalInput)
     {
-        base->GDIR &= ~(1U << pin);
+        base->GDIR &= ~(1UL << pin);
     }
     else
     {
         GPIO_PinWrite(base, pin, Config->outputLogic);
-        base->GDIR |= (1U << pin);
+        base->GDIR |= (1UL << pin);
     }
 
     /* Configure GPIO pin interrupt mode */
     GPIO_SetPinInterruptConfig(base, pin, Config->interruptMode);
 }
 
+/*!
+ * brief Sets the output level of the individual GPIO pin to logic 1 or 0.
+ *
+ * param base GPIO base pointer.
+ * param pin GPIO port pin number.
+ * param output GPIOpin output logic level.
+ *        - 0: corresponding pin output low-logic level.
+ *        - 1: corresponding pin output high-logic level.
+ */
 void GPIO_PinWrite(GPIO_Type *base, uint32_t pin, uint8_t output)
 {
-    assert(pin < 32);
+    assert(pin < 32U);
     if (output == 0U)
     {
-        base->DR &= ~(1U << pin); /* Set pin output to low level.*/
+        base->DR &= ~(1UL << pin); /* Set pin output to low level.*/
     }
     else
     {
-        base->DR |= (1U << pin); /* Set pin output to high level.*/
+        base->DR |= (1UL << pin); /* Set pin output to high level.*/
     }
 }
 
+/*!
+ * brief Sets the current pin interrupt mode.
+ *
+ * param base GPIO base pointer.
+ * param pin GPIO port pin number.
+ * param pininterruptMode pointer to a ref gpio_interrupt_mode_t structure
+ *        that contains the interrupt mode information.
+ */
 void GPIO_PinSetInterruptConfig(GPIO_Type *base, uint32_t pin, gpio_interrupt_mode_t pinInterruptMode)
 {
     volatile uint32_t *icr;
@@ -126,35 +137,35 @@ void GPIO_PinSetInterruptConfig(GPIO_Type *base, uint32_t pin, gpio_interrupt_mo
     icrShift = pin;
 
     /* Register reset to default value */
-    base->EDGE_SEL &= ~(1U << pin);
+    base->EDGE_SEL &= ~(1UL << pin);
 
-    if (pin < 16)
+    if (pin < 16U)
     {
         icr = &(base->ICR1);
     }
     else
     {
         icr = &(base->ICR2);
-        icrShift -= 16;
+        icrShift -= 16U;
     }
     switch (pinInterruptMode)
     {
         case (kGPIO_IntLowLevel):
-            *icr &= ~(3U << (2 * icrShift));
+            *icr &= ~(3UL << (2UL * icrShift));
             break;
         case (kGPIO_IntHighLevel):
-            *icr = (*icr & (~(3U << (2 * icrShift)))) | (1U << (2 * icrShift));
+            *icr = (*icr & (~(3UL << (2UL * icrShift)))) | (1UL << (2UL * icrShift));
             break;
         case (kGPIO_IntRisingEdge):
-            *icr = (*icr & (~(3U << (2 * icrShift)))) | (2U << (2 * icrShift));
+            *icr = (*icr & (~(3UL << (2UL * icrShift)))) | (2UL << (2UL * icrShift));
             break;
         case (kGPIO_IntFallingEdge):
-            *icr |= (3U << (2 * icrShift));
+            *icr |= (3UL << (2UL * icrShift));
             break;
         case (kGPIO_IntRisingOrFallingEdge):
-            base->EDGE_SEL |= (1U << pin);
+            base->EDGE_SEL |= (1UL << pin);
             break;
-        default:
+        default:; /* Intentional empty default */
             break;
     }
 }

@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_flexio_uart_edma.h"
@@ -37,6 +11,11 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.flexio_uart_edma"
+#endif
 
 /*<! Structure definition for uart_edma_private_handle_t. The structure is private. */
 typedef struct _flexio_uart_edma_private_handle
@@ -55,8 +34,9 @@ enum _flexio_uart_edma_tansfer_states
 };
 
 /*******************************************************************************
- * Definitions
+ * Variables
  ******************************************************************************/
+
 /*< @brief user configurable flexio uart handle count. */
 #define FLEXIO_UART_HANDLE_COUNT 2
 
@@ -104,13 +84,13 @@ static void FLEXIO_UART_TransferSendEDMACallback(edma_handle_t *handle, void *pa
 
     /* Avoid the warning for unused variables. */
     handle = handle;
-    tcds = tcds;
+    tcds   = tcds;
 
     if (transferDone)
     {
         FLEXIO_UART_TransferAbortSendEDMA(uartPrivateHandle->base, uartPrivateHandle->handle);
 
-        if (uartPrivateHandle->handle->callback)
+        if (uartPrivateHandle->handle->callback != NULL)
         {
             uartPrivateHandle->handle->callback(uartPrivateHandle->base, uartPrivateHandle->handle,
                                                 kStatus_FLEXIO_UART_TxIdle, uartPrivateHandle->handle->userData);
@@ -129,14 +109,14 @@ static void FLEXIO_UART_TransferReceiveEDMACallback(edma_handle_t *handle,
 
     /* Avoid the warning for unused variables. */
     handle = handle;
-    tcds = tcds;
+    tcds   = tcds;
 
     if (transferDone)
     {
         /* Disable transfer. */
         FLEXIO_UART_TransferAbortReceiveEDMA(uartPrivateHandle->base, uartPrivateHandle->handle);
 
-        if (uartPrivateHandle->handle->callback)
+        if (uartPrivateHandle->handle->callback != NULL)
         {
             uartPrivateHandle->handle->callback(uartPrivateHandle->base, uartPrivateHandle->handle,
                                                 kStatus_FLEXIO_UART_RxIdle, uartPrivateHandle->handle->userData);
@@ -144,6 +124,18 @@ static void FLEXIO_UART_TransferReceiveEDMACallback(edma_handle_t *handle,
     }
 }
 
+/*!
+ * brief Initializes the UART handle which is used in transactional functions.
+ *
+ * param base Pointer to FLEXIO_UART_Type.
+ * param handle Pointer to flexio_uart_edma_handle_t structure.
+ * param callback The callback function.
+ * param userData The parameter of the callback function.
+ * param rxEdmaHandle User requested DMA handle for RX DMA transfer.
+ * param txEdmaHandle User requested DMA handle for TX DMA transfer.
+ * retval kStatus_Success Successfully create the handle.
+ * retval kStatus_OutOfRange The FlexIO SPI eDMA type/handle table out of range.
+ */
 status_t FLEXIO_UART_TransferCreateHandleEDMA(FLEXIO_UART_Type *base,
                                               flexio_uart_edma_handle_t *handle,
                                               flexio_uart_edma_transfer_callback_t callback,
@@ -153,28 +145,28 @@ status_t FLEXIO_UART_TransferCreateHandleEDMA(FLEXIO_UART_Type *base,
 {
     assert(handle);
 
-    uint8_t index = 0;
+    uint8_t index = 0U;
 
     /* Find the an empty handle pointer to store the handle. */
-    for (index = 0; index < FLEXIO_UART_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_UART_HANDLE_COUNT; index++)
     {
         if (s_edmaPrivateHandle[index].base == NULL)
         {
-            s_edmaPrivateHandle[index].base = base;
+            s_edmaPrivateHandle[index].base   = base;
             s_edmaPrivateHandle[index].handle = handle;
             break;
         }
     }
 
-    if (index == FLEXIO_UART_HANDLE_COUNT)
+    if (index == (uint8_t)FLEXIO_UART_HANDLE_COUNT)
     {
         return kStatus_OutOfRange;
     }
 
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
-    handle->rxState = kFLEXIO_UART_RxIdle;
-    handle->txState = kFLEXIO_UART_TxIdle;
+    handle->rxState = (uint8_t)kFLEXIO_UART_RxIdle;
+    handle->txState = (uint8_t)kFLEXIO_UART_TxIdle;
 
     handle->rxEdmaHandle = rxEdmaHandle;
     handle->txEdmaHandle = txEdmaHandle;
@@ -183,13 +175,13 @@ status_t FLEXIO_UART_TransferCreateHandleEDMA(FLEXIO_UART_Type *base,
     handle->userData = userData;
 
     /* Configure TX. */
-    if (txEdmaHandle)
+    if (txEdmaHandle != NULL)
     {
         EDMA_SetCallback(handle->txEdmaHandle, FLEXIO_UART_TransferSendEDMACallback, &s_edmaPrivateHandle);
     }
 
     /* Configure RX. */
-    if (rxEdmaHandle)
+    if (rxEdmaHandle != NULL)
     {
         EDMA_SetCallback(handle->rxEdmaHandle, FLEXIO_UART_TransferReceiveEDMACallback, &s_edmaPrivateHandle);
     }
@@ -197,6 +189,18 @@ status_t FLEXIO_UART_TransferCreateHandleEDMA(FLEXIO_UART_Type *base,
     return kStatus_Success;
 }
 
+/*!
+ * brief Sends data using eDMA.
+ *
+ * This function sends data using eDMA. This is a non-blocking function, which returns
+ * right away. When all data is sent out, the send callback function is called.
+ *
+ * param base Pointer to FLEXIO_UART_Type
+ * param handle UART handle pointer.
+ * param xfer UART eDMA transfer structure, see #flexio_uart_transfer_t.
+ * retval kStatus_Success if succeed, others failed.
+ * retval kStatus_FLEXIO_UART_TxBusy Previous transfer on going.
+ */
 status_t FLEXIO_UART_TransferSendEDMA(FLEXIO_UART_Type *base,
                                       flexio_uart_edma_handle_t *handle,
                                       flexio_uart_transfer_t *xfer)
@@ -213,25 +217,25 @@ status_t FLEXIO_UART_TransferSendEDMA(FLEXIO_UART_Type *base,
     }
 
     /* If previous TX not finished. */
-    if (kFLEXIO_UART_TxBusy == handle->txState)
+    if ((uint8_t)kFLEXIO_UART_TxBusy == handle->txState)
     {
         status = kStatus_FLEXIO_UART_TxBusy;
     }
     else
     {
-        handle->txState = kFLEXIO_UART_TxBusy;
+        handle->txState       = (uint8_t)kFLEXIO_UART_TxBusy;
         handle->txDataSizeAll = xfer->dataSize;
 
         /* Prepare transfer. */
         EDMA_PrepareTransfer(&xferConfig, xfer->data, sizeof(uint8_t),
-                             (void *)FLEXIO_UART_GetTxDataRegisterAddress(base), sizeof(uint8_t), sizeof(uint8_t),
+                             (uint32_t *)FLEXIO_UART_GetTxDataRegisterAddress(base), sizeof(uint8_t), sizeof(uint8_t),
                              xfer->dataSize, kEDMA_MemoryToPeripheral);
 
         /* Store the initially configured eDMA minor byte transfer count into the FLEXIO UART handle */
         handle->nbytes = sizeof(uint8_t);
 
         /* Submit transfer. */
-        EDMA_SubmitTransfer(handle->txEdmaHandle, &xferConfig);
+        (void)EDMA_SubmitTransfer(handle->txEdmaHandle, &xferConfig);
         EDMA_StartTransfer(handle->txEdmaHandle);
 
         /* Enable UART TX EDMA. */
@@ -243,6 +247,18 @@ status_t FLEXIO_UART_TransferSendEDMA(FLEXIO_UART_Type *base,
     return status;
 }
 
+/*!
+ * brief Receives data using eDMA.
+ *
+ * This function receives data using eDMA. This is a non-blocking function, which returns
+ * right away. When all data is received, the receive callback function is called.
+ *
+ * param base Pointer to FLEXIO_UART_Type
+ * param handle Pointer to flexio_uart_edma_handle_t structure
+ * param xfer UART eDMA transfer structure, see #flexio_uart_transfer_t.
+ * retval kStatus_Success if succeed, others failed.
+ * retval kStatus_UART_RxBusy Previous transfer on going.
+ */
 status_t FLEXIO_UART_TransferReceiveEDMA(FLEXIO_UART_Type *base,
                                          flexio_uart_edma_handle_t *handle,
                                          flexio_uart_transfer_t *xfer)
@@ -259,24 +275,24 @@ status_t FLEXIO_UART_TransferReceiveEDMA(FLEXIO_UART_Type *base,
     }
 
     /* If previous RX not finished. */
-    if (kFLEXIO_UART_RxBusy == handle->rxState)
+    if ((uint8_t)kFLEXIO_UART_RxBusy == handle->rxState)
     {
         status = kStatus_FLEXIO_UART_RxBusy;
     }
     else
     {
-        handle->rxState = kFLEXIO_UART_RxBusy;
+        handle->rxState       = (uint8_t)kFLEXIO_UART_RxBusy;
         handle->rxDataSizeAll = xfer->dataSize;
 
         /* Prepare transfer. */
-        EDMA_PrepareTransfer(&xferConfig, (void *)FLEXIO_UART_GetRxDataRegisterAddress(base), sizeof(uint8_t),
+        EDMA_PrepareTransfer(&xferConfig, (uint32_t *)FLEXIO_UART_GetRxDataRegisterAddress(base), sizeof(uint8_t),
                              xfer->data, sizeof(uint8_t), sizeof(uint8_t), xfer->dataSize, kEDMA_PeripheralToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the FLEXIO UART handle */
         handle->nbytes = sizeof(uint8_t);
 
         /* Submit transfer. */
-        EDMA_SubmitTransfer(handle->rxEdmaHandle, &xferConfig);
+        (void)EDMA_SubmitTransfer(handle->rxEdmaHandle, &xferConfig);
         EDMA_StartTransfer(handle->rxEdmaHandle);
 
         /* Enable UART RX EDMA. */
@@ -288,6 +304,14 @@ status_t FLEXIO_UART_TransferReceiveEDMA(FLEXIO_UART_Type *base,
     return status;
 }
 
+/*!
+ * brief Aborts the sent data which using eDMA.
+ *
+ * This function aborts sent data which using eDMA.
+ *
+ * param base Pointer to FLEXIO_UART_Type
+ * param handle Pointer to flexio_uart_edma_handle_t structure
+ */
 void FLEXIO_UART_TransferAbortSendEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle)
 {
     assert(handle->txEdmaHandle);
@@ -298,9 +322,17 @@ void FLEXIO_UART_TransferAbortSendEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_
     /* Stop transfer. */
     EDMA_StopTransfer(handle->txEdmaHandle);
 
-    handle->txState = kFLEXIO_UART_TxIdle;
+    handle->txState = (uint8_t)kFLEXIO_UART_TxIdle;
 }
 
+/*!
+ * brief Aborts the receive data which using eDMA.
+ *
+ * This function aborts the receive data which using eDMA.
+ *
+ * param base Pointer to FLEXIO_UART_Type
+ * param handle Pointer to flexio_uart_edma_handle_t structure
+ */
 void FLEXIO_UART_TransferAbortReceiveEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle)
 {
     assert(handle->rxEdmaHandle);
@@ -311,9 +343,20 @@ void FLEXIO_UART_TransferAbortReceiveEDMA(FLEXIO_UART_Type *base, flexio_uart_ed
     /* Stop transfer. */
     EDMA_StopTransfer(handle->rxEdmaHandle);
 
-    handle->rxState = kFLEXIO_UART_RxIdle;
+    handle->rxState = (uint8_t)kFLEXIO_UART_RxIdle;
 }
 
+/*!
+ * brief Gets the number of bytes received.
+ *
+ * This function gets the number of bytes received.
+ *
+ * param base Pointer to FLEXIO_UART_Type
+ * param handle Pointer to flexio_uart_edma_handle_t structure
+ * param count Number of bytes received so far by the non-blocking transaction.
+ * retval kStatus_NoTransferInProgress transfer has finished or no transfer in progress.
+ * retval kStatus_Success Successfully return the count.
+ */
 status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
                                                  flexio_uart_edma_handle_t *handle,
                                                  size_t *count)
@@ -322,7 +365,7 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
     assert(handle->rxEdmaHandle);
     assert(count);
 
-    if (kFLEXIO_UART_RxIdle == handle->rxState)
+    if ((uint8_t)kFLEXIO_UART_RxIdle == handle->rxState)
     {
         return kStatus_NoTransferInProgress;
     }
@@ -334,13 +377,24 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
     return kStatus_Success;
 }
 
+/*!
+ * brief Gets the number of bytes sent out.
+ *
+ * This function gets the number of bytes sent out.
+ *
+ * param base Pointer to FLEXIO_UART_Type
+ * param handle Pointer to flexio_uart_edma_handle_t structure
+ * param count Number of bytes sent so far by the non-blocking transaction.
+ * retval kStatus_NoTransferInProgress transfer has finished or no transfer in progress.
+ * retval kStatus_Success Successfully return the count.
+ */
 status_t FLEXIO_UART_TransferGetSendCountEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle, size_t *count)
 {
     assert(handle);
     assert(handle->txEdmaHandle);
     assert(count);
 
-    if (kFLEXIO_UART_TxIdle == handle->txState)
+    if ((uint8_t)kFLEXIO_UART_TxIdle == handle->txState)
     {
         return kStatus_NoTransferInProgress;
     }

@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright 2017 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  *
  */
 #include <math.h>
@@ -47,22 +21,18 @@
 #define HUGE_VAL (99.e99)
 #endif /* HUGE_VAL */
 
-#if SCANF_FLOAT_ENABLE
-static double fnum = 0.0;
-#endif /* SCANF_FLOAT_ENABLE */
-
 #if PRINTF_ADVANCED_ENABLE
 /*! @brief Specification modifier flags for printf. */
 enum _debugconsole_printf_flag
 {
-    kPRINTF_Minus = 0x01U,              /*!< Minus FLag. */
-    kPRINTF_Plus = 0x02U,               /*!< Plus Flag. */
-    kPRINTF_Space = 0x04U,              /*!< Space Flag. */
-    kPRINTF_Zero = 0x08U,               /*!< Zero Flag. */
-    kPRINTF_Pound = 0x10U,              /*!< Pound Flag. */
-    kPRINTF_LengthChar = 0x20U,         /*!< Length: Char Flag. */
-    kPRINTF_LengthShortInt = 0x40U,     /*!< Length: Short Int Flag. */
-    kPRINTF_LengthLongInt = 0x80U,      /*!< Length: Long Int Flag. */
+    kPRINTF_Minus             = 0x01U,  /*!< Minus FLag. */
+    kPRINTF_Plus              = 0x02U,  /*!< Plus Flag. */
+    kPRINTF_Space             = 0x04U,  /*!< Space Flag. */
+    kPRINTF_Zero              = 0x08U,  /*!< Zero Flag. */
+    kPRINTF_Pound             = 0x10U,  /*!< Pound Flag. */
+    kPRINTF_LengthChar        = 0x20U,  /*!< Length: Char Flag. */
+    kPRINTF_LengthShortInt    = 0x40U,  /*!< Length: Short Int Flag. */
+    kPRINTF_LengthLongInt     = 0x80U,  /*!< Length: Long Int Flag. */
     kPRINTF_LengthLongLongInt = 0x100U, /*!< Length: Long Long Int Flag. */
 };
 #endif /* PRINTF_ADVANCED_ENABLE */
@@ -70,21 +40,21 @@ enum _debugconsole_printf_flag
 /*! @brief Specification modifier flags for scanf. */
 enum _debugconsole_scanf_flag
 {
-    kSCANF_Suppress = 0x2U,      /*!< Suppress Flag. */
-    kSCANF_DestMask = 0x7cU,     /*!< Destination Mask. */
-    kSCANF_DestChar = 0x4U,      /*!< Destination Char Flag. */
+    kSCANF_Suppress   = 0x2U,    /*!< Suppress Flag. */
+    kSCANF_DestMask   = 0x7cU,   /*!< Destination Mask. */
+    kSCANF_DestChar   = 0x4U,    /*!< Destination Char Flag. */
     kSCANF_DestString = 0x8U,    /*!< Destination String FLag. */
-    kSCANF_DestSet = 0x10U,      /*!< Destination Set Flag. */
-    kSCANF_DestInt = 0x20U,      /*!< Destination Int Flag. */
-    kSCANF_DestFloat = 0x30U,    /*!< Destination Float Flag. */
+    kSCANF_DestSet    = 0x10U,   /*!< Destination Set Flag. */
+    kSCANF_DestInt    = 0x20U,   /*!< Destination Int Flag. */
+    kSCANF_DestFloat  = 0x30U,   /*!< Destination Float Flag. */
     kSCANF_LengthMask = 0x1f00U, /*!< Length Mask Flag. */
 #if SCANF_ADVANCED_ENABLE
-    kSCANF_LengthChar = 0x100U,        /*!< Length Char Flag. */
-    kSCANF_LengthShortInt = 0x200U,    /*!< Length ShortInt Flag. */
-    kSCANF_LengthLongInt = 0x400U,     /*!< Length LongInt Flag. */
+    kSCANF_LengthChar        = 0x100U, /*!< Length Char Flag. */
+    kSCANF_LengthShortInt    = 0x200U, /*!< Length ShortInt Flag. */
+    kSCANF_LengthLongInt     = 0x400U, /*!< Length LongInt Flag. */
     kSCANF_LengthLongLongInt = 0x800U, /*!< Length LongLongInt Flag. */
 #endif                                 /* SCANF_ADVANCED_ENABLE */
-#if PRINTF_FLOAT_ENABLE
+#if SCANF_FLOAT_ENABLE
     kSCANF_LengthLongLongDouble = 0x1000U, /*!< Length LongLongDuoble Flag. */
 #endif                                     /*PRINTF_FLOAT_ENABLE */
     kSCANF_TypeSinged = 0x2000U,           /*!< TypeSinged Flag. */
@@ -134,7 +104,7 @@ static int32_t ConvertFloatRadixNumToString(char *numstr, void *nump, int32_t ra
 #endif /* PRINTF_FLOAT_ENABLE */
 
 /*!
-*
+ *
  */
 double modf(double input_dbl, double *intpart_ptr);
 
@@ -178,8 +148,8 @@ static int32_t ConvertRadixNumToString(char *numstr, void *nump, int32_t neg, in
     int32_t nlen;
     char *nstrp;
 
-    nlen = 0;
-    nstrp = numstr;
+    nlen     = 0;
+    nstrp    = numstr;
     *nstrp++ = '\0';
 
     if (neg)
@@ -203,7 +173,7 @@ static int32_t ConvertRadixNumToString(char *numstr, void *nump, int32_t neg, in
             if (c < 0)
             {
                 uc = (uint64_t)c;
-                c = (int64_t)(~uc) + 1 + '0';
+                c  = (int64_t)(~uc) + 1 + '0';
             }
 #else
             b = a / radix;
@@ -211,14 +181,14 @@ static int32_t ConvertRadixNumToString(char *numstr, void *nump, int32_t neg, in
             if (c < 0)
             {
                 uc = (uint32_t)c;
-                c = (uint32_t)(~uc) + 1 + '0';
+                c  = (uint32_t)(~uc) + 1 + '0';
             }
 #endif /* PRINTF_ADVANCED_ENABLE */
             else
             {
                 c = c + '0';
             }
-            a = b;
+            a        = b;
             *nstrp++ = (char)c;
             ++nlen;
         }
@@ -254,7 +224,7 @@ static int32_t ConvertRadixNumToString(char *numstr, void *nump, int32_t neg, in
             {
                 uc = uc - 10 + (use_caps ? 'A' : 'a');
             }
-            ua = ub;
+            ua       = ub;
             *nstrp++ = (char)uc;
             ++nlen;
         }
@@ -279,10 +249,10 @@ static int32_t ConvertFloatRadixNumToString(char *numstr, void *nump, int32_t ra
 
     int32_t nlen;
     char *nstrp;
-    nlen = 0;
-    nstrp = numstr;
+    nlen     = 0;
+    nstrp    = numstr;
     *nstrp++ = '\0';
-    r = *(double *)nump;
+    r        = *(double *)nump;
     if (!r)
     {
         *nstrp = '0';
@@ -315,17 +285,17 @@ static int32_t ConvertFloatRadixNumToString(char *numstr, void *nump, int32_t ra
     {
         fb = fa / (int32_t)radix;
         dc = (fa - (int64_t)fb * (int32_t)radix);
-        c = (int32_t)dc;
+        c  = (int32_t)dc;
         if (c < 0)
         {
             uc = (uint32_t)c;
-            c = (int32_t)(~uc) + 1 + '0';
+            c  = (int32_t)(~uc) + 1 + '0';
         }
         else
         {
             c = c + '0';
         }
-        fa = fb;
+        fa       = fb;
         *nstrp++ = (char)c;
         ++nlen;
     }
@@ -346,13 +316,13 @@ static int32_t ConvertFloatRadixNumToString(char *numstr, void *nump, int32_t ra
             if (c < 0)
             {
                 uc = (uint32_t)c;
-                c = (int32_t)(~uc) + 1 + '0';
+                c  = (int32_t)(~uc) + 1 + '0';
             }
             else
             {
                 c = c + '0';
             }
-            a = b;
+            a        = b;
             *nstrp++ = (char)c;
             ++nlen;
         }
@@ -361,6 +331,19 @@ static int32_t ConvertFloatRadixNumToString(char *numstr, void *nump, int32_t ra
 }
 #endif /* PRINTF_FLOAT_ENABLE */
 
+/*!
+ * brief This function outputs its parameters according to a formatted string.
+ *
+ * note I/O is performed by calling given function pointer using following
+ * (*func_ptr)(c);
+ *
+ * param[in] fmt_ptr   Format string for printf.
+ * param[in] args_ptr  Arguments to printf.
+ * param[in] buf  pointer to the buffer
+ * param cb print callback function pointer
+ *
+ * return Number of characters to be print
+ */
 int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
 {
     /* va_list ap; */
@@ -368,7 +351,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
     int32_t c;
 
     char vstr[33];
-    char *vstrp = NULL;
+    char *vstrp  = NULL;
     int32_t vlen = 0;
 
     int32_t done;
@@ -417,7 +400,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
 #if PRINTF_ADVANCED_ENABLE
         /* First check for specification modifier flags. */
         flags_used = 0;
-        done = false;
+        done       = false;
         while (!done)
         {
             switch (*++p)
@@ -448,7 +431,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
 
         /* Next check for minimum field width. */
         field_width = 0;
-        done = false;
+        done        = false;
         while (!done)
         {
             c = *++p;
@@ -478,7 +461,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
         {
             /* Must get precision field width, if present. */
             precision_width = 0;
-            done = false;
+            done            = false;
             while (!done)
             {
                 c = *++p;
@@ -492,7 +475,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
 #if PRINTF_ADVANCED_ENABLE
                 else if (c == '*')
                 {
-                    precision_width = (uint32_t)va_arg(ap, uint32_t);
+                    precision_width       = (uint32_t)va_arg(ap, uint32_t);
                     valid_precision_width = true;
                 }
 #endif /* PRINTF_ADVANCED_ENABLE */
@@ -561,7 +544,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
                     {
                         ival = (int32_t)va_arg(ap, int32_t);
                     }
-                    vlen = ConvertRadixNumToString(vstr, &ival, true, 10, use_caps);
+                    vlen  = ConvertRadixNumToString(vstr, &ival, true, 10, use_caps);
                     vstrp = &vstr[vlen];
 #if PRINTF_ADVANCED_ENABLE
                     if (ival < 0)
@@ -625,8 +608,8 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
 #if PRINTF_FLOAT_ENABLE
                 if ((c == 'f') || (c == 'F'))
                 {
-                    fval = (double)va_arg(ap, double);
-                    vlen = ConvertFloatRadixNumToString(vstr, &fval, 10, precision_width);
+                    fval  = (double)va_arg(ap, double);
+                    vlen  = ConvertFloatRadixNumToString(vstr, &fval, 10, precision_width);
                     vstrp = &vstr[vlen];
 
 #if PRINTF_ADVANCED_ENABLE
@@ -701,7 +684,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
                     {
                         uval = (uint32_t)va_arg(ap, uint32_t);
                     }
-                    vlen = ConvertRadixNumToString(vstr, &uval, false, 16, use_caps);
+                    vlen  = ConvertRadixNumToString(vstr, &uval, false, 16, use_caps);
                     vstrp = &vstr[vlen];
 
 #if PRINTF_ADVANCED_ENABLE
@@ -773,7 +756,7 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
                         radix = 10;
                     }
 
-                    vlen = ConvertRadixNumToString(vstr, &uval, false, radix, use_caps);
+                    vlen  = ConvertRadixNumToString(vstr, &uval, false, radix, use_caps);
                     vstrp = &vstr[vlen];
 #if PRINTF_ADVANCED_ENABLE
                     if (flags_used & kPRINTF_Zero)
@@ -876,6 +859,17 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
     return count;
 }
 
+/*!
+ * brief Converts an input line of ASCII characters based upon a provided
+ * string format.
+ *
+ * param[in] line_ptr The input line of ASCII data.
+ * param[in] format   Format first points to the format string.
+ * param[in] args_ptr The list of parameters.
+ *
+ * return Number of input items converted and assigned.
+ * retval IO_EOF When line_ptr is empty string "".
+ */
 int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
 {
     uint8_t base;
@@ -899,6 +893,9 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
     /* Identifier for the input string. */
     const char *p = line_ptr;
 
+#if SCANF_FLOAT_ENABLE
+    double fnum = 0.0;
+#endif /* SCANF_FLOAT_ENABLE */
     /* Return EOF error before any conversion. */
     if (*p == '\0')
     {
@@ -935,9 +932,9 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
             /* convernsion specification */
             c++;
             /* Reset. */
-            flag = 0;
+            flag        = 0;
             field_width = 0;
-            base = 0;
+            base        = 0;
 
             /* Loop to get full conversion specification. */
             while ((*c) && (!(flag & kSCANF_DestMask)))
@@ -1096,7 +1093,7 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
             switch (flag & kSCANF_DestMask)
             {
                 case kSCANF_DestChar:
-                    s = (const char *)p;
+                    s   = (const char *)p;
                     buf = va_arg(args_ptr, char *);
                     while ((field_width--) && (*p))
                     {
@@ -1118,7 +1115,7 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
                     break;
                 case kSCANF_DestString:
                     n_decode += ScanIgnoreWhiteSpace(&p);
-                    s = p;
+                    s   = p;
                     buf = va_arg(args_ptr, char *);
                     while ((field_width--) && (*p != '\0') && (*p != ' ') && (*p != '\t') && (*p != '\n') &&
                            (*p != '\r') && (*p != '\v') && (*p != '\f'))
@@ -1143,7 +1140,7 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
                     break;
                 case kSCANF_DestInt:
                     n_decode += ScanIgnoreWhiteSpace(&p);
-                    s = p;
+                    s   = p;
                     val = 0;
                     if ((base == 0) || (base == 16))
                     {

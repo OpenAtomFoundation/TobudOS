@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_GPT_H_
@@ -48,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
-                                                       /*@}*/
+#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*@}*/
 
 /*!
  * @brief List of clock sources
@@ -57,12 +31,12 @@
  */
 typedef enum _gpt_clock_source
 {
-    kGPT_ClockSource_Off = 0U,      /*!< GPT Clock Source Off.*/
-    kGPT_ClockSource_Periph = 1U,   /*!< GPT Clock Source from Peripheral Clock.*/
+    kGPT_ClockSource_Off      = 0U, /*!< GPT Clock Source Off.*/
+    kGPT_ClockSource_Periph   = 1U, /*!< GPT Clock Source from Peripheral Clock.*/
     kGPT_ClockSource_HighFreq = 2U, /*!< GPT Clock Source from High Frequency Reference Clock.*/
-    kGPT_ClockSource_Ext = 3U,      /*!< GPT Clock Source from external pin.*/
-    kGPT_ClockSource_LowFreq = 4U,  /*!< GPT Clock Source from Low Frequency Reference Clock.*/
-    kGPT_ClockSource_Osc = 5U,      /*!< GPT Clock Source from Crystal oscillator.*/
+    kGPT_ClockSource_Ext      = 3U, /*!< GPT Clock Source from external pin.*/
+    kGPT_ClockSource_LowFreq  = 4U, /*!< GPT Clock Source from Low Frequency Reference Clock.*/
+    kGPT_ClockSource_Osc      = 5U, /*!< GPT Clock Source from Crystal oscillator.*/
 } gpt_clock_source_t;
 
 /*! @brief List of input capture channel number. */
@@ -93,10 +67,10 @@ typedef enum _gpt_output_compare_channel
 typedef enum _gpt_output_operation_mode
 {
     kGPT_OutputOperation_Disconnected = 0U, /*!< Don't change output pin.*/
-    kGPT_OutputOperation_Toggle = 1U,       /*!< Toggle output pin.*/
-    kGPT_OutputOperation_Clear = 2U,        /*!< Set output pin low.*/
-    kGPT_OutputOperation_Set = 3U,          /*!< Set output pin high.*/
-    kGPT_OutputOperation_Activelow = 4U,    /*!< Generate a active low pulse on output pin.*/
+    kGPT_OutputOperation_Toggle       = 1U, /*!< Toggle output pin.*/
+    kGPT_OutputOperation_Clear        = 2U, /*!< Set output pin low.*/
+    kGPT_OutputOperation_Set          = 3U, /*!< Set output pin high.*/
+    kGPT_OutputOperation_Activelow    = 4U, /*!< Generate a active low pulse on output pin.*/
 } gpt_output_operation_mode_t;
 
 /*! @brief List of GPT interrupts */
@@ -105,9 +79,9 @@ typedef enum _gpt_interrupt_enable
     kGPT_OutputCompare1InterruptEnable = GPT_IR_OF1IE_MASK, /*!< Output Compare Channel1 interrupt enable*/
     kGPT_OutputCompare2InterruptEnable = GPT_IR_OF2IE_MASK, /*!< Output Compare Channel2 interrupt enable*/
     kGPT_OutputCompare3InterruptEnable = GPT_IR_OF3IE_MASK, /*!< Output Compare Channel3 interrupt enable*/
-    kGPT_InputCapture1InterruptEnable = GPT_IR_IF1IE_MASK,  /*!< Input Capture Channel1 interrupt enable*/
-    kGPT_InputCapture2InterruptEnable = GPT_IR_IF2IE_MASK,  /*!< Input Capture Channel1 interrupt enable*/
-    kGPT_RollOverFlagInterruptEnable = GPT_IR_ROVIE_MASK,   /*!< Counter rolled over interrupt enable*/
+    kGPT_InputCapture1InterruptEnable  = GPT_IR_IF1IE_MASK, /*!< Input Capture Channel1 interrupt enable*/
+    kGPT_InputCapture2InterruptEnable  = GPT_IR_IF2IE_MASK, /*!< Input Capture Channel1 interrupt enable*/
+    kGPT_RollOverFlagInterruptEnable   = GPT_IR_ROVIE_MASK, /*!< Counter rolled over interrupt enable*/
 } gpt_interrupt_enable_t;
 
 /*! @brief Status flag. */
@@ -116,9 +90,9 @@ typedef enum _gpt_status_flag
     kGPT_OutputCompare1Flag = GPT_SR_OF1_MASK, /*!< Output compare channel 1 event.*/
     kGPT_OutputCompare2Flag = GPT_SR_OF2_MASK, /*!< Output compare channel 2 event.*/
     kGPT_OutputCompare3Flag = GPT_SR_OF3_MASK, /*!< Output compare channel 3 event.*/
-    kGPT_InputCapture1Flag = GPT_SR_IF1_MASK,  /*!< Input Capture channel 1 event.*/
-    kGPT_InputCapture2Flag = GPT_SR_IF2_MASK,  /*!< Input Capture channel 2 event.*/
-    kGPT_RollOverFlag = GPT_SR_ROV_MASK,       /*!< Counter reaches maximum value and rolled over to 0 event.*/
+    kGPT_InputCapture1Flag  = GPT_SR_IF1_MASK, /*!< Input Capture channel 1 event.*/
+    kGPT_InputCapture2Flag  = GPT_SR_IF2_MASK, /*!< Input Capture channel 2 event.*/
+    kGPT_RollOverFlag       = GPT_SR_ROV_MASK, /*!< Counter reaches maximum value and rolled over to 0 event.*/
 } gpt_status_flag_t;
 
 /*! @brief Structure to configure the running mode. */
@@ -231,7 +205,7 @@ static inline void GPT_SetClockSource(GPT_Type *base, gpt_clock_source_t source)
  */
 static inline gpt_clock_source_t GPT_GetClockSource(GPT_Type *base)
 {
-    return (gpt_clock_source_t)((base->CR & GPT_CR_CLKSRC_MASK) >> GPT_CR_CLKSRC_SHIFT);
+    return (gpt_clock_source_t)(uint8_t)((base->CR & GPT_CR_CLKSRC_MASK) >> GPT_CR_CLKSRC_SHIFT);
 }
 
 /*!
@@ -242,9 +216,9 @@ static inline gpt_clock_source_t GPT_GetClockSource(GPT_Type *base)
  */
 static inline void GPT_SetClockDivider(GPT_Type *base, uint32_t divider)
 {
-    assert(divider - 1 <= GPT_PR_PRESCALER_MASK);
+    assert(divider - 1U <= GPT_PR_PRESCALER_MASK);
 
-    base->PR = (base->PR & ~GPT_PR_PRESCALER_MASK) | GPT_PR_PRESCALER(divider - 1);
+    base->PR = (base->PR & ~GPT_PR_PRESCALER_MASK) | GPT_PR_PRESCALER(divider - 1U);
 }
 
 /*!
@@ -255,7 +229,7 @@ static inline void GPT_SetClockDivider(GPT_Type *base, uint32_t divider)
  */
 static inline uint32_t GPT_GetClockDivider(GPT_Type *base)
 {
-    return ((base->PR & GPT_PR_PRESCALER_MASK) >> GPT_PR_PRESCALER_SHIFT) + 1;
+    return ((base->PR & GPT_PR_PRESCALER_MASK) >> GPT_PR_PRESCALER_SHIFT) + 1U;
 }
 
 /*!
@@ -266,9 +240,9 @@ static inline uint32_t GPT_GetClockDivider(GPT_Type *base)
  */
 static inline void GPT_SetOscClockDivider(GPT_Type *base, uint32_t divider)
 {
-    assert(divider - 1 <= (GPT_PR_PRESCALER24M_MASK >> GPT_PR_PRESCALER24M_SHIFT));
+    assert(divider - 1U <= (GPT_PR_PRESCALER24M_MASK >> GPT_PR_PRESCALER24M_SHIFT));
 
-    base->PR = (base->PR & ~GPT_PR_PRESCALER24M_MASK) | GPT_PR_PRESCALER24M(divider - 1);
+    base->PR = (base->PR & ~GPT_PR_PRESCALER24M_MASK) | GPT_PR_PRESCALER24M(divider - 1U);
 }
 
 /*!
@@ -279,7 +253,7 @@ static inline void GPT_SetOscClockDivider(GPT_Type *base, uint32_t divider)
  */
 static inline uint32_t GPT_GetOscClockDivider(GPT_Type *base)
 {
-    return ((base->PR & GPT_PR_PRESCALER24M_MASK) >> GPT_PR_PRESCALER24M_SHIFT) + 1;
+    return ((base->PR & GPT_PR_PRESCALER24M_MASK) >> GPT_PR_PRESCALER24M_SHIFT) + 1U;
 }
 
 /*! @}*/
@@ -344,7 +318,8 @@ static inline void GPT_SetInputOperationMode(GPT_Type *base,
 {
     assert(channel <= kGPT_InputCapture_Channel2);
 
-    base->CR = (base->CR & ~(GPT_CR_IM1_MASK << (channel * 2))) | (GPT_CR_IM1(mode) << (channel * 2));
+    base->CR =
+        (base->CR & ~(GPT_CR_IM1_MASK << ((uint32_t)channel * 2UL))) | (GPT_CR_IM1(mode) << ((uint32_t)channel * 2UL));
 }
 
 /*!
@@ -358,8 +333,8 @@ static inline gpt_input_operation_mode_t GPT_GetInputOperationMode(GPT_Type *bas
 {
     assert(channel <= kGPT_InputCapture_Channel2);
 
-    return (gpt_input_operation_mode_t)((base->CR >> (GPT_CR_IM1_SHIFT + channel * 2)) &
-                                        (GPT_CR_IM1_MASK >> GPT_CR_IM1_SHIFT));
+    return (gpt_input_operation_mode_t)(uint8_t)((base->CR >> (GPT_CR_IM1_SHIFT + (uint32_t)channel * 2UL)) &
+                                                 (GPT_CR_IM1_MASK >> GPT_CR_IM1_SHIFT));
 }
 
 /*!
@@ -373,7 +348,7 @@ static inline uint32_t GPT_GetInputCaptureValue(GPT_Type *base, gpt_input_captur
 {
     assert(channel <= kGPT_InputCapture_Channel2);
 
-    return *(&base->ICR[0] + channel);
+    return base->ICR[(uint32_t)channel];
 }
 
 /*!
@@ -389,7 +364,8 @@ static inline void GPT_SetOutputOperationMode(GPT_Type *base,
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    base->CR = (base->CR & ~(GPT_CR_OM1_MASK << (channel * 3))) | (GPT_CR_OM1(mode) << (channel * 3));
+    base->CR =
+        (base->CR & ~(GPT_CR_OM1_MASK << ((uint32_t)channel * 3UL))) | (GPT_CR_OM1(mode) << ((uint32_t)channel * 3UL));
 }
 
 /*!
@@ -404,8 +380,8 @@ static inline gpt_output_operation_mode_t GPT_GetOutputOperationMode(GPT_Type *b
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    return (gpt_output_operation_mode_t)((base->CR >> (GPT_CR_OM1_SHIFT + channel * 3)) &
-                                         (GPT_CR_OM1_MASK >> GPT_CR_OM1_SHIFT));
+    return (gpt_output_operation_mode_t)(uint8_t)((base->CR >> (GPT_CR_OM1_SHIFT + (uint32_t)channel * 3UL)) &
+                                                  (GPT_CR_OM1_MASK >> GPT_CR_OM1_SHIFT));
 }
 
 /*!
@@ -419,7 +395,7 @@ static inline void GPT_SetOutputCompareValue(GPT_Type *base, gpt_output_compare_
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    *(&base->OCR[0] + channel) = value;
+    base->OCR[(uint32_t)channel] = value;
 }
 
 /*!
@@ -433,7 +409,7 @@ static inline uint32_t GPT_GetOutputCompareValue(GPT_Type *base, gpt_output_comp
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    return *(&base->OCR[0] + channel);
+    return base->OCR[(uint32_t)channel];
 }
 
 /*!
@@ -446,7 +422,7 @@ static inline void GPT_ForceOutput(GPT_Type *base, gpt_output_compare_channel_t 
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    base->CR |= (GPT_CR_FO1_MASK << channel);
+    base->CR |= (GPT_CR_FO1_MASK << (uint32_t)channel);
 }
 
 /*@}*/
@@ -508,7 +484,7 @@ static inline uint32_t GPT_GetEnabledInterrupts(GPT_Type *base)
  */
 static inline uint32_t GPT_GetStatusFlags(GPT_Type *base, gpt_status_flag_t flags)
 {
-    return base->SR & flags;
+    return base->SR & (uint32_t)flags;
 }
 
 /*!
@@ -519,7 +495,7 @@ static inline uint32_t GPT_GetStatusFlags(GPT_Type *base, gpt_status_flag_t flag
  */
 static inline void GPT_ClearStatusFlags(GPT_Type *base, gpt_status_flag_t flags)
 {
-    base->SR = flags;
+    base->SR = (uint32_t)flags;
 }
 
 /*@}*/

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2017 ARM Limited. All rights reserved.
+ * Copyright (c) 2013-2018 ARM Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -15,13 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Date:        2. Feb 2017
- * $Revision:    V2.1
+ * $Date:        19. Apr 2018
+ * $Revision:    V2.2
  *
  * Project:      Flash Driver definitions
  */
 
 /* History:
+ *  Version 2.2
+ *    Padding bytes added to ARM_FLASH_INFO
  *  Version 2.1
  *    ARM_FLASH_STATUS made volatile
  *  Version 2.0
@@ -47,7 +49,7 @@ extern "C"
 
 #include "Driver_Common.h"
 
-#define ARM_FLASH_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,1)  /* API version */
+#define ARM_FLASH_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,2)  /* API version */
 
 
 #define _ARM_Driver_Flash_(n)      Driver_Flash##n
@@ -74,6 +76,7 @@ typedef struct _ARM_FLASH_INFO {
   uint32_t          page_size;          ///< Optimal programming page size in bytes
   uint32_t          program_unit;       ///< Smallest programmable unit in bytes
   uint8_t           erased_value;       ///< Contents of erased memory (usually 0xFF)
+  uint8_t           reserved[3];        ///< Reserved (must be zero)
 } const ARM_FLASH_INFO;
 
 

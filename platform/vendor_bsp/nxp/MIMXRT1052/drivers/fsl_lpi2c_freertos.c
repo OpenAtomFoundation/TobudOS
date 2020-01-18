@@ -1,48 +1,38 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_lpi2c_freertos.h"
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.lpi2c_freertos"
+#endif
 
 static void LPI2C_RTOS_Callback(LPI2C_Type *base, lpi2c_master_handle_t *drv_handle, status_t status, void *userData)
 {
     lpi2c_rtos_handle_t *handle = (lpi2c_rtos_handle_t *)userData;
     BaseType_t reschedule;
-
+    handle->async_status = status;
     xSemaphoreGiveFromISR(handle->semaphore, &reschedule);
     portYIELD_FROM_ISR(reschedule);
 }
 
+/*!
+ * brief Initializes LPI2C.
+ *
+ * This function initializes the LPI2C module and related RTOS context.
+ *
+ * param handle The RTOS LPI2C handle, the pointer to an allocated space for RTOS context.
+ * param base The pointer base address of the LPI2C instance to initialize.
+ * param masterConfig Configuration structure to set-up LPI2C in master mode.
+ * param srcClock_Hz Frequency of input clock of the LPI2C module.
+ * return status of the operation.
+ */
 status_t LPI2C_RTOS_Init(lpi2c_rtos_handle_t *handle,
                          LPI2C_Type *base,
                          const lpi2c_master_config_t *masterConfig,
@@ -81,6 +71,13 @@ status_t LPI2C_RTOS_Init(lpi2c_rtos_handle_t *handle,
     return kStatus_Success;
 }
 
+/*!
+ * brief Deinitializes the LPI2C.
+ *
+ * This function deinitializes the LPI2C module and related RTOS context.
+ *
+ * param handle The RTOS LPI2C handle.
+ */
 status_t LPI2C_RTOS_Deinit(lpi2c_rtos_handle_t *handle)
 {
     LPI2C_MasterDeinit(handle->base);
@@ -91,6 +88,15 @@ status_t LPI2C_RTOS_Deinit(lpi2c_rtos_handle_t *handle)
     return kStatus_Success;
 }
 
+/*!
+ * brief Performs I2C transfer.
+ *
+ * This function performs an I2C transfer using LPI2C module according to data given in the transfer structure.
+ *
+ * param handle The RTOS LPI2C handle.
+ * param transfer Structure specifying the transfer parameters.
+ * return status of the operation.
+ */
 status_t LPI2C_RTOS_Transfer(lpi2c_rtos_handle_t *handle, lpi2c_master_transfer_t *transfer)
 {
     status_t status;
@@ -109,7 +115,7 @@ status_t LPI2C_RTOS_Transfer(lpi2c_rtos_handle_t *handle, lpi2c_master_transfer_
     }
 
     /* Wait for transfer to finish */
-    xSemaphoreTake(handle->semaphore, portMAX_DELAY);
+    (void)xSemaphoreTake(handle->semaphore, portMAX_DELAY);
 
     /* Unlock resource mutex */
     xSemaphoreGive(handle->mutex);

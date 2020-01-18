@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
- * Copyright (c) 2017, NXP Semiconductors, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_PXP_H_
@@ -74,7 +48,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */
@@ -123,10 +97,10 @@ enum _pxp_flags
 /*! @brief PXP output flip mode. */
 typedef enum _pxp_flip_mode
 {
-    kPXP_FlipDisable = 0U,       /*!< Flip disable. */
+    kPXP_FlipDisable    = 0U,    /*!< Flip disable. */
     kPXP_FlipHorizontal = 0x01U, /*!< Horizontal flip. */
-    kPXP_FlipVertical = 0x02U,   /*!< Vertical flip. */
-    kPXP_FlipBoth = 0x03U,       /*!< Flip both directions. */
+    kPXP_FlipVertical   = 0x02U, /*!< Vertical flip. */
+    kPXP_FlipBoth       = 0x03U, /*!< Flip both directions. */
 } pxp_flip_mode_t;
 
 /*! @brief PXP rotate mode. */
@@ -157,23 +131,23 @@ typedef enum _pxp_interlaced_output_mode
 /*! @brief PXP output buffer format. */
 typedef enum _pxp_output_pixel_format
 {
-    kPXP_OutputPixelFormatARGB8888 = 0x0,   /*!< 32-bit pixels with alpha. */
-    kPXP_OutputPixelFormatRGB888 = 0x4,     /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
-    kPXP_OutputPixelFormatRGB888P = 0x5,    /*!< 24-bit pixels without alpha (packed 24-bit format) */
-    kPXP_OutputPixelFormatARGB1555 = 0x8,   /*!< 16-bit pixels with alpha. */
-    kPXP_OutputPixelFormatARGB4444 = 0x9,   /*!< 16-bit pixels with alpha. */
-    kPXP_OutputPixelFormatRGB555 = 0xC,     /*!< 16-bit pixels without alpha. */
-    kPXP_OutputPixelFormatRGB444 = 0xD,     /*!< 16-bit pixels without alpha. */
-    kPXP_OutputPixelFormatRGB565 = 0xE,     /*!< 16-bit pixels without alpha. */
-    kPXP_OutputPixelFormatYUV1P444 = 0x10,  /*!< 32-bit pixels (1-plane XYUV unpacked). */
+    kPXP_OutputPixelFormatARGB8888  = 0x0,  /*!< 32-bit pixels with alpha. */
+    kPXP_OutputPixelFormatRGB888    = 0x4,  /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
+    kPXP_OutputPixelFormatRGB888P   = 0x5,  /*!< 24-bit pixels without alpha (packed 24-bit format) */
+    kPXP_OutputPixelFormatARGB1555  = 0x8,  /*!< 16-bit pixels with alpha. */
+    kPXP_OutputPixelFormatARGB4444  = 0x9,  /*!< 16-bit pixels with alpha. */
+    kPXP_OutputPixelFormatRGB555    = 0xC,  /*!< 16-bit pixels without alpha. */
+    kPXP_OutputPixelFormatRGB444    = 0xD,  /*!< 16-bit pixels without alpha. */
+    kPXP_OutputPixelFormatRGB565    = 0xE,  /*!< 16-bit pixels without alpha. */
+    kPXP_OutputPixelFormatYUV1P444  = 0x10, /*!< 32-bit pixels (1-plane XYUV unpacked). */
     kPXP_OutputPixelFormatUYVY1P422 = 0x12, /*!< 16-bit pixels (1-plane U0,Y0,V0,Y1 interleaved bytes) */
     kPXP_OutputPixelFormatVYUY1P422 = 0x13, /*!< 16-bit pixels (1-plane V0,Y0,U0,Y1 interleaved bytes) */
-    kPXP_OutputPixelFormatY8 = 0x14,        /*!< 8-bit monochrome pixels (1-plane Y luma output) */
-    kPXP_OutputPixelFormatY4 = 0x15,        /*!< 4-bit monochrome pixels (1-plane Y luma, 4 bit truncation) */
-    kPXP_OutputPixelFormatYUV2P422 = 0x18,  /*!< 16-bit pixels (2-plane UV interleaved bytes) */
-    kPXP_OutputPixelFormatYUV2P420 = 0x19,  /*!< 16-bit pixels (2-plane UV) */
-    kPXP_OutputPixelFormatYVU2P422 = 0x1A,  /*!< 16-bit pixels (2-plane VU interleaved bytes) */
-    kPXP_OutputPixelFormatYVU2P420 = 0x1B,  /*!< 16-bit pixels (2-plane VU) */
+    kPXP_OutputPixelFormatY8        = 0x14, /*!< 8-bit monochrome pixels (1-plane Y luma output) */
+    kPXP_OutputPixelFormatY4        = 0x15, /*!< 4-bit monochrome pixels (1-plane Y luma, 4 bit truncation) */
+    kPXP_OutputPixelFormatYUV2P422  = 0x18, /*!< 16-bit pixels (2-plane UV interleaved bytes) */
+    kPXP_OutputPixelFormatYUV2P420  = 0x19, /*!< 16-bit pixels (2-plane UV) */
+    kPXP_OutputPixelFormatYVU2P422  = 0x1A, /*!< 16-bit pixels (2-plane VU interleaved bytes) */
+    kPXP_OutputPixelFormatYVU2P420  = 0x1B, /*!< 16-bit pixels (2-plane VU) */
 } pxp_output_pixel_format_t;
 
 /*! @brief PXP output buffer configuration. */
@@ -192,21 +166,21 @@ typedef struct _pxp_output_buffer_config
 /*! @brief PXP process surface buffer pixel format. */
 typedef enum _pxp_ps_pixel_format
 {
-    kPXP_PsPixelFormatRGB888 = 0x4,     /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
-    kPXP_PsPixelFormatRGB555 = 0xC,     /*!< 16-bit pixels without alpha. */
-    kPXP_PsPixelFormatRGB444 = 0xD,     /*!< 16-bit pixels without alpha. */
-    kPXP_PsPixelFormatRGB565 = 0xE,     /*!< 16-bit pixels without alpha. */
-    kPXP_PsPixelFormatYUV1P444 = 0x10,  /*!< 32-bit pixels (1-plane XYUV unpacked). */
+    kPXP_PsPixelFormatRGB888    = 0x4,  /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
+    kPXP_PsPixelFormatRGB555    = 0xC,  /*!< 16-bit pixels without alpha. */
+    kPXP_PsPixelFormatRGB444    = 0xD,  /*!< 16-bit pixels without alpha. */
+    kPXP_PsPixelFormatRGB565    = 0xE,  /*!< 16-bit pixels without alpha. */
+    kPXP_PsPixelFormatYUV1P444  = 0x10, /*!< 32-bit pixels (1-plane XYUV unpacked). */
     kPXP_PsPixelFormatUYVY1P422 = 0x12, /*!< 16-bit pixels (1-plane U0,Y0,V0,Y1 interleaved bytes) */
     kPXP_PsPixelFormatVYUY1P422 = 0x13, /*!< 16-bit pixels (1-plane V0,Y0,U0,Y1 interleaved bytes) */
-    kPXP_PsPixelFormatY8 = 0x14,        /*!< 8-bit monochrome pixels (1-plane Y luma output) */
-    kPXP_PsPixelFormatY4 = 0x15,        /*!< 4-bit monochrome pixels (1-plane Y luma, 4 bit truncation) */
-    kPXP_PsPixelFormatYUV2P422 = 0x18,  /*!< 16-bit pixels (2-plane UV interleaved bytes) */
-    kPXP_PsPixelFormatYUV2P420 = 0x19,  /*!< 16-bit pixels (2-plane UV) */
-    kPXP_PsPixelFormatYVU2P422 = 0x1A,  /*!< 16-bit pixels (2-plane VU interleaved bytes) */
-    kPXP_PsPixelFormatYVU2P420 = 0x1B,  /*!< 16-bit pixels (2-plane VU) */
-    kPXP_PsPixelFormatYVU422 = 0x1E,    /*!< 16-bit pixels (3-plane) */
-    kPXP_PsPixelFormatYVU420 = 0x1F,    /*!< 16-bit pixels (3-plane) */
+    kPXP_PsPixelFormatY8        = 0x14, /*!< 8-bit monochrome pixels (1-plane Y luma output) */
+    kPXP_PsPixelFormatY4        = 0x15, /*!< 4-bit monochrome pixels (1-plane Y luma, 4 bit truncation) */
+    kPXP_PsPixelFormatYUV2P422  = 0x18, /*!< 16-bit pixels (2-plane UV interleaved bytes) */
+    kPXP_PsPixelFormatYUV2P420  = 0x19, /*!< 16-bit pixels (2-plane UV) */
+    kPXP_PsPixelFormatYVU2P422  = 0x1A, /*!< 16-bit pixels (2-plane VU interleaved bytes) */
+    kPXP_PsPixelFormatYVU2P420  = 0x1B, /*!< 16-bit pixels (2-plane VU) */
+    kPXP_PsPixelFormatYVU422    = 0x1E, /*!< 16-bit pixels (3-plane) */
+    kPXP_PsPixelFormatYVU420    = 0x1F, /*!< 16-bit pixels (3-plane) */
 } pxp_ps_pixel_format_t;
 
 /*! @brief PXP process surface buffer configuration. */
@@ -224,12 +198,12 @@ typedef struct _pxp_ps_buffer_config
 typedef enum _pxp_as_pixel_format
 {
     kPXP_AsPixelFormatARGB8888 = 0x0, /*!< 32-bit pixels with alpha. */
-    kPXP_AsPixelFormatRGB888 = 0x4,   /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
+    kPXP_AsPixelFormatRGB888   = 0x4, /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
     kPXP_AsPixelFormatARGB1555 = 0x8, /*!< 16-bit pixels with alpha. */
     kPXP_AsPixelFormatARGB4444 = 0x9, /*!< 16-bit pixels with alpha. */
-    kPXP_AsPixelFormatRGB555 = 0xC,   /*!< 16-bit pixels without alpha. */
-    kPXP_AsPixelFormatRGB444 = 0xD,   /*!< 16-bit pixels without alpha. */
-    kPXP_AsPixelFormatRGB565 = 0xE,   /*!< 16-bit pixels without alpha. */
+    kPXP_AsPixelFormatRGB555   = 0xC, /*!< 16-bit pixels without alpha. */
+    kPXP_AsPixelFormatRGB444   = 0xD, /*!< 16-bit pixels without alpha. */
+    kPXP_AsPixelFormatRGB565   = 0xE, /*!< 16-bit pixels without alpha. */
 } pxp_as_pixel_format_t;
 
 /*! @brief PXP alphs surface buffer configuration. */
@@ -265,18 +239,18 @@ typedef enum _pxp_alpha_mode
  */
 typedef enum _pxp_rop_mode
 {
-    kPXP_RopMaskAs = 0x0,     /*!< AS AND PS. */
-    kPXP_RopMaskNotAs = 0x1,  /*!< nAS AND PS. */
-    kPXP_RopMaskAsNot = 0x2,  /*!< AS AND nPS. */
-    kPXP_RopMergeAs = 0x3,    /*!< AS OR PS. */
+    kPXP_RopMaskAs     = 0x0, /*!< AS AND PS. */
+    kPXP_RopMaskNotAs  = 0x1, /*!< nAS AND PS. */
+    kPXP_RopMaskAsNot  = 0x2, /*!< AS AND nPS. */
+    kPXP_RopMergeAs    = 0x3, /*!< AS OR PS. */
     kPXP_RopMergeNotAs = 0x4, /*!< nAS OR PS. */
     kPXP_RopMergeAsNot = 0x5, /*!< AS OR nPS. */
-    kPXP_RopNotCopyAs = 0x6,  /*!< nAS. */
-    kPXP_RopNot = 0x7,        /*!< nPS. */
-    kPXP_RopNotMaskAs = 0x8,  /*!< AS NAND PS. */
+    kPXP_RopNotCopyAs  = 0x6, /*!< nAS. */
+    kPXP_RopNot        = 0x7, /*!< nPS. */
+    kPXP_RopNotMaskAs  = 0x8, /*!< AS NAND PS. */
     kPXP_RopNotMergeAs = 0x9, /*!< AS NOR PS. */
-    kPXP_RopXorAs = 0xA,      /*!< AS XOR PS. */
-    kPXP_RopNotXorAs = 0xB    /*!< AS XNOR PS. */
+    kPXP_RopXorAs      = 0xA, /*!< AS XOR PS. */
+    kPXP_RopNotXorAs   = 0xB  /*!< AS XNOR PS. */
 } pxp_rop_mode_t;
 
 /*!
@@ -397,8 +371,8 @@ typedef enum _pxp_ram
 enum _pxp_dither_mode
 {
     kPXP_DitherPassThrough = 0U, /*!< Pass through, no dither. */
-    kPXP_DitherOrdered = 3U,     /*!< Ordered dither. */
-    kPXP_DitherQuantOnly = 4U,   /*!< No dithering, only quantization. */
+    kPXP_DitherOrdered     = 3U, /*!< Ordered dither. */
+    kPXP_DitherQuantOnly   = 4U, /*!< No dithering, only quantization. */
 };
 
 /*! @brief PXP dither LUT mode. */
@@ -743,6 +717,7 @@ static inline void PXP_EnableAlphaSurfaceOverlayColorKey(PXP_Type *base, bool en
     {
         base->AS_CTRL |= PXP_AS_CTRL_ENABLE_COLORKEY_MASK;
     }
+    else
     {
         base->AS_CTRL &= ~PXP_AS_CTRL_ENABLE_COLORKEY_MASK;
     }
@@ -910,15 +885,35 @@ static inline void PXP_SetRotateConfig(PXP_Type *base,
         (base->CTRL & ~(PXP_CTRL_ROTATE_MASK | PXP_CTRL_ROT_POS_MASK | PXP_CTRL_VFLIP_MASK | PXP_CTRL_HFLIP_MASK)) |
         PXP_CTRL_ROTATE(degree) | PXP_CTRL_ROT_POS(position) | ((uint32_t)flipMode << PXP_CTRL_HFLIP_SHIFT);
 #else
-    uint32_t ctrl = base->CTRL;
+    uint32_t ctrl       = base->CTRL;
 
     if (kPXP_RotateOutputBuffer == position)
     {
+        if ((degree != kPXP_Rotate0) || (flipMode != kPXP_FlipDisable))
+        {
+            base->DATA_PATH_CTRL0 =
+                (base->DATA_PATH_CTRL0 & (~PXP_DATA_PATH_CTRL0_MUX12_SEL_MASK)) | PXP_DATA_PATH_CTRL0_MUX12_SEL(0);
+        }
+        else
+        {
+            base->DATA_PATH_CTRL0 =
+                (base->DATA_PATH_CTRL0 & (~PXP_DATA_PATH_CTRL0_MUX12_SEL_MASK)) | PXP_DATA_PATH_CTRL0_MUX12_SEL(1);
+        }
         ctrl &= ~(PXP_CTRL_HFLIP0_MASK | PXP_CTRL_VFLIP0_MASK | PXP_CTRL_ROTATE0_MASK);
         ctrl |= (PXP_CTRL_ROTATE0(degree) | ((uint32_t)flipMode << PXP_CTRL_HFLIP0_SHIFT));
     }
     else
     {
+        if ((degree != kPXP_Rotate0) || (flipMode != kPXP_FlipDisable))
+        {
+            base->DATA_PATH_CTRL0 =
+                (base->DATA_PATH_CTRL0 & (~PXP_DATA_PATH_CTRL0_MUX3_SEL_MASK)) | PXP_DATA_PATH_CTRL0_MUX3_SEL(1);
+        }
+        else
+        {
+            base->DATA_PATH_CTRL0 =
+                (base->DATA_PATH_CTRL0 & (~PXP_DATA_PATH_CTRL0_MUX3_SEL_MASK)) | PXP_DATA_PATH_CTRL0_MUX3_SEL(0);
+        }
         ctrl &= ~(PXP_CTRL_HFLIP1_MASK | PXP_CTRL_VFLIP1_MASK | PXP_CTRL_ROTATE1_MASK);
         ctrl |= (PXP_CTRL_ROTATE1(degree) | ((uint32_t)flipMode << PXP_CTRL_HFLIP1_SHIFT));
     }
@@ -954,23 +949,19 @@ static inline void PXP_SetRotateConfig(PXP_Type *base,
    uint32_t pxp_command1[48];
    uint32_t pxp_command2[48];
 
-   // Prepare the register values.
    pxp_command1[0] = ...;
    pxp_command1[1] = ...;
-   // ...
+   ...
    pxp_command2[0] = ...;
    pxp_command2[1] = ...;
-   // ...
+   ...
 
-   // Make sure no new command pending.
    while (PXP_IsNextCommandPending(PXP))
    {
    }
 
-   // Set new operation.
    PXP_SetNextCommand(PXP, pxp_command1);
 
-   // Wait for new command loaded. Here could check @ref kPXP_CommandLoadFlag too.
    while (PXP_IsNextCommandPending(PXP))
    {
    }
@@ -981,13 +972,7 @@ static inline void PXP_SetRotateConfig(PXP_Type *base,
  * @param base PXP peripheral base address.
  * @param commandAddr Address of the new command.
  */
-static inline void PXP_SetNextCommand(PXP_Type *base, void *commandAddr)
-{
-    /* Make sure commands have been saved to memory. */
-    __DSB();
-
-    base->NEXT = (uint32_t)commandAddr & PXP_NEXT_POINTER_MASK;
-}
+void PXP_SetNextCommand(PXP_Type *base, void *commandAddr);
 
 /*!
  * @brief Check whether the next command is pending.

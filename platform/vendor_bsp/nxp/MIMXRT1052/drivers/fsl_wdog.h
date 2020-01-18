@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_WDOG_H_
 #define _FSL_WDOG_H_
@@ -47,11 +21,11 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines WDOG driver version */
-#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 /*! @name Refresh sequence */
 /*@{*/
-#define WDOG_REFRESH_KEY                         (0xAAAA5555U)
+#define WDOG_REFRESH_KEY (0xAAAA5555U)
 /*@}*/
 
 /*! @brief Defines WDOG work mode. */
@@ -72,8 +46,7 @@ typedef struct _wdog_config
     uint16_t interruptTimeValue; /*!< Interrupt count timeout value */
     bool softwareResetExtension; /*!< software reset extension */
     bool enablePowerDown;        /*!< power down enable bit */
-    bool softwareAssertion;      /*!< software assertion bit*/
-    bool softwareResetSignal;    /*!< software reset signalbit*/
+    bool enableTimeOutAssert;    /*!< Enable WDOG_B timeout assertion. */
 } wdog_config_t;
 
 /*!
@@ -93,11 +66,11 @@ enum _wdog_interrupt_enable
  */
 enum _wdog_status_flags
 {
-    kWDOG_RunningFlag = WDOG_WCR_WDE_MASK,         /*!< Running flag, set when WDOG is enabled*/
-    kWDOG_PowerOnResetFlag = WDOG_WRSR_POR_MASK,   /*!< Power On flag, set when reset is the result of a powerOnReset*/
-    kWDOG_TimeoutResetFlag = WDOG_WRSR_TOUT_MASK,  /*!< Timeout flag, set when reset is the result of a timeout*/
+    kWDOG_RunningFlag       = WDOG_WCR_WDE_MASK,   /*!< Running flag, set when WDOG is enabled*/
+    kWDOG_PowerOnResetFlag  = WDOG_WRSR_POR_MASK,  /*!< Power On flag, set when reset is the result of a powerOnReset*/
+    kWDOG_TimeoutResetFlag  = WDOG_WRSR_TOUT_MASK, /*!< Timeout flag, set when reset is the result of a timeout*/
     kWDOG_SoftwareResetFlag = WDOG_WRSR_SFTW_MASK, /*!< Software flag, set when reset is the result of a software*/
-    kWDOG_InterruptFlag = WDOG_WICR_WTIS_MASK      /*!< interrupt flag,whether interrupt has occurred or not*/
+    kWDOG_InterruptFlag     = WDOG_WICR_WTIS_MASK  /*!< interrupt flag,whether interrupt has occurred or not*/
 };
 
 /*******************************************************************************
@@ -114,7 +87,7 @@ extern "C" {
  */
 
 /*!
- * @brief Initializes the WDOG configuration sturcture.
+ * @brief Initializes the WDOG configuration structure.
  *
  * This function initializes the WDOG configuration structure to default values. The default
  * values are as follows.
@@ -187,7 +160,37 @@ static inline void WDOG_Enable(WDOG_Type *base)
  */
 static inline void WDOG_Disable(WDOG_Type *base)
 {
-    base->WCR &= ~WDOG_WCR_WDE_MASK;
+    base->WCR &= ~(uint16_t)WDOG_WCR_WDE_MASK;
+}
+
+/*!
+ * @brief Trigger the system software reset.
+ *
+ * This function will write to the WCR[SRS] bit to trigger a software system reset.
+ * This bit will automatically resets to "1" after it has been asserted to "0".
+ * Note: Calling this API will reset the system right now, please using it with more attention.
+ *
+ * @param base WDOG peripheral base address
+ */
+static inline void WDOG_TriggerSystemSoftwareReset(WDOG_Type *base)
+{
+    base->WCR &= ~(uint16_t)WDOG_WCR_SRS_MASK;
+}
+
+/*!
+ * @brief Trigger an output assertion.
+ *
+ * This function will write to the WCR[WDA] bit to trigger WDOG_B signal assertion.
+ * The WDOG_B signal can be routed to external pin of the chip, the output pin will turn to
+ * assertion along with WDOG_B signal.
+ * Note: The WDOG_B signal will remain assert until a power on reset occurred, so, please
+ * take more attention while calling it.
+ *
+ * @param base WDOG peripheral base address
+ */
+static inline void WDOG_TriggerSoftwareSignal(WDOG_Type *base)
+{
+    base->WCR &= ~(uint16_t)WDOG_WCR_WDA_MASK;
 }
 
 /*!
@@ -251,7 +254,7 @@ void WDOG_ClearInterruptStatus(WDOG_Type *base, uint16_t mask);
  */
 static inline void WDOG_SetTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
 {
-    base->WCR = (base->WCR & ~WDOG_WCR_WT_MASK) | WDOG_WCR_WT(timeoutCount);
+    base->WCR = (base->WCR & (uint16_t)~WDOG_WCR_WT_MASK) | WDOG_WCR_WT(timeoutCount);
 }
 
 /*!
@@ -266,7 +269,7 @@ static inline void WDOG_SetTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
  */
 static inline void WDOG_SetInterrputTimeoutValue(WDOG_Type *base, uint16_t timeoutCount)
 {
-    base->WICR = (base->WICR & ~WDOG_WICR_WICT_MASK) | WDOG_WICR_WICT(timeoutCount);
+    base->WICR = (base->WICR & ~(uint16_t)WDOG_WICR_WICT_MASK) | WDOG_WICR_WICT(timeoutCount);
 }
 
 /*!
@@ -279,7 +282,7 @@ static inline void WDOG_SetInterrputTimeoutValue(WDOG_Type *base, uint16_t timeo
  */
 static inline void WDOG_DisablePowerDownEnable(WDOG_Type *base)
 {
-    base->WMCR &= ~WDOG_WMCR_PDE_MASK;
+    base->WMCR &= ~(uint16_t)WDOG_WMCR_PDE_MASK;
 }
 
 /*!
@@ -291,7 +294,6 @@ static inline void WDOG_DisablePowerDownEnable(WDOG_Type *base)
  * @param base WDOG peripheral base address
  */
 void WDOG_Refresh(WDOG_Type *base);
-
 /*@}*/
 
 #if defined(__cplusplus)

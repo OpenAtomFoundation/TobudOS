@@ -354,14 +354,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -1435,14 +1435,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -2515,14 +2515,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -3598,14 +3598,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -4678,14 +4678,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -5757,14 +5757,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -6836,14 +6836,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -7917,14 +7917,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -8997,14 +8997,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -10080,14 +10080,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -11160,14 +11160,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -12239,14 +12239,14 @@
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/..</state>
                     <state>$PROJ_DIR$/../../..</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\CMSIS\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager</state>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m7\iccarm</state>
@@ -12970,83 +12970,83 @@
         <group>
             <name>serial_manager</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager\serial_manager.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager\serial_manager.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager\serial_manager.h</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager\serial_manager.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager\serial_port_internal.h</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager\serial_port_internal.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager\serial_port_uart.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager\serial_port_uart.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\serial_manager\serial_port_uart.h</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\serial_manager\serial_port_uart.h</name>
             </file>
         </group>
         <group>
             <name>uart</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart\lpuart_adapter.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart\lpuart_adapter.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\components\uart\uart.h</name>
+                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\components\uart\uart.h</name>
             </file>
         </group>
     </group>
     <group>
         <name>device</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\fsl_device_registers.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\fsl_device_registers.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\MIMXRT1052.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\MIMXRT1052.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\MIMXRT1052_features.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\MIMXRT1052_features.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\system_MIMXRT1052.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\system_MIMXRT1052.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\system_MIMXRT1052.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\system_MIMXRT1052.h</name>
         </file>
     </group>
     <group>
         <name>drivers</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_clock.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_clock.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_clock.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_clock.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_common.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_common.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_common.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_common.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_gpio.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_gpio.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_gpio.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_gpio.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_iomuxc.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_iomuxc.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_lpuart.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_lpuart.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\drivers\fsl_lpuart.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\drivers\fsl_lpuart.h</name>
         </file>
     </group>
     <group>
         <name>startup</name>
         <file>
-            <name>$PROJ_DIR$\startup_MIMXRT1052.s</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\iar\startup_MIMXRT1052.s</name>
         </file>
     </group>
     <group>
@@ -13282,26 +13282,29 @@
         <file>
             <name>$PROJ_DIR$\..\..\BSP\Inc\pin_mux.h</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\TOS_CONFIG\tos_config.h</name>
+        </file>
     </group>
     <group>
         <name>utilities</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\fsl_assert.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\fsl_assert.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console\fsl_debug_console.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console\fsl_debug_console.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console\fsl_debug_console.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console\fsl_debug_console.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\debug_console\fsl_debug_console_conf.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\debug_console\fsl_debug_console_conf.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str\fsl_str.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str\fsl_str.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\utilities\str\fsl_str.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\utilities\str\fsl_str.h</name>
         </file>
     </group>
     <group>
@@ -13319,10 +13322,10 @@
             <name>$PROJ_DIR$\..\..\BSP\Inc\evkbimxrt1050_sdram_ini_dcd.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\xip\fsl_flexspi_nor_boot.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\xip\fsl_flexspi_nor_boot.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052_ver270\xip\fsl_flexspi_nor_boot.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1052\xip\fsl_flexspi_nor_boot.h</name>
         </file>
     </group>
 </project>

@@ -1,35 +1,10 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_SPDIF_H_
@@ -48,29 +23,29 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
 /*@}*/
 
 /*! @brief SPDIF return status*/
-enum _spdif_status_t
+enum
 {
-    kStatus_SPDIF_RxDPLLLocked = MAKE_STATUS(kStatusGroup_SPDIF, 0),     /*!< SPDIF Rx PLL locked. */
-    kStatus_SPDIF_TxFIFOError = MAKE_STATUS(kStatusGroup_SPDIF, 1),      /*!< SPDIF Tx FIFO error. */
-    kStatus_SPDIF_TxFIFOResync = MAKE_STATUS(kStatusGroup_SPDIF, 2),     /*!< SPDIF Tx left and right FIFO resync. */
-    kStatus_SPDIF_RxCnew = MAKE_STATUS(kStatusGroup_SPDIF, 3),           /*!< SPDIF Rx status channel value updated. */
-    kStatus_SPDIF_ValidatyNoGood = MAKE_STATUS(kStatusGroup_SPDIF, 4),   /*!< SPDIF validaty flag not good. */
-    kStatus_SPDIF_RxIllegalSymbol = MAKE_STATUS(kStatusGroup_SPDIF, 5),  /*!< SPDIF Rx receive illegal symbol. */
+    kStatus_SPDIF_RxDPLLLocked     = MAKE_STATUS(kStatusGroup_SPDIF, 0), /*!< SPDIF Rx PLL locked. */
+    kStatus_SPDIF_TxFIFOError      = MAKE_STATUS(kStatusGroup_SPDIF, 1), /*!< SPDIF Tx FIFO error. */
+    kStatus_SPDIF_TxFIFOResync     = MAKE_STATUS(kStatusGroup_SPDIF, 2), /*!< SPDIF Tx left and right FIFO resync. */
+    kStatus_SPDIF_RxCnew           = MAKE_STATUS(kStatusGroup_SPDIF, 3), /*!< SPDIF Rx status channel value updated. */
+    kStatus_SPDIF_ValidatyNoGood   = MAKE_STATUS(kStatusGroup_SPDIF, 4), /*!< SPDIF validaty flag not good. */
+    kStatus_SPDIF_RxIllegalSymbol  = MAKE_STATUS(kStatusGroup_SPDIF, 5), /*!< SPDIF Rx receive illegal symbol. */
     kStatus_SPDIF_RxParityBitError = MAKE_STATUS(kStatusGroup_SPDIF, 6), /*!< SPDIF Rx parity bit error. */
-    kStatus_SPDIF_UChannelOverrun = MAKE_STATUS(kStatusGroup_SPDIF, 7),  /*!< SPDIF receive U channel overrun. */
-    kStatus_SPDIF_QChannelOverrun = MAKE_STATUS(kStatusGroup_SPDIF, 8),  /*!< SPDIF receive Q channel overrun. */
-    kStatus_SPDIF_UQChannelSync = MAKE_STATUS(kStatusGroup_SPDIF, 9),    /*!< SPDIF U/Q channel sync found. */
+    kStatus_SPDIF_UChannelOverrun  = MAKE_STATUS(kStatusGroup_SPDIF, 7), /*!< SPDIF receive U channel overrun. */
+    kStatus_SPDIF_QChannelOverrun  = MAKE_STATUS(kStatusGroup_SPDIF, 8), /*!< SPDIF receive Q channel overrun. */
+    kStatus_SPDIF_UQChannelSync    = MAKE_STATUS(kStatusGroup_SPDIF, 9), /*!< SPDIF U/Q channel sync found. */
     kStatus_SPDIF_UQChannelFrameError = MAKE_STATUS(kStatusGroup_SPDIF, 10), /*!< SPDIF U/Q channel frame error. */
-    kStatus_SPDIF_RxFIFOError = MAKE_STATUS(kStatusGroup_SPDIF, 11),         /*!< SPDIF Rx FIFO error. */
+    kStatus_SPDIF_RxFIFOError         = MAKE_STATUS(kStatusGroup_SPDIF, 11), /*!< SPDIF Rx FIFO error. */
     kStatus_SPDIF_RxFIFOResync = MAKE_STATUS(kStatusGroup_SPDIF, 12), /*!< SPDIF Rx left and right FIFO resync. */
-    kStatus_SPDIF_LockLoss = MAKE_STATUS(kStatusGroup_SPDIF, 13),     /*!< SPDIF Rx PLL clock lock loss. */
-    kStatus_SPDIF_TxIdle = MAKE_STATUS(kStatusGroup_SPDIF, 14),       /*!< SPDIF Tx is idle */
-    kStatus_SPDIF_RxIdle = MAKE_STATUS(kStatusGroup_SPDIF, 15),       /*!< SPDIF Rx is idle */
-    kStatus_SPDIF_QueueFull = MAKE_STATUS(kStatusGroup_SPDIF, 16)     /*!< SPDIF queue full */
+    kStatus_SPDIF_LockLoss     = MAKE_STATUS(kStatusGroup_SPDIF, 13), /*!< SPDIF Rx PLL clock lock loss. */
+    kStatus_SPDIF_TxIdle       = MAKE_STATUS(kStatusGroup_SPDIF, 14), /*!< SPDIF Tx is idle */
+    kStatus_SPDIF_RxIdle       = MAKE_STATUS(kStatusGroup_SPDIF, 15), /*!< SPDIF Rx is idle */
+    kStatus_SPDIF_QueueFull    = MAKE_STATUS(kStatusGroup_SPDIF, 16)  /*!< SPDIF queue full */
 };
 
 /*! @brief SPDIF Rx FIFO full falg select, it decides when assert the rx full flag */
@@ -94,7 +69,7 @@ typedef enum _spdif_txempty_select
 /*! @brief SPDIF U channel source */
 typedef enum _spdif_uchannel_source
 {
-    kSPDIF_NoUChannel = 0x0U,     /*!< No embedded U channel */
+    kSPDIF_NoUChannel     = 0x0U, /*!< No embedded U channel */
     kSPDIF_UChannelFromRx = 0x1U, /*!< U channel from receiver, it is CD mode */
     kSPDIF_UChannelFromTx = 0x3U, /*!< U channel from on chip tx */
 } spdif_uchannel_source_t;
@@ -115,7 +90,7 @@ typedef enum _spdif_gain_select
 typedef enum _spdif_tx_source
 {
     kSPDIF_txFromReceiver = 0x1U, /*!< Tx data directly through SPDIF receiver */
-    kSPDIF_txNormal = 0x5U,       /*!< Normal operation, data from processor */
+    kSPDIF_txNormal       = 0x5U, /*!< Normal operation, data from processor */
 } spdif_tx_source_t;
 
 /*! @brief SPDIF tx data source */
@@ -126,30 +101,30 @@ typedef enum _spdif_validity_config
 } spdif_validity_config_t;
 
 /*! @brief The SPDIF interrupt enable flag */
-enum _spdif_interrupt_enable_t
+enum
 {
-    kSPDIF_RxDPLLLocked = SPDIF_SIE_LOCK_MASK,                    /*!< SPDIF DPLL locked */
-    kSPDIF_TxFIFOError = SPDIF_SIE_TXUNOV_MASK,                   /*!< Tx FIFO underrun or overrun */
-    kSPDIF_TxFIFOResync = SPDIF_SIE_TXRESYN_MASK,                 /*!< Tx FIFO left and right channel resync */
-    kSPDIF_RxControlChannelChange = SPDIF_SIE_CNEW_MASK,          /*!< SPDIF Rx control channel value changed */
-    kSPDIF_ValidityFlagNoGood = SPDIF_SIE_VALNOGOOD_MASK,         /*!< SPDIF validity flag no good */
-    kSPDIF_RxIllegalSymbol = SPDIF_SIE_SYMERR_MASK,               /*!< SPDIF receiver found illegal symbol */
-    kSPDIF_RxParityBitError = SPDIF_SIE_BITERR_MASK,              /*!< SPDIF receiver found parity bit error */
-    kSPDIF_UChannelReceiveRegisterFull = SPDIF_SIE_URXFUL_MASK,   /*!< SPDIF U channel revceive register full */
-    kSPDIF_UChannelReceiveRegisterOverrun = SPDIF_SIE_URXOV_MASK, /*!< SPDIF U channel receive register overrun */
-    kSPDIF_QChannelReceiveRegisterFull = SPDIF_SIE_QRXFUL_MASK,   /*!< SPDIF Q channel receive reigster full */
-    kSPDIF_QChannelReceiveRegisterOverrun = SPDIF_SIE_QRXOV_MASK, /*!< SPDIF Q channel receive register overrun */
-    kSPDIF_UQChannelSync = SPDIF_SIE_UQSYNC_MASK,                 /*!< SPDIF U/Q channel sync found */
-    kSPDIF_UQChannelFrameError = SPDIF_SIE_UQERR_MASK,            /*!< SPDIF U/Q channel frame error */
-    kSPDIF_RxFIFOError = SPDIF_SIE_RXFIFOUNOV_MASK,               /*!< SPDIF Rx FIFO underrun/overrun */
-    kSPDIF_RxFIFOResync = SPDIF_SIE_RXFIFORESYN_MASK,             /*!< SPDIF Rx left and right FIFO resync */
-    kSPDIF_LockLoss = SPDIF_SIE_LOCKLOSS_MASK,                    /*!< SPDIF receiver loss of lock */
-    kSPDIF_TxFIFOEmpty = SPDIF_SIE_TXEM_MASK,                     /*!< SPDIF Tx FIFO empty */
-    kSPDIF_RxFIFOFull = SPDIF_SIE_RXFIFOFUL_MASK                  /*!< SPDIF Rx FIFO full */
+    kSPDIF_RxDPLLLocked                   = SPDIF_SIE_LOCK_MASK,        /*!< SPDIF DPLL locked */
+    kSPDIF_TxFIFOError                    = SPDIF_SIE_TXUNOV_MASK,      /*!< Tx FIFO underrun or overrun */
+    kSPDIF_TxFIFOResync                   = SPDIF_SIE_TXRESYN_MASK,     /*!< Tx FIFO left and right channel resync */
+    kSPDIF_RxControlChannelChange         = SPDIF_SIE_CNEW_MASK,        /*!< SPDIF Rx control channel value changed */
+    kSPDIF_ValidityFlagNoGood             = SPDIF_SIE_VALNOGOOD_MASK,   /*!< SPDIF validity flag no good */
+    kSPDIF_RxIllegalSymbol                = SPDIF_SIE_SYMERR_MASK,      /*!< SPDIF receiver found illegal symbol */
+    kSPDIF_RxParityBitError               = SPDIF_SIE_BITERR_MASK,      /*!< SPDIF receiver found parity bit error */
+    kSPDIF_UChannelReceiveRegisterFull    = SPDIF_SIE_URXFUL_MASK,      /*!< SPDIF U channel revceive register full */
+    kSPDIF_UChannelReceiveRegisterOverrun = SPDIF_SIE_URXOV_MASK,       /*!< SPDIF U channel receive register overrun */
+    kSPDIF_QChannelReceiveRegisterFull    = SPDIF_SIE_QRXFUL_MASK,      /*!< SPDIF Q channel receive reigster full */
+    kSPDIF_QChannelReceiveRegisterOverrun = SPDIF_SIE_QRXOV_MASK,       /*!< SPDIF Q channel receive register overrun */
+    kSPDIF_UQChannelSync                  = SPDIF_SIE_UQSYNC_MASK,      /*!< SPDIF U/Q channel sync found */
+    kSPDIF_UQChannelFrameError            = SPDIF_SIE_UQERR_MASK,       /*!< SPDIF U/Q channel frame error */
+    kSPDIF_RxFIFOError                    = SPDIF_SIE_RXFIFOUNOV_MASK,  /*!< SPDIF Rx FIFO underrun/overrun */
+    kSPDIF_RxFIFOResync                   = SPDIF_SIE_RXFIFORESYN_MASK, /*!< SPDIF Rx left and right FIFO resync */
+    kSPDIF_LockLoss                       = SPDIF_SIE_LOCKLOSS_MASK,    /*!< SPDIF receiver loss of lock */
+    kSPDIF_TxFIFOEmpty                    = SPDIF_SIE_TXEM_MASK,        /*!< SPDIF Tx FIFO empty */
+    kSPDIF_RxFIFOFull                     = SPDIF_SIE_RXFIFOFUL_MASK    /*!< SPDIF Rx FIFO full */
 };
 
 /*! @brief The DMA request sources */
-enum _spdif_dma_enable_t
+enum
 {
     kSPDIF_RxDMAEnable = SPDIF_SCR_DMA_RX_EN_MASK, /*!< Rx FIFO full */
     kSPDIF_TxDMAEnable = SPDIF_SCR_DMA_TX_EN_MASK, /*!< Tx FIFO empty */
@@ -171,7 +146,7 @@ typedef struct _spdif_config
 } spdif_config_t;
 
 /*!@brief SPDIF transfer queue size, user can refine it according to use case. */
-#define SPDIF_XFER_QUEUE_SIZE (4)
+#define SPDIF_XFER_QUEUE_SIZE (4U)
 
 /*! @brief SPDIF transfer structure */
 typedef struct _spdif_transfer
@@ -226,7 +201,7 @@ extern "C" {
  *
  * @param base SPDIF base pointer
  * @param config SPDIF configuration structure.
-*/
+ */
 void SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config);
 
 /*!
@@ -251,8 +226,15 @@ void SPDIF_GetDefaultConfig(spdif_config_t *config);
  * This API gates the SPDIF clock. The SPDIF module can't operate unless SPDIF_Init is called to enable the clock.
  *
  * @param base SPDIF base pointer
-*/
+ */
 void SPDIF_Deinit(SPDIF_Type *base);
+
+/*!
+ * @brief Get the instance number for SPDIF.
+ *
+ * @param base SPDIF base pointer.
+ */
+uint32_t SPDIF_GetInstance(SPDIF_Type *base);
 
 /*!
  * @brief Resets the SPDIF Tx.
@@ -474,7 +456,7 @@ static inline uint32_t SPDIF_RxGetRightDataRegisterAddress(SPDIF_Type *base)
  * @param base SPDIF base pointer.
  * @param sampleRate_Hz SPDIF sample rate frequency in Hz.
  * @param sourceClockFreq_Hz SPDIF tx clock source frequency in Hz.
-*/
+ */
 void SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_t sourceClockFreq_Hz);
 
 /*!
@@ -730,7 +712,7 @@ status_t SPDIF_TransferGetReceiveCount(SPDIF_Type *base, spdif_handle_t *handle,
 void SPDIF_TransferAbortSend(SPDIF_Type *base, spdif_handle_t *handle);
 
 /*!
- * @brief Aborts the the current IRQ receive.
+ * @brief Aborts the current IRQ receive.
  *
  * @note This API can be called when an interrupt non-blocking transfer initiates
  * to abort the transfer early.

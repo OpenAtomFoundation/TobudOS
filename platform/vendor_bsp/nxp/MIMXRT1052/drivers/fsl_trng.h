@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_TRNG_DRIVER_H_
 #define _FSL_TRNG_DRIVER_H_
@@ -43,30 +17,40 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  *******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TRNG driver version 2.0.1. 
+/*! @brief TRNG driver version 2.0.6
  *
- * Current version: 2.0.1
+ * Current version: 2.0.6
  *
  * Change log:
+ * - version 2.0.6
+ *   - For KW35Z4_SERIES set TRNG_USER_CONFIG_DEFAULT_OSC_DIV to kTRNG_RingOscDiv8.
+ * - version 2.0.5
+ *   - Add possibility to define default TRNG configuration by device specific preprocessor macros
+ *     for FRQMIN, FRQMAX and OSCDIV.
+ * - version 2.0.4
+ *   - Fix MISRA-2012 issues.
+ * - Version 2.0.3
+ *   - update TRNG_Init to restart entropy generation
+ * - Version 2.0.2
+ *   - fix MISRA issues
  * - Version 2.0.1
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */
 typedef enum _trng_sample_mode
 {
     kTRNG_SampleModeVonNeumann = 0U, /*!< Use von Neumann data in both Entropy shifter and Statistical Checker. */
-    kTRNG_SampleModeRaw = 1U,        /*!< Use raw data into both Entropy shifter and Statistical Checker. */
+    kTRNG_SampleModeRaw        = 1U, /*!< Use raw data into both Entropy shifter and Statistical Checker. */
     kTRNG_SampleModeVonNeumannRaw =
         2U /*!< Use von Neumann data in Entropy shifter. Use raw data into Statistical Checker. */
 } trng_sample_mode_t;
@@ -75,7 +59,7 @@ typedef enum _trng_sample_mode
 typedef enum _trng_clock_mode
 {
     kTRNG_ClockModeRingOscillator = 0U, /*!< Ring oscillator is used to operate the TRNG (default). */
-    kTRNG_ClockModeSystem = 1U          /*!< System clock is used to operate the TRNG. This is for test use only, and
+    kTRNG_ClockModeSystem         = 1U  /*!< System clock is used to operate the TRNG. This is for test use only, and
                                            indeterminate results may occur. */
 } trng_clock_mode_t;
 
@@ -112,44 +96,36 @@ typedef struct _trng_user_config
         entropyDelay; /*!< @brief Entropy Delay. Defines the length (in system clocks) of each Entropy sample taken. */
     uint16_t sampleSize; /*!< @brief Sample Size. Defines the total number of Entropy samples that will be taken during
                             Entropy generation. */
-    uint16_t
-        sparseBitLimit; /*!< @brief Sparse Bit Limit which defines the maximum number of
-                        * consecutive samples that may be discarded before an error is generated.
-                        * This limit is used only for during von Neumann sampling (enabled by TRNG_HAL_SetSampleMode()).
-                        * Samples are discarded if two consecutive raw samples are both 0 or both 1. If
-                        * this discarding occurs for a long period of time, it indicates that there is
-                        * insufficient Entropy. */
+    uint16_t sparseBitLimit; /*!< @brief Sparse Bit Limit which defines the maximum number of
+                              * consecutive samples that may be discarded before an error is generated.
+                              * This limit is used only for during von Neumann sampling (enabled by
+                              * TRNG_HAL_SetSampleMode()). Samples are discarded if two consecutive raw samples are both
+                              * 0 or both 1. If this discarding occurs for a long period of time, it indicates that
+                              * there is insufficient Entropy. */
     /* Statistical Check Parameters.*/
     uint8_t retryCount;      /*!< @brief Retry count. It defines the number of times a statistical check may fails
-                             * during the TRNG Entropy Generation before generating an error. */
+                              * during the TRNG Entropy Generation before generating an error. */
     uint8_t longRunMaxLimit; /*!< @brief Largest allowable number of consecutive samples of all 1, or all 0,
-                             * that is allowed during the Entropy generation. */
-    trng_statistical_check_limit_t
-        monobitLimit; /*!< @brief Maximum and minimum limits for statistical check of number of ones/zero detected
-                         during entropy generation. */
-    trng_statistical_check_limit_t
-        runBit1Limit; /*!< @brief Maximum and minimum limits for statistical check of number of runs of length 1
-                         detected during entropy generation. */
-    trng_statistical_check_limit_t
-        runBit2Limit; /*!< @brief Maximum and minimum limits for statistical check of number of runs of length 2
-                         detected during entropy generation. */
-    trng_statistical_check_limit_t
-        runBit3Limit; /*!< @brief Maximum and minimum limits for statistical check of number of runs of length 3
-                         detected during entropy generation. */
-    trng_statistical_check_limit_t
-        runBit4Limit; /*!< @brief Maximum and minimum limits for statistical check of number of runs of length 4
-                         detected during entropy generation. */
-    trng_statistical_check_limit_t
-        runBit5Limit; /*!< @brief Maximum and minimum limits for statistical check of number of runs of length 5
-                         detected during entropy generation. */
+                              * that is allowed during the Entropy generation. */
+    trng_statistical_check_limit_t monobitLimit; /*!< @brief Maximum and minimum limits for statistical check of number
+                                                    of ones/zero detected during entropy generation. */
+    trng_statistical_check_limit_t runBit1Limit; /*!< @brief Maximum and minimum limits for statistical check of number
+                                                    of runs of length 1 detected during entropy generation. */
+    trng_statistical_check_limit_t runBit2Limit; /*!< @brief Maximum and minimum limits for statistical check of number
+                                                    of runs of length 2 detected during entropy generation. */
+    trng_statistical_check_limit_t runBit3Limit; /*!< @brief Maximum and minimum limits for statistical check of number
+                                                    of runs of length 3 detected during entropy generation. */
+    trng_statistical_check_limit_t runBit4Limit; /*!< @brief Maximum and minimum limits for statistical check of number
+                                                    of runs of length 4 detected during entropy generation. */
+    trng_statistical_check_limit_t runBit5Limit; /*!< @brief Maximum and minimum limits for statistical check of number
+                                                    of runs of length 5 detected during entropy generation. */
     trng_statistical_check_limit_t runBit6PlusLimit; /*!< @brief Maximum and minimum limits for statistical check of
                                                         number of runs of length 6 or more detected during entropy
                                                         generation. */
     trng_statistical_check_limit_t
         pokerLimit; /*!< @brief Maximum and minimum limits for statistical check of "Poker Test". */
-    trng_statistical_check_limit_t
-        frequencyCountLimit; /*!< @brief Maximum and minimum limits for statistical check of entropy sample frequency
-                                count. */
+    trng_statistical_check_limit_t frequencyCountLimit; /*!< @brief Maximum and minimum limits for statistical check of
+                                                           entropy sample frequency count. */
 } trng_config_t;
 
 /*******************************************************************************

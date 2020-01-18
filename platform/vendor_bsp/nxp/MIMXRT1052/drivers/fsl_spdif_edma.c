@@ -1,44 +1,24 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_spdif_edma.h"
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.spdif_edma"
+#endif
 
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
 /* Used for 32byte aligned */
-#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)address + 32) & ~0x1FU)
+#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32U) & ~0x1FU)
 
 /*<! Structure definition for uart_edma_private_handle_t. The structure is private. */
 typedef struct _spdif_edma_private_handle
@@ -47,27 +27,30 @@ typedef struct _spdif_edma_private_handle
     spdif_edma_handle_t *handle;
 } spdif_edma_private_handle_t;
 
-enum _spdif_edma_transfer_state
+/*!
+ * @brief Used for conversion between `void*` and `uint32_t`.
+ */
+typedef union pvoid_to_u32
+{
+    void *pvoid;
+    uint32_t u32;
+} pvoid_to_u32_t;
+
+/*! @brief spdif edma transfer state. */
+enum
 {
     kSPDIF_Busy = 0x0U, /*!< SPDIF is busy */
     kSPDIF_Idle,        /*!< Transfer is done. */
 };
 
 /*<! Private handle only used for internally. */
-static spdif_edma_private_handle_t s_edmaPrivateHandle[FSL_FEATURE_SOC_I2S_COUNT][2];
+static spdif_edma_private_handle_t s_edmaPrivateHandle[FSL_FEATURE_SOC_SPDIF_COUNT][2];
 static uint8_t s_spdif_tx_watermark[4] = {16, 12, 8, 4};
 static uint8_t s_spdif_rx_watermark[4] = {1, 4, 8, 16};
 
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-/*!
- * @brief Get the instance number for SPDIF.
- *
- * @param base SPDIF base pointer.
- */
-extern uint32_t SPDIF_GetInstance(SPDIF_Type *base);
-
 /*!
  * @brief Submit SPDIF tcds to EDMA.
  *
@@ -98,17 +81,17 @@ static void SPDIF_TxEDMACallback(edma_handle_t *handle, void *userData, bool don
 static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds);
 
 /*******************************************************************************
-* Code
-******************************************************************************/
+ * Code
+ ******************************************************************************/
 static void SPDIF_TxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
     spdif_edma_private_handle_t *privHandle = (spdif_edma_private_handle_t *)userData;
-    spdif_edma_handle_t *spdifHandle = privHandle->handle;
+    spdif_edma_handle_t *spdifHandle        = privHandle->handle;
 
-    /* If finished a blcok, call the callback function */
-    memset(&spdifHandle->spdifQueue[spdifHandle->queueDriver], 0, sizeof(spdif_edma_transfer_t));
-    spdifHandle->queueDriver = (spdifHandle->queueDriver + 1) % SPDIF_XFER_QUEUE_SIZE;
-    if (spdifHandle->callback)
+    /* If finished a block, call the callback function */
+    (void)memset(&spdifHandle->spdifQueue[spdifHandle->queueDriver], 0, sizeof(spdif_edma_transfer_t));
+    spdifHandle->queueDriver = (spdifHandle->queueDriver + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
+    if (spdifHandle->callback != NULL)
     {
         (spdifHandle->callback)(privHandle->base, spdifHandle, kStatus_SPDIF_TxIdle, spdifHandle->userData);
     }
@@ -123,12 +106,12 @@ static void SPDIF_TxEDMACallback(edma_handle_t *handle, void *userData, bool don
 static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
     spdif_edma_private_handle_t *privHandle = (spdif_edma_private_handle_t *)userData;
-    spdif_edma_handle_t *spdifHandle = privHandle->handle;
+    spdif_edma_handle_t *spdifHandle        = privHandle->handle;
 
-    /* If finished a blcok, call the callback function */
-    memset(&spdifHandle->spdifQueue[spdifHandle->queueDriver], 0, sizeof(spdif_edma_transfer_t));
-    spdifHandle->queueDriver = (spdifHandle->queueDriver + 1) % SPDIF_XFER_QUEUE_SIZE;
-    if (spdifHandle->callback)
+    /* If finished a block, call the callback function */
+    (void)memset(&spdifHandle->spdifQueue[spdifHandle->queueDriver], 0, sizeof(spdif_edma_transfer_t));
+    spdifHandle->queueDriver = (spdifHandle->queueDriver + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
+    if (spdifHandle->callback != NULL)
     {
         (spdifHandle->callback)(privHandle->base, spdifHandle, kStatus_SPDIF_RxIdle, spdifHandle->userData);
     }
@@ -144,14 +127,16 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
 {
     edma_tcd_t *tcdRegs = (edma_tcd_t *)&handle->base->TCD[handle->channel];
     uint32_t primask;
-    uint32_t csr;
+    uint16_t csr;
     int8_t currentTcd;
     int8_t previousTcd;
     int8_t nextTcd;
+    int8_t tcdUsed = handle->tcdUsed;
+    int8_t tcdSize = handle->tcdSize;
 
     /* Check if tcd pool is full. */
     primask = DisableGlobalIRQ();
-    if (handle->tcdUsed >= handle->tcdSize)
+    if (tcdUsed >= tcdSize)
     {
         EnableGlobalIRQ(primask);
 
@@ -160,16 +145,16 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     currentTcd = handle->tail;
     handle->tcdUsed++;
     /* Calculate index of next TCD */
-    nextTcd = currentTcd + 1U;
+    nextTcd = currentTcd + 0x01;
     if (nextTcd == handle->tcdSize)
     {
-        nextTcd = 0U;
+        nextTcd = 0x00;
     }
     /* Advance queue tail index */
     handle->tail = nextTcd;
     EnableGlobalIRQ(primask);
     /* Calculate index of previous TCD */
-    previousTcd = currentTcd ? currentTcd - 1U : handle->tcdSize - 1U;
+    previousTcd = (currentTcd != 0x00) ? (currentTcd - 0x01) : (handle->tcdSize - 0x01);
     /* Configure current TCD block. */
     EDMA_TcdReset(&handle->tcdPool[currentTcd]);
     EDMA_TcdSetTransferConfig(&handle->tcdPool[currentTcd], config, NULL);
@@ -184,10 +169,10 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     if (currentTcd != previousTcd)
     {
         /* Enable scatter/gather feature in the previous TCD block. */
-        csr = (handle->tcdPool[previousTcd].CSR | DMA_CSR_ESG_MASK) & ~DMA_CSR_DREQ_MASK;
+        csr = (handle->tcdPool[previousTcd].CSR | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
         handle->tcdPool[previousTcd].CSR = csr;
         /*
-            Check if the TCD blcok in the registers is the previous one (points to current TCD block). It
+            Check if the TCD block in the registers is the previous one (points to current TCD block). It
             is used to check if the previous TCD linked has been loaded in TCD register. If so, it need to
             link the TCD register in case link the current TCD with the dead chain when TCD loading occurs
             before link the previous TCD block.
@@ -195,7 +180,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
         if (tcdRegs->DLAST_SGA == (uint32_t)&handle->tcdPool[currentTcd])
         {
             /* Enable scatter/gather also in the TCD registers. */
-            csr = (tcdRegs->CSR | DMA_CSR_ESG_MASK) & ~DMA_CSR_DREQ_MASK;
+            csr = (tcdRegs->CSR | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
             /* Must write the CSR register one-time, because the transfer maybe finished anytime. */
             tcdRegs->CSR = csr;
             /*
@@ -208,7 +193,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
                 transfer again. And if ESG is set, it means transfer has notfinished, so TCD dynamic
                 link succeed.
             */
-            if (tcdRegs->CSR & DMA_CSR_ESG_MASK)
+            if ((tcdRegs->CSR & DMA_CSR_ESG_MASK) != 0x00U)
             {
                 return kStatus_Success;
             }
@@ -226,7 +211,7 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
                 So shall configure TCD registers.
             */
         }
-        else if (tcdRegs->DLAST_SGA != 0)
+        else if (tcdRegs->DLAST_SGA != 0x00U)
         {
             /* The current TCD block has been linked successfully. */
             return kStatus_Success;
@@ -242,14 +227,32 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     /* There is no live chain, TCD block need to be installed in TCD registers. */
     EDMA_InstallTCD(handle->base, handle->channel, &handle->tcdPool[currentTcd]);
     /* Enable channel request again. */
-    if (handle->flags & 0x80)
+    if ((handle->flags & 0x80U) != 0x00U)
     {
         handle->base->SERQ = DMA_SERQ_SERQ(handle->channel);
+    }
+    else
+    {
+        ; /* Intentional empty */
     }
 
     return kStatus_Success;
 }
 
+/*!
+ * brief Initializes the SPDIF eDMA handle.
+ *
+ * This function initializes the SPDIF master DMA handle, which can be used for other SPDIF master transactional APIs.
+ * Usually, for a specified SPDIF instance, call this API once to get the initialized handle.
+ *
+ * param base SPDIF base pointer.
+ * param handle SPDIF eDMA handle pointer.
+ * param base SPDIF peripheral base address.
+ * param callback Pointer to user callback function.
+ * param userData User parameter passed to the callback function.
+ * param dmaLeftHandle eDMA handle pointer for left channel, this handle shall be static allocated by users.
+ * param dmaRightHandle eDMA handle pointer for right channel, this handle shall be static allocated by users.
+ */
 void SPDIF_TransferTxCreateHandleEDMA(SPDIF_Type *base,
                                       spdif_edma_handle_t *handle,
                                       spdif_edma_callback_t callback,
@@ -257,25 +260,27 @@ void SPDIF_TransferTxCreateHandleEDMA(SPDIF_Type *base,
                                       edma_handle_t *dmaLeftHandle,
                                       edma_handle_t *dmaRightHandle)
 {
-    assert(handle && dmaLeftHandle && dmaRightHandle);
+    assert(handle != NULL);
+    assert(dmaLeftHandle != NULL);
+    assert(dmaRightHandle != NULL);
 
     uint32_t instance = SPDIF_GetInstance(base);
 
     /* Zero the handle */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set spdif base to handle */
-    handle->dmaLeftHandle = dmaLeftHandle;
+    handle->dmaLeftHandle  = dmaLeftHandle;
     handle->dmaRightHandle = dmaRightHandle;
-    handle->callback = callback;
-    handle->userData = userData;
+    handle->callback       = callback;
+    handle->userData       = userData;
     handle->count =
         s_spdif_tx_watermark[(base->SCR & SPDIF_SCR_TXFIFOEMPTY_SEL_MASK) >> SPDIF_SCR_TXFIFOEMPTY_SEL_SHIFT];
 
     /* Set SPDIF state to idle */
     handle->state = kSPDIF_Idle;
 
-    s_edmaPrivateHandle[instance][0].base = base;
+    s_edmaPrivateHandle[instance][0].base   = base;
     s_edmaPrivateHandle[instance][0].handle = handle;
 
     /* Need to use scatter gather */
@@ -286,6 +291,20 @@ void SPDIF_TransferTxCreateHandleEDMA(SPDIF_Type *base,
     EDMA_SetCallback(dmaRightHandle, SPDIF_TxEDMACallback, &s_edmaPrivateHandle[instance][0]);
 }
 
+/*!
+ * brief Initializes the SPDIF Rx eDMA handle.
+ *
+ * This function initializes the SPDIF slave DMA handle, which can be used for other SPDIF master transactional APIs.
+ * Usually, for a specified SPDIF instance, call this API once to get the initialized handle.
+ *
+ * param base SPDIF base pointer.
+ * param handle SPDIF eDMA handle pointer.
+ * param base SPDIF peripheral base address.
+ * param callback Pointer to user callback function.
+ * param userData User parameter passed to the callback function.
+ * param dmaLeftHandle eDMA handle pointer for left channel, this handle shall be static allocated by users.
+ * param dmaRightHandle eDMA handle pointer for right channel, this handle shall be static allocated by users.
+ */
 void SPDIF_TransferRxCreateHandleEDMA(SPDIF_Type *base,
                                       spdif_edma_handle_t *handle,
                                       spdif_edma_callback_t callback,
@@ -293,24 +312,26 @@ void SPDIF_TransferRxCreateHandleEDMA(SPDIF_Type *base,
                                       edma_handle_t *dmaLeftHandle,
                                       edma_handle_t *dmaRightHandle)
 {
-    assert(handle && dmaLeftHandle && dmaRightHandle);
+    assert(handle != NULL);
+    assert(dmaLeftHandle != NULL);
+    assert(dmaRightHandle != NULL);
 
     uint32_t instance = SPDIF_GetInstance(base);
 
     /* Zero the handle */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set spdif base to handle */
-    handle->dmaLeftHandle = dmaLeftHandle;
+    handle->dmaLeftHandle  = dmaLeftHandle;
     handle->dmaRightHandle = dmaRightHandle;
-    handle->callback = callback;
-    handle->userData = userData;
+    handle->callback       = callback;
+    handle->userData       = userData;
     handle->count = s_spdif_rx_watermark[(base->SCR & SPDIF_SCR_RXFIFOFULL_SEL_MASK) >> SPDIF_SCR_RXFIFOFULL_SEL_SHIFT];
 
     /* Set SPDIF state to idle */
     handle->state = kSPDIF_Idle;
 
-    s_edmaPrivateHandle[instance][1].base = base;
+    s_edmaPrivateHandle[instance][1].base   = base;
     s_edmaPrivateHandle[instance][1].handle = handle;
 
     /* Need to use scatter gather */
@@ -321,12 +342,27 @@ void SPDIF_TransferRxCreateHandleEDMA(SPDIF_Type *base,
     EDMA_SetCallback(dmaRightHandle, SPDIF_RxEDMACallback, &s_edmaPrivateHandle[instance][1]);
 }
 
+/*!
+ * brief Performs a non-blocking SPDIF transfer using DMA.
+ *
+ * note This interface returns immediately after the transfer initiates. Call
+ * SPDIF_GetTransferStatus to poll the transfer status and check whether the SPDIF transfer is finished.
+ *
+ * param base SPDIF base pointer.
+ * param handle SPDIF eDMA handle pointer.
+ * param xfer Pointer to the DMA transfer structure.
+ * retval kStatus_Success Start a SPDIF eDMA send successfully.
+ * retval kStatus_InvalidArgument The input argument is invalid.
+ * retval kStatus_TxBusy SPDIF is busy sending data.
+ */
 status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, spdif_edma_transfer_t *xfer)
 {
-    assert(handle && xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
+    pvoid_to_u32_t destAddr;
     edma_transfer_config_t config = {0};
-    uint32_t destAddr = SPDIF_TxGetLeftDataRegisterAddress(base);
+    destAddr.u32                  = SPDIF_TxGetLeftDataRegisterAddress(base);
 
     /* Check if input parameter invalid */
     if ((xfer->leftData == NULL) || (xfer->dataSize == 0U) || (xfer->rightData == NULL))
@@ -334,7 +370,8 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
         return kStatus_InvalidArgument;
     }
 
-    if ((handle->spdifQueue[handle->queueUser].leftData) || (handle->spdifQueue[handle->queueUser].rightData))
+    if ((handle->spdifQueue[handle->queueUser].leftData != NULL) ||
+        (handle->spdifQueue[handle->queueUser].rightData != NULL))
     {
         return kStatus_SPDIF_QueueFull;
     }
@@ -343,25 +380,25 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
     handle->state = kSPDIF_Busy;
 
     /* Update the queue state */
-    handle->transferSize[handle->queueUser] = xfer->dataSize;
-    handle->spdifQueue[handle->queueUser].leftData = xfer->leftData;
-    handle->spdifQueue[handle->queueUser].dataSize = xfer->dataSize;
+    handle->transferSize[handle->queueUser]         = xfer->dataSize;
+    handle->spdifQueue[handle->queueUser].leftData  = xfer->leftData;
+    handle->spdifQueue[handle->queueUser].dataSize  = xfer->dataSize;
     handle->spdifQueue[handle->queueUser].rightData = xfer->rightData;
-    handle->queueUser = (handle->queueUser + 1) % SPDIF_XFER_QUEUE_SIZE;
+    handle->queueUser                               = (handle->queueUser + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
 
     /* Store the initially configured eDMA minor byte transfer count into the SPDIF handle */
     handle->nbytes = handle->count * 8U;
 
     /* Prepare edma configure */
-    EDMA_PrepareTransfer(&config, xfer->leftData, 4U, (void *)destAddr, 4U, handle->count * 4U, xfer->dataSize,
+    EDMA_PrepareTransfer(&config, xfer->leftData, 4U, destAddr.pvoid, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_MemoryToPeripheral);
-    SPDIF_SubmitTransfer(handle->dmaLeftHandle, &config, handle->dmaRightHandle->channel);
+    (void)SPDIF_SubmitTransfer(handle->dmaLeftHandle, &config, handle->dmaRightHandle->channel);
 
     /* Prepare right channel */
-    destAddr = SPDIF_TxGetRightDataRegisterAddress(base);
-    EDMA_PrepareTransfer(&config, xfer->rightData, 4U, (void *)destAddr, 4U, handle->count * 4U, xfer->dataSize,
+    destAddr.u32 = SPDIF_TxGetRightDataRegisterAddress(base);
+    EDMA_PrepareTransfer(&config, xfer->rightData, 4U, destAddr.pvoid, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_MemoryToPeripheral);
-    EDMA_SubmitTransfer(handle->dmaRightHandle, &config);
+    (void)EDMA_SubmitTransfer(handle->dmaRightHandle, &config);
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaLeftHandle);
@@ -376,12 +413,27 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
     return kStatus_Success;
 }
 
+/*!
+ * brief Performs a non-blocking SPDIF receive using eDMA.
+ *
+ * note This interface returns immediately after the transfer initiates. Call
+ * the SPDIF_GetReceiveRemainingBytes to poll the transfer status and check whether the SPDIF transfer is finished.
+ *
+ * param base SPDIF base pointer
+ * param handle SPDIF eDMA handle pointer.
+ * param xfer Pointer to DMA transfer structure.
+ * retval kStatus_Success Start a SPDIF eDMA receive successfully.
+ * retval kStatus_InvalidArgument The input argument is invalid.
+ * retval kStatus_RxBusy SPDIF is busy receiving data.
+ */
 status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, spdif_edma_transfer_t *xfer)
 {
-    assert(handle && xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
+    pvoid_to_u32_t srcAddr;
     edma_transfer_config_t config = {0};
-    uint32_t srcAddr = SPDIF_RxGetLeftDataRegisterAddress(base);
+    srcAddr.u32                   = SPDIF_RxGetLeftDataRegisterAddress(base);
 
     /* Check if input parameter invalid */
     if ((xfer->leftData == NULL) || (xfer->dataSize == 0U) || (xfer->rightData == NULL))
@@ -389,7 +441,8 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
         return kStatus_InvalidArgument;
     }
 
-    if ((handle->spdifQueue[handle->queueUser].leftData) || (handle->spdifQueue[handle->queueUser].rightData))
+    if ((handle->spdifQueue[handle->queueUser].leftData != NULL) ||
+        (handle->spdifQueue[handle->queueUser].rightData != NULL))
     {
         return kStatus_SPDIF_QueueFull;
     }
@@ -398,26 +451,26 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
     handle->state = kSPDIF_Busy;
 
     /* Update the queue state */
-    handle->transferSize[handle->queueUser] = xfer->dataSize;
-    handle->spdifQueue[handle->queueUser].leftData = xfer->leftData;
-    handle->spdifQueue[handle->queueUser].dataSize = xfer->dataSize;
+    handle->transferSize[handle->queueUser]         = xfer->dataSize;
+    handle->spdifQueue[handle->queueUser].leftData  = xfer->leftData;
+    handle->spdifQueue[handle->queueUser].dataSize  = xfer->dataSize;
     handle->spdifQueue[handle->queueUser].rightData = xfer->rightData;
-    handle->queueUser = (handle->queueUser + 1) % SPDIF_XFER_QUEUE_SIZE;
+    handle->queueUser                               = (handle->queueUser + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
 
     /* Store the initially configured eDMA minor byte transfer count into the SPDIF handle */
     handle->nbytes = handle->count * 8U;
 
     /* Prepare edma configure */
-    EDMA_PrepareTransfer(&config, (void *)srcAddr, 4U, xfer->leftData, 4U, handle->count * 4U, xfer->dataSize,
+    EDMA_PrepareTransfer(&config, srcAddr.pvoid, 4U, xfer->leftData, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_PeripheralToMemory);
     /* Use specific submit function to enable channel link */
-    SPDIF_SubmitTransfer(handle->dmaLeftHandle, &config, handle->dmaRightHandle->channel);
+    (void)SPDIF_SubmitTransfer(handle->dmaLeftHandle, &config, handle->dmaRightHandle->channel);
 
     /* Prepare right channel */
-    srcAddr = SPDIF_RxGetRightDataRegisterAddress(base);
-    EDMA_PrepareTransfer(&config, (void *)srcAddr, 4U, xfer->rightData, 4U, handle->count * 4U, xfer->dataSize,
+    srcAddr.u32 = SPDIF_RxGetRightDataRegisterAddress(base);
+    EDMA_PrepareTransfer(&config, srcAddr.pvoid, 4U, xfer->rightData, 4U, (uint32_t)handle->count * 4U, xfer->dataSize,
                          kEDMA_PeripheralToMemory);
-    EDMA_SubmitTransfer(handle->dmaRightHandle, &config);
+    (void)EDMA_SubmitTransfer(handle->dmaRightHandle, &config);
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaLeftHandle);
@@ -432,9 +485,15 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
     return kStatus_Success;
 }
 
+/*!
+ * brief Aborts a SPDIF transfer using eDMA.
+ *
+ * param base SPDIF base pointer.
+ * param handle SPDIF eDMA handle pointer.
+ */
 void SPDIF_TransferAbortSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Disable dma */
     EDMA_AbortTransfer(handle->dmaLeftHandle);
@@ -444,18 +503,24 @@ void SPDIF_TransferAbortSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle)
     SPDIF_EnableDMA(base, kSPDIF_TxDMAEnable, false);
 
     /* Set internal state */
-    memset(handle->spdifQueue, 0U, sizeof(handle->spdifQueue));
-    memset(handle->transferSize, 0U, sizeof(handle->transferSize));
-    handle->queueUser = 0U;
+    (void)memset(handle->spdifQueue, 0, sizeof(handle->spdifQueue));
+    (void)memset(handle->transferSize, 0, sizeof(handle->transferSize));
+    handle->queueUser   = 0U;
     handle->queueDriver = 0U;
 
     /* Set the handle state */
     handle->state = kSPDIF_Idle;
 }
 
+/*!
+ * brief Aborts a SPDIF receive using eDMA.
+ *
+ * param base SPDIF base pointer
+ * param handle SPDIF eDMA handle pointer.
+ */
 void SPDIF_TransferAbortReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Disable dma */
     EDMA_AbortTransfer(handle->dmaLeftHandle);
@@ -465,22 +530,31 @@ void SPDIF_TransferAbortReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handl
     SPDIF_EnableDMA(base, kSPDIF_RxDMAEnable, false);
 
     /* Set internal state */
-    memset(handle->spdifQueue, 0U, sizeof(handle->spdifQueue));
-    memset(handle->transferSize, 0U, sizeof(handle->transferSize));
-    handle->queueUser = 0U;
+    (void)memset(handle->spdifQueue, 0, sizeof(handle->spdifQueue));
+    (void)memset(handle->transferSize, 0, sizeof(handle->transferSize));
+    handle->queueUser   = 0U;
     handle->queueDriver = 0U;
 
     /* Set the handle state */
     handle->state = kSPDIF_Idle;
 }
 
+/*!
+ * brief Gets byte count sent by SPDIF.
+ *
+ * param base SPDIF base pointer.
+ * param handle SPDIF eDMA handle pointer.
+ * param count Bytes count sent by SPDIF.
+ * retval kStatus_Success Succeed get the transfer count.
+ * retval kStatus_NoTransferInProgress There is no non-blocking transaction in progress.
+ */
 status_t SPDIF_TransferGetSendCountEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     status_t status = kStatus_Success;
 
-    if (handle->state != kSPDIF_Busy)
+    if (handle->state != (uint32_t)kSPDIF_Busy)
     {
         status = kStatus_NoTransferInProgress;
     }
@@ -494,13 +568,22 @@ status_t SPDIF_TransferGetSendCountEDMA(SPDIF_Type *base, spdif_edma_handle_t *h
     return status;
 }
 
+/*!
+ * brief Gets byte count received by SPDIF.
+ *
+ * param base SPDIF base pointer
+ * param handle SPDIF eDMA handle pointer.
+ * param count Bytes count received by SPDIF.
+ * retval kStatus_Success Succeed get the transfer count.
+ * retval kStatus_NoTransferInProgress There is no non-blocking transaction in progress.
+ */
 status_t SPDIF_TransferGetReceiveCountEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     status_t status = kStatus_Success;
 
-    if (handle->state != kSPDIF_Busy)
+    if (handle->state != (uint32_t)kSPDIF_Busy)
     {
         status = kStatus_NoTransferInProgress;
     }

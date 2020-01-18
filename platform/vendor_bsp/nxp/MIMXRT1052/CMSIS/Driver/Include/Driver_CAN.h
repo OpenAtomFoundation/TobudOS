@@ -15,13 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Date:        2. Feb 2017
- * $Revision:    V1.1
+ * $Date:        13. Sept 2017
+ * $Revision:    V1.2
  *
  * Project:      CAN (Controller Area Network) Driver definitions
  */
 
 /* History:
+ *  Version 1.2
+ *    Added ARM_CAN_UNIT_STATE_BUS_OFF unit state and
+ *    ARM_CAN_EVENT_UNIT_INACTIVE unit event
  *  Version 1.1
  *    ARM_CAN_STATUS made volatile
  *  Version 1.0
@@ -38,7 +41,7 @@ extern "C"
 
 #include "Driver_Common.h"
 
-#define ARM_CAN_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,1)  /* API version */
+#define ARM_CAN_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,2)  /* API version */
 
 
 /****** CAN Bitrate selection codes *****/
@@ -151,9 +154,10 @@ typedef struct _ARM_CAN_MSG_INFO {
 #define ARM_CAN_NO_MESSAGE_AVAILABLE   (ARM_DRIVER_ERROR_SPECIFIC - 7)          ///< Message is not available
 
 /****** CAN Status codes *****/
-#define ARM_CAN_UNIT_STATE_INACTIVE    (0U)             ///< Unit state: Not active on bus (initialize or error bus off)
+#define ARM_CAN_UNIT_STATE_INACTIVE    (0U)             ///< Unit state: Not active on bus (initialization)
 #define ARM_CAN_UNIT_STATE_ACTIVE      (1U)             ///< Unit state: Active on bus (can generate active error frame)
 #define ARM_CAN_UNIT_STATE_PASSIVE     (2U)             ///< Unit state: Error passive (can not generate active error frame)
+#define ARM_CAN_UNIT_STATE_BUS_OFF     (3U)             ///< Unit state: Bus-off (can recover to active state)
 #define ARM_CAN_LEC_NO_ERROR           (0U)             ///< Last error code: No error
 #define ARM_CAN_LEC_BIT_ERROR          (1U)             ///< Last error code: Bit error
 #define ARM_CAN_LEC_STUFF_ERROR        (2U)             ///< Last error code: Bit stuffing error
@@ -174,10 +178,11 @@ typedef volatile struct _ARM_CAN_STATUS {
 
 
 /****** CAN Unit Event *****/
+#define ARM_CAN_EVENT_UNIT_INACTIVE    (0U)             ///< Unit entered Inactive state
 #define ARM_CAN_EVENT_UNIT_ACTIVE      (1U)             ///< Unit entered Error Active state
 #define ARM_CAN_EVENT_UNIT_WARNING     (2U)             ///< Unit entered Error Warning state (one or both error counters >= 96)
 #define ARM_CAN_EVENT_UNIT_PASSIVE     (3U)             ///< Unit entered Error Passive state
-#define ARM_CAN_EVENT_UNIT_BUS_OFF     (4U)             ///< Unit entered bus off state
+#define ARM_CAN_EVENT_UNIT_BUS_OFF     (4U)             ///< Unit entered Bus-off state
 
 /****** CAN Send/Receive Event *****/
 #define ARM_CAN_EVENT_SEND_COMPLETE    (1UL << 0)       ///< Send complete

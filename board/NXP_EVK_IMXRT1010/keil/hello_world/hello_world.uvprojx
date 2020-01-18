@@ -962,9 +962,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>New Group</GroupName>
-        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1922,9 +1919,6 @@
               <FilePath>..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1011\utilities\fsl_assert.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>New Group</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -2884,9 +2878,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>New Group</GroupName>
-        </Group>
       </Groups>
     </Target>
     <Target>
@@ -3844,9 +3835,6 @@
               <FilePath>..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1011\utilities\fsl_assert.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>New Group</GroupName>
         </Group>
       </Groups>
     </Target>

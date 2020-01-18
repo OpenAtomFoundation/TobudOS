@@ -1,53 +1,31 @@
 /*
-* The Clear BSD License
-* Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016 NXP
-* All rights reserved.
-*
-* 
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted (subject to the limitations in the disclaimer below) provided
-*  that the following conditions are met:
-*
-* o Redistributions of source code must retain the above copyright notice, this list
-*   of conditions and the following disclaimer.
-*
-* o Redistributions in binary form must reproduce the above copyright notice, this
-*   list of conditions and the following disclaimer in the documentation and/or
-*   other materials provided with the distribution.
-*
-* o Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from this
-*   software without specific prior written permission.
-*
-* NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
+ * Copyright 2016-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
 
 #include "fsl_common.h"
-#define SDK_MEM_MAGIC_NUMBER   12345U
+#define SDK_MEM_MAGIC_NUMBER 12345U
 
 typedef struct _mem_align_control_block
 {
-    uint16_t    identifier;     /*!< Identifier for the memory control block. */
-    uint16_t    offset;         /*!< offset from aligned adress to real address */
+    uint16_t identifier; /*!< Identifier for the memory control block. */
+    uint16_t offset;     /*!< offset from aligned address to real address */
 } mem_align_cb_t;
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.common"
+#endif
 
 #ifndef __GIC_PRIO_BITS
 #if defined(ENABLE_RAM_VECTOR_TABLE)
 uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler)
 {
 /* Addresses for VECTOR_TABLE and VECTOR_RAM come from the linker file */
-#if defined(__CC_ARM)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
     extern uint32_t Image$$VECTOR_ROM$$Base[];
     extern uint32_t Image$$VECTOR_RAM$$Base[];
     extern uint32_t Image$$RW_m_data$$Base[];
@@ -64,7 +42,7 @@ uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler)
     extern uint32_t __VECTOR_RAM[];
     extern uint32_t __RAM_VECTOR_TABLE_SIZE_BYTES[];
     uint32_t __RAM_VECTOR_TABLE_SIZE = (uint32_t)(__RAM_VECTOR_TABLE_SIZE_BYTES);
-#endif /* defined(__CC_ARM) */
+#endif /* defined(__CC_ARM) || defined(__ARMCC_VERSION) */
     uint32_t n;
     uint32_t ret;
     uint32_t irqMaskValue;
@@ -98,13 +76,15 @@ uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler)
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
 #endif /* __GIC_PRIO_BITS. */
 
-#ifndef QN908XC_SERIES
 #if (defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0))
+#if !(defined(FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS) && FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS)
 
 void EnableDeepSleepIRQ(IRQn_Type interrupt)
 {
-    uint32_t index = 0;
     uint32_t intNumber = (uint32_t)interrupt;
+
+    uint32_t index = 0;
+
     while (intNumber >= 32u)
     {
         index++;
@@ -117,50 +97,129 @@ void EnableDeepSleepIRQ(IRQn_Type interrupt)
 
 void DisableDeepSleepIRQ(IRQn_Type interrupt)
 {
-    uint32_t index = 0;
     uint32_t intNumber = (uint32_t)interrupt;
+
+    DisableIRQ(interrupt); /* also disable interrupt at NVIC */
+    uint32_t index = 0;
+
     while (intNumber >= 32u)
     {
         index++;
         intNumber -= 32u;
     }
 
-    DisableIRQ(interrupt); /* also disable interrupt at NVIC */
     SYSCON->STARTERCLR[index] = 1u << intNumber;
 }
+#endif /* FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS */
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT */
-
-#endif /* QN908XC_SERIES */
 
 void *SDK_Malloc(size_t size, size_t alignbytes)
 {
     mem_align_cb_t *p_cb = NULL;
     uint32_t alignedsize = SDK_SIZEALIGN(size, alignbytes) + alignbytes + sizeof(mem_align_cb_t);
-    void *p_align_addr, *p_addr = malloc(alignedsize);
+    union
+    {
+        void *pointer_value;
+        uint32_t unsigned_value;
+    } p_align_addr, p_addr;
 
-    if (!p_addr)
+    p_addr.pointer_value = malloc(alignedsize);
+
+    if (p_addr.pointer_value == NULL)
     {
         return NULL;
     }
 
-    p_align_addr = (void *)SDK_SIZEALIGN((uint32_t)p_addr + sizeof(mem_align_cb_t), alignbytes);
+    p_align_addr.unsigned_value = SDK_SIZEALIGN(p_addr.unsigned_value + sizeof(mem_align_cb_t), alignbytes);
 
-    p_cb = (mem_align_cb_t *)((uint32_t)p_align_addr - 4);
+    p_cb             = (mem_align_cb_t *)(p_align_addr.unsigned_value - 4U);
     p_cb->identifier = SDK_MEM_MAGIC_NUMBER;
-    p_cb->offset = (uint32_t)p_align_addr - (uint32_t)p_addr;
+    p_cb->offset     = (uint16_t)(p_align_addr.unsigned_value - p_addr.unsigned_value);
 
-    return (void *)p_align_addr;
+    return p_align_addr.pointer_value;
 }
 
 void SDK_Free(void *ptr)
 {
-    mem_align_cb_t *p_cb = (mem_align_cb_t *)((uint32_t)ptr - 4);
+    union
+    {
+        void *pointer_value;
+        uint32_t unsigned_value;
+    } p_free;
+    p_free.pointer_value = ptr;
+    mem_align_cb_t *p_cb = (mem_align_cb_t *)(p_free.unsigned_value - 4U);
 
     if (p_cb->identifier != SDK_MEM_MAGIC_NUMBER)
     {
         return;
     }
 
-    free((void *)((uint32_t)ptr - p_cb->offset));
+    p_free.unsigned_value = p_free.unsigned_value - p_cb->offset;
+
+    free(p_free.pointer_value);
 }
 
+/*!
+ * @brief Delay function bases on while loop, every loop includes three instructions.
+ *
+ * @param count  Counts of loop needed for dalay.
+ */
+#ifndef __XCC__
+#if defined(__CC_ARM) /* This macro is arm v5 specific */
+/* clang-format off */
+__ASM static void DelayLoop(uint32_t count)
+{
+loop
+    SUBS R0, R0, #1
+    CMP  R0, #0
+    BNE  loop
+    BX   LR
+}
+/* clang-format on */
+#elif defined(__ARMCC_VERSION) || defined(__ICCARM__) || defined(__GNUC__)
+/* Cortex-M0 has a smaller instruction set, SUBS isn't supported in thumb-16 mode reported from __GNUC__ compiler,
+ * use SUB and CMP here for compatibility */
+static void DelayLoop(uint32_t count)
+{
+    __ASM volatile("    MOV    R0, %0" : : "r"(count));
+    __ASM volatile(
+        "loop:                          \n"
+#if defined(__GNUC__) && !defined(__ARMCC_VERSION)
+        "    SUB    R0, R0, #1          \n"
+#else
+        "    SUBS   R0, R0, #1          \n"
+#endif
+        "    CMP    R0, #0              \n"
+
+        "    BNE    loop                \n");
+}
+#endif /* defined(__CC_ARM) */
+
+/*!
+ * @brief Delay at least for some time.
+ *  Please note that, this API uses while loop for delay, different run-time environments make the time not precise,
+ *  if precise delay count was needed, please implement a new delay function with hardware timer.
+ *
+ * @param delay_us  Delay time in unit of microsecond.
+ * @param coreClock_Hz  Core clock frequency with Hz.
+ */
+void SDK_DelayAtLeastUs(uint32_t delay_us, uint32_t coreClock_Hz)
+{
+    assert(0U != delay_us);
+    uint64_t count = USEC_TO_COUNT(delay_us, coreClock_Hz);
+    assert(count <= UINT32_MAX);
+
+    /* Divide value may be different in various environment to ensure delay is precise.
+     * Every loop count includes three instructions, due to Cortex-M7 sometimes executes
+     * two instructions in one period, through test here set divide 2. Other M cores use
+     * divide 4. By the way, divide 2 or 4 could let odd count lost precision, but it does
+     * not matter because other instructions outside while loop is enough to fill the time.
+     */
+#if (__CORTEX_M == 7)
+    count = count / 2U;
+#else
+    count = count / 4U;
+#endif
+    DelayLoop((uint32_t)count);
+}
+#endif

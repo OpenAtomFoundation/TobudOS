@@ -1,34 +1,8 @@
 /*
- * The Clear BSD License
- * Copyright 2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_QTMR_H_
 #define _FSL_QTMR_H_
@@ -40,14 +14,13 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
 /*@}*/
 
 /*! @brief Quad Timer primary clock source selection*/
@@ -133,23 +106,24 @@ typedef enum _qtmr_debug_action
 } qtmr_debug_action_t;
 
 /*! @brief List of Quad Timer interrupts */
+// typedef enum _qtmr_interrupt_enable
 typedef enum _qtmr_interrupt_enable
 {
-    kQTMR_CompareInterruptEnable = (1U << 0),  /*!< Compare interrupt.*/
+    kQTMR_CompareInterruptEnable  = (1U << 0), /*!< Compare interrupt.*/
     kQTMR_Compare1InterruptEnable = (1U << 1), /*!< Compare 1 interrupt.*/
     kQTMR_Compare2InterruptEnable = (1U << 2), /*!< Compare 2 interrupt.*/
     kQTMR_OverflowInterruptEnable = (1U << 3), /*!< Timer overflow interrupt.*/
-    kQTMR_EdgeInterruptEnable = (1U << 4)      /*!< Input edge interrupt.*/
+    kQTMR_EdgeInterruptEnable     = (1U << 4)  /*!< Input edge interrupt.*/
 } qtmr_interrupt_enable_t;
 
 /*! @brief List of Quad Timer flags */
 typedef enum _qtmr_status_flags
 {
-    kQTMR_CompareFlag = (1U << 0),  /*!< Compare flag */
+    kQTMR_CompareFlag  = (1U << 0), /*!< Compare flag */
     kQTMR_Compare1Flag = (1U << 1), /*!< Compare 1 flag */
     kQTMR_Compare2Flag = (1U << 2), /*!< Compare 2 flag */
     kQTMR_OverflowFlag = (1U << 3), /*!< Timer overflow flag */
-    kQTMR_EdgeFlag = (1U << 4)      /*!< Input edge flag */
+    kQTMR_EdgeFlag     = (1U << 4)  /*!< Input edge flag */
 } qtmr_status_flags_t;
 
 /*! @brief List of channel selection */
@@ -164,7 +138,7 @@ typedef enum _qtmr_channel_selection
 /*! @brief List of Quad Timer DMA enable */
 typedef enum _qtmr_dma_enable
 {
-    kQTMR_InputEdgeFlagDmaEnable = (1U << 0),      /*!< Input Edge Flag DMA Enable.*/
+    kQTMR_InputEdgeFlagDmaEnable      = (1U << 0), /*!< Input Edge Flag DMA Enable.*/
     kQTMR_ComparatorPreload1DmaEnable = (1U << 1), /*!< Comparator Preload Register 1 DMA Enable.*/
     kQTMR_ComparatorPreload2DmaEnable = (1U << 2), /*!< Comparator Preload Register 2 DMA Enable.*/
 } qtmr_dma_enable_t;
@@ -259,8 +233,12 @@ void QTMR_GetDefaultConfig(qtmr_config_t *config);
  *
  * @return Returns an error if there was error setting up the signal.
  */
-status_t QTMR_SetupPwm(
-    TMR_Type *base, qtmr_channel_selection_t channel, uint32_t pwmFreqHz, uint8_t dutyCyclePercent, bool outputPolarity, uint32_t srcClock_Hz);
+status_t QTMR_SetupPwm(TMR_Type *base,
+                       qtmr_channel_selection_t channel,
+                       uint32_t pwmFreqHz,
+                       uint8_t dutyCyclePercent,
+                       bool outputPolarity,
+                       uint32_t srcClock_Hz);
 
 /*!
  * @brief Allows the user to count the source clock cycles until a capture event arrives.
@@ -407,7 +385,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
 {
     uint16_t reg = base->CHANNEL[channel].CTRL;
 
-    reg &= ~(TMR_CTRL_CM_MASK);
+    reg &= (uint16_t)(~(TMR_CTRL_CM_MASK));
     reg |= TMR_CTRL_CM(clockSource);
     base->CHANNEL[channel].CTRL = reg;
 }
@@ -420,7 +398,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
  */
 static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t channel)
 {
-    base->CHANNEL[channel].CTRL &= ~TMR_CTRL_CM_MASK;
+    base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
 }
 
 /*! @}*/

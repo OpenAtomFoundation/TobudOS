@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_CMP_H_
@@ -42,23 +16,22 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CMP driver version 2.0.0. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief CMP driver version 2.0.2. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
-* @brief Interrupt enable/disable mask.
-*/
+ * @brief Interrupt enable/disable mask.
+ */
 enum _cmp_interrupt_enable
 {
-    kCMP_OutputRisingInterruptEnable = CMP_SCR_IER_MASK,  /*!< Comparator interrupt enable rising. */
+    kCMP_OutputRisingInterruptEnable  = CMP_SCR_IER_MASK, /*!< Comparator interrupt enable rising. */
     kCMP_OutputFallingInterruptEnable = CMP_SCR_IEF_MASK, /*!< Comparator interrupt enable falling. */
 };
 
@@ -67,9 +40,9 @@ enum _cmp_interrupt_enable
  */
 enum _cmp_status_flags
 {
-    kCMP_OutputRisingEventFlag = CMP_SCR_CFR_MASK,  /*!< Rising-edge on the comparison output has occurred. */
-    kCMP_OutputFallingEventFlag = CMP_SCR_CFF_MASK, /*!< Falling-edge on the comparison output has occurred. */
-    kCMP_OutputAssertEventFlag = CMP_SCR_COUT_MASK, /*!< Return the current value of the analog comparator output. */
+    kCMP_OutputRisingEventFlag  = CMP_SCR_CFR_MASK,  /*!< Rising-edge on the comparison output has occurred. */
+    kCMP_OutputFallingEventFlag = CMP_SCR_CFF_MASK,  /*!< Falling-edge on the comparison output has occurred. */
+    kCMP_OutputAssertEventFlag  = CMP_SCR_COUT_MASK, /*!< Return the current value of the analog comparator output. */
 };
 
 /*!
@@ -126,7 +99,7 @@ typedef struct _cmp_filter_config
 typedef struct _cmp_dac_config
 {
     cmp_reference_voltage_source_t referenceVoltageSource; /*!< Supply voltage reference source. */
-    uint8_t DACValue;                                      /*!< Value for the DAC Output Voltage. Available range is 0-63.*/
+    uint8_t DACValue; /*!< Value for the DAC Output Voltage. Available range is 0-63.*/
 } cmp_dac_config_t;
 
 #if defined(__cplusplus)
@@ -186,25 +159,25 @@ static inline void CMP_Enable(CMP_Type *base, bool enable)
     }
     else
     {
-        base->CR1 &= ~CMP_CR1_EN_MASK;
+        base->CR1 &= ~(uint8_t)CMP_CR1_EN_MASK;
     }
 }
 
 /*!
-* @brief Initializes the CMP user configuration structure.
-*
-* This function initializes the user configuration structure to these default values.
-* @code
-*   config->enableCmp           = true;
-*   config->hysteresisMode      = kCMP_HysteresisLevel0;
-*   config->enableHighSpeed     = false;
-*   config->enableInvertOutput  = false;
-*   config->useUnfilteredOutput = false;
-*   config->enablePinOut        = false;
-*   config->enableTriggerMode   = false;
-* @endcode
-* @param config Pointer to the configuration structure.
-*/
+ * @brief Initializes the CMP user configuration structure.
+ *
+ * This function initializes the user configuration structure to these default values.
+ * @code
+ *   config->enableCmp           = true;
+ *   config->hysteresisMode      = kCMP_HysteresisLevel0;
+ *   config->enableHighSpeed     = false;
+ *   config->enableInvertOutput  = false;
+ *   config->useUnfilteredOutput = false;
+ *   config->enablePinOut        = false;
+ *   config->enableTriggerMode   = false;
+ * @endcode
+ * @param config Pointer to the configuration structure.
+ */
 void CMP_GetDefaultConfig(cmp_config_t *config);
 
 /*!
@@ -232,7 +205,8 @@ void CMP_SetInputChannels(CMP_Type *base, uint8_t positiveChannel, uint8_t negat
  * @brief Enables/disables the DMA request for rising/falling events.
  *
  * This function enables/disables the DMA request for rising/falling events. Either event triggers the generation of
- * the DMA request from CMP if the DMA feature is enabled. Both events are ignored for generating the DMA request from the CMP
+ * the DMA request from CMP if the DMA feature is enabled. Both events are ignored for generating the DMA request from
+ * the CMP
  * if the DMA is disabled.
  *
  * @param base CMP peripheral base address.
@@ -256,7 +230,7 @@ static inline void CMP_EnableWindowMode(CMP_Type *base, bool enable)
     }
     else
     {
-        base->CR1 &= ~CMP_CR1_WE_MASK;
+        base->CR1 &= (uint8_t)(~CMP_CR1_WE_MASK);
     }
 }
 #endif /* FSL_FEATURE_CMP_HAS_WINDOW_MODE */
@@ -276,7 +250,7 @@ static inline void CMP_EnablePassThroughMode(CMP_Type *base, bool enable)
     }
     else
     {
-        base->MUXCR &= ~CMP_MUXCR_PSTM_MASK;
+        base->MUXCR &= (uint8_t)(~CMP_MUXCR_PSTM_MASK);
     }
 }
 #endif /* FSL_FEATURE_CMP_HAS_PASS_THROUGH_MODE */

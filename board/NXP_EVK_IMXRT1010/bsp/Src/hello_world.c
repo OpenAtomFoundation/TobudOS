@@ -67,7 +67,7 @@ int main(void)
     BOARD_BootClockRUN();
     BOARD_InitDebugConsole();
 
-    PRINTF("hello world from i.MX RT1010.\r\n");
+    PRINTF("Hello world from i.MX RT1010.\r\n");
     PRINTF("Welcome to TencentOS tiny\r\n");
     osKernelInitialize(); // TencentOS Tiny kernel initialize
     osThreadCreate(osThread(task1), NULL); // Create task1

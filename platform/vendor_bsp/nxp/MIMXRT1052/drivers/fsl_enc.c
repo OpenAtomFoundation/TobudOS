@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_enc.h"
@@ -37,6 +11,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.enc"
+#endif
+
 #define ENC_CTRL_W1C_FLAGS (ENC_CTRL_HIRQ_MASK | ENC_CTRL_XIRQ_MASK | ENC_CTRL_DIRQ_MASK | ENC_CTRL_CMPIRQ_MASK)
 #define ENC_CTRL2_W1C_FLAGS (ENC_CTRL2_SABIRQ_MASK | ENC_CTRL2_ROIRQ_MASK | ENC_CTRL2_RUIRQ_MASK)
 
@@ -82,11 +62,22 @@ static uint32_t ENC_GetInstance(ENC_Type *base)
     return instance;
 }
 
+/*!
+ * brief Initialization for the ENC module.
+ *
+ * This function is to make the initialization for the ENC module. It should be called firstly before any operation to
+ * the ENC with the operations like:
+ *  - Enable the clock for ENC module.
+ *  - Configure the ENC's working attributes.
+ *
+ * param base   ENC peripheral base address.
+ * param config Pointer to configuration structure. See to "enc_config_t".
+ */
 void ENC_Init(ENC_Type *base, const enc_config_t *config)
 {
     assert(NULL != config);
 
-    uint32_t tmp16;
+    uint16_t tmp16;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
@@ -171,6 +162,15 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
     base->LINIT = (uint16_t)(config->positionInitialValue);        /* Lower 16 bits. */
 }
 
+/*!
+ * brief De-initialization for the ENC module.
+ *
+ * This function is to make the de-initialization for the ENC module. It could be called when ENC is no longer used with
+ * the operations like:
+ *  - Disable the clock for ENC module.
+ *
+ * param base ENC peripheral base address.
+ */
 void ENC_Deinit(ENC_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -179,28 +179,63 @@ void ENC_Deinit(ENC_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Get an available pre-defined settings for ENC's configuration.
+ *
+ * This function initializes the ENC configuration structure with an available settings, the default value are:
+ * code
+ *   config->enableReverseDirection                = false;
+ *   config->decoderWorkMode                       = kENC_DecoderWorkAsNormalMode;
+ *   config->HOMETriggerMode                       = kENC_HOMETriggerDisabled;
+ *   config->INDEXTriggerMode                      = kENC_INDEXTriggerDisabled;
+ *   config->enableTRIGGERClearPositionCounter     = false;
+ *   config->enableTRIGGERClearHoldPositionCounter = false;
+ *   config->enableWatchdog                        = false;
+ *   config->watchdogTimeoutValue                  = 0U;
+ *   config->filterCount                           = 0U;
+ *   config->filterSamplePeriod                    = 0U;
+ *   config->positionMatchMode                     = kENC_POSMATCHOnPositionCounterEqualToComapreValue;
+ *   config->positionCompareValue                  = 0xFFFFFFFFU;
+ *   config->revolutionCountCondition              = kENC_RevolutionCountOnINDEXPulse;
+ *   config->enableModuloCountMode                 = false;
+ *   config->positionModulusValue                  = 0U;
+ *   config->positionInitialValue                  = 0U;
+ * endcode
+ * param config Pointer to a variable of configuration structure. See to "enc_config_t".
+ */
 void ENC_GetDefaultConfig(enc_config_t *config)
 {
     assert(NULL != config);
 
-    config->enableReverseDirection = false;
-    config->decoderWorkMode = kENC_DecoderWorkAsNormalMode;
-    config->HOMETriggerMode = kENC_HOMETriggerDisabled;
-    config->INDEXTriggerMode = kENC_INDEXTriggerDisabled;
-    config->enableTRIGGERClearPositionCounter = false;
+    /* Initializes the configure structure to zero. */
+    (void)memset(config, 0, sizeof(*config));
+
+    config->enableReverseDirection                = false;
+    config->decoderWorkMode                       = kENC_DecoderWorkAsNormalMode;
+    config->HOMETriggerMode                       = kENC_HOMETriggerDisabled;
+    config->INDEXTriggerMode                      = kENC_INDEXTriggerDisabled;
+    config->enableTRIGGERClearPositionCounter     = false;
     config->enableTRIGGERClearHoldPositionCounter = false;
-    config->enableWatchdog = false;
-    config->watchdogTimeoutValue = 0U;
-    config->filterCount = 0U;
-    config->filterSamplePeriod = 0U;
-    config->positionMatchMode = kENC_POSMATCHOnPositionCounterEqualToComapreValue;
-    config->positionCompareValue = 0xFFFFFFFFU;
-    config->revolutionCountCondition = kENC_RevolutionCountOnINDEXPulse;
-    config->enableModuloCountMode = false;
-    config->positionModulusValue = 0U;
-    config->positionInitialValue = 0U;
+    config->enableWatchdog                        = false;
+    config->watchdogTimeoutValue                  = 0U;
+    config->filterCount                           = 0U;
+    config->filterSamplePeriod                    = 0U;
+    config->positionMatchMode                     = kENC_POSMATCHOnPositionCounterEqualToComapreValue;
+    config->positionCompareValue                  = 0xFFFFFFFFU;
+    config->revolutionCountCondition              = kENC_RevolutionCountOnINDEXPulse;
+    config->enableModuloCountMode                 = false;
+    config->positionModulusValue                  = 0U;
+    config->positionInitialValue                  = 0U;
 }
 
+/*!
+ * brief Load the initial position value to position counter.
+ *
+ * This function is to transfer the initial position value (UINIT and LINIT) contents to position counter (UPOS and
+ * LPOS), so that to provide the consistent operation the position counter registers.
+ *
+ * param base ENC peripheral base address.
+ */
 void ENC_DoSoftwareLoadInitialPositionValue(ENC_Type *base)
 {
     uint16_t tmp16 = base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS);
@@ -209,24 +244,43 @@ void ENC_DoSoftwareLoadInitialPositionValue(ENC_Type *base)
     base->CTRL = tmp16;
 }
 
+/*!
+ * brief Enable and configure the self test function.
+ *
+ * This function is to enable and configuration the self test function. It controls and sets the frequency of a
+ * quadrature signal generator. It provides a quadrature test signal to the inputs of the quadrature decoder module.
+ * It is a factory test feature; however, it may be useful to customers' software development and testing.
+ *
+ * param base   ENC peripheral base address.
+ * param config Pointer to configuration structure. See to "enc_self_test_config_t". Pass "NULL" to disable.
+ */
 void ENC_SetSelfTestConfig(ENC_Type *base, const enc_self_test_config_t *config)
 {
     uint16_t tmp16 = 0U;
 
     if (NULL == config) /* Pass "NULL" to disable the feature. */
     {
-        base->TST = 0U;
-        return;
+        tmp16 = 0U;
     }
-    tmp16 = ENC_TST_TEN_MASK | ENC_TST_TCE_MASK | ENC_TST_TEST_PERIOD(config->signalPeriod) |
-            ENC_TST_TEST_COUNT(config->signalCount);
-    if (kENC_SelfTestDirectionNegative == config->signalDirection)
+    else
     {
-        tmp16 |= ENC_TST_QDN_MASK;
+        tmp16 = ENC_TST_TEN_MASK | ENC_TST_TCE_MASK | ENC_TST_TEST_PERIOD(config->signalPeriod) |
+                ENC_TST_TEST_COUNT(config->signalCount);
+        if (kENC_SelfTestDirectionNegative == config->signalDirection)
+        {
+            tmp16 |= ENC_TST_QDN_MASK;
+        }
     }
+
     base->TST = tmp16;
 }
 
+/*!
+ * brief Enable watchdog for ENC module.
+ *
+ * param base ENC peripheral base address
+ * param enable Enables or disables the watchdog
+ */
 void ENC_EnableWatchdog(ENC_Type *base, bool enable)
 {
     uint16_t tmp16 = base->CTRL & (uint16_t)(~(ENC_CTRL_W1C_FLAGS | ENC_CTRL_WDE_MASK));
@@ -238,158 +292,183 @@ void ENC_EnableWatchdog(ENC_Type *base, bool enable)
     base->CTRL = tmp16;
 }
 
+/*!
+ * brief  Get the status flags.
+ *
+ * param  base ENC peripheral base address.
+ *
+ * return      Mask value of status flags. For available mask, see to "_enc_status_flags".
+ */
 uint32_t ENC_GetStatusFlags(ENC_Type *base)
 {
     uint32_t ret32 = 0U;
 
     /* ENC_CTRL. */
-    if (ENC_CTRL_HIRQ_MASK == (ENC_CTRL_HIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_HIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_HOMETransitionFlag;
+        ret32 |= (uint32_t)kENC_HOMETransitionFlag;
     }
-    if (ENC_CTRL_XIRQ_MASK == (ENC_CTRL_XIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_XIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_INDEXPulseFlag;
+        ret32 |= (uint32_t)kENC_INDEXPulseFlag;
     }
-    if (ENC_CTRL_DIRQ_MASK == (ENC_CTRL_DIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_DIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_WatchdogTimeoutFlag;
+        ret32 |= (uint32_t)kENC_WatchdogTimeoutFlag;
     }
-    if (ENC_CTRL_CMPIRQ_MASK == (ENC_CTRL_CMPIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_CMPIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_PositionCompareFlag;
+        ret32 |= (uint32_t)kENC_PositionCompareFlag;
     }
 
     /* ENC_CTRL2. */
-    if (ENC_CTRL2_SABIRQ_MASK == (ENC_CTRL2_SABIRQ_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_SABIRQ_MASK & base->CTRL2))
     {
-        ret32 |= kENC_SimultBothPhaseChangeFlag;
+        ret32 |= (uint32_t)kENC_SimultBothPhaseChangeFlag;
     }
-    if (ENC_CTRL2_ROIRQ_MASK == (ENC_CTRL2_ROIRQ_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_ROIRQ_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollOverFlag;
+        ret32 |= (uint32_t)kENC_PositionRollOverFlag;
     }
-    if (ENC_CTRL2_RUIRQ_MASK == (ENC_CTRL2_RUIRQ_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_RUIRQ_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollUnderFlag;
+        ret32 |= (uint32_t)kENC_PositionRollUnderFlag;
     }
-    if (ENC_CTRL2_DIR_MASK == (ENC_CTRL2_DIR_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_DIR_MASK & base->CTRL2))
     {
-        ret32 |= kENC_LastCountDirectionFlag;
+        ret32 |= (uint32_t)kENC_LastCountDirectionFlag;
     }
 
     return ret32;
 }
 
+/*!
+ * brief Clear the status flags.
+ *
+ * param base ENC peripheral base address.
+ * param mask Mask value of status flags to be cleared. For available mask, see to "_enc_status_flags".
+ */
 void ENC_ClearStatusFlags(ENC_Type *base, uint32_t mask)
 {
     uint32_t tmp16 = 0U;
 
     /* ENC_CTRL. */
-    if (kENC_HOMETransitionFlag == (kENC_HOMETransitionFlag & mask))
+    if (0U != ((uint32_t)kENC_HOMETransitionFlag & mask))
     {
         tmp16 |= ENC_CTRL_HIRQ_MASK;
     }
-    if (kENC_INDEXPulseFlag == (kENC_INDEXPulseFlag & mask))
+    if (0U != ((uint32_t)kENC_INDEXPulseFlag & mask))
     {
         tmp16 |= ENC_CTRL_XIRQ_MASK;
     }
-    if (kENC_WatchdogTimeoutFlag == (kENC_WatchdogTimeoutFlag & mask))
+    if (0U != ((uint32_t)kENC_WatchdogTimeoutFlag & mask))
     {
         tmp16 |= ENC_CTRL_DIRQ_MASK;
     }
-    if (kENC_PositionCompareFlag == (kENC_PositionCompareFlag & mask))
+    if (0U != ((uint32_t)kENC_PositionCompareFlag & mask))
     {
         tmp16 |= ENC_CTRL_CMPIRQ_MASK;
     }
     if (0U != tmp16)
     {
-        base->CTRL = (base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS)) | tmp16;
+        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~ENC_CTRL_W1C_FLAGS)) | tmp16);
     }
 
     /* ENC_CTRL2. */
     tmp16 = 0U;
-    if (kENC_SimultBothPhaseChangeFlag == (kENC_SimultBothPhaseChangeFlag & mask))
+    if (0U != ((uint32_t)kENC_SimultBothPhaseChangeFlag & mask))
     {
         tmp16 |= ENC_CTRL2_SABIRQ_MASK;
     }
-    if (kENC_PositionRollOverFlag == (kENC_PositionRollOverFlag & mask))
+    if (0U != ((uint32_t)kENC_PositionRollOverFlag & mask))
     {
         tmp16 |= ENC_CTRL2_ROIRQ_MASK;
     }
-    if (kENC_PositionRollUnderFlag == (kENC_PositionRollUnderFlag & mask))
+    if (0U != ((uint32_t)kENC_PositionRollUnderFlag & mask))
     {
         tmp16 |= ENC_CTRL2_RUIRQ_MASK;
     }
     if (0U != tmp16)
     {
-        base->CTRL2 = (base->CTRL2 & (uint16_t)(~ENC_CTRL2_W1C_FLAGS)) | tmp16;
+        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~ENC_CTRL2_W1C_FLAGS)) | tmp16);
     }
 }
 
+/*!
+ * brief Enable the interrupts.
+ *
+ * param base ENC peripheral base address.
+ * param mask Mask value of interrupts to be enabled. For available mask, see to "_enc_interrupt_enable".
+ */
 void ENC_EnableInterrupts(ENC_Type *base, uint32_t mask)
 {
     uint32_t tmp16 = 0U;
 
     /* ENC_CTRL. */
-    if (kENC_HOMETransitionInterruptEnable == (kENC_HOMETransitionInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_HOMETransitionInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_HIE_MASK;
     }
-    if (kENC_INDEXPulseInterruptEnable == (kENC_INDEXPulseInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_INDEXPulseInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_XIE_MASK;
     }
-    if (kENC_WatchdogTimeoutInterruptEnable == (kENC_WatchdogTimeoutInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_WatchdogTimeoutInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_DIE_MASK;
     }
-    if (kENC_PositionCompareInerruptEnable == (kENC_PositionCompareInerruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionCompareInerruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_CMPIE_MASK;
     }
     if (tmp16 != 0U)
     {
-        base->CTRL = (base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS)) | tmp16;
+        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~ENC_CTRL_W1C_FLAGS)) | tmp16);
     }
     /* ENC_CTRL2. */
     tmp16 = 0U;
-    if (kENC_SimultBothPhaseChangeInterruptEnable == (kENC_SimultBothPhaseChangeInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_SimultBothPhaseChangeInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_SABIE_MASK;
     }
-    if (kENC_PositionRollOverInterruptEnable == (kENC_PositionRollOverInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollOverInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_ROIE_MASK;
     }
-    if (kENC_PositionRollUnderInterruptEnable == (kENC_PositionRollUnderInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollUnderInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_RUIE_MASK;
     }
     if (tmp16 != 0U)
     {
-        base->CTRL2 = (base->CTRL2 & (uint16_t)(~ENC_CTRL2_W1C_FLAGS)) | tmp16;
+        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~ENC_CTRL2_W1C_FLAGS)) | tmp16);
     }
 }
 
+/*!
+ * brief Disable the interrupts.
+ *
+ * param base ENC peripheral base address.
+ * param mask Mask value of interrupts to be disabled. For available mask, see to "_enc_interrupt_enable".
+ */
 void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
 {
     uint16_t tmp16 = 0U;
 
     /* ENC_CTRL. */
-    if (kENC_HOMETransitionInterruptEnable == (kENC_HOMETransitionInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_HOMETransitionInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_HIE_MASK;
     }
-    if (kENC_INDEXPulseInterruptEnable == (kENC_INDEXPulseInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_INDEXPulseInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_XIE_MASK;
     }
-    if (kENC_WatchdogTimeoutInterruptEnable == (kENC_WatchdogTimeoutInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_WatchdogTimeoutInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_DIE_MASK;
     }
-    if (kENC_PositionCompareInerruptEnable == (kENC_PositionCompareInerruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionCompareInerruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_CMPIE_MASK;
     }
@@ -399,15 +478,15 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
     }
     /* ENC_CTRL2. */
     tmp16 = 0U;
-    if (kENC_SimultBothPhaseChangeInterruptEnable == (kENC_SimultBothPhaseChangeInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_SimultBothPhaseChangeInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_SABIE_MASK;
     }
-    if (kENC_PositionRollOverInterruptEnable == (kENC_PositionRollOverInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollOverInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_ROIE_MASK;
     }
-    if (kENC_PositionRollUnderInterruptEnable == (kENC_PositionRollUnderInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollUnderInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_RUIE_MASK;
     }
@@ -417,49 +496,69 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
     }
 }
 
+/*!
+ * brief  Get the enabled interrupts' flags.
+ *
+ * param  base ENC peripheral base address.
+ *
+ * return      Mask value of enabled interrupts.
+ */
 uint32_t ENC_GetEnabledInterrupts(ENC_Type *base)
 {
     uint32_t ret32 = 0U;
 
     /* ENC_CTRL. */
-    if (ENC_CTRL_HIE_MASK == (ENC_CTRL_HIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_HIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_HOMETransitionInterruptEnable;
+        ret32 |= (uint32_t)kENC_HOMETransitionInterruptEnable;
     }
-    if (ENC_CTRL_XIE_MASK == (ENC_CTRL_XIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_XIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_INDEXPulseInterruptEnable;
+        ret32 |= (uint32_t)kENC_INDEXPulseInterruptEnable;
     }
-    if (ENC_CTRL_DIE_MASK == (ENC_CTRL_DIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_DIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_WatchdogTimeoutInterruptEnable;
+        ret32 |= (uint32_t)kENC_WatchdogTimeoutInterruptEnable;
     }
-    if (ENC_CTRL_CMPIE_MASK == (ENC_CTRL_CMPIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_CMPIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_PositionCompareInerruptEnable;
+        ret32 |= (uint32_t)kENC_PositionCompareInerruptEnable;
     }
     /* ENC_CTRL2. */
-    if (ENC_CTRL2_SABIE_MASK == (ENC_CTRL2_SABIE_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_SABIE_MASK & base->CTRL2))
     {
-        ret32 |= kENC_SimultBothPhaseChangeInterruptEnable;
+        ret32 |= (uint32_t)kENC_SimultBothPhaseChangeInterruptEnable;
     }
-    if (ENC_CTRL2_ROIE_MASK == (ENC_CTRL2_ROIE_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_ROIE_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollOverInterruptEnable;
+        ret32 |= (uint32_t)kENC_PositionRollOverInterruptEnable;
     }
-    if (ENC_CTRL2_RUIE_MASK == (ENC_CTRL2_RUIE_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_RUIE_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollUnderInterruptEnable;
+        ret32 |= (uint32_t)kENC_PositionRollUnderInterruptEnable;
     }
     return ret32;
 }
 
+/*!
+ * brief Set initial position value for ENC module.
+ *
+ * param base ENC peripheral base address
+ * param value Positive initial value
+ */
 void ENC_SetInitialPositionValue(ENC_Type *base, uint32_t value)
 {
     base->UINIT = (uint16_t)(value >> 16U); /* Set upper 16 bits. */
     base->LINIT = (uint16_t)(value);        /* Set lower 16 bits. */
 }
 
+/*!
+ * brief  Get the current position counter's value.
+ *
+ * param  base ENC peripheral base address.
+ *
+ * return     Current position counter's value.
+ */
 uint32_t ENC_GetPositionValue(ENC_Type *base)
 {
     uint32_t ret32;
@@ -471,6 +570,17 @@ uint32_t ENC_GetPositionValue(ENC_Type *base)
     return ret32;
 }
 
+/*!
+ * brief  Get the hold position counter's value.
+ *
+ * When any of the counter registers is read, the contents of each counter register is written to the corresponding hold
+ * register. Taking a snapshot of the counters' values provides a consistent view of a system position and a velocity to
+ * be attained.
+ *
+ * param  base ENC peripheral base address.
+ *
+ * return      Hold position counter's value.
+ */
 uint32_t ENC_GetHoldPositionValue(ENC_Type *base)
 {
     uint32_t ret32;

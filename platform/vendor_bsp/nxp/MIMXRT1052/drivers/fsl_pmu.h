@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_PMU_H_
 #define _FSL_PMU_H_
@@ -46,13 +20,13 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief PMU driver version */
-#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
                                                        /*@}*/
 
 /*!
- * @brief Status flags.
+ * @brief PMU Status flags.
  */
-enum _pmu_status_flags
+enum
 {
     kPMU_1P1RegulatorOutputOK = (1U << 0U), /*!< Status bit that signals when the 1p1 regulator output
                                                         is ok. 1 = regulator output > brownout target. */
@@ -91,10 +65,10 @@ typedef enum _pmu_3p0_vbus_voltage_source
  */
 typedef enum _pmu_core_reg_voltage_ramp_rate
 {
-    kPMU_CoreRegVoltageRampRateFast = 0U,       /*!< Fast. */
+    kPMU_CoreRegVoltageRampRateFast       = 0U, /*!< Fast. */
     kPMU_CoreRegVoltageRampRateMediumFast = 1U, /*!< Medium Fast. */
     kPMU_CoreRegVoltageRampRateMediumSlow = 2U, /*!< Medium Slow. */
-    kPMU_CoreRegVoltageRampRateSlow = 0U,       /*!< Slow. */
+    kPMU_CoreRegVoltageRampRateSlow       = 0U, /*!< Slow. */
 } pmu_core_reg_voltage_ramp_rate_t;
 
 #if defined(FSL_FEATURE_PMU_HAS_LOWPWR_CTRL) && FSL_FEATURE_PMU_HAS_LOWPWR_CTRL
@@ -103,11 +77,11 @@ typedef enum _pmu_core_reg_voltage_ramp_rate
  */
 enum _pmu_power_gate
 {
-    kPMU_PowerGateDisplay = PMU_LOWPWR_CTRL_MIX_PWRGATE_MASK,          /*!< Display power gate control. */
-    kPMU_PowerGateDisplayLogic = PMU_LOWPWR_CTRL_DISPLAY_PWRGATE_MASK, /*!< Display logic power gate control. */
-    kPMU_PowerGateL2 = PMU_LOWPWR_CTRL_L2_PWRGATE_MASK,                /*!< L2 power gate control. */
-    kPMU_PowerGateL1 = PMU_LOWPWR_CTRL_L1_PWRGATE_MASK,                /*!< L1 power gate control. */
-    kPMU_PowerGateRefTopIBias = PMU_LOWPWR_CTRL_REFTOP_IBIAS_OFF_MASK, /*!< Low power reftop ibias disable. */
+    kPMU_PowerGateDisplay      = PMU_LOWPWR_CTRL_MIX_PWRGATE_MASK,      /*!< Display power gate control. */
+    kPMU_PowerGateDisplayLogic = PMU_LOWPWR_CTRL_DISPLAY_PWRGATE_MASK,  /*!< Display logic power gate control. */
+    kPMU_PowerGateL2           = PMU_LOWPWR_CTRL_L2_PWRGATE_MASK,       /*!< L2 power gate control. */
+    kPMU_PowerGateL1           = PMU_LOWPWR_CTRL_L1_PWRGATE_MASK,       /*!< L1 power gate control. */
+    kPMU_PowerGateRefTopIBias  = PMU_LOWPWR_CTRL_REFTOP_IBIAS_OFF_MASK, /*!< Low power reftop ibias disable. */
 };
 #endif /*  FSL_FEATURE_PMU_HAS_LOWPWR_CTRL. */
 
@@ -117,7 +91,7 @@ enum _pmu_power_gate
 typedef enum _pmu_power_bandgap
 {
     kPMU_NormalPowerBandgap = 0U, /*!< Normal power bandgap. */
-    kPMU_LowPowerBandgap = 1U,    /*!< Low power bandgap. */
+    kPMU_LowPowerBandgap    = 1U, /*!< Low power bandgap. */
 } pmu_power_bandgap_t;
 
 /*******************************************************************************
@@ -133,6 +107,13 @@ extern "C" {
  * @{
  */
 
+/*!
+ * @brief Get PMU status flags.
+ *
+ * @param base PMU peripheral base address.
+ * @return PMU status flags.It indicate if regulator output of 1P1,3P0 and 2P5 is ok
+ * and brownout output of 1P1,3P0 and 2P5 is detected.
+ */
 uint32_t PMU_GetStatusFlags(PMU_Type *base);
 
 /*@}*/
