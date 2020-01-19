@@ -101,7 +101,7 @@ __STATIC__ void shell_cmd_process(void)
             ++pos;
         }
 
-        while ((*pos == ' ' || *pos == '\t') && *pos) {
+        while (*pos == ' ' || *pos == '\t') {
             *pos++ = '\0';
         }
 

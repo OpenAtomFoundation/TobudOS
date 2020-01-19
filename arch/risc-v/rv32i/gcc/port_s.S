@@ -361,3 +361,4 @@ irq_task_switch:
     sw s11, __reg_s11__OFFSET(sp)
 
     j switch_task
+

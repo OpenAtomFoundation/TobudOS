@@ -19,7 +19,7 @@
 #define  _TOS_SLIST_H_
 
 typedef struct k_slist_node_st {
-	struct k_slist_node_st *next;
+    struct k_slist_node_st *next;
 } k_slist_t;
 
 #define TOS_SLIST_NODE(dummy) \
