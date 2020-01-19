@@ -34,8 +34,6 @@ k_stack_t task2_stack[512];
 
 int main(void)
 {
-    unsigned char state = OFF;
-
     uart_init();
     led_init();
     beep_init();
@@ -53,10 +51,6 @@ int main(void)
                         0);
 
     tos_knl_start();
-
-    while (1) {
-        delay(3000);
-    }
 
     return 0;
 }
