@@ -355,7 +355,7 @@ __STATIC__ void rhf76_incoming_data_process(void)
 
     ret = 0;
 
-    memset(incoming_data_buffer, 0x00, 512);
+    memset(incoming_data_buffer, 0x00, sizeof(incoming_data_buffer));
 
     while (1) {
         tos_at_uart_read(&data, 1);
