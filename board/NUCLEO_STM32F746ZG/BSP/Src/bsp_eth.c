@@ -20,7 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "bsp_eth.h"
 #include "main.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "lwip/opt.h"
 #include "lwip/timeouts.h"
 #include "netif/ethernet.h"

@@ -1,7 +1,7 @@
 #include "LoRaApi.h"
 #include <stdio.h>
 #include <string.h>
-#include "tos.h"
+#include "tos_k.h"
 #include "atcmd-board.h"
 /*LORA入网状态*/
 uint8_t g_join_state = 0;
@@ -11,11 +11,11 @@ uint32_t g_rx_num = 0;
 
 //任务优先级
 #define TASK1_PRIO		3
-//任务堆栈大小	
+//任务堆栈大小
 #define TASK1_STK_SIZE 		(1024 * 4)
 //任务控制块
 k_task_t Task1TCB;
-//任务堆栈	
+//任务堆栈
 k_stack_t TASK1_STK[TASK1_STK_SIZE];
 //任务函数
 void task1(void *arg);
@@ -58,7 +58,7 @@ void task1(void *arg)
 						Lora_Send(0, 2, tmpbuf, sizeof(tmpbuf));
 						g_rx_num++;
 				}
-		}	
+		}
 		at_cmd_handle();
 	}
 }

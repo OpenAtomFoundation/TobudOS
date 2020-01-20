@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC_INLINE__ void prio_q_item_copy_to(k_prio_q_t *prio_q, void *item_out, size_t *item_size, prio_q_slot_t slot)
 {
@@ -179,9 +179,7 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
     prio_q->mgr_pool    = (uint8_t *)mgr_array;
     prio_q->data_pool   = (uint8_t *)pool;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&prio_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_QUEUE);
-#endif
+    TOS_OBJ_INIT(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&prio_q->knl_obj);
 #endif
@@ -209,9 +207,7 @@ __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q)
     prio_q->mgr_pool    = K_NULL;
     prio_q->data_pool   = K_NULL;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&prio_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(prio_q);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&prio_q->knl_obj);
 #endif
@@ -271,9 +267,7 @@ __API__ k_err_t tos_prio_q_destroy_dyn(k_prio_q_t *prio_q)
     prio_q->mgr_pool    = K_NULL;
     prio_q->data_pool   = K_NULL;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&prio_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(prio_q);
     knl_object_alloc_reset(&prio_q->knl_obj);
 
     return K_ERR_NONE;

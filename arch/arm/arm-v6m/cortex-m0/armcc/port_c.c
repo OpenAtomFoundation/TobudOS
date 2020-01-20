@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "core_cm0.h"
 
 __PORT__ void port_cpu_reset(void)

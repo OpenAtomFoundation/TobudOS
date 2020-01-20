@@ -24,7 +24,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "tos.h"
+#include "tos_k.h"
 
 #ifdef __cplusplus
 extern "C" {

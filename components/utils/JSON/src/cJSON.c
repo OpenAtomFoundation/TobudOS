@@ -48,7 +48,7 @@
 #include <ctype.h>
 
 #include "cJSON.h"
-#include <tos.h>
+#include <tos_k.h>
 
 #ifdef ENABLE_LOCALES
 #include <locale.h>

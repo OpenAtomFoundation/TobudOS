@@ -10,7 +10,7 @@ extern "C" {
 #include "usart.h"
 #include "gpio.h"
 #include "spi.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "lcd.h"
 
 void board_init(void);

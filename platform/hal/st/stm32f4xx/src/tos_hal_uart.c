@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_hal.h"
 #include "stm32f4xx_hal.h"
 #include "usart.h"
@@ -35,12 +35,13 @@ __API__ int tos_hal_uart_write(hal_uart_t *uart, const uint8_t *buf, size_t size
     }
 
     uart_handle = (UART_HandleTypeDef *)uart->private_uart;
-    (void)HAL_UART_Transmit(uart_handle, buf, size, timeout);
+    (void)HAL_UART_Transmit(uart_handle, (uint8_t *)buf, size, timeout);
+    return 0;
 }
 
 __API__ int tos_hal_uart_read(hal_uart_t *uart, const uint8_t *buf, size_t size, uint32_t timeout)
 {
-
+    return 0;
 }
 
 __API__ int tos_hal_uart_deinit(hal_uart_t *uart)

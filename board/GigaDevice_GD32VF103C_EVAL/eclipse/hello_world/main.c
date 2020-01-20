@@ -1,5 +1,5 @@
 #include "mcu_init.h"
-#include "tos.h"
+#include "tos_k.h"
 
 #define TASK_SIZE 1024
 k_task_t k_task_task1;

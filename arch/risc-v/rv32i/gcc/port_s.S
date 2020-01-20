@@ -267,7 +267,7 @@ restore_context:
     mret
 
 
-.align 2
+.align 6
 .global rv32_exception_entry
 rv32_exception_entry:
     addi   sp,  sp, -128
@@ -361,3 +361,4 @@ irq_task_switch:
     sw s11, __reg_s11__OFFSET(sp)
 
     j switch_task
+

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 #include "bc35_28_95_lwm2m.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at.h"
 #include "tos_hal.h"
 #include "sal_module_wrapper.h"
@@ -60,7 +60,7 @@ static int bc35_28_95_reset(void){
             return 0;
         }
     }
-    return -1; 
+    return -1;
 }
 
 static int bc35_28_95_echo_close(void)
@@ -197,7 +197,7 @@ static int bc35_28_95_autoconnect_config(char mode)
         }
         else{
             tos_at_cmd_exec(&echo, 1000, "AT+NCONFIG=AUTOCONNECT,FALSE\r\n");
-        }  
+        }
         if(echo.status == AT_ECHO_STATUS_OK){
             return 0;
         }
@@ -213,7 +213,7 @@ static int bc35_28_95_print_IMEI(void) {
         return 0;
     }
     return -1;
-   
+
 }
 static int bc35_28_95_print_CIMI(void) {
     at_echo_t echo;
@@ -223,8 +223,8 @@ static int bc35_28_95_print_CIMI(void) {
         return 0;
     }
     return -1;
-   
-}    
+
+}
 static int bc35_28_95_print_NBAND(void) {
     at_echo_t echo;
     tos_at_echo_create(&echo, NULL, 0, NULL);
@@ -233,7 +233,7 @@ static int bc35_28_95_print_NBAND(void) {
         return 0;
     }
     return -1;
-   
+
 }
 
 static int bc35_28_95_lwm2m_init(void)
@@ -246,7 +246,7 @@ static int bc35_28_95_lwm2m_init(void)
     }
     if(bc35_28_95_autoconnect_config(0)!=0){
         printf("autoconnect false FAILED\n");
-        return -1;       
+        return -1;
     };
     if (bc35_28_95_cfun_set(0) != 0) {
         printf("close_cfun FAILED\n");
@@ -254,7 +254,7 @@ static int bc35_28_95_lwm2m_init(void)
     }
     if(bc35_28_95_nband_set(5)!=0){
         printf("nband_set FAILED\n");
-        return -1;      
+        return -1;
     }
 
     printf("Init bc35_28_95 Done\n" );
@@ -272,11 +272,11 @@ static int bc35_28_95_lwm2m_connect(const char *ip, const char *port, sal_proto_
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
-  
+
     if(bc35_28_95_reset()!=0){
         printf("reset FAILED\n");
-        return -1;            
-    }   
+        return -1;
+    }
     tos_task_delay(1000);
     bc35_28_95_check_cfun();
     bc35_28_95_cfun_set(1);
@@ -289,7 +289,7 @@ static int bc35_28_95_lwm2m_connect(const char *ip, const char *port, sal_proto_
     if (bc35_28_95_signal_quality_check() != 0) {
         printf("check csq FAILED\n");
         return -1;
-    }    
+    }
     while (try++ < 10) {
         if (bc35_28_95_check_net()==0){
             is_connected = 1;
@@ -297,7 +297,7 @@ static int bc35_28_95_lwm2m_connect(const char *ip, const char *port, sal_proto_
         }
         tos_task_delay(1000);
        continue;
-    }   
+    }
     if(is_connected){
         id=0;
         sscanf(echo.buffer, "%d", &id);
@@ -305,7 +305,7 @@ static int bc35_28_95_lwm2m_connect(const char *ip, const char *port, sal_proto_
         if (id == -1) {
             return -1;
         }
-    } 
+    }
     else{
         return -1;
     }
@@ -362,16 +362,16 @@ __STATIC__ void bc35_28_95_lwm2m_incoming_data_process(void)
         }
         data_len = data_len * 10 + (data - '0');
     }
-    
+
 
     if (data_len > sizeof(incoming_data_buffer)/2) {
         data_len = sizeof(incoming_data_buffer)/2;
-    }  
+    }
 
     if (tos_at_uart_read(incoming_data_buffer, data_len*2) != data_len*2) {
         return;
     }
-    
+
     tos_at_channel_write(channel_id, incoming_data_buffer, data_len*2);
 }
 

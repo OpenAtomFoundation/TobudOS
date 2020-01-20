@@ -18,7 +18,7 @@
  */
 
 #include <stddef.h>
-#include <tos.h>
+#include <tos_k.h>
 #include "syscfg/syscfg.h"
 #include "nimble/nimble_port.h"
 

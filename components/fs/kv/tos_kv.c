@@ -136,7 +136,7 @@ __STATIC__ uint32_t kv_blk_next_fresh(void)
     uint32_t cur_blk;
 
     // we try to find a fresh block behind current block(take all the blocks as a ring)
-    KV_BLK_FOREACH_FROM(cur_blk, KV_MGR_WORKSPACE) {
+    KV_BLK_FOR_EACH_FROM(cur_blk, KV_MGR_WORKSPACE) {
         if (kv_blk_is_fresh(cur_blk)) {
             return cur_blk;
         }
@@ -149,7 +149,7 @@ __STATIC__ uint32_t kv_blk_search_inuse(uint32_t item_size)
 {
     uint32_t cur_blk;
 
-    KV_BLK_FOREACH_FROM(cur_blk, KV_MGR_WORKSPACE) {
+    KV_BLK_FOR_EACH_FROM(cur_blk, KV_MGR_WORKSPACE) {
         if (kv_blk_is_inuse(cur_blk) &&
             kv_blk_freesz_get(cur_blk) >= item_size) {
             return cur_blk;
@@ -668,7 +668,7 @@ __STATIC__ kv_item_t *kv_item_find(const char *key)
     uint32_t cur_blk;
     kv_item_t *item;
 
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_is_bad(cur_blk) ||
             kv_blk_is_fresh(cur_blk)) {
             continue;
@@ -699,7 +699,7 @@ __STATIC__ kv_item_t *kv_item_find_new_copy(kv_item_t *the_item)
     uint32_t cur_blk;
     kv_item_t *item;
 
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_is_bad(cur_blk) ||
             kv_blk_is_fresh(cur_blk)) {
             continue;
@@ -893,7 +893,7 @@ __STATIC__ int kv_mgr_blk_index_rebuild(void)
     uint32_t cur_blk;
     int is_rebuild_done = K_FALSE;
 
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_is_hanging(cur_blk)) {
             if (kv_mgr_index_build(cur_blk) == KV_ERR_NONE) {
                 kv_blk_reset_hanging(cur_blk);
@@ -921,7 +921,7 @@ __STATIC__ kv_err_t kv_mgr_workspace_locate(void)
     /* if no block inuse, we locate workspace in first fresh block
        else locate in first block inuse
     */
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         if (KV_MGR_BLK_NUM_INUSE == 0) {
             if (kv_blk_is_fresh(cur_blk)) {
                 KV_MGR_WORKSPACE = cur_blk;
@@ -942,7 +942,7 @@ __STATIC__ void kv_mgr_ctl_build(void)
     uint32_t cur_blk;
     kv_blk_hdr_t blk_hdr;
 
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_hdr_read(cur_blk, &blk_hdr) != KV_ERR_NONE) {
             // sth must be wrong seriously with this block
             kv_blk_set_bad(cur_blk);
@@ -1022,7 +1022,7 @@ __STATIC__ kv_err_t kv_gc(void)
     // there must be at least one fresh block left, make workspace pointer to the fresh one
     KV_MGR_WORKSPACE = kv_blk_next_fresh();
 
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_is_dirty(cur_blk)) {
             if (kv_do_gc(cur_blk) != KV_ERR_NONE) {
                 // cannot do gc for this block, give others a try
@@ -1171,7 +1171,7 @@ __DEBUG__ kv_err_t tos_kv_walkthru(void)
 
     printf("workspace: 0x%x [%d block]\n", KV_MGR_WORKSPACE, KV_BLK_ADDR2IDX(KV_MGR_WORKSPACE));
 
-    KV_BLK_FOREACH(cur_blk) {
+    KV_BLK_FOR_EACH(cur_blk) {
         printf("[%d] block\n", i++);
         printf("addr: 0x%x\n", cur_blk);
 

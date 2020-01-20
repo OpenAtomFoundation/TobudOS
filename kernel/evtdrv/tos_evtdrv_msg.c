@@ -89,13 +89,11 @@ __STATIC_INLINE__ void evtdrv_msg_prepare4use(evtdrv_msg_hdr_t *msg_hdr)
 __API__ evtdrv_msg_body_t tos_evtdrv_msg_recv(void)
 {
     TOS_CPU_CPSR_ALLOC();
-    k_list_t *curr, *next;
-    evtdrv_msg_hdr_t *msg_hdr = K_NULL;
+    evtdrv_msg_hdr_t *msg_hdr, *tmp;
 
     TOS_CPU_INT_DISABLE();
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &evtdrv_msg_list) {
-        msg_hdr = TOS_LIST_ENTRY(curr, evtdrv_msg_hdr_t, list);
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(msg_hdr, tmp, evtdrv_msg_hdr_t, list, &evtdrv_msg_list) {
         if (!evtdrv_task_is_self(msg_hdr->dst_task_id)) {
             continue;
         }

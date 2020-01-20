@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_COUNTDOWNLATCH_EN > 0u
 
@@ -23,12 +23,9 @@ __API__ k_err_t tos_countdownlatch_create(k_countdownlatch_t *countdownlatch, k_
 {
     TOS_PTR_SANITY_CHECK(countdownlatch);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&countdownlatch->knl_obj, KNL_OBJ_TYPE_COUNTDOWNLATCH);
-#endif
-
-    pend_object_init(&countdownlatch->pend_obj);
     countdownlatch->count = count;
+    pend_object_init(&countdownlatch->pend_obj);
+    TOS_OBJ_INIT(countdownlatch, KNL_OBJ_TYPE_COUNTDOWNLATCH);
 
     return K_ERR_NONE;
 }
@@ -48,9 +45,7 @@ __API__ k_err_t tos_countdownlatch_destroy(k_countdownlatch_t *countdownlatch)
 
     pend_object_deinit(&countdownlatch->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&countdownlatch->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(countdownlatch);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u
 
@@ -40,9 +40,7 @@ __API__ k_err_t tos_prio_mail_q_create(k_prio_mail_q_t *prio_mail_q, void *pool,
     prio_mail_q->prio_q_mgr_array = prio_q_mgr_array;
     pend_object_init(&prio_mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&prio_mail_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
-#endif
+    TOS_OBJ_INIT(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
     knl_object_alloc_set_static(&prio_mail_q->knl_obj);
 
     return K_ERR_NONE;
@@ -77,9 +75,7 @@ __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q)
 
     pend_object_deinit(&prio_mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&prio_mail_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(prio_mail_q);
     knl_object_alloc_reset(&prio_mail_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();
@@ -101,9 +97,7 @@ __API__ k_err_t tos_prio_mail_q_create_dyn(k_prio_mail_q_t *prio_mail_q, size_t 
 
     pend_object_init(&prio_mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&prio_mail_q->knl_obj, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
-#endif
+    TOS_OBJ_INIT(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);
     knl_object_alloc_set_dynamic(&prio_mail_q->knl_obj);
 
     return K_ERR_NONE;
@@ -135,9 +129,7 @@ __API__ k_err_t tos_prio_mail_q_destroy_dyn(k_prio_mail_q_t *prio_mail_q)
 
     pend_object_deinit(&prio_mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&prio_mail_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(prio_mail_q);
     knl_object_alloc_reset(&prio_mail_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();
@@ -208,7 +200,7 @@ __STATIC__ k_err_t prio_mail_q_do_post(k_prio_mail_q_t *prio_mail_q, void *mail_
 {
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
-    k_list_t *curr, *next;
+    k_task_t *task, *tmp;
 
     TOS_PTR_SANITY_CHECK(prio_mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
@@ -230,9 +222,8 @@ __STATIC__ k_err_t prio_mail_q_do_post(k_prio_mail_q_t *prio_mail_q, void *mail_
         prio_mail_task_recv(TOS_LIST_FIRST_ENTRY(&prio_mail_q->pend_obj.list, k_task_t, pend_list),
                                 mail_buf, mail_size);
     } else { // OPT_POST_ALL
-        TOS_LIST_FOR_EACH_SAFE(curr, next, &prio_mail_q->pend_obj.list) {
-            prio_mail_task_recv(TOS_LIST_ENTRY(curr, k_task_t, pend_list),
-                                    mail_buf, mail_size);
+        TOS_LIST_FOR_EACH_ENTRY_SAFE(task, tmp, k_task_t, pend_list, &prio_mail_q->pend_obj.list) {
+            prio_mail_task_recv(task, mail_buf, mail_size);
         }
     }
 

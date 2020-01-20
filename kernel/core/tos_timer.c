@@ -15,27 +15,25 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include "tos_k.h"
 
 #if TOS_CFG_TIMER_EN > 0u
 
 __STATIC__ void timer_place(k_timer_t *tmr)
 {
     TOS_CPU_CPSR_ALLOC();
-    k_list_t *curr;
     k_timer_t *iter = K_NULL;
 
     TOS_CPU_INT_DISABLE();
 
     tmr->expires += k_tick_count;
 
-    TOS_LIST_FOR_EACH(curr, &k_timer_ctl.list) {
-        iter = TOS_LIST_ENTRY(curr, k_timer_t, list);
+    TOS_LIST_FOR_EACH_ENTRY(iter, k_timer_t, list, &k_timer_ctl.list) {
         if (tmr->expires < iter->expires) {
             break;
         }
     }
-    tos_list_add_tail(&tmr->list, curr);
+    tos_list_add_tail(&tmr->list, &iter->list);
 
     if (k_timer_ctl.list.next == &tmr->list) {
         // we are the first guy now
@@ -84,10 +82,6 @@ __STATIC__ void timer_takeoff(k_timer_t *tmr)
 
 __STATIC_INLINE__ void timer_reset(k_timer_t *tmr)
 {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&tmr->knl_obj);
-#endif
-
     tmr->state          = TIMER_STATE_UNUSED;
     tmr->delay          = (k_tick_t)0u;
     tmr->expires        = (k_tick_t)0u;
@@ -96,6 +90,8 @@ __STATIC_INLINE__ void timer_reset(k_timer_t *tmr)
     tmr->cb             = K_NULL;
     tmr->cb_arg         = K_NULL;
     tos_list_init(&tmr->list);
+
+    TOS_OBJ_DEINIT(tmr);
 }
 
 __API__ k_err_t tos_timer_create(k_timer_t *tmr,
@@ -129,10 +125,6 @@ __API__ k_err_t tos_timer_create(k_timer_t *tmr,
         return K_ERR_TIMER_PERIOD_FOREVER;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&tmr->knl_obj, KNL_OBJ_TYPE_TIMER);
-#endif
-
     tmr->state          = TIMER_STATE_STOPPED;
     tmr->delay          = delay;
     tmr->expires        = (k_tick_t)0u;
@@ -141,6 +133,9 @@ __API__ k_err_t tos_timer_create(k_timer_t *tmr,
     tmr->cb             = callback;
     tmr->cb_arg         = cb_arg;
     tos_list_init(&tmr->list);
+
+    TOS_OBJ_INIT(tmr, KNL_OBJ_TYPE_TIMER);
+
     return K_ERR_NONE;
 }
 
@@ -281,8 +276,7 @@ __KERNEL__ k_tick_t timer_next_expires_get(void)
 
 __KERNEL__ void timer_update(void)
 {
-    k_timer_t *tmr;
-    k_list_t *curr, *next;
+    k_timer_t *tmr, *tmp;
 
     if (k_timer_ctl.next_expires < k_tick_count) {
         return;
@@ -290,8 +284,7 @@ __KERNEL__ void timer_update(void)
 
     tos_knl_sched_lock();
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &k_timer_ctl.list) {
-        tmr = TOS_LIST_ENTRY(curr, k_timer_t, list);
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(tmr, tmp, k_timer_t, list, &k_timer_ctl.list) {
         if (tmr->expires > k_tick_count) {
             break;
         }
@@ -316,8 +309,7 @@ __KERNEL__ void timer_update(void)
 
 __STATIC__ void timer_task_entry(void *arg)
 {
-    k_timer_t *tmr;
-    k_list_t *curr, *next;
+    k_timer_t *tmr, *tmp;
     k_tick_t next_expires;
 
     arg = arg; // make compiler happy
@@ -331,8 +323,7 @@ __STATIC__ void timer_task_entry(void *arg)
 
         tos_knl_sched_lock();
 
-        TOS_LIST_FOR_EACH_SAFE(curr, next, &k_timer_ctl.list) {
-            tmr = TOS_LIST_ENTRY(curr, k_timer_t, list);
+        TOS_LIST_FOR_EACH_ENTRY_SAFE(tmr, tmp, k_timer_t, list, &k_timer_ctl.list) {
             if (tmr->expires > k_tick_count) { // not yet
                 break;
             }

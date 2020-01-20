@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include <tos_k.h>
 #include <riscv_port.h>
 
 #ifndef TOS_CFG_IRQ_STK_SIZE
@@ -159,14 +159,20 @@ void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
     }
 }
 
+void eclic_mtip_handler();
 void cpu_irq_entry(cpu_data_t irq)
 {
-    void (*irq_handler)();
+    typedef void (*irq_handler_t)();
 
-    irq_handler = *((void (**)())(port_get_irq_vector_table() + irq*sizeof(cpu_addr_t)));
-    if((*irq_handler) == 0) {
+
+    irq_handler_t *irq_handler_base = port_get_irq_vector_table();
+
+    irq_handler_t irq_handler = irq_handler_base[irq];
+
+    if(irq_handler == 0) {
         return;
     }
+
 
     (*irq_handler)();
 }
@@ -175,27 +181,27 @@ __API__ uint32_t tos_cpu_clz(uint32_t val)
 {
     uint32_t nbr_lead_zeros = 0;
 
-    if (!(val & 0XFFFF0000)) {
+    if (!(val & 0xFFFF0000)) {
         val <<= 16;
         nbr_lead_zeros += 16;
     }
 
-    if (!(val & 0XFF000000)) {
+    if (!(val & 0xFF000000)) {
         val <<= 8;
         nbr_lead_zeros += 8;
     }
 
-    if (!(val & 0XF0000000)) {
+    if (!(val & 0xF0000000)) {
         val <<= 4;
         nbr_lead_zeros += 4;
     }
 
-    if (!(val & 0XC0000000)) {
+    if (!(val & 0xC0000000)) {
         val <<= 2;
         nbr_lead_zeros += 2;
     }
 
-    if (!(val & 0X80000000)) {
+    if (!(val & 0x80000000)) {
         nbr_lead_zeros += 1;
     }
 

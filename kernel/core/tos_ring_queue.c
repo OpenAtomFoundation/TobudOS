@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC_INLINE__ void ring_q_item_copy_to(k_ring_q_t *ring_q, void *item_out, size_t *item_size)
 {
@@ -55,9 +55,7 @@ __STATIC_INLINE__ void ring_q_item_decrease(k_ring_q_t *ring_q)
     ring_q->item_size   = item_size;
     ring_q->item_cnt    = item_cnt;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&ring_q->knl_obj, KNL_OBJ_TYPE_RING_QUEUE);
-#endif
+    TOS_OBJ_INIT(ring_q, KNL_OBJ_TYPE_RING_QUEUE);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&ring_q->knl_obj);
 #endif
@@ -84,9 +82,7 @@ __API__ k_err_t tos_ring_q_destroy(k_ring_q_t *ring_q)
     ring_q->item_size   = 0u;
     ring_q->item_cnt    = 0u;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&ring_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(ring_q);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&ring_q->knl_obj);
 #endif
@@ -115,9 +111,7 @@ __API__ k_err_t tos_ring_q_destroy(k_ring_q_t *ring_q)
     ring_q->item_size   = item_size;
     ring_q->item_cnt    = item_cnt;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&ring_q->knl_obj, KNL_OBJ_TYPE_RING_QUEUE);
-#endif
+    TOS_OBJ_INIT(ring_q, KNL_OBJ_TYPE_RING_QUEUE);
     knl_object_alloc_set_dynamic(&ring_q->knl_obj);
 
     return K_ERR_NONE;
@@ -142,9 +136,7 @@ __API__ k_err_t tos_ring_q_destroy_dyn(k_ring_q_t *ring_q)
     ring_q->item_size   = 0u;
     ring_q->item_cnt    = 0u;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&ring_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(ring_q);
     knl_object_alloc_reset(&ring_q->knl_obj);
 
     return K_ERR_NONE;

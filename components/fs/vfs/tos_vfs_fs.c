@@ -7,13 +7,11 @@ TOS_LIST_DEFINE(k_vfs_fsmap_list);
 
 __STATIC__ vfs_fsmap_t *vfs_fsmap_get(const char *fs_name)
 {
-    k_list_t *curr;
     char *name = K_NULL;
     vfs_fsmap_t *fsmap = K_NULL;
 
-    TOS_LIST_FOR_EACH(curr, &k_vfs_fsmap_list) {
-        fsmap   = TOS_LIST_ENTRY(curr, vfs_fsmap_t, list);
-        name    = (char *)fsmap->name;
+    TOS_LIST_FOR_EACH_ENTRY(fsmap, vfs_fsmap_t, list, &k_vfs_fsmap_list) {
+        name = (char *)fsmap->name;
         if (strlen(name) == strlen(fs_name) &&
             strncmp(name, fs_name, strlen(name)) == 0) {
             return fsmap;

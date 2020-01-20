@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_MUTEX_EN > 0u
 
@@ -72,15 +72,13 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
     TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(mutex);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&mutex->knl_obj, KNL_OBJ_TYPE_MUTEX);
-#endif
-
     pend_object_init(&mutex->pend_obj);
     mutex->pend_nesting     = (k_nesting_t)0u;
     mutex->owner            = K_NULL;
     mutex->owner_orig_prio  = K_TASK_PRIO_INVALID;
     tos_list_init(&mutex->owner_anchor);
+
+    TOS_OBJ_INIT(mutex, KNL_OBJ_TYPE_MUTEX);
 
     return K_ERR_NONE;
 }
@@ -105,9 +103,7 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 
     pend_object_deinit(&mutex->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&mutex->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(mutex);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

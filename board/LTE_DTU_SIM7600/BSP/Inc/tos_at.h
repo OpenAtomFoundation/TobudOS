@@ -18,7 +18,7 @@
 #ifndef _TOS_AT_H_
 #define _TOS_AT_H_
 
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at_utils.h"
 #include "tos_hal.h"
 
@@ -268,7 +268,7 @@ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size_t event
  *
  * @attention None
  *
- * @return  
+ * @return
 None
  */
 void tos_at_deinit(void);
@@ -363,7 +363,7 @@ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const uint8_t 
  *
  * @return  None
  */
-void tos_at_uart_write_byte(uint8_t data);
+void tos_at_uart_input_byte(uint8_t data);
 
 /**
  * @brief A global lock provided by at framework.

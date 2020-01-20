@@ -15,7 +15,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include "tos.h"
+#include "tos_k.h"
 
 #include "infra_defs.h"
 

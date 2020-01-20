@@ -34,7 +34,7 @@
 #include "stm32l4xx_hal.h"
 #include "stm32l4xx.h"
 #include "stm32l4xx_it.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_at.h"
 /* USER CODE BEGIN 0 */
 
@@ -46,7 +46,7 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
 /******************************************************************************/
-/*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M4 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
 
 /**
@@ -279,10 +279,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t data;
     if (huart->Instance == USART3) {
         HAL_UART_Receive_IT(&huart3, &data, 1);
-        tos_at_uart_write_byte(data);
+        tos_at_uart_input_byte(data);
     } else if (huart->Instance == USART2) {
         HAL_UART_Receive_IT(&huart2, &data, 1);
-        tos_at_uart_write_byte(data);
+        tos_at_uart_input_byte(data);
     }
 }
 /* USER CODE END 1 */

@@ -151,7 +151,7 @@ used throughout the whole project.
 
 #include <stdint.h>
 #include <stddef.h>
-#include "tos.h"
+#include "tos_k.h"
 
 #ifdef  __cplusplus
 extern "C" {

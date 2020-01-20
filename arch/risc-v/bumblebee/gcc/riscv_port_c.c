@@ -75,13 +75,13 @@ static void eclic_set_irq_level(uint32_t source, uint8_t level) {
         return ;
     }
 
-    uint8_t intctrl_val = eclic_get_intctrl(CLIC_INT_TMR);
+    uint8_t intctrl_val = eclic_get_intctrl(source);
 
     intctrl_val <<= nlbits;
     intctrl_val >>= nlbits;
     intctrl_val  |= (level << (8- nlbits));
 
-    eclic_set_intctrl(CLIC_INT_TMR, intctrl_val);
+    eclic_set_intctrl(source, intctrl_val);
 }
 
 static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
@@ -98,29 +98,32 @@ static void eclic_set_irq_priority(uint32_t source, uint8_t priority) {
     pad         >>= cicbits;
 
 
-    uint8_t intctrl_val = eclic_get_intctrl(CLIC_INT_TMR);
+    uint8_t intctrl_val = eclic_get_intctrl(source);
 
     intctrl_val >>= (8 - nlbits);
     intctrl_val <<= (8 - nlbits);
     intctrl_val  |= (priority << (8 - cicbits));
     intctrl_val  |= pad;
 
-    eclic_set_intctrl(CLIC_INT_TMR, intctrl_val);
+    eclic_set_intctrl(source, intctrl_val);
 }
 
-void rv32_exception_entry();
 __PORT__ void port_cpu_init() {
 
-    __ASM__ __VOLATILE__("csrw mtvec, %0"::"r"(rv32_exception_entry));
+    void rv32_exception_entry();
+    uint32_t entry = (uint32_t) rv32_exception_entry;
+
+    // 0x03 means use eclic
+    __ASM__ __VOLATILE__("csrw mtvec, %0"::"r"(entry | 0x03));
 
     // MTVT2: 0x7EC
+    // set mtvt2.MTVT2EN = 0 needs to clear bit 0
     // use mtvec as entry of irq and other trap
     __ASM__ __VOLATILE__("csrc 0x7EC, 0x1");
 
     eclic_enable_interrupt(CLIC_INT_TMR);
 
     eclic_set_irq_level(CLIC_INT_TMR, 0);
-
 }
 
 __PORT__ void port_systick_priority_set(uint32_t priority) {

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_SEM_EN > 0u
 
@@ -23,13 +23,10 @@ __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_c
 {
     TOS_PTR_SANITY_CHECK(sem);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&sem->knl_obj, KNL_OBJ_TYPE_SEMAPHORE);
-#endif
-
-    pend_object_init(&sem->pend_obj);
     sem->count      = init_count;
     sem->count_max  = max_count;
+    pend_object_init(&sem->pend_obj);
+    TOS_OBJ_INIT(sem, KNL_OBJ_TYPE_SEMAPHORE);
 
     return K_ERR_NONE;
 }
@@ -54,9 +51,7 @@ __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
 
     pend_object_deinit(&sem->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&sem->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(sem);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

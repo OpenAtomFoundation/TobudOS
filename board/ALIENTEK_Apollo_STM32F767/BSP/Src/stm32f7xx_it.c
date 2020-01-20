@@ -34,7 +34,7 @@
 #include "stm32f7xx_hal.h"
 #include "stm32f7xx.h"
 #include "stm32f7xx_it.h"
-#include "tos.h"
+#include "tos_k.h"
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -42,7 +42,7 @@
 /* External variables --------------------------------------------------------*/
 
 /******************************************************************************/
-/*            Cortex-M7 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M7 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
 
 /**

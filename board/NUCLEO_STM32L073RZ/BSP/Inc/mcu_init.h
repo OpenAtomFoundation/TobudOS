@@ -8,7 +8,7 @@
 #include "stm32l0xx_hal.h"
 #include "usart.h"
 #include "gpio.h"
-#include "tos.h"
+#include "tos_k.h"
 #include "i2c.h"
 
 void board_init(void);

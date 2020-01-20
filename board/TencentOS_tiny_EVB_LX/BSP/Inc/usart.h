@@ -11,7 +11,7 @@
 
 #define USART2_GPIO_TX_PIN  GPIO_PIN_10
 #define USART2_GPIO_RX_PIN  GPIO_PIN_11
-#define USART2_GPIO_PORT    GPIOC
+#define USART2_GPIO_PORT    GPIOB
 
 
 void usart0_init(int baud);

@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 
 #include "stm32f7xx_hal.h"
 #include "stm32f7xx_hal_tim.h"
@@ -159,7 +159,7 @@ static HAL_StatusTypeDef tickless_rtc_time_set(uint8_t hour, uint8_t minu, uint8
     rtc_time.TimeFormat = format;
     rtc_time.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
     rtc_time.StoreOperation = RTC_STOREOPERATION_RESET;
-    return HAL_RTC_SetTime(&rtc_handler, &rtc_time, RTC_FORMAT_BIN);	
+    return HAL_RTC_SetTime(&rtc_handler, &rtc_time, RTC_FORMAT_BIN);
 }
 
 static HAL_StatusTypeDef tickless_rtc_date_set(uint8_t year, uint8_t month, uint8_t date, uint8_t week)
@@ -256,7 +256,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *rtc_handler)
 
 void RTC_WKUP_IRQHandler(void)
 {
-    HAL_RTCEx_WakeUpTimerIRQHandler(&rtc_handler); 
+    HAL_RTCEx_WakeUpTimerIRQHandler(&rtc_handler);
 }
 
 void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *rtc_handler)
@@ -333,11 +333,11 @@ static int tickless_rtc_alarmirq_wkup_alarm_setup(k_time_t millisecond)
     // __HAL_PWR_GET_FLAG(PWR_FLAG_WU)
 
 
-    __HAL_RCC_AHB1_FORCE_RESET();       //复位所有IO口  
+    __HAL_RCC_AHB1_FORCE_RESET();       //复位所有IO口
     __HAL_RCC_PWR_CLK_ENABLE();         //使能PWR时钟
 
     // __HAL_RCC_BACKUPRESET_FORCE();      //复位备份区域
-    HAL_PWR_EnableBkUpAccess();         //后备区域访问使能  
+    HAL_PWR_EnableBkUpAccess();         //后备区域访问使能
 
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);
     __HAL_RTC_WRITEPROTECTION_DISABLE(&rtc_handler);//关闭RTC写保护
@@ -351,7 +351,7 @@ static int tickless_rtc_alarmirq_wkup_alarm_setup(k_time_t millisecond)
 
     //清除RTC相关中断标志位
     __HAL_RTC_ALARM_CLEAR_FLAG(&rtc_handler,RTC_FLAG_ALRAF|RTC_FLAG_ALRBF);
-    __HAL_RTC_TIMESTAMP_CLEAR_FLAG(&rtc_handler,RTC_FLAG_TSF); 
+    __HAL_RTC_TIMESTAMP_CLEAR_FLAG(&rtc_handler,RTC_FLAG_TSF);
     __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&rtc_handler,RTC_FLAG_WUTF);
 
     // __HAL_RCC_BACKUPRESET_RELEASE();                    //备份区域复位结束

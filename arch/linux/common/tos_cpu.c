@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include "tos_k.h"
 
 __API__ uint32_t tos_cpu_clz(uint32_t val)
 {

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_MAIL_QUEUE_EN > 0u
 
@@ -32,9 +32,7 @@ __API__ k_err_t tos_mail_q_create(k_mail_q_t *mail_q, void *pool, size_t mail_cn
 
     pend_object_init(&mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&mail_q->knl_obj, KNL_OBJ_TYPE_MAIL_QUEUE);
-#endif
+    TOS_OBJ_INIT(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&mail_q->knl_obj);
 #endif
@@ -70,9 +68,7 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
 
     pend_object_deinit(&mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&mail_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(mail_q);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&mail_q->knl_obj);
 #endif
@@ -98,9 +94,7 @@ __API__ k_err_t tos_mail_q_create_dyn(k_mail_q_t *mail_q, size_t mail_cnt, size_
 
     pend_object_init(&mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&mail_q->knl_obj, KNL_OBJ_TYPE_MAIL_QUEUE);
-#endif
+    TOS_OBJ_INIT(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
     knl_object_alloc_set_dynamic(&mail_q->knl_obj);
 
     return K_ERR_NONE;
@@ -132,9 +126,7 @@ __API__ k_err_t tos_mail_q_destroy_dyn(k_mail_q_t *mail_q)
 
     pend_object_deinit(&mail_q->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&mail_q->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(mail_q);
     knl_object_alloc_reset(&mail_q->knl_obj);
 
     TOS_CPU_INT_ENABLE();
@@ -207,7 +199,7 @@ __STATIC__ k_err_t mail_q_do_post(k_mail_q_t *mail_q, void *mail_buf, size_t mai
 {
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
-    k_list_t *curr, *next;
+    k_task_t *task, *tmp;
 
     TOS_PTR_SANITY_CHECK(mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
@@ -229,9 +221,8 @@ __STATIC__ k_err_t mail_q_do_post(k_mail_q_t *mail_q, void *mail_buf, size_t mai
         mail_task_recv(TOS_LIST_FIRST_ENTRY(&mail_q->pend_obj.list, k_task_t, pend_list),
                             mail_buf, mail_size);
     } else { // OPT_POST_ALL
-        TOS_LIST_FOR_EACH_SAFE(curr, next, &mail_q->pend_obj.list) {
-            mail_task_recv(TOS_LIST_ENTRY(curr, k_task_t, pend_list),
-                                mail_buf, mail_size);
+        TOS_LIST_FOR_EACH_ENTRY_SAFE(task, tmp, k_task_t, pend_list, &mail_q->pend_obj.list) {
+            mail_task_recv(task, mail_buf, mail_size);
         }
     }
 

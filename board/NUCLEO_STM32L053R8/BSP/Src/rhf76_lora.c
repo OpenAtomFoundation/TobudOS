@@ -1,5 +1,5 @@
 #include "rhf76_lora.h"
-#include "tos.h"
+#include "tos_k.h"
 
 uint16_t rx_rd_index  = 0;
 uint16_t rx_wr_index = 0;
@@ -89,8 +89,8 @@ bool rhf76_send_cmd(char * cmd, uint32_t len,char * reply1, char * reply2, uint3
     dev_uart_recv((uint8_t *)buf, 120, 20);
     printf("%s",buf);
     if ( ( reply1 != 0 ) && ( reply2 != 0 ) )
-        return ( ( bool ) strstr ( buf, reply1 ) || 
-                     ( bool ) strstr ( buf, reply2 ) ); 
+        return ( ( bool ) strstr ( buf, reply1 ) ||
+                     ( bool ) strstr ( buf, reply2 ) );
 
     else if ( reply1 != 0 )
         return ( ( bool ) strstr ( buf, reply1 ) );
@@ -155,7 +155,7 @@ void rhf76_set_class ( ENUM_CLASS_TypeDef type )
 			break;
 		default:
 			break;
-	}	
+	}
 }
 
 void rhf76_set_chanel(void)
@@ -250,7 +250,7 @@ static void __hex2str(uint8_t *in, char *out, int len)
 }
 
 int rhf76_send(const void  *buf, uint32_t len)
-{    
+{
     char *str_buf = NULL;
 
     str_buf = tos_mmheap_calloc(2 * len + 1, sizeof(char));
@@ -258,13 +258,13 @@ int rhf76_send(const void  *buf, uint32_t len)
         return -1;
     }
     __hex2str((uint8_t *)buf, str_buf, len);
-    
+
     char cmd[100] = {0};
-    
+
     snprintf(cmd, sizeof(cmd), "AT+CMSGHEX=\"%s\"\r\n", str_buf);
     cmd[sizeof(cmd) - 1] = '\0';
     tos_mmheap_free(str_buf);
 
     rhf76_send_cmd((char *)cmd, strlen(cmd), (char *)"ACK Received","Done",10000);
-    return len;    
+    return len;
 }

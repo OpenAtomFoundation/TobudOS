@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "mcu_init.h"
 
 #if TOS_CFG_PWR_MGR_EN > 0u

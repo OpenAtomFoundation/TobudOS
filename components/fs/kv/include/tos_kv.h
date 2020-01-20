@@ -18,7 +18,7 @@
 #ifndef _TOS_KV_H_
 #define  _TOS_KV_H_
 
-#include "tos.h"
+#include "tos_k.h"
 #include "tos_kv_err.h"
 #include "tos_kv_flash.h"
 
@@ -112,12 +112,12 @@ typedef uint64_t    kv_dword_t; // double word
 #define KV_BLK_FIRST_ITEM(blk_start)                (blk_start + KV_BLK_HDR_SIZE)
 #define KV_BLK_NEXT(blk_start)                      (blk_start + KV_BLK_SIZE >= KV_FLASH_END ? KV_FLASH_START : blk_start + KV_BLK_SIZE)
 
-#define KV_BLK_FOREACH_FROM(cur_blk, start_blk) \
+#define KV_BLK_FOR_EACH_FROM(cur_blk, start_blk) \
 	for (cur_blk = KV_BLK_NEXT(start_blk); \
             cur_blk != start_blk; \
             cur_blk = KV_BLK_NEXT(cur_blk))
 
-#define KV_BLK_FOREACH(cur_blk) \
+#define KV_BLK_FOR_EACH(cur_blk) \
     for (cur_blk = KV_FLASH_START; \
             cur_blk < KV_FLASH_END; \
             cur_blk += KV_BLK_SIZE)

@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include "tos_k.h"
 
 __API__ k_err_t tos_knl_init(void)
 {
@@ -159,6 +159,7 @@ __API__ k_err_t tos_knl_start(void)
     k_next_task = readyqueue_highest_ready_task_get();
     k_curr_task = k_next_task;
     k_knl_state = KNL_STATE_RUNNING;
+
     cpu_sched_start();
 
     return K_ERR_NONE;

@@ -13,7 +13,7 @@
 #include "usart.h"
 #include "usb.h"
 #include "gpio.h"
-#include "tos.h"
+#include "tos_k.h"
 
 void board_init(void);
 void SystemClock_Config(void);

@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "M251.h"
-#include "tos.h"   //include tos.h
+#include "tos_k.h"
 #if defined (__ARM_FEATURE_CMSE) &&  (__ARM_FEATURE_CMSE == 3U)
     #include "partition_M251.h"
 #endif

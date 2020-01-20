@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include "tos_k.h"
 
 #if TOS_CFG_MMBLK_EN > 0u
 
@@ -46,15 +46,14 @@ __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, siz
     }
     *(void **)blk_next = K_NULL;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&mbp->knl_obj, KNL_OBJ_TYPE_MMBLK_POOL);
-#endif
-
     mbp->pool_start = pool_start;
     mbp->free_list  = pool_start;
     mbp->blk_free   = blk_num;
     mbp->blk_max    = blk_num;
     mbp->blk_size   = blk_size;
+
+    TOS_OBJ_INIT(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
+
     return K_ERR_NONE;
 }
 
@@ -69,9 +68,7 @@ __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp)
     mbp->blk_max    = 0;
     mbp->blk_size   = 0;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&mbp->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(mbp);
 
     return K_ERR_NONE;
 }

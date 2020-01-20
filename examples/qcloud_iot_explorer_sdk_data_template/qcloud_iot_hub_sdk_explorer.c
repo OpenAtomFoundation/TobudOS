@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 
 /* 用户根据自己的底层通信链路来配置此宏
  * 如果是基于以太网lwip的链路，这里应该定义 USE_LWIP
@@ -30,7 +30,7 @@ void application_entry(void *arg)
     esp8266_sal_init(HAL_UART_PORT_0);
     esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
 #endif
-    
+
 #ifdef USE_NB_BC35
     extern int bc35_28_95_sal_init(hal_uart_port_t uart_port);
     bc35_28_95_sal_init(HAL_UART_PORT_0);

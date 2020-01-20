@@ -34,7 +34,7 @@
 #include "n32g020xx_log.h"
 #include "tos_at.h"
 /* USER CODE BEGIN 0 */
-#include <tos.h>
+#include <tos_k.h>
 
 /* USER CODE END 0 */
 
@@ -98,9 +98,9 @@ void SysTick_Handler(void) {
   /* USER CODE END SysTick_IRQn 1 */
 }
 
-void AT_UART_DataParse(char byte) 
+void AT_UART_DataParse(char byte)
 {
-    tos_at_uart_write_byte(byte);
+    tos_at_uart_input_byte(byte);
 }
 /* USER CODE BEGIN 1 */
 

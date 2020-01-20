@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "lvgl/lvgl.h"
 #include "tft.h"
 #include "touchpad.h"
@@ -22,7 +22,7 @@ void application_entry(void *arg)
     lv_init();
     tft_init();
     touchpad_init();
-    
+
     //benchmark_create();
     //sysmon_create();
     //terminal_create();
@@ -37,7 +37,7 @@ void application_entry(void *arg)
     {
         tos_task_delay(5);
         lv_task_handler();
-    }    
+    }
 }
 
 

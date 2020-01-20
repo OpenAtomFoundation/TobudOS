@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __API__ k_err_t tos_chr_fifo_create(k_chr_fifo_t *chr_fifo, void *buffer, size_t size)
 {
@@ -29,9 +29,7 @@ __API__ k_err_t tos_chr_fifo_create(k_chr_fifo_t *chr_fifo, void *buffer, size_t
         return err;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&chr_fifo->knl_obj, KNL_OBJ_TYPE_CHAR_FIFO);
-#endif
+    TOS_OBJ_INIT(chr_fifo, KNL_OBJ_TYPE_CHAR_FIFO);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&chr_fifo->knl_obj);
 #endif
@@ -57,9 +55,7 @@ __API__ k_err_t tos_chr_fifo_destroy(k_chr_fifo_t *chr_fifo)
         return err;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&chr_fifo->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(chr_fifo);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&chr_fifo->knl_obj);
 #endif
@@ -80,9 +76,7 @@ __API__ k_err_t tos_chr_fifo_create_dyn(k_chr_fifo_t *chr_fifo, size_t fifo_size
         return err;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&chr_fifo->knl_obj, KNL_OBJ_TYPE_CHAR_FIFO);
-#endif
+    TOS_OBJ_INIT(chr_fifo, KNL_OBJ_TYPE_CHAR_FIFO);
     knl_object_alloc_set_dynamic(&chr_fifo->knl_obj);
 
     return K_ERR_NONE;
@@ -104,9 +98,7 @@ __API__ k_err_t tos_chr_fifo_destroy_dyn(k_chr_fifo_t *chr_fifo)
         return err;
     }
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&chr_fifo->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(chr_fifo);
     knl_object_alloc_reset(&chr_fifo->knl_obj);
 
     return K_ERR_NONE;

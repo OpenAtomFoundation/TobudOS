@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #endif
 
-#include "tos.h"
+#include "tos_k.h"
 #include "mbedtls/net_sockets.h"
 #include "sal_module_wrapper.h"
 

@@ -1,4 +1,4 @@
-	EXPORT  port_int_disable
+    EXPORT  port_int_disable
     EXPORT  port_int_enable
 
     EXPORT  port_cpsr_save
@@ -28,7 +28,7 @@ NVIC_PENDSVSET  EQU     0x10000000
     PRESERVE8
 
 
-	GLOBAL port_int_disable
+    GLOBAL port_int_disable
 port_int_disable
     CPSID   I
     BX      LR

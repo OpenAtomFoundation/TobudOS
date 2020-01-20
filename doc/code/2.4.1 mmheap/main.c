@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 #include "mcu_init.h"
 
 #define STK_SIZE_TASK_DEMO      512
@@ -29,7 +29,7 @@ void entry_task_demo(void *arg)
             p = tos_mmheap_alloc(0x30);
             if (p) {
                 printf("alloc: %x\n", (cpu_addr_t)p);
-            }            
+            }
         } else if (i == 4) {
             p_aligned = tos_mmheap_aligned_alloc(0x50, 16);
             if (p_aligned) {

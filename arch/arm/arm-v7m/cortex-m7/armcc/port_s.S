@@ -59,7 +59,7 @@ port_clz
     BX      LR
 
 
-	GLOBAL port_sched_start
+    GLOBAL port_sched_start
 port_sched_start
     CPSID   I
 

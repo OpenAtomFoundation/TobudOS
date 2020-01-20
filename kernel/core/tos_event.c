@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_EVENT_EN > 0
 
@@ -23,12 +23,10 @@ __API__ k_err_t tos_event_create(k_event_t *event, k_event_flag_t init_flag)
 {
     TOS_PTR_SANITY_CHECK(event);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&event->knl_obj, KNL_OBJ_TYPE_EVENT);
-#endif
-
-    pend_object_init(&event->pend_obj);
     event->flag = init_flag;
+    pend_object_init(&event->pend_obj);
+    TOS_OBJ_INIT(event, KNL_OBJ_TYPE_EVENT);
+
     return K_ERR_NONE;
 }
 
@@ -45,12 +43,11 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
         pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
     }
 
-    pend_object_deinit(&event->pend_obj);
     event->flag = (k_event_flag_t)0u;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&event->knl_obj);
-#endif
+    pend_object_deinit(&event->pend_obj);
+
+    TOS_OBJ_DEINIT(event);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
@@ -134,8 +131,7 @@ __API__ k_err_t tos_event_pend(k_event_t *event, k_event_flag_t flag_expect, k_e
 __STATIC__ k_err_t event_do_post(k_event_t *event, k_event_flag_t flag, opt_event_post_t opt_post)
 {
     TOS_CPU_CPSR_ALLOC();
-    k_task_t *task;
-    k_list_t *curr, *next;
+    k_task_t *task, *tmp;
 
     TOS_PTR_SANITY_CHECK(event);
     TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
@@ -148,11 +144,9 @@ __STATIC__ k_err_t event_do_post(k_event_t *event, k_event_flag_t flag, opt_even
 
     TOS_CPU_INT_DISABLE();
 
-    TOS_LIST_FOR_EACH_SAFE(curr, next, &event->pend_obj.list) {
-        task = TOS_LIST_ENTRY(curr, k_task_t, pend_list);
-
+    TOS_LIST_FOR_EACH_ENTRY_SAFE(task, tmp, k_task_t, pend_list, &event->pend_obj.list) {
         if (event_is_match(event->flag, task->flag_expect, task->flag_match, task->opt_event_pend)) {
-            pend_task_wakeup(TOS_LIST_ENTRY(curr, k_task_t, pend_list), PEND_STATE_POST);
+            pend_task_wakeup(task, PEND_STATE_POST);
 
             // if anyone pending the event has set the TOS_OPT_EVENT_PEND_CLR, then no wakeup for the others pendig for the event.
             if (task->opt_event_pend & TOS_OPT_EVENT_PEND_CLR) {

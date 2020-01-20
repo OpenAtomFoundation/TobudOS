@@ -4,7 +4,7 @@
 #include MBEDTLS_CONFIG_FILE
 #endif
 
-#include "tos.h"
+#include "tos_k.h"
 #include "timing_alt.h"
 
 unsigned long mbedtls_timing_get_timer(struct mbedtls_timing_hr_time *val, int reset)

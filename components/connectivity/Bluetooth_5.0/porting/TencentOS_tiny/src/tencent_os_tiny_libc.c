@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 
 #ifdef __CC_ARM
 /* avoid the heap and heap-using library functions supplied by arm */

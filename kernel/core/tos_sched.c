@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include <tos.h>
+#include "tos_k.h"
 
 __STATIC__ k_prio_t readyqueue_prio_highest_get(void)
 {

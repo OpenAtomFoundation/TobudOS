@@ -347,7 +347,7 @@ __STATIC_INLINE__ void at_echo_flush(at_echo_t *echo)
     echo->__w_idx   = 0;
 }
 
-__STATIC_INLINE void at_echo_attach(at_echo_t *echo)
+__STATIC_INLINE__ void at_echo_attach(at_echo_t *echo)
 {
     at_echo_flush(echo);
     AT_AGENT->echo = echo;
@@ -907,7 +907,7 @@ __API__ void tos_at_deinit(void)
 
 /* To completely decouple the uart intterupt and at agent, we need a more powerful
    hal(driver framework), that would be a huge work, we place it in future plans. */
-__API__ void tos_at_uart_write_byte(uint8_t data)
+__API__ void tos_at_uart_input_byte(uint8_t data)
 {
     if (tos_chr_fifo_push(&AT_AGENT->uart_rx_fifo, data) == K_ERR_NONE) {
         tos_sem_post(&AT_AGENT->uart_rx_sem);

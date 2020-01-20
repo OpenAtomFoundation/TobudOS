@@ -50,10 +50,6 @@ typedef enum lora_key_type {
     LORA_KEY_TYPE_NWKSKEY,
 } lora_key_type_t;
 
-
-const char RHF76_LOWPOWER_SET[] = {
-    0xFF,0xFF,0xFF,0xFF,'A','T','+','L','O','W','P','O','W','E','R','=','a','u','t','o','o','f','f','\r','\n'
-};
 #define RHF76_ATCMD_SET_CLASS_A                 "AT+CLASS=A\r\n"
 #define RHF76_ATCMD_SET_CLASS_B                 "AT+CLASS=B\r\n"
 #define RHF76_ATCMD_SET_CLASS_C                 "AT+CLASS=C\r\n"
@@ -72,9 +68,12 @@ const char RHF76_LOWPOWER_SET[] = {
 #define RHF76_ATCMD_FMT_SET_KEY_TYPE_NWKSKEY    "AT+KEY=\"nwkskey\",%s\r\n"
 #define RHF76_ATCMD_FMT_SEND_MSGHEX             "AT+CMSGHEX=\"%s\"\r\n"
 
+#define RHF76_ATCMD_SET_BAND_CN470              "AT+DR=CN470\r\n"
+#define RHF76_ATCMD_REPLY_BAND_CN470            "+DR: CN470"
+
 #define RHF76_ATCMD_SET_CHANNEL                 "at+ch=num,0-7\r\n"
 #define RHF76_ATCMD_SET_ADR_OFF                 "at+adr=off\r\n"
-#define RHF76_ATCMD_JOIN                            "AT+join\r\n"
+#define RHF76_ATCMD_JOIN                        "AT+join\r\n"
 
 #define RHF76_ATCMD_SET_MODE_LWOTAA             "AT+MODE=LWOTAA\r\n"
 #define RHF76_ATCMD_SET_MODE_LWABP              "AT+MODE=LWABP\r\n"

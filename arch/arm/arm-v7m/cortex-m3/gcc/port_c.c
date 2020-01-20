@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 #include "core_cm3.h"
 
 __PORT__ void port_cpu_reset(void)

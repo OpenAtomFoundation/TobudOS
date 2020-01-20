@@ -21,7 +21,7 @@
 #include <msp430.h>
 #include <driverlib.h>
 #include <stdint.h>
-#include "tos.h"
+#include "tos_k.h"
 
 #define TASK1_STK_SIZE		320 // more than 300 for stb printf
 #define TASK2_STK_SIZE		320 // more than 300 for stb printf
@@ -41,13 +41,13 @@ void task2_entry(void *arg);
 
 
 /* EUSCI-UART-UCA1 115200 @ 8M */
-EUSCI_A_UART_initParam uart_config = 
+EUSCI_A_UART_initParam uart_config =
 {
     EUSCI_A_UART_CLOCKSOURCE_SMCLK, // SMCLK Clock Source
-    
-    4,                             // BRDIV 
-    5,                             // UCxBRF 
-    85,                            // UCxBRS 
+
+    4,                             // BRDIV
+    5,                             // UCxBRF
+    85,                            // UCxBRS
 
     EUSCI_A_UART_NO_PARITY,        // No Parity
     EUSCI_A_UART_LSB_FIRST,        // MSB First
@@ -64,11 +64,11 @@ EUSCI_A_UART_initParam uart_config =
  */
 void systick_handler(void)
 {
-  if(tos_knl_is_running())					
+  if(tos_knl_is_running())
   {
-      tos_knl_irq_enter();					
-      tos_tick_handler();       				            
-      tos_knl_irq_leave();       	 			
+      tos_knl_irq_enter();
+      tos_tick_handler();
+      tos_knl_irq_leave();
   }
 }
 
@@ -105,7 +105,7 @@ void board_init(void)
 
     /* Disable the GPIO power-on default high-impedance mode. */
     PMM_unlockLPM5();
-        
+
     /* Set P1.0(LED1) to output direction */
     GPIO_setAsOutputPin(GPIO_PORT_P1,GPIO_PIN0);
 
@@ -117,7 +117,7 @@ void board_init(void)
     GPIO_setAsOutputPin( GPIO_PORT_P3, GPIO_PIN4 );
     GPIO_setAsPeripheralModuleFunctionInputPin( GPIO_PORT_P3, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION );
     GPIO_setAsPeripheralModuleFunctionOutputPin( GPIO_PORT_P3, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION );
-    
+
     EUSCI_A_UART_init(EUSCI_A1_BASE, &uart_config);
     EUSCI_A_UART_enable(EUSCI_A1_BASE);
     //EUSCI_A_UART_enableInterrupt(EUSCI_A1_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
@@ -130,7 +130,7 @@ void board_init(void)
  * @return  ch
  */
 int putchar(int ch)
-{  
+{
     EUSCI_A_UART_transmitData(EUSCI_A1_BASE, ch);
 
     return (ch);
@@ -145,10 +145,10 @@ int putchar(int ch)
 void task1_entry(void *arg)
 {
     int count = 1;
-    while (1) 
+    while (1)
     {
         printf("###This is task1, %d\r\n", count++);
-        
+
         GPIO_toggleOutputOnPin(GPIO_PORT_P1,GPIO_PIN0);
 
         tos_task_delay(tos_millisec2tick(2000));
@@ -164,12 +164,12 @@ void task1_entry(void *arg)
 void task2_entry(void *arg)
 {
     int count = 1;
-    while (1) 
-    {      
+    while (1)
+    {
         printf("***This is task2, %d\r\n", count++);
 
         GPIO_toggleOutputOnPin(GPIO_PORT_P9,GPIO_PIN7);
-  
+
         tos_task_delay(tos_millisec2tick(1000));
     }
 }
@@ -177,11 +177,11 @@ void task2_entry(void *arg)
 int main(void)
 {
     k_err_t err;
-     
+
     board_init();
-    
+
     printf("Welcome to TencentOS tiny\r\n");
-    
+
     tos_knl_init();
 
     err = tos_task_create(&task1, "task1", task1_entry,
@@ -189,7 +189,7 @@ int main(void)
                             task1_stack, sizeof(task1_stack),0);
     err = tos_task_create(&task2, "task2", task2_entry,
                             K_NULL, TASK2_PRIO,
-                            task2_stack, sizeof(task2_stack),0);         
+                            task2_stack, sizeof(task2_stack),0);
     if( err == K_ERR_NONE )
     {
         err = tos_knl_start();
@@ -197,7 +197,7 @@ int main(void)
     else
     {
         printf("TencentOS tiny fail to creat tasks \r\n");
-        
+
         while(1);
     }
 }

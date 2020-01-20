@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32L073RZTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L0xx_DFP.2.0.1</PackID>
+          <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x20004FFF) IROM(0x8000000-0x802FFFF) CLOCK(8000000) CPUTYPE("Cortex-M0+")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -54,7 +54,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath></ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -421,6 +421,11 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\stm32l0xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\i2c.c</FilePath>
             </File>
           </Files>
         </Group>

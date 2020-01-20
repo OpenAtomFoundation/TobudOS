@@ -1,4 +1,4 @@
-#include "tos.h"
+#include "tos_k.h"
 
 /* 用户根据自己的底层通信链路来配置此宏
  * 如果是基于以太网lwip的链路，这里应该定义 USE_LWIP

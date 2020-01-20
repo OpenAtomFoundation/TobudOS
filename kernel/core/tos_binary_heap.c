@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 __STATIC_INLINE__ void bin_heap_item_copy_to(k_bin_heap_t *bin_heap, void *item_out, size_t *item_size)
 {
@@ -120,18 +120,16 @@ __API__ k_err_t tos_bin_heap_create(k_bin_heap_t *bin_heap, void *pool, size_t i
     TOS_PTR_SANITY_CHECK(pool);
     TOS_PTR_SANITY_CHECK(cmp);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&bin_heap->knl_obj, KNL_OBJ_TYPE_BINARY_HEAP);
-#endif
-#if TOS_CFG_MMHEAP_EN > 0u
-    knl_object_alloc_set_static(&bin_heap->knl_obj);
-#endif
-
     bin_heap->total     = 0;
     bin_heap->cmp       = cmp;
     bin_heap->item_size = item_size;
     bin_heap->item_cnt  = item_cnt;
     bin_heap->pool      = (uint8_t *)pool;
+
+    TOS_OBJ_INIT(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP);
+#if TOS_CFG_MMHEAP_EN > 0u
+    knl_object_alloc_set_static(&bin_heap->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -153,9 +151,7 @@ __API__ k_err_t tos_bin_heap_destroy(k_bin_heap_t *bin_heap)
     bin_heap->item_cnt  = 0;
     bin_heap->pool      = K_NULL;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&bin_heap->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(bin_heap);
 #if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&bin_heap->knl_obj);
 #endif
@@ -183,9 +179,7 @@ __API__ k_err_t tos_bin_heap_create_dyn(k_bin_heap_t *bin_heap, size_t item_cnt,
     bin_heap->item_cnt  = item_cnt;
     bin_heap->pool      = (uint8_t *)pool;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&bin_heap->knl_obj, KNL_OBJ_TYPE_BINARY_HEAP);
-#endif
+    TOS_OBJ_INIT(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP);
     knl_object_alloc_set_dynamic(&bin_heap->knl_obj);
 
     return K_ERR_NONE;
@@ -208,9 +202,7 @@ __API__ k_err_t tos_bin_heap_destroy_dyn(k_bin_heap_t *bin_heap)
     bin_heap->item_cnt  = 0;
     bin_heap->pool      = K_NULL;
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&bin_heap->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(bin_heap);
     knl_object_alloc_reset(&bin_heap->knl_obj);
 
     return K_ERR_NONE;

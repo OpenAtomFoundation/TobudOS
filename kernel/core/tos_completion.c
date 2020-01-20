@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#include "tos.h"
+#include "tos_k.h"
 
 #if TOS_CFG_COMPLETION_EN > 0u
 
@@ -23,12 +23,9 @@ __API__ k_err_t tos_completion_create(k_completion_t *completion)
 {
     TOS_PTR_SANITY_CHECK(completion);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_init(&completion->knl_obj, KNL_OBJ_TYPE_COMPLETION);
-#endif
-
-    pend_object_init(&completion->pend_obj);
     completion->done = (completion_done_t)0u;
+    pend_object_init(&completion->pend_obj);
+    TOS_OBJ_INIT(completion, KNL_OBJ_TYPE_COMPLETION);
 
     return K_ERR_NONE;
 }
@@ -48,9 +45,7 @@ __API__ k_err_t tos_completion_destroy(k_completion_t *completion)
 
     pend_object_deinit(&completion->pend_obj);
 
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
-    knl_object_deinit(&completion->knl_obj);
-#endif
+    TOS_OBJ_DEINIT(completion);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

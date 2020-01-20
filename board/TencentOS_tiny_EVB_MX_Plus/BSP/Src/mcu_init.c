@@ -2,11 +2,17 @@
 
 int fputc(int ch, FILE *f)
 {
-  if (ch == '\n') {
-    HAL_UART_Transmit(&huart2, (void *)"\r", 1,30000);
-  }
-  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
-  return ch;
+#if 0
+    if (ch == '\n') {
+        HAL_UART_Transmit(&huart2, (void *)"\r", 1, 30000);
+    }
+    HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+    return ch;
+#else
+    while ((USART2->ISR & 0X40) == 0);
+    USART2->TDR = (uint8_t)ch;
+    return ch;
+#endif
 }
 
 int _write(int fd, char *ptr, int len)
@@ -38,7 +44,7 @@ void m26_power_on(void)
 void board_init(void)
 {
   char *str = "TencentOS tiny";
-	
+
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
@@ -72,11 +78,11 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /** Configure LSE Drive Capability 
+  /** Configure LSE Drive Capability
   */
   HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE|RCC_OSCILLATORTYPE_MSI;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
@@ -94,7 +100,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -126,13 +132,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Configure the main internal regulator output voltage 
+  /** Configure the main internal regulator output voltage
   */
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     Error_Handler();
   }
-  /** Enable MSI Auto calibration 
+  /** Enable MSI Auto calibration
   */
   HAL_RCCEx_EnableMSIPLLMode();
 }
@@ -162,7 +168,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(char *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

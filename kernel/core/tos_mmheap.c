@@ -52,7 +52,7 @@
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <tos.h>
+#include "tos_k.h"
 
 #if TOS_CFG_MMHEAP_EN > 0u
 
