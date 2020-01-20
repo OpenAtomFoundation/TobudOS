@@ -48,7 +48,7 @@ static int sim7600ce_signal_quality_check(void)
 
     str = strstr(echo.buffer, "+CSQ:");
     sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
-    if (rssi == 99 || ber != 99) {
+    if (rssi == 99 || ber == 99) {
         return -1;
     }
 
