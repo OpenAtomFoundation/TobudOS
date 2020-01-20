@@ -31,7 +31,7 @@ __QCLOUD_STATIC__ qcloud_err_t qcloud_network_tcp_read(qcloud_network_t *network
 
 __QCLOUD_STATIC__ qcloud_err_t qcloud_network_tcp_write(qcloud_network_t *network, const void *buf, size_t len, uint32_t timeout, size_t *write_len)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
     QCLOUD_POINTER_SANITY_CHECK(buf, QCLOUD_ERR_INVAL);
     QCLOUD_POINTER_SANITY_CHECK(write_len, QCLOUD_ERR_INVAL);
 
@@ -40,28 +40,28 @@ __QCLOUD_STATIC__ qcloud_err_t qcloud_network_tcp_write(qcloud_network_t *networ
 
 __QCLOUD_STATIC__ void qcloud_network_tcp_disconnect(qcloud_network_t *network)
 {
-	if (!network || network->fd < 0) {
-		return;
-	}
+    if (!network || network->fd < 0) {
+        return;
+    }
 
-	osal_tcp_disconnect(network->fd);
-	network->fd = -1;
+    osal_tcp_disconnect(network->fd);
+    network->fd = -1;
 }
 
 __QCLOUD_STATIC__ qcloud_err_t qcloud_network_tcp_connect(qcloud_network_t *network)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
 
-	network->fd = osal_tcp_connect(network->host, network->port);
-	if (network->fd >= 0) {
-		return QCLOUD_ERR_SUCCESS;
-	}
-	return QCLOUD_ERR_FAILURE;
+    network->fd = osal_tcp_connect(network->host, network->port);
+    if (network->fd >= 0) {
+        return QCLOUD_ERR_SUCCESS;
+    }
+    return QCLOUD_ERR_FAILURE;
 }
 
 __QCLOUD_API__ qcloud_err_t qcloud_network_tcp_init(qcloud_network_t *network)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
 
     network->connect            = qcloud_network_tcp_connect;
     network->read               = qcloud_network_tcp_read;
@@ -81,7 +81,7 @@ __QCLOUD_STATIC__ int qcloud_network_udp_is_connected(qcloud_network_t *network)
 
 __QCLOUD_STATIC__ qcloud_err_t qcloud_network_udp_read(qcloud_network_t *network, void *buf, size_t len, uint32_t timeout, size_t *read_len)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
     QCLOUD_POINTER_SANITY_CHECK(buf, QCLOUD_ERR_INVAL);
     QCLOUD_POINTER_SANITY_CHECK(read_len, QCLOUD_ERR_INVAL);
 
@@ -90,7 +90,7 @@ __QCLOUD_STATIC__ qcloud_err_t qcloud_network_udp_read(qcloud_network_t *network
 
 __QCLOUD_STATIC__ qcloud_err_t qcloud_network_udp_write(qcloud_network_t *network, const void *buf, size_t len, uint32_t timeout, size_t *write_len)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
     QCLOUD_POINTER_SANITY_CHECK(buf, QCLOUD_ERR_INVAL);
     QCLOUD_POINTER_SANITY_CHECK(write_len, QCLOUD_ERR_INVAL);
 
@@ -99,29 +99,28 @@ __QCLOUD_STATIC__ qcloud_err_t qcloud_network_udp_write(qcloud_network_t *networ
 
 __QCLOUD_STATIC__ void qcloud_network_udp_disconnect(qcloud_network_t *network)
 {
-	if (!network || network->fd < 0) {
-		return;
-	}
+    if (!network || network->fd < 0) {
+        return;
+    }
 
-	osal_udp_disconnect(network->fd);
-	network->fd = -1;
+    osal_udp_disconnect(network->fd);
+    network->fd = -1;
 }
 
 __QCLOUD_STATIC__ qcloud_err_t qcloud_network_udp_connect(qcloud_network_t *network)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
 
-	network->fd = osal_udp_connect(network->host, network->port);
-	if (network->fd >= 0) {
-		return QCLOUD_ERR_SUCCESS;
-	}
-	return QCLOUD_ERR_FAILURE;
+    network->fd = osal_udp_connect(network->host, network->port);
+    if (network->fd >= 0) {
+        return QCLOUD_ERR_SUCCESS;
+    }
+    return QCLOUD_ERR_FAILURE;
 }
 
 __QCLOUD_API__ qcloud_err_t qcloud_network_udp_init(qcloud_network_t *network)
 {
-	QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
-
+    QCLOUD_POINTER_SANITY_CHECK(network, QCLOUD_ERR_INVAL);
 
     network->connect        = qcloud_network_udp_connect;
     network->read           = qcloud_network_udp_read;
