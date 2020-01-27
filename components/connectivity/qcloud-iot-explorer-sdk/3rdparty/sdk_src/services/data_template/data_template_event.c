@@ -305,7 +305,7 @@ static int _iot_construct_event_json(void *handle, char *jsonBuffer, size_t size
 	}else{ //single		
 		sEvent *pEvent = pEventArry[0];
 		if(0 == pEvent->timestamp){ //no accurate UTC time, set 0
-			rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "{\"eventId\":\"%s\", \"type\":\"%s\", \"timestamp\":0, \"params\":{",\
+			rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "\"eventId\":\"%s\", \"type\":\"%s\", \"timestamp\":0, \"params\":{",\
 							pEvent->event_name, pEvent->type);
 		}else{ // accurate UTC time is second,change to ms
 			rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "\"eventId\":\"%s\", \"type\":\"%s\", \"timestamp\":%u000, \"params\":{",\
