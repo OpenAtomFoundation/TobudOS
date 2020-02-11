@@ -69,7 +69,7 @@ TencentOS tiny目前支持STM32、NXP、华大半导体、国民技术、GD32、
 
 # 三、TencentOS tiny 参考文档
 ## 1、移植指南
-- [TencentOS tiny移植指南（KEIL版本）](./doc/10.Porting_Manual_for_Keil.md)
+- [TencentOS tiny移植指南（KEIL版本）](./doc/10.Porting_Manual_for_KEIL.md)
 - [TencentOS tiny移植指南（IAR版本）](./doc/11.Porting_Manual_for_IAR.md)
 - [TencentOS tiny移植指南（GCC版本）](./doc/12.Porting_Manual_for_GCC.md)
 
