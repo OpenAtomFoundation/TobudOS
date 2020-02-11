@@ -7,7 +7,7 @@ const Credential = tencentcloud.common.Credential;
 const ClientProfile = tencentcloud.common.ClientProfile;
 const HttpProfile = tencentcloud.common.HttpProfile;
 
-let cred = new Credential("AKIDxZ2LTTi84eaR3OfS8hnfxd4JHzQatFpF", "UigMrA9rJXUCeoiBQP8dsJuJ6sYzmNjs");
+let cred = new Credential("AKIDDDzjIeENdhosOg9T0LRXabO0B7pHhzQe", "f6IqCUirpeF1gLn3f0IWosjOqjOyTq2r");
 let httpProfile = new HttpProfile();
 httpProfile.endpoint = "iotcloud.tencentcloudapi.com";
 let clientProfile = new ClientProfile();
