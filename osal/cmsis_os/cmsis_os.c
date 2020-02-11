@@ -75,9 +75,20 @@ osThreadId osThreadCreate(const osThreadDef_t *thread_def, void *argument)
         return NULL;
     }
 
+#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+    if (!thread_def->stackbase && !thread_def->task) {
+        k_task_t *task;
+        err = tos_task_create_dyn(&task, thread_def->name, (k_task_entry_t)thread_def->pthread,
+                                argument, priority_cmsis2knl(thread_def->tpriority),
+                                thread_def->stacksize, thread_def->timeslice);
+        return err == K_ERR_NONE ? task : NULL;
+    }
+#endif
+
     err = tos_task_create((k_task_t *)thread_def->task, thread_def->name, (k_task_entry_t)thread_def->pthread,
                             argument, priority_cmsis2knl(thread_def->tpriority), thread_def->stackbase,
                             thread_def->stacksize, thread_def->timeslice);
+
     return err == K_ERR_NONE ? thread_def->task : NULL;
 }
 

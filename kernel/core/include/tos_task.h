@@ -176,7 +176,6 @@ __API__ k_err_t tos_task_destroy(k_task_t *task);
  * @brief Create a task with a dynamic allocated task handler and stack.
  * create a task with a dynamic allocated task handler and stack.
  *
- * @attention a task created by tos_task_create_dyn, should be destroyed by tos_task_destroy_dyn.
  * @param[out]  task        dynamic allocated task handler.
  * @param[in]   name        name of the task.
  * @param[in]   entry       running entry of the task.
@@ -198,20 +197,6 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
                                                     k_prio_t prio,
                                                     size_t stk_size,
                                                     k_timeslice_t timeslice);
-
-/**
- * @brief Destroy a dynamic created task.
- * delete a dynamic created task.
- *
- * @attention the API to destroy a dynamic created task.
- *
- * @param[in]   task        pointer to the handler of the task to be deleted.
- *
- * @return  errcode
- * @retval  #K_ERR_TASK_DESTROY_IDLE    attempt to destroy idle task.
- * @retval  #K_ERR_NONE                 return successfully.
- */
-__API__ k_err_t tos_task_destroy_dyn(k_task_t *task);
 
 #endif
 

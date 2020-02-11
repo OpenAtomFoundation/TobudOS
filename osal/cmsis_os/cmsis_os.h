@@ -398,12 +398,21 @@ uint32_t osKernelSysTick(void);
 #define osThreadDef(name, priority, instances, stacksz)  \
     extern const osThreadDef_t os_thread_def_##name
 #else                            // define the object
+
 #define osThreadDef(name, priority, instances, stacksz)  \
     k_task_t task_handler_##name; \
     k_stack_t task_stack_##name[(stacksz)]; \
     const osThreadDef_t os_thread_def_##name = \
         { #name, (os_pthread)(name), (osPriority)(priority), (instances), \
         (&((task_stack_##name)[0])), (stacksz), ((k_timeslice_t)0u), (&(task_handler_##name)) }
+
+#if (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u)
+#define osThreadDynamicDef(name, priority, instances, stacksz) \
+    const osThreadDef_t os_thread_def_##name = \
+        { #name, (os_pthread)(name), (osPriority)(priority), (instances), \
+        (K_NULL), (stacksz), ((k_timeslice_t)0u), (K_NULL) }
+#endif
+
 #endif
 
 /// Access a Thread definition.
