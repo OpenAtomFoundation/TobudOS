@@ -24,7 +24,7 @@ void udp_test0(void)
 
 	while (1) {
 		tos_sal_module_sendto(socket_id_0, "47.107.78.107", "1234",
-                                (const void*)"This is TCP Test!\r\n", strlen("This is UDP Test!\r\n"));
+                                (const void*)"This is UDP Test!\r\n", strlen("This is UDP Test!\r\n"));
 
 		recv_len = tos_sal_module_recvfrom(socket_id_0, recv_data_0, sizeof(recv_data_0));
 		if (recv_len < 0) {
@@ -78,16 +78,16 @@ void application_entry(void *arg)
 
     socket_id_0 = tos_sal_module_connect("47.107.78.107", "1234", TOS_SAL_PROTO_UDP);
     if (socket_id_0 == -1) {
-        printf("TCP0 connect failed\r\n");
+        printf("UDP0 connect failed\r\n");
     } else {
-        printf("TCP0 connect success! fd: %d\n", socket_id_0);
+        printf("UDP0 connect success! fd: %d\n", socket_id_0);
     }
 
     socket_id_1 = tos_sal_module_connect("47.107.78.107", "4321", TOS_SAL_PROTO_UDP);
     if (socket_id_1 == -1) {
-        printf("TCP1 connect failed\r\n");
+        printf("UDP1 connect failed\r\n");
     } else {
-        printf("TCP1 connect success! fd: %d\n", socket_id_1);
+        printf("UDP1 connect success! fd: %d\n", socket_id_1);
     }
 
     osThreadCreate(osThread(udp_test0), NULL);
