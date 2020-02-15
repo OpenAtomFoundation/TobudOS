@@ -38,7 +38,7 @@ void application_entry(void *arg)
 
         printf("send(%d): %s:%d :%s\n", ++cnt, server_ip, server_port, str);
         if ((send(socketfd, str, strlen(str), 0)) < 0) {
-            printf("send mes error: %s errno : %d\n", strerror(errno), errno);
+            printf("send msg error: %s errno : %d\n", strerror(errno), errno);
             goto tcp_client_exit;
         }
 
