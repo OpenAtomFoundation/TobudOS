@@ -51,7 +51,7 @@ void application_entry(void *arg)
         buff[n] = '\0';
         printf("recv(%d) msg from client:%s\n", ++cnt, buff);
         if ((send(connfd, buff, strlen(buff), 0)) < 0) {
-            printf("send mes error: %s errno : %d\n", strerror(errno), errno);
+            printf("send msg error: %s errno : %d\n", strerror(errno), errno);
             break;
         }
         close(connfd);
