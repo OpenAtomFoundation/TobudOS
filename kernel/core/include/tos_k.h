@@ -56,8 +56,12 @@
 #include <tos_mmheap.h>
 #include <tos_tick.h>
 #include <tos_sched.h>
+#if TOS_CFG_PWR_MGR_EN > 0u
 #include <tos_pm.h>
+#if TOS_CFG_TICKLESS_EN > 0u
 #include <tos_tickless.h>
+#endif
+#endif
 #include <tos_global.h>
 
 #endif /* _TOS_K_H_ */

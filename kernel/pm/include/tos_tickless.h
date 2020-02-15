@@ -33,11 +33,11 @@ __API__ k_err_t tos_tickless_wkup_alarm_init(k_cpu_lpwr_mode_t mode);
 
 __HOOK__ int tos_bsp_tickless_setup(void);
 
-__KERNEL__ int tickless_wkup_alarm_is_installed(k_cpu_lpwr_mode_t mode);
+__KNL__ int tickless_wkup_alarm_is_installed(k_cpu_lpwr_mode_t mode);
 
-__KERNEL__ void tickless_init(void);
+__KNL__ void tickless_init(void);
 
-__KERNEL__ void tickless_proc(void);
+__KNL__ void tickless_proc(void);
 
 #endif /* TOS_CFG_TICKLESS_EN */
 

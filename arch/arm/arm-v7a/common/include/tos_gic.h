@@ -92,15 +92,15 @@ typedef struct gic_data_st {
     gic_cpu_t  *cpu;
 } gic_data_t;
 
-__KERNEL__ uint32_t gic_interrupt_id_get(uint32_t gic_nr);
+__KNL__ uint32_t gic_interrupt_id_get(uint32_t gic_nr);
 
-__KERNEL__ void gic_interrupt_end(uint32_t gic_nr, uint32_t vector);
+__KNL__ void gic_interrupt_end(uint32_t gic_nr, uint32_t vector);
 
-__KERNEL__ int gic_init(uint32_t gic_nr);
+__KNL__ int gic_init(uint32_t gic_nr);
 
-__KERNEL__ void gic_interrupt_enable(uint32_t gic_nr, uint32_t vector);
+__KNL__ void gic_interrupt_enable(uint32_t gic_nr, uint32_t vector);
 
-__KERNEL__ void gic_interrupt_disable(uint32_t gic_nr, uint32_t vector);
+__KNL__ void gic_interrupt_disable(uint32_t gic_nr, uint32_t vector);
 
 #endif /* _TOS_GIC_H_ */
 

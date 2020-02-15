@@ -36,11 +36,11 @@ typedef evtdrv_event_flag_t (*evtdrv_task_entry_t)(evtdrv_event_flag_t event_fla
  */
 __API__ evtdrv_task_id_t tos_evtdrv_task_self(void);
 
-__KERNEL__ evtdrv_bool_t evtdrv_task_id_is_invalid(evtdrv_task_id_t task_id);
+__KNL__ evtdrv_bool_t evtdrv_task_id_is_invalid(evtdrv_task_id_t task_id);
 
-__KERNEL__ evtdrv_bool_t evtdrv_task_is_self(evtdrv_task_id_t task_id);
+__KNL__ evtdrv_bool_t evtdrv_task_is_self(evtdrv_task_id_t task_id);
 
-__KERNEL__ void evtdrv_task_init(void);
+__KNL__ void evtdrv_task_init(void);
 
 #endif /* TOS_CFG_EVENT_DRIVEN_EN */
 

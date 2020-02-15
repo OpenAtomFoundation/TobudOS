@@ -160,29 +160,29 @@ __API__ k_err_t tos_knl_sched_lock(void);
 __API__ k_err_t tos_knl_sched_unlock(void);
 
 #if TOS_CFG_TICKLESS_EN > 0u
-__KERNEL__ k_tick_t knl_next_expires_get(void);
+__KNL__ k_tick_t knl_next_expires_get(void);
 #endif
 
-__KERNEL__ void     knl_sched(void);
-__KERNEL__ int      knl_is_sched_locked(void);
-__KERNEL__ int      knl_is_inirq(void);
-__KERNEL__ int      knl_is_idle(k_task_t *task);
-__KERNEL__ int      knl_is_self(k_task_t *task);
-__KERNEL__ k_err_t  knl_idle_init(void);
+__KNL__ void    knl_sched(void);
+__KNL__ int     knl_is_sched_locked(void);
+__KNL__ int     knl_is_inirq(void);
+__KNL__ int     knl_is_idle(k_task_t *task);
+__KNL__ int     knl_is_self(k_task_t *task);
+__KNL__ k_err_t knl_idle_init(void);
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
 
-__KERNEL__ __STATIC_INLINE__ int knl_object_verify(knl_obj_t *knl_obj, knl_obj_type_t type)
+__KNL__ __STATIC_INLINE__ int knl_object_verify(knl_obj_t *knl_obj, knl_obj_type_t type)
 {
     return knl_obj->type == type;
 }
 
-__KERNEL__ __STATIC_INLINE__ void knl_object_init(knl_obj_t *knl_obj, knl_obj_type_t type)
+__KNL__ __STATIC_INLINE__ void knl_object_init(knl_obj_t *knl_obj, knl_obj_type_t type)
 {
     knl_obj->type = type;
 }
 
-__KERNEL__ __STATIC_INLINE__ void knl_object_deinit(knl_obj_t *knl_obj)
+__KNL__ __STATIC_INLINE__ void knl_object_deinit(knl_obj_t *knl_obj)
 {
     knl_obj->type = KNL_OBJ_TYPE_NONE;
 }
@@ -191,27 +191,27 @@ __KERNEL__ __STATIC_INLINE__ void knl_object_deinit(knl_obj_t *knl_obj)
 
 #if TOS_CFG_MMHEAP_EN > 0u
 
-__KERNEL__ __STATIC_INLINE__ void knl_object_alloc_reset(knl_obj_t *knl_obj)
+__KNL__ __STATIC_INLINE__ void knl_object_alloc_reset(knl_obj_t *knl_obj)
 {
     knl_obj->alloc_type = KNL_OBJ_ALLOC_TYPE_NONE;
 }
 
-__KERNEL__ __STATIC_INLINE__ void knl_object_alloc_set_dynamic(knl_obj_t *knl_obj)
+__KNL__ __STATIC_INLINE__ void knl_object_alloc_set_dynamic(knl_obj_t *knl_obj)
 {
     knl_obj->alloc_type = KNL_OBJ_ALLOC_TYPE_DYNAMIC;
 }
 
-__KERNEL__ __STATIC_INLINE__ void knl_object_alloc_set_static(knl_obj_t *knl_obj)
+__KNL__ __STATIC_INLINE__ void knl_object_alloc_set_static(knl_obj_t *knl_obj)
 {
     knl_obj->alloc_type = KNL_OBJ_ALLOC_TYPE_STATIC;
 }
 
-__KERNEL__ __STATIC_INLINE__ int knl_object_alloc_is_dynamic(knl_obj_t *knl_obj)
+__KNL__ __STATIC_INLINE__ int knl_object_alloc_is_dynamic(knl_obj_t *knl_obj)
 {
     return knl_obj->alloc_type == KNL_OBJ_ALLOC_TYPE_DYNAMIC;
 }
 
-__KERNEL__ __STATIC_INLINE__ int knl_object_alloc_is_static(knl_obj_t *knl_obj)
+__KNL__ __STATIC_INLINE__ int knl_object_alloc_is_static(knl_obj_t *knl_obj)
 {
     return knl_obj->alloc_type == KNL_OBJ_ALLOC_TYPE_STATIC;
 }

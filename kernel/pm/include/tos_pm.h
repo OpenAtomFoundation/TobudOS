@@ -78,23 +78,23 @@ __API__ k_err_t tos_pm_cpu_lpwr_mode_set(k_cpu_lpwr_mode_t cpu_lpwr_mode);
 
 __API__ k_err_t tos_pm_device_register(k_pm_device_t *device);
 
-__KERNEL__ void pm_init(void);
+__KNL__ void pm_init(void);
 
-__KERNEL__ void pm_cpu_lpwr_mode_enter(k_cpu_lpwr_mode_t lpwr_mode);
+__KNL__ void pm_cpu_lpwr_mode_enter(k_cpu_lpwr_mode_t lpwr_mode);
 
-__KERNEL__ k_cpu_lpwr_mode_t pm_cpu_lpwr_mode_get(void);
+__KNL__ k_cpu_lpwr_mode_t pm_cpu_lpwr_mode_get(void);
 
-__KERNEL__ void pm_idle_pwr_mgr_mode_set(idle_pwrmgr_mode_t idle_pwrmgr_mode);
+__KNL__ void pm_idle_pwr_mgr_mode_set(idle_pwrmgr_mode_t idle_pwrmgr_mode);
 
-__KERNEL__ int  pm_idle_pwr_mgr_mode_is_sleep(void);
+__KNL__ int  pm_idle_pwr_mgr_mode_is_sleep(void);
 
-__KERNEL__ int  pm_idle_pwr_mgr_mode_is_tickless(void);
+__KNL__ int  pm_idle_pwr_mgr_mode_is_tickless(void);
 
-__KERNEL__ void pm_power_manager(void);
+__KNL__ void pm_power_manager(void);
 
-__KERNEL__ int  pm_device_suspend(void);
+__KNL__ int  pm_device_suspend(void);
 
-__KERNEL__ int  pm_device_resume(void);
+__KNL__ int  pm_device_resume(void);
 
 #endif /* TOS_CFG_PWR_MGR_EN */
 

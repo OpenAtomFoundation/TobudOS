@@ -69,19 +69,19 @@ __STATIC__ void tick_task_takeoff(k_task_t *task)
     TOS_CPU_INT_ENABLE();
 }
 
-__KERNEL__ void tick_list_add(k_task_t *task, k_tick_t timeout)
+__KNL__ void tick_list_add(k_task_t *task, k_tick_t timeout)
 {
     tick_task_place(task, timeout);
     task_state_set_sleeping(task);
 }
 
-__KERNEL__ void tick_list_remove(k_task_t *task)
+__KNL__ void tick_list_remove(k_task_t *task)
 {
     tick_task_takeoff(task);
     task_state_reset_sleeping(task);
 }
 
-__KERNEL__ void tick_update(k_tick_t tick)
+__KNL__ void tick_update(k_tick_t tick)
 {
     TOS_CPU_CPSR_ALLOC();
     k_task_t *first, *task, *tmp;
@@ -115,7 +115,7 @@ __KERNEL__ void tick_update(k_tick_t tick)
     TOS_CPU_INT_ENABLE();
 }
 
-__KERNEL__ k_tick_t tick_next_expires_get(void)
+__KNL__ k_tick_t tick_next_expires_get(void)
 {
     TOS_CPU_CPSR_ALLOC();
     k_tick_t next_expires;

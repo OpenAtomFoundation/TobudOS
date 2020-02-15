@@ -90,19 +90,19 @@ typedef struct vfs_file_st {
     void           *private; /*< usually used to hook the real file struct of the certain filesystem */
 } vfs_file_t;
 
-__KERNEL__ vfs_file_t *vfs_fd2file(int fd);
+__KNL__ vfs_file_t *vfs_fd2file(int fd);
 
-__KERNEL__ int vfs_file2fd(vfs_file_t *file);
+__KNL__ int vfs_file2fd(vfs_file_t *file);
 
-__KERNEL__ vfs_file_t *vfs_file_alloc(void);
+__KNL__ vfs_file_t *vfs_file_alloc(void);
 
-__KERNEL__ void vfs_file_free(vfs_file_t *file);
+__KNL__ void vfs_file_free(vfs_file_t *file);
 
-__KERNEL__ vfs_file_t *vfs_file_dup(vfs_file_t *file);
+__KNL__ vfs_file_t *vfs_file_dup(vfs_file_t *file);
 
-__KERNEL__ vfs_dir_t *vfs_dir_alloc(void);
+__KNL__ vfs_dir_t *vfs_dir_alloc(void);
 
-__KERNEL__ void vfs_dir_free(vfs_dir_t *dir);
+__KNL__ void vfs_dir_free(vfs_dir_t *dir);
 
 #endif
 

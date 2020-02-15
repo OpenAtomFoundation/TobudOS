@@ -70,7 +70,7 @@
 #error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_EN should be declared in 'port.h'"
 #elif   (TOS_CFG_CPU_HRTIMER_EN > 0u) && !defined(TOS_CFG_CPU_HRTIMER_SIZE)
 #error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_SIZE should be declared in 'port.h'"
-#elif  ((TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_08) && \
+#elif  (TOS_CFG_CPU_HRTIMER_EN > 0u) && ((TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_32) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_64))

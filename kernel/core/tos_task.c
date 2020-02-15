@@ -215,7 +215,7 @@ __STATIC__ void task_free(k_task_t *task)
     tos_mmheap_free(task);
 }
 
-__KERNEL__ void task_free_all(void)
+__KNL__ void task_free_all(void)
 {
     TOS_CPU_CPSR_ALLOC();
     k_task_t *task, *tmp;

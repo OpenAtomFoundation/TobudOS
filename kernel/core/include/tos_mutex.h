@@ -110,7 +110,7 @@ __API__ k_err_t tos_mutex_pend(k_mutex_t *mutex);
  */
 __API__ k_err_t tos_mutex_post(k_mutex_t *mutex);
 
-__KERNEL__ void mutex_release(k_mutex_t *mutex);
+__KNL__ void mutex_release(k_mutex_t *mutex);
 
 #endif
 

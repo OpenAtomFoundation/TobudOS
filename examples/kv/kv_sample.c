@@ -41,12 +41,6 @@ void task(void *arg)
     MX_QUADSPI_Init();
 #endif
 
-#if 0
-    stm32l4_norflash_onchip_erase(0x803d000, 2048);
-    stm32l4_norflash_onchip_erase(0x803d000 + 2048, 2048);
-    return;
-#endif
-
 #ifdef USING_ONCHIP_FLASH
     err = tos_kv_init(&stm32l4_norflash_onchip_drv, &stm32l4_norflash_onchip_prop);
     printf("kv init, rc: %d\n", err);

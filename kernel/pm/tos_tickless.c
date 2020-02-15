@@ -40,7 +40,7 @@ __API__ k_err_t tos_tickless_wkup_alarm_init(k_cpu_lpwr_mode_t mode)
     return K_ERR_NONE;
 }
 
-__KERNEL__ int tickless_wkup_alarm_is_installed(k_cpu_lpwr_mode_t mode)
+__KNL__ int tickless_wkup_alarm_is_installed(k_cpu_lpwr_mode_t mode)
 {
     return k_tickless_wkup_alarm[mode] != K_NULL;
 }
@@ -134,7 +134,7 @@ __STATIC__ void tickless_leave(k_time_t time_sleep_ms)
     tickless_systick_fix(tick_sleep);
 }
 
-__KERNEL__ void tickless_proc(void)
+__KNL__ void tickless_proc(void)
 {
     k_time_t time_sleep;
     k_cpu_lpwr_mode_t lpwr_mode;
@@ -150,7 +150,7 @@ __KERNEL__ void tickless_proc(void)
     tickless_leave(time_sleep);
 }
 
-__KERNEL__ void tickless_init(void)
+__KNL__ void tickless_init(void)
 {
     pm_idle_pwr_mgr_mode_set(IDLE_POWER_MANAGER_MODE_TICKLESS);
 

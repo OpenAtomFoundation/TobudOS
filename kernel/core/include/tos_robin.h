@@ -46,7 +46,7 @@ __API__ void    tos_robin_timeslice_set(k_task_t *task, k_timeslice_t timeslice)
  */
 __API__ void    tos_robin_default_timeslice_config(k_timeslice_t default_timeslice);
 
-__KERNEL__ void robin_sched(k_prio_t prio);
+__KNL__ void robin_sched(k_prio_t prio);
 
 #endif
 

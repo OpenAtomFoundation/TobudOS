@@ -87,20 +87,20 @@ __STATIC__ vfs_inode_t *vfs_inode_create(const char *name, int name_len)
     return inode;
 }
 
-__KERNEL__ void vfs_inode_free(vfs_inode_t *inode)
+__KNL__ void vfs_inode_free(vfs_inode_t *inode)
 {
     tos_list_del(&inode->list);
     tos_mmheap_free((void *)inode);
 }
 
-__KERNEL__ void vfs_inode_refinc(vfs_inode_t *inode)
+__KNL__ void vfs_inode_refinc(vfs_inode_t *inode)
 {
     if (inode->refs < VFS_INODE_REFS_MAX) {
         ++inode->refs;
     }
 }
 
-__KERNEL__ vfs_inode_t *vfs_inode_find(const char *path, const char **relative_path)
+__KNL__ vfs_inode_t *vfs_inode_find(const char *path, const char **relative_path)
 {
     vfs_inode_t *inode = K_NULL;
 
@@ -114,12 +114,12 @@ __KERNEL__ vfs_inode_t *vfs_inode_find(const char *path, const char **relative_p
     return inode;
 }
 
-__KERNEL__ int vfs_inode_is_busy(vfs_inode_t *inode)
+__KNL__ int vfs_inode_is_busy(vfs_inode_t *inode)
 {
     return inode->refs > 0;
 }
 
-__KERNEL__ vfs_inode_t *vfs_inode_alloc(const char *name)
+__KNL__ vfs_inode_t *vfs_inode_alloc(const char *name)
 {
     int name_len;
     vfs_inode_t *inode = K_NULL;
@@ -150,7 +150,7 @@ __STATIC__ void vfs_inode_refdec(vfs_inode_t *inode)
     }
 }
 
-__KERNEL__ void vfs_inode_release(vfs_inode_t *inode)
+__KNL__ void vfs_inode_release(vfs_inode_t *inode)
 {
     vfs_inode_refdec(inode);
 

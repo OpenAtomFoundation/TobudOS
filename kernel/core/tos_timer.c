@@ -253,7 +253,7 @@ __API__ k_err_t tos_timer_period_change(k_timer_t *tmr, k_tick_t period)
     return timer_change(tmr, period, TIMER_CHANGE_TYPE_PERIOD);
 }
 
-__KERNEL__ k_tick_t timer_next_expires_get(void)
+__KNL__ k_tick_t timer_next_expires_get(void)
 {
     TOS_CPU_CPSR_ALLOC();
     k_tick_t next_expires;
@@ -274,7 +274,7 @@ __KERNEL__ k_tick_t timer_next_expires_get(void)
 
 #if TOS_CFG_TIMER_AS_PROC > 0u
 
-__KERNEL__ void timer_update(void)
+__KNL__ void timer_update(void)
 {
     k_timer_t *tmr, *tmp;
 
@@ -347,7 +347,7 @@ __STATIC__ void timer_task_entry(void *arg)
 
 #endif
 
-__KERNEL__ k_err_t timer_init(void)
+__KNL__ k_err_t timer_init(void)
 {
 #if TOS_CFG_TIMER_AS_PROC > 0u
     return K_ERR_NONE;

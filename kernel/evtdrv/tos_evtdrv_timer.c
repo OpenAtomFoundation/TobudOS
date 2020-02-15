@@ -95,7 +95,7 @@ __API__ evtdrv_err_t tos_evtdrv_timer_stop(evtdrv_timer_t *tmr)
     return EVTDRV_ERR_NONE;
 }
 
-__KERNEL__ void evtdrv_timer_update(void)
+__KNL__ void evtdrv_timer_update(void)
 {
     TOS_CPU_CPSR_ALLOC();
     evtdrv_timer_t *tmr, *tmp;

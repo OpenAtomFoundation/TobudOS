@@ -41,17 +41,17 @@ typedef struct vfs_inode_st {
 
 #define VFS_INODE_SIZE(name_len)    (sizeof(vfs_inode_t) + name_len)
 
-__KERNEL__ int vfs_inode_is_busy(vfs_inode_t *inode);
+__KNL__ int vfs_inode_is_busy(vfs_inode_t *inode);
 
-__KERNEL__ void vfs_inode_refinc(vfs_inode_t *inode);
+__KNL__ void vfs_inode_refinc(vfs_inode_t *inode);
 
-__KERNEL__ vfs_inode_t *vfs_inode_find(const char *path, const char **relative_path);
+__KNL__ vfs_inode_t *vfs_inode_find(const char *path, const char **relative_path);
 
-__KERNEL__ vfs_inode_t *vfs_inode_alloc(const char *name);
+__KNL__ vfs_inode_t *vfs_inode_alloc(const char *name);
 
-__KERNEL__ void vfs_inode_free(vfs_inode_t *inode);
+__KNL__ void vfs_inode_free(vfs_inode_t *inode);
 
-__KERNEL__ void vfs_inode_release(vfs_inode_t *inode);
+__KNL__ void vfs_inode_release(vfs_inode_t *inode);
 
 #endif
 

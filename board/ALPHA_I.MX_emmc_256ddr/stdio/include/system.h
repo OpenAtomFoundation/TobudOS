@@ -217,7 +217,7 @@ do {									\
 	:							\
 	: "memory", "cc");					\
 	})
-	
+
 /*
  * Enable IRQs
  */

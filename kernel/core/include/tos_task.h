@@ -337,64 +337,64 @@ __API__ void tos_task_walkthru(k_task_walker_t walker);
  */
 __DEBUG__ void tos_task_info_display(void);
 
-__KERNEL__ void task_free_all(void);
+__KNL__ void task_free_all(void);
 
-__KERNEL__ __STATIC_INLINE__ int task_state_is_ready(k_task_t *task)
+__KNL__ __STATIC_INLINE__ int task_state_is_ready(k_task_t *task)
 {
     return task->state == K_TASK_STATE_READY;
 }
 
-__KERNEL__ __STATIC_INLINE__ int task_state_is_sleeping(k_task_t *task)
+__KNL__ __STATIC_INLINE__ int task_state_is_sleeping(k_task_t *task)
 {
     return task->state & K_TASK_STATE_SLEEP;
 }
 
-__KERNEL__ __STATIC_INLINE__ int task_state_is_pending(k_task_t *task)
+__KNL__ __STATIC_INLINE__ int task_state_is_pending(k_task_t *task)
 {
     return task->state & K_TASK_STATE_PEND;
 }
 
-__KERNEL__ __STATIC_INLINE__ int task_state_is_suspended(k_task_t *task)
+__KNL__ __STATIC_INLINE__ int task_state_is_suspended(k_task_t *task)
 {
     return task->state & K_TASK_STATE_SUSPENDED;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_reset_pending(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_reset_pending(k_task_t *task)
 {
     task->state &= ~K_TASK_STATE_PEND;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_reset_sleeping(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_reset_sleeping(k_task_t *task)
 {
     task->state &= ~K_TASK_STATE_SLEEP;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_reset_suspended(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_reset_suspended(k_task_t *task)
 {
     task->state &= ~K_TASK_STATE_SUSPENDED;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_set_suspended(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_set_suspended(k_task_t *task)
 {
     task->state |= K_TASK_STATE_SUSPENDED;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_set_pend(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_set_pend(k_task_t *task)
 {
     task->state |= K_TASK_STATE_PEND;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_set_ready(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_set_ready(k_task_t *task)
 {
     task->state = K_TASK_STATE_READY;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_set_deleted(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_set_deleted(k_task_t *task)
 {
     task->state = K_TASK_STATE_DELETED;
 }
 
-__KERNEL__ __STATIC_INLINE__ void task_state_set_sleeping(k_task_t *task)
+__KNL__ __STATIC_INLINE__ void task_state_set_sleeping(k_task_t *task)
 {
     task->state |= K_TASK_STATE_SLEEP;
 }

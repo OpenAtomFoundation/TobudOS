@@ -61,7 +61,7 @@ __STATIC_INLINE__ void mutex_new_owner_mark(k_mutex_t *mutex, k_task_t *task)
     }
 }
 
-__KERNEL__ void mutex_release(k_mutex_t *mutex)
+__KNL__ void mutex_release(k_mutex_t *mutex)
 {
     mutex_old_owner_release(mutex);
     pend_wakeup_all(&mutex->pend_obj, PEND_STATE_OWNER_DIE);

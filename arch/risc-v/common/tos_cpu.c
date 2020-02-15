@@ -26,13 +26,13 @@
 k_stack_t k_irq_stk[TOS_CFG_IRQ_STK_SIZE];
 k_stack_t *k_irq_stk_top = k_irq_stk + TOS_CFG_IRQ_STK_SIZE;
 
-__KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
+__KNL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
     port_systick_priority_set(TOS_CFG_CPU_SYSTICK_PRIO);
     port_systick_config(cycle_per_tick);
 }
 
-__KERNEL__ void cpu_init(void) {
+__KNL__ void cpu_init(void) {
 
     // reserve storage space for sp registers
     k_irq_stk_top = (k_stack_t *)(((cpu_addr_t) k_irq_stk_top) - sizeof(cpu_data_t));
@@ -67,17 +67,17 @@ __API__ void tos_cpu_cpsr_restore(cpu_cpsr_t cpsr)
 }
 
 
-__KERNEL__ void cpu_context_switch(void)
+__KNL__ void cpu_context_switch(void)
 {
     port_context_switch();
 }
 
-__KERNEL__ void cpu_irq_context_switch(void)
+__KNL__ void cpu_irq_context_switch(void)
 {
     // DO NOTHING
 }
 
-__KERNEL__ void cpu_sched_start(void)
+__KNL__ void cpu_sched_start(void)
 {
     port_sched_start();
 }
@@ -120,7 +120,7 @@ Inx Offset Register
 
 */
 
-__KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
+__KNL__ k_stack_t *cpu_task_stk_init(void *entry,
                                               void *arg,
                                               void *exit,
                                               k_stack_t *stk_base,
