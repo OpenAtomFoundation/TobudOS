@@ -1,56 +1,30 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT1052CVL5B
+**     Processors:          MIMXRT1052CVJ5B
+**                          MIMXRT1052CVL5B
+**                          MIMXRT1052DVJ6B
 **                          MIMXRT1052DVL6B
 **
-**     Compilers:           Keil ARM C/C++ Compiler
-**                          Freescale C/C++ for Embedded ARM
+**     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1050RM Rev.1, 03/2018
-**     Version:             rev. 0.1, 2017-01-10
-**     Build:               b180307
+**     Reference manual:    IMXRT1050RM Rev.2.1, 12/2018 | IMXRT1050SRM Rev.2
+**     Version:             rev. 1.3, 2019-04-29
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
 **         contains the system frequency. It configures the device and initializes
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
-**     The Clear BSD License
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
-**     Redistribution and use in source and binary forms, with or without
-**     modification, are permitted (subject to the limitations in the
-**     disclaimer below) provided that the following conditions are met:
-**
-**     * Redistributions of source code must retain the above copyright
-**       notice, this list of conditions and the following disclaimer.
-**
-**     * Redistributions in binary form must reproduce the above copyright
-**       notice, this list of conditions and the following disclaimer in the
-**       documentation and/or other materials provided with the distribution.
-**
-**     * Neither the name of the copyright holder nor the names of its
-**       contributors may be used to endorse or promote products derived from
-**       this software without specific prior written permission.
-**
-**     NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
-**     GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
-**     HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-**     WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-**     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-**     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-**     LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-**     CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-**     SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-**     BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-**     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-**     OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-**     IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
 **     mail:                 support@nxp.com
@@ -58,14 +32,24 @@
 **     Revisions:
 **     - rev. 0.1 (2017-01-10)
 **         Initial version.
+**     - rev. 1.0 (2018-09-21)
+**         Update interrupt vector table and dma request source.
+**         Update register BEE_ADDR_OFFSET1's bitfield name to ADDR_OFFSET1.
+**         Split GPIO_COMBINED_IRQS to GPIO_COMBINED_LOW_IRQS and GPIO_COMBINED_HIGH_IRQS.
+**     - rev. 1.1 (2018-11-16)
+**         Update header files to align with IMXRT1050RM Rev.1.
+**     - rev. 1.2 (2018-11-27)
+**         Update header files to align with IMXRT1050RM Rev.2.1.
+**     - rev. 1.3 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1052
- * @version 0.1
- * @date 2017-01-10
+ * @version 1.3
+ * @date 2019-04-29
  * @brief Device specific configuration file for MIMXRT1052 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -98,24 +82,36 @@ void SystemInit (void) {
     SCB->VTOR = (uint32_t)g_pfnVectors;
 #endif
 
+/* Disable Watchdog Power Down Counter */
+WDOG1->WMCR &= ~WDOG_WMCR_PDE_MASK;
+WDOG2->WMCR &= ~WDOG_WMCR_PDE_MASK;
+
 /* Watchdog disable */
 
 #if (DISABLE_WDOG)
-    if (WDOG1->WCR & WDOG_WCR_WDE_MASK)
+    if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
         WDOG1->WCR &= ~WDOG_WCR_WDE_MASK;
     }
-    if (WDOG2->WCR & WDOG_WCR_WDE_MASK)
+    if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
         WDOG2->WCR &= ~WDOG_WCR_WDE_MASK;
     }
-    RTWDOG->CNT = 0xD928C520U; /* 0xD928C520U is the update key */
+    if ((RTWDOG->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
+    {
+        RTWDOG->CNT = 0xD928C520U; /* 0xD928C520U is the update key */
+    }
+    else
+    {
+        RTWDOG->CNT = 0xC520U;
+        RTWDOG->CNT = 0xD928U;
+    }
     RTWDOG->TOVAL = 0xFFFF;
     RTWDOG->CS = (uint32_t) ((RTWDOG->CS) & ~RTWDOG_CS_EN_MASK) | RTWDOG_CS_UPDATE_MASK;
 #endif /* (DISABLE_WDOG) */
 
     /* Disable Systick which might be enabled by bootrom */
-    if (SysTick->CTRL & SysTick_CTRL_ENABLE_Msk)
+    if ((SysTick->CTRL & SysTick_CTRL_ENABLE_Msk) != 0U)
     {
         SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
     }
@@ -146,20 +142,20 @@ void SystemCoreClockUpdate (void) {
     uint32_t PLL2MainClock;
 
     /* Periph_clk2_clk ---> Periph_clk */
-    if (CCM->CBCDR & CCM_CBCDR_PERIPH_CLK_SEL_MASK)
+    if ((CCM->CBCDR & CCM_CBCDR_PERIPH_CLK_SEL_MASK) != 0U)
     {
         switch (CCM->CBCMR & CCM_CBCMR_PERIPH_CLK2_SEL_MASK)
         {
             /* Pll3_sw_clk ---> Periph_clk2_clk ---> Periph_clk */
             case CCM_CBCMR_PERIPH_CLK2_SEL(0U):
-                if(CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK)
+                if((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK) != 0U)
                 {
                     freq = (((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_USB1_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                            CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
                 }
                 else
                 {
-                    freq = (CPU_XTAL_CLK_HZ * ((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_DIV_SELECT_MASK) ? 22U : 20U));
+                    freq = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
                 }
                 break;
 
@@ -171,6 +167,7 @@ void SystemCoreClockUpdate (void) {
             case CCM_CBCMR_PERIPH_CLK2_SEL(2U):
                 freq = (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                    CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
+                break;
 
             case CCM_CBCMR_PERIPH_CLK2_SEL(3U):
             default:
@@ -184,7 +181,7 @@ void SystemCoreClockUpdate (void) {
     else
     {
         /* check if pll is bypassed */
-        if(CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_BYPASS_MASK)
+        if((CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_BYPASS_MASK) != 0U)
         {
             PLL1MainClock = (((CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_ARM_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                    CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
@@ -196,16 +193,16 @@ void SystemCoreClockUpdate (void) {
         }
 
         /* check if pll is bypassed */
-        if(CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_MASK)
+        if((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_MASK) != 0U)
         {
             PLL2MainClock = (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                    CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
         }
         else
         {
-            PLL2MainClock = (CPU_XTAL_CLK_HZ * ((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) ? 22U : 20U));
+            PLL2MainClock = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
         }
-        PLL2MainClock += ((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM));
+        PLL2MainClock += (uint32_t)(((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM)));
 
 
         switch (CCM->CBCMR & CCM_CBCMR_PRE_PERIPH_CLK_SEL_MASK)

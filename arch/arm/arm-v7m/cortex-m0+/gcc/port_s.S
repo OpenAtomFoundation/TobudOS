@@ -58,7 +58,7 @@ port_sched_start:
 
     LDR     R1, =NVIC_PENDSV_PRI
 
-	
+
     STR    R1, [R0]
 
     MOVS    R0, #0
@@ -102,7 +102,7 @@ PendSV_Handler:
 
     SUBS    R0, R0, #0x20
     STMIA   R0!, {R4 - R7}
-    MOV     R4, R8                
+    MOV     R4, R8
     MOV     R5, R9
     MOV     R6, R10
     MOV     R7, R11
@@ -123,11 +123,11 @@ PendSVHandler_nosave:
 
     LDMIA   R0!, {R4 - R7}
     LDMIA   R0!, {R2 - R3}
-    MOV     R8, R2       
+    MOV     R8, R2
     MOV     R9, R3
-    LDMIA   R0!, {R2 - R3}          
-    MOV     R10, R2                 
-    MOV     R11, R3 
+    LDMIA   R0!, {R2 - R3}
+    MOV     R10, R2
+    MOV     R11, R3
     MSR     PSP, R0
 
     MOV     R0, R14

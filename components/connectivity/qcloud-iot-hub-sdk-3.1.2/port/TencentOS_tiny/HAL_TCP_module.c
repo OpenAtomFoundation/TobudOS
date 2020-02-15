@@ -43,9 +43,8 @@ static uint32_t _time_left(uint32_t t_end, uint32_t t_now)
 uintptr_t HAL_TCP_Connect(const char *host, uint16_t port)
 {
     int fd;
-    char port_str[PORT_BUFF_LEN];
-
-    memset(port_str, 0, PORT_BUFF_LEN);
+    char port_str[PORT_BUFF_LEN] = {0};
+    
     snprintf(port_str, PORT_BUFF_LEN, "%u", port);
     Log_i("osal_tcp_connect entry, host=%s port=%d(%s)", host , port, port_str);
 
