@@ -51,7 +51,5 @@ void application_entry(void *arg)
         printf("read error: %d\n", res);
     }
     f_close(&file);
-
-    f_sync(&file);
 }
 
