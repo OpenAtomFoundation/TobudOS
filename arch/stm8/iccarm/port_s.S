@@ -40,7 +40,6 @@ port_cpsr_restore
      */
     PUSH    A
     POP     CC
-    RIM
     RET
 
 

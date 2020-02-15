@@ -13,7 +13,6 @@ typedef uint32_t    cpu_data_t;
 typedef uint32_t    cpu_addr_t;
 #endif
 
-//typedef cpu_addr_t  size_t;
 typedef cpu_addr_t  cpu_cpsr_t;
 
 #endif

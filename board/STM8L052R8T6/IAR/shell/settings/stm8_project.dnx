@@ -49,7 +49,7 @@
         <MultiCoreRunAll>1</MultiCoreRunAll>
     </Simulator>
     <DebugChecksum>
-        <Checksum>4271934099</Checksum>
+        <Checksum>407403705</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -87,18 +87,21 @@
         <Bp12>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.96.1" 0 0 0 0 "" 0 ""</Bp12>
         <Bp13>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.149.5" 0 0 0 0 "" 0 ""</Bp13>
         <Bp14>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.107.9" 0 0 0 0 "" 0 ""</Bp14>
-        <Bp15>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\kernel\core\tos_tick.c}.107.9" 1 0 0 0 "" 0 ""</Bp15>
-        <Bp16>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.293.5" 0 0 0 0 "" 0 ""</Bp16>
-        <Bp17>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.100.1" 0 0 0 0 "" 0 ""</Bp17>
-        <Bp18>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.91.1" 0 0 0 0 "" 0 ""</Bp18>
-        <Bp19>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.96.1" 0 0 0 0 "" 0 ""</Bp19>
+        <Bp15>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.293.5" 0 0 0 0 "" 0 ""</Bp15>
+        <Bp16>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.100.1" 0 0 0 0 "" 0 ""</Bp16>
+        <Bp17>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.91.1" 0 0 0 0 "" 0 ""</Bp17>
+        <Bp18>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.96.1" 0 0 0 0 "" 0 ""</Bp18>
+        <Bp19>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.293.5" 0 0 0 0 "" 0 ""</Bp19>
         <Bp20>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.293.5" 0 0 0 0 "" 0 ""</Bp20>
-        <Bp21>_ "STD_CODE" "{D:\TOS\TencentOS-tiny}.293.5" 0 0 0 0 "" 0 ""</Bp21>
-        <Bp22>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.293.5" 0 0 0 0 "" 0 ""</Bp22>
-        <Bp23>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.299.9" 0 0 0 0 "" 0 ""</Bp23>
-        <Bp24>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.94.5" 0 0 0 0 "" 0 ""</Bp24>
-        <Bp25>_ "STD_CODE" "{$PROJ_DIR$\..\..\USER\main.c}.94.5" 1 0 0 0 "" 0 ""</Bp25>
-        <Count>26</Count>
+        <Bp21>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.293.5" 0 0 0 0 "" 0 ""</Bp21>
+        <Bp22>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.299.9" 0 0 0 0 "" 0 ""</Bp22>
+        <Bp23>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.439.5" 0 0 0 0 "" 0 ""</Bp23>
+        <Bp24>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\components\shell\tos_shell.c}.129.13" 1 0 0 0 "" 0 ""</Bp24>
+        <Bp25>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\components\shell\tos_shell.c}.138.11" 1 0 0 0 "" 0 ""</Bp25>
+        <Bp26>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\board\STM8L052R8T6}.441.5" 0 0 0 0 "" 0 ""</Bp26>
+        <Bp27>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\components\shell\tos_shell.c}.33.5" 1 0 0 0 "" 0 ""</Bp27>
+        <Bp28>_ "STD_CODE" "{D:\TOS\TencentOS-tiny\components\shell\tos_shell.c}.222.1" 1 0 0 0 "" 0 ""</Bp28>
+        <Count>29</Count>
     </Breakpoints>
     <Aliases>
         <Count>0</Count>

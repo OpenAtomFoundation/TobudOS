@@ -79,20 +79,13 @@ k_stack_t task1_stack[512];
 k_task_t task2;
 k_stack_t task2_stack[512];
 
-int main(void)
+#define APPLICATION_TASK_STK_SIZE       1024
+
+k_task_t task_app;
+k_stack_t task_app_stack[512];
+
+__WEAK__ void application_entry(void * arg)
 {
-    LED_GPIO_Init();
-    UART1_Init(57600); /* Init the UART1, baud rate 57600 */
-    RTC_Setting_Init(); /* Init RTC */
-
-    /* use as systick, interrupt handler see TIM2_UPD_OVF_TRG_BRK_USART2_TX_IRQHandler */
-    Timer2_Init(TOS_CFG_CPU_CLOCK, TOS_CFG_CPU_TICK_PER_SECOND);
-
-    LED_On();
-    UART1_Send_String("welcome to TencentOS tiny!\r\n");
-
-    tos_knl_init();
-
     tos_task_create(&task1, "task1", task1_entry, NULL,
                         4,
                         task1_stack, sizeof(task1_stack),
@@ -101,6 +94,27 @@ int main(void)
     tos_task_create(&task2, "task2", task2_entry, NULL,
                         4,
                         task2_stack, sizeof(task2_stack),
+                        0);
+}
+
+int main(void)
+{
+    LED_GPIO_Init();
+    UART1_Init(9600); /* Init the UART1, baud rate 9600 */
+    RTC_Setting_Init(); /* Init RTC */
+
+    /* use as systick, interrupt handler see TIM2_UPD_OVF_TRG_BRK_USART2_TX_IRQHandler */
+    Timer2_Init(TOS_CFG_CPU_CLOCK, TOS_CFG_CPU_TICK_PER_SECOND);
+
+    LED_On();
+    UART1_Send_String("welcome to TencentOS tiny!\r\n");
+    printf("welcome to TencentOS tiny!\r\n");
+
+    tos_knl_init();
+
+    tos_task_create(&task_app, "app", application_entry, NULL,
+                        4,
+                        task_app_stack, sizeof(task_app_stack),
                         0);
 
     tos_knl_start();

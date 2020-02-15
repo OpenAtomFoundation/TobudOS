@@ -1,7 +1,7 @@
 #include "tos_shell.h"
 #include "tos_hal.h"
 
-#define CMD_LEN_MAX     128
+#define CMD_LEN_MAX     25
 char cmd_buf[CMD_LEN_MAX];
 
 hal_uart_t shell_uart;

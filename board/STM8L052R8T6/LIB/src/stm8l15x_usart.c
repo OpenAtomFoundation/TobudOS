@@ -4,9 +4,9 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    30-September-2014
-  * @brief   This file provides firmware functions to manage the following 
+  * @brief   This file provides firmware functions to manage the following
   *          functionalities of the Universal synchronous asynchronous receiver
-  *          transmitter (USART):           
+  *          transmitter (USART):
   *           - Initialization and Configuration
   *           - Data transfers
   *           - Multi-Processor Communication
@@ -14,10 +14,10 @@
   *           - Smartcard mode
   *           - IrDA mode
   *           - DMA transfers management
-  *           - Interrupts and flags management 
-  *           
+  *           - Interrupts and flags management
+  *
   *  @verbatim
-  *      
+  *
   *          ===================================================================
   *                                 How to use this driver
   *          ===================================================================
@@ -27,7 +27,7 @@
   *
   *          2.  Enable the external Pull-up on the used USART Pins using the
   *              GPIO_ExternalPullUpConfig() function or an external pull-up equivalent resistor
-	*              (RPU = 45 KOhm typical value). 
+	*              (RPU = 45 KOhm typical value).
 	*
   *          3. Program the Baud Rate, Word Length , Stop Bit, Parity and Mode (Receiver/Transmitter)
   *           	using the USART_Init() function.
@@ -35,21 +35,21 @@
   *          4. For synchronous mode, enable the clock and program the polarity,
   *             phase and last bit using the USART_ClockInit() function.
   *
-  *          5. Enable the corresponding interrupt using the function USART_ITConfig() if you need 
-	*             to use interrupt mode. 
+  *          5. Enable the corresponding interrupt using the function USART_ITConfig() if you need
+	*             to use interrupt mode.
   *
-  *          6. When using the DMA mode 
+  *          6. When using the DMA mode
   *                   - Configure the DMA using DMA_Init() function
   *                   - Activate the needed channel Request using USART_DMACmd() function
-  * 
+  *
   *          7. Enable the USART using the USART_Cmd() function.
-  * 
-  *          8. Enable the DMA using the DMA_Cmd() function, when using DMA mode. 
+  *
+  *          8. Enable the DMA using the DMA_Cmd() function, when using DMA mode.
   *
   *          Refer to Multi-Processor, half-duplex, Smartcard, IrDA sub-sections for more details.
-  *          
+  *
   *  @endverbatim
-  *        
+  *
   ******************************************************************************
   * @attention
   *
@@ -61,14 +61,14 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm8l15x_usart.h"
@@ -77,11 +77,11 @@
   * @{
   */
 
-/** @defgroup USART 
+/** @defgroup USART
   * @brief USART driver modules
   * @{
   */
-	
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -94,46 +94,46 @@
   */
 
 /** @defgroup USART_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+ *  @brief   Initialization and Configuration functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                   Initialization and Configuration functions
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a set of functions allowing to initialize the USART 
+  This subsection provides a set of functions allowing to initialize the USART
   in asynchronous and in synchronous modes.
-   - For the asynchronous mode only these parameters can be configured: 
+   - For the asynchronous mode only these parameters can be configured:
         - Baud Rate
-        - Word Length 
+        - Word Length
         - Stop Bit
         - Parity: If the parity is enabled, then the MSB bit of the data written
           in the data register is transmitted but is changed by the parity bit.
           Depending on the frame length defined by the M bit (8-bits or 9-bits),
           the possible USART frame formats are as listed in the following table:
-   +-------------------------------------------------------------+     
+   +-------------------------------------------------------------+
    |   M bit |  PCE bit  |            USART frame                |
-   |---------------------|---------------------------------------|             
+   |---------------------|---------------------------------------|
    |    0    |    0      |    | SB | 8 bit data | STB |          |
-   |---------|-----------|---------------------------------------|  
+   |---------|-----------|---------------------------------------|
    |    0    |    1      |    | SB | 7 bit data | PB | STB |     |
-   |---------|-----------|---------------------------------------|  
+   |---------|-----------|---------------------------------------|
    |    1    |    0      |    | SB | 9 bit data | STB |          |
-   |---------|-----------|---------------------------------------|  
+   |---------|-----------|---------------------------------------|
    |    1    |    1      |    | SB | 8 bit data | PB | STB |     |
-   +-------------------------------------------------------------+            
+   +-------------------------------------------------------------+
         - Receiver/transmitter modes
 
   The USART_Init() function follows the USART  asynchronous configuration procedure
   (details for the procedure are available in reference manual (RM0031)).
 
-  - For the synchronous mode in addition to the asynchronous mode parameters these 
+  - For the synchronous mode in addition to the asynchronous mode parameters these
     parameters should be also configured:
         - USART Clock Enabled
         - USART polarity
         - USART phase
         - USART LastBit
-  
+
   These parameters can be configured using the USART_ClockInit() function.
 
 @endverbatim
@@ -172,7 +172,7 @@ void USART_DeInit(USART_TypeDef* USARTx)
   * @param  USART_WordLength: the word length
   *           This parameter can be one of the following values:
   *            @arg USART_WordLength_8b: 8 bits Data
-  *            @arg USART_WordLength_9b: 9 bits Data  
+  *            @arg USART_WordLength_9b: 9 bits Data
   * @param  USART_StopBits: Stop Bit
   *           This parameter can be one of the following values:
   *            @arg USART_StopBits_1: One stop bit is transmitted at the end of frame
@@ -182,11 +182,11 @@ void USART_DeInit(USART_TypeDef* USARTx)
   *           This parameter can be one of the following values:
   *            @arg USART_Parity_No: No Parity
   *            @arg USART_Parity_Even: Even Parity
-  *            @arg USART_Parity_Odd: Odd Parity    
+  *            @arg USART_Parity_Odd: Odd Parity
   * @param  USART_Mode: Mode
   *           This parameter can be one of the following values:
   *            @arg USART_Mode_Rx: Receive Enable
-  *            @arg USART_Mode_Tx: Transmit Enable  
+  *            @arg USART_Mode_Tx: Transmit Enable
   * @retval None
   */
 void USART_Init(USART_TypeDef* USARTx, uint32_t BaudRate, USART_WordLength_TypeDef
@@ -244,7 +244,7 @@ void USART_Init(USART_TypeDef* USARTx, uint32_t BaudRate, USART_WordLength_TypeD
   * @param  USART_Clock: Clock
   *           This parameter can be one of the following values:
   *            @arg USART_Clock_Disable: CK pin disabled
-  *            @arg USART_Clock_Enable: CK pin enabled  
+  *            @arg USART_Clock_Enable: CK pin enabled
   * @param  USART_CPOL: Clock Polarity
   *           This parameter can be one of the following values:
   *            @arg USART_CPOL_Low: CK to 0 when idle
@@ -255,9 +255,9 @@ void USART_Init(USART_TypeDef* USARTx, uint32_t BaudRate, USART_WordLength_TypeD
   *            @arg USART_CPHA_2Edge: The second clock transition is the first data capture edge
   * @param  USART_LastBit: Last Bit
   *           This parameter can be one of the following values:
-  *            @arg USART_LastBit_Disable: The clock pulse of the last data bit is 
+  *            @arg USART_LastBit_Disable: The clock pulse of the last data bit is
   *               not output to the SCLK pin
-  *            @arg USART_LastBit_Enable: The clock pulse of the last data bit is 
+  *            @arg USART_LastBit_Enable: The clock pulse of the last data bit is
   *               output to the SCLK pin
   * @retval None
   */
@@ -311,7 +311,7 @@ void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @note   This function is related to SmartCard and IrDa mode.
   * @param  USARTx: Select the USARTx peripheral.
   * @param  USART_Prescaler: specifies the prescaler clock.
-  * @note   In IrDA Low Power Mode the clock source is divided by the value given 
+  * @note   In IrDA Low Power Mode the clock source is divided by the value given
   *         in the register (8 bits)
   *         - 0000 0000 Reserved
   *         - 0000 0001 divides the clock source by 1
@@ -347,27 +347,27 @@ void USART_SendBreak(USART_TypeDef* USARTx)
   */
 
 /** @defgroup USART_Group2 Data transfers functions
- *  @brief   Data transfers functions 
+ *  @brief   Data transfers functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                             Data transfers functions
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a set of functions allowing to manage the USART data 
+  This subsection provides a set of functions allowing to manage the USART data
   transfers.
-  
-  During an USART reception, data shifts in least significant bit first through 
-  the RX pin. In this mode, the USART_DR register is similar to a buffer (RDR) 
+
+  During an USART reception, data shifts in least significant bit first through
+  the RX pin. In this mode, the USART_DR register is similar to a buffer (RDR)
   between the internal bus and the received shift register.
 
-  When a transmission is taking place, a write instruction to the USART_DR register 
-  stores the data in the TDR register which is copied in the shift register 
+  When a transmission is taking place, a write instruction to the USART_DR register
+  stores the data in the TDR register which is copied in the shift register
   at the end of the current transmission.
 
   The read access of the USART_DR register can be done using the USART_ReceiveData8()
   or USART_ReceiveData9() functions and returns the RDR buffered value. Whereas a write
-	access to the USART_DR can be done using USART_SendData8() or USART_SendData9() 
+	access to the USART_DR can be done using USART_SendData8() or USART_SendData9()
 	functions and stores the written data into TDR buffer.
 
 @endverbatim
@@ -433,22 +433,22 @@ void USART_SendData9(USART_TypeDef* USARTx, uint16_t Data)
   */
 
 /** @defgroup USART_Group3 MultiProcessor Communication functions
- *  @brief   Multi-Processor Communication functions 
+ *  @brief   Multi-Processor Communication functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                     Multi-Processor Communication functions
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a set of functions allowing to manage the USART 
+  This subsection provides a set of functions allowing to manage the USART
   multiprocessor communication.
-  
-  For instance one of the USARTs can be the master, its TX output is connected to 
-  the RX input of the other USART. The others are slaves, their respective TX outputs 
+
+  For instance one of the USARTs can be the master, its TX output is connected to
+  the RX input of the other USART. The others are slaves, their respective TX outputs
   are logically ANDed together and connected to the RX input of the master.
 
   USART multiprocessor communication is possible through the following procedure:
-     1. Program the Baud rate, Word length = 9 bits, Stop bits, Parity, Mode transmitter 
+     1. Program the Baud rate, Word length = 9 bits, Stop bits, Parity, Mode transmitter
         or Mode receiver and hardware flow control values using the USART_Init()
         function.
      2. Configures the USART address using the USART_SetAddress() function.
@@ -462,7 +462,7 @@ void USART_SendData9(USART_TypeDef* USARTx, uint16_t Data)
 @endverbatim
   * @{
   */
-	
+
 /**
   * @brief  Determines if the USART is in mute mode or not.
   * @param  USARTx: where x can be 1 to select the specified USART peripheral.
@@ -509,7 +509,7 @@ void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
   * @param  USART_WakeUp: Specifies the USART wakeup method.
   *           This parameter can be one of the following values:
   *            @arg USART_WakeUp_IdleLine: 0x01 Idle Line wake up
-  *            @arg USART_WakeUp_AddressMark: 0x02 Address Mark wake up    
+  *            @arg USART_WakeUp_AddressMark: 0x02 Address Mark wake up
   * @retval None
   */
 void USART_WakeUpConfig(USART_TypeDef* USARTx, USART_WakeUp_TypeDef USART_WakeUp)
@@ -524,21 +524,21 @@ void USART_WakeUpConfig(USART_TypeDef* USARTx, USART_WakeUp_TypeDef USART_WakeUp
   */
 
 /** @defgroup USART_Group4 Halfduplex mode function
- *  @brief   Half-duplex mode function 
+ *  @brief   Half-duplex mode function
  *
-@verbatim   
+@verbatim
  ===============================================================================
                          Half-duplex mode function
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a function allowing to manage the USART 
+  This subsection provides a function allowing to manage the USART
   Half-duplex communication.
-  
-  The USART can be configured to follow a single-wire half-duplex protocol where 
+
+  The USART can be configured to follow a single-wire half-duplex protocol where
   the TX and RX lines are internally connected.
 
   USART Half duplex communication is possible through the following procedure:
-     1. Program the Baud rate, Word length, Stop bits, Parity, Mode transmitter 
+     1. Program the Baud rate, Word length, Stop bits, Parity, Mode transmitter
         or Mode receiver and hardware flow control values using the USART_Init()
         function.
      2. Configures the USART address using the USART_SetAddress() function.
@@ -582,21 +582,21 @@ void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 
 /** @defgroup USART_Group5 Smartcard mode functions
- *  @brief   Smartcard mode functions 
+ *  @brief   Smartcard mode functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                                Smartcard mode functions
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a set of functions allowing to manage the USART 
+  This subsection provides a set of functions allowing to manage the USART
   Smartcard communication.
-  
+
   The Smartcard interface is designed to support asynchronous protocol Smartcards as
   defined in the ISO 7816-3 standard.
 
   The USART can provide a clock to the smartcard through the SCLK output.
-  In smartcard mode, SCLK is not associated to the communication but is simply derived 
+  In smartcard mode, SCLK is not associated to the communication but is simply derived
   from the internal peripheral input clock through a 5-bit prescaler.
 
   Smartcard communication is possible through the following procedure:
@@ -622,10 +622,10 @@ void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
   Please refer to the ISO 7816-3 specification for more details.
 
-Note: 
+Note:
 -----
-  1.  It is also possible to choose 0.5 stop bit for receiving but it is recommended 
-      to use 1.5 stop bits for both transmitting and receiving to avoid switching 
+  1.  It is also possible to choose 0.5 stop bit for receiving but it is recommended
+      to use 1.5 stop bits for both transmitting and receiving to avoid switching
       between the two configurations.
   2. In smartcard mode, the following bits must be kept cleared:
      - HDSEL and IREN bits in the USART_CR5 register.
@@ -633,7 +633,7 @@ Note:
 @endverbatim
   * @{
   */
-	
+
 /**
   * @brief  Enables or disables the USART Smart Card mode.
   * @param  USARTx: Select the USARTx peripheral.
@@ -698,38 +698,38 @@ void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
   */
 
 /** @defgroup USART_Group6 IrDA mode functions
- *  @brief   IrDA mode functions 
+ *  @brief   IrDA mode functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                                 IrDA mode functions
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a set of functions allowing to manage the USART 
+  This subsection provides a set of functions allowing to manage the USART
   IrDA communication.
-  
+
   IrDA is a half duplex communication protocol. If the Transmitter is busy, any data
-  on the IrDA receive line will be ignored by the IrDA decoder and if the Receiver 
+  on the IrDA receive line will be ignored by the IrDA decoder and if the Receiver
   is busy, data on the TX from the USART to IrDA will not be encoded by IrDA.
   While receiving data, transmission should be avoided as the data to be transmitted
   could be corrupted.
 
   IrDA communication is possible through the following procedure:
-     1. Program the Baud rate, Word length = 8 bits, Stop bits, Parity, Transmitter/Receiver 
+     1. Program the Baud rate, Word length = 8 bits, Stop bits, Parity, Transmitter/Receiver
         modes and hardware flow control values using the USART_Init() function.
      2. Enable the USART using the USART_Cmd() function.
-     3. Configures the IrDA pulse width by configuring the prescaler using  
+     3. Configures the IrDA pulse width by configuring the prescaler using
         the USART_SetPrescaler() function.
      4. Configures the IrDA  USART_IrDAMode_LowPower or USART_IrDAMode_Normal mode
         using the USART_IrDAConfig() function.
      5. Enable the IrDA using the USART_IrDACmd() function.
 
-Note: 
+Note:
 -----
   1. A pulse of width less than two and greater than one PSC period(s) may or may
      not be rejected.
   2. The receiver set up time should be managed by software. The IrDA physical layer
-     specification specifies a minimum of 10 ms delay between transmission and 
+     specification specifies a minimum of 10 ms delay between transmission and
      reception (IrDA is a half duplex protocol).
   3. In IrDA mode, the following bits must be kept cleared:
     - STOP and CLKEN bits in the USART_CR3 register.
@@ -738,14 +738,14 @@ Note:
 @endverbatim
   * @{
   */
-	
+
 /**
   * @brief  Configures the USART’s IrDA interface.
   * @param  USARTx: where x can be 1 to select the specified USART peripheral.
   * @param  USART_IrDAMode specifies the IrDA mode.
   *           This parameter can be one of the following values:
   *            @arg USART_IrDAMode_Normal: IrDA Normal Mode
-  *            @arg USART_IrDAMode_LowPower: IrDA Low Power Mode 
+  *            @arg USART_IrDAMode_LowPower: IrDA Low Power Mode
   * @retval None
   */
 void USART_IrDAConfig(USART_TypeDef* USARTx, USART_IrDAMode_TypeDef USART_IrDAMode)
@@ -794,10 +794,10 @@ void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
 /** @defgroup USART_Group7 DMA transfers management functions
  *  @brief   DMA transfers management functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                       DMA transfers management functions
- ===============================================================================  
+ ===============================================================================
 
 @endverbatim
   * @{
@@ -810,7 +810,7 @@ void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @param  USART_DMAReq Specifies the USART DMA transfer request to be enabled or disabled.
   *           This parameter can be one of the following values:
   *            @arg USART_DMAReq_TX: Receive DMA request Enable
-  *            @arg USART_DMAReq_RX: Transmit DMA request Enable 
+  *            @arg USART_DMAReq_RX: Transmit DMA request Enable
   * @param  NewState Indicates the new state of the USART DMA request.
     *         This parameter can be: ENABLE or DISABLE.
   * @retval None
@@ -839,28 +839,28 @@ void USART_DMACmd(USART_TypeDef* USARTx, USART_DMAReq_TypeDef USART_DMAReq,
 /**
   * @}
   */
-  
+
 /** @defgroup USART_Group8 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions 
+ *  @brief   Interrupts and flags management functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                    Interrupts and flags management functions
- ===============================================================================  
+ ===============================================================================
 
-  This subsection provides a set of functions allowing to configure the USART 
-  Interrupts sources, DMA channels requests and check or clear the flags or 
+  This subsection provides a set of functions allowing to configure the USART
+  Interrupts sources, DMA channels requests and check or clear the flags or
   pending bits status.
-  The user should identify which mode will be used in his application to manage 
-  the communication: Polling mode, Interrupt mode or DMA mode. 
-    
+  The user should identify which mode will be used in his application to manage
+  the communication: Polling mode, Interrupt mode or DMA mode.
+
   Polling Mode
   =============
   In Polling Mode, the USART communication can be managed by 9 flags:
      1. USART_FLAG_TXE: to indicate the status of the transmit buffer register
      2. USART_FLAG_RXNE: to indicate the status of the receive buffer register
      3. USART_FLAG_TC: to indicate the status of the transmit operation
-     4. USART_FLAG_IDLE: to indicate the status of the Idle Line             
+     4. USART_FLAG_IDLE: to indicate the status of the Idle Line
      5. USART_FLAG_SBK: to indicate the status of the Send Break characters
      6. USART_FLAG_NE: to indicate if a noise error occur
      7. USART_FLAG_FE: to indicate if a frame error occur
@@ -874,32 +874,32 @@ void USART_DMACmd(USART_TypeDef* USARTx, USART_DMAReq_TypeDef USART_DMAReq,
   Interrupt Mode
   ===============
   In Interrupt Mode, the USART communication can be managed by 7 interrupt sources
-  and 6 pending bits: 
+  and 6 pending bits:
 
   Pending Bits:
-  ------------- 
+  -------------
      1. USART_IT_TXE: to indicate the status of the transmit buffer register
      2. USART_IT_RXNE: to indicate the status of the receive buffer register
      3. USART_IT_TC: to indicate the status of the transmit operation
-     4. USART_IT_IDLE: to indicate the status of the Idle Line             
+     4. USART_IT_IDLE: to indicate the status of the Idle Line
      5. USART_IT_PE: to indicate if a parity error occur
      6. USART_IT_OR: to indicate if an Noise flag, overrun error and framing error in
 											multibuffer communication error occur
 
   Interrupt Source:
   -----------------
-     1. USART_IT_TXE: specifies the interrupt source for the Tx buffer empty 
-                       interrupt. 
-     2. USART_IT_RXNE: specifies the interrupt source for the Rx buffer not 
+     1. USART_IT_TXE: specifies the interrupt source for the Tx buffer empty
+                       interrupt.
+     2. USART_IT_RXNE: specifies the interrupt source for the Rx buffer not
                         empty interrupt.
-     3. USART_IT_TC: specifies the interrupt source for the Transmit complete 
-											interrupt. 
+     3. USART_IT_TC: specifies the interrupt source for the Transmit complete
+											interrupt.
      4. USART_IT_IDLE: specifies the interrupt source for the Idle Line interrupt.
-     5. USART_IT_PE: specifies the interrupt source for the parity error interrupt. 
+     5. USART_IT_PE: specifies the interrupt source for the parity error interrupt.
      6. USART_IT_ERR:  specifies the interrupt source for the errors interrupt.
 		 7. USART_IT_OR: specifies the interrupt source for the overrun error interrupt.
 
-    Note: Some parameters are coded in order to use them as interrupt source or 
+    Note: Some parameters are coded in order to use them as interrupt source or
     ----  as pending bits.
 
   In this Mode it is advised to use the following functions:
@@ -989,14 +989,14 @@ void USART_ITConfig(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT, Functional
   * @param  USART_FLAG specifies the flag to check.
   *         This parameter can be one of the following values:
   *            @arg USART_FLAG_TXE: Transmit Data Register empty
-  *            @arg USART_FLAG_TC: Transmission Complete 
+  *            @arg USART_FLAG_TC: Transmission Complete
   *            @arg USART_FLAG_RXNE: Read Data Register Not Empty
   *            @arg USART_FLAG_IDLE: Idle line detected
   *            @arg USART_FLAG_OR: OverRun error
   *            @arg USART_FLAG_NF: Noise error
   *            @arg USART_FLAG_FE: Framing Error
   *            @arg USART_FLAG_PE: Parity Error
-  *            @arg USART_FLAG_SBK: Send Break characters               
+  *            @arg USART_FLAG_SBK: Send Break characters
   * @retval FlagStatus (SET or RESET)
   */
 FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_FLAG)

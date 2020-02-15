@@ -1,7 +1,19 @@
 #include "stm8l15x.h"
 #include "uart.h"
 
+#include "stdio.h"
+
 const uint8_t HEX_TABLE[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+int putchar(int c) {
+    if('\n' == (char)c)  {
+        USART_SendData8(USART1, '\r');
+        while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+    }
+    USART_SendData8(USART1, c);
+    while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+    return (c);
+}
 
 void UART1_Send_Byte(uint8_t ucData)
 {
@@ -98,18 +110,21 @@ void UART1_Send_Dec(unsigned int num, unsigned char ucNumCount)
 
 void UART1_Init(uint32_t uiBaudRate)
 {
-	//INIT UART1 PINS
-	GPIO_Init(GPIOC, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast);
-	GPIO_Init(GPIOC, GPIO_Pin_2, GPIO_Mode_In_PU_No_IT);
-	GPIO_SetBits(GPIOC, GPIO_Pin_3);
+    // INIT UART1 PINS
+    GPIO_Init(GPIOC, GPIO_Pin_3, GPIO_Mode_Out_PP_High_Fast);
+    GPIO_Init(GPIOC, GPIO_Pin_2, GPIO_Mode_In_PU_No_IT);
+    GPIO_SetBits(GPIOC, GPIO_Pin_3);
 
-	//enable UART1 Clock
-	CLK_PeripheralClockConfig(CLK_Peripheral_USART1, ENABLE);
+    // enable UART1 Clock
+    CLK_PeripheralClockConfig(CLK_Peripheral_USART1, ENABLE);
 
-	//setting the UART1
-	USART_Init(USART1, uiBaudRate, USART_WordLength_8b, USART_StopBits_1, USART_Parity_No,
-			   (USART_Mode_TypeDef)(USART_Mode_Tx | USART_Mode_Rx));
+    // setting the UART1
+    USART_Init(USART1, uiBaudRate, USART_WordLength_8b, USART_StopBits_1, USART_Parity_No,
+                (USART_Mode_TypeDef)(USART_Mode_Tx | USART_Mode_Rx));
 
-	//enable UART1
-	USART_Cmd(USART1, ENABLE);
+    // enable RX interrupt
+    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+
+    // enable UART1
+    USART_Cmd(USART1, ENABLE);
 }

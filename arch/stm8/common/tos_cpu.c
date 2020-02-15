@@ -210,6 +210,9 @@ __KNL__ k_stack_t *cpu_task_stk_init(void *entry,
     }
 #endif
 
+    *--sp = (cpu_data_t)((uint16_t)exit & 0xFF);           /* LRL */
+    *--sp = (cpu_data_t)(((uint16_t)exit >> 8) & 0xFF);    /* LRH */
+
     *--sp = (cpu_data_t)((uint16_t)entry & 0xFF);           /* PCL */
     *--sp = (cpu_data_t)(((uint16_t)entry >> 8) & 0xFF);    /* PCH */
 

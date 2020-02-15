@@ -291,7 +291,6 @@ INTERRUPT_HANDLER(TIM2_UPD_OVF_TRG_BRK_USART2_TX_IRQHandler, 19)
        */
 
     TIM2_ClearITPendingBit(TIM2_IT_Update);
-    //UART1_Send_String("tim\r\n");
 
     if (tos_knl_is_running()) {
         tos_knl_irq_enter();
@@ -433,6 +432,7 @@ INTERRUPT_HANDLER(USART1_RX_TIM5_CC_IRQHandler, 28)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
        */
+
 #ifdef USE_STM8L1526_EVAL
     uint8_t temp;
 
