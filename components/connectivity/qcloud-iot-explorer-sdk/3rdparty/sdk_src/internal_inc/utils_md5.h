@@ -81,7 +81,7 @@ void utils_md5_process(iot_md5_context *ctx, const unsigned char data[64]);
  * @brief          Output = MD5( input buffer )
  *
  * @param input    data input
- * @param ilen     data lenght
+ * @param ilen     data length
  * @param output   MD5 result
  */
 void utils_md5(const unsigned char *input, size_t ilen, unsigned char output[16]);
