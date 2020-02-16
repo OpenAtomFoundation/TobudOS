@@ -65,14 +65,14 @@ _context_save:
     PUSH    ?b15
 
     /* k_curr_task->sp = SP */
-    LDW     X, k_curr_task  /* equls to: "ldr r0, =k_curr_task; ldr r0, [r0]" */
+    LDW     X, k_curr_task  /* equals to: "ldr r0, =k_curr_task; ldr r0, [r0]" */
     LDW     Y, SP
     LDW     (X), Y
 
 _context_restore:
     ; k_curr_task = k_next_task
     LDW     X, k_next_task
-    LDW     Y, #k_curr_task /* equls to: "ldr r0, =k_curr_task "*/
+    LDW     Y, #k_curr_task /* equals to: "ldr r0, =k_curr_task "*/
     LDW     (Y), X
 
     /* SP = k_next_task->sp */
