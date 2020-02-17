@@ -128,8 +128,8 @@ typedef enum light_color_en {
 } light_color_t; // a enum to describe the color of a light
 
 typedef enum light_switch_state_en {
-    LIGHT_SWTICH_STATE_OFF    = 0,
-    LIGHT_SWTICH_STATE_ON     = 1,
+    LIGHT_SWITCH_STATE_OFF    = 0,
+    LIGHT_SWITCH_STATE_ON     = 1,
 } light_switch_state_t; // a enum to describe the switch state of a light
 
 typedef enum property_state_en {
@@ -174,7 +174,7 @@ static void data_template_init(qcloud_device_t *device)
 {
     memset((void *)&light_profile, 0, sizeof(light_profile_t));
 
-    light_profile.switch_state  = LIGHT_SWTICH_STATE_OFF;
+    light_profile.switch_state  = LIGHT_SWITCH_STATE_OFF;
     light_profile.color         = LIGHT_COLOR_RED;
     light_profile.brightness    = 0.0;
 
@@ -223,7 +223,7 @@ static void property_do_update(shadow_dev_property_t *property)
             break;
 
         case JSON_DATA_TYPE_STRING: // device name
-            /* Èç¹û¶à¸ö×Ö·û´®ÊôĞÔ,¸ù¾İpProperty->keyÖµÆ¥Åä£¬´¦Àí×Ö·û´® */
+            /* å¦‚æœå¤šä¸ªå­—ç¬¦ä¸²å±æ€§,æ ¹æ®pProperty->keyå€¼åŒ¹é…ï¼Œå¤„ç†å­—ç¬¦ä¸² */
             if (strcmp("name", property->key) != 0) {
                 break;
             }
@@ -235,7 +235,7 @@ static void property_do_update(shadow_dev_property_t *property)
     }
 }
 
-/* Èç¹ûÓĞ×Ô¶¨ÒåµÄ×Ö·û´®»òÕßjson£¬ĞèÒªÔÚÕâÀï½âÎö */
+/* å¦‚æœæœ‰è‡ªå®šä¹‰çš„å­—ç¬¦ä¸²æˆ–è€…jsonï¼Œéœ€è¦åœ¨è¿™é‡Œè§£æ */
 static qcloud_err_t property_update(const char *json_doc, shadow_dev_property_t *property)
 {
     QCLOUD_POINTER_SANITY_CHECK(json_doc, QCLOUD_ERR_INVAL);
@@ -263,13 +263,13 @@ static qcloud_err_t property_update(const char *json_doc, shadow_dev_property_t 
     return QCLOUD_ERR_SUCCESS;
 }
 
-/* ·şÎñ¶ËÓĞ¿ØÖÆÏûÏ¢ÏÂ·¢£¬»á´¥·¢ÕâÀïµÄdelta»Øµ÷ */
+/* æœåŠ¡ç«¯æœ‰æ§åˆ¶æ¶ˆæ¯ä¸‹å‘ï¼Œä¼šè§¦å‘è¿™é‡Œçš„deltaå›è°ƒ */
 static void on_property_delta_handler(void *client, const char *json_doc, uint32_t json_doc_len, shadow_dev_property_t *property)
 {
     int i = 0;
 
     for (i = 0; i < LIGHT_PROPERTY_COUNT; ++i) {
-        /* ÆäËûÊı¾İÀàĞÍÒÑ¾­ÔÚ_handle_deltaÁ÷³ÌÍ³Ò»´¦ÀíÁË£¬×Ö·û´®ºÍjson´®ĞèÒªÔÚÕâÀï´¦Àí£¬ÒòÎªÖ»ÓĞ²úÆ·×Ô¼º²ÅÖªµÀstring/jsonµÄ×Ô¶¨Òå½âÎö */
+        /* å…¶ä»–æ•°æ®ç±»å‹å·²ç»åœ¨_handle_deltaæµç¨‹ç»Ÿä¸€å¤„ç†äº†ï¼Œå­—ç¬¦ä¸²å’Œjsonä¸²éœ€è¦åœ¨è¿™é‡Œå¤„ç†ï¼Œå› ä¸ºåªæœ‰äº§å“è‡ªå·±æ‰çŸ¥é“string/jsonçš„è‡ªå®šä¹‰è§£æ */
         if (strcmp(light_property_handler.property_wrappers[i].property.key, property->key) != 0) {
             continue;
         }
@@ -288,7 +288,7 @@ static void on_property_delta_handler(void *client, const char *json_doc, uint32
     QCLOUD_LOG_E("property=%s changed no match", property->key);
 }
 
-/* ×¢²áÊı¾İÄ£°åÊôĞÔ */
+/* æ³¨å†Œæ•°æ®æ¨¡æ¿å±æ€§ */
 static qcloud_err_t data_template_property_register(qcloud_shadow_client_t *client)
 {
     int i = 0;
@@ -324,17 +324,17 @@ __weak void OLED_ShowString(int x, int y, uint8_t *str, int bold)
 // handle the light(simulated)
 static void light_change_color(const char *color)
 {
-    // ×÷Îªdemo£¬ÕâÀïÓÃoledÆÁ×Ö·ûÏÔÊ¾À´Ä£ÄâµÆÑÕÉ«µÄÇĞ»»
-    // ÕâÀïÓ¦¸ÃÓÉÓÃ»§ÊµÏÖÓ²¼ş²Ù×÷´úÂë£¬À´¸Ä±äÖÇÄÜµÆµÄÑÕÉ«
-    // ´Ë´¦demo£¬ÔÚ¿ª·¢°åÏÔÊ¾ÆÁÉÏÏÔÊ¾¾ßÌåµÄÑÕÉ«
+    // ä½œä¸ºdemoï¼Œè¿™é‡Œç”¨oledå±å­—ç¬¦æ˜¾ç¤ºæ¥æ¨¡æ‹Ÿç¯é¢œè‰²çš„åˆ‡æ¢
+    // è¿™é‡Œåº”è¯¥ç”±ç”¨æˆ·å®ç°ç¡¬ä»¶æ“ä½œä»£ç ï¼Œæ¥æ”¹å˜æ™ºèƒ½ç¯çš„é¢œè‰²
+    // æ­¤å¤„demoï¼Œåœ¨å¼€å‘æ¿æ˜¾ç¤ºå±ä¸Šæ˜¾ç¤ºå…·ä½“çš„é¢œè‰²
     OLED_ShowString(0, 0, (uint8_t *)color, 8);
 }
 
 static void light_change_brightness(template_float_t brightness)
 {
-    // ×÷Îªdemo£¬ÕâÀïÓÃoledÆÁ×Ö·ûÏÔÊ¾À´Ä£ÄâµÆÑÕÉ«µÄÇĞ»»
-    // ÕâÀïÓ¦¸ÃÓÉÓÃ»§ÊµÏÖÓ²¼ş²Ù×÷´úÂë£¬À´¸Ä±äÖÇÄÜµÆµÄÑÕÉ«
-    // ´Ë´¦demo£¬ÔÚ¿ª·¢°åÏÔÊ¾ÆÁÉÏÏÔÊ¾¾ßÌåµÄÑÕÉ«
+    // ä½œä¸ºdemoï¼Œè¿™é‡Œç”¨oledå±å­—ç¬¦æ˜¾ç¤ºæ¥æ¨¡æ‹Ÿç¯é¢œè‰²çš„åˆ‡æ¢
+    // è¿™é‡Œåº”è¯¥ç”±ç”¨æˆ·å®ç°ç¡¬ä»¶æ“ä½œä»£ç ï¼Œæ¥æ”¹å˜æ™ºèƒ½ç¯çš„é¢œè‰²
+    // æ­¤å¤„demoï¼Œåœ¨å¼€å‘æ¿æ˜¾ç¤ºå±ä¸Šæ˜¾ç¤ºå…·ä½“çš„é¢œè‰²
     char brightness_str[12];
 
     snprintf(brightness_str, sizeof(brightness_str), "%f", brightness);
@@ -344,13 +344,13 @@ static void light_change_brightness(template_float_t brightness)
 
 static void light_power_on(void)
 {
-    // ×÷Îªdemo£¬ÕâÀïÓÃoledÆÁ×Ö·ûÏÔÊ¾À´Ä£ÄâµÆÑÕÉ«µÄÇĞ»»
+    // ä½œä¸ºdemoï¼Œè¿™é‡Œç”¨oledå±å­—ç¬¦æ˜¾ç¤ºæ¥æ¨¡æ‹Ÿç¯é¢œè‰²çš„åˆ‡æ¢
     OLED_Clear();
 }
 
 static void light_power_off(void)
 {
-    // ×÷Îªdemo£¬ÕâÀïÓÃoledÆÁ×Ö·ûÏÔÊ¾À´Ä£ÄâµÆÑÕÉ«µÄÇĞ»»
+    // ä½œä¸ºdemoï¼Œè¿™é‡Œç”¨oledå±å­—ç¬¦æ˜¾ç¤ºæ¥æ¨¡æ‹Ÿç¯é¢œè‰²çš„åˆ‡æ¢
     char *info = "light off";
     OLED_Clear();
     OLED_ShowString(0, 0, (uint8_t *)info, 16);
@@ -403,12 +403,12 @@ static void incoming_messsage_handler(void *client, void *context, mqtt_event_t 
     }
 }
 
-/* Ê¾ÀıµÆ¹â¿ØÖÆ´¦ÀíÂß¼­ */
+/* ç¤ºä¾‹ç¯å…‰æ§åˆ¶å¤„ç†é€»è¾‘ */
 static void deal_down_stream_user_logic(void)
 {
     char *color_name;
 
-    /* µÆ¹âÑÕÉ« */
+    /* ç¯å…‰é¢œè‰² */
     switch (light_profile.color) {
         case LIGHT_COLOR_RED:
             color_name = " RED ";
@@ -423,19 +423,19 @@ static void deal_down_stream_user_logic(void)
             break;
     }
 
-    if (light_profile.switch_state == LIGHT_SWTICH_STATE_ON) {
-        /* µÆ¹â¿ªÆôÊ½£¬°´ÕÕ¿ØÖÆ²ÎÊıÕ¹Ê¾ */
+    if (light_profile.switch_state == LIGHT_SWITCH_STATE_ON) {
+        /* ç¯å…‰å¼€å¯å¼ï¼ŒæŒ‰ç…§æ§åˆ¶å‚æ•°å±•ç¤º */
         light_power_on();
         light_change_color(color_name);
         light_change_brightness(light_profile.brightness);
     } else {
-        /* µÆ¹â¹Ø±ÕÕ¹Ê¾ */
+        /* ç¯å…‰å…³é—­å±•ç¤º */
         light_power_off();
     }
 
 #if (QCLOUD_CFG_EVENT_EN > 0u)
     if (light_property_handler.property_wrappers_of.switch_state.state == PROPERTY_STATE_CHANGED) {
-        if (light_profile.switch_state == LIGHT_SWTICH_STATE_ON) {
+        if (light_profile.switch_state == LIGHT_SWITCH_STATE_ON) {
             strcpy(event_message, "light on");
             event_status = EVENT_STATUS_LIGHT_ON;
         } else {
@@ -448,7 +448,7 @@ static void deal_down_stream_user_logic(void)
 #endif
 }
 
-/* ÓÃ»§ĞèÒªÊµÏÖµÄÉÏĞĞÊı¾İµÄÒµÎñÂß¼­,´Ë´¦½ö¹©Ê¾Àı */
+/* ç”¨æˆ·éœ€è¦å®ç°çš„ä¸Šè¡Œæ•°æ®çš„ä¸šåŠ¡é€»è¾‘,æ­¤å¤„ä»…ä¾›ç¤ºä¾‹ */
 static void deal_up_stream_user_logic(shadow_dev_property_t *properties_report[], int *count)
 {
     int i, j;
@@ -473,7 +473,7 @@ static void on_shadow_update_handler(void *client,
     QCLOUD_LOG_I("recv shadow update response, request state: %d", req_state);
 }
 
-/* 5s¶¨Ê±ÉÏ±¨ÊôĞÔ×´Ì¬,¿É¸ù¾İÒµÎñ²Ã¼ô£¬´Ë´¦½ö¹©Ê¾Àı */
+/* 5så®šæ—¶ä¸ŠæŠ¥å±æ€§çŠ¶æ€,å¯æ ¹æ®ä¸šåŠ¡è£å‰ªï¼Œæ­¤å¤„ä»…ä¾›ç¤ºä¾‹ */
 qcloud_err_t timely_reporting(shadow_dev_property_t *properties_report[], osal_timer_t *report_timer)
 {
     int i;
@@ -540,14 +540,14 @@ int data_template_light_thread(void)
     }
 
 #define SHADOW_REQUEST_TIMEOUT          (10)    // in seconds
-    // ÀëÏßÆÚ¼ä·şÎñ¶Ë¿ÉÄÜÓĞÏÂĞĞÃüÁî£¬´Ë´¦ÊµÏÖÍ¬²½¡£versionÍ¬²½ºóÌ¨·Ç±ØÒª
+    // ç¦»çº¿æœŸé—´æœåŠ¡ç«¯å¯èƒ½æœ‰ä¸‹è¡Œå‘½ä»¤ï¼Œæ­¤å¤„å®ç°åŒæ­¥ã€‚versionåŒæ­¥åå°éå¿…è¦
     rc = qcloud_shadow_client_get_sync(&shadow_client, SHADOW_REQUEST_TIMEOUT);
     if (rc != QCLOUD_ERR_SUCCESS) {
         QCLOUD_LOG_E("device shadow get failed, err: %d", rc);
         return rc;
     }
 
-    // ÊôĞÔ¶¨Ê±ÉÏ±¨timer£¬¿ÉÒÔ¸ù¾İÒµÎñĞèÒª²Ã¼ô¡£
+    // å±æ€§å®šæ—¶ä¸ŠæŠ¥timerï¼Œå¯ä»¥æ ¹æ®ä¸šåŠ¡éœ€è¦è£å‰ªã€‚
     osal_timer_init(&report_timer);
 
     while (qcloud_shadow_client_is_connected(&shadow_client) ||
@@ -562,20 +562,20 @@ int data_template_light_thread(void)
         } else if (rc != QCLOUD_ERR_SUCCESS && rc != QCLOUD_ERR_MQTT_RECONNECTED) {
 			QCLOUD_LOG_E("exit with error: %d", rc);
             break;
-		}
+	}
 
-        /* ·şÎñ¶ËÏÂĞĞÏûÏ¢£¬ÒµÎñ´¦ÀíÂß¼­1Èë¿Ú */
+        /* æœåŠ¡ç«¯ä¸‹è¡Œæ¶ˆæ¯ï¼Œä¸šåŠ¡å¤„ç†é€»è¾‘1å…¥å£ */
         if (is_light_property_changed) {
             deal_down_stream_user_logic();
 
-            /* ÒµÎñÂß¼­´¦ÀíÍêºóĞèÒªÍ¬²½Í¨Öª·şÎñ¶Ë:Éè±¸Êı¾İÒÑ¸üĞÂ£¬É¾³ıdseireÊı¾İ */
+            /* ä¸šåŠ¡é€»è¾‘å¤„ç†å®Œåéœ€è¦åŒæ­¥é€šçŸ¥æœåŠ¡ç«¯:è®¾å¤‡æ•°æ®å·²æ›´æ–°ï¼Œåˆ é™¤dseireæ•°æ® */
             rc = qcloud_shadow_client_desire_null_construct(&shadow_client, shadow_update_buffer, sizeof(shadow_update_buffer));
             if (rc == QCLOUD_ERR_SUCCESS) {
                 rc = qcloud_shadow_client_update_sync(&shadow_client, shadow_update_buffer, sizeof(shadow_update_buffer), 5);
                 if (rc == QCLOUD_ERR_SUCCESS) {
                     is_light_property_changed = QCLOUD_FALSE;
 
-                    // ÓÃ»§ĞèÒª¸ù¾İÒµÎñÇé¿öĞŞ¸ÄÉÏ±¨flagµÄ¸³ÖµÎ»ÖÃ,´Ë´¦½öÎªÊ¾Àı¡£
+                    // ç”¨æˆ·éœ€è¦æ ¹æ®ä¸šåŠ¡æƒ…å†µä¿®æ”¹ä¸ŠæŠ¥flagçš„èµ‹å€¼ä½ç½®,æ­¤å¤„ä»…ä¸ºç¤ºä¾‹ã€‚
                     is_new_property_reported = QCLOUD_TRUE;
                     QCLOUD_LOG_I("shadow update(desired) success");
                 } else {
@@ -586,9 +586,9 @@ int data_template_light_thread(void)
             }
         }
 
-        /* Éè±¸ÉÏĞĞÏûÏ¢,ÒµÎñÂß¼­2Èë¿Ú */
+        /* è®¾å¤‡ä¸Šè¡Œæ¶ˆæ¯,ä¸šåŠ¡é€»è¾‘2å…¥å£ */
         if (is_new_property_reported) {
-            /* deltaÏûÏ¢ÊÇÊôĞÔµÄdesireºÍÊôĞÔµÄreportµÄ²îÒì¼¯£¬ÊÕµ½deseireÏûÏ¢´¦Àíºó£¬ÒªreportÊôĞÔµÄ×´Ì¬ */
+            /* deltaæ¶ˆæ¯æ˜¯å±æ€§çš„desireå’Œå±æ€§çš„reportçš„å·®å¼‚é›†ï¼Œæ”¶åˆ°deseireæ¶ˆæ¯å¤„ç†åï¼Œè¦reportå±æ€§çš„çŠ¶æ€ */
             deal_up_stream_user_logic(properties_report, &properties_report_count);
             if (properties_report_count > 0) {
                 rc = qcloud_shadow_client_report_construct_array(&shadow_client, shadow_update_buffer, sizeof(shadow_update_buffer),
@@ -632,7 +632,7 @@ int data_template_light_thread(void)
         }
 
 #if (QCLOUD_CFG_EVENT_EN > 0u)
-        // ÊÂ¼şÉÏ±¨
+        // äº‹ä»¶ä¸ŠæŠ¥
         event_count = 0;
         event_flag = event_flag_get();
         if (EVENT_COUNTS > 0 && event_flag > 0) {
