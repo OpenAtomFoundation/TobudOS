@@ -24,8 +24,8 @@
 #include <tos_cpu_def.h>
 #include <tos_config.h>
 #include <tos_config_default.h>
-#include <tos_cpu_types.h>
 #include <port_config.h>
+#include <tos_cpu_types.h>
 #include <port.h>
 #include <tos_cpu.h>
 #include <tos_config_check.h>

@@ -41,31 +41,31 @@ typedef struct pend_object_st {
     k_list_t        list;
 } pend_obj_t;
 
-__KNL__ void     pend_object_init(pend_obj_t *object);
+__KNL__ void        pend_object_init(pend_obj_t *object);
 
-__KNL__ void     pend_object_deinit(pend_obj_t *object);
+__KNL__ void        pend_object_deinit(pend_obj_t *object);
 
-__KNL__ int      pend_is_nopending(pend_obj_t *object);
+__KNL__ int         pend_is_nopending(pend_obj_t *object);
 
-__KNL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object);
+__KNL__ k_prio_t    pend_highest_pending_prio_get(pend_obj_t *object);
 
-__KNL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object);
+__KNL__ k_task_t   *pend_highest_pending_task_get(pend_obj_t *object);
 
-__KNL__ void     pend_list_remove(k_task_t *task);
+__KNL__ void        pend_list_remove(k_task_t *task);
 
-__KNL__ void     pend_list_adjust(k_task_t *task);
+__KNL__ void        pend_list_adjust(k_task_t *task);
 
-__KNL__ k_err_t  pend_state2errno(pend_state_t state);
+__KNL__ k_err_t     pend_state2errno(pend_state_t state);
 
-__KNL__ void     pend_task_wakeup(k_task_t *task, pend_state_t state);
+__KNL__ void        pend_task_wakeup(k_task_t *task, pend_state_t state);
 
-__KNL__ void     pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout);
+__KNL__ void        pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout);
 
-__KNL__ void     pend_wakeup_one(pend_obj_t *object, pend_state_t state);
+__KNL__ void        pend_wakeup_one(pend_obj_t *object, pend_state_t state);
 
-__KNL__ void     pend_wakeup_all(pend_obj_t *object, pend_state_t state);
+__KNL__ void        pend_wakeup_all(pend_obj_t *object, pend_state_t state);
 
-__KNL__ void     pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt);
+__KNL__ void        pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt);
 
 #endif /* _TOS_PEND_H_ */
 

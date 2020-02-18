@@ -14,17 +14,17 @@
     PUBLIC port_irq_context_switch
     PUBLIC port_context_switch
 
-port_int_disable
+port_int_disable:
     SIM
     RET
 
 
-port_int_enable
+port_int_enable:
     RIM
     RET
 
 
-port_cpsr_save
+port_cpsr_save:
     /* does not work:
      LD      A, CC
      */
@@ -34,7 +34,7 @@ port_cpsr_save
     RET
 
 
-port_cpsr_restore
+port_cpsr_restore:
     /* does not work:
      LD      CC, A
      */
