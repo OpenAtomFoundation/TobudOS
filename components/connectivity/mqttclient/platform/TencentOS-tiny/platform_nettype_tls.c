@@ -13,6 +13,7 @@
 
 #if MQTT_NETWORK_TYPE_TLS
 
+#include "mbedtls/platform.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/net_sockets.h"
@@ -51,6 +52,8 @@ static int platform_nettype_tls_entropy_source(void *data, uint8_t *output, size
 static int platform_nettype_tls_init(network_t* n, nettype_tls_params_t* nettype_tls_params)
 {
     int rc = MQTT_SUCCESS_ERROR;
+    
+    mbedtls_platform_set_calloc_free(platform_memory_calloc, platform_memory_free);
     
     mbedtls_net_init(&(nettype_tls_params->socket_fd));
     mbedtls_ssl_init(&(nettype_tls_params->ssl));

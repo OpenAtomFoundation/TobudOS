@@ -33,7 +33,6 @@
 
     #define MQTT_TLS_HANDSHAKE_TIMEOUT  (5 * 1000)
 
-    #include "mbedtls/config.h"
     #include "mbedtls/ssl.h"
     #include "mbedtls/entropy.h"
     #include "mbedtls/net_sockets.h"

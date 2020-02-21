@@ -54,7 +54,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\List\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,MBEDTLS_CONFIG_FILE=&lt;mbedtls_config.h&gt;,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\TOS-CONFIG;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\net\lwip;..\..\..\..\net\lwip\3rdparty\src\include;..\..\..\..\net\lwip\3rdparty\src\include\compat;..\..\..\..\net\lwip\3rdparty\src\include\lwip;..\..\..\..\net\lwip\3rdparty\src\include\netif;..\..\..\..\net\lwip\3rdparty\src\include\lwip\apps;..\..\..\..\net\lwip\3rdparty\src\include\lwip\priv;..\..\..\..\net\lwip\3rdparty\src\include\lwip\prot;..\..\..\..\net\lwip\port\include\arch;..\..\..\..\net\lwip\port\include;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny;..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs;..\..\..\..\components\connectivity\mqttclient\common\mbedtls\wrapper;..\..\..\..\components\security\mbedtls\3rdparty\include</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\TOS-CONFIG;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\net\lwip;..\..\..\..\net\lwip\3rdparty\src\include;..\..\..\..\net\lwip\3rdparty\src\include\compat;..\..\..\..\net\lwip\3rdparty\src\include\lwip;..\..\..\..\net\lwip\3rdparty\src\include\netif;..\..\..\..\net\lwip\3rdparty\src\include\lwip\apps;..\..\..\..\net\lwip\3rdparty\src\include\lwip\priv;..\..\..\..\net\lwip\3rdparty\src\include\lwip\prot;..\..\..\..\net\lwip\port\include\arch;..\..\..\..\net\lwip\port\include;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny;..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs;..\..\..\..\components\connectivity\mqttclient\common\mbedtls\wrapper;..\..\..\..\components\security\mbedtls\3rdparty\include;..\..\..\..\components\security\mbedtls\3rdparty\include\mbedtls</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1406,36 +1406,6 @@
               <FileName>platform_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_timer.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mbedtls/config</GroupName>
-          <Files>
-            <File>
-              <FileName>config-ccm-psk-tls1_2.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs\config-ccm-psk-tls1_2.h</FilePath>
-            </File>
-            <File>
-              <FileName>config-mini-tls1_1.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs\config-mini-tls1_1.h</FilePath>
-            </File>
-            <File>
-              <FileName>config-no-entropy.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs\config-no-entropy.h</FilePath>
-            </File>
-            <File>
-              <FileName>config-suite-b.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs\config-suite-b.h</FilePath>
-            </File>
-            <File>
-              <FileName>config-thread.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs\config-thread.h</FilePath>
             </File>
           </Files>
         </Group>
