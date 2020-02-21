@@ -53,9 +53,9 @@ static void update_events_timestamp(sEvent *pEvents, int count)
             return;
         }
 #ifdef EVENT_TIMESTAMP_USED
-    pEvents[i].timestamp = time(NULL); //should be UTC and accurate
+        pEvents[i].timestamp = time(NULL); //should be UTC and accurate
 #else
-    pEvents[i].timestamp = 0;
+        pEvents[i].timestamp = 0;
 #endif
     }
 }
@@ -373,8 +373,7 @@ void first_time_report_construct(DeviceProperty *pReportDataList[], int *pCount)
 
     for (i = 0, j = 0; i < TOTAL_PROPERTY_COUNT; i++) {
         pReportDataList[j++] = &(sg_DataTemplate[i].data_property);
-    }
-    
+    }    
     *pCount = j;
 }
 /////////////////////////////////////////////////////////////////////////////////////
