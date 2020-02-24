@@ -2,9 +2,9 @@
 **一个基于socket API之上的跨平台MQTT客户端**
 
 ## 整体框架
-![整体框架](https://github.com/jiejieTop/mqttclient/blob/master/png/mqttclient.png?raw=true)
+![整体框架](./png/mqttclient.png)
 
-> 备注：目前只实现了linux平台，TencentOS tiny与RT-Thread正在移植中
+> 备注：目前只支持linux及encentOS tiny系统
 
 ## linux平台下测试使用
 ### 安装cmake：
