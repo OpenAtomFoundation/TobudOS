@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
+<fpconfig>
+
+  <targetconfwindow>
+    <usecustomsettings>true</usecustomsettings>
+    <targetprocessor>523x</targetprocessor>
+    <connection>PEMICRO_PARALLEL</connection>
+    <usetargetinit>true</usetargetinit>
+    <targetinitfile>C:\Projects\freemodbus-new\demo\MCF5235CW\support\mcf523x.cfg</targetinitfile>
+    <targetmembuffaddr>0x10000000</targetmembuffaddr>
+    <targetmembuffsize>0x10006000</targetmembuffsize>
+    <enablelogging>true</enablelogging>
+    <verifywrites>false</verifywrites>
+  </targetconfwindow>
+
+  <flashconfwindow>
+    <membaseaddr>0x00000000</membaseaddr>
+    <device>AM29PL160CB</device>
+    <organization>1Mx16x1</organization>
+    <flashstart>0x00000000</flashstart>
+    <flashend>0x001FFFFF</flashend>
+  </flashconfwindow>
+
+  <programverifywindow>
+    <useselectedfile>true</useselectedfile>
+    <projbuildtargetfile/>
+    <fileiotype>Auto Detect</fileiotype>
+    <restrictaddrrange>false</restrictaddrrange>
+    <restrictaddrrangestart>0xFF800000</restrictaddrrangestart>
+    <restrictaddrrangeend>0xFFFFFFFF</restrictaddrrangeend>
+    <applyaddroffset>false</applyaddroffset>
+    <addroffset>0x00000000</addroffset>
+  </programverifywindow>
+
+  <eraseblankcheckwindow>
+    <eraseallsectors>true</eraseallsectors>
+    <sector/>
+    <processsectorsindividually>true</processsectorsindividually>
+  </eraseblankcheckwindow>
+
+  <checksumwindow>
+    <computechecksumover>FileOnTarg</computechecksumover>
+    <addrstart>0xFF800000</addrstart>
+    <addrsize>0x007FFFFF</addrsize>
+  </checksumwindow>
+
+</fpconfig>

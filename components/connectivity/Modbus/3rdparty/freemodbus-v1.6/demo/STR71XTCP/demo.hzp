@@ -1,0 +1,225 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution version="1" Name="demo" >
+  <project Name="demo" >
+    <configuration Target="STR711F" property_groups_file_path="$(StudioDir)/targets/ST_STR71x/propertyGroups.xml" linker_memory_map_file="$(StudioDir)/targets/ST_STR71x/ST_STR711F_MemoryMap.xml" c_preprocessor_definitions="GCC_STR71X" c_user_include_directories=".;port;freertos/include;lwip/src/include;lwip/src/include/ipv4;lwip/src/netif;lwip/contrib/port/FreeRTOS/STR71X;../../modbus/include/;../../modbus/tcp;library/include" project_directory="" link_include_startup_code="No" project_type="Executable" c_additional_options="-Wall" Name="Common" arm_linker_heap_size="16384" />
+    <configuration target_reset_script="RAMReset()" Name="RAM" />
+    <configuration arm_target_flash_loader_file_path="$(StudioDir)/targets/ST_STR71x/Release/Loader.exe" target_reset_script="FLASHReset()" Name="Flash" />
+    <folder Name="System Files" >
+      <file file_name="$(StudioDir)/targets/sram_placement.xml" Name="sram_placement.xml" >
+        <configuration build_exclude_from_build="Yes" Name="Flash" />
+      </file>
+      <file file_name="$(StudioDir)/targets/flash_placement.xml" Name="flash_placement.xml" >
+        <configuration build_exclude_from_build="Yes" Name="RAM" />
+      </file>
+      <file file_name="$(StudioDir)/targets/ST_STR71x/STR71x_Target.js" Name="STR71x_Target.js" >
+        <configuration Name="Common" file_type="Reset Script" />
+      </file>
+      <file file_name="startup.s" Name="startup.s" />
+      <file file_name="crt0.s" Name="crt0.s" >
+        <configuration c_preprocessor_definitions="SUPERVISOR_START" Name="Common" />
+      </file>
+    </folder>
+    <folder Name="FreeRTOS" >
+      <file file_name="freertos/tasks.c" Name="tasks.c" />
+      <file file_name="freertos/list.c" Name="list.c" />
+      <file file_name="freertos/queue.c" Name="queue.c" />
+      <file file_name="freertos/queue.c.bak" Name="queue.c.bak" />
+      <file file_name="freertos/readme.txt" Name="readme.txt" />
+      <file file_name="freertos/include/task.h" Name="task.h" />
+      <file file_name="freertos/include/FreeRTOS.h" Name="FreeRTOS.h" />
+      <file file_name="freertos/include/list.h" Name="list.h" />
+      <file file_name="freertos/include/portable.h" Name="portable.h" />
+      <file file_name="freertos/include/portable.h.bak" Name="portable.h.bak" />
+      <file file_name="freertos/include/projdefs.h" Name="projdefs.h" />
+      <file file_name="freertos/include/queue.h" Name="queue.h" />
+      <file file_name="freertos/include/semphr.h" Name="semphr.h" />
+      <file file_name="freertos/portable/GCC/ARM7_STR71X/portmacro.h" Name="portmacro.h" />
+      <file file_name="freertos/portable/GCC/ARM7_STR71X/port.c" Name="port.c" />
+      <file file_name="freertos/portable/GCC/ARM7_STR71X/portISR.c" Name="portISR.c" />
+      <file file_name="freertos/portable/MemMang/heap_3.c" Name="heap_3.c" />
+    </folder>
+    <folder Name="Demo" >
+      <file file_name="demo.c" Name="demo.c" />
+    </folder>
+    <folder Name="STR71X Library" >
+      <file file_name="library/71x_lib.c" Name="71x_lib.c" />
+      <file file_name="library/gpio.c" Name="gpio.c" />
+      <file file_name="library/rccu.c" Name="rccu.c" />
+      <file file_name="library/tim.c" Name="tim.c" />
+      <file file_name="library/uart.c" Name="uart.c" />
+      <file file_name="library/wdg.c" Name="wdg.c" />
+      <file file_name="library/eic.c" Name="eic.c" />
+      <file file_name="library/include/71x_conf.h" Name="71x_conf.h" />
+      <file file_name="library/include/wdg.h" Name="wdg.h" />
+      <file file_name="library/include/71x_it.h" Name="71x_it.h" />
+      <file file_name="library/include/71x_lib.h" Name="71x_lib.h" />
+      <file file_name="library/include/71x_map.h" Name="71x_map.h" />
+      <file file_name="library/include/71x_type.h" Name="71x_type.h" />
+      <file file_name="library/include/eic.h" Name="eic.h" />
+      <file file_name="library/include/gpio.h" Name="gpio.h" />
+      <file file_name="library/include/rccu.h" Name="rccu.h" />
+      <file file_name="library/include/tim.h" Name="tim.h" />
+      <file file_name="library/include/uart.h" Name="uart.h" />
+    </folder>
+    <folder Name="Modbus" >
+      <folder Name="Functions" >
+        <file file_name="../../modbus/functions/mbfuncdiag.c" Name="mbfuncdiag.c" />
+        <file file_name="../../modbus/functions/mbfuncholding.c" Name="mbfuncholding.c" />
+        <file file_name="../../modbus/functions/mbfuncinput.c" Name="mbfuncinput.c" />
+        <file file_name="../../modbus/functions/mbfuncother.c" Name="mbfuncother.c" />
+        <file file_name="../../modbus/functions/mbfunccoils.c" Name="mbfunccoils.c" />
+        <file file_name="../../modbus/include/mbutils.h" Name="mbutils.h" />
+        <file file_name="../../modbus/functions/mbutils.c" Name="mbutils.c" />
+        <file file_name="../../modbus/functions/mbfuncdisc.c" Name="mbfuncdisc.c" />
+      </folder>
+      <file file_name="../../modbus/mb.c" Name="mb.c" />
+      <file file_name="../../modbus/include/mbproto.h" Name="mbproto.h" />
+      <file file_name="../../modbus/include/mb.h" Name="mb.h" />
+      <file file_name="../../modbus/include/mbconfig.h" Name="mbconfig.h" />
+      <file file_name="../../modbus/include/mbframe.h" Name="mbframe.h" />
+      <file file_name="../../modbus/include/mbfunc.h" Name="mbfunc.h" />
+      <file file_name="../../modbus/include/mbport.h" Name="mbport.h" />
+      <folder Name="TCP" >
+        <file file_name="../../modbus/tcp/mbtcp.c" Name="mbtcp.c" />
+        <file file_name="../../modbus/tcp/mbtcp.h" Name="mbtcp.h" />
+      </folder>
+    </folder>
+    <folder Name="Modbus Port" >
+      <file file_name="port/mbconfig.h" Name="mbconfig.h" />
+      <file file_name="port/port.h" Name="port.h" />
+      <file file_name="port/portevent.c" Name="portevent.c" />
+      <file file_name="port/portother.c" Name="portother.c" />
+      <file file_name="port/porttcp.c" Name="porttcp.c" />
+    </folder>
+    <folder Name="lwIP Port" >
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/sys_arch.c" Name="sys_arch.c" />
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/arch/cc.h" Name="cc.h" />
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/arch/cpu.h" Name="cpu.h" />
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/arch/perf.h" Name="perf.h" />
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/arch/sys_arch.h" Name="sys_arch.h" />
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/netif/serial.h" Name="serial.h" />
+      <file file_name="lwip/contrib/port/FreeRTOS/STR71X/netif/serial.c" Name="serial.c" />
+    </folder>
+    <folder Name="lwIP" >
+      <folder Name="api" >
+        <file file_name="lwip/src/api/api_lib.c" Name="api_lib.c" />
+        <file file_name="lwip/src/api/api_msg.c" Name="api_msg.c" />
+        <file file_name="lwip/src/api/err.c" Name="err.c" />
+        <file file_name="lwip/src/api/sockets.c" Name="sockets.c" />
+        <file file_name="lwip/src/api/tcpip.c" Name="tcpip.c" />
+      </folder>
+      <folder Name="core" >
+        <file file_name="lwip/src/core/inet.c" Name="inet.c" />
+        <file file_name="lwip/src/core/mem.c" Name="mem.c" />
+        <file file_name="lwip/src/core/memp.c" Name="memp.c" >
+          <configuration asm_additional_options="c" Name="ARM Flash Release" />
+        </file>
+        <file file_name="lwip/src/core/netif.c" Name="netif.c" />
+        <file file_name="lwip/src/core/pbuf.c" Name="pbuf.c" />
+        <file file_name="lwip/src/core/raw.c" Name="raw.c" />
+        <file file_name="lwip/src/core/stats.c" Name="stats.c" />
+        <file file_name="lwip/src/core/sys.c" Name="sys.c" />
+        <file file_name="lwip/src/core/tcp.c" Name="tcp.c" />
+        <file file_name="lwip/src/core/tcp_in.c" Name="tcp_in.c" />
+        <file file_name="lwip/src/core/tcp_out.c" Name="tcp_out.c" />
+        <file file_name="lwip/src/core/udp.c" Name="udp.c" />
+        <folder Name="ipv4" >
+          <file file_name="lwip/src/core/ipv4/icmp.c" Name="icmp.c" />
+          <file file_name="lwip/src/core/ipv4/ip.c" Name="ip.c" />
+          <file file_name="lwip/src/core/ipv4/ip_addr.c" Name="ip_addr.c" />
+          <file file_name="lwip/src/core/ipv4/ip_frag.c" Name="ip_frag.c" />
+        </folder>
+      </folder>
+      <folder Name="netif" >
+        <folder Name="ppp" >
+          <file file_name="lwip/src/netif/ppp/auth.c" Name="auth.c" />
+          <file file_name="lwip/src/netif/ppp/auth.h" Name="auth.h" />
+          <file file_name="lwip/src/netif/ppp/chap.c" Name="chap.c" />
+          <file file_name="lwip/src/netif/ppp/chap.h" Name="chap.h" />
+          <file file_name="lwip/src/netif/ppp/chpms.c" Name="chpms.c" />
+          <file file_name="lwip/src/netif/ppp/chpms.h" Name="chpms.h" />
+          <file file_name="lwip/src/netif/ppp/fsm.c" Name="fsm.c" />
+          <file file_name="lwip/src/netif/ppp/fsm.h" Name="fsm.h" />
+          <file file_name="lwip/src/netif/ppp/ipcp.c" Name="ipcp.c" />
+          <file file_name="lwip/src/netif/ppp/ipcp.h" Name="ipcp.h" />
+          <file file_name="lwip/src/netif/ppp/lcp.c" Name="lcp.c" />
+          <file file_name="lwip/src/netif/ppp/lcp.h" Name="lcp.h" />
+          <file file_name="lwip/src/netif/ppp/magic.c" Name="magic.c" />
+          <file file_name="lwip/src/netif/ppp/magic.h" Name="magic.h" />
+          <file file_name="lwip/src/netif/ppp/md5.c" Name="md5.c" />
+          <file file_name="lwip/src/netif/ppp/md5.h" Name="md5.h" />
+          <file file_name="lwip/src/netif/ppp/pap.c" Name="pap.c" />
+          <file file_name="lwip/src/netif/ppp/pap.h" Name="pap.h" />
+          <file file_name="lwip/src/netif/ppp/ppp.c" Name="ppp.c" />
+          <file file_name="lwip/src/netif/ppp/ppp.h" Name="ppp.h" />
+          <file file_name="lwip/src/netif/ppp/pppdebug.h" Name="pppdebug.h" />
+          <file file_name="lwip/src/netif/ppp/randm.c" Name="randm.c" />
+          <file file_name="lwip/src/netif/ppp/randm.h" Name="randm.h" />
+          <file file_name="lwip/src/netif/ppp/vj.c" Name="vj.c" />
+          <file file_name="lwip/src/netif/ppp/vj.h" Name="vj.h" />
+          <file file_name="lwip/src/netif/ppp/vjbsdhdr.h" Name="vjbsdhdr.h" />
+        </folder>
+      </folder>
+      <folder Name="include" >
+        <folder Name="lwip" >
+          <file file_name="lwip/src/include/lwip/api.h" Name="api.h" />
+          <file file_name="lwip/src/include/lwip/api_msg.h" Name="api_msg.h" />
+          <file file_name="lwip/src/include/lwip/arch.h" Name="arch.h" />
+          <file file_name="lwip/src/include/lwip/debug.h" Name="debug.h" />
+          <file file_name="lwip/src/include/lwip/def.h" Name="def.h" />
+          <file file_name="lwip/src/include/lwip/dhcp.h" Name="dhcp.h" />
+          <file file_name="lwip/src/include/lwip/err.h" Name="err.h" />
+          <file file_name="lwip/src/include/lwip/mem.h" Name="mem.h" />
+          <file file_name="lwip/src/include/lwip/memp.h" Name="memp.h" />
+          <file file_name="lwip/src/include/lwip/netif.h" Name="netif.h" />
+          <file file_name="lwip/src/include/lwip/opt.h" Name="opt.h" />
+          <file file_name="lwip/src/include/lwip/pbuf.h" Name="pbuf.h" />
+          <file file_name="lwip/src/include/lwip/raw.h" Name="raw.h" />
+          <file file_name="lwip/src/include/lwip/sio.h" Name="sio.h" />
+          <file file_name="lwip/src/include/lwip/snmp.h" Name="snmp.h" />
+          <file file_name="lwip/src/include/lwip/sockets.h" Name="sockets.h" />
+          <file file_name="lwip/src/include/lwip/stats.h" Name="stats.h" />
+          <file file_name="lwip/src/include/lwip/sys.h" Name="sys.h" />
+          <file file_name="lwip/src/include/lwip/tcp.h" Name="tcp.h" />
+          <file file_name="lwip/src/include/lwip/tcpip.h" Name="tcpip.h" />
+          <file file_name="lwip/src/include/lwip/udp.h" Name="udp.h" />
+        </folder>
+        <folder Name="ipv4" >
+          <folder Name="lwip" >
+            <file file_name="lwip/src/include/ipv4/lwip/icmp.h" Name="icmp.h" />
+            <file file_name="lwip/src/include/ipv4/lwip/inet.h" Name="inet.h" />
+            <file file_name="lwip/src/include/ipv4/lwip/ip.h" Name="ip.h" />
+            <file file_name="lwip/src/include/ipv4/lwip/ip_addr.h" Name="ip_addr.h" />
+            <file file_name="lwip/src/include/ipv4/lwip/ip_frag.h" Name="ip_frag.h" />
+          </folder>
+        </folder>
+        <folder Name="ipv6" >
+          <folder Name="lwip" >
+            <file file_name="lwip/src/include/ipv6/lwip/icmp.h" Name="icmp.h" />
+            <file file_name="lwip/src/include/ipv6/lwip/inet.h" Name="inet.h" />
+            <file file_name="lwip/src/include/ipv6/lwip/ip.h" Name="ip.h" />
+            <file file_name="lwip/src/include/ipv6/lwip/ip_addr.h" Name="ip_addr.h" />
+          </folder>
+        </folder>
+        <folder Name="netif" >
+          <file file_name="lwip/src/include/netif/etharp.h" Name="etharp.h" />
+          <file file_name="lwip/src/include/netif/loopif.h" Name="loopif.h" />
+          <file file_name="lwip/src/include/netif/slipif.h" Name="slipif.h" />
+        </folder>
+      </folder>
+    </folder>
+    <file file_name="lwipopts.h" Name="lwipopts.h" />
+    <configuration gcc_optimization_level="Optimize For Size" Name="ARM Flash Release" />
+    <file file_name="FreeRTOSConfig.h" Name="FreeRTOSConfig.h" />
+  </project>
+  <configuration inherited_configurations="ARM;RAM;Debug" Name="ARM RAM Debug" />
+  <configuration arm_library_instruction_set="ARM" c_preprocessor_definitions="__ARM" arm_instruction_set="ARM" hidden="Yes" Name="ARM" />
+  <configuration c_preprocessor_definitions="__RAM_BUILD" hidden="Yes" Name="RAM" />
+  <configuration c_preprocessor_definitions="DEBUG" link_include_startup_code="No" gcc_optimization_level="None" build_debug_information="Yes" Name="Debug" />
+  <configuration inherited_configurations="ARM;RAM;Release" Name="ARM RAM Release" />
+  <configuration c_preprocessor_definitions="NDEBUG" link_include_startup_code="No" gcc_optimization_level="Level 1" build_debug_information="No" Name="Release" />
+  <configuration inherited_configurations="ARM;Flash;Debug" Name="ARM Flash Debug" />
+  <configuration c_preprocessor_definitions="__FLASH_BUILD" hidden="Yes" Name="Flash" />
+  <configuration inherited_configurations="ARM;Flash;Release" Name="ARM Flash Release" />
+  <configuration c_preprocessor_definitions="STR71X_GCC" arm_linker_fiq_stack_size="0" arm_linker_stack_size="256" Name="Common" arm_linker_svc_stack_size="256" arm_linker_heap_size="2048" />
+</solution>
