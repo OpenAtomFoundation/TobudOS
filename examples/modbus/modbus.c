@@ -9,7 +9,7 @@
 #define REG_HOLDING_NREGS               ( 32 )
 /* ----------------------- Static variables ---------------------------------*/
 static uint16_t   usRegInputStart = REG_INPUT_START;
-static uint16_t   usRegInputBuf[REG_INPUT_NREGS]={0x01,0x02,0x03,0x04};
+static uint16_t   usRegInputBuf[REG_INPUT_NREGS]={0x05,0x06,0x07,0x08};
 
 static USHORT   usRegHoldingStart = REG_HOLDING_START;
 static USHORT   usRegHoldingBuf[REG_HOLDING_NREGS];
@@ -27,7 +27,7 @@ void task1(void *arg)
 
     while (1) {
 				eMBPoll();
-        printf("###I am task1\r\n");
+        printf("FreeModbus eMBPoll function running\r\n");
         osDelay(2000);
     }
 }

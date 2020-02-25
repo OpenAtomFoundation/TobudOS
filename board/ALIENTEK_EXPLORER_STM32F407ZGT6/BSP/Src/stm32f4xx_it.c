@@ -238,27 +238,21 @@ void USART2_IRQHandler(void)
 	
  /* USER CODE BEGIN USART1_IRQn 0 */
 	uint8_t tmp;
-	if(__HAL_UART_GET_FLAG(&huart1,UART_FLAG_PE))//???????
+	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_PE))//???????
 	{
-		HAL_UART_Receive(&huart1,&tmp,1,1);
+		HAL_UART_Receive(&huart2,&tmp,1,1);
 	}
 	
-	else if(__HAL_UART_GET_FLAG(&huart1,UART_FLAG_RXNE)&&__HAL_UART_GET_IT_SOURCE(&huart1,UART_IT_RXNE))
+	else if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_RXNE)&&__HAL_UART_GET_IT_SOURCE(&huart2,UART_IT_RXNE))
 	{
 		prvvUARTRxISR();
 		
 	}
-	if(__HAL_UART_GET_FLAG(&huart1,UART_FLAG_TXE)&&__HAL_UART_GET_IT_SOURCE(&huart1,UART_IT_TXE))
+	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TXE)&&__HAL_UART_GET_IT_SOURCE(&huart2,UART_IT_TXE))
 	{
 		prvvUARTTxReadyISR();
 		
 	}
-	
-  /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart1);
-  /* USER CODE BEGIN USART1_IRQn 1 */
-
-  /* USER CODE END USART1_IRQn 1 */
 }
 
 /**

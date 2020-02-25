@@ -52,7 +52,7 @@ vMBPortSerialEnable( BOOL xRxEnable, BOOL xTxEnable )
 BOOL
 xMBPortSerialInit( UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits, eMBParity eParity )
 {
-	HAL_UART_DeInit(&huart2);
+	//HAL_UART_DeInit(&huart2);
 	(void)ucPORT;
 	huart2.Instance = USART2;
     huart2.Init.BaudRate = ulBaudRate;
