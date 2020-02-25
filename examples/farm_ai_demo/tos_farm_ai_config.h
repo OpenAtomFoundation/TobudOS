@@ -1,5 +1,5 @@
 #ifndef _H_TOS_FARM_AI_CONFIG_H  
-#define  _H_TOS_FARM_AI_CONFIG_H
+#define _H_TOS_FARM_AI_CONFIG_H
 
 #define MQTT_SERVER_IP          "iotcloud-mqtt.gz.tencentdevices.com"
 #define MQTT_SERVER_PORT        "1883"

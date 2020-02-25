@@ -20,11 +20,13 @@ static int str_to_hex(const char *bufin, int len, char *bufout)
 {
     int i = 0;
     unsigned char tmp2 = 0x0;
-    unsigned int tmp = 0;
+    unsigned char tmp  = 0x0;
+	
     if (NULL == bufin || len <= 0 || NULL == bufout)
     {
         return -1;
     }
+	
     for(i = 0; i < len; i = i+2)
     {
         tmp2 =  bufin[i];
@@ -34,13 +36,14 @@ static int str_to_hex(const char *bufin, int len, char *bufout)
         bufout[i/2] =(tmp2<<4)|(tmp&0x0F);
 
     }
+	
     return 0; 
 }
 
 int mq_dev_report(void)
 {
-	char *data;
-	cJSON *root = NULL;
+    char *data;
+    cJSON *root = NULL;
     mqtt_pub_opt_t pub_opt;
     pub_opt.dup = 0;
     pub_opt.qos = 0;
@@ -48,83 +51,91 @@ int mq_dev_report(void)
     pub_opt.id = 0;
     pub_opt.topic = MQTT_PUBLISH_TOPIC;
     
-//  {"motor":0,"light":1,"temperature":22.22,"humidity":55.55,"light_intensity":100.00}
+    //{"motor":0,"light":1,"temperature":22.22,"humidity":55.55,"light_intensity":100.00}
     root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "motor",E53_IA1_Data.MotorMode);
     cJSON_AddNumberToObject(root, "light",E53_IA1_Data.LightMode);
     cJSON_AddNumberToObject(root, "temperature",math_keep_ndot((double)E53_IA1_Data.Temperature,2));
- 	cJSON_AddNumberToObject(root, "humidity",math_keep_ndot((double)E53_IA1_Data.Humidity,2));
-  	cJSON_AddNumberToObject(root, "light_intensity",math_keep_ndot((double)E53_IA1_Data.Lux,2));
+    cJSON_AddNumberToObject(root, "humidity",math_keep_ndot((double)E53_IA1_Data.Humidity,2));
+    cJSON_AddNumberToObject(root, "light_intensity",math_keep_ndot((double)E53_IA1_Data.Lux,2));
      /* formatted print */
-	data=cJSON_PrintUnformatted(root);
+    data=cJSON_PrintUnformatted(root);
 
     pub_opt.topic = MQTT_PUBLISH_TOPIC;
     pub_opt.payload =(unsigned char *)data;
     pub_opt.payload_len = strlen(data);
     printf("\r\nreport--->topic:%s\r\ndata(%d):%s", pub_opt.topic,pub_opt.payload_len,pub_opt.payload);
     if (tos_mqtt_publish(sock_id, &pub_opt) != 0) {
-            printf("publish failed!!!\n");
+        printf("publish failed!!!\n");
     }
-	tos_mmheap_free(data);
-	cJSON_Delete(root);
+    tos_mmheap_free(data);
+    cJSON_Delete(root);
+    
     return 0;	
 }
 
 int parse_dev_cmd(uint8_t *data)
 {
     //{"motor":0,"light":1}
-	//JSON字符串到cJSON格式
-	cJSON* cjson = cJSON_Parse((char *)data); 
-	cJSON *cjsonret=NULL;
-	int motor;
+    //JSON字符串到cJSON格式
+    cJSON* cjson = cJSON_Parse((char *)data); 
+    cJSON *cjsonret=NULL;
+    int motor;
     int light;
     char *str;
-	printf("parse_dev_cmd...\n");
-	if(cjson == NULL){
-		 printf("json pack into cjson error...");
-		 return -1;
-	}
-	else{
-		cJSON_Print(cjson);
-	}
-	cjsonret = NULL;
-	cjsonret = cJSON_GetObjectItem(cjson,"motor");
-	if(cjsonret!=NULL)
-	{
-		//打印输出
-		motor=cjsonret->valueint;
-		printf("motor=%d\n",motor);
-		if(motor==1)
-		{//power on relay
+	
+    printf("parse_dev_cmd...\n");
+    if(cjson == NULL){
+        printf("json pack into cjson error...");
+        return -1;
+    }
+    else{
+        cJSON_Print(cjson);
+    }
+	
+    cjsonret = NULL;
+    cjsonret = cJSON_GetObjectItem(cjson,"motor");
+    if(cjsonret!=NULL)
+    {
+        //打印输出
+        motor=cjsonret->valueint;
+        printf("motor=%d\n",motor);
+        if(motor==1)
+        {   
+            //power on relay
             motor_control(1);
-		}	
-		else if(motor==0)
-		{//power off relay
+        }	
+        else if(motor==0)
+        {
+            //power off relay
             motor_control(0);
-		}	
-	}
-	cjsonret = NULL;
-	cjsonret = cJSON_GetObjectItem(cjson,"light");
-	if(cjsonret!=NULL)
-	{
-		//打印输出
-		light=cjsonret->valueint;
-		//打印输出
-		printf("light=%d\n",light);
-		if(light==1)
-		{//power on relay
+        }	
+    }
+	
+    cjsonret = NULL;
+    cjsonret = cJSON_GetObjectItem(cjson,"light");
+    if(cjsonret!=NULL)
+    {
+        //打印输出
+        light=cjsonret->valueint;
+        //打印输出
+        printf("light=%d\n",light);
+        if(light==1)
+        {
+            //power on relay
             light_control(1);
-		}	
-		else if(light==0)
-		{//power off relay
+        }	
+        else if(light==0)
+        {
+            //power off relay
             light_control(0);
-		}			
-	}
-   	cjsonret = cJSON_GetObjectItem(cjson,"speaker");
-	if(cjsonret!=NULL)
-	{
-		//打印输出
-		printf("parse speaker:%s\n",cjsonret->valuestring);
+        }			
+    }
+    cjsonret = cJSON_GetObjectItem(cjson,"speaker");
+    if(cjsonret!=NULL)
+    {
+        //打印输出
+        printf("parse speaker:%s\n",cjsonret->valuestring);
         str=tos_mmheap_alloc(strlen(cjsonret->valuestring));
         if(str!=NULL)
         {
@@ -134,13 +145,15 @@ int parse_dev_cmd(uint8_t *data)
     	    speaker(str);
             tos_mmheap_free(str);
         }
-	} 
-	//delete cjson
-	cJSON_Delete(cjson);
-	return 0;	
+    } 
+    //delete cjson
+    cJSON_Delete(cjson);
+    
+    return 0;	
 }
 
-int mq_dev_receiv(void){
+int mq_dev_receiv(void)
+{
     static int count = 1;
     uint8_t read_data[100];
     int read_len;
@@ -156,27 +169,29 @@ int mq_dev_receiv(void){
     printf("read buf1,\r\n");
     read_len = tos_mqtt_receive(sub_opt.topic, strlen(sub_opt.topic), read_data, sizeof(read_data));
     if (read_len >= 0) {
-            printf("---------->topic: %s, payload: %s, payload_len: %d\n", sub_opt.topic, read_data, read_len);
-            parse_dev_cmd(read_data);
+        printf("---------->topic: %s, payload: %s, payload_len: %d\n", sub_opt.topic, read_data, read_len);
+        parse_dev_cmd(read_data);
     }
     count++;
-		return 0;
+		
+    return 0;
 }
 
-int mq_dev_subscribe(void){
+int mq_dev_subscribe(void)
+{
     mqtt_sub_opt_t sub_opt;
-
     sub_opt.count = 1;
     sub_opt.dup = 0;
     sub_opt.id = 1;
     sub_opt.req_qos = 0;
     sub_opt.topic = MQTT_SUBSCRIBE_TOPIC;
 
-   printf("subscribe topic1:%s",sub_opt.topic);
+    printf("subscribe topic1:%s",sub_opt.topic);
     if (tos_mqtt_subscribe(sock_id, &sub_opt) != 0) {
         printf("subscribe failed!!!\n");
     }
-   return 0;
+	
+    return 0;
 }
 void ai_demo(void)
 {
@@ -205,15 +220,18 @@ void ai_demo(void)
     }
 }
 
-void sensor_read(void){
-    while(1){
-    E53_IA1_Read_Data();
-    osDelay(100);
+void sensor_read(void)
+{
+    while(1)
+    {
+        E53_IA1_Read_Data();
+        osDelay(100);
     }
 }
 
 #define welcomspeak "欢迎TOS"
-void speaker(char *str){
+void speaker(char *str)
+{
     uint8_t data[100];
     int16_t len=0;
 
@@ -244,4 +262,3 @@ void application_entry(void *arg)
         tos_task_delay(1000);
     }
 }
-
