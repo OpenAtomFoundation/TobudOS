@@ -56,7 +56,7 @@ port_sched_start
     CPSID   I
 
     ; set pendsv priority lowest
-    ; otherwise trigger pendsv in port_irq_context_switch will cause a context swich in irq
+    ; otherwise trigger pendsv in port_irq_context_switch will cause a context switch in irq
     ; that would be a disaster
     MOV32   R0, NVIC_SYSPRI14
     MOV32   R1, NVIC_PENDSV_PRI
