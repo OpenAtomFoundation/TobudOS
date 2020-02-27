@@ -96,7 +96,12 @@ __API__ k_err_t tos_task_create(k_task_t *task,
     TOS_PTR_SANITY_CHECK(entry);
     TOS_PTR_SANITY_CHECK(stk_base);
 
-    if (unlikely(stk_size < sizeof(cpu_context_t))) {
+    if (task->knl_obj.type == KNL_OBJ_TYPE_TASK) {
+        /* try to re-create a task, kind of dangerous action */
+        return K_ERR_TASK_ALREADY_CREATED;
+    }
+
+    if (unlikely(stk_size < K_TASK_STK_SIZE_MIN)) {
         return K_ERR_TASK_STK_SIZE_INVALID;
     }
 
@@ -119,10 +124,10 @@ __API__ k_err_t tos_task_create(k_task_t *task,
     task->sp        = cpu_task_stk_init((void *)entry, arg, (void *)task_exit, stk_base, stk_size);
     task->entry     = entry;
     task->arg       = arg;
-    task->name      = name;
     task->prio      = prio;
     task->stk_base  = stk_base;
     task->stk_size  = stk_size;
+    strncpy(task->name, name, K_TASK_NAME_MAX);
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
     task->timeslice_reload = timeslice;
@@ -186,18 +191,6 @@ __STATIC__ k_err_t task_do_destroy(k_task_t *task)
 
 __STATIC__ k_err_t task_destroy_static(k_task_t *task)
 {
-    TOS_IN_IRQ_CHECK();
-
-    if (unlikely(!task)) {
-        task = k_curr_task;
-    }
-
-    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
-
-    if (knl_is_self(task) && knl_is_sched_locked()) {
-        return K_ERR_SCHED_LOCKED;
-    }
-
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
     if (!knl_object_alloc_is_static(&task->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;

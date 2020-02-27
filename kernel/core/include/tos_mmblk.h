@@ -18,6 +18,8 @@
 #ifndef _TOS_MMBLK_H_
 #define  _TOS_MMBLK_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_MMBLK_EN > 0u
 
 #define K_MMBLK_NEXT_BLK(blk_curr, blk_size)        ((void *)((cpu_addr_t)blk_curr + blk_size))
@@ -102,6 +104,8 @@ __API__ k_err_t tos_mmblk_alloc(k_mmblk_pool_t *mbp, void **blk);
 __API__ k_err_t tos_mmblk_free(k_mmblk_pool_t *mbp, void *blk);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_MMBLK_H_ */
 

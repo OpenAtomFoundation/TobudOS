@@ -18,6 +18,8 @@
 #ifndef _TOS_MUTEX_H_
 #define  _TOS_MUTEX_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_MUTEX_EN > 0u
 
 typedef struct k_mutex_st {
@@ -113,6 +115,8 @@ __API__ k_err_t tos_mutex_post(k_mutex_t *mutex);
 __KNL__ void mutex_release(k_mutex_t *mutex);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_MUTEX_H_ */
 

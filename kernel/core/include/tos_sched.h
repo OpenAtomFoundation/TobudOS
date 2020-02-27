@@ -18,6 +18,8 @@
 #ifndef _TOS_SCHED_H_
 #define  _TOS_SCHED_H_
 
+__CDECLS_BEGIN
+
 #define K_PRIO_TBL_SIZE         ((TOS_CFG_TASK_PRIO_MAX + 31) / 32)
 #define K_PRIO_TBL_SLOT_SIZE    (32u)
 
@@ -47,6 +49,8 @@ __KNL__ void         readyqueue_add(k_task_t *task);
 __KNL__ void         readyqueue_remove(k_task_t *task);
 
 __KNL__ void         readyqueue_move_head_to_tail(k_prio_t prio);
+
+__CDECLS_END
 
 #endif /* _TOS_SCHED_H_ */
 

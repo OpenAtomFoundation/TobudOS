@@ -18,6 +18,8 @@
 #ifndef _TOS_PRIORITY_MESSAGE_QUEUE_H_
 #define  _TOS_PRIORITY_MESSAGE_QUEUE_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u
 
 typedef struct k_priority_message_queue_st {
@@ -154,6 +156,8 @@ __API__ k_err_t tos_prio_msg_q_post(k_prio_msg_q_t *prio_msg_q, void *msg_ptr, k
 __API__ k_err_t tos_prio_msg_q_post_all(k_prio_msg_q_t *prio_msg_q, void *msg_ptr, k_prio_t prio);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_PRIORITY_MESSAGE_QUEUE_H_ */
 

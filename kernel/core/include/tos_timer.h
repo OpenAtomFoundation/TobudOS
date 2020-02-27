@@ -18,6 +18,8 @@
 #ifndef _TOS_TIMER_H_
 #define  _TOS_TIMER_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_TIMER_EN > 0u
 
 // if we just want the timer to run only once, this option should be passed to tos_timer_create.
@@ -184,6 +186,8 @@ __KNL__ k_err_t timer_init(void);
 __KNL__ k_tick_t timer_next_expires_get(void);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_TIMER_H_ */
 

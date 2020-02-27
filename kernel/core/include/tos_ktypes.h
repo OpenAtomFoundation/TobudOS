@@ -30,6 +30,7 @@ typedef uint8_t         k_nesting_t;
 typedef uint16_t        k_opt_t;
 typedef uint16_t        k_sem_cnt_t;
 typedef uint32_t        k_event_flag_t;
+typedef uint16_t        k_barrier_cnt_t;
 typedef uint16_t        k_countdownlatch_cnt_t;
 
 typedef uint32_t        k_time_t;

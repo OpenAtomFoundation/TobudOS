@@ -18,20 +18,29 @@
 #ifndef _TOS_COMPILER_H_
 #define  _TOS_COMPILER_H_
 
-// function with __API__ prefix, api for user
+/* function with __API__ prefix, api for user */
 #define __API__
 
-// function with __KNL__ prefix, only for kernel
+/* function with __KNL__ prefix, only for kernel */
 #define __KNL__
 
-// function with __HOOK__ prefix, should be implemented by user
+/* function with __HOOK__ prefix, should be implemented by user */
 #define __HOOK__
 
-// function with __DEBUG__ prefix, only for debug
+/* function with __DEBUG__ prefix, only for debug */
 #define __DEBUG__
 
-// function with __PORT__ is architecture depended
+/* function with __PORT__ is architecture depended */
 #define __PORT__
+
+/* CPP header guards */
+#ifdef __cplusplus
+#define __CDECLS_BEGIN          extern "C" {
+#define __CDECLS_END            }
+#else
+#define __CDECLS_BEGIN
+#define __CDECLS_END
+#endif
 
 /*------------------ RealView Compiler -----------------*/
 #if defined(__CC_ARM)

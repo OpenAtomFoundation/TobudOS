@@ -55,6 +55,8 @@
 #ifndef _TOS_MMHEAP_H_
 #define  _TOS_MMHEAP_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_MMHEAP_EN > 0u
 
 /**
@@ -261,6 +263,8 @@ __KNL__ k_err_t mmheap_init(void);
 __KNL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_MMHEAP_H_ */
 

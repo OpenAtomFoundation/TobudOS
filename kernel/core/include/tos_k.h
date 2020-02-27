@@ -35,6 +35,7 @@
 #include <tos_slist.h>
 #include <tos_pend.h>
 #include <tos_sys.h>
+#include <tos_bitmap.h>
 #include <tos_ring_queue.h>
 #include <tos_char_fifo.h>
 #include <tos_mail_queue.h>
@@ -48,10 +49,13 @@
 #include <tos_mutex.h>
 #include <tos_sem.h>
 #include <tos_event.h>
-#include <tos_countdownlatch.h>
+#include <tos_barrier.h>
 #include <tos_completion.h>
+#include <tos_countdownlatch.h>
+#include <tos_rwlock.h>
 #include <tos_timer.h>
 #include <tos_time.h>
+#include <tos_stopwatch.h>
 #include <tos_mmblk.h>
 #include <tos_mmheap.h>
 #include <tos_tick.h>

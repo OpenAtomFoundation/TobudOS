@@ -151,6 +151,7 @@ __API__ k_err_t tos_msg_q_pend(k_msg_q_t *msg_q, void **msg_ptr, k_tick_t timeou
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(msg_q);
     TOS_PTR_SANITY_CHECK(msg_ptr);
     TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);

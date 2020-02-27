@@ -21,7 +21,12 @@
 typedef enum k_err_en {
     K_ERR_NONE                                  = 0u,
 
-    K_ERR_BIN_HEAP_FULL                     = 10u,
+    K_ERR_BARRIER_COUNT_INVALID                 = 5u,
+    K_ERR_BARRIER_OVERFLOW,
+
+    K_ERR_BITMAP_EXCEED                         = 10u,
+
+    K_ERR_BIN_HEAP_FULL                     = 15u,
     K_ERR_BIN_HEAP_EMPTY,
     K_ERR_BIN_HEAP_ITEM_SIZE_NOT_MATCH,
 
@@ -64,7 +69,6 @@ typedef enum k_err_en {
 
     K_ERR_PEND_NOWAIT                           = 1200u,
     K_ERR_PEND_SCHED_LOCKED,
-    K_ERR_PEND_IN_IRQ,
     K_ERR_PEND_ABNORMAL,
     K_ERR_PEND_TIMEOUT,
     K_ERR_PEND_DESTROY,
@@ -79,16 +83,25 @@ typedef enum k_err_en {
     K_ERR_PRIO_Q_SLOT_NOT_TAKEN,
     K_ERR_PRIO_Q_ITEM_SIZE_NOT_MATCH,
 
-    K_ERR_RING_Q_FULL                           = 1600u,
+    K_ERR_RING_Q_FULL                           = 1500u,
     K_ERR_RING_Q_EMPTY,
     K_ERR_RING_Q_ITEM_SIZE_NOT_MATCH,
+
+    K_ERR_RWLOCK_READERS_TO_MANY            = 1600u,
+    K_ERR_RWLOCK_IS_READING,
+    K_ERR_RWLOCK_IS_WRITTING,
+    K_ERR_RWLOCK_NOT_READING,
+    K_ERR_RWLOCK_NOT_WRITTING,
+    K_ERR_RWLOCK_NOT_TAKEN,
+    K_ERR_RWLOCK_WAITING_WRITERS_TO_MANY,
 
     K_ERR_SCHED_LOCKED                          = 1700u,
     K_ERR_SCHED_NOT_LOCKED,
 
     K_ERR_SEM_OVERFLOW                          = 1800u,
 
-    K_ERR_TASK_DESTROY_IDLE                     = 1900u,
+    K_ERR_TASK_ALREADY_CREATED                  = 1900u,
+    K_ERR_TASK_DESTROY_IDLE,
     K_ERR_TASK_NOT_DELAY,
     K_ERR_TASK_PRIO_INVALID,
     K_ERR_TASK_RESUME_SELF,

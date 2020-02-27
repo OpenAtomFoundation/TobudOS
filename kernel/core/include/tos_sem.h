@@ -18,6 +18,8 @@
 #ifndef _TOS_SEM_H_
 #define  _TOS_SEM_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_SEM_EN > 0u
 
 typedef struct k_sem_st {
@@ -119,6 +121,8 @@ __API__ k_err_t tos_sem_post(k_sem_t *sem);
 __API__ k_err_t tos_sem_post_all(k_sem_t *sem);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_SEM_H_ */
 

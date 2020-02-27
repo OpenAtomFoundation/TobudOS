@@ -18,7 +18,7 @@
 #ifndef _TOS_COMPLETION_H_
 #define  _TOS_COMPLETION_H_
 
-#if TOS_CFG_COMPLETION_EN > 0u
+__CDECLS_BEGIN
 
 typedef uint16_t    completion_done_t;
 
@@ -147,7 +147,7 @@ __API__ k_err_t tos_completion_reset(k_completion_t *completion);
  */
 __API__ int tos_completion_is_done(k_completion_t *completion);
 
-#endif
+__CDECLS_END
 
-#endif
+#endif /* _TOS_COMPLETION_H_ */
 

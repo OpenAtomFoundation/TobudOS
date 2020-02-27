@@ -150,6 +150,7 @@ __API__ k_err_t tos_mail_q_pend(k_mail_q_t *mail_q, void *mail_buf, size_t *mail
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
     TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);

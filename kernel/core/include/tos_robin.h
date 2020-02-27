@@ -18,6 +18,8 @@
 #ifndef _TOS_ROBIN_H_
 #define  _TOS_ROBIN_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
 
 /**
@@ -49,6 +51,8 @@ __API__ void    tos_robin_default_timeslice_config(k_timeslice_t default_timesli
 __KNL__ void robin_sched(k_prio_t prio);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_ROBIN_H_ */
 

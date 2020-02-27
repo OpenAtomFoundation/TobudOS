@@ -101,6 +101,7 @@ __API__ k_err_t tos_sem_pend(k_sem_t *sem, k_tick_t timeout)
 {
     TOS_CPU_CPSR_ALLOC();
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(sem);
     TOS_OBJ_VERIFY(sem, KNL_OBJ_TYPE_SEMAPHORE);
 
@@ -115,11 +116,6 @@ __API__ k_err_t tos_sem_pend(k_sem_t *sem, k_tick_t timeout)
     if (timeout == TOS_TIME_NOWAIT) { // no wait, return immediately
         TOS_CPU_INT_ENABLE();
         return K_ERR_PEND_NOWAIT;
-    }
-
-    if (knl_is_inirq()) {
-        TOS_CPU_INT_ENABLE();
-        return K_ERR_PEND_IN_IRQ;
     }
 
     if (knl_is_sched_locked()) {

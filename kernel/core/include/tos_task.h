@@ -18,6 +18,11 @@
 #ifndef _TOS_TASK_H_
 #define  _TOS_TASK_H_
 
+__CDECLS_BEGIN
+
+#define K_TASK_NAME_MAX                 (16u)
+#define K_TASK_STK_SIZE_MIN             (sizeof(cpu_context_t))
+
 // task state is just a flag, indicating which manager list we are in.
 
 // ready to schedule
@@ -67,43 +72,43 @@ typedef void (*k_task_walker_t)(k_task_t *task);
  * task control block
  */
 typedef struct k_task_st {
-    k_stack_t          *sp;                 /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
+    k_stack_t          *sp;                     /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
 
-    knl_obj_t           knl_obj;            /**< just for verification, test whether current object is really a task. */
+    knl_obj_t           knl_obj;                /**< just for verification, test whether current object is really a task. */
 
-    char               *name;               /**< task name */
-    k_task_entry_t      entry;              /**< task entry */
-    void               *arg;                /**< argument for task entry */
-    k_task_state_t      state;              /**< just state */
-    k_prio_t            prio;               /**< just priority */
+    char                name[K_TASK_NAME_MAX];  /**< task name */
+    k_task_entry_t      entry;                  /**< task entry */
+    void               *arg;                    /**< argument for task entry */
+    k_task_state_t      state;                  /**< just state */
+    k_prio_t            prio;                   /**< just priority */
 
-    k_stack_t          *stk_base;           /**< task stack base address */
-    size_t              stk_size;           /**< stack size of the task */
+    k_stack_t          *stk_base;               /**< task stack base address */
+    size_t              stk_size;               /**< stack size of the task */
 
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
-    k_list_t            dead_list;          /**< when a dynamic allocated task destroyed, we hook the task's dead_list to the k_dead_task_list */
+    k_list_t            dead_list;              /**< when a dynamic allocated task destroyed, we hook the task's dead_list to the k_dead_task_list */
 #endif
 
-    k_list_t            stat_list;          /**< list for hooking us to the k_stat_list */
+    k_list_t            stat_list;              /**< list for hooking us to the k_stat_list */
 
-    k_tick_t            tick_expires;       /**< if we are in k_tick_list, how much time will we wait for? */
+    k_tick_t            tick_expires;           /**< if we are in k_tick_list, how much time will we wait for? */
 
-    k_list_t            tick_list;          /**< list for hooking us to the k_tick_list */
-    k_list_t            pend_list;          /**< when we are ready, our pend_list is in readyqueue; when pend, in a certain pend object's list. */
+    k_list_t            tick_list;              /**< list for hooking us to the k_tick_list */
+    k_list_t            pend_list;              /**< when we are ready, our pend_list is in readyqueue; when pend, in a certain pend object's list. */
 
 #if TOS_CFG_MUTEX_EN > 0u
-    k_list_t            mutex_own_list;     /**< the list hold all the mutex we own.
-                                                When we die(tos_task_destroy), we have an obligation to wakeup all the task pending for those mutexs we own;
-                                                if not, those pending tasks may never get a chance to wakeup. */
-    k_prio_t            prio_pending;       /*< when tos_task_prio_change called, we may be just the owner of a mutex.
-                                                to avoid PRIORITY INVERSION, must make sure our priority is higher than any one who is pending for
-                                                the mutex we hold. So, if the prio_new of tos_task_prio_change is not appropriate
-                                                (may against the principle of PRIORITY INVERSION), we just mark the prio_new here, do the real priority
-                                                change in the right time(mutex_old_owner_release) later. */
+    k_list_t            mutex_own_list;         /**< the list hold all the mutex we own.
+                                                    When we die(tos_task_destroy), we have an obligation to wakeup all the task pending for those mutexs we own;
+                                                    if not, those pending tasks may never get a chance to wakeup. */
+    k_prio_t            prio_pending;           /*< when tos_task_prio_change called, we may be just the owner of a mutex.
+                                                    to avoid PRIORITY INVERSION, must make sure our priority is higher than any one who is pending for
+                                                    the mutex we hold. So, if the prio_new of tos_task_prio_change is not appropriate
+                                                    (may against the principle of PRIORITY INVERSION), we just mark the prio_new here, do the real priority
+                                                    change in the right time(mutex_old_owner_release) later. */
 #endif
 
-    pend_obj_t         *pending_obj;       /**< if we are pending, which pend object's list we are in? */
-    pend_state_t        pend_state;         /**< why we wakeup from a pend */
+    pend_obj_t         *pending_obj;            /**< if we are pending, which pend object's list we are in? */
+    pend_state_t        pend_state;             /**< why we wakeup from a pend */
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
     k_timeslice_t       timeslice_reload;   /**< if current time slice is used up, use time_slice_reload to reload our time slice */
@@ -406,7 +411,9 @@ __DEBUG__ __STATIC_INLINE__ void task_default_walker(k_task_t *task)
     state_str = state_str;
     tos_kprintln("tsk name: %s", task->name);
 
-    if (task->state == K_TASK_STATE_PENDTIMEOUT_SUSPENDED) {
+    if (tos_task_curr_task_get() == task) {
+        state_str = "RUNNING";
+    } else if (task->state == K_TASK_STATE_PENDTIMEOUT_SUSPENDED) {
         state_str = "PENDTIMEOUT_SUSPENDED";
     } else if (task->state == K_TASK_STATE_PEND_SUSPENDED) {
         state_str = "PEND_SUSPENDED";
@@ -430,6 +437,8 @@ __DEBUG__ __STATIC_INLINE__ void task_default_walker(k_task_t *task)
     tos_kprintln("stk top : 0x%p", task->stk_base + task->stk_size);
     tos_kprintf("\n");
 }
+
+__CDECLS_END
 
 #endif /* _TOS_TASK_H_ */
 

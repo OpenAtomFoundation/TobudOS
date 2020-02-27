@@ -18,6 +18,8 @@
 #ifndef _TOS_TICK_H_
 #define  _TOS_TICK_H_
 
+__CDECLS_BEGIN
+
 /**
  * @brief Systick interrupt handler.
  * systick interrupt handler.
@@ -39,6 +41,8 @@ __KNL__ void tick_list_remove(k_task_t *task);
 #if TOS_CFG_TICKLESS_EN > 0u
 __KNL__ k_tick_t tick_next_expires_get(void);
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_TICK_H_ */
 

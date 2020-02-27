@@ -18,6 +18,8 @@
 #ifndef _TOS_MAIL_QUEUE_H_
 #define  _TOS_MAIL_QUEUE_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_MAIL_QUEUE_EN > 0u
 
 typedef struct k_mail_queue_st {
@@ -154,6 +156,8 @@ __API__ k_err_t tos_mail_q_post(k_mail_q_t *mail_q, void *mail_buf, size_t mail_
 __API__ k_err_t tos_mail_q_post_all(k_mail_q_t *mail_q, void *mail_buf, size_t mail_size);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_MAIL_QUEUE_H_ */
 

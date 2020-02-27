@@ -70,24 +70,6 @@
 
 
 /////////////////////////////////////////
-// disable countdownlatch
-#ifdef TOS_CFG_COUNTDOWNLATCH_EN
-#undef  TOS_CFG_COUNTDOWNLATCH_EN
-#endif
-#define TOS_CFG_COUNTDOWNLATCH_EN           0u
-/////////////////////////////////////////
-
-
-/////////////////////////////////////////
-// disable completion
-#ifdef TOS_CFG_COMPLETION_EN
-#undef  TOS_CFG_COMPLETION_EN
-#endif
-#define TOS_CFG_COMPLETION_EN           0u
-/////////////////////////////////////////
-
-
-/////////////////////////////////////////
 // disable the "traditional" timer
 #ifdef TOS_CFG_TIMER_EN
 #undef  TOS_CFG_TIMER_EN
@@ -204,14 +186,6 @@
 
 #ifndef TOS_CFG_SEM_EN
 #define  TOS_CFG_SEM_EN                     0u
-#endif
-
-#ifndef TOS_CFG_COUNTDOWNLATCH_EN
-#define TOS_CFG_COUNTDOWNLATCH_EN           0u
-#endif
-
-#ifndef TOS_CFG_COMPLETION_EN
-#define TOS_CFG_COMPLETION_EN               0u
 #endif
 
 #ifndef TOS_CFG_TIMER_EN

@@ -18,6 +18,8 @@
 #ifndef _TOS_EVENT_H_
 #define _TOS_EVENT_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_EVENT_EN > 0
 
 // if we are pending an event, for any flag we expect is set is ok, this flag should be passed to tos_event_pend
@@ -132,6 +134,8 @@ __API__ k_err_t tos_event_post(k_event_t *event, k_event_flag_t flag);
 __API__ k_err_t tos_event_post_keep(k_event_t *event, k_event_flag_t flag);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_EVENT_H_ */
 

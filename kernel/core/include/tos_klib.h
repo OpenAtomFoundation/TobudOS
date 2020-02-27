@@ -23,51 +23,57 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define TOS_MACRO_BEGIN         do {
+#define TOS_MACRO_END           } while (0)
+
 #define TOS_OFFSET_OF_FIELD(type, field) \
     ((uint32_t)&(((type *)0)->field))
 
 #define TOS_CONTAINER_OF_FIELD(ptr, type, field) \
     ((type *)((uint8_t *)(ptr) - TOS_OFFSET_OF_FIELD(type, field)))
 
-#define TOS_PTR_SANITY_CHECK(ptr) \
-    do {    \
-        if (unlikely(!(ptr))) {    \
-            return K_ERR_OBJ_PTR_NULL;    \
-        }   \
-    } while(0)
+#define TOS_COUNT_OF(array)             (sizeof(array) / sizeof(array[0]))
 
-#define TOS_PTR_SANITY_CHECK_RC(ptr, return_code) \
-    do {    \
-        if (unlikely(!(ptr))) {    \
-            return return_code;    \
-        }   \
-    } while(0)
+#define TOS_PTR_SANITY_CHECK(ptr)           \
+TOS_MACRO_BEGIN                             \
+    if (unlikely(!(ptr))) {                 \
+        return K_ERR_OBJ_PTR_NULL;          \
+    }                                       \
+TOS_MACRO_END
 
-#define TOS_IN_IRQ_CHECK()    \
-    do {    \
-        if (unlikely(knl_is_inirq())) {   \
-            return K_ERR_IN_IRQ; \
-        }   \
-    } while(0)
+#define TOS_PTR_SANITY_CHECK_RC(ptr, return_code)   \
+TOS_MACRO_BEGIN                                         \
+    if (unlikely(!(ptr))) {                         \
+        return return_code;                         \
+    }                                                   \
+TOS_MACRO_END
+
+#define TOS_IN_IRQ_CHECK()                  \
+TOS_MACRO_BEGIN                             \
+    if (unlikely(knl_is_inirq())) {     \
+        return K_ERR_IN_IRQ;                \
+    }                                       \
+TOS_MACRO_END
 
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
 
 #define TOS_OBJ_INIT(obj, obj_type)     knl_object_init(&obj->knl_obj, obj_type)
 #define TOS_OBJ_DEINIT(obj)             knl_object_deinit(&obj->knl_obj)
 
-#define TOS_OBJ_VERIFY(obj, obj_type) \
-    do {    \
-        if (!knl_object_verify(&obj->knl_obj, obj_type)) {    \
-            return K_ERR_OBJ_INVALID;   \
-        }   \
-    } while (0)
+#define TOS_OBJ_VERIFY(obj, obj_type)                   \
+TOS_MACRO_BEGIN                                             \
+    if (!knl_object_verify(&obj->knl_obj, obj_type)) {  \
+        return K_ERR_OBJ_INVALID;                           \
+    }                                                       \
+TOS_MACRO_END
 
-#define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code) \
-    do {    \
-        if (!knl_object_verify(&obj->knl_obj, obj_type)) {    \
-            return return_code;   \
-        }   \
-    } while (0)
+
+#define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code)   \
+TOS_MACRO_BEGIN                                             \
+    if (!knl_object_verify(&obj->knl_obj, obj_type)) {  \
+        return return_code;                                 \
+    }                                                       \
+TOS_MACRO_END
 
 #else
 

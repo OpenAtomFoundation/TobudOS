@@ -18,6 +18,8 @@
 #ifndef _TOS_PRIORITY_QUEUE_H_
 #define  _TOS_PRIORITY_QUEUE_H_
 
+__CDECLS_BEGIN
+
 typedef uint16_t    prio_q_slot_t;
 
 typedef struct prio_q_pool_manager_entry_st {
@@ -206,6 +208,8 @@ __API__ int tos_prio_q_is_empty(k_prio_q_t *prio_q);
  * @retval  #Not 0  the priority queue is full.
  */
 __API__ int tos_prio_q_is_full(k_prio_q_t *prio_q);
+
+__CDECLS_END
 
 #endif /* _TOS_PRIORITY_QUEUE_H_ */
 

@@ -154,6 +154,7 @@ __API__ k_err_t tos_prio_msg_q_pend(k_prio_msg_q_t *prio_msg_q, void **msg_ptr, 
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(prio_msg_q);
     TOS_PTR_SANITY_CHECK(msg_ptr);
     TOS_OBJ_VERIFY(prio_msg_q, KNL_OBJ_TYPE_PRIORITY_MESSAGE_QUEUE);

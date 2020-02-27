@@ -18,6 +18,8 @@
 #ifndef _TOS_PRIORITY_MAIL_QUEUE_H_
 #define  _TOS_PRIORITY_MAIL_QUEUE_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u
 
 typedef struct k_priority_mail_queue_st {
@@ -159,6 +161,8 @@ __API__ k_err_t tos_prio_mail_q_post(k_prio_mail_q_t *prio_mail_q, void *mail_bu
 __API__ k_err_t tos_prio_mail_q_post_all(k_prio_mail_q_t *prio_mail_q, void *mail_buf, size_t mail_size, k_prio_t prio);
 
 #endif
+
+__CDECLS_END
 
 #endif /* TOS_CFG_PRIORITY_MAIL_QUEUE_EN */
 

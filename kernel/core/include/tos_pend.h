@@ -18,6 +18,8 @@
 #ifndef _TOS_PEND_H_
 #define  _TOS_PEND_H_
 
+__CDECLS_BEGIN
+
 typedef struct k_task_st k_task_t;
 
 /**
@@ -66,6 +68,8 @@ __KNL__ void        pend_wakeup_one(pend_obj_t *object, pend_state_t state);
 __KNL__ void        pend_wakeup_all(pend_obj_t *object, pend_state_t state);
 
 __KNL__ void        pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt);
+
+__CDECLS_END
 
 #endif /* _TOS_PEND_H_ */
 
