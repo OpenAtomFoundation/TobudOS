@@ -3,7 +3,7 @@
 
 void e53_ia1_demo(void)
 {
-	Init_E53_IA1();	
+    Init_E53_IA1();	
     while (1)
     {
         E53_IA1_Read_Data();
@@ -19,8 +19,8 @@ void e53_ia1_demo(void)
 void e53_st1_demo(void)
 {
     Init_E53_ST1();	
-	while (1)
-	{
+    while (1)
+    {
         E53_ST1_Read_Data();
         printf("\r\n******************************Longitude Value is  %.6f\r\n", E53_ST1_Data.Longitude);
         printf("\r\n******************************Latitude is  %.6f\r\n", E53_ST1_Data.Latitude);
@@ -33,21 +33,21 @@ void e53_st1_demo(void)
         E53_ST1_LED_StatusSet(ST1_OFF);
         osDelay(2000);
 
-	}
+    }
 }
 
 void e53_sf1_demo(void)
 {
-	Init_E53_SF1();	
-	while (1)
-	{
+    Init_E53_SF1();	
+    while (1)
+    {
         E53_SF1_Read_Data();
         printf("\r\n******************************Smoke Value is  %d\r\n", E53_SF1_Data.Smoke_Value);
         E53SF1_Beep(ON);  				        
         osDelay(2000);
         E53SF1_Beep(OFF);  
         osDelay(2000);
-	}
+    }
 }
 
 void application_entry(void *arg)
