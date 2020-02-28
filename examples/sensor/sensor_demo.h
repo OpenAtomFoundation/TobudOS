@@ -17,5 +17,5 @@ void application_entry(void *arg);
 }
 #endif
 
-#endif /* __APP_DEMO_H__ */
+#endif /* __SENSOR_DEMO_H__ */
 
