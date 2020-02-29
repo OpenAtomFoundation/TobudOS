@@ -230,7 +230,7 @@ static void nrf_cli_cmd_ccm(nrf_cli_t const * p_cli, size_t argc, char **argv)
     memset(mac,             0,  sizeof(mac));
     memset(nonce,           0,  sizeof(nonce));
     memset(encrypted_text,  0,  sizeof(encrypted_text));
-    memset(decrypted_text,  0,  sizeof(encrypted_text));
+    memset(decrypted_text,  0,  sizeof(decrypted_text));
     memset(&ccm_encr_ctx,   0,  sizeof(ccm_encr_ctx));
     memset(&ccm_decr_ctx,   0,  sizeof(ccm_decr_ctx));
 
