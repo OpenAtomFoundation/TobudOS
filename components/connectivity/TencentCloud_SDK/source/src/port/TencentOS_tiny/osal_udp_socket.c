@@ -98,7 +98,7 @@ __QCLOUD_OSAL__ qcloud_err_t osal_udp_read(int sockfd, void *buf, size_t len, ui
     fd_set read_fds;
 
     if (sockfd < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     FD_ZERO(&read_fds);
