@@ -70,7 +70,7 @@ int HAL_UDP_Write(uintptr_t fd, const unsigned char *p_data, unsigned int datale
     ret = tos_sal_module_sendto(fd, NULL, NULL, p_data, datalen);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_WRITE_FAIL;
+        return QCLOUD_ERR_UDP_WRITE_FAIL;
     }
 
     return QCLOUD_RET_SUCCESS;
@@ -85,11 +85,11 @@ int HAL_UDP_Read(uintptr_t fd, unsigned char *p_data, unsigned int datalen)
     ret = tos_sal_module_recvfrom(fd, p_data, datalen);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     if (ret == 0) {
-        return QCLOUD_ERR_TCP_NOTHING_TO_READ;
+        return QCLOUD_ERR_UDP_NOTHING_TO_READ;
     }
 
     return QCLOUD_RET_SUCCESS;
@@ -104,11 +104,11 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
     ret = tos_sal_module_recvfrom_timeout(fd, p_data, datalen, timeout_ms);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     if (ret == 0) {
-        return QCLOUD_ERR_TCP_NOTHING_TO_READ;
+        return QCLOUD_ERR_UDP_NOTHING_TO_READ;
     }
 
     return QCLOUD_RET_SUCCESS;
