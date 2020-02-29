@@ -33,7 +33,7 @@ __QCLOUD_OSAL__ int osal_udp_connect(const char *host, uint16_t port)
 	fd = tos_sal_module_connect("111.230.127.136", "5684", TOS_SAL_PROTO_UDP);
 	if (fd < 0) {
 		QCLOUD_LOG_I("net connect fail\n\r");
-		if (QCLOUD_ERR_SUCCESS == tos_sal_module_init()) { /* 重新初始化模组 */
+		if (QCLOUD_ERR_SUCCESS == tos_sal_module_init()) { /* 脰脴脨脗鲁玫脢录禄炉脛拢脳茅 */
 			QCLOUD_LOG_I("net reinit success\n\r");
 			fd = tos_sal_module_connect(host, port_str, TOS_SAL_PROTO_UDP);
 			if (fd < 0) {
@@ -63,7 +63,7 @@ __QCLOUD_OSAL__ qcloud_err_t osal_udp_write(int sockfd, const void *buf, size_t 
     ret = tos_sal_module_sendto(sockfd, NULL, NULL, buf, len);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_WRITE_FAIL;
+        return QCLOUD_ERR_UDP_WRITE_FAIL;
     }
 
     (*(int *)write_len) = ret;
@@ -79,11 +79,11 @@ __QCLOUD_OSAL__ qcloud_err_t osal_udp_read(int sockfd, void *buf, size_t len, ui
     ret = tos_sal_module_recvfrom_timeout(sockfd, buf, len, timeout);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     if (ret == 0) {
-        return QCLOUD_ERR_TCP_NOTHING_TO_READ;
+        return QCLOUD_ERR_UDP_NOTHING_TO_READ;
     }
 
     *(int *)read_len = ret;
