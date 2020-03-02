@@ -47,7 +47,7 @@ uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
     hints.ai_family = AF_INET;
     hints.ai_protocol = IPPROTO_UDP;
 
-    Log_d("establish tcp connection with server(host=%s port=%s)", host, port_str);
+    Log_d("establish udp connection with server(host=%s port=%s)", host, port_str);
 
     if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {        
 		Log_e("getaddrinfo error,errno:%s",strerror(errno));
