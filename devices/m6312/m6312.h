@@ -15,12 +15,12 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef __M6312_M6312_H_
-#define __M6312_M6312_H_
+#ifndef __M6312_H_
+#define __M6312_H_
 
 #include "tos_hal.h"
 
 
 int m6312_sal_init(hal_uart_port_t uart_port);
 
-#endif /* __M6312_M6312_H_ */
+#endif /* __M6312_H_ */
