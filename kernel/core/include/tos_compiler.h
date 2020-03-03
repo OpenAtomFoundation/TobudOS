@@ -112,7 +112,7 @@
 #define __NAKED__
 #define __WEAK__            __weak
 
-/*------------------ ICC Compiler for STM8 ----------------------*/
+/*------------------ ICC Compiler for STM8/AVR ----------------------*/
 #elif defined(__IAR_SYSTEMS_ICC__)
 
 #define __ASM__             __asm

@@ -259,7 +259,7 @@
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\stm8\common\include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\arch\stm8\iccarm</state>
+                    <state>$PROJ_DIR$\..\..\..\..\arch\stm8\iccstm8</state>
                     <state>$PROJ_DIR$\..\..\BSP\include</state>
                     <state>$PROJ_DIR$\..\..\LIB\inc</state>
                     <state>$PROJ_DIR$\..\..\TOS-CONFIG</state>
@@ -1646,16 +1646,16 @@
     <group>
         <name>arch</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccarm\port.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccstm8\port.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccarm\port_c.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccstm8\port_c.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccarm\port_config.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccstm8\port_config.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccarm\port_s.S</name>
+            <name>$PROJ_DIR$\..\..\..\..\arch\stm8\iccstm8\port_s.S</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\arch\stm8\common\tos_cpu.c</name>

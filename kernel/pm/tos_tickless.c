@@ -88,20 +88,20 @@ __STATIC__ k_time_t tickless_cpu_sleep_time_get(k_cpu_lpwr_mode_t lpwr_mode)
     return time_sleep_ms > max_delay_ms ? max_delay_ms : time_sleep_ms;
 }
 
-__STATIC__ void tickless_systick_suspend(void)
+__STATIC__ void tickless_tick_suspend(void)
 {
     cpu_systick_suspend();
     cpu_systick_pending_reset();
 }
 
-__STATIC__ void tickless_systick_resume(void)
+__STATIC__ void tickless_tick_resume(void)
 {
     cpu_systick_suspend();
     cpu_systick_reset();
     cpu_systick_resume();
 }
 
-__STATIC__ void tickless_systick_fix(k_tick_t tick_sleep)
+__STATIC__ void tickless_tick_fix(k_tick_t tick_sleep)
 {
     TOS_CPU_CPSR_ALLOC();
 
@@ -114,14 +114,14 @@ __STATIC__ void tickless_systick_fix(k_tick_t tick_sleep)
     timer_update();
 #endif
 
-    tickless_systick_resume();
+    tickless_tick_resume();
 
     TOS_CPU_INT_ENABLE();
 }
 
 __STATIC__ void tickless_enter(void)
 {
-    tickless_systick_suspend();
+    tickless_tick_suspend();
 }
 
 __STATIC__ void tickless_leave(k_time_t time_sleep_ms)
@@ -131,7 +131,7 @@ __STATIC__ void tickless_leave(k_time_t time_sleep_ms)
     /* how many "ticks" have we sleep */
     tick_sleep = k_cpu_tick_per_second * time_sleep_ms / K_TIME_MILLISEC_PER_SEC;
 
-    tickless_systick_fix(tick_sleep);
+    tickless_tick_fix(tick_sleep);
 }
 
 __KNL__ void tickless_proc(void)

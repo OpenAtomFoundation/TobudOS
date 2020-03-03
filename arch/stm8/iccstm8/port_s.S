@@ -70,7 +70,7 @@ _context_save:
     LDW     (X), Y
 
 _context_restore:
-    ; k_curr_task = k_next_task
+    /* k_curr_task = k_next_task */
     LDW     X, k_next_task
     LDW     Y, #k_curr_task /* equals to: "ldr r0, =k_curr_task "*/
     LDW     (Y), X

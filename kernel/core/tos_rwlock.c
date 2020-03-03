@@ -189,7 +189,7 @@ __API__ k_err_t tos_rwlock_wpend_timed(k_rwlock_t *rwlock, k_tick_t timeout)
     }
 
     while (rwlock->n_readers > 0u || rwlock->is_writting) {
-        /* util no one is writting or reading */
+        /* until no one is writting or reading */
         err = tos_sem_pend(&rwlock->signal, timeout);
         if (err != K_ERR_NONE) {
             break;

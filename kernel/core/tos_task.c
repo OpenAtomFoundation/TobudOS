@@ -96,10 +96,8 @@ __API__ k_err_t tos_task_create(k_task_t *task,
     TOS_PTR_SANITY_CHECK(entry);
     TOS_PTR_SANITY_CHECK(stk_base);
 
-    if (task->knl_obj.type == KNL_OBJ_TYPE_TASK) {
-        /* try to re-create a task, kind of dangerous action */
-        return K_ERR_TASK_ALREADY_CREATED;
-    }
+    /* try to re-create a task, kind of dangerous */
+    TOS_OBJ_TEST_RC(task, KNL_OBJ_TYPE_TASK, K_ERR_TASK_ALREADY_CREATED);
 
     if (unlikely(stk_size < K_TASK_STK_SIZE_MIN)) {
         return K_ERR_TASK_STK_SIZE_INVALID;

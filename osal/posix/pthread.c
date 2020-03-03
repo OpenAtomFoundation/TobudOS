@@ -212,7 +212,7 @@ __API__ int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_
     return 0;
 }
 
-__API__ int   pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
+__API__ int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
 {
     TOS_PTR_SANITY_CHECK_RC(attr, EINVAL);
     TOS_PTR_SANITY_CHECK_RC(policy, EINVAL);

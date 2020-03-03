@@ -1,0 +1,15 @@
+"--cpu=m32" 
+
+"--enhanced_core" 
+
+"-p" 
+
+"D:\Program Files\IAR Systems\Embedded Workbench 8.0 AVR\avr\Config\iom32.ddf" 
+
+"--eeprom_size" 
+
+"1024" 
+
+
+
+

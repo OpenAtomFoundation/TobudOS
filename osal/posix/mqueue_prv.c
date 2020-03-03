@@ -95,4 +95,3 @@ __KNL__ mqueue_ctl_t *mqueue_by_id(mqd_t id)
     return the_ctl;
 }
 
-

@@ -40,9 +40,9 @@ typedef struct pthread_control_st {
     k_sem_t                 joinner_sem;
 
     void                   *(*start_routine)(void *);   /* start routine of the pthread */
-    void                   *arg;                        /* argument to start routine */
+    void                   *arg;                        /* argument for start routine */
     void                   *retval;                     /* return value of start routine */
-    void                   *stackaddr;                  /* memory of address */
+    void                   *stackaddr;                  /* memory address of stack */
 
     k_slist_t               cleanup_ctl_list;
 
@@ -79,7 +79,7 @@ typedef struct pthread_key_control_st {
 
 #define PTHREAD_THREADS_MAX                 (POSIX_CFG_PTHREAD_THREADS_MAX)
 
-__KNL__pthread_ctl_t *pthread_ctl_self(void);
+__KNL__ pthread_ctl_t *pthread_ctl_self(void);
 
 __KNL__ pthread_ctl_t *pthread_ctl_by_id(pthread_t id);
 
