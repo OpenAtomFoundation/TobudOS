@@ -4,7 +4,7 @@
 ## 整体框架
 ![整体框架](./png/mqttclient.png)
 
-> 备注：目前只支持linux及encentOS tiny系统
+> 备注：目前只支持linux及TencentOS tiny系统
 
 ## linux平台下测试使用
 ### 安装cmake：
