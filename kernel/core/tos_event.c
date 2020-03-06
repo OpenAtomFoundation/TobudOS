@@ -39,9 +39,7 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&event->pend_obj)) {
-        pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
 
     event->flag = (k_event_flag_t)0u;
 

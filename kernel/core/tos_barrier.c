@@ -41,9 +41,7 @@ __API__ k_err_t tos_barrier_destroy(k_barrier_t *barrier)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&barrier->pend_obj)) {
-        pend_wakeup_all(&barrier->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&barrier->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&barrier->pend_obj);
 
@@ -72,10 +70,7 @@ __API__ k_err_t tos_barrier_pend(k_barrier_t *barrier)
 
     if (barrier->count == (k_barrier_cnt_t)1u) {
         barrier->count = (k_barrier_cnt_t)0u;
-
-        if (!pend_is_nopending(&barrier->pend_obj)) {
-            pend_wakeup_all(&barrier->pend_obj, PEND_STATE_POST);
-        }
+        pend_wakeup_all(&barrier->pend_obj, PEND_STATE_POST);
 
         TOS_CPU_INT_ENABLE();
         return K_ERR_NONE;

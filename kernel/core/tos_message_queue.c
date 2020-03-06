@@ -63,9 +63,7 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
         return err;
     }
 
-    if (!pend_is_nopending(&msg_q->pend_obj)) {
-        pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&msg_q->pend_obj);
 
@@ -121,9 +119,7 @@ __API__ k_err_t tos_msg_q_destroy_dyn(k_msg_q_t *msg_q)
         return err;
     }
 
-    if (!pend_is_nopending(&msg_q->pend_obj)) {
-        pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&msg_q->pend_obj);
 

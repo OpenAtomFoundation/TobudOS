@@ -37,9 +37,7 @@ __API__ k_err_t tos_completion_destroy(k_completion_t *completion)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&completion->pend_obj)) {
-        pend_wakeup_all(&completion->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&completion->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&completion->pend_obj);
 

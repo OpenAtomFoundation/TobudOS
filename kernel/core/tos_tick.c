@@ -108,7 +108,7 @@ __KNL__ void tick_update(k_tick_t tick)
             break;
         }
 
-        // we are pending on something, but tick's up, no longer waitting
+        // we are pending for something, but tick's up, no longer waitting
         pend_task_wakeup(task, PEND_STATE_TIMEOUT);
     }
 

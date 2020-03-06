@@ -45,9 +45,7 @@ __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&sem->pend_obj)) {
-        pend_wakeup_all(&sem->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&sem->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&sem->pend_obj);
 

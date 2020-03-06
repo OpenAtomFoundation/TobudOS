@@ -93,9 +93,7 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&mutex->pend_obj)) {
-        pend_wakeup_all(&mutex->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&mutex->pend_obj, PEND_STATE_DESTROY);
 
     if (mutex->owner) {
         mutex_old_owner_release(mutex);

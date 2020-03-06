@@ -67,7 +67,6 @@ TOS_MACRO_BEGIN                                             \
     }                                                       \
 TOS_MACRO_END
 
-
 #define TOS_OBJ_VERIFY_RC(obj, obj_type, return_code)   \
 TOS_MACRO_BEGIN                                             \
     if (!knl_object_verify(&obj->knl_obj, obj_type)) {      \
@@ -81,7 +80,6 @@ TOS_MACRO_BEGIN                                             \
         return K_ERR_OBJ_INVALID;                           \
     }                                                       \
 TOS_MACRO_END
-
 
 #define TOS_OBJ_TEST_RC(obj, obj_type, return_code)     \
 TOS_MACRO_BEGIN                                             \

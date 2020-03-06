@@ -37,9 +37,7 @@ __API__ k_err_t tos_countdownlatch_destroy(k_countdownlatch_t *countdownlatch)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&countdownlatch->pend_obj)) {
-        pend_wakeup_all(&countdownlatch->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&countdownlatch->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&countdownlatch->pend_obj);
 

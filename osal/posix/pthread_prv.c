@@ -139,7 +139,7 @@ __KNL__ void pthread_data_clear(pthread_key_t key)
     }
 }
 
-__KNL__ int pthread_key_ctl_init(void)
+__STATIC__ int pthread_key_ctl_init(void)
 {
     int i = 0;
 
@@ -278,7 +278,7 @@ __KNL__ void pthread_unlock(void)
     tos_mutex_post(&pthread_mutex);
 }
 
-__KNL__ int pthread_lock_init(void)
+__STATIC__ int pthread_lock_init(void)
 {
     if (tos_mutex_create(&pthread_mutex) != K_ERR_NONE) {
         return -1;
