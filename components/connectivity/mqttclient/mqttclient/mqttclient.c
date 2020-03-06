@@ -401,7 +401,7 @@ static message_handlers_t *mqtt_msg_handler_create(const char* topic_filter, mqt
     return msg_handler;
 }
 
-static void mqtt_msg_handler_destory(message_handlers_t *msg_handler)
+static void mqtt_msg_handler_destroy(message_handlers_t *msg_handler)
 {
     if (NULL != &msg_handler->list) {
         list_del(&msg_handler->list);
@@ -435,7 +435,7 @@ static int mqtt_msg_handler_is_exist(mqtt_client_t* c, message_handlers_t *handl
 static int mqtt_msg_handlers_install(mqtt_client_t* c, message_handlers_t *handler)
 {
     if (mqtt_msg_handler_is_exist(c, handler)) {
-        mqtt_msg_handler_destory(handler);
+        mqtt_msg_handler_destroy(handler);
         RETURN_ERROR(MQTT_SUCCESS_ERROR);
     }
 
@@ -620,7 +620,7 @@ static int mqtt_suback_packet_handle(mqtt_client_t *c, platform_timer_t *timer)
         RETURN_ERROR(MQTT_MEM_NOT_ENOUGH_ERROR);
     
     if (is_nack) {
-        mqtt_msg_handler_destory(msg_handler);
+        mqtt_msg_handler_destroy(msg_handler);
         RETURN_ERROR(MQTT_SUBSCRIBE_NOT_ACK_ERROR);
     }
     
@@ -643,7 +643,7 @@ static int mqtt_unsuback_packet_handle(mqtt_client_t *c, platform_timer_t *timer
     if (!msg_handler)
         RETURN_ERROR(MQTT_MEM_NOT_ENOUGH_ERROR);
     
-    mqtt_msg_handler_destory(msg_handler);
+    mqtt_msg_handler_destroy(msg_handler);
 
     RETURN_ERROR(rc);
 }
