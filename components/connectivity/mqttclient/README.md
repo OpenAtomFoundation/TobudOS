@@ -4,7 +4,7 @@
 ## 整体框架
 ![整体框架](./png/mqttclient.png)
 
-> 备注：目前只支持linux及encentOS tiny系统
+> 备注：目前只支持linux及TencentOS tiny系统
 
 ## linux平台下测试使用
 ### 安装cmake：
@@ -311,7 +311,7 @@ mqtt_ack_list_unrecord(c, UNSUBACK, packet_id, &msg_handler)
 ```
 3. 销毁对应的订阅消息处理函数
 ```c
-mqtt_msg_handler_destory(msg_handler);
+mqtt_msg_handler_destroy(msg_handler);
 ```
 ## 来自服务器的`发布`报文的处理
 ```c
