@@ -311,7 +311,7 @@ mqtt_ack_list_unrecord(c, UNSUBACK, packet_id, &msg_handler)
 ```
 3. 销毁对应的订阅消息处理函数
 ```c
-mqtt_msg_handler_destory(msg_handler);
+mqtt_msg_handler_destroy(msg_handler);
 ```
 ## 来自服务器的`发布`报文的处理
 ```c
