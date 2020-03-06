@@ -1,5 +1,5 @@
-#ifndef _H_TOS_FARM_AI_CONFIG_H  
-#define  _H_TOS_FARM_AI_CONFIG_H
+#ifndef _E53_IA1_E2E_DEMO_CONFIG_H_  
+#define _E53_IA1_E2E_DEMO_CONFIG_H_
 
 #define MQTT_PRODUCT_ID         "U1BZWHF7F9"
 #define MQTT_DEV_NAME           "dev_01"
@@ -9,4 +9,4 @@
 #define MQTT_SUBSCRIBE_TOPIC    "U1BZWHF7F9/dev_01/data"
 #define MQTT_PUBLISH_TOPIC      "$shadow/operation/U1BZWHF7F9/dev_01" // $shadow/operation/{MQTT_PRODUCT_ID}/{MQTT_DEV_NAME}
 
-#endif
+#endif/*_E53_IA1_E2E_DEMO_CONFIG_H_*/
