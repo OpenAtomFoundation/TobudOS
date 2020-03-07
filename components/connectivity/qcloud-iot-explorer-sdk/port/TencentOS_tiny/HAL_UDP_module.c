@@ -81,7 +81,7 @@ int HAL_UDP_Read(uintptr_t fd, unsigned char *p_data, unsigned int datalen)
 {
     int ret;
 
-    Log_i("osal_udp_read len %d timeout %d\r\n", datalen);
+    Log_i("osal_udp_read len %d\r\n", datalen);
 
     ret = tos_sal_module_recvfrom(fd, p_data, datalen);
 
@@ -100,7 +100,7 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
 {
     int ret;
 
-    Log_i("osal_udp_read len %d timeout %d\r\n", datalen);
+    Log_i("osal_udp_read len %d timeout %d\r\n", datalen, timeout_ms);
 
     ret = tos_sal_module_recvfrom_timeout(fd, p_data, datalen, timeout_ms);
 
