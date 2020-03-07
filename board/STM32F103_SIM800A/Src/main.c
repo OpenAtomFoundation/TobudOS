@@ -32,7 +32,7 @@ void tcp_test1(void)
 	while (1) {
 		tos_sal_module_send(socket_id, (const unsigned char*)data_send, strlen(data_send));
 
-		ret = tos_sal_module_recv_timeout(socket_id, recv_data1, strlen(data_send), 8000);
+		ret = tos_sal_module_recv_timeout(socket_id, recv_data1, sizeof(recv_data1), 8000);
 		if (ret < 0) {
 			printf("recv error\n\r");
 		} else {
@@ -52,7 +52,7 @@ void tcp_test2(void)
     while (1) {
         tos_sal_module_send(socket_id2, (const unsigned char*)data_send2, strlen(data_send2));
 
-        ret = tos_sal_module_recv_timeout(socket_id2, recv_data2, strlen(data_send2), 8000);
+        ret = tos_sal_module_recv_timeout(socket_id2, recv_data2, sizeof(recv_data2), 8000);
 		if (ret < 0) {
 			printf("recv2 error\n\r");
 		} else {
