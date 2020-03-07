@@ -176,7 +176,7 @@ int main()
 			oled_size,			//任务堆栈大小
 			100);						//时间片轮转机制下当前任务的时间片大小。当timeslice为0时，任务调度时间片会被设置为默认大小（TOS_CFG_CPU_TICK_PER_SECOND / 10），系统时钟滴答（systick）数 / 10。			
 	if(err != K_ERR_NONE)
-	printf("TenentOS creat task fail! code is %d\r\n",err);
+	printf("TencentOS create task fail! code is %d\r\n",err);
 
 	tos_knl_start(); //Start TOS TINY
 }
