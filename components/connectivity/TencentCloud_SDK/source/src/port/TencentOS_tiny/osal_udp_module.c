@@ -74,7 +74,7 @@ __QCLOUD_OSAL__ qcloud_err_t osal_udp_read(int sockfd, void *buf, size_t len, ui
 {
     int ret;
 
-    QCLOUD_LOG_I("osal_udp_read len %d timeout %d\r\n", len);
+    QCLOUD_LOG_I("osal_udp_read len %d timeout %d\r\n", len, timeout);
 
     ret = tos_sal_module_recvfrom_timeout(sockfd, buf, len, timeout);
 
