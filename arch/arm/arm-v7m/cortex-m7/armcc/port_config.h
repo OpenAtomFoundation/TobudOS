@@ -25,7 +25,8 @@
 #define TOS_CFG_CPU_HRTIMER_EN               0u
 #define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  1u
 
-#ifndef __TARGET_FPU_SOFTVFP
+#if (defined(ARMCC_V5) && !defined(__TARGET_FPU_SOFTVFP)) || \
+    (defined(ARMCC_V6) && defined(__ARM_PCS_VFP))
 #define TOS_CFG_CPU_ARM_FPU_EN      1u
 #else
 #define TOS_CFG_CPU_ARM_FPU_EN      0u

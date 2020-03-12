@@ -45,6 +45,8 @@
 /*------------------ RealView Compiler -----------------*/
 #if defined(__CC_ARM)
 
+#define ARMCC_V5
+
 #define __ASM__             __asm
 #define __VOLATILE__        volatile
 
@@ -70,6 +72,8 @@
 
 /*------------------ ARM Compiler V6 -------------------*/
 #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+
+#define ARMCC_V6
 
 #define __ASM__             __asm
 #define __VOLATILE__        volatile
