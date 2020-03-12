@@ -71,7 +71,7 @@ typedef void (*k_task_walker_t)(k_task_t *task);
 /**
  * task control block
  */
-typedef struct k_task_st {
+struct k_task_st {
     k_stack_t          *sp;                     /**< task stack pointer. This lady always comes first, we count on her in port_s.S for context switch. */
 
     knl_obj_t           knl_obj;                /**< just for verification, test whether current object is really a task. */
@@ -130,7 +130,7 @@ typedef struct k_task_st {
     k_event_flag_t     *flag_match;         /**< if we pend an event successfully, flag_match will be set by the event poster, and will be returned
                                                     by tos_event_pend to the caller */
 #endif
-} k_task_t;
+};
 
 /**
  * @brief Create a task.

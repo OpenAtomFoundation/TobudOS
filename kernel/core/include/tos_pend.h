@@ -20,8 +20,6 @@
 
 __CDECLS_BEGIN
 
-typedef struct k_task_st k_task_t;
-
 /**
  * The reason why we wakeup from a pend.
  * when we wakeup, we need to know why.
