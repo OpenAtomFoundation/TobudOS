@@ -28,7 +28,7 @@ __API__ int tos_hal_sd_read(hal_sd_t *sd, uint8_t *buf, uint32_t blk_addr, uint3
     }
 
     sd_handle = sd->private_sd;
-    hal_status = HAL_SD_ReadBlocks(sd_handle, buf, blk_addr, blk_num, timeout);
+    hal_status = HAL_SD_ReadBlocks(sd_handle, buf, blk_addr / 0x200, blk_num, timeout);
     if (hal_status != HAL_OK) {
         return -1;
     }
@@ -53,7 +53,7 @@ __API__ int tos_hal_sd_write(hal_sd_t *sd, const uint8_t *buf, uint32_t blk_addr
     }
 
     sd_handle = sd->private_sd;
-    hal_status = HAL_SD_WriteBlocks(sd_handle, (uint8_t *)buf, blk_addr, blk_num, timeout);
+    hal_status = HAL_SD_WriteBlocks(sd_handle, (uint8_t *)buf, blk_addr / 0x200, blk_num, timeout);
     if (hal_status != HAL_OK) {
         return -1;
     }
@@ -78,7 +78,7 @@ __API__ int tos_hal_sd_read_dma(hal_sd_t *sd, uint8_t *buf, uint32_t blk_addr, u
     }
 
     sd_handle = sd->private_sd;
-    hal_status = HAL_SD_ReadBlocks_DMA(sd_handle, buf, blk_addr, blk_num);
+    hal_status = HAL_SD_ReadBlocks_DMA(sd_handle, buf, blk_addr / 0x200, blk_num);
     if (hal_status != HAL_OK) {
         return -1;
     }
@@ -99,7 +99,7 @@ __API__ int tos_hal_sd_write_dma(hal_sd_t *sd, const uint8_t *buf, uint32_t blk_
     }
 
     sd_handle = sd->private_sd;
-    hal_status = HAL_SD_WriteBlocks_DMA(sd_handle, (uint8_t *)buf, blk_addr, blk_num);
+    hal_status = HAL_SD_WriteBlocks_DMA(sd_handle, (uint8_t *)buf, blk_addr / 0x200, blk_num);
     if (hal_status != HAL_OK) {
         return -1;
     }
@@ -116,7 +116,7 @@ __API__ int tos_hal_sd_erase(hal_sd_t *sd, uint32_t blk_add_start, uint32_t blk_
     }
 
     sd_handle = sd->private_sd;
-    hal_status = HAL_SD_Erase(sd_handle, blk_add_start, blk_addr_end);
+    hal_status = HAL_SD_Erase(sd_handle, blk_add_start / 0x200, blk_addr_end / 0x200);
     if (hal_status != HAL_OK) {
         return -1;
     }

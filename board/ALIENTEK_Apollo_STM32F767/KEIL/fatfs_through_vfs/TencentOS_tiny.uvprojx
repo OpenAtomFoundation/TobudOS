@@ -735,7 +735,7 @@
             <File>
               <FileName>tos_hal_sd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\hal\st\stm32f7xx\tos_hal_sd.c</FilePath>
+              <FilePath>..\..\..\..\platform\hal\st\stm32f7xx\src\tos_hal_sd.c</FilePath>
             </File>
           </Files>
         </Group>

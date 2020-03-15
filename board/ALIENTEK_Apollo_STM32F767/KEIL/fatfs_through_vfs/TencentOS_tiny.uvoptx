@@ -1063,7 +1063,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\platform\hal\st\stm32f7xx\tos_hal_sd.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\platform\hal\st\stm32f7xx\src\tos_hal_sd.c</PathWithFileName>
       <FilenameWithoutPath>tos_hal_sd.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
