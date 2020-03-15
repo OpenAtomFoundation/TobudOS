@@ -109,6 +109,9 @@ list_head_t *LITE_json_keys_of(char *src, char *prefix)
             json_key_t     *entry = NULL;
 
             entry = osal_malloc(sizeof(json_key_t));
+            if (NULL == entry) {
+                return NULL;
+            }
             memset(entry, 0, sizeof(json_key_t));
             entry->key = LITE_format_string("%s%.*s", prefix, klen, key);
             list_add_tail(&entry->list, &keylist);
@@ -127,6 +130,9 @@ list_head_t *LITE_json_keys_of(char *src, char *prefix)
         json_key_t     *entry = NULL;
 
         entry = osal_malloc(sizeof(json_key_t));
+        if (NULL == entry) {
+            return NULL;
+        }
         memset(entry, 0, sizeof(json_key_t));
         list_add_tail(&entry->list, &keylist);
 

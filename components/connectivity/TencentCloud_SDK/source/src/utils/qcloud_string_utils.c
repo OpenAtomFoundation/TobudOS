@@ -29,6 +29,10 @@ char *LITE_format_string(const char *fmt, ...)
 
     va_start(ap, fmt);
     tmp = osal_malloc(TEMP_STRING_MAXLEN);
+    if(NULL == tmp)
+    {
+        return NULL;
+    }
     memset(tmp, 0, TEMP_STRING_MAXLEN);
     rc = osal_vsnprintf(tmp, TEMP_STRING_MAXLEN, fmt, ap);
     va_end(ap);
@@ -52,6 +56,10 @@ char *LITE_format_nstring(const int len, const char *fmt, ...)
 
     va_start(ap, fmt);
     tmp = osal_malloc(len+2);
+    if(NULL == tmp)
+    {
+        return NULL;
+    }
     memset(tmp, 0, len+2);
     rc = osal_vsnprintf(tmp, len+1, fmt, ap);
     va_end(ap);
