@@ -32,7 +32,7 @@
 
 #include "arc/arc_feature_config.h"
 #include "arc/arc_em.h"
-
+#include "arc/arc_timer.h"
 #include "nsim_uart_obj.h"
 
 /** CPU Clock Frequency definition */

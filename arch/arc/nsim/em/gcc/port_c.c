@@ -45,6 +45,11 @@
 #include "board.h"
 #include "arc/arc_exception.h"
 
+__PORT__ void port_cpu_reset(void)
+{
+    exc_entry_reset();
+}
+
 __PORT__ void port_systick_config(uint32_t cycle_per_tick) // Configure SysTick to generate an interrupt every cycle_per_tick
 {
     timer_int_clear(0); // nsim #define BOARD_SYS_TIMER_ID          TIMER_0

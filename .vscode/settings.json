@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "arc_exception.h": "c",
+        "arc_timer.h": "c"
+    }
+}

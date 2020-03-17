@@ -49,6 +49,7 @@ CMSIS_SRC =  \
 		C_SOURCES += $(CMSIS_SRC)
 
 HAL_DRIVER_SRC =  \
+		$(TOP_DIR)/board/ARC_NSIM_EM/BSP/Src/main.c \
 		$(TOP_DIR)/board/ARC_NSIM_EM/BSP/Src/nsim_init.c \
 		$(TOP_DIR)/board/ARC_NSIM_EM/BSP/Src/nsim_uart_obj.c \
 		$(TOP_DIR)/examples/hello_world/hello_world.c \

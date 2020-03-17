@@ -49,7 +49,7 @@
 .weak	_f_sdata		/* start of small data, defined in link script */
 .weak	init_hardware_hook	/* app hardware init hook */
 
-.extern	board_main
+.extern	main
 .extern exc_entry_table
 
 /* initial vector table */
@@ -188,7 +188,7 @@ _s3_clear_bss_loop:
 /* STAGE 3: go to next level initialization */
 _arc_reset_call_main:
 
-	jl	board_main	/* board-level main */
+	jl	main	/* board-level main */
 	b	_exit_loop
 
 	.global _exit_loop
