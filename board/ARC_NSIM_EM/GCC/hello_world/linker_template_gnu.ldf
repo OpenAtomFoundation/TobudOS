@@ -1,0 +1,96 @@
+MEMORY
+{
+ ICCM : ORIGIN = 0x00000000, LENGTH = 0x80000
+ DCCM : ORIGIN = 0x80000000, LENGTH = 0x80000
+}
+ENTRY(_start)
+SECTIONS
+{
+ .init :
+ {
+  _f_init = .;
+  KEEP (*(.init_vector))
+  KEEP (*(.init_bootstrap))
+  _e_init = .;
+ } > ICCM
+ .vector : ALIGN(1024)
+ {
+  _f_vector = .;
+  *(.vector)
+  _e_vector = .;
+ } > ICCM
+ .text : ALIGN(4)
+ {
+  _f_text = .;
+  *(.text .text.* .gnu.linkonce.t.*)
+  _e_text = .;
+ } > ICCM
+ .rodata : ALIGN(4)
+ {
+  _f_rodata = .;
+  . = ALIGN(4);
+  __CTOR_LIST__ = .;
+  LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+  KEEP(*(SORT_BY_NAME(".ctors*")))
+  LONG(0)
+  __CTOR_END__ = .;
+  . = ALIGN(4);
+  __init_array_start = .;
+  KEEP(*(SORT_BY_NAME(".init_array*")))
+  __init_array_end = .;
+  . = ALIGN(4);
+  __DTOR_LIST__ = .;
+  LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+  KEEP(*(SORT_BY_NAME(".dtors*")))
+  LONG(0)
+  __DTOR_END__ = .;
+  *(.rodata .rodata.* .gnu.linkonce.r.*)
+  _e_rodata = .;
+ } > ICCM
+ .data : ALIGN(4)
+ {
+  _f_data = .;
+  *(.data .data.* .gnu.linkonce.d.*)
+  _f_sdata = .;
+  __SDATA_BEGIN__ = .;
+  *(.sdata .sdata.* .gnu.linkonce.s.*)
+  _e_sdata = .;
+  _e_data = .;
+ } > DCCM AT > ICCM
+ .bss (NOLOAD) : ALIGN(8)
+ {
+  PROVIDE (__sbss_start = .);
+  PROVIDE (___sbss_start = .);
+  _f_bss = .;
+  _f_sbss = .;
+  *(.dynsbss)
+  *(.sbss .sbss.* .gnu.linkonce.sb.*)
+  *(.scommon)
+  _e_sbss = .;
+  PROVIDE (__sbss_end = .);
+  PROVIDE (___sbss_end = .);
+  *(.dynbss)
+  *(.bss .bss.* .gnu.linkonce.b.*)
+  *(COMMON)
+  _e_bss = .;
+ } > DCCM
+ .stack (NOLOAD) :
+ {
+  . = ALIGN(4);
+  _f_stack = .;
+  . = . + 2048;
+  _e_stack = .;
+ } > DCCM
+ .heap (NOLOAD) :
+ {
+  . = ALIGN(4);
+  __start_heap = . ;
+  _f_heap = .;
+  . = . + 8192;
+  _e_heap = .;
+  __end_heap = . ;
+ } > DCCM
+ _load_addr_text = LOADADDR(.text);
+ _load_addr_rodata = LOADADDR(.rodata);
+ _load_addr_data = LOADADDR(.data);
+}
