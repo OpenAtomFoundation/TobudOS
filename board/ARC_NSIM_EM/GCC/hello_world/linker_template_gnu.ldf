@@ -1,30 +1,38 @@
 MEMORY
 {
- ICCM : ORIGIN = 0x00000000, LENGTH = 0x80000
- DCCM : ORIGIN = 0x80000000, LENGTH = 0x80000
+ REGION_ICCM : ORIGIN = 0x00000000, LENGTH = 0x80000
+ REGION_DCCM : ORIGIN = 0x80000000, LENGTH = 0x80000
+ REGION_YCCM : ORIGIN = 0xe0000000, LENGTH = 8192
 }
 ENTRY(_start)
 SECTIONS
 {
  .init :
  {
+  . = . + 0x0;
   _f_init = .;
-  KEEP (*(.init_vector))
-  KEEP (*(.init_bootstrap))
+  KEEP (*(.init_vector .init_vector.*))
+  KEEP (*(.init_bootstrap .init_bootstrap.*))
   _e_init = .;
- } > ICCM
+ } > REGION_ICCM
  .vector : ALIGN(1024)
  {
   _f_vector = .;
-  *(.vector)
+  *(.vector .vector.*)
   _e_vector = .;
- } > ICCM
+ } > REGION_ICCM
+ .y_ccm (NOLOAD) : ALIGN(8)
+ {
+  _f_y_ccm = .;
+  *(.y_ccm .y_ccm.*)
+  _e_y_ccm = .;
+ } > REGION_YCCM
  .text : ALIGN(4)
  {
   _f_text = .;
   *(.text .text.* .gnu.linkonce.t.*)
   _e_text = .;
- } > ICCM
+ } > REGION_ICCM
  .rodata : ALIGN(4)
  {
   _f_rodata = .;
@@ -46,7 +54,7 @@ SECTIONS
   __DTOR_END__ = .;
   *(.rodata .rodata.* .gnu.linkonce.r.*)
   _e_rodata = .;
- } > ICCM
+ } > REGION_ICCM
  .data : ALIGN(4)
  {
   _f_data = .;
@@ -54,14 +62,8 @@ SECTIONS
   _f_sdata = .;
   __SDATA_BEGIN__ = .;
   *(.sdata .sdata.* .gnu.linkonce.s.*)
-  _e_sdata = .;
-  _e_data = .;
- } > DCCM AT > ICCM
- .bss (NOLOAD) : ALIGN(8)
- {
   PROVIDE (__sbss_start = .);
   PROVIDE (___sbss_start = .);
-  _f_bss = .;
   _f_sbss = .;
   *(.dynsbss)
   *(.sbss .sbss.* .gnu.linkonce.sb.*)
@@ -69,18 +71,24 @@ SECTIONS
   _e_sbss = .;
   PROVIDE (__sbss_end = .);
   PROVIDE (___sbss_end = .);
+  _e_sdata = .;
+  _e_data = .;
+ } > REGION_DCCM AT > REGION_ICCM
+ .bss (NOLOAD) : ALIGN(8)
+ {
+  _f_bss = .;
   *(.dynbss)
   *(.bss .bss.* .gnu.linkonce.b.*)
   *(COMMON)
   _e_bss = .;
- } > DCCM
+ } > REGION_DCCM
  .stack (NOLOAD) :
  {
   . = ALIGN(4);
   _f_stack = .;
   . = . + 2048;
   _e_stack = .;
- } > DCCM
+ } > REGION_DCCM
  .heap (NOLOAD) :
  {
   . = ALIGN(4);
@@ -89,7 +97,7 @@ SECTIONS
   . = . + 8192;
   _e_heap = .;
   __end_heap = . ;
- } > DCCM
+ } > REGION_DCCM
  _load_addr_text = LOADADDR(.text);
  _load_addr_rodata = LOADADDR(.rodata);
  _load_addr_data = LOADADDR(.data);

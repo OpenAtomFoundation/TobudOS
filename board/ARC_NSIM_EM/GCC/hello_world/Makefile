@@ -64,7 +64,9 @@ HAL_DRIVER_SRC =  \
 		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/arc/arc_udma.c \
 		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/arc/arc_util.c \
 		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/library/clib/embARC_sbrk.c \
-		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/library/clib/embARC_syscalls.c
+		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/library/clib/embARC_syscalls.c \
+		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/library/console/xprintf/xprintf.c \
+		$(TOP_DIR)/platform/vendor_bsp/embarc_bsp/library/console/console_io.c
 		C_SOURCES += $(HAL_DRIVER_SRC) 
 
 # ASM sources
@@ -118,6 +120,7 @@ AS_DEFS =
 
 # C defines -DLIB_CONSOLE 
 C_DEFS =  \
+-DLIB_CONSOLE \
 -DBOARD_NSIM \
 -DCURRENT_CORE=arcem \
 -DEMBARC_TCF_GENERATED \
@@ -156,9 +159,9 @@ HAL_DRIVER_INC =  \
 		C_INCLUDES += $(HAL_DRIVER_INC)
 
 # compile gcc flags
-ASFLAGS = -mcpu=em4_dmips -mlittle-endian -mcode-density -mdiv-rem -mswap -mnorm -mmpy-option=6 -mbarrel-shifter --param l1-cache-size=16384 --param l1-cache-line-size=32 $(C_DEFS) $(C_INCLUDES) $(OPT) -fdata-sections -ffunction-sections -std=gnu99
+ASFLAGS = -mcpu=em4_dmips -mlittle-endian -mcode-density -mdiv-rem -mswap -mnorm -mmpy-option=6 -mbarrel-shifter --param l1-cache-size=16384 --param l1-cache-line-size=32 $(C_DEFS) $(C_INCLUDES) $(OPT) -fdata-sections -ffunction-sections -mno-sdata -g
 
-CFLAGS = -mcpu=em4_dmips -mlittle-endian -mcode-density -mdiv-rem -mswap -mnorm -mmpy-option=6 -mbarrel-shifter --param l1-cache-size=16384 --param l1-cache-line-size=32  $(C_DEFS) $(C_INCLUDES) $(OPT) -fdata-sections -ffunction-sections -std=gnu99
+CFLAGS = -mcpu=em4_dmips -mlittle-endian -mcode-density -mdiv-rem -mswap -mnorm -mmpy-option=6 -mbarrel-shifter --param l1-cache-size=16384 --param l1-cache-line-size=32  $(C_DEFS) $(C_INCLUDES) $(OPT) -fdata-sections -ffunction-sections -mno-sdata -g -std=gnu99
 
 # ifeq ($(DEBUG), 1)
 # CFLAGS += -g -gdwarf-2

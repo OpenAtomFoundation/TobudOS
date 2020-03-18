@@ -1,6 +1,9 @@
 {
     "files.associations": {
         "arc_exception.h": "c",
-        "arc_timer.h": "c"
+        "arc_timer.h": "c",
+        "board.h": "c",
+        "console_io.h": "c",
+        "xprintf.h": "c"
     }
 }

@@ -1,8 +1,6 @@
 #include "cmsis_os.h"
-#include "arc/arc_exception.h"
-#include "arc/arc_cache.h"
-#include "nsim.h"
-#include "board.h"
+#include "embARC.h"
+#include "embARC_debug.h"
 
 static uint32_t cyc_hz_count = (BOARD_CPU_CLOCK / BOARD_SYS_TIMER_HZ);
 
@@ -42,6 +40,7 @@ int main(void)
     arc_cache_init();
     board_init();
     board_timer_init();
+    xprintf_setup();
     printf("Welcome to TencentOS tiny\r\n");
     osKernelInitialize(); // TOS Tiny kernel initialize
     osThreadCreate(osThread(application_entry), NULL); // Create TOS Tiny task
