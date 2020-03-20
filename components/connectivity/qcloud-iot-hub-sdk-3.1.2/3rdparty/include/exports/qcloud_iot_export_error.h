@@ -118,6 +118,16 @@ typedef enum {
     QCLOUD_ERR_SSL_READ_TIMEOUT                              = -707,    // TLS/SSL read timeout
     QCLOUD_ERR_SSL_READ                                      = -708,    // TLS/SSL read error
     QCLOUD_ERR_SSL_NOTHING_TO_READ                           = -709,    // TLS/SSL nothing to read
+    
+    QCLOUD_ERR_UDP_SOCKET_FAILED                             = -801,    // TLS TCP socket connect fail
+    QCLOUD_ERR_UDP_UNKNOWN_HOST                              = -802,    // TCP unknown host (DNS fail)
+    QCLOUD_ERR_UDP_CONNECT                                   = -803,    // TCP/UDP socket connect fail 
+    QCLOUD_ERR_UDP_READ_TIMEOUT                              = -804,    // TCP read timeout
+    QCLOUD_ERR_UDP_WRITE_TIMEOUT                             = -805,    // TCP write timeout
+    QCLOUD_ERR_UDP_READ_FAIL                                 = -806,    // TCP read error
+    QCLOUD_ERR_UDP_WRITE_FAIL                                = -807,    // TCP write error
+    QCLOUD_ERR_UDP_PEER_SHUTDOWN                             = -808,    // TCP server close connection
+    QCLOUD_ERR_UDP_NOTHING_TO_READ                           = -809,    // TCP socket nothing to read
 } IoT_Return_Code;
 
 #ifdef __cplusplus

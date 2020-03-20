@@ -9,6 +9,7 @@
 #include "dac.h"
 #include "i2c.h"
 #include "usart.h"
+#include "tim.h"
 #include "spi.h"
 #include "gpio.h"
 #include "oled.h"

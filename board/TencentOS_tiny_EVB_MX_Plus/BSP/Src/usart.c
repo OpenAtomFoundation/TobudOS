@@ -98,7 +98,7 @@ void MX_USART3_UART_Init(void)
 {
 
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 9600;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
@@ -111,7 +111,7 @@ void MX_USART3_UART_Init(void)
   {
     Error_Handler();
   }
-
+    HAL_UART_Receive_IT(&huart3, &data, 1);//(uint8_t *)aRxBuffer, 1);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
