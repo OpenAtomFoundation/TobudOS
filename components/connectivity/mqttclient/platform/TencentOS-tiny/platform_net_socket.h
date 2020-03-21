@@ -2,20 +2,20 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-15 13:39:00
- * @LastEditTime : 2020-01-12 00:22:22
+ * @LastEditTime: 2020-02-19 01:02:51
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _PLATFORM_NET_SOCKET_H_
 #define _PLATFORM_NET_SOCKET_H_
+
+#include "network.h"
+#include "error.h"
 
 #include "lwip/opt.h"
 #include "lwip/sys.h"
 #include "lwip/api.h"
 #include <lwip/sockets.h>
 #include "lwip/netdb.h"
-
-#include "network.h"
-#include "error.h"
 
 #define PLATFORM_NET_PROTO_TCP  0 /**< The TCP transport protocol */
 #define PLATFORM_NET_PROTO_UDP  1 /**< The UDP transport protocol */

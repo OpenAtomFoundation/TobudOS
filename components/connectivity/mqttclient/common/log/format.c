@@ -2,11 +2,13 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-25 23:54:19
- * @LastEditTime : 2019-12-28 01:53:41
+ * @LastEditTime: 2020-02-25 08:12:02
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "format.h"
+#include "salof_defconfig.h"
 
+#ifdef USE_LOG
 
 static int _get_atoi(const char **str)
 {
@@ -280,9 +282,6 @@ int format_nstr(char *buf, unsigned int size, const char *fmt, va_list ap)
     return n;
 }
 
-
-
-
-
+#endif
 
 

@@ -38,6 +38,23 @@ platform_thread_t *platform_thread_init( const char *name,
     return thread;
 }
 
+void platform_thread_startup(platform_thread_t* thread)
+{
+    (void)thread;
+}
+
+
+void platform_thread_stop(platform_thread_t* thread)
+{
+    tos_task_suspend(&(thread->thread));
+}
+
+void platform_thread_start(platform_thread_t* thread)
+{
+    tos_task_resume(&(thread->thread));
+}
+
+
 void platform_thread_destroy(platform_thread_t* thread)
 {
     if (NULL != thread)

@@ -63,7 +63,9 @@ void application_entry(void *arg)
     LOG_D("mqtt connect error is %#x", error);
     
     mqtt_subscribe(&client, "tos-topic", QOS0, tos_topic_handler);
-
+    
+    LOG_D("mqtt subscribe error is %#x", error);
+    
     memset(&msg, 0, sizeof(msg));
 
     for (;;) {

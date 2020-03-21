@@ -1,6 +1,8 @@
 #include "fifo.h"
 #include <string.h>
 
+#ifdef USE_LOG
+
 static unsigned int _flbs(unsigned int x)   /* find last bit set*/
 {
     unsigned int r = 32;
@@ -131,3 +133,4 @@ unsigned int fifo_write_able(fifo_t fifo)
     return (fifo->size - fifo_read_able(fifo));
 }
 
+#endif

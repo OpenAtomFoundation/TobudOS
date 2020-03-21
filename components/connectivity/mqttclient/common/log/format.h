@@ -2,13 +2,12 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-25 23:54:38
- * @LastEditTime : 2019-12-26 20:10:28
+ * @LastEditTime: 2020-02-25 07:18:09
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _FORMAT_H_
 #define _FORMAT_H_
 
-#include "config.h"
 #include <stdarg.h>
 
 #define FORMAT_BUF_LEN 12

@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-11 19:45:44
- * @LastEditTime : 2020-01-13 07:26:26
+ * @LastEditTime: 2020-02-25 03:51:37
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -10,12 +10,12 @@
 #define _PLATFORM_NETTYPE_TLS_H_
 
 #include "platform_net_socket.h"
-#include "mqtt_config.h"
+#include "mqtt_defconfig.h"
 #include "network.h"
 #include "error.h"
 #include "log.h"
 
-#if MQTT_NETWORK_TYPE_TLS
+#ifdef MQTT_NETWORK_TYPE_TLS
 
 typedef struct nettype_tls_params {
     mbedtls_net_context         socket_fd;        /**< mbed TLS network context. */

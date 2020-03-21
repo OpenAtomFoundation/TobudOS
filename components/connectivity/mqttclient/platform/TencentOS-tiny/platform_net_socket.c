@@ -92,7 +92,7 @@ int platform_net_socket_write_timeout(int fd, unsigned char *buf, int len, int t
 		tv.tv_usec = 100;
 	}
 
-	setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+	platform_net_socket_setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
 	
     return write(fd, buf, len);
 }
