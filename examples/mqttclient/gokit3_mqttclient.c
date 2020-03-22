@@ -1,22 +1,14 @@
-/*
- * @Author: jiejie
- * @Github: https://github.com/jiejieTop
- * @Date: 2019-12-11 21:53:07
- * @LastEditTime : 2020-01-18 13:54:38
- * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
- */
-#include "stdio.h"
-#include "string.h"
-#include "ethernetif.h"
-#include "lwip/api.h"
-#include <lwip/sockets.h>
-#include <lwip/err.h>
-#include <lwip/sys.h>
-#include <errno.h>
-
+#include "stm32f1xx_hal.h"
+#include "bsp_init.h"
+#include "tos_k.h"
+#include "esp8266.h"
 #include "mqttclient.h"
 
-extern const char *test_ca_get(void);
+k_task_t task;
+k_stack_t task_stack[2048];
+
+mqtt_client_t client;
+client_init_params_t init_params;
 
 static void tos_topic_handler(void* client, message_data_t* msg)
 {
@@ -28,24 +20,21 @@ static void tos_topic_handler(void* client, message_data_t* msg)
 }
 
 
-mqtt_client_t client;
-client_init_params_t init_params;
-
-extern void TCPIP_Init(void);
-
-void application_entry(void *arg)
+void mqttclient_task(void *Parameter)
 {
     int error;
-    char buf[80] = { 0 };
+
+    char buf[100] = { 0 };
+    
     mqtt_message_t msg;
+    
     memset(&msg, 0, sizeof(msg));
     
-    sprintf(buf, "welcome to mqttclient, this is a publish test...");
+    esp8266_sal_init(HAL_UART_PORT_2);
+    esp8266_join_ap("wifii", "woshijiejie");
     
-    TCPIP_Init();
-    
-    init_params.read_buf_size = 1024;
-    init_params.write_buf_size = 1024;
+    init_params.read_buf_size = 256;
+    init_params.write_buf_size = 256;
     
 #ifdef MQTT_NETWORK_TYPE_TLS
     init_params.connect_params.network_params.network_ssl_params.ca_crt = test_ca_get();
@@ -55,9 +44,9 @@ void application_entry(void *arg)
 #endif
     init_params.connect_params.network_params.addr = "www.jiejie01.top"; //"47.95.164.112";//"jiejie01.top"; //"129.204.201.235"; //"192.168.1.101";
 
-    init_params.connect_params.user_name = random_string(10); 
-    init_params.connect_params.password = random_string(10); 
-    init_params.connect_params.client_id = random_string(10);
+    init_params.connect_params.user_name = random_string(10); // random_string(10); //"jiejietop-acer1";
+    init_params.connect_params.password = random_string(10);; //random_string(10); // "123456";
+    init_params.connect_params.client_id = random_string(10);; //random_string(10); // "clientid-acer1";
     init_params.connect_params.clean_session = 1;
 
     log_init();
@@ -81,10 +70,36 @@ void application_entry(void *arg)
         msg.qos = QOS0;
         msg.payload = (void *) buf;
         
-        mqtt_publish(&client, "tos-topic", &msg);
-        
+        error = mqtt_publish(&client, "tos-topic", &msg);
+
         tos_task_delay(4000); 
     }
-
 }
 
+
+int main(void)
+{
+
+    k_err_t err;
+    
+    bsp_init();
+    
+    printf("Welcome to TencentOS tiny\r\n");
+
+    tos_knl_init(); // TOS Tiny kernel initialize
+    
+    printf("create mqttclient task\r\n");
+    err = tos_task_create(&task, 
+                          "mqttclient-task", 
+                          mqttclient_task,
+                          NULL, 
+                          3, 
+                          task_stack,
+                          1024,
+                          20);
+    if(err != K_ERR_NONE)
+        printf("TencentOS Create mqttclient task fail! code : %d \r\n",err);
+    
+    tos_knl_start(); // Start TOS Tiny
+
+}
