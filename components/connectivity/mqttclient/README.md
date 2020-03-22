@@ -40,7 +40,7 @@
 | -------------- | -------- |
 | Linux          | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient) |
 | TencentOS tiny | [https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429](https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429) |
-
+| TencentOS tiny AT 框架| [https://github.com/Tencent/TencentOS-tiny/tree/master/board/GoKit3_STM32F103C8T6](https://github.com/Tencent/TencentOS-tiny/tree/master/board/GoKit3_STM32F103C8T6) |
 
 
 
