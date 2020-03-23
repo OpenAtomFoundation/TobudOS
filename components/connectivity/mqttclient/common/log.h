@@ -2,17 +2,15 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-27 03:25:58
- * @LastEditTime : 2020-02-20 01:16:25
+ * @LastEditTime: 2020-02-25 05:42:32
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _LOG_H_
 #define _LOG_H_
 
-#define LOG_IS_SALOF    1
+#include "mqtt_defconfig.h"
 
-#define LOG_LEVEL       DEBUG_LEVEL         //WARN_LEVEL DEBUG_LEVEL INFO_LEVEL
-
-#if LOG_IS_SALOF
+#ifdef LOG_IS_SALOF
     #include "salof.h"
 
     #define LOG_D(fmt, ...)   LOG_DEBUG(fmt, ##__VA_ARGS__)

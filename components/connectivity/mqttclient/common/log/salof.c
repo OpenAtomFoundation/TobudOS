@@ -9,6 +9,8 @@
 
 #include "salof.h"
 
+#ifdef USE_LOG
+
 #ifndef SALOF_BUFF_SIZE
     #define     SALOF_BUFF_SIZE     (1024U)
 #endif 
@@ -104,5 +106,5 @@ void salof_task(void *parm)
 }
 #endif
 
-
+#endif
 

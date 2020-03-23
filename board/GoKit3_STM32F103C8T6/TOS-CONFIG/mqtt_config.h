@@ -8,7 +8,7 @@
 #ifndef _MQTT_CONFIG_H_
 #define _MQTT_CONFIG_H_
 
-#define             LOG_IS_SALOF
+//#define             LOG_IS_SALOF
 
 #define             LOG_LEVEL                   DEBUG_LEVEL   //WARN_LEVEL DEBUG_LEVEL
 
@@ -41,6 +41,7 @@
 #define     MQTT_THREAD_PRIO                    5
 #define     MQTT_THREAD_TICK                    50
 
+#define     MQTT_NETSOCKET_USE_AT
 
 //#define     MQTT_NETWORK_TYPE_TLS
 

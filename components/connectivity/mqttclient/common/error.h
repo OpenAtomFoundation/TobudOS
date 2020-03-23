@@ -2,17 +2,18 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-15 00:42:16
- * @LastEditTime : 2020-01-10 01:01:26
+ * @LastEditTime: 2020-03-21 16:49:07
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _ERROR_H_
 #define _ERROR_H_
 
 typedef enum mqtt_error {
+    MQTT_SSL_CERT_ERROR                                     = -0x001C,      /* cetr parse failed */
     MQTT_SOCKET_FAILED                                      = -0x001B,      /* socket fd failed */
     MQTT_SOCKET_UNKNOWN_HOST                                = -0x001A,      /* socket unknown host ip or domain */ 
     MQTT_SET_PUBLISH_DUP_FAILED                             = -0x0019,      /* mqtt publish packet set udp bit failed */
-    MQTT_CLOSE_SESSION_ERROR                                = -0x0018,      /* mqtt close session error */
+    MQTT_CLEAN_SESSION_ERROR                                = -0x0018,      /* mqtt clean session error */
     MQTT_ACK_NODE_IS_EXIST                                  = -0x0017,      /* mqtt ack list is exist ack node */
     MQTT_ACK_HANDLER_NUM_TOO_MUCH                           = -0x0016,      /* mqtt ack handler number is too much */
     MQTT_RESUBSCRIBE_ERROR                                  = -0x0015,      /* mqtt resubscribe error */

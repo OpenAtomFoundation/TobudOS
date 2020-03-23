@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime : 2020-01-11 20:11:47
+ * @LastEditTime: 2020-03-15 01:12:28
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTTCLIENT_H_
@@ -17,7 +17,7 @@
 #include "platform_memory.h"
 #include "platform_mutex.h"
 #include "platform_thread.h"
-#include "mqtt_config.h"
+#include "mqtt_defconfig.h"
 #include "network.h"
 #include "random.h"
 #include "error.h"
@@ -35,6 +35,7 @@ typedef enum client_state {
 	CLIENT_STATE_INITIALIZED = 0,
 	CLIENT_STATE_CONNECTED = 1,
 	CLIENT_STATE_DISCONNECTED = 2,
+    CLIENT_STATE_CLEAN_SESSION = 3
 }client_state_t;
 
 typedef struct mqtt_connack_data {
@@ -93,10 +94,10 @@ typedef struct connect_params {
 
 typedef struct mqtt_client {
     unsigned short              packet_id;
-    unsigned char               *read_buf;
-    unsigned char               *write_buf;
     unsigned char               ping_outstanding;
     unsigned char               ack_handler_number;
+    unsigned char               *read_buf;
+    unsigned char               *write_buf;
     unsigned int                cmd_timeout;
     unsigned int                read_buf_size;
     unsigned int                write_buf_size;
