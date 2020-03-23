@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+    	
+    <storageModule moduleId="org.eclipse.cdt.core.settings">
+        		
+        <cconfiguration id="org.eclipse.cdt.cross.arc.gnu.linux.elf.debug.1536038980">
+            			
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arc.gnu.linux.elf.debug.1536038980" moduleId="org.eclipse.cdt.core.settings" name="arcem">
+                				
+                <externalSettings/>
+                				
+                <extensions>
+                    					
+                    <extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+                    					
+                    <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    					
+                    <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+                    					
+                    <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    					
+                    <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    					
+                    <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    				
+                </extensions>
+                			
+            </storageModule>
+            			
+            <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+                				
+                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.cross.arc.gnu.buildArtefactType.application" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.cross.arc.gnu.buildArtefactType.application,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" description="ARC ARCEM" id="org.eclipse.cdt.cross.arc.gnu.linux.elf.debug.1536038980" name="arcem" optionalBuildProperties="" parent="org.eclipse.cdt.cross.arc.gnu.linux.elf.debug">
+                    					
+                    <folderInfo id="org.eclipse.cdt.cross.arc.gnu.linux.elf.debug.1536038980." name="/" resourcePath="">
+                        						
+                        <toolChain id="org.eclipse.cdt.cross.arc.gnu.linux.elf.toolchain.debug.1518186599" name="GNU Toolchain for ARC EM" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.toolchain.debug">
+                            							
+                            <option id="org.eclipse.cdt.cross.arc.gnu.linux.option.debugging.level.2042344771" name="Debug level" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.debugging.level" value="org.eclipse.cdt.cross.arc.gnu.base.option.debugging.level.max" valueType="enumerated"/>
+                            							
+                            <targetPlatform id="org.eclipse.cdt.cross.arc.gnu.linux.elf.platform.debug.589546950" isAbstract="false" name="All Platform" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.platform.debug"/>
+                            							
+                            <builder autoBuildTarget="all" buildPath="${workspace_loc:/blinky}" cleanBuildTarget="clean" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.cross.arc.gnu.linux.elf.builder.debug.1840405665" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU Make Builder for ARC" parallelBuildOn="false" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.builder.debug"/>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.assembler.debug.420501660" name="ARC ELF32 GCC Assembler" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.assembler.debug">
+                                								
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.cross.arc.gnu.assembler.option.include.paths.1349156369" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arc.gnu.assembler.option.include.paths" valueType="includePath">
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/kernel/core/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/kernel/pm/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/kernel/hal/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/arch/arc/nsim/common/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/arch/arc/nsim/em/gcc}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/board/ARC_NSIM_EM/TOS-CONFIG}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/osal/cmsis_os}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/board/ARC_NSIM_EM/BSP/Inc}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/platform/vendor_bsp/embarc_bsp/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/platform/vendor_bsp/embarc_bsp/library}&quot;"/>
+                                    								
+                                </option>
+                                								
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.cross.arc.gnu.assembler.option.preprocessor.def.311605714" name="Defined symbols (-D)" superClass="org.eclipse.cdt.cross.arc.gnu.assembler.option.preprocessor.def" valueType="definedSymbols">
+                                    									
+                                    <listOptionValue builtIn="false" value="BOARD_CPU_FREQ=25000000"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="BOARD_DEV_FREQ=50000000"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="BOARD_NSIM"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="CPU_ARC"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="CURRENT_CORE=arcem"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="EMBARC_TCF_GENERATED"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="EMBARC_USE_BOARD_MAIN"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="HW_VERSION=10"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="LIB_CLIB"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="PLATFORM_EMBARC"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="TOOLCHAIN=ARC_GNU"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_HAVE_LIBGLOSS_"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_HEAPSIZE=8192"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_HOSTLINK_"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_NSIM_"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_STACKSIZE=2048"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="__GNU__"/>
+                                    								
+                                </option>
+                                								
+                                <inputType id="org.eclipse.cdt.cross.arc.gnu.linux.assembler.base.input.1466071146"/>
+                                								
+                                <inputType id="org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.input.1280163649" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.input"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.c.compiler.debug.448240261" name="ARC ELF32 GCC C Compiler" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.c.compiler.debug">
+                                								
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.include.paths.79614265" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.include.paths" valueType="includePath">
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/kernel/core/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/kernel/pm/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/kernel/hal/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/arch/arc/nsim/common/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/arch/arc/nsim/em/gcc}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/board/ARC_NSIM_EM/TOS-CONFIG}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/osal/cmsis_os}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/board/ARC_NSIM_EM/BSP/Inc}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/platform/vendor_bsp/embarc_bsp/include}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/blinky/tencentos/platform/vendor_bsp/embarc_bsp/library}&quot;"/>
+                                    								
+                                </option>
+                                								
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.preprocessor.def.1347816001" name="Defined symbols (-D)" superClass="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.preprocessor.def" valueType="definedSymbols">
+                                    									
+                                    <listOptionValue builtIn="false" value="BOARD_CPU_FREQ=25000000"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="BOARD_DEV_FREQ=50000000"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="BOARD_NSIM"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="CPU_ARC"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="CURRENT_CORE=arcem"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="EMBARC_TCF_GENERATED"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="EMBARC_USE_BOARD_MAIN"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="HW_VERSION=10"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="LIB_CLIB"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="PLATFORM_EMBARC"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="TOOLCHAIN=ARC_GNU"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_HAVE_LIBGLOSS_"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_HEAPSIZE=8192"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_HOSTLINK_"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_NSIM_"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="_STACKSIZE=2048"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="__GNU__"/>
+                                    								
+                                </option>
+                                								
+                                <option id="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.optimization.level.1856088319" name="Optimization level" superClass="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arc.gnu.base.option.optimization.level.none" valueType="enumerated"/>
+                                								
+                                <inputType id="org.eclipse.cdt.cross.arc.gnu.linux.c.compiler.base.input.1213319901"/>
+                                								
+                                <inputType id="org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.input.119616919" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.input"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.cpp.compiler.debug.1443248443" name="ARC ELF32 GCC C++ Compiler" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.cpp.compiler.debug">
+                                								
+                                <inputType id="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.input.664957218" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.input"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.c.linker.debug.1864971900" name="ARC ELF32 GCC C Linker" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.c.linker.debug">
+                                								
+                                <inputType id="org.eclipse.cdt.cross.arc.gnu.c.linker.input.976252164" superClass="org.eclipse.cdt.cross.arc.gnu.c.linker.input">
+                                    									
+                                    <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+                                    									
+                                    <additionalInput kind="additionalinput" paths="$(LIBS)"/>
+                                    								
+                                </inputType>
+                                							
+                            </tool>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.cpp.linker.debug.116146273" name="ARC ELF32 GCC C++ Linker" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.cpp.linker.debug"/>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.createflash.debug.2095919826" name="ARC ELF32 GNU Create Flash Image" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.createflash.debug"/>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.elf.createlisting.debug.207593566" name="ARC ELF32 GNU Create Listing" superClass="org.eclipse.cdt.cross.arc.gnu.linux.elf.createlisting.debug"/>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.linux.printsize.base.615400078" name="ARC ELF32 GNU Print Size" superClass="org.eclipse.cdt.cross.arc.gnu.linux.printsize.base"/>
+                            							
+                            <tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.archiver.base.1467791402" name="ARC ELF32 GCC Archiver" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.archiver.base"/>
+                            						
+                        </toolChain>
+                        					
+                    </folderInfo>
+                    				
+                </configuration>
+                			
+            </storageModule>
+            			
+            <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+            		
+        </cconfiguration>
+        	
+    </storageModule>
+    	
+    <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        		
+        <project id="baremetal_arc_feature_cache.org.eclipse.cdt.cross.arc.gnu.linux.elf.1234567890" name="ARC Cross ELF32 Target Application" projectType="org.eclipse.cdt.cross.arc.gnu.linux.elf"/>
+        	
+    </storageModule>
+    	
+    <storageModule moduleId="scannerConfiguration">
+        		
+        <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+        	
+    </storageModule>
+    	
+    <storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+    	
+    <storageModule moduleId="refreshScope" versionNumber="2">
+        		
+        <configuration configurationName="arcem">
+            			
+            <resource resourceType="PROJECT" workspacePath="/blinky"/>
+            		
+        </configuration>
+        	
+    </storageModule>
+    	
+    <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+    	
+    <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+    
+</cproject>
