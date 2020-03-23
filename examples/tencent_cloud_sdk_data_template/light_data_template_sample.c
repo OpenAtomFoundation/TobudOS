@@ -245,6 +245,10 @@ static qcloud_err_t property_update(const char *json_doc, shadow_dev_property_t 
 
     /* convert const char * to char * */
     json_doc_mutable = osal_malloc(strlen(json_doc));
+    if(!json_doc_mutable)
+    {
+        return QCLOUD_ERR_FAILURE;    
+    }
     QCLOUD_FUNC_EXIT_RC_IF(json_doc_mutable, NULL, QCLOUD_ERR_FAILURE);
     strcpy(json_doc_mutable, json_doc);
 
