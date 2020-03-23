@@ -188,7 +188,7 @@ __KNL__ void cpu_standby_mode_enter(void)
 }
 
 #endif /* TOS_CFG_PWR_MGR_EN */
-
+extern void start_r(void);
 __KNL__ k_stack_t *cpu_task_stk_init(void *entry,
                                               void *arg,
                                               void *exit,
@@ -199,15 +199,16 @@ __KNL__ k_stack_t *cpu_task_stk_init(void *entry,
     cpu_context_t *regs = 0;
 
     sp = (cpu_data_t *)&stk_base[stk_size];
-    sp = (cpu_data_t *)((cpu_addr_t)sp & 0xFFFFFFFC);
+    sp = (cpu_data_t *)((cpu_addr_t)sp & 0xFFFFFFC);
     sp  -= (sizeof(cpu_context_t)/sizeof(cpu_data_t));
     regs = (cpu_context_t*) sp;
 
-    /* auto-saved on exception(pendSV) by hardware */
-    regs->pc = (cpu_data_t)entry;
+    regs->pc = (cpu_data_t)start_r;
     regs->blink = (cpu_data_t)exit;
-    regs->r0    = (cpu_data_t)arg;
+    regs->task = (cpu_data_t)entry;
     regs->status32   = (cpu_data_t)(AUX_STATUS_MASK_IE | ((-1 - INT_PRI_MIN) << 1) | STATUS32_RESET_VALUE);
+    regs->r0    = (cpu_data_t)arg;
+
 
     return (k_stack_t *)sp;
 }

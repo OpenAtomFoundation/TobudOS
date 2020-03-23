@@ -4,6 +4,10 @@
         "arc_timer.h": "c",
         "board.h": "c",
         "console_io.h": "c",
-        "xprintf.h": "c"
+        "xprintf.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c"
     }
 }

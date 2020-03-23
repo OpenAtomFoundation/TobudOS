@@ -21,6 +21,7 @@
 typedef struct cpu_context_st {
     cpu_data_t      pc;
     cpu_data_t      blink;
+    cpu_data_t      task;
     cpu_data_t      status32;
     cpu_data_t      r0;
 } cpu_context_t;

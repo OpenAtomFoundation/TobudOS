@@ -7,6 +7,8 @@
     .global port_sched_start
     .global port_context_switch
 
+    .global start_r
+
 
     .extern k_curr_task
     .extern k_next_task
@@ -40,17 +42,25 @@ port_cpsr_restore:
 
 .type port_sched_start, %function
 port_sched_start:
-    push_s	blink
-    clri
-    mov r0, 0
-    mov r0, k_curr_task
-    mov r1, k_next_task
+    ld r0, [k_curr_task]
+    ld r1, [k_next_task]
     ld r2, [r1]
-    st r2, [r0]   /* k_curr_task = k_next_task*/
-    ld sp, [r2] 
-    seti
-    j	[r0]
+    st r2, [r0] /*k_curr_task=k_next_task*/
+    ld r0, [r2]
+    ld sp, [r0]
+    pop r3
+    j [r3]
 
+
+.type start_r, %function
+start_r:
+	pop blink;
+	pop r1
+	pop r2
+	pop r0
+
+	j_s.d [r1]
+	kflag r2
 
 .type port_context_switch, %function
 port_context_switch:

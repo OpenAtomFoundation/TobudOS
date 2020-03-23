@@ -178,8 +178,8 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # link script
 LDSCRIPT = linker_template_gnu.ldf
 
-# libraries
-LIBS = -lc -lm -lnosys 
+# libraries -lc -lm -lnosys
+LIBS =  -lc -lgcc
 LIBDIR = 
 LDFLAGS = --specs=nsim.specs -mcpu=em4_dmips -mlittle-endian -mcode-density -mdiv-rem -mswap -mnorm -mmpy-option=6 -mbarrel-shifter --param l1-cache-size=16384 --param l1-cache-line-size=32 $(LIBDIR) $(LIBS) -mno-sdata -nostartfiles -Wl,-M,-Map=$(BUILD_DIR)/$(TARGET).map -lm -Wl,--script=$(LDSCRIPT)
 
@@ -226,7 +226,9 @@ $(BUILD_DIR):
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
-  
+
+run : build/TencentOS_tiny.elf
+	nsimdrv -p nsim_emt=1 -propsfile nsim.props build/TencentOS_tiny.elf
 #######################################
 # dependencies
 #######################################
