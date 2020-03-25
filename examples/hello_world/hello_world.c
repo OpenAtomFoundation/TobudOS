@@ -1,10 +1,10 @@
 #include "cmsis_os.h"
 
-#define TASK1_STK_SIZE          512
+#define TASK1_STK_SIZE          1024
 void task1(void *arg);
 osThreadDef(task1, osPriorityNormal, 1, TASK1_STK_SIZE);
 
-#define TASK2_STK_SIZE          512
+#define TASK2_STK_SIZE          1024
 void task2(void *arg);
 osThreadDef(task2, osPriorityNormal, 1, TASK2_STK_SIZE);
 

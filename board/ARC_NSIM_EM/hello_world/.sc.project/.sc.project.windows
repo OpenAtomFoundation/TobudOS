@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<windowLayout version="3" model="sash">
+  <mdiFrame model="sash" x="297" y="114" width="1200" height="800">
+    <splitPane orientation="horizontal" divider="510">
+      <splitPane orientation="vertical" divider="409">
+        <pane>
+          <tabbedPanel name="locals" selected="1">
+            <toolBar id="0" visible="0"/>
+            <toolBar id="1" visible="1"/>
+            <toolBar id="2" visible="0"/>
+          </tabbedPanel>
+        </pane>
+        <pane>
+          <tabbedPanel name="stack">
+            <toolBar id="0" visible="0"/>
+            <toolBar id="1" visible="1"/>
+            <toolBar id="2" visible="0"/>
+          </tabbedPanel>
+          <tabbedPanel name="globals" selected="1">
+            <toolBar id="0" visible="0"/>
+            <toolBar id="1" visible="1"/>
+            <toolBar id="2" visible="0"/>
+            <valueUpdate name="regex_name" value="k_next_task"/>
+          </tabbedPanel>
+        </pane>
+      </splitPane>
+      <splitPane orientation="vertical" divider="478">
+        <pane>
+          <tabbedPanel name="source" selected="1">
+            <toolBar id="0" visible="0"/>
+            <toolBar id="1" visible="1"/>
+            <toolBar id="2" visible="0"/>
+            <toolBar id="3" visible="0"/>
+          </tabbedPanel>
+        </pane>
+        <pane>
+          <tabbedPanel name="break">
+            <toolBar id="0" visible="0"/>
+            <toolBar id="1" visible="1"/>
+            <toolBar id="2" visible="0"/>
+          </tabbedPanel>
+          <tabbedPanel name="watchdisp">
+            <toolBar id="0" visible="0"/>
+            <toolBar id="1" visible="1"/>
+            <toolBar id="2" visible="0"/>
+          </tabbedPanel>
+          <tabbedPanel name="command" selected="1"/>
+        </pane>
+      </splitPane>
+    </splitPane>
+  </mdiFrame>
+</windowLayout>
