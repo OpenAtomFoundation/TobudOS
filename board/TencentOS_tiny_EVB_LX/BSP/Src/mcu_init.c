@@ -19,6 +19,7 @@ void board_init()
     usart0_init(115200);
     usart1_init(115200);
     usart2_init(115200);
+    uart3_init(9600);
     OLED_Init();
     OLED_Clear();
     OLED_ShowChinese(36,0,0);

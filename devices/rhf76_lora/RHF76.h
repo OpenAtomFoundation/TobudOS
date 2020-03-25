@@ -19,7 +19,6 @@
 #define __RHF76_H__
 
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 #include "usart.h"
 #include "tos_at.h"

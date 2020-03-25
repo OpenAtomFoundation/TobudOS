@@ -13,8 +13,13 @@
 #define USART2_GPIO_RX_PIN  GPIO_PIN_11
 #define USART2_GPIO_PORT    GPIOB
 
+#define UART3_GPIO_TX_PIN  GPIO_PIN_10
+#define UART3_GPIO_RX_PIN  GPIO_PIN_11
+#define UART3_GPIO_PORT    GPIOC
+
 
 void usart0_init(int baud);
 void usart1_init(int baud);
 void usart2_init(int baud);
+void uart3_init(int baud);
 #endif // __USART_H
