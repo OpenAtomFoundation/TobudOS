@@ -94,7 +94,7 @@ __KNL__ void cpu_reset(void)
     port_cpu_reset();
 }
 
-__KNL__ void cpu_sched_start(void) // 启动任务调度器
+__KNL__ void cpu_sched_start(void)
 {
     port_sched_start();
 }

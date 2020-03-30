@@ -127,7 +127,11 @@ start_r:
     pop r2
     pop r0
 
+#if defined(__MW__)
     j_s.d [r1]
+#else
+    j [r1]
+#endif
     kflag r2
 
 /****** exceptions and interrupts handing ******/
