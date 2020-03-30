@@ -200,7 +200,6 @@ __KNL__ void cpu_standby_mode_enter(void)
 #endif /* TOS_CFG_PWR_MGR_EN */
 
 uint32_t g_context_switch_reqflg;
-uint32_t g_exc_nest_count;
 
 extern void start_r(void);
 

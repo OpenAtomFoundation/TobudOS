@@ -86,6 +86,7 @@ MDB_ARG_FILE := $(EMBARC_OUT_DIR)/embARC_generated/mdb.arg
 else
 COMPILER_ARG_FILE := $(EMBARC_OUT_DIR)/embARC_generated/gcc.arg
 LDF_FILE := $(EMBARC_OUT_DIR)/linker_gnu.ldf
+NSIM_PROPS := $(EMBARC_OUT_DIR)/embARC_generated/nsim.props
 endif
 
 ######################################
@@ -120,7 +121,7 @@ PREFIX =
 CC = $(PREFIX)ccac
 AS = $(PREFIX)ccac
 
-SZ = $(PREFIX)size
+SZ = $(PREFIX)sizeac
 
 OBJCOPY	= $(PREFIX)elf2bin
 ELF2HEX	= $(PREFIX)elf2hex
@@ -129,7 +130,16 @@ ELF2HEX_INOPT = -Q -I
 ELF2HEX_OUTOPT = -o
 ELF2BIN_OPT =
 else
+PREFIX = arc-elf32-
+CC = $(PREFIX)gcc
+AS = $(PREFIX)gcc -x assembler-with-cpp
+SZ = $(PREFIX)size
+OBJCOPY = $(PREFIX)objcopy
+ELF2HEX	= $(OBJCOPY)
 
+ELF2HEX_INOPT = -O ihex
+ELF2HEX_OUTOPT =
+ELF2BIN_OPT = -O binary -S
 endif
 
 #######################################
@@ -201,6 +211,11 @@ CFLAGS =  @$(COMPILER_ARG_FILE) -Hnoccm -Hnosdata -Wincompatible-pointer-types -
 LDFLAGS = -Hhostlink @$(COMPILER_ARG_FILE) -Hnocopyr -Hnosdata -Hnocrt -Hldopt=-Coutput=$(BUILD_DIR)/mw_arcem.map -Hldopt=-Csections -Hldopt=-Ccrossfunc -Hldopt=-Csize -zstdout $(LDF_FILE)
 else
 
+ASFLAGS = @$(COMPILER_ARG_FILE) -fdata-sections -ffunction-sections -mno-sdata -$(OLEVEL) -g $(C_DEFS) $(C_INCLUDES) -x assembler-with-cpp
+
+CFLAGS =  @$(COMPILER_ARG_FILE) -fdata-sections -ffunction-sections -mno-sdata -$(OLEVEL) -g $(C_DEFS) $(C_INCLUDES) -std=gnu99
+
+LDFLAGS = --specs=nsim.specs @$(COMPILER_ARG_FILE) -mno-sdata -nostartfiles -Wl,-M,-Map=$(BUILD_DIR)/gnu_arcem.map -lm -Wl,--script=$(LDF_FILE)
 endif
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
@@ -264,6 +279,13 @@ nsim_debug : $(BUILD_DIR)/$(TARGET).elf
 #######################################
 # dependencies
 #######################################
+run : $(BUILD_DIR)/$(TARGET).elf
+ifeq ($(TOOLCHAIN),mw)
+	mdb -nooptions -nogoifmain -toggle=include_local_symbols=1 -nsim -off=binary_stdin -off=binary_stdout  -on=load_at_paddr -on=reset_upon_restart -off=flush_pipe -off=cr_for_more -OKN @$(MDB_ARG_FILE) -run $<
+else
+	nsimdrv -p nsim_emt=1 -propsfile $(NSIM_PROPS) $<
+endif
+
 -include $(wildcard $(BUILD_DIR)/*.d)
 
 # *** EOF ***
