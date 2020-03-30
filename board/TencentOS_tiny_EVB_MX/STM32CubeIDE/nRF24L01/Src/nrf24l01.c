@@ -197,21 +197,68 @@ int nrf_enable_rxaddr(uint8_t pipe) {
 	}
 
 	_nrf_write_reg_byte(REG_EN_RXADDR, pipe);
+	return 0;
+}
+
+void nrf_reset_registers() {
+	_nrf_write_reg_byte(REG_CONFIG,     _BV(EN_CRC));
+	_nrf_write_reg_byte(REG_EN_AA,      _BV(ENAA_P0) | _BV(ENAA_P1) | _BV(ENAA_P2) | _BV(ENAA_P3) | _BV(ENAA_P4) | _BV(ENAA_P5));
+	_nrf_write_reg_byte(REG_EN_RXADDR,  _BV(ERX_P0) | _BV(ERX_P1));
+	_nrf_write_reg_byte(REG_SETUP_AW,   _VV(AW_5BYTES, AW));
+	_nrf_write_reg_byte(REG_SETUP_RETR, _VV(ARD_250us, ARD) | _VV(ARC_3, ARC));
+	_nrf_write_reg_byte(REG_RF_CH,		0b00000010);
+	_nrf_write_reg_byte(REG_RF_SETUP,	_BV(RF_DR_HIGH) | _VV(RF_PWR_0dBm, RF_PWR));
+
+	uint8_t status = 0;
+	_nrf_read_reg_byte(REG_STATUS, &status);
+	if(status & _BV(RX_DR)) {
+		_nrf_set_reg_bit(REG_STATUS, _BV(RX_DR));
+	}
+	if(status & _BV(TX_DS)) {
+		_nrf_set_reg_bit(REG_STATUS, _BV(TX_DS));
+	}
+	if(status & _BV(MAX_RT)) {
+		_nrf_set_reg_bit(REG_STATUS, _BV(MAX_RT));
+	}
+
+	_nrf_write_reg_byte(REG_RX_PW_P0,	0);
+	_nrf_write_reg_byte(REG_RX_PW_P1,	0);
+	_nrf_write_reg_byte(REG_RX_PW_P2,	0);
+	_nrf_write_reg_byte(REG_RX_PW_P3,	0);
+	_nrf_write_reg_byte(REG_RX_PW_P4,	0);
+	_nrf_write_reg_byte(REG_RX_PW_P5,	0);
+	_nrf_write_reg_byte(REG_DYNPD,		0);
+	_nrf_write_reg_byte(REG_FEATURE,	0);
+
+	uint8_t addrp0[] = {0xE7, 0xE7, 0xE7, 0xE7, 0xE7};
+	uint8_t addrp1[] = {0xC2, 0xC2, 0xC2, 0xC2, 0xC2};
+	_nrf_write_reg(REG_TX_ADDR,    addrp0, 5);
+	_nrf_write_reg(REG_RX_ADDR_P0, addrp0, 5);
+	_nrf_write_reg(REG_RX_ADDR_P1, addrp1, 5);
+	_nrf_write_reg_byte(REG_RX_ADDR_P2, 0xC3);
+	_nrf_write_reg_byte(REG_RX_ADDR_P3, 0xC4);
+	_nrf_write_reg_byte(REG_RX_ADDR_P4, 0xC5);
+	_nrf_write_reg_byte(REG_RX_ADDR_P5, 0xC6);
+
+	nrf_flush_rx();
+	nrf_flush_tx();
 }
 
 void nrf_set_standby_mode() {
 	nrf_ce(0);
 	nrf_powerdown();
+	nrf_reset_registers();
 	nrf_delay(10);
 
-
-	_nrf_set_reg_bit(REG_CONFIG, EN_CRC);
+	printf("\n");
+	for(int i=0; i<=7; i++) {
+		uint8_t v = 0;
+		_nrf_read_reg_byte(i, &v);
+		printf("--reg %u val %x\n", i, v);
+	}
 
 	nrf_powerup();
 	nrf_delay(10);	// 10m > 1.5~2ms
-
-	nrf_flush_rx();
-	nrf_flush_tx();
 }
 
 
@@ -312,9 +359,9 @@ uint8_t nrf_hal_test() {
 	nrf_delay(200);
 
 
-
-
 	nrf_set_standby_mode();
+
+
 
 	nrf_set_receive_mode();
 	//nrf_disable_rx_irq();
@@ -338,6 +385,7 @@ uint8_t nrf_hal_test() {
 	nrf_enable_rxaddr(0);
 	nrf_enable_rxaddr(1);
 
+	printf("\n");
 	for(int i=0; i<=7; i++) {
 		uint8_t v = 0;
 		_nrf_read_reg_byte(i, &v);
@@ -354,18 +402,6 @@ uint8_t nrf_hal_test() {
 #if 1
 		uint8_t buf[32];
 		uint8_t len = 0;
-
-#if 0
-		uint8_t v = 0;
-		_nrf_read_reg_byte(7, &v);
-		printf("1reg status val %x\n", v);
-
-		printf("%x len %u\n", buf[0], len);
-		_nrf_set_reg_bit(REG_STATUS, _BV(RX_DR));
-
-		_nrf_read_reg_byte(7, &v);
-		printf("2reg status val %x\n", v);
-#endif
 
 		uint8_t status = 0;
 		_nrf_read_reg_byte(REG_STATUS, &status);

@@ -1,6 +1,14 @@
 #ifndef NRF24L01_H_
 #define NRF24L01_H_
 
+#if defined(__SI24R1__) && defined(__NRF24L01__)
+#error "you must choose chip between SI24R1 and NRF24L01"
+#endif
+
+#if !defined(__SI24R1__) && !defined(__NRF24L01__)
+#define __NRF24L01__
+#endif
+
 #define REG_CONFIG 0x00
     // 屏蔽因RX_DR触发的中断
     // 0 不屏蔽， 1 屏蔽
@@ -51,6 +59,10 @@
     // 10 4字节
     // 11 5字节
     #define AW          0
+	#define AW_3BYTES	1
+	#define AW_4BYTES	2
+	#define AW_5BYTES	3
+
 
 
 #define REG_SETUP_RETR 0x04
@@ -61,6 +73,22 @@
     // ...
     // 1111 4000us
     #define ARD         4
+    #define ARD_250us	0
+    #define ARD_500us	1
+    #define ARD_750us   2
+    #define ARD_1000us	3
+    #define ARD_1250us	4
+    #define ARD_1500us	5
+    #define ARD_1750us	6
+    #define ARD_2000us	7
+    #define ARD_2250us	8
+    #define ARD_2500us	9
+    #define ARD_2750us	10
+    #define ARD_3000us	11
+    #define ARD_3250us  12
+    #define ARD_3500us	13
+    #define ARD_3750us	14
+    #define ARD_4000us	15
 
     // ARC, Auto Retransmit Count占3:0共4个比特
     // 0000 Re-Transmit disabled
@@ -68,6 +96,22 @@
     // ...
     // 1111 最多重度15次
     #define ARC         0
+	#define ARC_0		0
+	#define ARC_1		1
+	#define ARC_2		2
+	#define ARC_3		3
+	#define ARC_4		4
+	#define ARC_5		5
+	#define ARC_6		6
+	#define ARC_7		7
+	#define ARC_8		8
+	#define ARC_9		9
+	#define ARC_10		10
+	#define ARC_11		11
+	#define ARC_12		12
+	#define ARC_13		13
+	#define ARC_14		14
+	#define ARC_15		15
 
 
 // RF Channel选择
@@ -76,7 +120,9 @@
 
 
 #define REG_RF_SETUP 0x06
+	#define RF_DR_LOW   5
     #define PLL_LOCK    4 // 仅用在测试
+	#define RF_DR_HIGH	3
     // Air Data Rate
     // 0 1Mbps
     // 1 2Mbps
@@ -91,9 +137,29 @@
     // 01 -12dBm
     // 10  -6dBm
     // 11   0dBm
+#if defined(__NRF24L01__)
     #define RF_PWR      1
+		#define RF_PWR_n18dBm	0
+		#define RF_PWR_n12dBm   1
+		#define RF_PWR_n6dBm	2
+		#define RF_PWR_0dBm		3
+
     // Non-P omissions
     #define LNA_HCURR   0
+#endif
+
+#if defined(__SI24R1__)
+    #define RF_PWR      0
+		#define RF_PWR_n12dBm	0
+		#define RF_PWR_n6dBm    1
+		#define RF_PWR_n4dBm	2
+		#define RF_PWR_0dBm		3
+		#define RF_PWR_1dBm		4
+		#define RF_PWR_3dBm		5
+		#define RF_PWR_4dBm		6
+		#define RF_PWR_7dBm		7
+#endif
+
 
 #define REG_STATUS 0x07
     // RX FIFO数据READY中断标记位
@@ -207,6 +273,7 @@
 
 
 #define _BV(n) (1<<(n))
+#define _VV(v, n) ((v)<<(n))
 
 void nrf_powerup();
 
