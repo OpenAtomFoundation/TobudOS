@@ -70,7 +70,7 @@ typedef enum lora_key_type {
 #define RHF76_ATCMD_SET_BAND_CN470              "AT+DR=CN470\r\n"
 #define RHF76_ATCMD_REPLY_BAND_CN470            "+DR: CN470"
 
-#define RHF76_ATCMD_SET_CHANNEL                 "at+ch=num,0-7\r\n"
+#define RHF76_ATCMD_SET_CHANNEL                 "at+ch=num,80-87\r\n"
 #define RHF76_ATCMD_SET_ADR_OFF                 "at+adr=off\r\n"
 #define RHF76_ATCMD_JOIN                        "AT+join\r\n"
 
