@@ -44,7 +44,7 @@
                 </option>
                 <option>
                     <name>MemFile</name>
-                    <state>$TOOLKIT_DIR$\CONFIG\debugger\ST\STM32L073RZ.ddf</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>RunToEnable</name>
@@ -76,11 +76,11 @@
                 </option>
                 <option>
                     <name>OCDownloadVerifyAll</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OCProductVersion</name>
-                    <state>7.10.3.6927</state>
+                    <state>8.30.1.17146</state>
                 </option>
                 <option>
                     <name>OCDynDriverList</name>
@@ -112,7 +112,7 @@
                 </option>
                 <option>
                     <name>FlashLoadersV3</name>
-                    <state>$TOOLKIT_DIR$\config\flashloader\ST\FlashSTM32L07xxZ.board</state>
+                    <state>$TOOLKIT_DIR$\config\flashloader\</state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck1</name>
@@ -282,10 +282,6 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
-                    <name>CatchSFERR</name>
-                    <state>1</state>
-                </option>
-                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -404,6 +400,10 @@
                     <state>1</state>
                 </option>
                 <option>
+                    <name>CatchSFERR</name>
+                    <state>1</state>
+                </option>
+                <option>
                     <name>CatchHARDERR</name>
                     <state>1</state>
                 </option>
@@ -498,10 +498,6 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
-                    <name>CatchSFERR</name>
-                    <state>1</state>
-                </option>
-                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -577,7 +573,7 @@
                 </option>
                 <option>
                     <name>IjetCpuClockEdit</name>
-                    <state>72.0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IjetSwoPrescalerList</name>
@@ -650,6 +646,10 @@
                 </option>
                 <option>
                     <name>CatchINTERR</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>CatchSFERR</name>
                     <state>1</state>
                 </option>
                 <option>
@@ -727,10 +727,6 @@
                 <version>16</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
-                <option>
-                    <name>CCCatchSFERR</name>
-                    <state>0</state>
-                </option>
                 <option>
                     <name>JLinkSpeed</name>
                     <state>1000</state>
@@ -835,7 +831,7 @@
                 <option>
                     <name>CCJLinkResetList</name>
                     <version>6</version>
-                    <state>7</state>
+                    <state>5</state>
                 </option>
                 <option>
                     <name>CCJLinkInterfaceCmdLine</name>
@@ -870,6 +866,10 @@
                     <state>0</state>
                 </option>
                 <option>
+                    <name>CCCatchSFERR</name>
+                    <state>0</state>
+                </option>
+                <option>
                     <name>CCCatchHARDERR</name>
                     <state>0</state>
                 </option>
@@ -896,7 +896,7 @@
                 </option>
                 <option>
                     <name>CCCpuClockEdit</name>
-                    <state>72.0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>CCSwoClockAuto</name>
@@ -1097,7 +1097,7 @@
                 </option>
                 <option>
                     <name>CCSTLinkUsbSerialNoSelect</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCSTLinkJtagSpeedList</name>
@@ -1361,7 +1361,7 @@
                 </option>
                 <option>
                     <name>CCXds100InterfaceRadio</name>
-                    <state>0</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCXds100InterfaceCmdLine</name>
@@ -1370,7 +1370,7 @@
                 <option>
                     <name>CCXds100ProbeList</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCXds100SWOPortRadio</name>

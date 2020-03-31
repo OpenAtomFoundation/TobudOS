@@ -16,15 +16,15 @@
                 <debug>1</debug>
                 <option>
                     <name>ExePath</name>
-                    <state>TencentOS_tiny/Exe</state>
+                    <state>Debug\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>TencentOS_tiny/Obj</state>
+                    <state>Debug\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>TencentOS_tiny/List</state>
+                    <state>Debug\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -32,11 +32,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Full formatting, with multibyte support.</state>
+                    <state>Automatic choice of formatter, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Full formatting, with multibyte support.</state>
+                    <state>Automatic choice of formatter, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -62,7 +62,7 @@
                 </option>
                 <option>
                     <name>OGProductVersion</name>
-                    <state>4.41A</state>
+                    <state>7.60.1.11206</state>
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
@@ -108,7 +108,7 @@
                 <option>
                     <name>GeneralMisraRules04</name>
                     <version>0</version>
-                    <state>011111111111111110111111111111011111111111111011110100111111111111111111111111111111111111111111101111111111111011111111111111111111111111111</state>
+                    <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
@@ -121,7 +121,7 @@
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>OGUseCmsisDspLib</name>
@@ -173,20 +173,20 @@
                 <option>
                     <name>OGPrintfVariant</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OGPrintfMultibyteSupport</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OGScanfVariant</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OGScanfMultibyteSupport</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>GenLocaleTags</name>
@@ -220,7 +220,10 @@
                 <debug>1</debug>
                 <option>
                     <name>CCDefines</name>
-                    <state></state>
+                    <state>USE_HAL_DRIVER</state>
+                    <state>STM32L073xx</state>
+                    <state>USE_HAL_DRIVER</state>
+                    <state>STM32L073xx</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -329,7 +332,7 @@
                 </option>
                 <option>
                     <name>OutputFile</name>
-                    <state></state>
+                    <state>$FILE_BNAME$.o</state>
                 </option>
                 <option>
                     <name>CCLibConfigHeader</name>
@@ -345,7 +348,27 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state></state>
+                    <state>$PROJ_DIR$/../../BSP/Inc</state>
+                    <state>$PROJ_DIR$/../../../../platform/vendor_bsp/st/STM32L0xx_HAL_Driver/Inc</state>
+                    <state>$PROJ_DIR$/../../../../platform/vendor_bsp/st/STM32L0xx_HAL_Driver/Inc/Legacy</state>
+                    <state>$PROJ_DIR$/../../../../platform/vendor_bsp/st/CMSIS/Device/ST/STM32L0xx/Include</state>
+                    <state>$PROJ_DIR$/../../../../platform/vendor_bsp/st/CMSIS/Include</state>
+                    <state>$PROJ_DIR$/../../../../arch/arm/arm-v7m/common/include</state>
+                    <state>$PROJ_DIR$/../../../../arch/arm/arm-v7m/cortex-m0+/armcc</state>
+                    <state>$PROJ_DIR$/../../../../kernel/core/include</state>
+                    <state>$PROJ_DIR$/../../../../kernel/pm/include</state>
+                    <state>$PROJ_DIR$/../../../../kernel/hal/include</state>
+                    <state>$PROJ_DIR$/../../../../osal/cmsis_os</state>
+                    <state>$PROJ_DIR$/../../TOS_CONFIG</state>
+                    <state>$PROJ_DIR$/../../../../devices/rhf76_lora</state>
+                    <state>$PROJ_DIR$/../../../../net/at/include</state>
+                    <state>$PROJ_DIR$/../../../../net/lora_module_wrapper</state>
+                    <state>$PROJ_DIR$/../../BSP/HardWare/HTS221</state>
+                    <state>$PROJ_DIR$/../../../../examples/LoRaWAN</state>
+                    <state>$PROJ_DIR$</state>
+                    <state>$PROJ_DIR$\..\..\BSP\HardWare\LPS22HB</state>
+                    <state>$PROJ_DIR$\..\..\BSP\HardWare\Common</state>
+                    <state>$PROJ_DIR$\..\..\BSP\HardWare\LIS3MDL</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -637,15 +660,15 @@
                 <option>
                     <name>OOCOutputFormat</name>
                     <version>3</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OCOutputOverride</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>TencentOS_tiny.hex</state>
+                    <state>TencentOS_tiny.srec</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -653,7 +676,7 @@
                 </option>
                 <option>
                     <name>OOCObjCopyEnable</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
             </data>
         </settings>
@@ -700,7 +723,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>TencentOS_tiny.out</state>
+                    <state>template_project.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -764,7 +787,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>lnk0t.icf</state>
+                    <state>$TOOLKIT_DIR$\config\linker\ST\stm32l073xZ.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -824,7 +847,7 @@
                 </option>
                 <option>
                     <name>IlinkProgramEntryLabel</name>
-                    <state></state>
+                    <state>__iar_program_start</state>
                 </option>
                 <option>
                     <name>DoFill</name>
@@ -997,7 +1020,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>TencentOS_tiny_import_lib.o</state>
                 </option>
             </data>
         </settings>
@@ -1029,106 +1052,148 @@
         </settings>
     </configuration>
     <group>
-        <name>Application</name>
-        <group>
-            <name>EWARM</name>
-            <file>
-                <name>$PROJ_DIR$\startup_stm32l073xx.s</name>
-            </file>
-        </group>
-        <group>
-            <name>examples</name>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\examples\hello_world\hello_world.c</name>
-            </file>
-        </group>
-        <group>
-            <name>User</name>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\gpio.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\i2c.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\main.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\mcu_init.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\stm32l0xx_hal_msp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\stm32l0xx_it.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\usart.c</name>
-            </file>
-        </group>
+        <name>Application/EWARM</name>
+        <file>
+            <name>$PROJ_DIR$\startup_stm32l073xx.s</name>
+        </file>
     </group>
     <group>
-        <name>Drivers</name>
+        <name>Application/User</name>
         <group>
-            <name>CMSIS</name>
+            <name>BSP</name>
+            <group>
+                <name>HTS221</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\BSP\HardWare\HTS221\HTS221.c</name>
+                </file>
+            </group>
+            <group>
+                <name>LIS3MDL</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\BSP\HardWare\LIS3MDL\LIS3MDL.c</name>
+                </file>
+            </group>
+            <group>
+                <name>LPS22HB</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\BSP\HardWare\LPS22HB\LPS22HB.c</name>
+                </file>
+            </group>
             <file>
-                <name>$PROJ_DIR$\..\..\BSP\Src\system_stm32l0xx.c</name>
+                <name>$PROJ_DIR$\..\..\BSP\HardWare\Common\bsp.c</name>
             </file>
         </group>
-        <group>
-            <name>STM32L0xx_HAL_Driver</name>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_cortex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_dma.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ramfunc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_gpio.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_i2c.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_i2c_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_pwr.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_pwr_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_rcc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_rcc_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_tim.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_tim_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_uart.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_uart_ex.c</name>
-            </file>
-        </group>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\gpio.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\i2c.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\mcu_init.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\stm32l0xx_hal_msp.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\stm32l0xx_it_lorawan.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\usart.c</name>
+        </file>
+    </group>
+    <group>
+        <name>at</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\net\lora_module_wrapper\lora_module_wrapper.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\net\at\src\tos_at.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\net\at\src\tos_at_utils.c</name>
+        </file>
+    </group>
+    <group>
+        <name>devices</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\devices\rhf76_lora\RHF76.c</name>
+        </file>
+    </group>
+    <group>
+        <name>Drivers/CMSIS</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\system_stm32l0xx.c</name>
+        </file>
+    </group>
+    <group>
+        <name>Drivers/STM32L0xx_HAL_Driver</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_cortex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_dma.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ramfunc.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_gpio.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_i2c.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_i2c_ex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_pwr.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_pwr_ex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_rcc.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_rcc_ex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_tim.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_tim_ex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_uart.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_uart_ex.c</name>
+        </file>
+    </group>
+    <group>
+        <name>examples</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\BSP\Src\lora_demo.c</name>
+        </file>
+    </group>
+    <group>
+        <name>hal</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\hal\st\stm32l0xx\src\tos_hal_uart.c</name>
+        </file>
     </group>
     <group>
         <name>tos/arch</name>
@@ -1143,7 +1208,7 @@
         </file>
     </group>
     <group>
-        <name>tos/cmsis-os</name>
+        <name>tos/cmsis_os</name>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\osal\cmsis_os\cmsis_os.c</name>
         </file>
