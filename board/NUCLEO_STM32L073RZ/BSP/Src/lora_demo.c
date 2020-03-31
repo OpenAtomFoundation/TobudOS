@@ -2,6 +2,7 @@
 #include "RHF76.h"
 #include <Math.h>
 #include "bsp.h"
+#include <stdbool.h>
 
 /*
  ==================================================================================
@@ -27,46 +28,80 @@
  up-link parser javascript:
 
  function RawToProtocol(fPort, bytes) {
-  var data = {
-      "method": "report",
-      "clientToken" : new Date(),
-      "params" : {}
-  };
-  data.params.temperature = bytes[0];
-  data.params.humidity = bytes[1];
-  data.params.period = bytes[2] | (bytes[3] << 8);
-  return data;
- }
+	var data ={
+		"method": "report",
+		"clientToken": new Date(),
+		"params": {}
+	}
+	data.params.magnFullscale = GetMagnFullscale(bytes[0]);
+	
+	var tempSensitivity = bytes[1];
+	var humiSensitivity = bytes[2] | (bytes[3]<<8);
+	var presSensitivity = bytes[4] | (bytes[5]<<8);
+	var magnSensitivity = bytes[6] | (bytes[7]<<8);
+
+	data.params.temperature   = (ConvertToInt16(bytes[8] | (bytes[9]<<8))*1.0/10).toFixed(2);
+	data.params.humidity      = ((bytes[10] | (bytes[11]<<8))*1.0/10).toFixed(2);
+	data.params.magnX         = (ConvertToInt16(bytes[12] | (bytes[13]<<8))*1.0/magnSensitivity).toFixed(2);
+	data.params.magnY         = (ConvertToInt16(bytes[14] | (bytes[15]<<8))*1.0/magnSensitivity).toFixed(2);
+	data.params.magnZ         = (ConvertToInt16(bytes[16] | (bytes[17]<<8))*1.0/magnSensitivity).toFixed(2);
+	data.params.period        = bytes[18] | (bytes[19]<<8);
+	data.params.pressure      = ((bytes[20] | (bytes[21]<<8) | (bytes[22]<<16) | (bytes[23]<<24))*1.0/presSensitivity).toFixed(2);
+	data.params.altitude      = ((Math.pow(1017.92/data.params.pressure,1.0/5.257) - 1)*(data.params.temperature/10.0+273.15)/0.0065).toFixed(2);
+	return data;
+  }
+
+  function ConvertToInt16(num)
+  {
+        var intNum = num;
+        if ((num & 0x8000) > 0) {
+                intNum = num - 0x10000;
+        }
+        return intNum;
+  }
+
+  function GetMagnFullscale(fullscale){
+        var MagnFullscale = { 0: 4, 1: 8, 2: 12, 3: 16 };
+        return MagnFullscale[fullscale] === undefined ? 4 : MagnFullscale[fullscale];
+  }
 
  ==================================================================================
  down-link parser javascript:
 
  function ProtocolToRaw(obj) {
-     var data = new Array();
-     data[0] = 5;// fport=5
-     data[1] = 0;// unconfirmed mode
-     data[2] = obj.params.period & 0x00FF;
-     data[3] = (obj.params.period >> 8) & 0x00FF;
-     return data;
- }
+	var data = new Array();
+	data[0] = 5; // fport = 5
+	data[1] = 0; // unconfirmed mode
+	data[2] = obj.params.period & 0x00FF;
+	data[3] = (obj.params.period >> 8) & 0x00FF;
+	data[4] = GetMagnFullscale(obj.params.magnFullscale);
+	data[5] = obj.params.isconfirmed;
+	return data;
+  }
+
+  function GetMagnFullscale(fullscale){
+        var MagnFullscale = { 4: 0, 8: 1, 12: 2, 16: 3 };
+        return MagnFullscale[fullscale]===undefined?0:MagnFullscale[fullscale];
+  }
 
  */
 
 uint16_t report_period = 10;
+bool     isconfirmed   = false;
 
 typedef struct device_data_st {
-    uint8_t     magn_fullscale;                // fullscale of magnetometer
-    uint8_t     temp_sensitivity;
-    uint16_t    humi_sensitivity;
-    uint16_t    press_sensitivity;
-    uint16_t    magn_sensitivity;              // sensitivity per fullscale
-    int16_t     temperature;
-    int16_t     humidity;  
-    int16_t     magn_x;                       // X-magnetic value in LSB
-    int16_t     magn_y;                       // Y-magnetic value in LSB
-    int16_t     magn_z;                       // Z-magnetic value in LSB
-    uint16_t    period;
-    uint32_t    pressure;
+    uint8_t     magn_fullscale;                // fullscale of magnetometer(RW)
+    uint8_t     temp_sensitivity;              // temperature sensitivity  (R)
+    uint16_t    humi_sensitivity;              // humidity sensitivity     (R)
+    uint16_t    press_sensitivity;             // pressure sensitivity     (R)
+    uint16_t    magn_sensitivity;              // magnetic sensitivity     (R)
+    int16_t     temperature;                   // temperature              (R)
+    int16_t     humidity;                      // humidity                 (R)
+    int16_t     magn_x;                        // X-magnetic value in LSB  (R)
+    int16_t     magn_y;                        // Y-magnetic value in LSB  (R)
+    int16_t     magn_z;                        // Z-magnetic value in LSB  (R)
+    uint16_t    period;                        // report period            (R)
+    uint32_t    pressure;                      // pressure                 (R)
 } __PACKED__ dev_data_t;
 
 typedef struct device_data_wrapper_st {
@@ -80,10 +115,8 @@ dev_data_wrapper_t dev_data_wrapper;
 
 void recv_callback(uint8_t *data, uint8_t len)
 {
-    int i = 0;
-
     printf("len: %d\n", len);
-
+    int i = 0;
     for (i = 0; i < len; ++i) {
         printf("data[%d]: %d\n", i, data[i]);
     }
@@ -92,8 +125,9 @@ void recv_callback(uint8_t *data, uint8_t len)
         report_period = data[0];
     } else if (len >= 2) {
         report_period = data[0] | (data[1] << 8);
+        LIS3MDL_Set_FullScale((LIS3MDL_FullScaleTypeDef)data[2]);
+        isconfirmed = (bool)data[3];
     }
-    printf("report_period: %d\n", report_period);
 }
 
 void print_to_screen(sensor_data_t sensor_data)
@@ -112,58 +146,6 @@ void print_to_screen(sensor_data_t sensor_data)
 /**
  * @brief     application entry
  * @modified  by jieranzhi 2020/03/31
- * @note      following javascript code snippet demonstrate how to correctly 
- *            decode the data passed to Tencent cloud
- ****************************** CODE START *****************************  
-              function RawToProtocol(fPort, bytes) 
-              {
-                var data ={
-                        "method": "report",
-                        "clientToken": new Date(),
-                        "params": {}
-                }
-                var magnFullscale   = bytes[0];
-                switch(magnFullscale)
-                {
-                        case 0:
-                                data.params.magnFullscale = 4; 
-                        break;
-                        case 1:
-                                data.params.magnFullscale = 8; 
-                        break;
-                        case 2:
-                                data.params.magnFullscale = 12; 
-                        break;
-                        case 3:
-                                data.params.magnFullscale = 16; 
-                        break;
-                }
-                var tempSensitivity = bytes[1];
-                var humiSensitivity = bytes[2] | (bytes[3]<<8);
-                var presSensitivity = bytes[4] | (bytes[5]<<8);
-                var magnSensitivity = bytes[6] | (bytes[7]<<8);
-
-                data.params.temperature   = (convertToInt16(bytes[8] | (bytes[9]<<8))*1.0/10).toFixed(2);
-                data.params.humidity      = ((bytes[10] | (bytes[11]<<8))*1.0/10).toFixed(2);
-                data.params.magnX         = (convertToInt16(bytes[12] | (bytes[13]<<8))*1.0/magnSensitivity).toFixed(2);
-                data.params.magnY         = (convertToInt16(bytes[14] | (bytes[15]<<8))*1.0/magnSensitivity).toFixed(2);
-                data.params.magnZ         = (convertToInt16(bytes[16] | (bytes[17]<<8))*1.0/magnSensitivity).toFixed(2);
-                data.params.period        = bytes[18] | (bytes[19]<<8);
-                data.params.pressure      = ((bytes[20] | (bytes[21]<<8) | (bytes[22]<<16) | (bytes[23]<<24))*1.0/presSensitivity).toFixed(2);
-                data.params.altitude      = ((Math.pow(1017.92/data.params.pressure,1.0/5.257) - 1)*(data.params.temperature/10.0+273.15)/0.0065).toFixed(2);
-                data.params.fPort         = fPort;
-                return data;
-             } 
-
-            function convertToInt16(num)
-            {
-                    var intNum = num;
-                    if ((num & 0x8000) > 0) {
-                            intNum = num - 0x10000;
-                    }
-                    return intNum;
-            }
- ****************************** CODE END ***************************** 
  */
 void application_entry(void *arg)
 {
@@ -174,7 +156,7 @@ void application_entry(void *arg)
 
     rhf76_lora_init(HAL_UART_PORT_1);
     tos_lora_module_recvcb_register(recv_callback);
-    tos_lora_module_join_otaa("8cf957200000f53c", "8cf957200000f52c6d09aaaaad205a72");
+    tos_lora_module_join_otaa("8cf957200000f52c", "8cf957200000f52c6d09aaaaad204a72");
 
     while (1) {
         BSP_Sensor_Read(&sensor_data);
