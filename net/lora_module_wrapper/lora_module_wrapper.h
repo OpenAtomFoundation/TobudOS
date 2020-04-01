@@ -32,6 +32,8 @@ typedef struct lora_module_st {
 
     int (*send)(const void *buf, size_t len);
 
+    int (*send_unconfirmed)(const void *buf, size_t len);
+    
     int (*close)(void);
 
     lora_recv_callback_t recv_callback;
@@ -86,6 +88,18 @@ int tos_lora_module_join_abp(const char *deveui, const char *devaddr, const char
  * @return  errcode
  */
 int tos_lora_module_send(const void *buf, size_t len);
+
+/**
+ * @brief Send unconfirmed data (message) by lora module.
+ *
+ * @attention None
+ *
+ * @param[in]   buf     data to send
+ * @param[in]   len     length of the data
+ *
+ * @return  errcode
+ */
+int tos_lora_module_send_unconfirmed(const void *buf, size_t len);
 
 /**
  * @brief Register a Receive callback method by lora module.

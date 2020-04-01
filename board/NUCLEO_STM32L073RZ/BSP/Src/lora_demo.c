@@ -1,8 +1,8 @@
 #include "lora_demo.h"
 #include "RHF76.h"
-#include <Math.h>
 #include "bsp.h"
 #include <stdbool.h>
+#include <Math.h>
 
 /*
  ==================================================================================
@@ -19,11 +19,43 @@
                                                                 step: 1
                                                                 unit: %
 
+ property   pressure        pressure      integer     read-write  range: [259, 1260]
+                                                                initial: 260
+                                                                step: 1
+                                                                unit: hPa
+
+ property   magnFullscale   magnFullscale integer     read-write  range: [4, 16]
+                                                                  initial: 4
+                                                                  step: 1
+                                                                  unit: guass
+
+ property   magn_x          magn_x      float     read-write  range: [-16, 16]
+                                                                initial: 0
+                                                                step: 1
+                                                                unit: guass
+
+ property   magn_y          magn_y      float     read-write  range: [-16, 16]
+                                                                initial: 0
+                                                                step: 1
+                                                                unit: guass
+
+ property   magn_z          magn_z      float     read-write  range: [-16, 16]
+                                                                initial: 0
+                                                                step: 1
+                                                                unit: guass
+
+ property   altitude        altitude      float     read-write  range: [-1000, 10000]
+                                                                initial: 0
+                                                                step: 1
+                                                                unit: m
+
+ property   isconfirmed     isconfirmed   bool     read-write  0: confirmed message
+                                                               1: unconfirmed message
+
  property   report_period   period      integer     read-write  range: [0, 3600]
                                                                 initial: 0
                                                                 step: 1
                                                                 unit: second
-
  ==================================================================================
  up-link parser javascript:
 
@@ -87,7 +119,7 @@
  */
 
 uint16_t report_period = 10;
-bool     isconfirmed   = false;
+bool     is_confirmed  = true;
 
 typedef struct device_data_st {
     uint8_t     magn_fullscale;                // fullscale of magnetometer(RW)
@@ -126,7 +158,7 @@ void recv_callback(uint8_t *data, uint8_t len)
     } else if (len >= 2) {
         report_period = data[0] | (data[1] << 8);
         LIS3MDL_Set_FullScale((LIS3MDL_FullScaleTypeDef)data[2]);
-        isconfirmed = (bool)data[3];
+        is_confirmed = (bool)data[3];
     }
 }
 
@@ -175,7 +207,12 @@ void application_entry(void *arg)
         dev_data_wrapper.u.dev_data.pressure          = (uint32_t)(sensor_data.sensor_press.pressure);
         dev_data_wrapper.u.dev_data.period            = report_period;
         // send data to the server (via gateway)
-        tos_lora_module_send(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
+        if(is_confirmed){
+          tos_lora_module_send(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
+        }else{
+          tos_lora_module_send_unconfirmed(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
+        }
+        
         tos_task_delay(report_period * 1000);
     }
 }
