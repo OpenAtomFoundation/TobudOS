@@ -65,7 +65,10 @@ typedef enum lora_key_type {
 #define RHF76_ATCMD_FMT_SET_KEY_TYPE_APPKEY     "AT+KEY=\"appkey\",%s\r\n"
 #define RHF76_ATCMD_FMT_SET_KEY_TYPE_APPSKEY    "AT+KEY=\"appskey\",%s\r\n"
 #define RHF76_ATCMD_FMT_SET_KEY_TYPE_NWKSKEY    "AT+KEY=\"nwkskey\",%s\r\n"
-#define RHF76_ATCMD_FMT_SEND_MSGHEX             "AT+CMSGHEX=\"%s\"\r\n"
+#define RHF76_ATCMD_FMT_SEND_CMSGHEX            "AT+CMSGHEX=\"%s\"\r\n"
+#define RHF76_ATCMD_FMT_SEND_MSGHEX             "AT+MSGHEX=\"%s\"\r\n"
+
+#define RHF76_ATCMD_SET_REPT                    "AT+REPT=%d\r\n"
 
 #define RHF76_ATCMD_SET_BAND_CN470              "AT+DR=CN470\r\n"
 #define RHF76_ATCMD_REPLY_BAND_CN470            "+DR: CN470"

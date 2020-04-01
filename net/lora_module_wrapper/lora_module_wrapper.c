@@ -44,6 +44,14 @@ int tos_lora_module_send(const void *buf, size_t len)
     return -1;
 }
 
+int tos_lora_module_send_unconfirmed(const void *buf, size_t len)
+{
+    if (g_lora_module && g_lora_module->send_unconfirmed) {
+        return g_lora_module->send_unconfirmed(buf, len);
+    }
+    return -1;
+}
+
 int tos_lora_module_recvcb_register(lora_recv_callback_t recv_callback)
 {
     if (g_lora_module) {
