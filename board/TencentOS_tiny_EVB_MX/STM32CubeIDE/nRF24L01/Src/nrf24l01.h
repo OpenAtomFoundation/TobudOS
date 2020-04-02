@@ -1,12 +1,14 @@
 #ifndef NRF24L01_H_
 #define NRF24L01_H_
 
+#include "nrf24l01_hal.h"
+
 #if defined(__SI24R1__) && defined(__NRF24L01__)
 #error "you must choose chip between SI24R1 and NRF24L01"
 #endif
 
 #if !defined(__SI24R1__) && !defined(__NRF24L01__)
-#define __NRF24L01__
+#error "you must specify the core chip of NRF24L01"
 #endif
 
 #define REG_CONFIG 0x00
@@ -275,9 +277,9 @@
 #define _BV(n) (1<<(n))
 #define _VV(v, n) ((v)<<(n))
 
-void nrf_powerup();
+int nrf_powerup();
 
-void nrf_init();
+int nrf_init(SPI_HandleTypeDef* spi, GPIO_TypeDef* csn_gpio_port, uint16_t csn_pin, GPIO_TypeDef* ce_gpio_port, uint16_t ce_pin);
 
 uint8_t nrf_hal_test();
 

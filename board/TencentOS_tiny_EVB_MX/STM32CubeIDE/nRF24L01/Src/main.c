@@ -69,7 +69,6 @@ void task2(void *arg)
 {
     int task_cnt2 = 0;
     tos_task_delay(200);
-    nrf_init();
     nrf_hal_test();
     while (1) {
     	task_cnt2--;
