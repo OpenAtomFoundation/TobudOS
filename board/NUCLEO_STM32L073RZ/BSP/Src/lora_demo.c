@@ -1,7 +1,7 @@
 #include "lora_demo.h"
+#include "stm32l0xx_hal_flash_ex2.h"
 #include "RHF76.h"
 #include "bsp.h"
-#include <stdbool.h>
 #include <Math.h>
 
 /*
@@ -118,9 +118,6 @@
 
  */
 
-uint16_t report_period = 10;
-bool     is_confirmed  = true;
-
 typedef struct device_data_st {
     uint8_t     magn_fullscale;                // fullscale of magnetometer(RW)
     uint8_t     temp_sensitivity;              // temperature sensitivity  (R)
@@ -145,6 +142,118 @@ typedef struct device_data_wrapper_st {
 
 dev_data_wrapper_t dev_data_wrapper;
 
+DeviceConfig_TypeDef device_config;
+
+void set_config_to_default(DeviceConfig_TypeDef* config)
+{
+  config->config_address = 0x08080000U;
+  config->is_confirmed   = true;
+  config->report_period  = 10;
+  config->magn_fullscale = FULLSCALE_4;
+}
+
+/**
+  * @brief  Write the configuration to the internal EEPROM bank 1 
+  * @note   a single config frame is of 32-bit(a word, 4bytes), and the config
+  *         block starts with a frame whose value is 0x464E4F43U ('CONF' from 
+  *         low to high) and ends with a frame with a value of 0xFFFFFFFFU; a
+  *         single data frame has a following structure£º
+  *         ----------------------------------------------------------------
+  *         | byte |           0          |     1    |    2     |    3     |
+  *         ----------------------------------------------------------------
+  *         | value|  Device Config Type  | value-L  | value-H  | reserve  |
+  *         ----------------------------------------------------------------
+  *         the reserve byte could be used as an extra byte for the config
+  *         value, i.e. a 24-bit value.
+  *
+  * @param  config       system configurations
+  * 
+  * @retval HAL_StatusTypeDef HAL Status
+  */
+HAL_StatusTypeDef write_config_to_Flash(DeviceConfig_TypeDef config)
+{
+  uint32_t frame[5] = {0};
+  frame[0] = 0x464E4F43U; // <'C'><'O'><'N'><'F'> from low to high
+  frame[1] = (uint32_t)config.is_confirmed<<8 | (uint32_t)DCT_IS_CONFIRM;
+  frame[2] = (uint32_t)config.report_period<<8 | (uint32_t)DCT_REPORT_PERIOD;
+  frame[3] = (uint32_t)config.repeat_time<<8 | (uint32_t)DCT_REPEAT_TIME;
+  frame[4] = 0xFFFFFFFFU;
+  
+  HAL_FLASH_Unlock();
+  uint8_t retry = 10;
+  
+  HAL_StatusTypeDef status = HAL_OK;
+  for(int i=0; i<5; i++)
+  {
+    status = HAL_OK;
+    do{
+      status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, config.config_address+4*i, frame[i]);
+    }while(retry--!=0 && status != HAL_OK);
+  }
+  HAL_FLASH_Lock();
+  
+  return status;
+}
+
+HAL_StatusTypeDef read_config_from_Flash(DeviceConfig_TypeDef* config)
+{
+  uint32_t data = 0;
+  HAL_StatusTypeDef status = HAL_FLASH_ReadWord(config->config_address, &data);
+  if(status == HAL_OK)
+  {
+    // a valid config starts with <'C'><'O'><'N'><'F'> and ended with a word of 0xFFFFFFFF
+    if((char)(data&0xFF) == 'C' 
+       &&(char)(data>>8&0xFF) == 'O'
+       &&(char)(data>>16&0xFF) == 'N'
+       &&(char)(data>>24&0xFF) == 'F')
+    {
+      int i = 0;
+      int retry = 10;
+      DeviceConfigType_TypeDef config_type = DCT_DEFAULT;
+      while(data!=0xFFFFFFFF)
+      {
+        i+=4;
+        status = HAL_FLASH_ReadWord(config->config_address+i, &data);
+        if(status != HAL_OK){
+          retry--;
+          i-=4;
+          if(retry == 0) break;
+        }else{
+          config_type = (DeviceConfigType_TypeDef)(data&0xFF);
+          switch(config_type)
+          {
+          case DCT_IS_CONFIRM:
+            {
+              config->is_confirmed = (bool)(data>>8&0xFF);
+              break;
+            }
+          case DCT_REPORT_PERIOD:
+            {
+              config->report_period = (uint16_t)(data>>8&0xFFFF);
+              break;
+            }
+          case DCT_REPEAT_TIME:
+            {
+              config->repeat_time = (uint8_t)(data>>8&0xFF);
+              break;
+            }
+          case DCT_MAGN_FULLSCALE:
+            {
+              config->magn_fullscale = (LIS3MDL_FullScaleTypeDef)(data>>8&0xFF);
+              break;
+            }
+          default:
+            {
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+  return status;
+}
+
 void recv_callback(uint8_t *data, uint8_t len)
 {
     printf("len: %d\n", len);
@@ -154,11 +263,13 @@ void recv_callback(uint8_t *data, uint8_t len)
     }
 
     if (len == 1) {
-        report_period = data[0];
+        device_config.report_period = data[0];
     } else if (len >= 2) {
-        report_period = data[0] | (data[1] << 8);
-        LIS3MDL_Set_FullScale((LIS3MDL_FullScaleTypeDef)data[2]);
-        is_confirmed = (bool)data[3];
+        device_config.is_confirmed = (bool)data[3];
+        device_config.report_period = data[0] | (data[1] << 8);
+        device_config.magn_fullscale = (LIS3MDL_FullScaleTypeDef)data[2];
+        LIS3MDL_Set_FullScale(device_config.magn_fullscale);
+        write_config_to_Flash(device_config);
     }
 }
 
@@ -181,15 +292,22 @@ void print_to_screen(sensor_data_t sensor_data)
  */
 void application_entry(void *arg)
 {
+    // retrieve configuration from the EEPROM (if any)
+    set_config_to_default(&device_config);
+    HAL_StatusTypeDef status = read_config_from_Flash(&device_config);
+    if(status != HAL_OK)
+    {
+      printf("retrieve configuration FAILED!\r\n");
+    }
+    
+    // initialization 
     sensor_data_t sensor_data;
-
-    // initialization of sensors
-    BSP_Sensor_Init();
-
+    BSP_Sensor_Init(device_config);
     rhf76_lora_init(HAL_UART_PORT_1);
     tos_lora_module_recvcb_register(recv_callback);
     tos_lora_module_join_otaa("8cf957200000f52c", "8cf957200000f52c6d09aaaaad204a72");
 
+    // do the job
     while (1) {
         BSP_Sensor_Read(&sensor_data);
         print_to_screen(sensor_data);
@@ -205,15 +323,14 @@ void application_entry(void *arg)
         dev_data_wrapper.u.dev_data.magn_y            = (int16_t)(sensor_data.sensor_magn.magn_y);
         dev_data_wrapper.u.dev_data.magn_z            = (int16_t)(sensor_data.sensor_magn.magn_z);
         dev_data_wrapper.u.dev_data.pressure          = (uint32_t)(sensor_data.sensor_press.pressure);
-        dev_data_wrapper.u.dev_data.period            = report_period;
+        dev_data_wrapper.u.dev_data.period            = device_config.report_period;
         // send data to the server (via gateway)
-        if(is_confirmed){
+        if(device_config.is_confirmed){
           tos_lora_module_send(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
         }else{
           tos_lora_module_send_unconfirmed(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
         }
-        
-        tos_task_delay(report_period * 1000);
+        tos_task_delay(device_config.report_period * 1000);
     }
 }
 

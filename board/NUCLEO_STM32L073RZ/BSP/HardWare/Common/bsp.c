@@ -3,19 +3,20 @@
   * @file    bsp.c
   * @author  jieranzhi
   * @brief   provide high level interfaces to manage the sensors on the 
-  *          application, this is a modified version of the official api
+  *          application
   ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
 #include "bsp.h"
 
-void  BSP_Sensor_Init(void)
+void  BSP_Sensor_Init(DeviceConfig_TypeDef config)
 {
   /* Initialize sensors */
   HTS221_Init();
   LPS22HB_Init();
   LIS3MDL_Init();
+  LIS3MDL_Set_FullScale((LIS3MDL_FullScaleTypeDef)config.magn_fullscale);
 }
 
 void BSP_Sensor_Read(sensor_data_t *sensor_data)

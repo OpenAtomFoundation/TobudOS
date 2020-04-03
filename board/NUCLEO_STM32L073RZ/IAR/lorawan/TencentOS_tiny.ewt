@@ -1258,13 +1258,13 @@
         </file>
     </group>
     <group>
-        <name>Drivers/CMSIS</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\BSP\Src\system_stm32l0xx.c</name>
-        </file>
-    </group>
-    <group>
         <name>Drivers/STM32L0xx_HAL_Driver</name>
+        <group>
+            <name>Drivers/CMSIS</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\BSP\Src\system_stm32l0xx.c</name>
+            </file>
+        </group>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal.c</name>
         </file>
@@ -1279,6 +1279,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ex.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ex2.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_flash_ramfunc.c</name>
