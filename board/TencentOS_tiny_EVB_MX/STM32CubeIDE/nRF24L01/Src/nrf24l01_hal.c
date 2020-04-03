@@ -122,6 +122,22 @@ int nrf_hal_cmd_read(uint8_t cmd, uint8_t *data, uint8_t len) {
 	return 0;
 }
 
+int nrf_hal_cmd_write(uint8_t cmd, uint8_t *data, uint8_t len) {
+	nrf_hal_csn(0);
+
+	if(HAL_OK != HAL_SPI_Transmit(nrf_spi, &cmd, 1, HAL_MAX_DELAY)) {
+		return -1;
+	}
+
+	if(HAL_OK != HAL_SPI_Transmit(nrf_spi, data, len, HAL_MAX_DELAY)) {
+		return -1;
+	}
+
+	nrf_hal_csn(1);
+
+	return 0;
+}
+
 int nrf_hal_cmd_read_byte(uint8_t cmd, uint8_t *data) {
 	return nrf_hal_cmd_read(cmd, data, 1);
 }

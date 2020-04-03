@@ -146,13 +146,6 @@ void nrf_set_standby_mode() {
 	nrf_reset_registers();
 	nrf_delay(10);
 
-	printf("\n");
-	for(int i=0; i<=7; i++) {
-		uint8_t v = 0;
-		nrf_hal_read_reg_byte(i, &v);
-		printf("--reg %u val %x\n", i, v);
-	}
-
 	nrf_powerup();
 	nrf_delay(10);	// 10m > 1.5~2ms
 }
@@ -160,8 +153,15 @@ void nrf_set_standby_mode() {
 
 
 void nrf_set_receive_mode() {
-
 	nrf_hal_set_reg_bit(REG_CONFIG, PRIM_RX);
+
+	nrf_hal_ce(1);
+
+	nrf_delay(1); // 1ms > 120~130us
+}
+
+void nrf_set_send_mode() {
+	nrf_hal_clear_reg_bit(REG_CONFIG, PRIM_RX);
 
 	nrf_hal_ce(1);
 
@@ -229,6 +229,10 @@ int nrf_read_payload(uint8_t *buf, uint8_t *len) {
 	return 0;
 }
 
+int nrf_write_payload(uint8_t *buf, uint8_t len) {
+	return nrf_hal_cmd_write(CMD_W_TX_PAYLOAD_NOACK, buf, len);
+}
+
 void print_addr(uint8_t pipe) {
 	uint8_t addr[5];
 	nrf_hal_read_reg(REG_RX_ADDR_P0+pipe, addr, 5);
@@ -242,12 +246,13 @@ void print_addr(uint8_t pipe) {
 
 uint8_t nrf_received_data = 0;
 
-uint8_t nrf_hal_test() {
+
+uint8_t nrf_hal_test_rx() {
 
 	uint8_t data = 0;
 	extern SPI_HandleTypeDef hspi1;
 	nrf_init(&hspi1, CSN_GPIO_Port, CSN_Pin, CE_GPIO_Port, CE_Pin);
-#if 1
+
 	nrf_delay(200);
 
 	nrf_hal_csn(1);
@@ -259,20 +264,15 @@ uint8_t nrf_hal_test() {
 	nrf_set_standby_mode();
 
 	nrf_set_receive_mode();
-	//nrf_disable_rx_irq();
+	nrf_disable_rx_irq();
 
 
 	nrf_set_rf_channel(64);
 	nrf_set_datarate(NRF_2Mbps);
 	uint8_t rxaddr[] = { 1, 2, 3, 4, 1 };
-	uint8_t rxaddr1[] = { 1, 2, 3, 4, 2 };
+	uint8_t txaddr[] = { 1, 2, 3, 4, 2 };
 	nrf_set_rxaddr(0, rxaddr, 5);
-	nrf_set_rxaddr(1, rxaddr1, 5);
-	nrf_set_txaddr(rxaddr, 5);
-
-	nrf_enable_autoack(0);
-	//nrf_disable_autoack(0);
-	nrf_enable_autoack(1);
+	nrf_set_txaddr(txaddr, 5);
 
 	nrf_enable_dynamic_payload(0);
 	nrf_enable_dynamic_payload(1);
@@ -280,35 +280,24 @@ uint8_t nrf_hal_test() {
 	nrf_enable_rxaddr(0);
 	nrf_enable_rxaddr(1);
 
-	printf("\n");
-	for(int i=0; i<=7; i++) {
-		uint8_t v = 0;
-		nrf_hal_read_reg_byte(i, &v);
-		printf("reg %u val %x\n", i, v);
-	}
-
 	print_addr(0);
 	print_addr(1);
 	print_addr(2);
-#endif
+
+
 	nrf_flush_rx();
 	while(1) {
-
-#if 1
 		uint8_t buf[32];
 		uint8_t len = 0;
-
 		uint8_t status = 0;
 		nrf_hal_read_reg_byte(REG_STATUS, &status);
 		nrf_read_payload(buf, &len);
 
 		if(status &  _BV(RX_DR)) {
-
 			nrf_hal_set_reg_bit(REG_STATUS, _BV(RX_DR));
 			nrf_flush_rx();
 
 			if(len > 0) {
-
 				uint8_t pipe = status;
 				pipe >>= 1;
 				pipe &= 0x07;
@@ -328,9 +317,67 @@ uint8_t nrf_hal_test() {
 			printf("nodata %x\n", status);
 			nrf_delay(100);
 		}
-#endif
 	}
 
+	return data;
+}
+
+uint8_t nrf_hal_test_tx() {
+
+	uint8_t data = 0;
+	extern SPI_HandleTypeDef hspi1;
+	nrf_init(&hspi1, CSN_GPIO_Port, CSN_Pin, CE_GPIO_Port, CE_Pin);
+
+	nrf_delay(200);
+	nrf_hal_csn(1);
+	nrf_hal_ce(0);
+	nrf_delay(200);
+
+	nrf_set_standby_mode();
+	nrf_set_send_mode();
+
+	nrf_set_rf_channel(100);
+	nrf_set_datarate(NRF_2Mbps);
+
+	nrf_enable_dynamic_payload(0);
+	uint8_t txaddr[] = { 1, 2, 3, 4, 0 };
+	nrf_set_txaddr(txaddr, 5);
+
+	nrf_flush_rx();
+	nrf_flush_tx();
+	uint32_t cnt = 0;
+	while(1) {
+		nrf_flush_rx();
+		nrf_flush_tx();
+		uint8_t buf[] = {0x0A, 0x0C, 0x0E, cnt++ };
+		nrf_write_payload(buf, sizeof(buf));
+
+		while(1) {
+			uint8_t status = 0;
+			nrf_hal_read_reg_byte(REG_STATUS, &status);
+
+			printf("status %x\n", status);
+			if(status & _BV(MAX_RT)) {
+				printf("send error....\n");
+				nrf_hal_set_reg_bit(REG_STATUS, _BV(MAX_RT));
+				nrf_flush_tx();
+				break;
+			}else if(status &  _BV(TX_DS)) {
+				printf("sended....\n");
+				nrf_hal_set_reg_bit(REG_STATUS, _BV(TX_DS));
+				break;
+			} else {
+				printf("sending....\n");
+			}
+		}
+
+		nrf_delay(100);
+	}
 
 	return data;
+}
+
+uint8_t nrf_hal_test() {
+	//return nrf_hal_test_rx();
+	return nrf_hal_test_tx();
 }

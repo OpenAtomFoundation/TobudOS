@@ -32,6 +32,8 @@ int nrf_hal_cmd_read(uint8_t cmd, uint8_t *data, uint8_t len);
 
 int nrf_hal_cmd_read_byte(uint8_t cmd, uint8_t *data);
 
+int nrf_hal_cmd_write(uint8_t cmd, uint8_t *data, uint8_t len);
+
 int nrf_hal_write_cmd(uint8_t cmd);
 
 
