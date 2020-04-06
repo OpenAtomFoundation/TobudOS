@@ -119,18 +119,31 @@
  */
 
 typedef struct device_data_st {
-    uint8_t     magn_fullscale;                // fullscale of magnetometer(RW)
-    uint8_t     temp_sensitivity;              // temperature sensitivity  (R)
-    uint16_t    humi_sensitivity;              // humidity sensitivity     (R)
-    uint16_t    press_sensitivity;             // pressure sensitivity     (R)
-    uint16_t    magn_sensitivity;              // magnetic sensitivity     (R)
-    int16_t     temperature;                   // temperature              (R)
-    int16_t     humidity;                      // humidity                 (R)
-    int16_t     magn_x;                        // X-magnetic value in LSB  (R)
-    int16_t     magn_y;                        // Y-magnetic value in LSB  (R)
-    int16_t     magn_z;                        // Z-magnetic value in LSB  (R)
-    uint16_t    period;                        // report period            (R)
-    uint32_t    pressure;                      // pressure                 (R)
+    // -- data set 1
+    uint8_t     magn_fullscale;                // fullscale of magnetometer (RW)
+    uint8_t    temp_sensitivity;              // temperature sensitivity   (R)
+    uint16_t    humi_sensitivity;              // humidity sensitivity      (R)
+    uint16_t    press_sensitivity;             // pressure sensitivity      (R)
+    uint16_t    magn_sensitivity;              // magnetic sensitivity      (R)
+    int16_t     temperature;                   // temperature               (R)
+    int16_t     humidity;                      // humidity                  (R)
+    int16_t     magn_x;                        // X-magnetic value in LSB   (R)
+    int16_t     magn_y;                        // Y-magnetic value in LSB   (R)
+    int16_t     magn_z;                        // Z-magnetic value in LSB   (R)
+    uint16_t    period;                        // report period             (R)
+    uint32_t    pressure;                      // pressure                  (R)
+    
+    // --- data set 2
+    uint16_t    accel_fullscale;               // fullscale of accelerometer(RW)
+    uint16_t    gyro_fullscale;                // fullscale of magnetometer (RW)
+    int16_t     accel_x;                       // X-accel value in LSB      (R)
+    int16_t     accel_y;                       // Y-accel value in LSB      (R)
+    int16_t     accel_z;                       // Z-accel value in LSB      (R)
+    int16_t     gyro_x;                        // X-gyro value in LSB       (R)
+    int16_t     gyro_y;                        // Y-gyro value in LSB       (R)
+    int16_t     gyro_z;                        // Z-gyro value in LSB       (R)
+    uint32_t    accel_sensitivity;             // accel sensitivity         (R)
+    uint32_t    gyro_sensitivity;              // gyro sensitivity          (R)
 } __PACKED__ dev_data_t;
 
 typedef struct device_data_wrapper_st {
@@ -146,10 +159,12 @@ DeviceConfig_TypeDef device_config;
 
 void set_config_to_default(DeviceConfig_TypeDef* config)
 {
-  config->config_address = 0x08080000U;
-  config->is_confirmed   = true;
-  config->report_period  = 10;
-  config->magn_fullscale = FULLSCALE_4;
+  config->config_address  = 0x08080000U;
+  config->is_confirmed    = true;
+  config->report_period   = 10;
+  config->magn_fullscale  = MAGN_FULLSCALE_4;
+  config->accel_fullscale = ACCEL_FULLSCALE_4;
+  config->gyro_fullscale  = GYRO_FULLSCALE_250;
 }
 
 /**
@@ -177,6 +192,9 @@ HAL_StatusTypeDef write_config_to_Flash(DeviceConfig_TypeDef config)
   frame[1] = (uint32_t)config.is_confirmed<<8 | (uint32_t)DCT_IS_CONFIRM;
   frame[2] = (uint32_t)config.report_period<<8 | (uint32_t)DCT_REPORT_PERIOD;
   frame[3] = (uint32_t)config.repeat_time<<8 | (uint32_t)DCT_REPEAT_TIME;
+  frame[3] = (uint32_t)config.magn_fullscale<<8 | (uint32_t)DCT_MAGN_FULLSCALE;
+  frame[3] = (uint32_t)config.accel_fullscale<<8 | (uint32_t)DCT_ACCEL_FULLSCALE;
+  frame[3] = (uint32_t)config.gyro_fullscale<<8 | (uint32_t)DCT_GYRO_FULLSCALE;
   frame[4] = 0xFFFFFFFFU;
   
   HAL_FLASH_Unlock();
@@ -240,6 +258,16 @@ HAL_StatusTypeDef read_config_from_Flash(DeviceConfig_TypeDef* config)
           case DCT_MAGN_FULLSCALE:
             {
               config->magn_fullscale = (LIS3MDL_FullScaleTypeDef)(data>>8&0xFF);
+              break;
+            }
+          case DCT_ACCEL_FULLSCALE:
+            {
+              config->accel_fullscale = (LSM6DS3_AccelFullscaleTypeDef)(data>>8&0xFF);
+              break;
+            }
+          case DCT_GYRO_FULLSCALE:
+            {
+              config->gyro_fullscale = (LSM6DS3_GyroFullscaleTypeDef)(data>>8&0xFF);
               break;
             }
           default:
@@ -311,24 +339,45 @@ void application_entry(void *arg)
     while (1) {
         BSP_Sensor_Read(&sensor_data);
         print_to_screen(sensor_data);
-        // generate data frame
-        dev_data_wrapper.u.dev_data.magn_fullscale    = (uint8_t)(sensor_data.sensor_magn.fullscale);
-        dev_data_wrapper.u.dev_data.temp_sensitivity  = (uint8_t)(sensor_data.sensor_tempnhumi.temp_sensitivity);
-        dev_data_wrapper.u.dev_data.humi_sensitivity  = (uint16_t)(sensor_data.sensor_tempnhumi.humi_sensitivity);
-        dev_data_wrapper.u.dev_data.press_sensitivity = (uint16_t)(sensor_data.sensor_press.sensitivity);
-        dev_data_wrapper.u.dev_data.magn_sensitivity  = (uint16_t)(sensor_data.sensor_magn.sensitivity);
-        dev_data_wrapper.u.dev_data.temperature       = (int16_t)(sensor_data.sensor_tempnhumi.temperature);
-        dev_data_wrapper.u.dev_data.humidity          = (int16_t)(sensor_data.sensor_tempnhumi.humidity);
-        dev_data_wrapper.u.dev_data.magn_x            = (int16_t)(sensor_data.sensor_magn.magn_x);
-        dev_data_wrapper.u.dev_data.magn_y            = (int16_t)(sensor_data.sensor_magn.magn_y);
-        dev_data_wrapper.u.dev_data.magn_z            = (int16_t)(sensor_data.sensor_magn.magn_z);
-        dev_data_wrapper.u.dev_data.pressure          = (uint32_t)(sensor_data.sensor_press.pressure);
-        dev_data_wrapper.u.dev_data.period            = device_config.report_period;
+        // generate data frame for data set 1
+        dev_data_wrapper.u.dev_data.magn_fullscale     = (uint8_t)(sensor_data.sensor_magn.fullscale);
+        dev_data_wrapper.u.dev_data.temp_sensitivity   = (uint8_t)(sensor_data.sensor_tempnhumi.temp_sensitivity);
+        dev_data_wrapper.u.dev_data.humi_sensitivity   = (uint16_t)(sensor_data.sensor_tempnhumi.humi_sensitivity);
+        dev_data_wrapper.u.dev_data.press_sensitivity  = (uint16_t)(sensor_data.sensor_press.sensitivity);
+        dev_data_wrapper.u.dev_data.magn_sensitivity   = (uint16_t)(sensor_data.sensor_magn.sensitivity);
+        dev_data_wrapper.u.dev_data.temperature        = (int16_t)(sensor_data.sensor_tempnhumi.temperature);
+        dev_data_wrapper.u.dev_data.humidity           = (int16_t)(sensor_data.sensor_tempnhumi.humidity);
+        dev_data_wrapper.u.dev_data.magn_x             = (int16_t)(sensor_data.sensor_magn.magn_x);
+        dev_data_wrapper.u.dev_data.magn_y             = (int16_t)(sensor_data.sensor_magn.magn_y);
+        dev_data_wrapper.u.dev_data.magn_z             = (int16_t)(sensor_data.sensor_magn.magn_z);
+        dev_data_wrapper.u.dev_data.period             = device_config.report_period;
+        dev_data_wrapper.u.dev_data.pressure           = (uint32_t)(sensor_data.sensor_press.pressure);
+        
+        // generate data frame for data set 2
+        dev_data_wrapper.u.dev_data.accel_fullscale    = (uint16_t)(sensor_data.sensor_motion.accelFullscale);
+        dev_data_wrapper.u.dev_data.gyro_fullscale     = (uint16_t)(sensor_data.sensor_motion.gyroFullscale);
+        dev_data_wrapper.u.dev_data.accel_sensitivity  = (uint32_t)(sensor_data.sensor_motion.accelSensitivity);
+        dev_data_wrapper.u.dev_data.gyro_sensitivity   = (uint32_t)(sensor_data.sensor_motion.gyroSensitivity);
+        dev_data_wrapper.u.dev_data.accel_x            = (int16_t)(sensor_data.sensor_motion.accelX);
+        dev_data_wrapper.u.dev_data.accel_y            = (int16_t)(sensor_data.sensor_motion.accelY);
+        dev_data_wrapper.u.dev_data.accel_z            = (int16_t)(sensor_data.sensor_motion.accelZ);
+        dev_data_wrapper.u.dev_data.gyro_x             = (int16_t)(sensor_data.sensor_motion.gyroX);
+        dev_data_wrapper.u.dev_data.gyro_y             = (int16_t)(sensor_data.sensor_motion.gyroY);
+        dev_data_wrapper.u.dev_data.gyro_z             = (int16_t)(sensor_data.sensor_motion.gyroZ);
+        
+        // package segmentation
+        uint8_t data_frame1[25]={0};  // idx = 0
+        uint8_t data_frame2[25]={1};  // idx = 1
+        memcpy(data_frame1+1, dev_data_wrapper.u.serialize, sizeof(uint8_t)*24);
+        memcpy(data_frame2+1, dev_data_wrapper.u.serialize+24, sizeof(uint8_t)*24);
+        
         // send data to the server (via gateway)
         if(device_config.is_confirmed){
-          tos_lora_module_send(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
+          tos_lora_module_send(data_frame1, sizeof(data_frame1));
+          tos_lora_module_send(data_frame2, sizeof(data_frame2));
         }else{
-          tos_lora_module_send_unconfirmed(dev_data_wrapper.u.serialize, sizeof(dev_data_t));
+          tos_lora_module_send_unconfirmed(data_frame1, sizeof(data_frame1));
+          tos_lora_module_send_unconfirmed(data_frame2, sizeof(data_frame2));
         }
         tos_task_delay(device_config.report_period * 1000);
     }
