@@ -15,19 +15,44 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _TOS_CPU_DEF_H_
-#define  _TOS_CPU_DEF_H_
+#ifndef  _TOS_AT_SOCKET_TYPES_H_
+#define  _TOS_AT_SOCKET_TYPES_H_
 
-#define CPU_WORD_SIZE_08            1
-#define CPU_WORD_SIZE_16            2
-#define CPU_WORD_SIZE_32            3
-#define CPU_WORD_SIZE_64            4
+#include "stdint.h"
 
-#define CPU_STK_GROWTH_ASCENDING    1
-#define CPU_STK_GROWTH_DESCENDING   2
+typedef uint8_t     u8_t;
+typedef uint16_t    u16_t;
+typedef uint32_t    u32_t;
 
-#define CPU_BYTE_ORDER_LITTLE_ENDIAN    1
-#define CPU_BYTE_ORDER_BIG_ENDIAN       2
+typedef int8_t      s8_t;
+typedef int16_t     s16_t;
+typedef int32_t     s32_t;
 
-#endif /* _TOS_CPU_DEF_H_ */
+#if !defined(in_addr_t)
+typedef u32_t in_addr_t;
+#endif
+
+struct in_addr {
+    in_addr_t   s_addr;
+};
+
+struct sockaddr_in {
+    u8_t        sin_len;
+    u8_t        sin_family;
+    u16_t       sin_port;
+    struct      in_addr sin_addr;
+    char        sin_zero[8];
+};
+
+struct sockaddr {
+    u8_t        sa_len;
+    u8_t        sa_family;
+    char        sa_data[14];
+};
+
+#ifndef socklen_t
+#  define socklen_t int
+#endif
+
+#endif /* _TOS_AT_SOCKET_TYPES_H_ */
 

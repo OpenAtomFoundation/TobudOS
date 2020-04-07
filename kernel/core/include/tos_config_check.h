@@ -67,9 +67,9 @@
 #endif
 
 #ifndef  TOS_CFG_CPU_HRTIMER_EN
-#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_EN should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_EN should be declared in 'port_config.h'"
 #elif   (TOS_CFG_CPU_HRTIMER_EN > 0u) && !defined(TOS_CFG_CPU_HRTIMER_SIZE)
-#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_SIZE should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_SIZE should be declared in 'port_config.h'"
 #elif  (TOS_CFG_CPU_HRTIMER_EN > 0u) && ((TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_32) && \
@@ -78,18 +78,22 @@
 #endif
 
 #ifndef  TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT
-#error  "UNDECLARED config, TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT, should be declared in 'port_config.h'"
+#endif
+
+#ifndef TOS_CFG_CPU_BYTE_ORDER
+#error  "UNDECLARED config, TOS_CFG_CPU_BYTE_ORDER, should be declared in 'port_config.h'"
 #endif
 
 #ifndef  TOS_CFG_CPU_STK_GROWTH
-#error  "UNDECLARED config, TOS_CFG_CPU_STK_GROWTH, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_STK_GROWTH, should be declared in 'port_config.h'"
 #elif  ((TOS_CFG_CPU_STK_GROWTH != CPU_STK_GROWTH_ASCENDING) && \
         (TOS_CFG_CPU_STK_GROWTH != CPU_STK_GROWTH_DESCENDING))
 #error  "INVALID config, TOS_CFG_CPU_STK_GROWTH"
 #endif
 
 #ifndef  TOS_CFG_CPU_ADDR_SIZE
-#error  "UNDECLARED config, TOS_CFG_CPU_ADDR_SIZE, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_ADDR_SIZE, should be declared in 'port_config.h'"
 #elif  ((TOS_CFG_CPU_ADDR_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_ADDR_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_ADDR_SIZE != CPU_WORD_SIZE_32) && \
@@ -98,7 +102,7 @@
 #endif
 
 #ifndef  TOS_CFG_CPU_DATA_SIZE
-#error  "UNDECLARED config, TOS_CFG_CPU_DATA_SIZE, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_DATA_SIZE, should be declared in 'port_config.h'"
 #elif  ((TOS_CFG_CPU_DATA_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_DATA_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_DATA_SIZE != CPU_WORD_SIZE_32) && \

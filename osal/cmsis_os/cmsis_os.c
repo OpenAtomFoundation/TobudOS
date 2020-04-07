@@ -356,7 +356,6 @@ osStatus osSemaphoreDelete(osSemaphoreId semaphore_id)
 
 #endif // TOS_CFG_SEM_EN
 
-#if TOS_CFG_MMBLK_EN > 0u
 //  ==== Memory Pool Management Functions ====
 
 #if (defined (osFeature_Pool)  &&  (osFeature_Pool != 0))  // Memory Pool Management available
@@ -424,7 +423,6 @@ osStatus osPoolFree(osPoolId pool_id, void *block)
 }
 
 #endif // Memory Pool Management available
-#endif // TOS_CFG_MMBLK_EN
 
 #if TOS_CFG_MESSAGE_QUEUE_EN > 0u
 //  ==== Message Queue Management Functions ====

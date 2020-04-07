@@ -22,6 +22,7 @@
 __API__ k_err_t tos_rwlock_create(k_rwlock_t *rwlock)
 {
     k_err_t err;
+
     TOS_PTR_SANITY_CHECK(rwlock);
 
     err = tos_sem_create(&rwlock->signal, 0u);

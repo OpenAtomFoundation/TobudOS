@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include "tos_at.h"
 
 __STATIC__ at_agent_t at_agent;
@@ -161,18 +178,16 @@ __STATIC__ int at_is_echo_expect(void)
         return 0;
     }
 
-    if(at_echo->fuzzy_matching){
-      if(strstr(recv_buffer, expect)!=NULL){
-        return 0;
-      }
-      return -1;
+    if (at_echo->__is_fuzzy_match) {
+        if (strstr(recv_buffer, expect) != NULL) {
+            return 0;
+        }
+        return -1;
     }
-    
+
     if (strncmp(expect, recv_buffer, expect_len) == 0) {
         return 1;
     }
-    
-    
 
     return 0;
 }
@@ -346,7 +361,7 @@ __API__ int tos_at_echo_create(at_echo_t *echo, char *buffer, size_t buffer_size
     echo->status            = AT_ECHO_STATUS_NONE;
     echo->__w_idx           = 0;
     echo->__is_expecting    = K_FALSE;
-    echo->fuzzy_matching    = K_FALSE;
+    echo->__is_fuzzy_match  = K_FALSE;
     return 0;
 }
 
@@ -367,7 +382,7 @@ __API__ int tos_at_echo_fuzzy_matching_create(at_echo_t *echo, char *buffer, siz
     echo->status            = AT_ECHO_STATUS_NONE;
     echo->__w_idx           = 0;
     echo->__is_expecting    = K_FALSE;
-    echo->fuzzy_matching    = K_TRUE;
+    echo->__is_fuzzy_match  = K_TRUE;
     return 0;
 }
 

@@ -42,6 +42,23 @@ __API__ int tos_hal_uart_write(hal_uart_t *uart, const uint8_t *buf, size_t size
 
 __API__ int tos_hal_uart_read(hal_uart_t *uart, const uint8_t *buf, size_t size, uint32_t timeout)
 {
+    HAL_StatusTypeDef hal_status;
+    UART_HandleTypeDef *uart_handle;
+
+    if (!uart || !buf) {
+        return -1;
+    }
+
+    if (!uart->private_uart) {
+        return -1;
+    }
+
+    uart_handle = (UART_HandleTypeDef *)uart->private_uart;
+
+    hal_status = HAL_UART_Receive(uart_handle, (uint8_t *)buf, size, timeout);
+    if (hal_status != HAL_OK) {
+        return -1;
+    }
     return 0;
 }
 

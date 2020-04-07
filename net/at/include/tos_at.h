@@ -93,7 +93,7 @@ typedef struct at_echo_st {
     size_t              __w_idx;
     int                 __is_expecting;
     k_sem_t             __expect_notify;
-    int                 fuzzy_matching;
+    int                 __is_fuzzy_match;
 } at_echo_t;
 
 typedef void (*at_event_callback_t)(void);
@@ -269,7 +269,7 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
  *
  * @attention None
  *
- * @return  
+ * @return
 None
  */
 __API__ void tos_at_deinit(void);

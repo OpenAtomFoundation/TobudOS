@@ -101,14 +101,6 @@
 
 /////////////////////////////////////////
 // disable default
-#ifndef TOS_CFG_MMBLK_EN
-#define TOS_CFG_MMBLK_EN                       0u
-#endif
-/////////////////////////////////////////
-
-
-/////////////////////////////////////////
-// disable default
 #ifndef TOS_CFG_FAULT_BACKTRACE_EN
 #define  TOS_CFG_FAULT_BACKTRACE_EN         0u
 #endif
@@ -230,10 +222,6 @@
 
 #ifndef TOS_CFG_TASK_PRIO_MAX
 #define  TOS_CFG_TASK_PRIO_MAX                  8u
-#endif
-
-#ifndef TOS_CFG_MMBLK_EN
-#define TOS_CFG_MMBLK_EN                       0u
 #endif
 
 #ifndef TOS_CFG_MMHEAP_EN
