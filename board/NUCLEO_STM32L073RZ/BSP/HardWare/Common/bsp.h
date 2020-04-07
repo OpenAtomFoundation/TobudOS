@@ -1,33 +1,9 @@
-/*
- / _____)             _              | |
-( (____  _____ ____ _| |_ _____  ____| |__
- \____ \| ___ |    (_   _) ___ |/ ___)  _ \
- _____) ) ____| | | || |_| ____( (___| | | |
-(______/|_____)_|_|_| \__)_____)\____)_| |_|
-    (C)2013 Semtech
-
-Description: contains all hardware driver
-
-License: Revised BSD License, see LICENSE.TXT file include in the project
-
-Maintainer: Miguel Luis and Gregory Cristian
-*/
 /**
   ******************************************************************************
-  * @file    bsp.h
-  * @author  MCD Application Team
-  * @brief   contains all hardware driver
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
-  *
+  * @file    bsp.c
+  * @author  jieranzhi
+  * @brief   provide high level interfaces to manage the sensors on the 
+  *          application, this is a modified version of the official api
   ******************************************************************************
   */
 
@@ -40,9 +16,11 @@ extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
+#include <stdbool.h>
 #include "HTS221.h"
 #include "LPS22HB.h"
 #include "LIS3MDL.h"
+#include "LSM6DS3.h"
   
 /* Exported types ------------------------------------------------------------*/
 typedef struct
@@ -50,16 +28,31 @@ typedef struct
   sensor_press_t       sensor_press;         /* pressure sensor          */
   sensor_tempnhumi_t   sensor_tempnhumi;     /* temperature and humidity */
   sensor_magn_t        sensor_magn;          /* magnetometer             */
-  
-  //--------------------------- accelerator and gyroscope  -------------------//
-  int16_t  accel_x;                           /* in g           */
-  int16_t  accel_y;                           /* in g           */
-  int16_t  accel_z;                           /* in g           */
-  int16_t  gyro_x;                            /* in degree/s    */
-  int16_t  gyro_y;                            /* in degree/s    */
-  int16_t  gyro_z;                            /* in degree/s    */
-  
+  sensor_motion_t      sensor_motion;        /* accelerometer, gyroscope */
 } sensor_data_t;
+
+ // application configuration types
+ typedef enum{
+   DCT_IS_CONFIRM      = 0x00U,
+   DCT_REPORT_PERIOD   = 0x01U,
+   DCT_REPEAT_TIME     = 0x02U,
+   DCT_MAGN_FULLSCALE  = 0x03U,
+   DCT_ACCEL_FULLSCALE = 0x04U,
+   DCT_GYRO_FULLSCALE  = 0x05U,
+   DCT_DEFAULT         = 0xFFU,
+ }DeviceConfigType_TypeDef;
+
+// application configuration
+typedef struct
+{
+  uint32_t                        config_address;
+  uint16_t                        report_period;
+  uint8_t                         repeat_time;
+  LIS3MDL_FullScaleTypeDef        magn_fullscale;
+  LSM6DS3_AccelFullscaleTypeDef   accel_fullscale;
+  LSM6DS3_GyroFullscaleTypeDef    gyro_fullscale;    
+  bool                            is_confirmed;
+}DeviceConfig_TypeDef;  
 
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
@@ -71,7 +64,7 @@ typedef struct
  * @note
  * @retval None
  */
-void  BSP_Sensor_Init(void);
+void  BSP_Sensor_Init(DeviceConfig_TypeDef config);
 
 /**
  * @brief  sensor  read.

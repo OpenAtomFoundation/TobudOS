@@ -58,7 +58,7 @@ typedef enum
 typedef struct
 {
   uint16_t sensitivity;                  // sensitivity per fullscale
-  uint32_t pressure;                       // X-magnetic value in LSB
+  uint32_t pressure;                     // pressure
 }sensor_press_t;
 
 /* Functions -----------------------------------------------------------------*/

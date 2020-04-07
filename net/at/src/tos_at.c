@@ -161,9 +161,18 @@ __STATIC__ int at_is_echo_expect(void)
         return 0;
     }
 
+    if(at_echo->fuzzy_matching){
+      if(strstr(recv_buffer, expect)!=NULL){
+        return 0;
+      }
+      return -1;
+    }
+    
     if (strncmp(expect, recv_buffer, expect_len) == 0) {
         return 1;
     }
+    
+    
 
     return 0;
 }
@@ -337,6 +346,28 @@ __API__ int tos_at_echo_create(at_echo_t *echo, char *buffer, size_t buffer_size
     echo->status            = AT_ECHO_STATUS_NONE;
     echo->__w_idx           = 0;
     echo->__is_expecting    = K_FALSE;
+    echo->fuzzy_matching    = K_FALSE;
+    return 0;
+}
+
+__API__ int tos_at_echo_fuzzy_matching_create(at_echo_t *echo, char *buffer, size_t buffer_size, char *echo_expect_contains)
+{
+    if (!echo) {
+        return -1;
+    }
+
+    if (buffer) {
+        memset(buffer, 0, buffer_size);
+    }
+
+    echo->buffer            = buffer;
+    echo->buffer_size       = buffer_size;
+    echo->echo_expect       = echo_expect_contains;
+    echo->line_num          = 0;
+    echo->status            = AT_ECHO_STATUS_NONE;
+    echo->__w_idx           = 0;
+    echo->__is_expecting    = K_FALSE;
+    echo->fuzzy_matching    = K_TRUE;
     return 0;
 }
 

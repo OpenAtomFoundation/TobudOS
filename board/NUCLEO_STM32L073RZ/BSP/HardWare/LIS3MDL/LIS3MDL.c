@@ -75,19 +75,19 @@ uint16_t LIS3MDL_Get_Sensitivity(LIS3MDL_FullScaleTypeDef fullscale)
   uint16_t sensitivity = 1;
   switch(fullscale)
   {
-    case FULLSCALE_4:{
+    case MAGN_FULLSCALE_4:{
       sensitivity = 6842;
       break;
     }
-    case FULLSCALE_8:{
+    case MAGN_FULLSCALE_8:{
       sensitivity = 3421;
       break;
     }
-    case FULLSCALE_12:{
+    case MAGN_FULLSCALE_12:{
       sensitivity = 2281;
       break;
     }
-    case FULLSCALE_16:{
+    case MAGN_FULLSCALE_16:{
       sensitivity = 1711;
       break;
     }

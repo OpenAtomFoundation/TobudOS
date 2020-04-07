@@ -65,10 +65,10 @@ typedef enum
   */ 
 typedef enum
 {
-  FULLSCALE_4  = 0x00U,
-  FULLSCALE_8  = 0x01U,
-  FULLSCALE_12 = 0x02U,
-  FULLSCALE_16 = 0x03U
+  MAGN_FULLSCALE_4  = 0x00U,
+  MAGN_FULLSCALE_8  = 0x01U,
+  MAGN_FULLSCALE_12 = 0x02U,
+  MAGN_FULLSCALE_16 = 0x03U
 }LIS3MDL_FullScaleTypeDef;
 
 /** 

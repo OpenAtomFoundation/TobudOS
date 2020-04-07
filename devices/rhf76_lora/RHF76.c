@@ -154,7 +154,7 @@ static int rhf76_set_chanel(void)
     return -1;
 }
 
-static int rhf76_set_repeat(uint8_t num)
+int rhf76_set_repeat(uint8_t num)
 {
     int try = 0;
     at_echo_t echo;
@@ -172,6 +172,56 @@ static int rhf76_set_repeat(uint8_t num)
         }
     }
     return -1;
+}
+
+int rhf76_set_data_rate(uint8_t num)
+{
+    if(num>15) return -1; // num should between [0, 15]
+    int try = 0;
+    at_echo_t echo;
+    char cmd[14] = {0};
+    char expect[10] = {'\0'};
+    snprintf(cmd, sizeof(cmd), RHF76_ATCMD_SET_DATA_RATE, num);
+    snprintf(expect, sizeof(expect), " DR%d", num);
+    
+    tos_at_echo_fuzzy_matching_create(&echo, NULL, 0, expect);
+
+    while (try++ < 10) {
+        tos_at_cmd_exec(&echo, 3000, cmd);
+        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+            return 0;
+        }
+    }
+    return -1;
+}
+
+int rhf76_set_delay(char *param)
+{
+    int try = 0;
+    at_echo_t echo;
+    char cmd[20] = {0};
+    char expect[20] = {'\0'};
+    snprintf(cmd, sizeof(cmd), RHF76_ATCMD_SET_DELAY, param);
+    snprintf(expect, sizeof(expect), "+DELAY %s", param);
+    
+    tos_at_echo_create(&echo, NULL, 0, expect);
+
+    while (try++ < 10) {
+        tos_at_cmd_exec(&echo, 3000, cmd);
+        if(strstr(param,"?")!=NULL) return 0;
+        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+            return 0;
+        }
+    }
+    return -1;
+}
+
+int rhf76_at_cmd_exe(char *cmd)
+{
+    at_echo_t echo;
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 8000, cmd);
+    return 0;
 }
 
 static int rhf76_set_adr_off(void)
@@ -329,9 +379,33 @@ static int rhf76_init(void)
         printf("rhf76 set repeat times for unconfirmed message FAILED\n");
         return -1;
     }
-    
     at_delay_ms(2000);
     printf("Init RHF76 LoRa done\n");
+    
+    /*----------------------------------------------------*/
+    /*--- the following code is only used for debuging ---*/
+    /*----------------------------------------------------*/
+    
+    /*<-- query/set UART Timeout (~TX timeout) -->*/
+    // rhf76_at_cmd_exe("AT+UART=TIMEOUT, 300\r\n");
+    // rhf76_at_cmd_exe("AT+UART=TIMEOUT\r\n");
+    
+    /*<-- query current band config -->*/
+    // rhf76_at_cmd_exe("AT+DR=SCHEME\r\n");
+    // rhf76_at_cmd_exe("AT+LW=CDR\r\n");
+    
+    /*<-- query current data rate and the corresponding max payload size -->*/
+    rhf76_set_data_rate(0);
+    // rhf76_at_cmd_exe("at+dr=0\r\n");
+    // rhf76_at_cmd_exe("AT+DR\r\n");
+    // rhf76_at_cmd_exe("AT+LW=LEN\r\n");
+    
+    /*<-- query RX1\RX2\JRX1\JRX2 delay config -->*/
+    // rhf76_set_delay("?");
+    
+    /*<-- query RF config -->*/
+    // rhf76_at_cmd_exe("AT+MODE=TEST\r\n");
+    // rhf76_at_cmd_exe("AT+TEST=?\r\n");
     
     return 0;
 }
@@ -454,7 +528,6 @@ static int rhf76_send(const void *buf, size_t len)
 
 static int rhf76_send_unconfirmed(const void *buf, size_t len)
 {
-
     char *str_buf = NULL;
     at_echo_t echo;
 
