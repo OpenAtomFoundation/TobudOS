@@ -57,7 +57,7 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick) // Configure SysTick 
 }
 __PORT__ void port_systick_priority_set(uint32_t prio) // Sets the int priority
 {
-    int_pri_set(INTNO_TIMER0, prio); // get system tick from timer 0 arc_timer.h
+    int_pri_set(BOARD_OS_TIMER_INTNO, prio); // get system tick from timer 0 arc_timer.h
 }
 
 
@@ -103,7 +103,6 @@ __PORT__ void port_systick_reload(uint32_t cycle_per_tick)
 
 __PORT__ void port_systick_pending_reset(void)
 {
-    // SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
     arc_aux_write(AUX_TIMER0_CTRL, TIMER_CTRL_IP); // interrupt pending
 }
 
@@ -132,14 +131,11 @@ __PORT__ void port_standby_mode_enter(void)
 __STATIC__ void port_fault_do_diagnosis(port_fault_regs_t *regs) // 硬件错误诊断
 {
     k_fault_log_writer("\n\n====================== Fault Diagnosis =====================\n");
-
-   
 }
 
 __PORT__ void port_fault_diagnosis(void)
 {
     k_fault_log_writer("\n\n====================== Fault Diagnosis .. =====================\n");
-
 }
 
 __PORT__ void __NAKED__ HardFault_Handler(void)

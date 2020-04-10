@@ -18,7 +18,7 @@
 #include <tos_k.h>
 #include "embARC.h"
 
-void tos_cup_tick_handler(void)
+void tos_cpu_tick_handler(void)
 {
     arc_timer_int_clear(BOARD_OS_TIMER_ID);
     tos_tick_handler();
@@ -115,7 +115,7 @@ __KNL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
     arc_timer_stop(BOARD_OS_TIMER_ID);
     arc_timer_start(BOARD_OS_TIMER_ID, TIMER_CTRL_IE | TIMER_CTRL_NH, cycle_per_tick);
 
-    int_handler_install(BOARD_OS_TIMER_INTNO, (INT_HANDLER_T)tos_cup_tick_handler);
+    int_handler_install(BOARD_OS_TIMER_INTNO, (INT_HANDLER_T)tos_cpu_tick_handler);
     int_pri_set(BOARD_OS_TIMER_INTNO, INT_PRI_MIN + 1);
     int_enable(BOARD_OS_TIMER_INTNO);
 }
@@ -200,7 +200,7 @@ __KNL__ void cpu_standby_mode_enter(void)
 #endif /* TOS_CFG_PWR_MGR_EN */
 
 uint32_t g_context_switch_reqflg;
-
+uint32_t g_exc_nest_count;
 extern void start_r(void);
 
 #if ARC_FEATURE_STACK_CHECK

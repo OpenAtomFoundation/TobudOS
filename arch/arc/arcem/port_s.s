@@ -11,6 +11,7 @@
 .global k_curr_task
 .global k_next_task
 
+.global g_exc_nest_count
 .global g_context_switch_reqflg
 
 .global tos_knl_irq_enter
@@ -145,9 +146,9 @@ exc_entry_cpu:
     mov	blink,	sp
     mov	r3, sp		/* as exception handler's para(p_excinfo) */
 
-    ld	r0, [k_irq_nest_cnt]
+    ld	r0, [g_exc_nest_count]
     add	r1, r0, 1
-    st	r1, [k_irq_nest_cnt]
+    st	r1, [g_exc_nest_count]
     brne	r0, 0, exc_handler_1
 /* change to exception stack if interrupt happened in task context */
     mov	sp, _e_stack
@@ -169,7 +170,7 @@ exc_handler_1:
 /* interrupts are not allowed */
 ret_exc:
     POP	sp
-    mov	r1, k_irq_nest_cnt
+    mov	r1, g_exc_nest_count
     ld	r0, [r1]
     sub	r0, r0, 1
     st	r0, [r1]
@@ -236,9 +237,9 @@ exc_entry_int:
     mov	blink, sp
 
     clri	/* disable interrupt */
-    ld	r3, [k_irq_nest_cnt]
+    ld	r3, [g_exc_nest_count]
     add	r2, r3, 1
-    st	r2, [k_irq_nest_cnt]
+    st	r2, [g_exc_nest_count]
     seti	/* enable higher priority interrupt */
 
     brne	r3, 0, irq_handler_1
@@ -282,7 +283,7 @@ ret_int:
     clri			/* disable interrupt */
     POP	r3		/* irq priority */
     POP	sp
-    mov	r1, k_irq_nest_cnt
+    mov	r1, g_exc_nest_count
     ld	r0, [r1]
     sub	r0, r0, 1
     st	r0, [r1]

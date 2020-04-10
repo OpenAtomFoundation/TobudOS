@@ -16,7 +16,7 @@
  *---------------------------------------------------------------------------*/
 
 #ifndef _PORT_CONFIG_H_
-#define  _PORT_CONFIG_H_
+#define _PORT_CONFIG_H_
 
 #define TOS_CFG_CPU_ADDR_SIZE               CPU_WORD_SIZE_32
 #define TOS_CFG_CPU_DATA_SIZE               CPU_WORD_SIZE_32

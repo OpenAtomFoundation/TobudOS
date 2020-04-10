@@ -235,13 +235,7 @@ vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
 # EMBARC_PREBUILT_LIBRARY = -Hldopt=-Bgrouplib
 EMBARC_PREBUILT_LIBRARY = $(EMBARC_OUT_DIR)/libembarc.a
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/board/board.o
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/arc/startup/arc_startup.o
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/arc/startup/arc_cxx_support.o
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/libboard_nsim.a
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/libcpuarc.a
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/libembarc_libc.a
-# EMBARC_PREBUILT_LIBRARY += $(EMBARC_OUT_DIR)/libembarc_console.a
+
 
 build_embarc_lib: | $(BUILD_DIR)
 	make -f $(EMBARC_BSP_ROOT)/options/options.mk V=1 embarc_lib
