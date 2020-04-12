@@ -473,5 +473,5 @@ __API__ const char *tos_at_agent_channel_ip_get(int channel_id);
  */
 __API__ const char *tos_at_agent_channel_port_get(int channel_id);
 
-#endif /* __AT_AGENT_H_ */
+#endif /* _TOS_AT_H_ */
 
