@@ -16,7 +16,7 @@
  *---------------------------------------------------------------------------*/
 
 #ifndef _LORA_MODULE_WRAPPER_H_
-#define  _LORA_MODULE_WRAPPER_H_
+#define _LORA_MODULE_WRAPPER_H_
 
 #include <stdint.h>
 #include <stdio.h>
@@ -106,7 +106,7 @@ int tos_lora_module_send_unconfirmed(const void *buf, size_t len);
  *
  * @attention None
  *
- * @param[in]   mcps_indication     receive callback method
+ * @param[in]   recv_callback     receive callback method
  *
  * @return  errcode
  */
@@ -121,5 +121,4 @@ int tos_lora_module_recvcb_register(lora_recv_callback_t recv_callback);
  */
 int tos_lora_module_close(void);
 
-#endif
-
+#endif /*_LORA_MODULE_WRAPPER_H_*/
