@@ -12,9 +12,14 @@
 #include "utils/system_parameter.h"
 #include "hal/hal_adc.h"
 
+#include "tcp_server_echo.h"
+#include "tcp_client_echo.h"
+
 
 static OS_Thread_t g_temp_cal_thread;
 #define TEMP_APP_TASK_STACK_SIZE   4*256 //Byte
+
+volatile uint8_t dhcp_get_ip = 0;
 
 void wifi_init_sta(void)
 {
@@ -147,12 +152,20 @@ void temp_cal_app_task_entry(void *params)
     }
 }
 
+void wifi_event_sta_got_ip_cb(wifi_msg_t * msg)
+{
+    dhcp_get_ip =  1;
+};
+
 
 void application_entry(void *arg)
 {
+    //wifi chip temperature calibration.
     if(OS_OK != OS_ThreadCreate(&g_temp_cal_thread, "TempAPP", temp_cal_app_task_entry, NULL, OS_PRIORITY_BELOW_NORMAL, TEMP_APP_TASK_STACK_SIZE)) {
         ART_ASSERT(1);
     }
+    
+    reg_wifi_msg_callbcak(wifi_manager_get_handle(), WIFI_MSG_ID_STA_DHCP_GOT_IP,wifi_event_sta_got_ip_cb);
 
     wifi_mode_enum_t wifi_mode = WIFI_MODE_STATION;
 
@@ -179,6 +192,13 @@ void application_entry(void *arg)
 
         ethernetif_get_ip_info(if_index, &ip_info);
     }
+    
+    while(!dhcp_get_ip){
+        OS_MsDelay(1000);
+    };
+    
+    tcp_server_echo_task_creat(8087);
+    tcp_client_echo_task_creat((uint8_t *)"120.76.100.197", 10002);//Í¨ÐÅÃ¨²âÊÔ(IP:120.76.100.197) 10002¶Ë¿Ú
     
     while(1)
     {
