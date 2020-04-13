@@ -3,7 +3,7 @@
 void board_init() {
 
     SystemInit();
-
+#if 0
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOC);
 
@@ -17,4 +17,5 @@ void board_init() {
 
     LCD_Init();         // init LCD
     LCD_Clear(BLACK);
+#endif
 }

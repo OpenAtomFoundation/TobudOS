@@ -248,6 +248,13 @@ uint8_t nrf_hal_test_rx() {
 
 	nrf_delay(200);
 
+	while(1) {
+		nrf_hal_write_reg_byte(REG_CONFIG, _BV(EN_CRC));
+		nrf_hal_read_reg_byte(REG_CONFIG, &data);
+		nrf_delay(100);
+	}
+
+
 
 	nrf_set_standby_mode();
 

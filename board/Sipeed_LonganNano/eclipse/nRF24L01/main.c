@@ -11,7 +11,7 @@
     k_task_t led_handle;
 
 uint8_t task1_stk[TASK_SIZE];
-uint8_t task2_stk[TASK_SIZE];
+uint8_t task2_stk[TASK_SIZE*8];
 uint8_t led_stk[TASK_SIZE/2];
 
 int share = 0xCBA7F9;
@@ -85,15 +85,23 @@ void task_led(void *arg)
 }
 
 void main(void) {
-    board_init();
+    //board_init();
+
+	SystemInit();
+
+    nrf24l01_init();
+    nrf_hal_test_rx();
+
+    while(1) { }
+
 
     usart0_init(115200);
 
     tos_knl_init();
 
 
-    tos_task_create(&task1_handle, "task1", task1,      NULL, 3, task1_stk, TASK_SIZE, 0);
-    tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE*4, 0);
+    //tos_task_create(&task1_handle, "task1", task1,      NULL, 2, task1_stk, TASK_SIZE, 0);
+    tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE*8, 0);
     //tos_task_create(&led_handle,   "led",   task_led,   NULL, 2, led_stk,   TASK_SIZE/2, 0);
 
     k_err_t err = tos_sem_create(&sem, 1);
