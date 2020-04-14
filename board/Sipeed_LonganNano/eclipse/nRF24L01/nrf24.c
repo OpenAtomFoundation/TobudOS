@@ -1,7 +1,8 @@
 #include "nrf24.h"
 #include "tos_k.h"
 #include <stdio.h>
-
+extern k_sem_t sem_led;
+k_sem_t sem_nrf_recv;
 int flag = 0;
 #define TASK_SIZE (8*1024)
 k_task_t task_nrf24_handle;
@@ -84,7 +85,7 @@ void EXTI0_IRQHandler(void)
             nrf_hal_read_reg_byte(REG_STATUS, &status);
 
             if(status & _BV(RX_DR)) {
-                  flag = 1;
+                  tos_sem_post(&sem_nrf_recv);
             }
         }
 
@@ -110,6 +111,7 @@ void task_nrf24() {
 
     if(1)
     {
+        tos_sem_create(&sem_nrf_recv, 1);
         // nrf24 irq pin
         gpio_init(GPIOB, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
         gpio_bit_set(GPIOB, GPIO_PIN_0);
@@ -160,22 +162,19 @@ void task_nrf24() {
 
 
     while(1) {
-        while(flag == 0) {
-            nrf_delay(1);
-        }
-        flag = 0;
+        tos_sem_pend(&sem_nrf_recv, ~0);
 
         uint8_t buf[32];
         uint8_t len = 0;
         uint8_t status = 0;
         nrf_hal_read_reg_byte(REG_STATUS, &status);
 
-        if((status & _BV(RX_DR)) == 0) {
-            printf("nodata %x\n", status);
-        }
-
         uint8_t pipe = ((status>>1) & 0x07);
         nrf_read_payload(buf, &len);
+
+        if(pipe >= 6) {
+            printf("shit happens\n");
+        }
 
         nrf_hal_set_reg_bit(REG_STATUS, _BV(RX_DR));
 
@@ -183,6 +182,7 @@ void task_nrf24() {
 
         printf("received %u bytes from pipe %u: ", len, pipe);
 
+        tos_sem_post(&sem_led);
 
         for(int i=0; i<len; i++) {
             printf("%x ", buf[i]);

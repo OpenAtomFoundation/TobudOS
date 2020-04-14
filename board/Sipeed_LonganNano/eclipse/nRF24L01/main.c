@@ -5,18 +5,21 @@
 
 #if 0
 #define TASK_SIZE 1024
-
-
-k_task_t task1_handle;
-k_task_t task2_handle;
-k_task_t led_handle;
-
-uint8_t task1_stk[TASK_SIZE];
+k_task_t task2_handle
 uint8_t task2_stk[TASK_SIZE*1];
-uint8_t led_stk[TASK_SIZE/2];
+
+
+#define LCD_TASK_SIZE 1024
+k_task_t lcd_handle;
+uint8_t lcd_stk[LCD_TASK_SIZE];
 #endif
 
 
+#define LED_TASK_SIZE 1024
+k_task_t led_handle;
+uint8_t led_stk[LED_TASK_SIZE];
+
+k_sem_t sem_led;
 
 typedef struct {
     int port;
@@ -30,18 +33,17 @@ Led_t leds[] = {
 };
 
 
-void task1(void *arg)
+void task_led(void *arg)
 {
     int task_cnt1 = 0;
     while (1) {
         printf("hello world from %s cnt: %d\n", __func__, task_cnt1++);
 
-        for(int i=0; i<sizeof(leds)/sizeof(Led_t); i++) {
-            int on = !(task_cnt1 & (1 << i));
-            gpio_bit_write(leds[i].port, leds[i].pin, on);
-        }
+        tos_sem_pend(&sem_led, ~0);
 
-        tos_task_delay(1000);
+        gpio_bit_reset(LEDR_GPIO_PORT, LEDR_PIN);
+        tos_task_delay(50);
+        gpio_bit_set(LEDR_GPIO_PORT, LEDR_PIN);
     }
 }
 
@@ -55,7 +57,7 @@ void task2(void *arg)
     }
 }
 
-void task_led(void *arg)
+void task_lcd(void *arg)
 {
     uint16_t color_table[] = { WHITE, BLUE, RED, GREEN, CYAN, YELLOW, GRAY};
 
@@ -92,9 +94,11 @@ void main(void) {
 
     nrf24l01_init();
 
-    //tos_task_create(&task1_handle, "task1", task1,      NULL, 2, task1_stk, TASK_SIZE, 0);
+
+    tos_sem_create(&sem_led, 1);
+    tos_task_create(&led_handle,      "led", task_led,    NULL, 6, led_stk, LED_TASK_SIZE, 0);
     //tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE*1, 0);
-    //tos_task_create(&led_handle,   "led",   task_led,   NULL, 2, led_stk,   TASK_SIZE/2, 0);
+    //tos_task_create(&lcd_handle,   "lcd",   task_lcd,   NULL, 2, lcd_stk,     TASK_SIZE, 0);
 
     tos_knl_start();
 
