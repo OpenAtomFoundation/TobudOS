@@ -72,6 +72,46 @@ int nrf_set_rxaddr(uint8_t pipe, uint8_t *addr, uint8_t addrlen) {
 	return nrf_hal_write_reg(reg, addr, addrlen);
 }
 
+int nrf_get_addrlen() {
+    uint8_t v = 0;
+    uint8_t addrlen = 0;
+    if(0 != nrf_hal_read_reg_byte(REG_SETUP_AW, v)) {
+        return 0;
+    }
+
+    v &= 0x03;
+
+    switch(v) {
+    case AW_3BYTES:
+        addrlen = 3;
+        break;
+    case AW_4BYTES:
+        addrlen = 4;
+        break;
+    case AW_5BYTES:
+        addrlen = 5;
+        break;
+    default:
+        break;
+    }
+
+    return addrlen;
+}
+
+int nrf_get_rxaddr(uint8_t pipe, uint8_t *addr, uint8_t *addrlen) {
+
+    *addrlen = nrf_get_addrlen();
+
+    uint8_t reg = REG_RX_ADDR_P0 + pipe;
+
+    return nrf_hal_read_reg(reg, addr, *addrlen);
+}
+
+int nrf_get_txaddr(uint8_t *addr, uint8_t *addrlen) {
+    *addrlen = nrf_get_addrlen();
+    return nrf_hal_read_reg(REG_TX_ADDR, addr, *addrlen);
+}
+
 int nrf_set_txaddr(uint8_t *addr, uint8_t addrlen) {
 	if(addrlen >= 6) {
 		return -1;
@@ -223,153 +263,4 @@ int nrf_read_payload(uint8_t *buf, uint8_t *len) {
 
 int nrf_write_payload(uint8_t *buf, uint8_t len) {
 	return nrf_hal_cmd_write(CMD_W_TX_PAYLOAD_NOACK, buf, len);
-}
-
-void print_addr(uint8_t pipe) {
-	uint8_t addr[5];
-	nrf_hal_read_reg(REG_RX_ADDR_P0+pipe, addr, 5);
-
-	printf("pipe %u addr: ", pipe);
-	for(int i=0; i<5; i++) {
-		printf("%u ", addr[i]);
-	}
-	printf("\n");
-}
-
-uint8_t nrf_received_data = 0;
-uint8_t nrf_hal_test_rx() {
-
-	uint8_t data = 0;
-
-	nrf_delay(200);
-
-	nrf_hal_csn(1);
-	nrf_hal_ce(0);
-
-	nrf_delay(200);
-#if 0
-	while(1) {
-		nrf_hal_write_reg_byte(REG_CONFIG, _BV(EN_CRC) | _BV(CRCO));
-		nrf_hal_read_reg_byte(REG_CONFIG, &data);
-		nrf_delay(100);
-	}
-#endif
-
-
-	nrf_set_standby_mode();
-
-	nrf_set_receive_mode();
-	nrf_disable_rx_irq();
-
-	nrf_set_rf_channel(64);
-	nrf_set_datarate(NRF_2Mbps);
-	uint8_t rxaddr[] = { 1, 2, 3, 4, 1 };
-	uint8_t txaddr[] = { 1, 2, 3, 4, 2 };
-	nrf_set_rxaddr(0, rxaddr, 5);
-	nrf_set_txaddr(txaddr, 5);
-
-	nrf_enable_dynamic_payload(0);
-	nrf_enable_dynamic_payload(1);
-
-	nrf_enable_rxaddr(0);
-	nrf_enable_rxaddr(1);
-
-	print_addr(0);
-	print_addr(1);
-	print_addr(2);
-
-
-	nrf_flush_rx();
-	while(1) {
-		uint8_t buf[32];
-		uint8_t len = 0;
-		uint8_t status = 0;
-		nrf_hal_read_reg_byte(REG_STATUS, &status);
-		nrf_read_payload(buf, &len);
-
-		if(status &  _BV(RX_DR)) {
-			nrf_hal_set_reg_bit(REG_STATUS, _BV(RX_DR));
-			nrf_flush_rx();
-
-			if(len > 0) {
-				uint8_t pipe = status;
-				pipe >>= 1;
-				pipe &= 0x07;
-				printf("received %u bytes from pipe %u: ", len, pipe);
-				if(pipe >= 6) {
-					printf("\n");
-					continue;
-				}
-				for(int i=0; i<len; i++) {
-					printf("%x ", buf[i]);
-				}
-				nrf_received_data = 1;
-				printf("\n");
-			}
-
-		} else {
-			printf("nodata %x\n", status);
-			nrf_delay(100);
-		}
-	}
-
-	return data;
-}
-
-uint8_t nrf_hal_test_tx() {
-
-	uint8_t data = 0;
-
-	nrf_delay(200);
-	nrf_hal_csn(1);
-	nrf_hal_ce(0);
-	nrf_delay(200);
-
-	nrf_set_standby_mode();
-	nrf_set_send_mode();
-
-	nrf_set_rf_channel(100);
-	nrf_set_datarate(NRF_2Mbps);
-
-	nrf_enable_dynamic_payload(0);
-	uint8_t txaddr[] = { 1, 2, 3, 4, 0 };
-	nrf_set_txaddr(txaddr, 5);
-
-	nrf_flush_rx();
-	nrf_flush_tx();
-	uint32_t cnt = 0;
-	while(1) {
-		nrf_flush_rx();
-		nrf_flush_tx();
-		uint8_t buf[] = {0x0A, 0x0C, 0x0E, cnt++ };
-		nrf_write_payload(buf, sizeof(buf));
-
-		while(1) {
-			uint8_t status = 0;
-			nrf_hal_read_reg_byte(REG_STATUS, &status);
-
-			printf("status %x\n", status);
-			if(status & _BV(MAX_RT)) {
-				printf("send error....\n");
-				nrf_hal_set_reg_bit(REG_STATUS, _BV(MAX_RT));
-				nrf_flush_tx();
-				break;
-			}else if(status &  _BV(TX_DS)) {
-				printf("sended....\n");
-				nrf_hal_set_reg_bit(REG_STATUS, _BV(TX_DS));
-				break;
-			} else {
-				printf("sending....\n");
-			}
-		}
-
-		nrf_delay(100);
-	}
-
-	return data;
-}
-
-uint8_t nrf_hal_test() {
-	//return nrf_hal_test_rx();
-	return nrf_hal_test_tx();
 }

@@ -281,11 +281,62 @@ typedef struct {
 #define _BV(n) (1<<(n))
 #define _VV(v, n) ((v)<<(n))
 
-int nrf_powerup();
 
 int nrf_init(void* ni);
 
-uint8_t nrf_hal_test();
+void nrf_flush_rx();
+
+void nrf_flush_tx();
+
+void nrf_delay(uint32_t delay);
+
+int nrf_powerup();
+
+int nrf_powerdown();
+
+void nrf_enable_rx_irq();
+
+void nrf_disable_rx_irq();
+
+void nrf_enable_tx_irq();
+
+void nrf_disable_tx_irq();
+
+void nrf_enable_max_rt_irq();
+
+void nrf_disable_max_rt_irq();
+
+void nrf_set_rf_channel(uint8_t channel);
+
+int nrf_set_rxaddr(uint8_t pipe, uint8_t *addr, uint8_t addrlen);
+
+int nrf_get_rxaddr(uint8_t pipe, uint8_t *addr, uint8_t *addrlen);
+
+int nrf_set_txaddr(uint8_t *addr, uint8_t addrlen);
+
+int nrf_get_txaddr(uint8_t *addr, uint8_t *addrlen);
+
+int nrf_enable_rxaddr(uint8_t pipe);
+
+void nrf_reset_registers();
+
+void nrf_set_standby_mode();
+
+void nrf_set_receive_mode();
+
+void nrf_set_send_mode();
+
+void nrf_enable_autoack(uint8_t pipe);
+
+void nrf_disable_autoack(uint8_t pipe);
+
+void nrf_set_datarate(uint8_t dr);
+
+int nrf_enable_dynamic_payload(uint8_t pipe);
+
+int nrf_read_payload(uint8_t *buf, uint8_t *len);
+
+int nrf_write_payload(uint8_t *buf, uint8_t len);
 
 
 #endif /* NRF24L01_H_ */

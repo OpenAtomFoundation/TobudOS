@@ -3,19 +3,20 @@
 #include "lcd.h"
 #include "nrf24.h"
 
+#if 0
 #define TASK_SIZE 1024
 
 
-    k_task_t task1_handle;
-    k_task_t task2_handle;
-    k_task_t led_handle;
+k_task_t task1_handle;
+k_task_t task2_handle;
+k_task_t led_handle;
 
 uint8_t task1_stk[TASK_SIZE];
-uint8_t task2_stk[TASK_SIZE*8];
+uint8_t task2_stk[TASK_SIZE*1];
 uint8_t led_stk[TASK_SIZE/2];
+#endif
 
-int share = 0xCBA7F9;
-k_sem_t sem;
+
 
 typedef struct {
     int port;
@@ -43,16 +44,13 @@ void task1(void *arg)
         tos_task_delay(1000);
     }
 }
-//extern uint8_t nrf_received_data = 0;
-extern uint8_t nrf_hal_test_rx();
+
 void task2(void *arg)
 {
     int task_cnt2 = 0;
 
-    nrf24l01_init();
-    nrf_hal_test_rx();
     while (1) {
-        printf("hello world from %s cnt: %08x\n", __func__, task_cnt2--);
+        //printf("hello world from %s cnt: %08x\n", __func__, task_cnt2--);
         tos_task_delay(200);
     }
 }
@@ -87,19 +85,16 @@ void task_led(void *arg)
 void main(void) {
     board_init();
 
-    usart0_init(115200);
+    //usart0_init(115200);
 
     tos_knl_init();
 
 
-    //tos_task_create(&task1_handle, "task1", task1,      NULL, 2, task1_stk, TASK_SIZE, 0);
-    tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE*8, 0);
-    //tos_task_create(&led_handle,   "led",   task_led,   NULL, 2, led_stk,   TASK_SIZE/2, 0);
+    nrf24l01_init();
 
-    k_err_t err = tos_sem_create(&sem, 1);
-    if (err != K_ERR_NONE) {
-        goto die;
-    }
+    //tos_task_create(&task1_handle, "task1", task1,      NULL, 2, task1_stk, TASK_SIZE, 0);
+    //tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE*1, 0);
+    //tos_task_create(&led_handle,   "led",   task_led,   NULL, 2, led_stk,   TASK_SIZE/2, 0);
 
     tos_knl_start();
 
