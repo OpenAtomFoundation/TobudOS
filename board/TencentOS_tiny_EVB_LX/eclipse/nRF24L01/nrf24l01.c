@@ -135,6 +135,17 @@ void nrf_reset_registers() {
 void nrf_set_standby_mode() {
 	nrf_hal_ce(0);
 	nrf_powerdown();
+#if 1
+	nrf_hal_write_reg_byte(REG_CONFIG,     _BV(EN_CRC));
+
+    while(1) {
+        uint8_t cfg;
+        nrf_hal_read_reg_byte(REG_CONFIG, &cfg);
+        printf("%x\n", cfg);
+        nrf_delay(100);
+    }
+#endif
+
 	nrf_reset_registers();
 	nrf_delay(10);
 
@@ -247,19 +258,15 @@ uint8_t nrf_hal_test_rx() {
 	nrf_hal_ce(0);
 
 	nrf_delay(200);
-#if 0
-	while(1) {
-		nrf_hal_write_reg_byte(REG_CONFIG, _BV(EN_CRC) | _BV(CRCO));
-		nrf_hal_read_reg_byte(REG_CONFIG, &data);
-		nrf_delay(100);
-	}
-#endif
 
 
 	nrf_set_standby_mode();
 
+
+
 	nrf_set_receive_mode();
 	nrf_disable_rx_irq();
+
 
 	nrf_set_rf_channel(64);
 	nrf_set_datarate(NRF_2Mbps);
@@ -367,9 +374,4 @@ uint8_t nrf_hal_test_tx() {
 	}
 
 	return data;
-}
-
-uint8_t nrf_hal_test() {
-	//return nrf_hal_test_rx();
-	return nrf_hal_test_tx();
 }

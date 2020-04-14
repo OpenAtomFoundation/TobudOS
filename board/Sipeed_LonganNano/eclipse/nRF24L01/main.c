@@ -85,15 +85,7 @@ void task_led(void *arg)
 }
 
 void main(void) {
-    //board_init();
-
-	SystemInit();
-
-    nrf24l01_init();
-    nrf_hal_test_rx();
-
-    while(1) { }
-
+    board_init();
 
     usart0_init(115200);
 

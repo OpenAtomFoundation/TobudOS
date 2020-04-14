@@ -15,64 +15,47 @@ int nrf_hal_init(nrf_hal_init_t *private) {
 }
 
 void nrf_hal_csn(uint8_t mode) {
-    //gpio_bit_write(nhi.csn_port, nhi.csn_pin, mode == 0 ? RESET : SET);
-    mode == 0 ? gpio_bit_reset(nhi.csn_port, nhi.csn_pin) : gpio_bit_set(nhi.csn_port, nhi.csn_pin);
+    gpio_bit_write(nhi.csn_port, nhi.csn_pin, mode == 0 ? RESET : SET);
+    //mode == 0 ? gpio_bit_reset(nhi.csn_port, nhi.csn_pin) : gpio_bit_set(nhi.csn_port, nhi.csn_pin);
 }
 
 void nrf_hal_ce(uint8_t mode) {
-	//gpio_bit_write(nhi.ce_port, nhi.ce_pin, mode == 0 ? RESET : SET);
-    mode == 0 ? gpio_bit_reset(nhi.ce_port, nhi.ce_pin) : gpio_bit_set(nhi.ce_port, nhi.ce_pin);
-}
-
-uint8_t _spi_transfer(uint32_t spi, uint8_t data) {
-    while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_TBE));
-    spi_i2s_data_transmit(spi, data);
-
-    while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_RBNE));
-    data = spi_i2s_data_receive(spi);
-
-    return data;
+	gpio_bit_write(nhi.ce_port, nhi.ce_pin, mode == 0 ? RESET : SET);
+    //mode == 0 ? gpio_bit_reset(nhi.ce_port, nhi.ce_pin) : gpio_bit_set(nhi.ce_port, nhi.ce_pin);
 }
 
 
-#if 1
 void _spi_send(uint32_t spi, uint8_t *buf, uint8_t len) {
-    for(uint8_t i=0; i<len; i++) {
-        _spi_transfer(spi, buf[i]);
+    if(buf == 0) {
+        return;
     }
-}
-void _spi_recv(uint32_t spi, uint8_t *buf, uint8_t len) {
-    for(uint8_t i=0; i<len; i++) {
-        buf[i] = _spi_transfer(spi, 0xFF);
-    }
-}
-#else
-void _spi_send(uint32_t spi, uint8_t *buf, uint8_t len) {
+
     int cnt = 0;
-    //while(cnt < len) {
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_TBE));
-        spi_i2s_data_transmit(spi, buf[cnt]);
-        cnt++;
-
-
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_RBNE));
-        spi_i2s_data_receive(spi);
-    //}
+    while(cnt < len) {
+        if(SET == spi_i2s_flag_get(spi, SPI_FLAG_TBE)) {
+            spi_i2s_data_transmit(spi, buf[cnt]);
+            cnt++;
+        }
+    }
 }
 
 void _spi_recv(uint32_t spi, uint8_t *buf, uint8_t len) {
+    if(buf == 0) {
+        return ;
+    }
+
     int cnt = 0;
-    //while(cnt < len) {
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_TBE));
-        spi_i2s_data_transmit(spi, 0xFF);
-
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_RBNE));
-
-        buf[cnt] = (uint8_t)spi_i2s_data_receive(spi);
-        cnt++;
-    //}
+    while(cnt < len) {
+        FlagStatus ret = spi_i2s_flag_get(spi, SPI_FLAG_RBNE);
+        if(SET == ret) {
+            //buf[cnt] = (uint8_t)spi_i2s_data_receive(spi);
+            uint16_t d = spi_i2s_data_receive(spi);
+            buf[cnt] = (uint8_t) d;
+            buf[cnt+1] = (uint8_t) (d >> 8);
+            cnt++;
+       }
+    }
 }
-#endif
 
 int nrf_hal_read_reg(uint8_t reg, uint8_t *buf, uint8_t len) {
 	uint8_t cmd  = CMD_R_REGISTER | reg;
