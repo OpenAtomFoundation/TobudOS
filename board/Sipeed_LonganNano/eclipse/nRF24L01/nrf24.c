@@ -5,22 +5,23 @@
 #define USE_SPI1
 
 extern k_sem_t sem_led;
-k_sem_t sem_nrf_recv;
-int flag = 0;
+k_sem_t sem_nrf;
+
 #define TASK_SIZE (8*1024)
+
 k_task_t task_nrf24_handle;
 uint8_t task_nrf24_stk[TASK_SIZE];
 
 #define CE_GPIO_PORT    GPIOA
 #define CE_PIN          GPIO_PIN_3
-
 #define CSN_GPIO_PORT   GPIOB
 #define CSN_PIN         GPIO_PIN_12
-
 #define IRQ_GPIO_PORT   GPIOB
 #define IRQ_PIN         GPIO_PIN_5
 
 void task_nrf24();
+
+
 
 void nrf24l01_init() {
     rcu_periph_clock_enable(RCU_GPIOA);
@@ -98,7 +99,7 @@ void EXTI5_9_IRQHandler(void)
             nrf_hal_read_reg_byte(REG_STATUS, &status);
 
             if(status & _BV(RX_DR)) {
-                  tos_sem_post(&sem_nrf_recv);
+                  tos_sem_post(&sem_nrf);
             }
         }
 
@@ -120,26 +121,27 @@ void print_rxaddr(uint8_t pipe) {
     printf("\n");
 }
 
-void task_nrf24() {
 
-    if(1)
-    {
-        tos_sem_create(&sem_nrf_recv, 1);
-        // nrf24 irq pin
-        gpio_init(IRQ_GPIO_PORT, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, IRQ_PIN);
-        gpio_bit_set(IRQ_GPIO_PORT, IRQ_PIN);
+void init_nrf24l01_irq() {
+    // nrf24 irq pin
+    gpio_init(IRQ_GPIO_PORT, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, IRQ_PIN);
+    gpio_bit_set(IRQ_GPIO_PORT, IRQ_PIN);
 
-        eclic_global_interrupt_enable();
-        eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL3_PRIO1);
-        eclic_irq_enable(EXTI5_9_IRQn, 1, 1);
+    eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL3_PRIO1);
+    eclic_irq_enable(EXTI5_9_IRQn, 1, 1);
 
-        /* connect EXTI line to GPIO pin */
-        gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_5);
+    /* connect EXTI line to GPIO pin */
+    gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_5);
 
-        exti_init(EXTI_5, EXTI_INTERRUPT, EXTI_TRIG_FALLING);
-        exti_interrupt_flag_clear(EXTI_5);
+    exti_init(EXTI_5, EXTI_INTERRUPT, EXTI_TRIG_FALLING);
+    exti_interrupt_flag_clear(EXTI_5);
+}
 
-    }
+void test_nrf24l01_irq_rx()
+{
+    tos_sem_create(&sem_nrf, 1);
+
+    init_nrf24l01_irq();
 
     nrf_delay(200);
     nrf_csn(1);
@@ -150,6 +152,7 @@ void task_nrf24() {
     nrf_set_receive_mode();
 
     nrf_enable_rx_irq();
+
     nrf_set_rf_channel(64);
     nrf_set_datarate(NRF_2Mbps);
     uint8_t rxaddr[ADDRLEN] = { 0xAA, 0xCC, 0xEE, 0x00, 0x00 };
@@ -158,16 +161,17 @@ void task_nrf24() {
     nrf_enable_rxaddr(0);
 
     while(1) {
-        tos_sem_pend(&sem_nrf_recv, ~0);
+        tos_sem_pend(&sem_nrf, ~0);
 
         uint8_t buf[32];
         uint8_t len = 0;
         uint8_t pipe = 0xFF;
+
         nrf_read_payload(buf, &len, &pipe);
 
-        printf("received %u bytes from pipe %u: ", len, pipe);
-
         tos_sem_post(&sem_led);
+
+        printf("received %u bytes from pipe %u: ", len, pipe);
 
         for(int i=0; i<len; i++) {
             printf("%x ", buf[i]);
@@ -176,20 +180,13 @@ void task_nrf24() {
     }
 }
 
-#if 0
-uint8_t nrf_hal_test_rx_old() {
-
-    uint8_t data = 0;
-
+void test_nrf24l01_rx() {
     nrf_delay(200);
-
     nrf_hal_csn(1);
     nrf_hal_ce(0);
-
     nrf_delay(200);
 
     nrf_set_standby_mode();
-
     nrf_set_receive_mode();
     nrf_disable_rx_irq();
 
@@ -197,72 +194,31 @@ uint8_t nrf_hal_test_rx_old() {
     nrf_set_datarate(NRF_2Mbps);
     uint8_t rxaddr[ADDRLEN] = { 0xAA, 0xCC, 0xEE, 0x00, 0x00 };
     nrf_set_rxaddr(0, rxaddr, ADDRLEN);
-
     nrf_enable_dynamic_payload(0);
-    nrf_enable_dynamic_payload(1);
-
     nrf_enable_rxaddr(0);
-    nrf_enable_rxaddr(1);
-
-    print_rxaddr(0);
-    print_rxaddr(1);
-    print_rxaddr(2);
-
 
     nrf_flush_rx();
+
     while(1) {
-        uint8_t buf[32];
+        uint8_t buf[36];
         uint8_t len = 0;
-        uint8_t status = 0;
-        nrf_hal_read_reg_byte(REG_STATUS, &status);
-
-        if((status & _BV(RX_DR)) == 0) {
-            printf("nodata %x\n", status);
-            nrf_delay(100);
-        }
-
         uint8_t pipe = 0xFF;
-        uint32_t loop_cnt = 0;
-        while(1) {
-            nrf_hal_read_reg_byte(REG_STATUS, &status);
-            pipe = status;
-            pipe >>= 1;
-            pipe &= 0x07;
-            if(pipe < 6) {
-                break;
-            }
-            nrf_delay(1);
-            loop_cnt++;
-        }
-        nrf_read_payload(buf, &len);
 
-        if(loop_cnt > 0) {
-            printf("loopcnt %u\n", loop_cnt);
-        }
+        nrf_poll_read_payload(buf, &len, &pipe);
 
-        nrf_hal_set_reg_bit(REG_STATUS, _BV(RX_DR));
-        nrf_hal_read_reg_byte(REG_STATUS, &status);
-
-        nrf_flush_rx();
+        tos_sem_post(&sem_led);
 
         printf("received %u bytes from pipe %u: ", len, pipe);
-
 
         for(int i=0; i<len; i++) {
             printf("%x ", buf[i]);
         }
         printf("\n");
-
     }
-
-    return data;
 }
 
 
-uint8_t nrf_hal_test_tx() {
-
-    uint8_t data = 0;
-
+void test_nrf24l01_tx() {
     nrf_delay(200);
     nrf_hal_csn(1);
     nrf_hal_ce(0);
@@ -270,45 +226,28 @@ uint8_t nrf_hal_test_tx() {
 
     nrf_set_standby_mode();
     nrf_set_send_mode();
-
+    nrf_disable_tx_irq();
     nrf_set_rf_channel(100);
     nrf_set_datarate(NRF_2Mbps);
-
     nrf_enable_dynamic_payload(0);
-    uint8_t txaddr[] = { 1, 2, 3, 4, 0 };
+    uint8_t txaddr[] = { 0xAA, 0xCC, 0xEE, 0x00, 0x01 };
     nrf_set_txaddr(txaddr, 5);
 
     nrf_flush_rx();
     nrf_flush_tx();
-    uint32_t cnt = 0;
+    uint8_t cnt = 0;
     while(1) {
         nrf_flush_rx();
         nrf_flush_tx();
         uint8_t buf[] = {0x0A, 0x0C, 0x0E, cnt++ };
         nrf_write_payload(buf, sizeof(buf));
-
-        while(1) {
-            uint8_t status = 0;
-            nrf_hal_read_reg_byte(REG_STATUS, &status);
-
-            printf("status %x\n", status);
-            if(status & _BV(MAX_RT)) {
-                printf("send error....\n");
-                nrf_hal_set_reg_bit(REG_STATUS, _BV(MAX_RT));
-                nrf_flush_tx();
-                break;
-            }else if(status &  _BV(TX_DS)) {
-                printf("sended....\n");
-                nrf_hal_set_reg_bit(REG_STATUS, _BV(TX_DS));
-                break;
-            } else {
-                printf("sending....\n");
-            }
-        }
-
+        tos_sem_post(&sem_led);
         nrf_delay(100);
     }
-
-    return data;
 }
-#endif
+
+void task_nrf24() {
+    test_nrf24l01_irq_rx();
+    //test_nrf24l01_rx();
+    //test_nrf24l01_tx();
+}

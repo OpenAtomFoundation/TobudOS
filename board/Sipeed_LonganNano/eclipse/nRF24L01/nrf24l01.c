@@ -283,7 +283,6 @@ int nrf_enable_dynamic_payload(uint8_t pipe) {
 	return 0;
 }
 
-
 int nrf_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe) {
     // 读数据通道
     uint8_t status = 0;
@@ -302,11 +301,63 @@ int nrf_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe) {
 	// 清空接收缓冲区
 	nrf_flush_rx();
 
+	if(*pipe >= 6) {
+	    *len = 0;
+	}
+
 	return 0;
 }
 
+
+int nrf_poll_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe) {
+    while(1) {
+        // 读数据通道
+        uint8_t status = 0;
+        nrf_hal_read_reg_byte(REG_STATUS, &status);
+        if((status & _BV(RX_DR)) == 0) {
+            nrf_delay(1);
+            continue;
+        }
+
+        *pipe = ((status>>1) & 0x07);
+
+        break;
+    }
+
+    // 读数据长度
+    nrf_hal_cmd_read_byte(CMD_R_RX_PL_WID, len);
+
+    // 读数据
+    nrf_hal_cmd_read(CMD_R_RX_PAYLOAD, buf, *len);
+
+    // 清除数据标志位
+    _nrf_set_reg_bit(REG_STATUS, _BV(RX_DR));
+
+    // 清空接收缓冲区
+    nrf_flush_rx();
+
+    if(*pipe >= 6) {
+        *len = 0;
+    }
+
+    return 0;
+}
+
 int nrf_write_payload(uint8_t *buf, uint8_t len) {
-	return nrf_hal_cmd_write(CMD_W_TX_PAYLOAD_NOACK, buf, len);
+	nrf_hal_cmd_write(CMD_W_TX_PAYLOAD_NOACK, buf, len);
+
+    while(1) {
+        uint8_t status = 0;
+        nrf_hal_read_reg_byte(REG_STATUS, &status);
+        if(status &  _BV(TX_DS)) {
+            nrf_delay(1);
+        }
+        _nrf_set_reg_bit(REG_STATUS, _BV(MAX_RT));
+        _nrf_set_reg_bit(REG_STATUS, _BV(TX_DS));
+        break;
+    }
+
+    return 0;
 }
 
 

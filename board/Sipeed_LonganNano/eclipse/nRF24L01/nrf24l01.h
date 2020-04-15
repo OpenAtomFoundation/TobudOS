@@ -346,6 +346,8 @@ int nrf_enable_dynamic_payload(uint8_t pipe);
 
 int nrf_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe);
 
+int nrf_poll_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe);
+
 int nrf_write_payload(uint8_t *buf, uint8_t len);
 
 void nrf_ce(uint8_t mode);
