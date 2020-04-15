@@ -1,6 +1,9 @@
 #include "nrf24.h"
 #include "tos_k.h"
 #include <stdio.h>
+
+#define USE_SPI1
+
 extern k_sem_t sem_led;
 k_sem_t sem_nrf_recv;
 int flag = 0;
@@ -8,78 +11,88 @@ int flag = 0;
 k_task_t task_nrf24_handle;
 uint8_t task_nrf24_stk[TASK_SIZE];
 
+#define CE_GPIO_PORT    GPIOA
+#define CE_PIN          GPIO_PIN_3
+
+#define CSN_GPIO_PORT   GPIOB
+#define CSN_PIN         GPIO_PIN_12
+
+#define IRQ_GPIO_PORT   GPIOB
+#define IRQ_PIN         GPIO_PIN_5
+
 void task_nrf24();
 
 void nrf24l01_init() {
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
     rcu_periph_clock_enable(RCU_AF);
-    rcu_periph_clock_enable(RCU_SPI0);
+
+#ifdef USE_SPI0
 	#define  SPIx  SPI0
-
-
-    /* spi GPIO config:SCK/PB13, MISO/PB14, MOSI/PB15 */
-    //gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13 | GPIO_PIN_15);
-    //gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_14);
-
-
+    rcu_periph_clock_enable(RCU_SPI0);
     /* spi GPIO config:SCK/PA5, MISO/PA6, MOSI/PA7 */
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
     gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+#endif
 
+#ifdef USE_SPI1
+    #define SPIx SPI1
+    rcu_periph_clock_enable(RCU_SPI1);
+    /* spi GPIO config:SCK/PB13, MISO/PB14, MOSI/PB15 */
+    gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13 | GPIO_PIN_15);
+    gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_14);
+#endif
 
+    {
+        spi_parameter_struct spi_init_struct;
+        /* deinitilize SPI and the parameters */
+        spi_i2s_deinit(SPIx);
+        spi_struct_para_init(&spi_init_struct);
+
+        /* spi parameter config */
+        spi_init_struct.trans_mode           = SPI_TRANSMODE_FULLDUPLEX;
+        spi_init_struct.device_mode          = SPI_MASTER;
+        spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
+        spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_1EDGE;
+        spi_init_struct.nss                  = SPI_NSS_SOFT;
+        spi_init_struct.prescale             = SPI_PSC_8;
+        spi_init_struct.endian               = SPI_ENDIAN_MSB;
+        spi_init(SPIx, &spi_init_struct);
+
+        spi_enable(SPIx);
+
+        spi_ti_mode_disable(SPIx); // use motorola mode
+        spi_crc_off(SPIx);
+        spi_crc_polynomial_set(SPIx, 7);
+        spi_nssp_mode_enable(SPIx);
+    }
+
+    {
+        nrf_hal_init_t nhi;
+        nhi.spi = SPIx;
+        nhi.ce_port = CE_GPIO_PORT;
+        nhi.ce_pin  = CE_PIN;
+        nhi.csn_port= CSN_GPIO_PORT;
+        nhi.csn_pin = CSN_PIN;
+
+        gpio_init(nhi.ce_port,  GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, nhi.ce_pin);
+        gpio_init(nhi.csn_port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, nhi.csn_pin);
+        gpio_bit_set(nhi.ce_port, nhi.ce_pin);
+        gpio_bit_set(nhi.csn_port, nhi.csn_pin);
+        nrf_init(&nhi);
+    }
 
     tos_task_create(&task_nrf24_handle, "task_nrf24", task_nrf24,  NULL, 5, task_nrf24_stk, TASK_SIZE, 0);
-
-    nrf_hal_init_t nhi;
-    nhi.spi = SPIx;
-    nhi.ce_port = GPIOA;
-    nhi.ce_pin  = GPIO_PIN_3;
-    nhi.csn_port= GPIOB;
-    nhi.csn_pin = GPIO_PIN_5;
-
-    gpio_init(nhi.ce_port,  GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, nhi.ce_pin);
-    gpio_init(nhi.csn_port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, nhi.csn_pin);
-
-    gpio_bit_set(nhi.ce_port, nhi.ce_pin);
-    gpio_bit_set(nhi.csn_port, nhi.csn_pin);
-
-
-    spi_parameter_struct spi_init_struct;
-    /* deinitilize SPI and the parameters */
-    spi_i2s_deinit(SPIx);
-    spi_struct_para_init(&spi_init_struct);
-
-
-    /* spi parameter config */
-    spi_init_struct.trans_mode           = SPI_TRANSMODE_FULLDUPLEX;
-    spi_init_struct.device_mode          = SPI_MASTER;
-    spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
-    spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_1EDGE;
-    spi_init_struct.nss                  = SPI_NSS_SOFT;
-    spi_init_struct.prescale             = SPI_PSC_8;
-    spi_init_struct.endian               = SPI_ENDIAN_MSB;
-    spi_init(SPIx, &spi_init_struct);
-
-    spi_enable(SPIx);
-
-    spi_ti_mode_disable(SPIx); // use motorola mode
-    spi_crc_off(SPIx);
-    spi_crc_polynomial_set(SPIx, 7);
-    spi_nssp_mode_enable(SPIx);
-
-    nrf_init(&nhi);
-
 }
 
-void EXTI0_IRQHandler(void)
+void EXTI5_9_IRQHandler(void)
 {
    if (tos_knl_is_running()) {
         tos_knl_irq_enter();
 
-        if (RESET != exti_interrupt_flag_get(GPIO_PIN_0)){
+        if (RESET != exti_interrupt_flag_get(IRQ_PIN)){
 
-            exti_interrupt_flag_clear(GPIO_PIN_0);
+            exti_interrupt_flag_clear(IRQ_PIN);
 
             uint8_t status = 0;
             nrf_hal_read_reg_byte(REG_STATUS, &status);
@@ -113,18 +126,18 @@ void task_nrf24() {
     {
         tos_sem_create(&sem_nrf_recv, 1);
         // nrf24 irq pin
-        gpio_init(GPIOB, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
-        gpio_bit_set(GPIOB, GPIO_PIN_0);
+        gpio_init(IRQ_GPIO_PORT, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, IRQ_PIN);
+        gpio_bit_set(IRQ_GPIO_PORT, IRQ_PIN);
 
         eclic_global_interrupt_enable();
         eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL3_PRIO1);
-        eclic_irq_enable(EXTI0_IRQn, 1, 1);
+        eclic_irq_enable(EXTI5_9_IRQn, 1, 1);
 
         /* connect EXTI line to GPIO pin */
-        gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_0);
+        gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_5);
 
-        exti_init(EXTI_0, EXTI_INTERRUPT, EXTI_TRIG_FALLING);
-        exti_interrupt_flag_clear(EXTI_0);
+        exti_init(EXTI_5, EXTI_INTERRUPT, EXTI_TRIG_FALLING);
+        exti_interrupt_flag_clear(EXTI_5);
 
     }
 

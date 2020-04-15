@@ -8,11 +8,12 @@
 k_task_t task2_handle
 uint8_t task2_stk[TASK_SIZE*1];
 
+#endif
 
 #define LCD_TASK_SIZE 1024
 k_task_t lcd_handle;
 uint8_t lcd_stk[LCD_TASK_SIZE];
-#endif
+
 
 
 #define LED_TASK_SIZE 1024
@@ -41,9 +42,9 @@ void task_led(void *arg)
 
         tos_sem_pend(&sem_led, ~0);
 
-        gpio_bit_reset(LEDR_GPIO_PORT, LEDR_PIN);
+        gpio_bit_reset(LEDB_GPIO_PORT, LEDB_PIN);
         tos_task_delay(50);
-        gpio_bit_set(LEDR_GPIO_PORT, LEDR_PIN);
+        gpio_bit_set(LEDB_GPIO_PORT, LEDB_PIN);
     }
 }
 
@@ -98,7 +99,7 @@ void main(void) {
     tos_sem_create(&sem_led, 1);
     tos_task_create(&led_handle,      "led", task_led,    NULL, 6, led_stk, LED_TASK_SIZE, 0);
     //tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE*1, 0);
-    //tos_task_create(&lcd_handle,   "lcd",   task_lcd,   NULL, 2, lcd_stk,     TASK_SIZE, 0);
+    tos_task_create(&lcd_handle,   "lcd",   task_lcd,   NULL, 6, lcd_stk,   LCD_TASK_SIZE, 0);
 
     tos_knl_start();
 

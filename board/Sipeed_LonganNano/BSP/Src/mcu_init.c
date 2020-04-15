@@ -14,7 +14,7 @@ void board_init() {
     gpio_bit_set(LEDG_GPIO_PORT, LEDG_PIN);
     gpio_bit_set(LEDB_GPIO_PORT, LEDB_PIN);
 
-#if 0
+#if 1
     LCD_Init();         // init LCD
     LCD_Clear(BLACK);
 #endif
