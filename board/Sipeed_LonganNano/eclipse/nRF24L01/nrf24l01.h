@@ -3,14 +3,6 @@
 
 #include "nrf24l01_hal.h"
 
-#if defined(__SI24R1__) && defined(__NRF24L01__)
-#error "you must choose chip between SI24R1 and NRF24L01"
-#endif
-
-#if !defined(__SI24R1__) && !defined(__NRF24L01__)
-#error "you must specify the core chip of NRF24L01"
-#endif
-
 typedef struct {
     void *private;
 } nrf_init_t;
@@ -126,45 +118,63 @@ typedef struct {
 
 
 #define REG_RF_SETUP 0x06
-	#define RF_DR_LOW   5
     #define PLL_LOCK    4 // 仅用在测试
-	#define RF_DR_HIGH	3
+
     // Air Data Rate
     // 0 1Mbps
     // 1 2Mbps
-	// 2 250Kbps
     #define RF_DR       3
 		#define NRF_1Mbps	0
 		#define NRF_2Mbps	1
-		#define NRF_250Kbps	2
+        // 对于250Kbps的配置需要特别注意
+        // 因为nRF24L01P(也就是nRF24L01+)和nRF24L01在这里不一样
+        // nRF24L01P只定义了第3比特位的RF_DR，0为1Mbps,1为2Mbps
+        // nRF24L01则定义了第3比特位的RF_DR_HIGH和第5比特位的RF_DR_LOW，当RF_DR_HIGH==0 && RF_DR_LOW == 1时设置为250Kbps
+        // 然而nRF24L01的第5比特位只允许为0，所以无法发送250Kbps
+        // 因此为了避免两个不同的产品在250Kbps不能通信带来的疑惑和调式程序的麻烦，本程序直接删除了NRF_250Kbps的定义
+        // 如果确实想用250Kbps，可以自己手动设置
 
-    // PWR, 占2:1共2个比特
+
+    // 仅用在nRF24L01P芯片上
+    #define RF_DR_LOW   5
+    #define RF_DR_HIGH  3
+
+    // PWR, 占2:1共2个比特，仅nRF24L01P、nRF24L01有效
     // 00 -18dBm
     // 01 -12dBm
     // 10  -6dBm
     // 11   0dBm
-#if defined(__NRF24L01__)
     #define RF_PWR      1
 		#define RF_PWR_n18dBm	0
 		#define RF_PWR_n12dBm   1
 		#define RF_PWR_n6dBm	2
 		#define RF_PWR_0dBm		3
 
-    // Non-P omissions
+    // 仅nRF24L01有效，nRF24L01P没有这位定义
     #define LNA_HCURR   0
-#endif
 
-#if defined(__SI24R1__)
-    #define RF_PWR      0
-		#define RF_PWR_n12dBm	0
-		#define RF_PWR_n6dBm    1
-		#define RF_PWR_n4dBm	2
-		#define RF_PWR_0dBm		3
-		#define RF_PWR_1dBm		4
-		#define RF_PWR_3dBm		5
-		#define RF_PWR_4dBm		6
-		#define RF_PWR_7dBm		7
-#endif
+    // 在SI24R1中，针对nRF24L01P没有使用这一位就直接拿来扩充RF_PWR的位数了
+    // 因此在SI24R1中 RF_PWR == 0 占用0:2共3个比特位
+    // 与nRF24L01P的对应关系如下
+    // [2:0]    SI24R1      nRF24L01P
+    //  000     -12dBm      -18dBm
+    //  001      -6dBm
+    //  010      -4dBm      -12dBm
+    //  011       0dBm
+    //  100       1dBm       -6dBm
+    //  101       3dBm
+    //  110       4dBm        0dBm
+    //  111       7dBm
+    // 以下定义仅SI24R1芯片有效
+    #define SI24R1_PWR   0
+        #define SI24R1_PWR_n12dBm   0
+        #define SI24R1_PWR_n6dBm    1
+        #define SI24R1_PWR_n4dBm    2
+        #define SI24R1_PWR_0dBm     3
+        #define SI24R1_PWR_1dBm     4
+        #define SI24R1_PWR_3dBm     5
+        #define SI24R1_PWR_4dBm     6
+        #define SI24R1_PWR_7dBm     7
 
 
 #define REG_STATUS 0x07
@@ -266,16 +276,16 @@ typedef struct {
 #define CMD_R_REGISTER    0x00
 #define CMD_W_REGISTER    0x20
 
-#define CMD_R_RX_PAYLOAD  0b01100001
-#define CMD_W_TX_PAYLOAD  0b10100000
-#define CMD_FLUSH_TX      0b11100001
-#define CMD_FLUSH_RX      0b11100010
-#define CMD_REUSE_TX_PL   0b11100011
-#define CMD_ACTIVATE      0b01010000
-#define CMD_R_RX_PL_WID   0b01100000
-#define CMD_W_ACK_PAYLOAD 0b10101000
+#define CMD_R_RX_PAYLOAD        0b01100001
+#define CMD_W_TX_PAYLOAD        0b10100000
+#define CMD_FLUSH_TX            0b11100001
+#define CMD_FLUSH_RX            0b11100010
+#define CMD_REUSE_TX_PL         0b11100011
+#define CMD_ACTIVATE            0b01010000
+#define CMD_R_RX_PL_WID         0b01100000
+#define CMD_W_ACK_PAYLOAD       0b10101000
 #define CMD_W_TX_PAYLOAD_NOACK  0b10110000
-#define CMD_NOP           0b11111111
+#define CMD_NOP                 0b11111111
 
 
 #define _BV(n) (1<<(n))
@@ -334,9 +344,12 @@ void nrf_set_datarate(uint8_t dr);
 
 int nrf_enable_dynamic_payload(uint8_t pipe);
 
-int nrf_read_payload(uint8_t *buf, uint8_t *len);
+int nrf_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe);
 
 int nrf_write_payload(uint8_t *buf, uint8_t len);
 
+void nrf_ce(uint8_t mode);
+
+void nrf_csn(uint8_t mode);
 
 #endif /* NRF24L01_H_ */

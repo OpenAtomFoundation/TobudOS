@@ -35,7 +35,6 @@ uint8_t _spi_transfer(uint32_t spi, uint8_t data) {
 }
 
 
-#if 1
 void _spi_send(uint32_t spi, uint8_t *buf, uint8_t len) {
     for(uint8_t i=0; i<len; i++) {
         _spi_transfer(spi, buf[i]);
@@ -46,33 +45,7 @@ void _spi_recv(uint32_t spi, uint8_t *buf, uint8_t len) {
         buf[i] = _spi_transfer(spi, 0xFF);
     }
 }
-#else
-void _spi_send(uint32_t spi, uint8_t *buf, uint8_t len) {
-    int cnt = 0;
-    //while(cnt < len) {
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_TBE));
-        spi_i2s_data_transmit(spi, buf[cnt]);
-        cnt++;
 
-
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_RBNE));
-        spi_i2s_data_receive(spi);
-    //}
-}
-
-void _spi_recv(uint32_t spi, uint8_t *buf, uint8_t len) {
-    int cnt = 0;
-    //while(cnt < len) {
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_TBE));
-        spi_i2s_data_transmit(spi, 0xFF);
-
-        while(RESET == spi_i2s_flag_get(spi, SPI_FLAG_RBNE));
-
-        buf[cnt] = (uint8_t)spi_i2s_data_receive(spi);
-        cnt++;
-    //}
-}
-#endif
 
 int nrf_hal_read_reg(uint8_t reg, uint8_t *buf, uint8_t len) {
 	uint8_t cmd  = CMD_R_REGISTER | reg;
@@ -113,38 +86,6 @@ int nrf_hal_write_reg_byte(uint8_t reg, uint8_t byte)
 	return nrf_hal_write_reg(reg, &byte, 1);
 }
 
-int nrf_hal_set_reg_bit(uint8_t reg, uint8_t bit) {
-	uint8_t v = 0;
-
-	if(0 != nrf_hal_read_reg_byte(reg, &v)) {
-		return -1;
-	}
-
-	v |= _BV(bit);
-
-	if(0 != nrf_hal_write_reg_byte(reg, v)) {
-		return -1;
-	}
-
-	return 0;
-}
-
-
-int nrf_hal_clear_reg_bit(uint8_t reg, uint8_t bit) {
-	uint8_t v = 0;
-
-	if(0 != nrf_hal_read_reg_byte(reg, &v)) {
-		return -1;
-	}
-
-	v &= ~_BV(bit);
-
-	if(0 != nrf_hal_write_reg_byte(reg, v)) {
-		return -1;
-	}
-
-	return 0;
-}
 
 int nrf_hal_cmd_read(uint8_t cmd, uint8_t *data, uint8_t len) {
 	nrf_hal_csn(0);
@@ -169,6 +110,7 @@ int nrf_hal_cmd_write(uint8_t cmd, uint8_t *data, uint8_t len) {
 
 	return 0;
 }
+
 
 int nrf_hal_cmd_read_byte(uint8_t cmd, uint8_t *data) {
 	return nrf_hal_cmd_read(cmd, data, 1);

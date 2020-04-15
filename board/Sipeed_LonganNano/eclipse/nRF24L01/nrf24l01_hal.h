@@ -1,8 +1,6 @@
 #ifndef NRF24L01_HAL_H_
 #define NRF24L01_HAL_H_
 
-#define __SI24R1__
-
 #include "gd32vf103.h"
 
 typedef struct {
@@ -26,13 +24,7 @@ int nrf_hal_read_reg_byte(uint8_t reg, uint8_t *v);
 
 int nrf_hal_write_reg(uint8_t reg, uint8_t *buf, uint8_t len);
 
-
 int nrf_hal_write_reg_byte(uint8_t reg, uint8_t byte);
-
-int nrf_hal_set_reg_bit(uint8_t reg, uint8_t bit);
-
-
-int nrf_hal_clear_reg_bit(uint8_t reg, uint8_t bit);
 
 int nrf_hal_cmd_read(uint8_t cmd, uint8_t *data, uint8_t len);
 

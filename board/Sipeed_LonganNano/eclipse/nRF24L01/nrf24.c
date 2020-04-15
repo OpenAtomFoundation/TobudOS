@@ -141,57 +141,29 @@ void task_nrf24() {
 
     }
 
-    uint8_t data = 0;
-
     nrf_delay(200);
-
-    nrf_hal_csn(1);
-    nrf_hal_ce(0);
-
+    nrf_csn(1);
+    nrf_ce(0);
     nrf_delay(200);
 
     nrf_set_standby_mode();
-
     nrf_set_receive_mode();
-    nrf_enable_rx_irq();
 
+    nrf_enable_rx_irq();
     nrf_set_rf_channel(64);
     nrf_set_datarate(NRF_2Mbps);
     uint8_t rxaddr[ADDRLEN] = { 0xAA, 0xCC, 0xEE, 0x00, 0x00 };
     nrf_set_rxaddr(0, rxaddr, ADDRLEN);
-
     nrf_enable_dynamic_payload(0);
-    nrf_enable_dynamic_payload(1);
-
     nrf_enable_rxaddr(0);
-    nrf_enable_rxaddr(1);
-
-    print_rxaddr(0);
-    print_rxaddr(1);
-    print_rxaddr(2);
-
-
-    nrf_flush_rx();
-
 
     while(1) {
         tos_sem_pend(&sem_nrf_recv, ~0);
 
         uint8_t buf[32];
         uint8_t len = 0;
-        uint8_t status = 0;
-        nrf_hal_read_reg_byte(REG_STATUS, &status);
-
-        uint8_t pipe = ((status>>1) & 0x07);
-        nrf_read_payload(buf, &len);
-
-        if(pipe >= 6) {
-            printf("shit happens\n");
-        }
-
-        nrf_hal_set_reg_bit(REG_STATUS, _BV(RX_DR));
-
-        nrf_flush_rx();
+        uint8_t pipe = 0xFF;
+        nrf_read_payload(buf, &len, &pipe);
 
         printf("received %u bytes from pipe %u: ", len, pipe);
 
@@ -201,12 +173,10 @@ void task_nrf24() {
             printf("%x ", buf[i]);
         }
         printf("\n");
-
     }
-
 }
 
-
+#if 0
 uint8_t nrf_hal_test_rx_old() {
 
     uint8_t data = 0;
@@ -341,3 +311,4 @@ uint8_t nrf_hal_test_tx() {
 
     return data;
 }
+#endif

@@ -1,6 +1,37 @@
 #include "nrf24l01.h"
 #include "tos_k.h"
 
+static int _nrf_clear_reg_bit(uint8_t reg, uint8_t bit) {
+    uint8_t v = 0;
+
+    if(0 != nrf_hal_read_reg_byte(reg, &v)) {
+        return -1;
+    }
+
+    v &= ~_BV(bit);
+
+    if(0 != nrf_hal_write_reg_byte(reg, v)) {
+        return -1;
+    }
+
+    return 0;
+}
+
+static int _nrf_set_reg_bit(uint8_t reg, uint8_t bit) {
+    uint8_t v = 0;
+
+    if(0 != nrf_hal_read_reg_byte(reg, &v)) {
+        return -1;
+    }
+
+    v |= _BV(bit);
+
+    if(0 != nrf_hal_write_reg_byte(reg, v)) {
+        return -1;
+    }
+
+    return 0;
+}
 
 int nrf_init(void *ni) {
     return nrf_hal_init(ni);
@@ -21,35 +52,35 @@ void nrf_delay(uint32_t delay) {
 
 
 int nrf_powerup() {
-	return nrf_hal_set_reg_bit(REG_CONFIG, PWR_UP);
+	return _nrf_set_reg_bit(REG_CONFIG, PWR_UP);
 }
 
 int nrf_powerdown() {
-	return nrf_hal_clear_reg_bit(REG_CONFIG, PWR_UP);
+	return _nrf_clear_reg_bit(REG_CONFIG, PWR_UP);
 }
 
 void nrf_enable_rx_irq() {
-	nrf_hal_clear_reg_bit(REG_CONFIG, MASK_RX_DR);
+	_nrf_clear_reg_bit(REG_CONFIG, MASK_RX_DR);
 }
 
 void nrf_disable_rx_irq() {
-	nrf_hal_set_reg_bit(REG_CONFIG, MASK_RX_DR);
+	_nrf_set_reg_bit(REG_CONFIG, MASK_RX_DR);
 }
 
 void nrf_enable_tx_irq() {
-	nrf_hal_clear_reg_bit(REG_CONFIG, MASK_TX_DS);
+	_nrf_clear_reg_bit(REG_CONFIG, MASK_TX_DS);
 }
 
 void nrf_disable_tx_irq() {
-	nrf_hal_set_reg_bit(REG_CONFIG, MASK_TX_DS);
+	_nrf_set_reg_bit(REG_CONFIG, MASK_TX_DS);
 }
 
 void nrf_enable_max_rt_irq() {
-	nrf_hal_clear_reg_bit(REG_CONFIG, MASK_MAX_RT);
+	_nrf_clear_reg_bit(REG_CONFIG, MASK_MAX_RT);
 }
 
 void nrf_disable_max_rt_irq() {
-	nrf_hal_clear_reg_bit(REG_CONFIG, MASK_MAX_RT);
+	_nrf_clear_reg_bit(REG_CONFIG, MASK_MAX_RT);
 }
 
 void nrf_set_rf_channel(uint8_t channel) {
@@ -75,7 +106,7 @@ int nrf_set_rxaddr(uint8_t pipe, uint8_t *addr, uint8_t addrlen) {
 int nrf_get_addrlen() {
     uint8_t v = 0;
     uint8_t addrlen = 0;
-    if(0 != nrf_hal_read_reg_byte(REG_SETUP_AW, v)) {
+    if(0 != nrf_hal_read_reg_byte(REG_SETUP_AW, &v)) {
         return 0;
     }
 
@@ -124,7 +155,8 @@ int nrf_enable_rxaddr(uint8_t pipe) {
 		return -1;
 	}
 
-	nrf_hal_write_reg_byte(REG_EN_RXADDR, pipe);
+	_nrf_set_reg_bit(REG_EN_RXADDR, pipe);
+
 	return 0;
 }
 
@@ -135,18 +167,18 @@ void nrf_reset_registers() {
 	nrf_hal_write_reg_byte(REG_SETUP_AW,   _VV(AW_5BYTES, AW));
 	nrf_hal_write_reg_byte(REG_SETUP_RETR, _VV(ARD_250us, ARD) | _VV(ARC_3, ARC));
 	nrf_hal_write_reg_byte(REG_RF_CH,		0b00000010);
-	nrf_hal_write_reg_byte(REG_RF_SETUP,	_BV(RF_DR_HIGH) | _VV(RF_PWR_0dBm, RF_PWR));
+	nrf_hal_write_reg_byte(REG_RF_SETUP,	_BV(RF_DR) | _VV(RF_PWR_0dBm, RF_PWR));
 
 	uint8_t status = 0;
 	nrf_hal_read_reg_byte(REG_STATUS, &status);
 	if(status & _BV(RX_DR)) {
-		nrf_hal_set_reg_bit(REG_STATUS, _BV(RX_DR));
+		_nrf_set_reg_bit(REG_STATUS, _BV(RX_DR));
 	}
 	if(status & _BV(TX_DS)) {
-		nrf_hal_set_reg_bit(REG_STATUS, _BV(TX_DS));
+		_nrf_set_reg_bit(REG_STATUS, _BV(TX_DS));
 	}
 	if(status & _BV(MAX_RT)) {
-		nrf_hal_set_reg_bit(REG_STATUS, _BV(MAX_RT));
+		_nrf_set_reg_bit(REG_STATUS, _BV(MAX_RT));
 	}
 
 	nrf_hal_write_reg_byte(REG_RX_PW_P0,	0);
@@ -185,7 +217,7 @@ void nrf_set_standby_mode() {
 
 
 void nrf_set_receive_mode() {
-	nrf_hal_set_reg_bit(REG_CONFIG, PRIM_RX);
+	_nrf_set_reg_bit(REG_CONFIG, PRIM_RX);
 
 	nrf_hal_ce(1);
 
@@ -193,7 +225,7 @@ void nrf_set_receive_mode() {
 }
 
 void nrf_set_send_mode() {
-	nrf_hal_clear_reg_bit(REG_CONFIG, PRIM_RX);
+	_nrf_clear_reg_bit(REG_CONFIG, PRIM_RX);
 
 	nrf_hal_ce(1);
 
@@ -205,7 +237,7 @@ void nrf_enable_autoack(uint8_t pipe) {
 		return ;
 	}
 
-	nrf_hal_set_reg_bit(REG_EN_AA, pipe);
+	_nrf_set_reg_bit(REG_EN_AA, pipe);
 }
 
 void nrf_disable_autoack(uint8_t pipe) {
@@ -213,7 +245,7 @@ void nrf_disable_autoack(uint8_t pipe) {
 		return ;
 	}
 
-	nrf_hal_clear_reg_bit(REG_EN_AA, pipe);
+	_nrf_clear_reg_bit(REG_EN_AA, pipe);
 }
 
 
@@ -252,15 +284,36 @@ int nrf_enable_dynamic_payload(uint8_t pipe) {
 }
 
 
-int nrf_read_payload(uint8_t *buf, uint8_t *len) {
+int nrf_read_payload(uint8_t *buf, uint8_t *len, uint8_t *pipe) {
+    // 读数据通道
+    uint8_t status = 0;
+    nrf_hal_read_reg_byte(REG_STATUS, &status);
+    *pipe = ((status>>1) & 0x07);
 
+    // 读数据长度
 	nrf_hal_cmd_read_byte(CMD_R_RX_PL_WID, len);
 
+	// 读数据
 	nrf_hal_cmd_read(CMD_R_RX_PAYLOAD, buf, *len);
+
+	// 清除数据标志位
+	_nrf_set_reg_bit(REG_STATUS, _BV(RX_DR));
+
+	// 清空接收缓冲区
+	nrf_flush_rx();
 
 	return 0;
 }
 
 int nrf_write_payload(uint8_t *buf, uint8_t len) {
 	return nrf_hal_cmd_write(CMD_W_TX_PAYLOAD_NOACK, buf, len);
+}
+
+
+void nrf_ce(uint8_t mode) {
+    nrf_hal_ce(mode);
+}
+
+void nrf_csn(uint8_t mode) {
+    nrf_hal_csn(mode);
 }
