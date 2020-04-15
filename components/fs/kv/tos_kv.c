@@ -25,12 +25,12 @@ __STATIC__ uint8_t kv_checksum_crc8(uint8_t *buf, int nbyte)
     uint8_t crc = 0;
 
 #define POLY            0x31
-#define BIT_PER_BYTE    8
+#define WIDTH           8
 #define TOP_BIT         0x80
 
     while (nbyte--) {
         crc ^= *buf++;
-        for (i = 0; i < BIT_PER_BYTE; ++i) {
+        for (i = 0; i < WIDTH; ++i) {
             if (crc & TOP_BIT) {
                 crc = (crc << 1) ^ POLY;
             } else {
