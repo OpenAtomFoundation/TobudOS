@@ -1,9 +1,14 @@
 #ifndef NRF24L01_H_
 #define NRF24L01_H_
 
-#include "nrf24l01_hal.h"
+#include "stdint.h"
 
 typedef struct {
+    int  (*init)(void *private);
+    void (*csn)(uint8_t mode);
+    void (*ce)(uint8_t mode);
+    void (*spi_send)(uint8_t *buf, uint8_t len);
+    void (*spi_recv)(uint8_t *buf, uint8_t len);
     void *private;
 } nrf_init_t;
 
@@ -292,7 +297,7 @@ typedef struct {
 #define _VV(v, n) ((v)<<(n))
 
 
-int nrf_init(void* ni);
+int nrf_init(nrf_init_t *ni);
 
 void nrf_flush_rx();
 
@@ -354,4 +359,17 @@ void nrf_ce(uint8_t mode);
 
 void nrf_csn(uint8_t mode);
 
+
+
+int nrf_read_reg(uint8_t reg, uint8_t *buf, uint8_t len);
+int nrf_read_reg_byte(uint8_t reg, uint8_t *v);
+int nrf_write_reg(uint8_t reg, uint8_t *buf, uint8_t len);
+int nrf_write_reg_byte(uint8_t reg, uint8_t byte);
+int nrf_clear_reg_bit(uint8_t reg, uint8_t bit);
+int nrf_set_reg_bit(uint8_t reg, uint8_t bit);
+
+int nrf_cmd_read(uint8_t cmd, uint8_t *data, uint8_t len);
+int nrf_cmd_read_byte(uint8_t cmd, uint8_t *data);
+int nrf_write_cmd_and_data(uint8_t cmd, uint8_t *data, uint8_t len);
+int nrf_write_cmd(uint8_t cmd);
 #endif /* NRF24L01_H_ */

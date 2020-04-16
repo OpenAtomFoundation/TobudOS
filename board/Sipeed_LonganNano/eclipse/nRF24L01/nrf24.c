@@ -76,11 +76,16 @@ void nrf24l01_init() {
         nhi.csn_port= CSN_GPIO_PORT;
         nhi.csn_pin = CSN_PIN;
 
-        gpio_init(nhi.ce_port,  GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, nhi.ce_pin);
-        gpio_init(nhi.csn_port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, nhi.csn_pin);
-        gpio_bit_set(nhi.ce_port, nhi.ce_pin);
-        gpio_bit_set(nhi.csn_port, nhi.csn_pin);
-        nrf_init(&nhi);
+        nrf_init_t ni = {
+                .init		= nrf_hal_init,
+				.ce			= nrf_hal_ce,
+				.csn		= nrf_hal_csn,
+				.spi_recv	= nrf_hal_spi_recv,
+				.spi_send	= nrf_hal_spi_send,
+				.private	= &nhi,
+        };
+
+        nrf_init(&ni);
     }
 
     tos_task_create(&task_nrf24_handle, "task_nrf24", task_nrf24,  NULL, 5, task_nrf24_stk, TASK_SIZE, 0);
@@ -96,7 +101,7 @@ void EXTI5_9_IRQHandler(void)
             exti_interrupt_flag_clear(IRQ_PIN);
 
             uint8_t status = 0;
-            nrf_hal_read_reg_byte(REG_STATUS, &status);
+            nrf_read_reg_byte(REG_STATUS, &status);
 
             if(status & _BV(RX_DR)) {
                   tos_sem_post(&sem_nrf);
