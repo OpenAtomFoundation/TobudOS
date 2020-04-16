@@ -244,15 +244,16 @@ void test_nrf24l01_tx() {
     while(1) {
         nrf_flush_rx();
         nrf_flush_tx();
-        uint8_t buf[] = {0x0A, 0x0C, 0x0E, cnt++ };
-        nrf_write_payload(buf, sizeof(buf));
+        uint8_t buf[32];
+        snprintf(buf, sizeof(buf), "Ace nRF24L01+ %u", cnt++);
+        nrf_write_payload(buf, strlen(buf)+1);
         tos_sem_post(&sem_led);
         nrf_delay(100);
     }
 }
 
 void task_nrf24() {
-    test_nrf24l01_irq_rx();
+    //test_nrf24l01_irq_rx();
     //test_nrf24l01_rx();
-    //test_nrf24l01_tx();
+    test_nrf24l01_tx();
 }

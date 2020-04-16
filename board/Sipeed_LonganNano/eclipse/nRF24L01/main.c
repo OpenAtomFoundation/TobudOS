@@ -81,8 +81,8 @@ void main(void) {
 
 
     tos_sem_create(&sem_led, 1);
-    tos_task_create(&led_handle,     "led", task_led, NULL, 3,   led_stk,   LED_TASK_SIZE, 0);
-    tos_task_create(&lcd_handle,     "lcd", task_lcd, NULL, 3,   lcd_stk,   LCD_TASK_SIZE, 0);
+    tos_task_create(&led_handle,     "led", task_led, NULL, 6,   led_stk,   LED_TASK_SIZE, 0);
+    tos_task_create(&lcd_handle,     "lcd", task_lcd, NULL, 6,   lcd_stk,   LCD_TASK_SIZE, 0);
 
     tos_knl_start();
 
