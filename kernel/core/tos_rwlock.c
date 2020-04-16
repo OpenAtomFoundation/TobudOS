@@ -135,7 +135,7 @@ __API__ k_err_t tos_rwlock_rpend_try(k_rwlock_t *rwlock)
     TOS_PTR_SANITY_CHECK(rwlock);
     TOS_OBJ_VERIFY(rwlock, KNL_OBJ_TYPE_RWLOCK);
 
-    err = tos_mutex_pend(&rwlock->lock);
+    err = tos_mutex_pend_timed(&rwlock->lock, TOS_TIME_NOWAIT);
     if (err != K_ERR_NONE) {
         return err;
     }
@@ -230,7 +230,7 @@ __API__ k_err_t tos_rwlock_wpend_try(k_rwlock_t *rwlock)
     TOS_PTR_SANITY_CHECK(rwlock);
     TOS_OBJ_VERIFY(rwlock, KNL_OBJ_TYPE_RWLOCK);
 
-    err = tos_mutex_pend(&rwlock->lock);
+    err = tos_mutex_pend_timed(&rwlock->lock, TOS_TIME_NOWAIT);
     if (err != K_ERR_NONE) {
         return err;
     }
