@@ -1,7 +1,6 @@
 #include "tos_k.h"
 #include "mcu_init.h"
 
-#define STK_SIZE_TASK_WIZARD    512
 #define STK_SIZE_TASK_WARRIOR   512
 
 k_stack_t stack_task_warrior_0[STK_SIZE_TASK_WARRIOR];
@@ -48,11 +47,11 @@ int main(void)
     tos_barrier_create(&barrier, 3);
 
     (void)tos_task_create(&task_warrior_0, "warrior_0", entry_task_warrior_0, NULL,
-                                4, stack_task_warrior_0, STK_SIZE_TASK_WIZARD, 0);
+                                4, stack_task_warrior_0, STK_SIZE_TASK_WARRIOR, 0);
     (void)tos_task_create(&task_warrior_1, "warrior_1", entry_task_warrior_1, NULL,
-                                4, stack_task_warrior_1, STK_SIZE_TASK_WIZARD, 0);
+                                4, stack_task_warrior_1, STK_SIZE_TASK_WARRIOR, 0);
     (void)tos_task_create(&task_warrior_2, "warrior_2", entry_task_warrior_2, NULL,
-                                4, stack_task_warrior_2, STK_SIZE_TASK_WIZARD, 0);
+                                4, stack_task_warrior_2, STK_SIZE_TASK_WARRIOR, 0);
     tos_knl_start();
 }
 
