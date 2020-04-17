@@ -39,7 +39,7 @@ void application_entry(void *arg)
     coap_thread();
 
     while (1) {
-        printf("This is a mqtt demo!\r\n");
+        printf("This is a coap demo!\r\n");
         tos_task_delay(1000);
     }
 }
