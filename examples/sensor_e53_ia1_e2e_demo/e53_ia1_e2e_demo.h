@@ -1,5 +1,5 @@
-#ifndef __MQTT_DEMO_H__
-#define __MQTT_DEMO_H__
+#ifndef _E53_IA1_E2E_DEMO_H_
+#define _E53_IA1_E2E_DEMO_H_
 
 #include "mcu_init.h"
 #include "tos_at.h"
@@ -12,5 +12,5 @@
 extern void application_entry(void *arg);
 extern void motor_control(char mode);
 extern void light_control(char mode);
-#endif /* __APP_DEMO_H__ */
 
+#endif /* _E53_IA1_E2E_DEMO_H_ */
