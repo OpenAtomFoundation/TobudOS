@@ -52,8 +52,6 @@ DRESULT w25q64_fatfs_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 
  DRESULT w25q64_fatfs_ioctl(BYTE lun, BYTE cmd, void *buff)
 {
-    DRESULT res = RES_PARERR;
-
     switch (cmd)
     {
     case GET_SECTOR_COUNT:
@@ -66,11 +64,9 @@ DRESULT w25q64_fatfs_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
         *(DWORD *)buff = 1;
         break;
     default:
-        return res;
-    }
-    res = RES_OK;
-  
-    return res;
+        return RES_PARERR;
+    } 
+    return RES_OK;
 }
 
 DWORD get_fattime (void)
