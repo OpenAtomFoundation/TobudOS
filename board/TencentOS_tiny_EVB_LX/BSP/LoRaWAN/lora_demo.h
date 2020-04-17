@@ -1,5 +1,5 @@
-#ifndef __APP_DEMO_H__
-#define __APP_DEMO_H__
+#ifndef __LORA_DEMO_H__
+#define __LORA_DEMO_H__
 
 #include "mcu_init.h"
 #include "tos_at.h"
@@ -20,5 +20,5 @@ void application_entry(void *arg);
 }
 #endif
 
-#endif /* __APP_DEMO_H__ */
+#endif /* __LORA_DEMO_H__ */
 
