@@ -7,7 +7,7 @@
    - GCC_VERSION
    - GCC_DIR
 3. 在TencentOS-tiny\board\ALPHA_I.MX_emmc_256ddr目录下执行make命令
-4. 利用正点原子官方的imxdownload工具，将out/target/TencenOS_tiny.bin烧写到SD卡中
+4. 利用正点原子官方的imxdownload工具，将out/target/TencentOS_tiny.bin烧写到SD卡中
 5. 将SD卡插入阿尔法开发板，接上串口，开发板复位上电，可从串口中看到两个任务以一定的时序交叉运行（业务入口文件为TencentOS-tiny\board\ALPHA_I.MX_emmc_256ddr\src\main.c）。
 
 ## 注意
