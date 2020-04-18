@@ -8,6 +8,7 @@
 
 #define SPI_FLASH_SECTOR_SIZE   (4 * 1024)
 #define SPI_FLASH_PAGE_SIZE     256
+
  DSTATUS w25q64_fatfs_status(BYTE lun)
 {
     DSTATUS status = STA_NOINIT;
@@ -51,8 +52,6 @@ DRESULT w25q64_fatfs_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 
  DRESULT w25q64_fatfs_ioctl(BYTE lun, BYTE cmd, void *buff)
 {
-    DRESULT res = RES_PARERR;
-
     switch (cmd)
     {
     case GET_SECTOR_COUNT:
@@ -64,13 +63,11 @@ DRESULT w25q64_fatfs_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
     case GET_BLOCK_SIZE:
         *(DWORD *)buff = 1;
         break;
-    }
-    res = RES_OK;
-    return res;
+    default:
+        return RES_PARERR;
+    } 
+    return RES_OK;
 }
-
-
-
 
 DWORD get_fattime (void)
 {
