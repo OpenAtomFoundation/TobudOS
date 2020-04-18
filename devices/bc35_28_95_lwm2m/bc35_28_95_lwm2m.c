@@ -245,7 +245,7 @@ static int bc35_28_95_lwm2m_init(void)
         return -1;
     }
     if(bc35_28_95_autoconnect_config(0)!=0){
-        printf("autoconnect false FAILED\n");
+        printf("autoconnect config FAILED\n");
         return -1;
     };
     if (bc35_28_95_cfun_set(0) != 0) {
