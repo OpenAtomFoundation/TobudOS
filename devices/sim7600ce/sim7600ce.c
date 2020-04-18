@@ -172,7 +172,7 @@ static int sim7600ce_init(void)
         //return -1;
     }
     if (sim7600ce_csocksetpn() != 0) {
-        printf("sim7600ce_net_open FAILED\n");
+        printf("sim7600ce_csocksetpn FAILED\n");
         return -1;
     }
 
