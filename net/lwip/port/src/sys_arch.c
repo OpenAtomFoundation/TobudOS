@@ -218,7 +218,7 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn function, void *arg
     sys_thread_t task;
     k_stack_t *task_stack;
 
-    task = tos_mmheap_alloc(sizeof(k_task_t));
+    task = tos_mmheap_calloc(sizeof(k_task_t));
     if (!task) {
         printf("[sys_arch]:memalloc k_task_t fail!\n");
         return NULL;
