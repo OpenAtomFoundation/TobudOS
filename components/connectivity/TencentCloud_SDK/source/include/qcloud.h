@@ -1,5 +1,5 @@
-#ifndef _QCLOUD_
-#define  _QCLOUD_
+#ifndef _QCLOUD_H_
+#define _QCLOUD_H_
 
 #include "qcloud_config_def.h"
 #include "qcloud_config.h"
@@ -47,5 +47,5 @@
 #include "qcloud_coap_config.h"
 #include "qcloud_coap.h"
 
-#endif
+#endif/*_QCLOUD_H_*/
 
