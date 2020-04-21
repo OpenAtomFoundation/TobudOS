@@ -150,6 +150,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/nRF24L01/Application/Inc}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/nRF24L01/Application/Hardware/lcd}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/nRF24L01/nrf24l01}&quot;"/>
                                     								
                                 </option>
                                 								

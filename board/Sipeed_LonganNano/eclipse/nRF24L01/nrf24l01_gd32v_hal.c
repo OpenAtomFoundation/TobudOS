@@ -1,4 +1,4 @@
-#include "nrf24l01_hal.h"
+#include "nrf24l01_gd32v_hal.h"
 #include "gd32vf103_gpio.h"
 #include <string.h>
 

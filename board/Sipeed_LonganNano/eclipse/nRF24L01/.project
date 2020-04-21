@@ -40,6 +40,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>nrf24l01</name>
+			<type>2</type>
+			<locationURI>PARENT-4-PROJECT_LOC/devices/nrf24l01</locationURI>
+		</link>
+		<link>
 			<name>Application/Hardware</name>
 			<type>2</type>
 			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/BSP/Hardware</locationURI>

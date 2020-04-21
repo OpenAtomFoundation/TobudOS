@@ -1,6 +1,9 @@
-#include "nrf24.h"
 #include "tos_k.h"
 #include <stdio.h>
+#include "mcu_init.h"
+#include "stdlib.h"
+#include "gd32vf103_gpio.h"
+#include "nrf24l01_gd32v_hal.h"
 
 #define USE_SPI1
 
@@ -8,9 +11,13 @@ extern k_sem_t sem_led;
 k_sem_t sem_nrf;
 
 #define TASK_SIZE (8*1024)
-
 k_task_t task_nrf24_handle;
 uint8_t task_nrf24_stk[TASK_SIZE];
+
+#define LED_TASK_SIZE 1024
+k_task_t led_handle;
+uint8_t led_stk[LED_TASK_SIZE];
+
 
 #define CE_GPIO_PORT    GPIOA
 #define CE_PIN          GPIO_PIN_3
@@ -20,6 +27,36 @@ uint8_t task_nrf24_stk[TASK_SIZE];
 #define IRQ_PIN         GPIO_PIN_5
 
 void task_nrf24();
+
+
+
+k_sem_t sem_led;
+
+typedef struct {
+    int port;
+    int pin;
+} Led_t;
+
+Led_t leds[] = {
+        { LEDR_GPIO_PORT, LEDR_PIN },
+        { LEDG_GPIO_PORT, LEDG_PIN },
+        { LEDB_GPIO_PORT, LEDB_PIN }
+};
+
+
+void task_led(void *arg)
+{
+    int task_cnt1 = 0;
+    while (1) {
+        //printf("hello world from %s cnt: %d\n", __func__, task_cnt1++);
+
+        tos_sem_pend(&sem_led, ~0);
+
+        gpio_bit_reset(LEDB_GPIO_PORT, LEDB_PIN);
+        tos_task_delay(50);
+        gpio_bit_set(LEDB_GPIO_PORT, LEDB_PIN);
+    }
+}
 
 
 
@@ -88,7 +125,11 @@ void nrf24l01_init() {
         nrf_init(&ni);
     }
 
-    tos_task_create(&task_nrf24_handle, "task_nrf24", task_nrf24,  NULL, 5, task_nrf24_stk, TASK_SIZE, 0);
+
+    tos_sem_create(&sem_nrf, 1);
+    tos_sem_create(&sem_led, 1);
+    tos_task_create(&task_nrf24_handle, "task_nrf24",   task_nrf24,     NULL, 5, task_nrf24_stk, TASK_SIZE,     0);
+    tos_task_create(&led_handle,        "led",          task_led,       NULL, 6, led_stk,        LED_TASK_SIZE, 0);
 }
 
 void EXTI5_9_IRQHandler(void)
@@ -144,7 +185,6 @@ void init_nrf24l01_irq() {
 
 void test_nrf24l01_irq_rx()
 {
-    tos_sem_create(&sem_nrf, 1);
 
     init_nrf24l01_irq();
 
@@ -160,7 +200,7 @@ void test_nrf24l01_irq_rx()
 
     nrf_set_rf_channel(64);
     nrf_set_datarate(NRF_2Mbps);
-    uint8_t rxaddr[ADDRLEN] = { 0xAA, 0xCC, 0xEE, 0x00, 0x00 };
+    uint8_t rxaddr[ADDRLEN] = { 0xCB, 0xA7, 0xF9, 0xAC, 0xE0 };
     nrf_set_rxaddr(0, rxaddr, ADDRLEN);
     nrf_enable_dynamic_payload(0);
     nrf_enable_rxaddr(0);
@@ -197,7 +237,7 @@ void test_nrf24l01_rx() {
 
     nrf_set_rf_channel(64);
     nrf_set_datarate(NRF_2Mbps);
-    uint8_t rxaddr[ADDRLEN] = { 0xAA, 0xCC, 0xEE, 0x00, 0x00 };
+    uint8_t rxaddr[ADDRLEN] = { 0xCB, 0xA7, 0xF9, 0xAC, 0xE0 };
     nrf_set_rxaddr(0, rxaddr, ADDRLEN);
     nrf_enable_dynamic_payload(0);
     nrf_enable_rxaddr(0);
@@ -235,7 +275,7 @@ void test_nrf24l01_tx() {
     nrf_set_rf_channel(100);
     nrf_set_datarate(NRF_2Mbps);
     nrf_enable_dynamic_payload(0);
-    uint8_t txaddr[] = { 0xAA, 0xCC, 0xEE, 0x00, 0x01 };
+    uint8_t txaddr[] = { 0xCB, 0xA7, 0xF9, 0xAC, 0xE1 };
     nrf_set_txaddr(txaddr, 5);
 
     nrf_flush_rx();
@@ -245,7 +285,7 @@ void test_nrf24l01_tx() {
         nrf_flush_rx();
         nrf_flush_tx();
         uint8_t buf[32];
-        snprintf(buf, sizeof(buf), "Ace nRF24L01+ %u", cnt++);
+        snprintf(buf, sizeof(buf), "TOS nRF24L01+ %u", cnt++);
         nrf_write_payload(buf, strlen(buf)+1);
         tos_sem_post(&sem_led);
         nrf_delay(100);
@@ -253,7 +293,7 @@ void test_nrf24l01_tx() {
 }
 
 void task_nrf24() {
-    //test_nrf24l01_irq_rx();
+    test_nrf24l01_irq_rx();
     //test_nrf24l01_rx();
-    test_nrf24l01_tx();
+    //test_nrf24l01_tx();
 }

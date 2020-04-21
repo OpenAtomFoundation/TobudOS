@@ -1,5 +1,5 @@
-#ifndef NRF24L01_HAL_H_
-#define NRF24L01_HAL_H_
+#ifndef NRF24L01_GD32V_HAL_H_
+#define NRF24L01_GD32V_HAL_H_
 
 #include "nrf24l01.h"
 
@@ -21,4 +21,4 @@ void nrf_hal_spi_send(uint8_t *buf, uint8_t len);
 
 void nrf_hal_spi_recv(uint8_t *buf, uint8_t len);
 
-#endif /* NRF24L01_HAL_H_ */
+#endif /* NRF24L01_GD32V_HAL_H_ */
