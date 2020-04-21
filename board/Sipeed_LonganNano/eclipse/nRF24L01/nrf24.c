@@ -4,11 +4,13 @@
 #include "stdlib.h"
 #include "gd32vf103_gpio.h"
 #include "nrf24l01_gd32v_hal.h"
+#include "lcd.h"
 
 #define USE_SPI1
 
-extern k_sem_t sem_led;
 k_sem_t sem_nrf;
+k_sem_t sem_led;
+k_mutex_t mutex_lcd;
 
 #define TASK_SIZE (8*1024)
 k_task_t task_nrf24_handle;
@@ -17,6 +19,11 @@ uint8_t task_nrf24_stk[TASK_SIZE];
 #define LED_TASK_SIZE 1024
 k_task_t led_handle;
 uint8_t led_stk[LED_TASK_SIZE];
+
+
+#define LCD_TASK_SIZE 1024
+k_task_t lcd_handle;
+uint8_t lcd_stk[LCD_TASK_SIZE];
 
 
 #define CE_GPIO_PORT    GPIOA
@@ -28,30 +35,13 @@ uint8_t led_stk[LED_TASK_SIZE];
 
 void task_nrf24();
 
-
-
-k_sem_t sem_led;
-
-typedef struct {
-    int port;
-    int pin;
-} Led_t;
-
-Led_t leds[] = {
-        { LEDR_GPIO_PORT, LEDR_PIN },
-        { LEDG_GPIO_PORT, LEDG_PIN },
-        { LEDB_GPIO_PORT, LEDB_PIN }
-};
-
+char lcd_buf[64];
 
 void task_led(void *arg)
 {
     int task_cnt1 = 0;
     while (1) {
-        //printf("hello world from %s cnt: %d\n", __func__, task_cnt1++);
-
         tos_sem_pend(&sem_led, ~0);
-
         gpio_bit_reset(LEDB_GPIO_PORT, LEDB_PIN);
         tos_task_delay(50);
         gpio_bit_set(LEDB_GPIO_PORT, LEDB_PIN);
@@ -59,6 +49,24 @@ void task_led(void *arg)
 }
 
 
+void task_lcd(void *arg)
+{
+    strcpy(lcd_buf, "initializing...");
+    LCD_SetDisplayMode(LCD_DISPMODE_HORIZONTAL_MIRROR);
+    LCD_Clear(BLACK);
+    const uint16_t x = 0;
+    const uint16_t y = 32;
+    uint8_t oldlen = strlen(lcd_buf);
+    for(int i=0; ; i++) {
+        tos_mutex_pend(&mutex_lcd);
+        uint8_t newlen = strlen(lcd_buf);
+        if(newlen < oldlen) {
+            LCD_Clear(BLACK);
+        }
+        oldlen = newlen;
+        LCD_ShowString(x, y, lcd_buf, CYAN);
+    }
+}
 
 void nrf24l01_init() {
     rcu_periph_clock_enable(RCU_GPIOA);
@@ -128,8 +136,10 @@ void nrf24l01_init() {
 
     tos_sem_create(&sem_nrf, 1);
     tos_sem_create(&sem_led, 1);
+    tos_mutex_create(&mutex_lcd);
     tos_task_create(&task_nrf24_handle, "task_nrf24",   task_nrf24,     NULL, 5, task_nrf24_stk, TASK_SIZE,     0);
     tos_task_create(&led_handle,        "led",          task_led,       NULL, 6, led_stk,        LED_TASK_SIZE, 0);
+    tos_task_create(&lcd_handle,        "lcd",          task_lcd,       NULL, 7, lcd_stk,        LCD_TASK_SIZE, 0);
 }
 
 void EXTI5_9_IRQHandler(void)
@@ -216,6 +226,8 @@ void test_nrf24l01_irq_rx()
 
         tos_sem_post(&sem_led);
 
+        strncpy(lcd_buf, buf, len);
+        tos_mutex_post(&mutex_lcd);
         printf("received %u bytes from pipe %u: ", len, pipe);
 
         for(int i=0; i<len; i++) {
@@ -252,7 +264,8 @@ void test_nrf24l01_rx() {
         nrf_poll_read_payload(buf, &len, &pipe);
 
         tos_sem_post(&sem_led);
-
+        strncpy(lcd_buf, buf, len);
+        tos_mutex_post(&mutex_lcd);
         printf("received %u bytes from pipe %u: ", len, pipe);
 
         for(int i=0; i<len; i++) {

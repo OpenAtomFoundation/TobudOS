@@ -396,6 +396,16 @@ void LCD_Clear(uint16_t Color)
     }
 }
 
+void LCD_ClearRect(uint16_t Color, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+{
+    LCD_Address_Set(x, y, width, height);
+    for(uint16_t i=0; i<max_width; i++) {
+        for (uint16_t j=0; j<max_height; j++) {
+            LCD_WR_DATA(Color);
+        }
+    }
+}
+
 void LCD_ShowChinese(uint16_t x, uint16_t y, uint8_t index, uint16_t color)    
 {
     const uint8_t *p = (uint8_t*) &(Hzk[index*2][0]);
