@@ -1,4 +1,6 @@
-#include "nrf24l01.h"
+
+#if 0
+#include <nrf24l01.old.h>
 
 static SPI_HandleTypeDef *nrf_spi;
 static GPIO_TypeDef* nrf_csn_gpio_port;
@@ -154,3 +156,4 @@ int nrf_hal_write_cmd(uint8_t cmd) {
 	return 0;
 }
 
+#endif

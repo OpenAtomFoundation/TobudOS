@@ -24,7 +24,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "tos_k.h"
-#include "nrf24l01.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -34,42 +33,17 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define TASK_SIZE 4096
+#define TASK_SIZE 1024
 
-
-k_task_t task1_handle;
 k_task_t task2_handle;
 
-uint8_t task1_stk[TASK_SIZE];
 uint8_t task2_stk[TASK_SIZE];
 
-extern uint8_t nrf_received_data;
-void task1(void *arg)
-{
-    int task_cnt1 = 0;
-    while (1) {
-    	task_cnt1++;
-        //printf("task1 cnt: %d\n", task_cnt1);
-#if 1
-    	if(0 != nrf_received_data) {
-    		nrf_received_data = 0;
-    		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-    		tos_task_delay(100);
-    		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-    		tos_task_delay(100);
-    	}
-#endif
-
-		//HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, task_cnt1 % 2 ? GPIO_PIN_SET : GPIO_PIN_RESET);
-		tos_task_delay(1);
-    }
-}
 
 void task2(void *arg)
 {
     int task_cnt2 = 0;
-    tos_task_delay(200);
-    nrf_hal_test();
+
     while (1) {
     	task_cnt2--;
         printf("task2 cnt: %08x\n", task_cnt2);
@@ -114,6 +88,8 @@ PUTCHAR_PROTOTYPE
 	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
 	return ch;
 }
+
+void nrf24l01_init();
 /* USER CODE END 0 */
 
 /**
@@ -147,19 +123,21 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-#if 1
+
   tos_knl_init();
-  tos_task_create(&task1_handle, "task1", task1,      NULL, 3, task1_stk, TASK_SIZE, 0);
+
+  nrf24l01_init();
+
   tos_task_create(&task2_handle, "task2", task2,      NULL, 3, task2_stk, TASK_SIZE, 0);
+
   tos_knl_start();
-#endif
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  nrf_hal_test();
 	  //HAL_Delay(1000);
     /* USER CODE END WHILE */
 
@@ -308,7 +286,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, LED_Pin|CE_Pin, GPIO_PIN_RESET);
@@ -330,18 +307,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(CSN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : nRF24_IRQ_Pin_Pin */
-  GPIO_InitStruct.Pin = nRF24_IRQ_Pin_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(nRF24_IRQ_Pin_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pin : CE_Pin */
   GPIO_InitStruct.Pin = CE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(CE_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : nRF24_IRQ_Pin_Pin */
+  GPIO_InitStruct.Pin = nRF24_IRQ_Pin_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(nRF24_IRQ_Pin_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

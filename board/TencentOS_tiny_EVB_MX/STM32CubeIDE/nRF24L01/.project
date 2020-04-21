@@ -34,6 +34,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>Src/nrf24l01</name>
+			<type>2</type>
+			<locationURI>PARENT-4-PROJECT_LOC/devices/nrf24l01</locationURI>
+		</link>
+		<link>
 			<name>Src/TencentOS tiny/arch</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

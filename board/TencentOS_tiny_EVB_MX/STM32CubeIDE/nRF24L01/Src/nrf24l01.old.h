@@ -1,3 +1,4 @@
+#if 0
 #ifndef NRF24L01_H_
 #define NRF24L01_H_
 
@@ -285,3 +286,4 @@ uint8_t nrf_hal_test();
 
 
 #endif /* NRF24L01_H_ */
+#endif

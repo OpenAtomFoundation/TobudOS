@@ -272,10 +272,10 @@ void test_nrf24l01_tx() {
     nrf_set_standby_mode();
     nrf_set_send_mode();
     nrf_disable_tx_irq();
-    nrf_set_rf_channel(100);
+    nrf_set_rf_channel(64);
     nrf_set_datarate(NRF_2Mbps);
     nrf_enable_dynamic_payload(0);
-    uint8_t txaddr[] = { 0xCB, 0xA7, 0xF9, 0xAC, 0xE1 };
+    uint8_t txaddr[] = { 0xCB, 0xA7, 0xF9, 0xAC, 0xE0 };
     nrf_set_txaddr(txaddr, 5);
 
     nrf_flush_rx();

@@ -1,3 +1,4 @@
+#if 0
 #ifndef NRF24L01_HAL_H_
 #define NRF24L01_HAL_H_
 
@@ -38,3 +39,4 @@ int nrf_hal_write_cmd(uint8_t cmd);
 
 
 #endif /* NRF24L01_HAL_H_ */
+#endif

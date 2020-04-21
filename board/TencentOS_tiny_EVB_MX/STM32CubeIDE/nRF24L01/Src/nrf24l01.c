@@ -1,12 +1,14 @@
+
 /*
  * nrf24l01.c
  *
  *  Created on: Mar 27, 2020
  *      Author: ace
  */
+#if 0
 
 #include "main.h"
-#include "nrf24l01.h"
+#include <nrf24l01.old.h>
 #include "tos_k.h"
 
 
@@ -381,3 +383,4 @@ uint8_t nrf_hal_test() {
 	//return nrf_hal_test_rx();
 	return nrf_hal_test_tx();
 }
+#endif

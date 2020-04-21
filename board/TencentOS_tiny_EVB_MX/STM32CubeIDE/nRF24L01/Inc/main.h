@@ -62,10 +62,11 @@ void Error_Handler(void);
 #define LED_GPIO_Port GPIOC
 #define CSN_Pin GPIO_PIN_4
 #define CSN_GPIO_Port GPIOA
-#define nRF24_IRQ_Pin_Pin GPIO_PIN_14
-#define nRF24_IRQ_Pin_GPIO_Port GPIOB
 #define CE_Pin GPIO_PIN_9
 #define CE_GPIO_Port GPIOC
+#define nRF24_IRQ_Pin_Pin GPIO_PIN_8
+#define nRF24_IRQ_Pin_GPIO_Port GPIOA
+#define nRF24_IRQ_Pin_EXTI_IRQn EXTI9_5_IRQn
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

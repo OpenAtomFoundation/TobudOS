@@ -18,13 +18,11 @@ int nrf_hal_init(void *private) {
 }
 
 void nrf_hal_csn(uint8_t mode) {
-    //gpio_bit_write(g_nrf_hal.csn_port, g_nrf_hal.csn_pin, mode == 0 ? RESET : SET);
-    mode == 0 ? gpio_bit_reset(g_nrf_hal.csn_port, g_nrf_hal.csn_pin) : gpio_bit_set(g_nrf_hal.csn_port, g_nrf_hal.csn_pin);
+    gpio_bit_write(g_nrf_hal.csn_port, g_nrf_hal.csn_pin, mode == 0 ? RESET : SET);
 }
 
 void nrf_hal_ce(uint8_t mode) {
-	//gpio_bit_write(g_nrf_hal.ce_port, g_nrf_hal.ce_pin, mode == 0 ? RESET : SET);
-    mode == 0 ? gpio_bit_reset(g_nrf_hal.ce_port, g_nrf_hal.ce_pin) : gpio_bit_set(g_nrf_hal.ce_port, g_nrf_hal.ce_pin);
+	gpio_bit_write(g_nrf_hal.ce_port, g_nrf_hal.ce_pin, mode == 0 ? RESET : SET);
 }
 
 uint8_t _spi_transfer(uint32_t spi, uint8_t data) {
