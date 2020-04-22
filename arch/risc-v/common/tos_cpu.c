@@ -159,7 +159,6 @@ void cpu_trap_entry(cpu_data_t cause, cpu_context_t *regs)
     }
 }
 
-void eclic_mtip_handler();
 void cpu_irq_entry(cpu_data_t irq)
 {
     typedef void (*irq_handler_t)();

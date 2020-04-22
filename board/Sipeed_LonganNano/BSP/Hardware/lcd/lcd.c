@@ -305,11 +305,11 @@ void LCD_Init(void)
     rcu_periph_clock_enable(RCU_GPIOB);
 
 #if USE_HARDWARE_SPI
-     rcu_periph_clock_enable(RCU_AF);
+    rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_SPI0);
     /* SPI0 GPIO config: NSS/PA4, SCK/PA5, MOSI/PA7 */
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 |GPIO_PIN_6| GPIO_PIN_7);
-    gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
+    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
+    //gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
 
     spi_config();
 #endif
@@ -389,6 +389,16 @@ void LCD_Init(void)
 void LCD_Clear(uint16_t Color)
 {
     LCD_Address_Set(0, 0, max_width, max_height);
+    for(uint16_t i=0; i<max_width; i++) {
+        for (uint16_t j=0; j<max_height; j++) {
+            LCD_WR_DATA(Color);
+        }
+    }
+}
+
+void LCD_ClearRect(uint16_t Color, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+{
+    LCD_Address_Set(x, y, width, height);
     for(uint16_t i=0; i<max_width; i++) {
         for (uint16_t j=0; j<max_height; j++) {
             LCD_WR_DATA(Color);
