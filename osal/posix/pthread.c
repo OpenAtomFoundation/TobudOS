@@ -551,7 +551,7 @@ __API__ int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *
     }
 
     if (!the_attr.stackaddr_valid) {
-        stackaddr   = tos_mmheap_alloc(stacksize);
+        stackaddr   = tos_mmheap_calloc(1, stacksize);
         if (!stackaddr) {
             errcode = ENOMEM;
             goto errout0;

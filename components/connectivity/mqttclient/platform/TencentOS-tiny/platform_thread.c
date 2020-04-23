@@ -18,7 +18,7 @@ platform_thread_t *platform_thread_init( const char *name,
     platform_thread_t *thread;
     k_err_t err;
     k_stack_t *thread_stack;
-    thread = platform_memory_alloc(sizeof(platform_thread_t));
+    thread = platform_memory_calloc(1, sizeof(platform_thread_t));
     thread_stack = (k_stack_t*) platform_memory_alloc(stack_size);
     
     err = tos_task_create(&(thread->thread), 
