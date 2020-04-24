@@ -208,10 +208,10 @@ port_context_switch:
     sw     t0,  __reg_mstatus_OFFSET(sp)
 
 
+switch_task:
     la      t0, k_curr_task         // t0 = &k_curr_task
     la      t1, k_next_task         // t1 = &k_next_task
 
-switch_task:
     // save sp to k_curr_task.sp
     lw      t2, (t0)
     sw      sp, (t2)
@@ -311,8 +311,8 @@ rv32_exception_entry:
     // switch back to task stack
     lw      sp, (sp)
 
-    la      t0,  k_curr_task
-    la      t1,  k_next_task
+    lw      t0,  k_curr_task
+    lw      t1,  k_next_task
 
     // unlikely
     bne     t0,  t1, irq_task_switch
