@@ -91,12 +91,12 @@ __STATIC__ kv_err_t  kv_flash_blk_erase(uint32_t blk_start)
     return kv_flash_erase(blk_start, KV_BLK_SIZE);
 }
 
-__STATIC__ void kv_flash_ctl_init(kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop)
+__STATIC__ void kv_flash_ctl_init(uint32_t flash_start, uint32_t flash_end, kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop)
 {
     memcpy(&kv_ctl.flash_ctl.flash_drv, flash_drv, sizeof(kv_flash_drv_t));
 
-    KV_FLASH_START              = flash_prop->flash_start;
-    KV_FLASH_SIZE               = flash_prop->flash_size;
+    KV_FLASH_START              = flash_start;
+    KV_FLASH_END                = flash_end;
     KV_FLASH_SECTOR_SIZE_LOG2   = flash_prop->sector_size_log2;
 
     if (flash_prop->pgm_type == KV_FLASH_PROGRAM_TYPE_BYTE) {
@@ -866,17 +866,17 @@ __STATIC__ kv_err_t kv_item_update(kv_item_t *item, const char *key, const void 
     return kv_item_delete(item);
 }
 
-__STATIC__ kv_err_t kv_param_verify(kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop)
+__STATIC__ kv_err_t kv_param_verify(uint32_t flash_start, uint32_t flash_end, kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop)
 {
     if (!flash_drv || !flash_prop) {
         return KV_ERR_INVALID_PARAM;
     }
 
-    if (!KV_IS_ALINGED_LOG2(flash_prop->flash_start, flash_prop->sector_size_log2)) {
+    if (!KV_IS_ALINGED_LOG2(flash_start, flash_prop->sector_size_log2)) {
         return KV_ERR_INVALID_PARAM;
     }
 
-    if (!KV_IS_ALINGED_LOG2(flash_prop->flash_size, flash_prop->sector_size_log2)) {
+    if (!KV_IS_ALINGED_LOG2(flash_end, flash_prop->sector_size_log2)) {
         return KV_ERR_INVALID_PARAM;
     }
 
@@ -1196,17 +1196,17 @@ __DEBUG__ kv_err_t tos_kv_walkthru(void)
     return KV_ERR_NONE;
 }
 
-__API__ kv_err_t tos_kv_init(kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop)
+__API__ kv_err_t tos_kv_init(uint32_t flash_start, uint32_t flash_end, kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop)
 {
     kv_err_t err;
 
-    if (kv_param_verify(flash_drv, flash_prop) != KV_ERR_NONE) {
+    if (kv_param_verify(flash_start, flash_end, flash_drv, flash_prop) != KV_ERR_NONE) {
         return KV_ERR_INVALID_PARAM;
     }
 
     memset(&kv_ctl, 0, sizeof(kv_ctl));
 
-    kv_flash_ctl_init(flash_drv, flash_prop);
+    kv_flash_ctl_init(flash_start, flash_end, flash_drv, flash_prop);
 
     err = kv_mgr_ctl_init();
     if (err != KV_ERR_NONE) {

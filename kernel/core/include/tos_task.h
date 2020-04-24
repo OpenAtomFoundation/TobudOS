@@ -293,7 +293,7 @@ __API__ void    tos_task_yield(void);
  * @brief Get current running task.
  * Get current running task.
  *
- * @attention is kernel is not running, you'll get K_NULL
+ * @attention if kernel is not running, you'll get K_NULL
  *
  * @param   None
  *

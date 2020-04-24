@@ -250,7 +250,7 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
         return K_ERR_TASK_PRIO_INVALID;
     }
 
-    the_task = tos_mmheap_alloc(sizeof(k_task_t));
+    the_task = tos_mmheap_calloc(1, sizeof(k_task_t));
     if (!the_task) {
         return K_ERR_TASK_OUT_OF_MEMORY;
     }

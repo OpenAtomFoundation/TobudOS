@@ -25,14 +25,14 @@ void tcp_client_echo_task_entry(void *arg)
     struct sockaddr_in target_sockaddr;
     ip4_addr_t target_ser_ip;
 
-    int optval = 0;           
-    int len = sizeof(int); 
+    int optval = 0;
+    int len = sizeof(int);
     struct timeval tv;
 
     target_ser_t target_ser = *(target_ser_t*)arg;
 
-    
-    if(!ipaddr_aton((const char *)target_ser.ip, &target_ser_ip)) 
+
+    if(!ipaddr_aton((const char *)target_ser.ip, &target_ser_ip))
     {
         LOG(LOG_LVL_ERROR, "[%s, %d]Convert target server ip addr failed.\r\n", __func__, __LINE__);
         return;
@@ -58,23 +58,25 @@ void tcp_client_echo_task_entry(void *arg)
 
     while (1)
     {
-    
+
         if(connect(conn, (struct sockaddr *)&target_sockaddr, sizeof(struct sockaddr)) == -1)
         {
             LOG(LOG_LVL_ERROR, "[%s, %d]Connect target tcp server faild!\r\n", __func__, __LINE__);
             OS_MsDelay(3000);
             continue;
         }
-        
+
         LOG(LOG_LVL_ERROR, "[%s, %d]Connect target tcp server successful!\r\n", __func__, __LINE__);
-        
+
         while (1)
         {
+            ret = send(conn, "hello", strlen("hello"), 0);
+
             //---------------recv data-----------------------//
             memset(recv_data,0,sizeof(recv_data));
-            
+
             ret = recv(conn, recv_data, BUFSZ-1, 0);
-            getsockopt(conn, SOL_SOCKET, SO_ERROR, &optval, (socklen_t *)&len);        
+            getsockopt(conn, SOL_SOCKET, SO_ERROR, &optval, (socklen_t *)&len);
             if (ret < 0)
             {
                 if(optval == EWOULDBLOCK){
@@ -99,26 +101,18 @@ void tcp_client_echo_task_entry(void *arg)
                     LOG(LOG_LVL_ERROR, "[%s, %d] recv = 0 (err optval = %d)\r\n", __func__, __LINE__,  optval);
                     closesocket(conn);
                     break;
-                }            
+                }
             }
             else
             {
                 cli_recv_count += ret;
                 LOG(LOG_LVL_ERROR, "client_recv_count = %u\r\n", cli_recv_count);
             }
-            
-            //---------------send data-----------------------//
-            if(!strstr(recv_data,"TencentOS tiny"))
-            {
-                ret = send(conn, "tcp client push massage!", strlen("tcp client push massage!"), 0);
-                OS_MsDelay(2000);
-            }
-            else
-            {
-                ret = send(conn, recv_data, ret, 0);                
-            }
 
-            getsockopt(conn, SOL_SOCKET, SO_ERROR, &optval, (socklen_t *)&len);        
+            //---------------send data-----------------------//
+            LOG(LOG_LVL_INFO, "received: %s\r\n", recv_data);
+
+            getsockopt(conn, SOL_SOCKET, SO_ERROR, &optval, (socklen_t *)&len);
             if (ret < 0)
             {
                 if(optval == EWOULDBLOCK){
@@ -132,7 +126,7 @@ void tcp_client_echo_task_entry(void *arg)
                     LOG(LOG_LVL_ERROR, "[%s, %d] send < 0 (err optval = %d)\r\n", __func__, __LINE__, optval);
                     closesocket(conn);
                     break;
-                }                
+                }
             }
             else if(ret == 0)
             {
@@ -143,11 +137,13 @@ void tcp_client_echo_task_entry(void *arg)
                     LOG(LOG_LVL_ERROR, "[%s, %d] send = 0 (err optval = %d)\r\n", __func__, __LINE__, optval);
                     closesocket(conn);
                     break;
-                }            
+                }
             }
+
+            OS_MsDelay(3000);
         }
     }
-    
+
     closesocket(conn);
     LOG(LOG_LVL_ERROR, "[%s, %d]tcp client sock closed.\r\n", __func__, __LINE__);
 }
@@ -158,7 +154,7 @@ void tcp_client_echo_task_creat(uint8_t * ser_ip, uint32_t port)
     target_ser_t ser = {0};
     ser.ip   = ser_ip;
     ser.port = port;
-    
+
     osThreadCreate(osThread(tcp_client_echo_task_entry), &ser);
 }
 

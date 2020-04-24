@@ -26,8 +26,8 @@ void wifi_init_sta(void)
     uint8_t macaddr[6] = {0}, macaddr_default[6] = {0};
     wifi_config_t wifi_config = {
         .sta = {
-            .ssid     = "LN882x-AP",
-            .password = "",
+            .ssid     = "SheldonDai",
+            .password = "srnr6x9xbhmb0",
             0,
         },
     };
@@ -198,7 +198,7 @@ void application_entry(void *arg)
     };
     
     tcp_server_echo_task_creat(8087);
-    tcp_client_echo_task_creat((uint8_t *)"120.76.100.197", 10002);//通信猫测试(IP:120.76.100.197) 10002端口
+    tcp_client_echo_task_creat((uint8_t *)"39.108.190.129", 8000);//通信猫测试(IP:120.76.100.197) 10002端口
     
     while(1)
     {

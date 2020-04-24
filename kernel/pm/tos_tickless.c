@@ -142,6 +142,9 @@ __KNL__ void tickless_proc(void)
     lpwr_mode = pm_cpu_lpwr_mode_get();
 
     time_sleep = tickless_cpu_sleep_time_get(lpwr_mode); /* in millisecond */
+    if (unlikely(time_sleep == (k_time_t)0)) {
+        return;
+    }
 
     tickless_enter();
     tickless_wkup_alarm_setup(lpwr_mode, time_sleep);

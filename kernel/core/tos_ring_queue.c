@@ -220,7 +220,7 @@ __API__ int tos_ring_q_is_empty(k_ring_q_t *ring_q)
     TOS_OBJ_VERIFY_RC(ring_q, KNL_OBJ_TYPE_RING_QUEUE, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
-    is_empty = (ring_q->total == 0);
+    is_empty = (ring_q->total == 0 ? K_TRUE : K_FALSE);
     TOS_CPU_INT_ENABLE();
 
     return is_empty;
@@ -235,7 +235,7 @@ __API__ int tos_ring_q_is_full(k_ring_q_t *ring_q)
     TOS_OBJ_VERIFY_RC(ring_q, KNL_OBJ_TYPE_RING_QUEUE, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
-    is_full = (ring_q->total == ring_q->item_cnt);
+    is_full = (ring_q->total == ring_q->item_cnt ? K_TRUE : K_FALSE);
     TOS_CPU_INT_ENABLE();
 
     return is_full;

@@ -4,9 +4,6 @@
 #define SECTOR_SIZE                 4096    // sector size for qspiflash
 #define SECTOR_SIZE_LOG2            12  // 2 ^ 12 = 4096
 
-#define FOR_KV_FLASH_SIZE           (2 * SECTOR_SIZE)
-#define FOR_KV_FLASH_START          0x0
-
 int stm32l4_qspiflash_read(uint32_t addr, void *buf, size_t len)
 {
     return hal_spi_flash_read(buf, len, addr);
@@ -33,8 +30,6 @@ kv_flash_drv_t stm32l4_qspiflash_drv = {
 kv_flash_prop_t stm32l4_qspiflash_prop = {
     .sector_size_log2   = SECTOR_SIZE_LOG2,
     .pgm_type           = KV_FLASH_PROGRAM_TYPE_BYTE,
-    .flash_start        = FOR_KV_FLASH_START,
-    .flash_size         = FOR_KV_FLASH_SIZE,
 };
 
 

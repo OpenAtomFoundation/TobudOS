@@ -7,9 +7,6 @@
 #define SECTOR_SIZE                 2048         // sector size for stm32l431RCTX
 #define SECTOR_SIZE_LOG2            11  // 2 ^ 11 = 2048
 
-#define FOR_KV_FLASH_SIZE           (2 * SECTOR_SIZE)  // storage for kv
-#define FOR_KV_FLASH_START          0x803d000
-
 kv_flash_drv_t stm32l4_norflash_onchip_drv = {
     .write  = stm32l4_norflash_onchip_write,
     .read   = stm32l4_norflash_onchip_read,
@@ -19,7 +16,5 @@ kv_flash_drv_t stm32l4_norflash_onchip_drv = {
 kv_flash_prop_t stm32l4_norflash_onchip_prop = {
     .sector_size_log2   = SECTOR_SIZE_LOG2,
     .pgm_type           = KV_FLASH_PROGRAM_TYPE_DOUBLEWORD,
-    .flash_start        = FOR_KV_FLASH_START,
-    .flash_size         = FOR_KV_FLASH_SIZE,
 };
 

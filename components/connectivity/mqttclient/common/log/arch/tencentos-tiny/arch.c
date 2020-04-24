@@ -14,6 +14,10 @@ void *salof_alloc(unsigned int size)
     return tos_mmheap_alloc(size);
 }
 
+void *salof_calloc(size_t num, size_t size)
+{
+    return tos_mmheap_calloc(num, size);
+}
 
 void salof_free(void *mem)
 {
@@ -30,13 +34,13 @@ salof_tcb salof_task_create(const char *name,
     salof_tcb task;
     k_err_t err;
     k_stack_t *task_stack;
-    task = salof_alloc(sizeof(k_task_t));
+    task = salof_calloc(1, sizeof(k_task_t));
     task_stack = salof_alloc(stack_size);
-    err = tos_task_create(task, 
-                          (char*)name, 
+    err = tos_task_create(task,
+                          (char*)name,
                           task_entry,
-                          param, 
-                          priority, 
+                          param,
+                          priority,
                           task_stack,
                           stack_size,
                           tick);
@@ -53,7 +57,7 @@ salof_mutex salof_mutex_create(void)
 {
     salof_mutex mutex;
     mutex = salof_alloc(sizeof(k_mutex_t));
-	tos_mutex_create((salof_mutex)mutex);	
+	tos_mutex_create((salof_mutex)mutex);
     return mutex;
 }
 
@@ -83,7 +87,7 @@ salof_sem salof_sem_create(void)
 {
     salof_sem sem;
     sem = salof_alloc(sizeof(k_sem_t));
-	tos_sem_create((salof_sem)sem, 0);	
+	tos_sem_create((salof_sem)sem, 0);
     return sem;
 }
 
@@ -120,4 +124,4 @@ char *salof_get_task_name(void)
     return k_curr_task->name;
 }
 
-#endif 
+#endif
