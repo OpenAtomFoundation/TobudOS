@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-
-<workspace>  <project>
-    <path>$WS_DIR$\pca10040\s132\iar\iot_secure_dfu_bootloader_secure_dfu_s132_pca10040.ewp</path>
-  </project>  <project>
-    <path>$WS_DIR$\pca10056\s140\iar\iot_secure_dfu_bootloader_secure_dfu_s140_pca10056.ewp</path>
-  </project>  <batchBuild/>
-</workspace>
