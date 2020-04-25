@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-03-15 01:12:28
+ * @LastEditTime: 2020-04-18 12:29:23
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTTCLIENT_H_
@@ -57,6 +57,7 @@ typedef struct message_data {
     mqtt_message_t      *message;
 } message_data_t;
 
+typedef void (*interceptor_handler_t)(void* client, message_data_t* msg);
 typedef void (*message_handler_t)(void* client, message_data_t* msg);
 typedef void (*reconnect_handler_t)(void* client, void* reconnect_date);
 
@@ -115,6 +116,7 @@ typedef struct mqtt_client {
     platform_timer_t            last_sent;
     platform_timer_t            last_received;
     connect_params_t            *connect_params;
+    interceptor_handler_t       interceptor_handler;
 } mqtt_client_t;
 
 typedef struct client_init_params{
@@ -135,8 +137,8 @@ int mqtt_disconnect(mqtt_client_t* c);
 int mqtt_subscribe(mqtt_client_t* c, const char* topic_filter, mqtt_qos_t qos, message_handler_t msg_handler);
 int mqtt_unsubscribe(mqtt_client_t* c, const char* topic_filter);
 int mqtt_publish(mqtt_client_t* c, const char* topic_filter, mqtt_message_t* msg);
-int mqtt_yield(mqtt_client_t* c, int timeout_ms);
-
+int mqtt_list_subscribe_topic(mqtt_client_t* c);
+int mqtt_set_interceptor_handler(mqtt_client_t* c, interceptor_handler_t handler);
 
 
 #endif /* _MQTTCLIENT_H_ */
