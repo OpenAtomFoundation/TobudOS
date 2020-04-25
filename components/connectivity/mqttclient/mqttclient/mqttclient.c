@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-04-23 15:12:36
+ * @LastEditTime: 2020-04-25 18:58:14
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -48,12 +48,12 @@ static int mqtt_set_publish_dup(mqtt_client_t* c, unsigned char dup)
     MQTTHeader header = {0};
 
     if (NULL == c->write_buf)
-        RETURN_ERROR(MQTT_SET_PUBLISH_DUP_FAILED);
+        RETURN_ERROR(MQTT_SET_PUBLISH_DUP_FAILED_ERROR);
 
     header.byte = readChar(&read_data); /* read header */
 
     if (header.bits.type != PUBLISH)
-        RETURN_ERROR(MQTT_SET_PUBLISH_DUP_FAILED);
+        RETURN_ERROR(MQTT_SET_PUBLISH_DUP_FAILED_ERROR);
     
     header.bits.dup = dup;
     writeChar(&write_data, header.byte); /* write header */
@@ -382,7 +382,7 @@ static int mqtt_ack_list_record(mqtt_client_t* c, int type, unsigned short packe
     
     /* Determine if the node already exists */
     if (mqtt_ack_list_node_is_exist(c, type, packet_id))
-        RETURN_ERROR(MQTT_ACK_NODE_IS_EXIST);
+        RETURN_ERROR(MQTT_ACK_NODE_IS_EXIST_ERROR);
 
     /* create a ack handler node */
     ack_handler = mqtt_ack_handler_create(c, type, packet_id, payload_len, handler);
@@ -552,7 +552,7 @@ static int mqtt_try_resubscribe(mqtt_client_t* c)
         msg_handler = LIST_ENTRY(curr, message_handlers_t, list);
 
         /* resubscribe topic */
-        if ((rc = mqtt_subscribe(c, msg_handler->topic_filter, msg_handler->qos, msg_handler->handler)) == MQTT_ACK_HANDLER_NUM_TOO_MUCH)
+        if ((rc = mqtt_subscribe(c, msg_handler->topic_filter, msg_handler->qos, msg_handler->handler)) == MQTT_ACK_HANDLER_NUM_TOO_MUCH_ERROR)
             LOG_W("%s:%d %s()... mqtt ack handler num too much ...", __FILE__, __LINE__, __FUNCTION__);
 
     }
@@ -571,7 +571,7 @@ static int mqtt_try_do_reconnect(mqtt_client_t* c)
         rc = mqtt_try_resubscribe(c);   /* resubscribe */
     }
 
-    LOG_I("%s:%d %s()... mqtt try connect result is %#x", __FILE__, __LINE__, __FUNCTION__, rc);
+    LOG_I("%s:%d %s()... mqtt try connect result is -0x%04x", __FILE__, __LINE__, __FUNCTION__, -rc);
     
     RETURN_ERROR(rc);
 }
@@ -751,7 +751,7 @@ static int mqtt_publish_packet_handle(mqtt_client_t *c, platform_timer_t *timer)
         mqtt_deliver_message(c, &topic_name, &msg);
     else {
         /* record the received of a qos2 message and only processes it when the qos2 message is received for the first time */
-        if ((rc = mqtt_ack_list_record(c, PUBREL, msg.id, len, NULL)) != MQTT_ACK_NODE_IS_EXIST)
+        if ((rc = mqtt_ack_list_record(c, PUBREL, msg.id, len, NULL)) != MQTT_ACK_NODE_IS_EXIST_ERROR)
             mqtt_deliver_message(c, &topic_name, &msg);
     }
     
@@ -1269,9 +1269,9 @@ int mqtt_publish(mqtt_client_t* c, const char* topic_filter, mqtt_message_t* msg
 
     platform_mutex_lock(&c->write_lock);
 
-    if (msg->qos != QOS0) {
+    if (QOS0 != msg->qos) {
         if (mqtt_ack_handler_is_maximum(c)) {
-            rc = MQTT_ACK_HANDLER_NUM_TOO_MUCH; /* the recorded ack handler has reached the maximum */
+            rc = MQTT_ACK_HANDLER_NUM_TOO_MUCH_ERROR; /* the recorded ack handler has reached the maximum */
             goto exit;
         }
         msg->id = mqtt_get_next_packet_id(c);
@@ -1301,6 +1301,13 @@ int mqtt_publish(mqtt_client_t* c, const char* topic_filter, mqtt_message_t* msg
     
 exit:
     platform_mutex_unlock(&c->write_lock);
+
+    if ((MQTT_ACK_HANDLER_NUM_TOO_MUCH_ERROR == rc) || (MQTT_MEM_NOT_ENOUGH_ERROR == rc)) {
+        LOG_W("%s:%d %s()... there is not enough memory space to record...", __FILE__, __LINE__, __FUNCTION__);
+
+        /* record too much retransmitted data, may be disconnected, need to reconnect */
+        mqtt_set_client_state(c, CLIENT_STATE_DISCONNECTED);
+    }
 
     RETURN_ERROR(rc);     
 }
