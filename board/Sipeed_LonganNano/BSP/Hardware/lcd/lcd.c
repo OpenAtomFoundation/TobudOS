@@ -408,7 +408,12 @@ void LCD_ClearRect(uint16_t Color, uint16_t x, uint16_t y, uint16_t width, uint1
 
 void LCD_ShowChinese(uint16_t x, uint16_t y, uint8_t index, uint16_t color)    
 {
-    const uint8_t *p = (uint8_t*) &(Hzk[index*2][0]);
+    LCD_ShowChineseWithFonts(x, y, Hzk, index, color);
+}
+
+void LCD_ShowChineseWithFonts(uint16_t x, uint16_t y, const char fonts[][16], uint8_t index, uint16_t color)    
+{
+    const uint8_t *p = (uint8_t*) &(fonts[index*2][0]);
 
     //[数据排列]:从左到右从上到下 [取模方式]:纵向8点下高位 [正负反色]:否
     LCD_Address_Set(x, y, 16, 16);
