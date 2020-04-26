@@ -147,7 +147,7 @@ int HAL_GetGwDevInfo(void *pgwDeviceInfo)
 	ret |= device_info_copy(gwDevInfo->sub_dev_info[0].device_name, sg_sub_device_name, MAX_SIZE_OF_DEVICE_NAME);
 
 #else
-	Log_e("HAL_GetDevInfo from json not implement yet");
+	Log_e("HAL_GetGwDevInfo from json not implement yet");
 	ret = QCLOUD_ERR_DEV_INFO;
 #endif
 
