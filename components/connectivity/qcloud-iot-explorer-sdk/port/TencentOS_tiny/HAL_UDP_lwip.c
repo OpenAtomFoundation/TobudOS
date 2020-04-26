@@ -50,7 +50,7 @@ uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
     Log_d("establish udp connection with server(host=%s port=%s)", host, port_str);
 
     if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {        
-	Log_e("getaddrinfo error,errno:%s",strerror(errno));
+        Log_e("getaddrinfo error,errno:%s",strerror(errno));
         return 0;
     }
 
@@ -158,4 +158,4 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
     return HAL_UDP_Read(fd, p_data, datalen);
 }
 
-#endif
+#endif/*COAP_COMM_ENABLED*/
