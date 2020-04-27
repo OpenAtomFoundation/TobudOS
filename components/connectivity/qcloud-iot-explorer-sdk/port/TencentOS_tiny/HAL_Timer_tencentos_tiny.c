@@ -42,18 +42,18 @@ uint32_t HAL_GetTimeMs(void)
 /*Get timestamp*/
 long HAL_Timer_current_sec(void)
 {
-	return HAL_GetTimeMs() / 1000;
+    return HAL_GetTimeMs() / 1000;
 }
 
 char* HAL_Timer_current(void)
 {
-	long time_sec;
+    long time_sec;
 
-	time_sec = HAL_Timer_current_sec();
-	memset(now_time_str, 0, 20);
-	snprintf(now_time_str, 20, "%ld", time_sec);
+    time_sec = HAL_Timer_current_sec();
+    memset(now_time_str, 0, sizeof(now_time_str));
+    snprintf(now_time_str, 20, "%ld", time_sec);
 
-	return now_time_str;
+    return now_time_str;
 }
 
 bool HAL_Timer_expired(Timer *timer)
@@ -63,14 +63,14 @@ bool HAL_Timer_expired(Timer *timer)
 
 void HAL_Timer_countdown_ms(Timer *timer, unsigned int timeout_ms)
 {
-	timer->end_time = HAL_GetTimeMs();
+    timer->end_time = HAL_GetTimeMs();
     timer->end_time += timeout_ms;
 }
 
 void HAL_Timer_countdown(Timer *timer, unsigned int timeout)
 {
     timer->end_time = HAL_GetTimeMs();
-	timer->end_time += timeout * 1000;
+    timer->end_time += timeout * 1000;
 }
 
 int HAL_Timer_remain(Timer *timer)
@@ -87,7 +87,7 @@ int HAL_Timer_remain(Timer *timer)
 
 void HAL_Timer_init(Timer *timer)
 {
-      timer->end_time = 0;
+    timer->end_time = 0;
 }
 
 #ifdef __cplusplus

@@ -45,8 +45,8 @@ static uint32_t _time_left(uint32_t t_end, uint32_t t_now)
 
 uintptr_t HAL_TCP_Connect(const char *host, uint16_t port)
 {
-	int ret;
-	struct addrinfo hints, *addr_list, *cur;
+    int ret;
+    struct addrinfo hints, *addr_list, *cur;
     int fd = 0;
 
     char port_str[6];
@@ -65,20 +65,20 @@ uintptr_t HAL_TCP_Connect(const char *host, uint16_t port)
 
     for (cur = addr_list; cur != NULL; cur = cur->ai_next) {
     	fd = (int) socket( cur->ai_family, cur->ai_socktype, cur->ai_protocol );
-		if( fd < 0 )
-		{
-			ret = 0;
-			continue;
-		}
+        if( fd < 0 )
+        {
+            ret = 0;
+            continue;
+        }
 
-		if (connect(fd, cur->ai_addr, cur->ai_addrlen) == 0)
-		{
-			ret = fd + LWIP_SOCKET_FD_SHIFT;
-			break;
-		}
+        if (connect(fd, cur->ai_addr, cur->ai_addrlen) == 0)
+        {
+            ret = fd + LWIP_SOCKET_FD_SHIFT;
+            break;
+        }
 
-		close( fd );
-		ret = 0;
+        close( fd );
+        ret = 0;
     }
 
     if (ret == 0) {
