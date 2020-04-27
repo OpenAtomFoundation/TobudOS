@@ -40,18 +40,6 @@
 #error  "INVALID config, TOS_CFG_TASK_PRIO_MAX must be >= 8"
 #endif
 
-#if     (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support dynamic task create"
-#endif
-
-#if     (TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support tos_prio_msg_q"
-#endif
-
-#if     (TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support tos_prio_mail_q"
-#endif
-
 #if     ((TOS_CFG_TIMER_EN > 0u) && !defined(TOS_CFG_TIMER_AS_PROC))
 #error  "UNDECLARED config, TOS_CFG_TIMER_AS_PROC"
 #endif
@@ -60,10 +48,6 @@
 #if     !defined(TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE) || (TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE == 0u)
 #error  "INVALID config, must define a valid TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE"
 #endif
-#endif
-
-#if     (TOS_CFG_VFS_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to use tos_vfs"
 #endif
 
 #ifndef  TOS_CFG_CPU_HRTIMER_EN

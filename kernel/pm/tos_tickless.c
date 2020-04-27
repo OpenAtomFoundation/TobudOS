@@ -132,21 +132,35 @@ __STATIC__ void tickless_leave(k_time_t time_sleep_ms)
     tick_sleep = k_cpu_tick_per_second * time_sleep_ms / K_TIME_MILLISEC_PER_SEC;
 
     tickless_tick_fix(tick_sleep);
+
+    knl_sched();
 }
 
 __KNL__ void tickless_proc(void)
 {
+    TOS_CPU_CPSR_ALLOC();
     k_time_t time_sleep;
     k_cpu_lpwr_mode_t lpwr_mode;
 
     lpwr_mode = pm_cpu_lpwr_mode_get();
+    if (lpwr_mode == TOS_LOW_POWER_MODE_NONE) {
+        return;
+    }
+
+    if (!tickless_wkup_alarm_is_installed(lpwr_mode)) {
+        return;
+    }
+
+    TOS_CPU_INT_DISABLE();
 
     time_sleep = tickless_cpu_sleep_time_get(lpwr_mode); /* in millisecond */
     if (unlikely(time_sleep == (k_time_t)0)) {
+        TOS_CPU_INT_ENABLE();
         return;
     }
 
     tickless_enter();
+    TOS_CPU_INT_ENABLE();
     tickless_wkup_alarm_setup(lpwr_mode, time_sleep);
     pm_cpu_lpwr_mode_enter(lpwr_mode);
     tickless_wkup_alarm_dismiss(lpwr_mode);

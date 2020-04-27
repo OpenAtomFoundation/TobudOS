@@ -78,8 +78,7 @@ pm_device_ctl_t     k_pm_device_ctl             = { 0u };
 /* default idle power manager mode is SLEEP */
 idle_pwrmgr_mode_t  k_idle_pwr_mgr_mode         = IDLE_POWER_MANAGER_MODE_SLEEP;
 
-/* default low power mode is SLEEP */
-k_cpu_lpwr_mode_t   k_cpu_lpwr_mode             = TOS_LOW_POWER_MODE_SLEEP;
+k_cpu_lpwr_mode_t   k_cpu_lpwr_mode             = TOS_LOW_POWER_MODE_NONE;
 #endif
 
 #if TOS_CFG_TICKLESS_EN > 0u

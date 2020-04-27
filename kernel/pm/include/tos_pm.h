@@ -53,7 +53,8 @@ typedef enum idle_power_manager_mode_en {
 |-------------------------------------------------------------------------------------------------------------------|
  */
 typedef enum k_cpu_low_power_mode_en {
-    TOS_LOW_POWER_MODE_SLEEP    = 0,    /* wakeup source: systick/tim/rtc */
+    TOS_LOW_POWER_MODE_NONE     = 0,    /* if set to NONE, disable low power mode */
+    TOS_LOW_POWER_MODE_SLEEP,           /* wakeup source: systick/tim/rtc */
     TOS_LOW_POWER_MODE_STOP,            /* wakeup source: rtc wakeup/alarm */
     TOS_LOW_POWER_MODE_STANDBY,         /* wakeup source: rtc alarm */
     __LOW_POWER_MODE_DUMMY,
