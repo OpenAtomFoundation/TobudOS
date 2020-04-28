@@ -51,15 +51,15 @@ typedef struct int_frame_st {
     cpu_data_t spsr;
 } int_frame_t;
 
-__KERNEL__  void interrupt_irq(int_frame_t *int_frame);
+__KNL__ void interrupt_irq(int_frame_t *int_frame);
 
-__KERNEL__  int interrupt_init(void);
+__KNL__ int interrupt_init(void);
 
-__API__     int tos_interrupt_handler_register(uint32_t vector, int_handler_t handler, void *arg);
+__API__ int tos_interrupt_handler_register(uint32_t vector, int_handler_t handler, void *arg);
 
-__API__     void tos_interrupt_enable(uint32_t vector);
+__API__ void tos_interrupt_enable(uint32_t vector);
 
-__API__     void tos_interrupt_disable(uint32_t vector);
+__API__ void tos_interrupt_disable(uint32_t vector);
 
 #endif /* _TOS_INTERRUPT_H_ */
 

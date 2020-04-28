@@ -54,6 +54,7 @@ void board_init(void)
   //MX_LPUART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  MX_TIM6_Init();
   //MX_SPI1_Init();
   //MX_SPI3_Init();
   DHT11_Init();

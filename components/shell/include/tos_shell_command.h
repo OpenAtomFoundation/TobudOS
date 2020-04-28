@@ -33,13 +33,13 @@ typedef struct shell_command_set_st {
     const shell_cmd_t *const    commands;
 } shell_cmd_set_t;
 
-__KERNEL__ int shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set);
+__KNL__ int shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set);
 
-__KERNEL__ int shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set);
+__KNL__ int shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set);
 
-__KERNEL__ const shell_cmd_t *shell_cmd_find(const char *name);
+__KNL__ const shell_cmd_t *shell_cmd_find(const char *name);
 
-__KERNEL__ void shell_cmd_init(shell_cmd_set_t *custom_cmd_set);
+__KNL__ void shell_cmd_init(shell_cmd_set_t *custom_cmd_set);
 
 #endif /* _TOS_SHELL_COMMAND_H_ */
 

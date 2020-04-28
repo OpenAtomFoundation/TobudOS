@@ -55,7 +55,7 @@ __STATIC_INLINE__ void readyqueue_prio_mark(k_prio_t prio)
 /**
  * when this function involved, must be at least one task in the task list of the certain priority
  */
-__KERNEL__ int readyqueue_is_prio_onlyone(k_prio_t prio)
+__KNL__ int readyqueue_is_prio_onlyone(k_prio_t prio)
 {
     k_list_t *task_list;
     k_task_t *task;
@@ -65,7 +65,7 @@ __KERNEL__ int readyqueue_is_prio_onlyone(k_prio_t prio)
     return task->pend_list.next == task_list;
 }
 
-__KERNEL__ k_task_t *readyqueue_first_task_get(k_prio_t prio)
+__KNL__ k_task_t *readyqueue_first_task_get(k_prio_t prio)
 {
     k_list_t *task_list;
 
@@ -73,7 +73,7 @@ __KERNEL__ k_task_t *readyqueue_first_task_get(k_prio_t prio)
     return TOS_LIST_FIRST_ENTRY_OR_NULL(task_list, k_task_t, pend_list);
 }
 
-__KERNEL__ k_task_t *readyqueue_highest_ready_task_get(void)
+__KNL__ k_task_t *readyqueue_highest_ready_task_get(void)
 {
     k_list_t *task_list;
 
@@ -81,7 +81,7 @@ __KERNEL__ k_task_t *readyqueue_highest_ready_task_get(void)
     return TOS_LIST_FIRST_ENTRY(task_list, k_task_t, pend_list);
 }
 
-__KERNEL__ void readyqueue_init(void)
+__KNL__ void readyqueue_init(void)
 {
     uint8_t i;
 
@@ -96,7 +96,7 @@ __KERNEL__ void readyqueue_init(void)
     }
 }
 
-__KERNEL__ void readyqueue_add_head(k_task_t *task)
+__KNL__ void readyqueue_add_head(k_task_t *task)
 {
     k_prio_t task_prio;
     k_list_t *task_list;
@@ -111,7 +111,7 @@ __KERNEL__ void readyqueue_add_head(k_task_t *task)
     tos_list_add(&task->pend_list, task_list);
 }
 
-__KERNEL__ void readyqueue_add_tail(k_task_t *task)
+__KNL__ void readyqueue_add_tail(k_task_t *task)
 {
     k_prio_t task_prio;
     k_list_t *task_list;
@@ -126,7 +126,7 @@ __KERNEL__ void readyqueue_add_tail(k_task_t *task)
     tos_list_add_tail(&task->pend_list, task_list);
 }
 
-__KERNEL__ void readyqueue_add(k_task_t *task)
+__KNL__ void readyqueue_add(k_task_t *task)
 {
     if (task->prio == k_curr_task->prio) {
         readyqueue_add_tail(task);
@@ -135,7 +135,7 @@ __KERNEL__ void readyqueue_add(k_task_t *task)
     }
 }
 
-__KERNEL__ void readyqueue_remove(k_task_t *task)
+__KNL__ void readyqueue_remove(k_task_t *task)
 {
     k_prio_t task_prio;
     k_list_t *task_list;
@@ -154,7 +154,7 @@ __KERNEL__ void readyqueue_remove(k_task_t *task)
     }
 }
 
-__KERNEL__ void readyqueue_move_head_to_tail(k_prio_t prio)
+__KNL__ void readyqueue_move_head_to_tail(k_prio_t prio)
 {
     k_list_t *task_list;
 

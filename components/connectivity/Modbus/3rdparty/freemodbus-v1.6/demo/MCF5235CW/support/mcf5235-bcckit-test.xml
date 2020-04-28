@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
+<configsettings>
+
+  <confwindow>
+    <usecustomsettings>true</usecustomsettings>
+    <targetprocessor>Generic</targetprocessor>
+    <connection>PEMICRO_PARALLEL</connection>
+    <usetargetinit>true</usetargetinit>
+    <targetinitfile>C:\Projects\freemodbus-new\demo\MCF5235CW\support\mcf523x.cfg</targetinitfile>
+  </confwindow>
+
+  <memoryreadwritewindow>
+    <accesstype>read</accesstype>
+    <accesssize>byte</accesssize>
+    <targetaddress>0x01000000</targetaddress>
+    <valuetowrite>67</valuetowrite>
+  </memoryreadwritewindow>
+
+  <scopelooptestwindow>
+    <accesstype>read</accesstype>
+    <accesssize>byte</accesssize>
+    <targetaddress>0x00100000</targetaddress>
+    <valuetowrite>0x67</valuetowrite>
+    <speed>1000</speed>
+  </scopelooptestwindow>
+
+  <memorytestswindow>
+    <runwalking1s>true</runwalking1s>
+    <runbusnoise>true</runbusnoise>
+    <runaddress>true</runaddress>
+    <startaddress>0x00000010</startaddress>
+    <endaddress>0x000000FF</endaddress>
+    <accesssize>byte</accesssize>
+    <passes>1</passes>
+    <usetargetcpu>false</usetargetcpu>
+    <targetscratchmemstart>0x00000100</targetscratchmemstart>
+    <targetscratchmemend>0x0000FFFF</targetscratchmemend>
+  </memorytestswindow>
+
+</configsettings>

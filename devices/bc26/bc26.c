@@ -201,7 +201,7 @@ static int bc26_init(void)
     }
 
     if (bc26_open_cfun() != 0) {
-        printf("bc26 psm lock FAILED\n");
+        printf("bc26 open cfun FAILED\n");
         return -1;
     }  
 
@@ -211,17 +211,17 @@ static int bc26_init(void)
     }
 
     if (bc26_open_err_code() != 0) {
-        printf("bc26_open_err_code FAILED\n");
+        printf("bc26 open err code FAILED\n");
         return -1;
     }
 
     if (bc26_check_sim() != 0) {
-        printf("bc26_open_err_code FAILED\n");
+        printf("bc26 check sim FAILED\n");
         return -1;
     }
 
     if (bc26_get_net() != 0) {
-        printf("bc26_open_err_code FAILED\n");
+        printf("bc26 get net FAILED\n");
         return -1;
     }
 

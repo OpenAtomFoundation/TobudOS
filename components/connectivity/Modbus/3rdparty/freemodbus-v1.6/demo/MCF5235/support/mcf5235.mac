@@ -1,0 +1,8 @@
+; set IPSBAR address
+mbar 40000000
+; set RAMBAR for processor
+control c05 100001
+; load debug file
+hload ..\demo.elf
+; set breakpoint at main
+br main

@@ -19,7 +19,7 @@
 
 __STATIC__ int_handle_t int_handle_table[INTERRUPT_MAX];
 
-__KERNEL__ void interrupt_irq(int_frame_t *int_frame)
+__KNL__ void interrupt_irq(int_frame_t *int_frame)
 {
     uint32_t vector;
     int_handle_t *handle;
@@ -38,7 +38,7 @@ __KERNEL__ void interrupt_irq(int_frame_t *int_frame)
     gic_interrupt_end(0u, vector);
 }
 
-__KERNEL__ int interrupt_init(void)
+__KNL__ int interrupt_init(void)
 {
     gic_init(0u);
     return 0;

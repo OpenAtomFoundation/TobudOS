@@ -46,12 +46,17 @@ void application_entry(void *arg)
             printf("accpet socket error: %s errno :%d\n",strerror(errno),errno);
             continue;
         }
-
+        
         n = recv(connfd, buff, sizeof(buff), 0);
-        buff[n] = '\0';
-        printf("recv(%d) msg from client:%s\n", ++cnt, buff);
+        if(n > 0) {
+            buff[n] = '\0';
+            printf("recv(%d) msg from client:%s\n", ++cnt, buff);
+        } else {
+            printf("recv err(%d)\n", n);
+        }
+
         if ((send(connfd, buff, strlen(buff), 0)) < 0) {
-            printf("send mes error: %s errno : %d\n", strerror(errno), errno);
+            printf("send msg error: %s errno : %d\n", strerror(errno), errno);
             break;
         }
         close(connfd);
@@ -59,4 +64,3 @@ void application_entry(void *arg)
 
     close(listenfd);
 }
-

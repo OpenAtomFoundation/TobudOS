@@ -222,7 +222,7 @@ __STATIC__ void fault_gather_information(cpu_data_t lr, fault_exc_frame_t *frame
     info->is_stk_ovrf = (info->sp_before_fault < info->stack_start || info->sp_before_fault > info->stack_limit);
 }
 
-__KERNEL__ int fault_default_log_writer(const char *format, ...)
+__KNL__ int fault_default_log_writer(const char *format, ...)
 {
     int len;
     va_list ap;
@@ -239,7 +239,7 @@ __API__ void tos_fault_log_writer_set(k_fault_log_writer_t log_writer)
     k_fault_log_writer = log_writer;
 }
 
-__KERNEL__ void fault_backtrace(cpu_addr_t lr, fault_exc_frame_t *frame)
+__KNL__ void fault_backtrace(cpu_addr_t lr, fault_exc_frame_t *frame)
 {
     fault_info_t info;
 

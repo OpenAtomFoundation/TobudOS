@@ -30,8 +30,10 @@ Page({
     wx.cloud.callFunction({
       name: 'iothub-shadow-query',
       data: {
-        productId: app.globalData.productId,
-        deviceName: app.globalData.deviceName,
+        ProductId: app.globalData.productId,
+        DeviceName: app.globalData.deviceName,
+        SecretId: app.globalData.secretId,
+        SecretKey: app.globalData.secretKey,
       },
       success: res => {
         wx.showToast({
@@ -67,9 +69,11 @@ Page({
     wx.cloud.callFunction({
       name: 'iothub-publish',
       data: {
+        SecretId: app.globalData.secretId,
+        SecretKey: app.globalData.secretKey,
         ProductId: app.globalData.productId,
         DeviceName: app.globalData.deviceName,
-        Topic: "",
+        Topic: app.globalData.productId + "/" + app.globalData.deviceName + "/data",
         Payload: payload,
       },
       success: res => {

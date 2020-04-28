@@ -968,8 +968,8 @@ void RadioSetTxContinuousWave( uint32_t freq, int8_t power, uint16_t time )
     SX126xSetRfTxPower( power );
     SX126xSetTxContinuousWave( );
 
-    TimerSetValue( &RxTimeoutTimer, time  * 1e3 );
-    TimerStart( &RxTimeoutTimer );
+    TimerSetValue( &TxTimeoutTimer, time  * 1e3 );
+    TimerStart( &TxTimeoutTimer );
 }
 
 int16_t RadioRssi( RadioModems_t modem )

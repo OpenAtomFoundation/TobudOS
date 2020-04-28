@@ -8,6 +8,7 @@
 #include "stm32f4xx_hal.h"
 #include "usart.h"
 #include "gpio.h"
+#include "tim.h"
 #include "tos_k.h"
 
 void board_init(void);

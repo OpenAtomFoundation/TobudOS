@@ -48,7 +48,7 @@ static int sim7600ce_signal_quality_check(void)
 
     str = strstr(echo.buffer, "+CSQ:");
     sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
-    if (rssi == 99 || ber != 99) {
+    if (rssi == 99 || ber == 99) {
         return -1;
     }
 
@@ -141,7 +141,7 @@ static int sim7600ce_net_open(void)
 static int sim7600ce_init(void)
 {
     printf("Init sim7600ce ...\n" );
-    
+
     if (sim7600ce_echo_close() != 0) {
         printf("echo close failed\n");
         return -1;
@@ -150,7 +150,7 @@ static int sim7600ce_init(void)
         printf("apn set FAILED\n");
         return -1;
     }
-    
+
     if (sim7600ce_signal_quality_check() != 0) {
         printf("signal quality check status failed\n");
         return -1;
@@ -172,15 +172,15 @@ static int sim7600ce_init(void)
         //return -1;
     }
     if (sim7600ce_csocksetpn() != 0) {
-        printf("sim7600ce_net_open FAILED\n");
+        printf("sim7600ce_csocksetpn FAILED\n");
         return -1;
-    }    
-    
+    }
+
     if (sim7600ce_send_mode_set(SAL_SEND_MODE_NORMAL) != 0)  {
         printf("send mode set FAILED\n");
         return -1;
-    }    
-    
+    }
+
     if (sim7600ce_net_open() != 0) {
         printf("sim7600ce_net_open FAILED\n");
         return -1;
@@ -310,13 +310,12 @@ static int sim7600ce_parse_domain(const char *host_name, char *host_ip, size_t h
     return 0;
 }
 
-__STATIC__ uint8_t incoming_data_buffer[512];
-
 __STATIC__ void sim7600ce_incoming_data_process(void)
 {
     uint8_t data;
     uint8_t str[2];
-    int channel_id = 0, data_len = 0;
+    int channel_id = 0, data_len = 0, read_len;
+    static uint8_t buffer[128];
 
     /*
     +RECEIVE,0,44:1234...
@@ -347,15 +346,19 @@ __STATIC__ void sim7600ce_incoming_data_process(void)
         data_len = data_len * 10 + (data - '0');
     }
 
-    if (data_len > sizeof(incoming_data_buffer)) {
-        data_len = sizeof(incoming_data_buffer);
-    }
+    do {
+#define MIN(a, b)   ((a) < (b) ? (a) : (b))
+        read_len = MIN(data_len, sizeof(buffer));
+        if (tos_at_uart_read(buffer, read_len) != read_len) {
+            return;
+        }
 
-    if (tos_at_uart_read(incoming_data_buffer, data_len) != data_len) {
-        return;
-    }
+        if (tos_at_channel_write(channel_id, buffer, read_len) <= 0) {
+            return;
+        }
 
-    tos_at_channel_write(channel_id, incoming_data_buffer, data_len);
+        data_len -= read_len;
+    } while (data_len > 0);
 }
 
 at_event_t sim7600ce_at_event[] = {

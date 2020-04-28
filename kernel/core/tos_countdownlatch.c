@@ -17,8 +17,6 @@
 
 #include "tos_k.h"
 
-#if TOS_CFG_COUNTDOWNLATCH_EN > 0u
-
 __API__ k_err_t tos_countdownlatch_create(k_countdownlatch_t *countdownlatch, k_countdownlatch_cnt_t count)
 {
     TOS_PTR_SANITY_CHECK(countdownlatch);
@@ -39,9 +37,7 @@ __API__ k_err_t tos_countdownlatch_destroy(k_countdownlatch_t *countdownlatch)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&countdownlatch->pend_obj)) {
-        pend_wakeup_all(&countdownlatch->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&countdownlatch->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&countdownlatch->pend_obj);
 
@@ -57,6 +53,7 @@ __API__ k_err_t tos_countdownlatch_pend_timed(k_countdownlatch_t *countdownlatch
 {
     TOS_CPU_CPSR_ALLOC();
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(countdownlatch);
     TOS_OBJ_VERIFY(countdownlatch, KNL_OBJ_TYPE_COUNTDOWNLATCH);
 
@@ -70,11 +67,6 @@ __API__ k_err_t tos_countdownlatch_pend_timed(k_countdownlatch_t *countdownlatch
     if (timeout == TOS_TIME_NOWAIT) { // no wait, return immediately
         TOS_CPU_INT_ENABLE();
         return K_ERR_PEND_NOWAIT;
-    }
-
-    if (knl_is_inirq()) {
-        TOS_CPU_INT_ENABLE();
-        return K_ERR_PEND_IN_IRQ;
     }
 
     if (knl_is_sched_locked()) {
@@ -137,6 +129,4 @@ __API__ k_err_t tos_countdownlatch_reset(k_countdownlatch_t *countdownlatch, k_c
 
     return K_ERR_NONE;
 }
-
-#endif
 

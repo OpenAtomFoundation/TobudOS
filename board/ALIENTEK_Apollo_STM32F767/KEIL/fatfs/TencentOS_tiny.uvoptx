@@ -154,7 +154,7 @@
           <Type>0</Type>
           <LineNumber>14</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134233172</Address>
+          <Address>134233412</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -168,18 +168,18 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>3229</LineNumber>
+          <LineNumber>15</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134242152</Address>
+          <Address>134233424</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\..\components\fs\fatfs\3rdparty\ff.c</Filename>
+          <Filename>..\..\..\..\examples\fatfs\fatfs_sample.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TencentOS_tiny\../../../../components/fs/fatfs/3rdparty/ff.c\3229</Expression>
+          <Expression>\\TencentOS_tiny\../../../../examples/fatfs/fatfs_sample.c\15</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -1063,7 +1063,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\platform\hal\st\stm32f7xx\tos_hal_sd.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\platform\hal\st\stm32f7xx\src\tos_hal_sd.c</PathWithFileName>
       <FilenameWithoutPath>tos_hal_sd.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

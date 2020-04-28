@@ -39,9 +39,7 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&event->pend_obj)) {
-        pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
 
     event->flag = (k_event_flag_t)0u;
 
@@ -75,6 +73,7 @@ __API__ k_err_t tos_event_pend(k_event_t *event, k_event_flag_t flag_expect, k_e
 {
     TOS_CPU_CPSR_ALLOC();
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(event);
     TOS_PTR_SANITY_CHECK(flag_match);
     TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
@@ -100,11 +99,6 @@ __API__ k_err_t tos_event_pend(k_event_t *event, k_event_flag_t flag_expect, k_e
     if (timeout == TOS_TIME_NOWAIT) {
         TOS_CPU_INT_ENABLE();
         return K_ERR_PEND_NOWAIT;
-    }
-
-    if (knl_is_inirq()) {
-        TOS_CPU_INT_ENABLE();
-        return K_ERR_PEND_IN_IRQ;
     }
 
     if (knl_is_sched_locked()) {

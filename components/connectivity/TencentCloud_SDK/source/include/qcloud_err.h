@@ -1,5 +1,5 @@
 #ifndef _QCLOUD_ERR_H_
-#define  _QCLOUD_ERR_H_
+#define _QCLOUD_ERR_H_
 
 typedef enum qcloud_err_en {
     QCLOUD_ERR_MQTT_ALREADY_CONNECTED                        = 4,       // 表示与MQTT服务器已经建立连接
@@ -98,13 +98,13 @@ typedef enum qcloud_err_en {
     QCLOUD_ERR_SSL_READ                                      = -708,    // 表示SSL读错误
     QCLOUD_ERR_SSL_NOTHING_TO_READ                           = -709,    // 表示底层没有数据可以读取
 
-    QCLOUD_ERR_UDP_SOCKET_FAILED                             = -601,    // 表示TCP连接建立套接字失败
+    QCLOUD_ERR_UDP_SOCKET_FAILED                             = -601,    // 表示UDP连接建立套接字失败
     QCLOUD_ERR_UDP_UNKNOWN_HOST                              = -602,    // 表示无法通过主机名获取IP地址
-    QCLOUD_ERR_UDP_CONNECT                                   = -603,    // 表示建立TCP连接失败
-    QCLOUD_ERR_UDP_READ_TIMEOUT                              = -604,    // 表示TCP读超时
-    QCLOUD_ERR_UDP_WRITE_TIMEOUT                             = -605,    // 表示TCP写超时
-    QCLOUD_ERR_UDP_READ_FAIL                                 = -606,    // 表示TCP读错误
-    QCLOUD_ERR_UDP_WRITE_FAIL                                = -607,    // 表示TCP写错误
+    QCLOUD_ERR_UDP_CONNECT                                   = -603,    // 表示建立UDP连接失败
+    QCLOUD_ERR_UDP_READ_TIMEOUT                              = -604,    // 表示UDP读超时
+    QCLOUD_ERR_UDP_WRITE_TIMEOUT                             = -605,    // 表示UDP写超时
+    QCLOUD_ERR_UDP_READ_FAIL                                 = -606,    // 表示UDP读错误
+    QCLOUD_ERR_UDP_WRITE_FAIL                                = -607,    // 表示UDP写错误
     QCLOUD_ERR_UDP_NOTHING_TO_READ                           = -609,    // 表示底层没有数据可以读取
 } qcloud_err_t;
 

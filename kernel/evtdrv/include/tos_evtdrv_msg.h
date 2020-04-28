@@ -78,7 +78,7 @@ __API__ evtdrv_err_t tos_evtdrv_msg_send(evtdrv_task_id_t dst_task_id, evtdrv_ms
 
 __API__ evtdrv_msg_body_t tos_evtdrv_msg_recv(void);
 
-__KERNEL__ void evtdrv_msg_init(void);
+__KNL__ void evtdrv_msg_init(void);
 
 #endif /* TOS_CFG_EVENT_DRIVEN_EN */
 

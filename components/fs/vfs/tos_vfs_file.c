@@ -4,7 +4,7 @@
 
 __STATIC__ vfs_file_t vfs_file_pool[VFS_FILE_OPEN_MAX] = { { K_NULL, 0 } };
 
-__KERNEL__ vfs_file_t *vfs_fd2file(int fd)
+__KNL__ vfs_file_t *vfs_fd2file(int fd)
 {
     if (unlikely(fd < 0 || fd >= VFS_FILE_OPEN_MAX)) {
         return K_NULL;
@@ -12,7 +12,7 @@ __KERNEL__ vfs_file_t *vfs_fd2file(int fd)
     return &vfs_file_pool[fd];
 }
 
-__KERNEL__ int vfs_file2fd(vfs_file_t *file)
+__KNL__ int vfs_file2fd(vfs_file_t *file)
 {
     if (unlikely((cpu_addr_t)file < (cpu_addr_t)&vfs_file_pool[0] ||
         (cpu_addr_t)file > (cpu_addr_t)&vfs_file_pool[VFS_FILE_OPEN_MAX - 1])) {
@@ -22,7 +22,7 @@ __KERNEL__ int vfs_file2fd(vfs_file_t *file)
     return (cpu_addr_t)file - (cpu_addr_t)&vfs_file_pool[0];
 }
 
-__KERNEL__ vfs_file_t *vfs_file_alloc(void)
+__KNL__ vfs_file_t *vfs_file_alloc(void)
 {
     int i = 0;
     vfs_file_t *file = K_NULL;
@@ -36,7 +36,7 @@ __KERNEL__ vfs_file_t *vfs_file_alloc(void)
     return K_NULL;
 }
 
-__KERNEL__ void vfs_file_free(vfs_file_t *file)
+__KNL__ void vfs_file_free(vfs_file_t *file)
 {
     if (vfs_file2fd(file) < 0) {
         return;
@@ -46,7 +46,7 @@ __KERNEL__ void vfs_file_free(vfs_file_t *file)
     file->pos   = 0;
 }
 
-__KERNEL__ vfs_file_t *vfs_file_dup(vfs_file_t *old_file)
+__KNL__ vfs_file_t *vfs_file_dup(vfs_file_t *old_file)
 {
     vfs_file_t *new_file = K_NULL;
 
@@ -65,12 +65,12 @@ __KERNEL__ vfs_file_t *vfs_file_dup(vfs_file_t *old_file)
     return new_file;
 }
 
-__KERNEL__ vfs_dir_t *vfs_dir_alloc(void)
+__KNL__ vfs_dir_t *vfs_dir_alloc(void)
 {
     return (vfs_dir_t *)tos_mmheap_calloc(1, sizeof(vfs_dir_t));
 }
 
-__KERNEL__ void vfs_dir_free(vfs_dir_t *dir)
+__KNL__ void vfs_dir_free(vfs_dir_t *dir)
 {
     tos_mmheap_free(dir);
 }

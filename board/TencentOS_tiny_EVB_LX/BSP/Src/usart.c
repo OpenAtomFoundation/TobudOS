@@ -65,8 +65,6 @@ void usart1_init(int baud)
 
 }
 
-
-
 void usart2_init(int baud)
 {
     //eclic_irq_enable(USART2_IRQn, 1, 0);
@@ -99,6 +97,40 @@ void usart2_init(int baud)
 
 
     //usart_interrupt_enable(USART2, USART_INT_RBNE);
+}
+
+void uart3_init(int baud)
+{
+    eclic_irq_enable(UART3_IRQn, 1, 0);
+
+    /* enable GPIO clock */
+    rcu_periph_clock_enable(RCU_GPIOC);
+
+    /* enable USART2 clock */
+    rcu_periph_clock_enable(RCU_UART3);
+
+    /* connect port to USART0_Tx */
+    gpio_init(UART3_GPIO_PORT, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, UART3_GPIO_TX_PIN);
+
+    /* connect port to USART0_Rx */
+    gpio_init(UART3_GPIO_PORT, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, UART3_GPIO_RX_PIN);
+
+    //gpio_pin_remap_config(GPIO_USART2_FULL_REMAP,ENABLE);
+
+    /* USART1 configure */
+    usart_deinit(UART3);
+    usart_baudrate_set(UART3, baud);
+    usart_word_length_set(UART3, USART_WL_8BIT);
+    usart_stop_bit_set(UART3, USART_STB_1BIT);
+    usart_parity_config(UART3, USART_PM_NONE);
+    usart_hardware_flow_rts_config(UART3, USART_RTS_DISABLE);
+    usart_hardware_flow_cts_config(UART3, USART_CTS_DISABLE);
+    usart_receive_config(UART3, USART_RECEIVE_ENABLE);
+    usart_transmit_config(UART3, USART_TRANSMIT_ENABLE);
+    usart_enable(UART3);
+
+
+    usart_interrupt_enable(UART3, USART_INT_RBNE);
 }
 
 

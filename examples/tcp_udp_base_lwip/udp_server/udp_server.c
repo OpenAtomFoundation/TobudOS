@@ -4,7 +4,7 @@
 #include <lwip/err.h>
 #include <lwip/sys.h>
 
-char buff[512];	// UDP½ÓÊÕÊı¾İ»º³åÇø
+char buff[512];	// UDPæ¥æ”¶æ•°æ®ç¼“å†²åŒº
 const unsigned short server_port = 8000;
 
 void application_entry(void *arg)
@@ -17,15 +17,15 @@ void application_entry(void *arg)
 
     MX_LWIP_Init();
 
-    /* ¹¹ÔìÓÃÓÚUDPµÄÌ×½Ó×Ö */
+    /* æ„é€ ç”¨äºUDPçš„å¥—æ¥å­— */
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY); //±¾µØÈÎÒâIP
+    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY); //æœ¬åœ°ä»»æ„IP
     serveraddr.sin_port = htons(server_port);
     while (1) {
         bind(sockfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
-        printf("udp blind ip:ANY,port:%d\n", server_port);
+        printf("udp bind ip:ANY,port:%d\n", server_port);
         clientlen = sizeof(clientaddr);
         len = recvfrom(sockfd, buff, sizeof(buff), 0, (struct sockaddr *)&clientaddr, &clientlen);
         printf("client IP %s\tPORT %d\nrec:%s\n",  inet_ntop(AF_INET, &clientaddr.sin_addr.s_addr, ipstr, sizeof(ipstr)), ntohs(clientaddr.sin_port), buff);

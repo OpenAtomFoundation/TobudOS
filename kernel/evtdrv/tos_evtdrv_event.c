@@ -88,7 +88,7 @@ __API__ evtdrv_err_t tos_evtdrv_event_reset(evtdrv_task_id_t task_id, evtdrv_eve
     return EVTDRV_ERR_NONE;
 }
 
-__KERNEL__ evtdrv_err_t evtdrv_event_init(void)
+__KNL__ evtdrv_err_t evtdrv_event_init(void)
 {
     evtdrv_task_id_t i;
     evtdrv_event_t *event;
@@ -106,7 +106,7 @@ __KERNEL__ evtdrv_err_t evtdrv_event_init(void)
     return EVTDRV_ERR_NONE;
 }
 
-__KERNEL__ evtdrv_event_flag_t evtdrv_event_fetch(evtdrv_task_id_t *task_id)
+__KNL__ evtdrv_event_flag_t evtdrv_event_fetch(evtdrv_task_id_t *task_id)
 {
     evtdrv_task_id_t i;
     evtdrv_event_t *event;

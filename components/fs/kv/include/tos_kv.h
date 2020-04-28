@@ -53,8 +53,8 @@ typedef uint64_t    kv_dword_t; // double word
 #define KV_BLK_FLAG_HANGING                         0x10    /* index building failed, we mark a hanging flag here, and will give another chance to do a retry */
 
 #define KV_FLASH_START                              (kv_ctl.flash_ctl.flash_start)
-#define KV_FLASH_SIZE                               (kv_ctl.flash_ctl.flash_size)
-#define KV_FLASH_END                                (KV_FLASH_START + KV_FLASH_SIZE)
+#define KV_FLASH_END                                (kv_ctl.flash_ctl.flash_end)
+#define KV_FLASH_SIZE                               (KV_FLASH_END - KV_FLASH_START)
 #define KV_FLASH_SECTOR_SIZE_LOG2                   (kv_ctl.flash_ctl.sector_size_log2)
 #define KV_FLASH_SECTOR_SIZE                        (1 << KV_FLASH_SECTOR_SIZE_LOG2)
 #define KV_FLASH_WRITE_ALIGN                        (kv_ctl.flash_ctl.flash_write_align)
@@ -126,7 +126,7 @@ typedef struct kv_flash_control_st {
     uint8_t         sector_size_log2;
     uint8_t         flash_write_align;
     uint32_t        flash_start;
-    uint32_t        flash_size;
+    uint32_t        flash_end;
 
     kv_flash_drv_t  flash_drv;
 } kv_flash_ctl_t;
@@ -313,7 +313,7 @@ __STATIC_INLINE__ void kv_blk_reset_hanging(uint32_t blk_start)
 
 typedef kv_err_t (*kv_item_walker_t)(kv_item_t *item, const void *patten);
 
-__API__ kv_err_t    tos_kv_init(kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop);
+__API__ kv_err_t    tos_kv_init(uint32_t flash_start, uint32_t flash_end, kv_flash_drv_t *flash_drv, kv_flash_prop_t *flash_prop);
 
 __API__ kv_err_t    tos_kv_deinit(void);
 

@@ -81,7 +81,7 @@ __STATIC_INLINE__ gic_data_t *gic_get(uint32_t gic_nr)
     return K_NULL;
 }
 
-__KERNEL__ uint32_t gic_interrupt_id_get(uint32_t gic_nr)
+__KNL__ uint32_t gic_interrupt_id_get(uint32_t gic_nr)
 {
     gic_data_t *gic = gic_get(gic_nr);
 
@@ -93,7 +93,7 @@ __KERNEL__ uint32_t gic_interrupt_id_get(uint32_t gic_nr)
     return (uint32_t)-1;
 }
 
-__KERNEL__ void gic_interrupt_end(uint32_t gic_nr, uint32_t vector)
+__KNL__ void gic_interrupt_end(uint32_t gic_nr, uint32_t vector)
 {
     gic_data_t *gic = gic_get(gic_nr);
 
@@ -102,7 +102,7 @@ __KERNEL__ void gic_interrupt_end(uint32_t gic_nr, uint32_t vector)
     }
 }
 
-__KERNEL__ int gic_init(uint32_t gic_nr)
+__KNL__ int gic_init(uint32_t gic_nr)
 {
     gic_data_t *gic;
 
@@ -119,7 +119,7 @@ __KERNEL__ int gic_init(uint32_t gic_nr)
     return 0;
 }
 
-__KERNEL__ void gic_interrupt_enable(uint32_t gic_nr, uint32_t vector)
+__KNL__ void gic_interrupt_enable(uint32_t gic_nr, uint32_t vector)
 {
     int reg;
     uint32_t mask;
@@ -134,7 +134,7 @@ __KERNEL__ void gic_interrupt_enable(uint32_t gic_nr, uint32_t vector)
     }
 }
 
-__KERNEL__ void gic_interrupt_disable(uint32_t gic_nr, uint32_t vector)
+__KNL__ void gic_interrupt_disable(uint32_t gic_nr, uint32_t vector)
 {
     int reg;
     uint32_t mask;

@@ -32,28 +32,27 @@
 uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
 {
     int fd;
-	char port_str[PORT_BUFF_LEN];
+    char port_str[PORT_BUFF_LEN] = {0};
 
-	memset(port_str, 0, PORT_BUFF_LEN);
-	snprintf(port_str, PORT_BUFF_LEN, "%u", port);
-	Log_i("osal_udp_connect entry, host=%s port=%d(%s)", host , port, port_str);
+    snprintf(port_str, PORT_BUFF_LEN, "%u", port);
+    Log_i("osal_udp_connect entry, host=%s port=%d(%s)", host , port, port_str);
 
-	fd = tos_sal_module_connect("111.230.127.136", "5684", TOS_SAL_PROTO_UDP);
-	if (fd < 0) {
-		Log_i("net connect fail\n\r");
-		if (QCLOUD_RET_SUCCESS == tos_sal_module_init()) { /* 重新初始化模组 */
-			Log_i("net reinit success\n\r");
-			fd = tos_sal_module_connect(host, port_str, TOS_SAL_PROTO_UDP);
-			if (fd < 0) {
-				Log_i("net connect fail\n\r");
-				return NULL;
-			} else {
-				Log_i("net connect success, fd=%d\n\r", fd);
-			}
+    fd = tos_sal_module_connect("111.230.127.136", "5684", TOS_SAL_PROTO_UDP);
+    if (fd < 0) {
+        Log_i("net connect fail\n\r");
+        if (QCLOUD_RET_SUCCESS == tos_sal_module_init()) { /* 脰脴脨脗鲁玫脢录禄炉脛拢脳茅 */
+            Log_i("net reinit success\n\r");
+            fd = tos_sal_module_connect(host, port_str, TOS_SAL_PROTO_UDP);
+            if (fd < 0) {
+                Log_i("net connect fail\n\r");
+                return NULL;
+            } else {
+                Log_i("net connect success, fd=%d\n\r", fd);
+            }
         } else {
-			Log_i("net reinit fail\n\r");
-			return NULL;
-		}
+            Log_i("net reinit fail\n\r");
+            return NULL;
+            }
 	}
 
 	return fd;
@@ -71,7 +70,7 @@ int HAL_UDP_Write(uintptr_t fd, const unsigned char *p_data, unsigned int datale
     ret = tos_sal_module_sendto(fd, NULL, NULL, p_data, datalen);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_WRITE_FAIL;
+        return QCLOUD_ERR_UDP_WRITE_FAIL;
     }
 
     return QCLOUD_RET_SUCCESS;
@@ -81,16 +80,16 @@ int HAL_UDP_Read(uintptr_t fd, unsigned char *p_data, unsigned int datalen)
 {
     int ret;
 
-    Log_i("osal_udp_read len %d timeout %d\r\n", datalen);
+    Log_i("osal_udp_read len %d\r\n", datalen);
 
     ret = tos_sal_module_recvfrom(fd, p_data, datalen);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     if (ret == 0) {
-        return QCLOUD_ERR_TCP_NOTHING_TO_READ;
+        return QCLOUD_ERR_UDP_NOTHING_TO_READ;
     }
 
     return QCLOUD_RET_SUCCESS;
@@ -100,16 +99,16 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
 {
     int ret;
 
-    Log_i("osal_udp_read len %d timeout %d\r\n", datalen);
+    Log_i("osal_udp_read len %d timeout %d\r\n", datalen, timeout_ms);
 
     ret = tos_sal_module_recvfrom_timeout(fd, p_data, datalen, timeout_ms);
 
     if (ret < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     if (ret == 0) {
-        return QCLOUD_ERR_TCP_NOTHING_TO_READ;
+        return QCLOUD_ERR_UDP_NOTHING_TO_READ;
     }
 
     return QCLOUD_RET_SUCCESS;

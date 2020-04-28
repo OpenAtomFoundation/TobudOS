@@ -1,0 +1,18 @@
+[DisAssemblyWindow]
+NumStates=_ 1
+State 1=_ 1
+[TraceHelper]
+Enabled=0
+ShowSource=1
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Breakpoints]
+Bp0=_ "Code" "{D:\TOS\TencentOS-tiny\kernel\core\tos_sys.c}.107.5@1" 0 0 0 0 "" 0 ""
+Bp1=_ "Code" "{D:\TOS\TencentOS-tiny\kernel\core\tos_sys.c}.101.19@1" 0 0 0 0 "" 0 ""
+Bp2=_ "Code" "{D:\TOS\TencentOS-tiny\kernel\core\tos_tick.c}.112.9@1" 0 0 0 0 "" 0 ""
+Count=3

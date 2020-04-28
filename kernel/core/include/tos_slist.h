@@ -18,6 +18,8 @@
 #ifndef _TOS_SLIST_H_
 #define  _TOS_SLIST_H_
 
+__CDECLS_BEGIN
+
 typedef struct k_slist_node_st {
     struct k_slist_node_st *next;
 } k_slist_t;
@@ -180,6 +182,8 @@ __API__ __STATIC_INLINE__ int tos_slist_empty(k_slist_t *slist)
 {
     return !slist->next;
 }
+
+__CDECLS_END
 
 #endif /* _TOS_SLIST_H_ */
 

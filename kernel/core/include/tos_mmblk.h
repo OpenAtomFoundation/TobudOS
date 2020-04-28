@@ -18,7 +18,7 @@
 #ifndef _TOS_MMBLK_H_
 #define  _TOS_MMBLK_H_
 
-#if TOS_CFG_MMBLK_EN > 0u
+__CDECLS_BEGIN
 
 #define K_MMBLK_NEXT_BLK(blk_curr, blk_size)        ((void *)((cpu_addr_t)blk_curr + blk_size))
 #define K_MMBLK_ALIGN_MASK                          (sizeof(void *) - 1u)
@@ -103,5 +103,5 @@ __API__ k_err_t tos_mmblk_free(k_mmblk_pool_t *mbp, void *blk);
 
 #endif
 
-#endif /* _TOS_MMBLK_H_ */
+__CDECLS_END
 

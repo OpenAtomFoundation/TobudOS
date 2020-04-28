@@ -61,7 +61,9 @@ void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2,uint16_t y2);
 void LCD_SetDisplayMode(lcd_display_mode_t m);
 
 void LCD_Clear(uint16_t Color);
+void LCD_ClearRect(uint16_t Color, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t index,uint16_t color);
+void LCD_ShowChineseWithFonts(uint16_t x,uint16_t y, const char fonts[][16], uint8_t index,uint16_t color);
 void LCD_DrawPoint(uint16_t x,uint16_t y,uint16_t color);
 void LCD_Fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color);
 void LCD_DrawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color);

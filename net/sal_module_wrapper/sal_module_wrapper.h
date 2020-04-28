@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-typedef enum sal_proto_en {
+typedef enum sal_protocol_en {
     TOS_SAL_PROTO_TCP,
     TOS_SAL_PROTO_UDP,
 } sal_proto_t;

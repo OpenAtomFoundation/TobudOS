@@ -50,8 +50,9 @@ void application_entry(void *arg)
     } else {
         printf("read error: %d\n", res);
     }
-    f_close(&file);
-
+    
     f_sync(&file);
+    
+    f_close(&file);
 }
 

@@ -97,7 +97,9 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *tim_handler)
         HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
     }
 }
-
+void MX_TIM6_Init(void)
+{
+}
 static int tickless_tim6_wkup_alarm_init(void)
 {
     tim6.Instance = TIM6;

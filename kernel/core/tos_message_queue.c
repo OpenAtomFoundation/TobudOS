@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
- #include "tos_k.h"
+#include "tos_k.h"
 
 #if TOS_CFG_MESSAGE_QUEUE_EN > 0u
 
@@ -63,9 +63,7 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
         return err;
     }
 
-    if (!pend_is_nopending(&msg_q->pend_obj)) {
-        pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&msg_q->pend_obj);
 
@@ -121,9 +119,7 @@ __API__ k_err_t tos_msg_q_destroy_dyn(k_msg_q_t *msg_q)
         return err;
     }
 
-    if (!pend_is_nopending(&msg_q->pend_obj)) {
-        pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&msg_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&msg_q->pend_obj);
 
@@ -151,6 +147,7 @@ __API__ k_err_t tos_msg_q_pend(k_msg_q_t *msg_q, void **msg_ptr, k_tick_t timeou
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(msg_q);
     TOS_PTR_SANITY_CHECK(msg_ptr);
     TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);

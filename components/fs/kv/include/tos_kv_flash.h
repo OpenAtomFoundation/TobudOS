@@ -38,8 +38,6 @@ typedef struct kv_flash_drv_st {
 typedef struct kv_flash_property_st {
     uint8_t             sector_size_log2;
     kv_flash_pgm_type_t pgm_type;
-    uint32_t            flash_start;
-    uint32_t            flash_size;
 } kv_flash_prop_t;
 
 #endif /* _TOS_KV_FLASH_H_ */

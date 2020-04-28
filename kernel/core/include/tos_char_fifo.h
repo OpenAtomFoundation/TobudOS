@@ -18,6 +18,8 @@
 #ifndef _TOS_CHAR_FIFO_H_
 #define  _TOS_CHAR_FIFO_H_
 
+__CDECLS_BEGIN
+
 typedef struct k_char_fifo_st {
     knl_obj_t   knl_obj;
 
@@ -187,5 +189,7 @@ __API__ int     tos_chr_fifo_is_empty(k_chr_fifo_t *chr_fifo);
  */
 __API__ int     tos_chr_fifo_is_full(k_chr_fifo_t *chr_fifo);
 
-#endif // _TOS_CHAR_FIFO_H_
+__CDECLS_END
+
+#endif /* _TOS_CHAR_FIFO_H_ */
 

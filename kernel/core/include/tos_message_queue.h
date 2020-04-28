@@ -18,6 +18,8 @@
 #ifndef _TOS_MESSAGE_QUEUE_H_
 #define  _TOS_MESSAGE_QUEUE_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_MESSAGE_QUEUE_EN > 0u
 
 typedef struct k_message_queue_st {
@@ -149,6 +151,8 @@ __API__ k_err_t tos_msg_q_post(k_msg_q_t *msg_q, void *msg_ptr);
 __API__ k_err_t tos_msg_q_post_all(k_msg_q_t *msg_q, void *msg_ptr);
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_MESSAGE_QUEUE_H_ */
 

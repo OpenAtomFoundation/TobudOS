@@ -18,14 +18,16 @@
 #ifndef _PORT_CONFIG_H_
 #define  _PORT_CONFIG_H_
 
-#define TOS_CFG_CPU_ADDR_SIZE               CPU_WORD_SIZE_32
-#define TOS_CFG_CPU_DATA_SIZE               CPU_WORD_SIZE_32
-#define TOS_CFG_CPU_STK_GROWTH              CPU_STK_GROWTH_DESCENDING
+#define TOS_CFG_CPU_ADDR_SIZE                   CPU_WORD_SIZE_32
+#define TOS_CFG_CPU_DATA_SIZE                   CPU_WORD_SIZE_32
+#define TOS_CFG_CPU_STK_GROWTH                  CPU_STK_GROWTH_DESCENDING
 // #define TOS_CFG_CPU_HRTIMER_SIZE             CPU_WORD_SIZE_32
-#define TOS_CFG_CPU_HRTIMER_EN               0u
-#define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  1u
+#define TOS_CFG_CPU_HRTIMER_EN                  0u
+#define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT      1u
+#define TOS_CFG_CPU_BYTE_ORDER                  CPU_BYTE_ORDER_LITTLE_ENDIAN
 
-#ifndef __TARGET_FPU_SOFTVFP
+#if (defined(ARMCC_V5) && !defined(__TARGET_FPU_SOFTVFP)) || \
+    (defined(ARMCC_V6) && defined(__ARM_PCS_VFP))
 #define TOS_CFG_CPU_ARM_FPU_EN      1u
 #else
 #define TOS_CFG_CPU_ARM_FPU_EN      0u

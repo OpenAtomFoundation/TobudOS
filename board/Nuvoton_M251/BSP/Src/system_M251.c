@@ -140,23 +140,18 @@ void Uart0DefaultMPF(void)
 {
 
     /* Set GPB multi-function pins for UART0 RXD and TXD */
-	  SYS->GPA_MFPL = (SYS->GPA_MFPL & ~SYS_GPA_MFPL_PA0MFP_Msk) | SYS_GPA_MFPL_PA0MFP_UART0_RXD;
+    SYS->GPA_MFPL = (SYS->GPA_MFPL & ~SYS_GPA_MFPL_PA0MFP_Msk) | SYS_GPA_MFPL_PA0MFP_UART0_RXD;
     SYS->GPA_MFPL = (SYS->GPA_MFPL & ~SYS_GPA_MFPL_PA1MFP_Msk) | SYS_GPA_MFPL_PA1MFP_UART0_TXD;
 
 }
 
-
 //systick interrupt Handler function
 void SysTick_Handler(void)
 {
-
-	if (tos_knl_is_running())
-  {
-    tos_knl_irq_enter();
-    tos_tick_handler();
-    tos_knl_irq_leave();
-  }
+    if (tos_knl_is_running())
+    {
+        tos_knl_irq_enter();
+        tos_tick_handler();
+        tos_knl_irq_leave();
+    }
 }
-
-
-

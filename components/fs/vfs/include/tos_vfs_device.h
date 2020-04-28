@@ -17,7 +17,7 @@ typedef struct vfs_char_device_operations_st {
     int     (*resume)   (void);
 } vfs_chrdev_ops_t;
 
-typedef struct vfs_block_device_geometry_t {
+typedef struct vfs_block_device_geometry_st {
     int         is_available;
     uint32_t    sector_size;
     uint32_t    nsectors;

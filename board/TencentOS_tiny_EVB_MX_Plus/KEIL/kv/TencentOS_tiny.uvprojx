@@ -447,6 +447,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\quadspi.c</FilePath>
             </File>
+            <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -626,6 +631,11 @@
               <FileName>qspi_flash_kv.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Hardware\QSPI_FLASH\qspi_flash_kv.c</FilePath>
+            </File>
+            <File>
+              <FileName>onchip_flash_kv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Hardware\ONCHIP_FLASH\onchip_flash_kv.c</FilePath>
             </File>
           </Files>
         </Group>

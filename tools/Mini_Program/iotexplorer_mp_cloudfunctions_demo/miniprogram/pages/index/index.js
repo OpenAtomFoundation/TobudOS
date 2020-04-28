@@ -60,18 +60,27 @@ Page({
       region: app.globalData.region,
     }
     console.log(queryData);
+    // 调用云函数query
     wx.cloud.callFunction({
       name: 'query',
       data: queryData,
       success: res => {
-        wx.showToast({
-          title: '调用成功',
-        })
-        let deviceData = JSON.parse(res.result.Data)
-        this.setData({
-          deviceData: deviceData
-        })
-        console.log("result:", deviceData)
+        try {
+          let deviceData = JSON.parse(res.result.Data)
+          this.setData({
+            deviceData: deviceData
+          })
+          console.log("result:", deviceData)
+          wx.showToast({
+            title: '调用成功',
+          })
+        } catch (e) {
+          wx.showToast({
+            icon: 'none',
+            title: '调用失败',
+          })
+          console.log(res.result.Data, e)
+        }
       },
       fail: err => {
         wx.showToast({
@@ -101,7 +110,7 @@ Page({
       data: JSON.stringify(data),
     }
     console.log(controlData);
-
+    // 调用云函数control
     wx.cloud.callFunction({
       name: 'control',
       data: controlData,

@@ -246,7 +246,7 @@ static int bc35_28_95_signal_quality_check(void)
 
 static int bc35_28_95_init(void)
 {
-    printf("Init BC95_28_95 ...\n" );
+    printf("Init BC35_28_95 ...\n" );
 
     if (bc35_28_95_reset() != 0) {
         printf("reset FAILED\n");

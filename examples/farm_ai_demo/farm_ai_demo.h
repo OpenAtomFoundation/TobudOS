@@ -12,5 +12,5 @@
 extern void application_entry(void *arg);
 extern void motor_control(char mode);
 extern void light_control(char mode);
-#endif /* __APP_DEMO_H__ */
+#endif /* __MQTT_DEMO_H__ */
 

@@ -3,7 +3,6 @@
 void board_init() {
 
     SystemInit();
-
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOC);
 

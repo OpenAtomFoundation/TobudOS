@@ -36,7 +36,7 @@ __STATIC__ void pend_list_add(k_task_t *task, pend_obj_t *pend_obj)
     task_state_set_pend(task);
 }
 
-__KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object)
+__KNL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object)
 {
     k_task_t *task;
 
@@ -45,12 +45,12 @@ __KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object)
     return task ? task->prio : K_TASK_PRIO_INVALID;
 }
 
-__KERNEL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object)
+__KNL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object)
 {
     return TOS_LIST_FIRST_ENTRY(&object->list, k_task_t, pend_list);
 }
 
-__KERNEL__ void pend_list_remove(k_task_t *task)
+__KNL__ void pend_list_remove(k_task_t *task)
 {
     tos_list_del(&task->pend_list);
 
@@ -58,22 +58,22 @@ __KERNEL__ void pend_list_remove(k_task_t *task)
     task_state_reset_pending(task);
 }
 
-__KERNEL__ void pend_object_init(pend_obj_t *object)
+__KNL__ void pend_object_init(pend_obj_t *object)
 {
     tos_list_init(&object->list);
 }
 
-__KERNEL__ void pend_object_deinit(pend_obj_t *object)
+__KNL__ void pend_object_deinit(pend_obj_t *object)
 {
     tos_list_init(&object->list);
 }
 
-__KERNEL__ int pend_is_nopending(pend_obj_t *object)
+__KNL__ int pend_is_nopending(pend_obj_t *object)
 {
     return tos_list_empty(&object->list);
 }
 
-__KERNEL__ void pend_list_adjust(k_task_t *task)
+__KNL__ void pend_list_adjust(k_task_t *task)
 {
     // we may be the boss, so re-enter the pend list
     tos_list_del(&task->pend_list);
@@ -81,7 +81,7 @@ __KERNEL__ void pend_list_adjust(k_task_t *task)
     pend_list_add(task, task->pending_obj);
 }
 
-__KERNEL__ k_err_t pend_state2errno(pend_state_t state)
+__KNL__ k_err_t pend_state2errno(pend_state_t state)
 {
     if (state == PEND_STATE_POST) {
         return K_ERR_NONE;
@@ -96,7 +96,7 @@ __KERNEL__ k_err_t pend_state2errno(pend_state_t state)
     }
 }
 
-__KERNEL__ void pend_task_wakeup(k_task_t *task, pend_state_t state)
+__KNL__ void pend_task_wakeup(k_task_t *task, pend_state_t state)
 {
     if (task_state_is_pending(task)) {
         // mark why we wakeup
@@ -115,7 +115,7 @@ __KERNEL__ void pend_task_wakeup(k_task_t *task, pend_state_t state)
     readyqueue_add(task);
 }
 
-__KERNEL__ void pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout)
+__KNL__ void pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout)
 {
     readyqueue_remove(task);
 
@@ -127,12 +127,12 @@ __KERNEL__ void pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t tim
     }
 }
 
-__KERNEL__ void pend_wakeup_one(pend_obj_t *object, pend_state_t state)
+__KNL__ void pend_wakeup_one(pend_obj_t *object, pend_state_t state)
 {
     pend_task_wakeup(TOS_LIST_FIRST_ENTRY(&object->list, k_task_t, pend_list), state);
 }
 
-__KERNEL__ void pend_wakeup_all(pend_obj_t *object, pend_state_t state)
+__KNL__ void pend_wakeup_all(pend_obj_t *object, pend_state_t state)
 {
     k_task_t *task, *tmp;
 
@@ -141,7 +141,7 @@ __KERNEL__ void pend_wakeup_all(pend_obj_t *object, pend_state_t state)
     }
 }
 
-__KERNEL__ void pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt)
+__KNL__ void pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt)
 {
     if (opt == OPT_POST_ONE) {
         pend_wakeup_one(object, state);

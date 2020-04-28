@@ -40,7 +40,7 @@ __API__ k_err_t tos_tickless_wkup_alarm_init(k_cpu_lpwr_mode_t mode)
     return K_ERR_NONE;
 }
 
-__KERNEL__ int tickless_wkup_alarm_is_installed(k_cpu_lpwr_mode_t mode)
+__KNL__ int tickless_wkup_alarm_is_installed(k_cpu_lpwr_mode_t mode)
 {
     return k_tickless_wkup_alarm[mode] != K_NULL;
 }
@@ -88,20 +88,20 @@ __STATIC__ k_time_t tickless_cpu_sleep_time_get(k_cpu_lpwr_mode_t lpwr_mode)
     return time_sleep_ms > max_delay_ms ? max_delay_ms : time_sleep_ms;
 }
 
-__STATIC__ void tickless_systick_suspend(void)
+__STATIC__ void tickless_tick_suspend(void)
 {
     cpu_systick_suspend();
     cpu_systick_pending_reset();
 }
 
-__STATIC__ void tickless_systick_resume(void)
+__STATIC__ void tickless_tick_resume(void)
 {
     cpu_systick_suspend();
     cpu_systick_reset();
     cpu_systick_resume();
 }
 
-__STATIC__ void tickless_systick_fix(k_tick_t tick_sleep)
+__STATIC__ void tickless_tick_fix(k_tick_t tick_sleep)
 {
     TOS_CPU_CPSR_ALLOC();
 
@@ -114,14 +114,14 @@ __STATIC__ void tickless_systick_fix(k_tick_t tick_sleep)
     timer_update();
 #endif
 
-    tickless_systick_resume();
+    tickless_tick_resume();
 
     TOS_CPU_INT_ENABLE();
 }
 
 __STATIC__ void tickless_enter(void)
 {
-    tickless_systick_suspend();
+    tickless_tick_suspend();
 }
 
 __STATIC__ void tickless_leave(k_time_t time_sleep_ms)
@@ -131,26 +131,40 @@ __STATIC__ void tickless_leave(k_time_t time_sleep_ms)
     /* how many "ticks" have we sleep */
     tick_sleep = k_cpu_tick_per_second * time_sleep_ms / K_TIME_MILLISEC_PER_SEC;
 
-    tickless_systick_fix(tick_sleep);
+    tickless_tick_fix(tick_sleep);
+
+    knl_sched();
 }
 
-__KERNEL__ void tickless_proc(void)
+__KNL__ void tickless_proc(void)
 {
+    TOS_CPU_CPSR_ALLOC();
     k_time_t time_sleep;
     k_cpu_lpwr_mode_t lpwr_mode;
 
     lpwr_mode = pm_cpu_lpwr_mode_get();
+    if (lpwr_mode == TOS_LOW_POWER_MODE_NONE ||
+        !tickless_wkup_alarm_is_installed(lpwr_mode)) {
+        return;
+    }
+
+    TOS_CPU_INT_DISABLE();
 
     time_sleep = tickless_cpu_sleep_time_get(lpwr_mode); /* in millisecond */
+    if (unlikely(time_sleep == (k_time_t)0)) {
+        TOS_CPU_INT_ENABLE();
+        return;
+    }
 
     tickless_enter();
+    TOS_CPU_INT_ENABLE();
     tickless_wkup_alarm_setup(lpwr_mode, time_sleep);
     pm_cpu_lpwr_mode_enter(lpwr_mode);
     tickless_wkup_alarm_dismiss(lpwr_mode);
     tickless_leave(time_sleep);
 }
 
-__KERNEL__ void tickless_init(void)
+__KNL__ void tickless_init(void)
 {
     pm_idle_pwr_mgr_mode_set(IDLE_POWER_MANAGER_MODE_TICKLESS);
 

@@ -305,11 +305,11 @@ void LCD_Init(void)
     rcu_periph_clock_enable(RCU_GPIOB);
 
 #if USE_HARDWARE_SPI
-     rcu_periph_clock_enable(RCU_AF);
+    rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_SPI0);
     /* SPI0 GPIO config: NSS/PA4, SCK/PA5, MOSI/PA7 */
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 |GPIO_PIN_6| GPIO_PIN_7);
-    gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
+    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
+    //gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
 
     spi_config();
 #endif
@@ -396,9 +396,24 @@ void LCD_Clear(uint16_t Color)
     }
 }
 
+void LCD_ClearRect(uint16_t Color, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+{
+    LCD_Address_Set(x, y, width, height);
+    for(uint16_t i=0; i<max_width; i++) {
+        for (uint16_t j=0; j<max_height; j++) {
+            LCD_WR_DATA(Color);
+        }
+    }
+}
+
 void LCD_ShowChinese(uint16_t x, uint16_t y, uint8_t index, uint16_t color)    
 {
-    const uint8_t *p = (uint8_t*) &(Hzk[index*2][0]);
+    LCD_ShowChineseWithFonts(x, y, Hzk, index, color);
+}
+
+void LCD_ShowChineseWithFonts(uint16_t x, uint16_t y, const char fonts[][16], uint8_t index, uint16_t color)    
+{
+    const uint8_t *p = (uint8_t*) &(fonts[index*2][0]);
 
     //[数据排列]:从左到右从上到下 [取模方式]:纵向8点下高位 [正负反色]:否
     LCD_Address_Set(x, y, 16, 16);

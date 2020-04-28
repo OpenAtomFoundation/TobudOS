@@ -428,7 +428,7 @@ __STATIC__ void m5310a_incoming_udp(void) {
 
 __STATIC__ void m5310a_socket_close_event(void) {
     int id = -1;
-    uint8_t data;
+    uint8_t data = 0;
     while (data != '\n') {
         if (tos_at_uart_read(&data, 1) != 1) {
             return;

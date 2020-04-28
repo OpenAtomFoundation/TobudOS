@@ -55,6 +55,8 @@
 #ifndef _TOS_MMHEAP_H_
 #define  _TOS_MMHEAP_H_
 
+__CDECLS_BEGIN
+
 #if TOS_CFG_MMHEAP_EN > 0u
 
 /**
@@ -256,11 +258,20 @@ __API__ k_err_t tos_mmheap_pool_check(void *pool_start, k_mmheap_info_t *info);
  */
 __API__ k_err_t tos_mmheap_check(k_mmheap_info_t *info);
 
-__KERNEL__ k_err_t mmheap_init(void);
+__KNL__ k_err_t mmheap_init(void);
 
-__KERNEL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size);
+__KNL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size);
+
+#else /* if mmheap is not enabled, use libc instead */
+
+#define tos_mmheap_alloc            malloc
+#define tos_mmheap_calloc           calloc
+#define tos_mmheap_realloc          realloc
+#define tos_mmheap_free             free
 
 #endif
+
+__CDECLS_END
 
 #endif /* _TOS_MMHEAP_H_ */
 

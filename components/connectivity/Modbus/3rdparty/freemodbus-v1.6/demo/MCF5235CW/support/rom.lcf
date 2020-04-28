@@ -1,0 +1,123 @@
+#
+# FreeModbus Libary: MCF5235 Demo Application
+# Copyright (C) 2007 Christian Walter <wolti@sil.at>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# File: $Id: rom.lcf,v 1.1 2007/02/19 00:56:14 wolti Exp $
+#
+
+MEMORY 
+{
+    ext_flash     (RWX) : ORIGIN = 0x00000000, LENGTH = 0x0
+    sdram         (RWX) : ORIGIN = 0x10000000, LENGTH = 0x0
+    vector_ram    (RWX) : ORIGIN = 0x10000000, LENGTH = 0x0
+    user          (RWX) : ORIGIN = 0x10000500, LENGTH = 0x0
+    sram          (RWX) : ORIGIN = 0x20000000, LENGTH = 0x0
+    ipsbar        (RWX) : ORIGIN = 0x40000000, LENGTH = 0x0
+}
+
+SECTIONS 
+{
+
+    .sdram      : {} > sdram
+    .vector_ram : {} > vector_ram
+    .ipsbar     : {} > ipsbar
+    .sram       : {} > sram
+
+    .boot_flash :
+    {
+        vectors.s (.text)
+        *(.text)
+        *(.rodata)
+        .= ALIGN(0x4);
+    } > ext_flash
+
+    __end_of_text = .;
+
+    ___DATA_ROM     = __end_of_text;
+        
+    ___DATA_RAM     = ADDR(user);
+    
+    .sys_sram : AT(___DATA_ROM)
+    {
+        __START_DATA = .;
+        *(.data)
+        __END_DATA = .;
+
+        __START_SDATA = .;
+        *(.sdata)
+        __END_SDATA = .;
+        
+        __SDA_BASE = .;
+        .= ALIGN(0x4);      
+    } > user
+    
+    .uninitialized_data :
+    {
+        __START_SBSS = .;
+        *(.sbss)
+        *(SCOMMON)
+        __END_SBSS = .;
+
+        __START_BSS = .;
+        *(.bss)
+        *(COMMON)
+        __END_BSS = .;  
+
+        . = ALIGN (0x4);
+
+        ___HEAP_START   = .;
+        ___HEAP_END     = ___HEAP_START + 0x10000;
+        ___SP_END       = ___HEAP_END;
+        ___SP_INIT      = ___SP_END + 0x1000;
+
+        .               = ALIGN(0x4);       
+    } >> user
+    
+    _romp_at = ___DATA_ROM + SIZEOF(.sys_sram);
+    .romp : AT(_romp_at)
+    {
+        __S_romp = _romp_at;
+        WRITEW(___DATA_ROM);
+        WRITEW(ADDR(.sys_sram));
+        WRITEW(SIZEOF(.sys_sram));
+        WRITEW(0);
+        WRITEW(0);
+        WRITEW(0);
+    }
+
+    
+    ___IPSBAR       = ADDR(.ipsbar);
+    ___VECTOR_RAM       = ADDR(.vector_ram);
+    ___SDRAM        = ADDR(.sdram);
+    ___SDRAM_SIZE       = 0x01000000;
+    ___SRAM         = ADDR(.sram);
+    ___SRAM_SIZE        = 0x00010000;
+    ___EXT_FLASH        = ADDR(.boot_flash);
+    ___EXT_FLASH_SIZE   = 0x00200000;
+    ___heap_addr        = ___HEAP_START;
+    ___heap_size        = 0x10000;
+    __SP_INIT       = ___SP_INIT;   
+    
+}

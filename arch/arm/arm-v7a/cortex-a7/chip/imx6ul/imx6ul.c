@@ -18,7 +18,7 @@
 #include "tos_k.h"
 #include "imx6ul.h"
 
-__KERNEL__ void chip_init(void)
+__KNL__ void chip_init(void)
 {
     clock_init();
     clock_enable();

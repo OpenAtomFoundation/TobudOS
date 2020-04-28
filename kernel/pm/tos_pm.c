@@ -24,7 +24,8 @@ __API__ k_err_t tos_pm_cpu_lpwr_mode_set(k_cpu_lpwr_mode_t cpu_lpwr_mode)
 {
     TOS_CPU_CPSR_ALLOC();
 
-    if (!tickless_wkup_alarm_is_installed(cpu_lpwr_mode)) {
+    if (cpu_lpwr_mode != TOS_LOW_POWER_MODE_NONE &&
+        !tickless_wkup_alarm_is_installed(cpu_lpwr_mode)) {
         return K_ERR_PM_WKUP_SOURCE_NOT_INSTALL;
     }
 
@@ -64,7 +65,7 @@ __API__ k_err_t tos_pm_device_register(k_pm_device_t *device)
     return K_ERR_NONE;
 }
 
-__KERNEL__ void pm_init(void)
+__KNL__ void pm_init(void)
 {
     memset(&k_pm_device_ctl, 0, sizeof(k_pm_device_ctl));
     k_pm_device_ctl.count = 0u;
@@ -85,7 +86,7 @@ __STATIC_INLINE__ void pm_cpu_standby_mode_enter(void)
     cpu_standby_mode_enter();
 }
 
-__KERNEL__ void pm_cpu_lpwr_mode_enter(k_cpu_lpwr_mode_t lpwr_mode)
+__KNL__ void pm_cpu_lpwr_mode_enter(k_cpu_lpwr_mode_t lpwr_mode)
 {
     if (TOS_LOW_POWER_MODE_SLEEP == lpwr_mode) {
         pm_cpu_sleep_mode_enter();
@@ -100,27 +101,27 @@ __KERNEL__ void pm_cpu_lpwr_mode_enter(k_cpu_lpwr_mode_t lpwr_mode)
     }
 }
 
-__KERNEL__ k_cpu_lpwr_mode_t pm_cpu_lpwr_mode_get(void)
+__KNL__ k_cpu_lpwr_mode_t pm_cpu_lpwr_mode_get(void)
 {
     return k_cpu_lpwr_mode;
 }
 
-__KERNEL__ void pm_idle_pwr_mgr_mode_set(idle_pwrmgr_mode_t idle_pwrmgr_mode)
+__KNL__ void pm_idle_pwr_mgr_mode_set(idle_pwrmgr_mode_t idle_pwrmgr_mode)
 {
     k_idle_pwr_mgr_mode = idle_pwrmgr_mode;
 }
 
-__KERNEL__ int pm_idle_pwr_mgr_mode_is_sleep(void)
+__KNL__ int pm_idle_pwr_mgr_mode_is_sleep(void)
 {
     return k_idle_pwr_mgr_mode == IDLE_POWER_MANAGER_MODE_SLEEP;
 }
 
-__KERNEL__ int pm_idle_pwr_mgr_mode_is_tickless(void)
+__KNL__ int pm_idle_pwr_mgr_mode_is_tickless(void)
 {
     return k_idle_pwr_mgr_mode == IDLE_POWER_MANAGER_MODE_TICKLESS;
 }
 
-__KERNEL__ void pm_power_manager(void)
+__KNL__ void pm_power_manager(void)
 {
     if (pm_idle_pwr_mgr_mode_is_sleep()) {
         pm_cpu_sleep_mode_enter();
@@ -133,7 +134,7 @@ __KERNEL__ void pm_power_manager(void)
 #endif
 }
 
-__KERNEL__ int pm_device_suspend(void)
+__KNL__ int pm_device_suspend(void)
 {
     uint8_t i = 0;
 
@@ -145,7 +146,7 @@ __KERNEL__ int pm_device_suspend(void)
     return 0;
 }
 
-__KERNEL__ int pm_device_resume(void)
+__KNL__ int pm_device_resume(void)
 {
     uint8_t i = 0;
 

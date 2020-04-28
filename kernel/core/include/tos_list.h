@@ -18,6 +18,8 @@
 #ifndef _TOS_LIST_H_
 #define  _TOS_LIST_H_
 
+__CDECLS_BEGIN
+
 typedef struct k_list_node_st {
     struct k_list_node_st *next;
     struct k_list_node_st *prev;
@@ -137,6 +139,8 @@ __API__ __STATIC_INLINE__ int tos_list_empty(const k_list_t *list)
 {
     return list->next == list;
 }
+
+__CDECLS_END
 
 #endif /* _TOS_LIST_H_ */
 

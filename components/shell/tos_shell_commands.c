@@ -52,7 +52,7 @@ __STATIC__ shell_cmd_set_t buildin_shell_cmd_set = {
     .commands   = builtin_shell_cmds,
 };
 
-__KERNEL__ int shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set)
+__KNL__ int shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set)
 {
     if (tos_slist_contains((k_slist_t *)&cmd_set->list, &cmd_set_list)) {
         return -1;
@@ -62,7 +62,7 @@ __KERNEL__ int shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set)
     return 0;
 }
 
-__KERNEL__ int shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set)
+__KNL__ int shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set)
 {
     if (!tos_slist_contains((k_slist_t *)&cmd_set->list, &cmd_set_list)) {
         return -1;
@@ -72,7 +72,7 @@ __KERNEL__ int shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set)
     return 0;
 }
 
-__KERNEL__ const shell_cmd_t *shell_cmd_find(const char *name)
+__KNL__ const shell_cmd_t *shell_cmd_find(const char *name)
 {
     const shell_cmd_t *cmd;
     const shell_cmd_set_t *cmd_set;
@@ -88,7 +88,7 @@ __KERNEL__ const shell_cmd_t *shell_cmd_find(const char *name)
     return K_NULL;
 }
 
-__KERNEL__ void shell_cmd_init(shell_cmd_set_t *custom_cmd_set)
+__KNL__ void shell_cmd_init(shell_cmd_set_t *custom_cmd_set)
 {
     tos_slist_init(&cmd_set_list);
 

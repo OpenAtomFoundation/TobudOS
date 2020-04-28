@@ -93,7 +93,7 @@ __API__ evtdrv_err_t tos_evtdrv_timer_start(evtdrv_timer_t *tmr, evtdrv_tick_t t
  */
 __API__ evtdrv_err_t tos_evtdrv_timer_stop(evtdrv_timer_t *tmr);
 
-__KERNEL__ void evtdrv_timer_update(void);
+__KNL__ void evtdrv_timer_update(void);
 
 #endif /* _TOS_EVTDRV_TIMER_H_ */
 

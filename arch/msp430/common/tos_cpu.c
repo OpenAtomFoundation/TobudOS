@@ -78,32 +78,32 @@ __API__ void tos_cpu_cpsr_restore(cpu_cpsr_t cpsr)
     port_cpsr_restore(cpsr);
 }
 
-__KERNEL__ void cpu_init(void)
+__KNL__ void cpu_init(void)
 {
 
 }
 
-__KERNEL__ void cpu_reset(void)
+__KNL__ void cpu_reset(void)
 {
     port_cpu_reset();
 }
 
-__KERNEL__ void cpu_sched_start(void)
+__KNL__ void cpu_sched_start(void)
 {
     port_sched_start();
 }
 
-__KERNEL__ void cpu_context_switch(void)
+__KNL__ void cpu_context_switch(void)
 {
     port_context_switch();
 }
 
-__KERNEL__ void cpu_irq_context_switch(void)
+__KNL__ void cpu_irq_context_switch(void)
 {
     irq_context_switch_flag = 1;//port_irq_context_switch();
 }
 
-__KERNEL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
+__KNL__ void cpu_systick_init(k_cycle_t cycle_per_tick)
 {
     port_systick_priority_set(TOS_CFG_CPU_SYSTICK_PRIO);
     port_systick_config(cycle_per_tick);
@@ -128,7 +128,7 @@ __STATIC_INLINE__ void cpu_systick_reload(k_cycle_t cycle_per_tick)
  *
  * @return None
  */
-__KERNEL__ void cpu_systick_resume(void)
+__KNL__ void cpu_systick_resume(void)
 {
     port_systick_resume();
 }
@@ -138,17 +138,17 @@ __KERNEL__ void cpu_systick_resume(void)
  *
  * @return None
  */
-__KERNEL__ void cpu_systick_suspend(void)
+__KNL__ void cpu_systick_suspend(void)
 {
     port_systick_suspend();
 }
 
-__KERNEL__ k_time_t cpu_systick_max_delay_millisecond(void)
+__KNL__ k_time_t cpu_systick_max_delay_millisecond(void)
 {
     return port_systick_max_delay_millisecond();
 }
 
-__KERNEL__ void cpu_systick_expires_set(k_time_t millisecond)
+__KNL__ void cpu_systick_expires_set(k_time_t millisecond)
 {
     k_cycle_t cycles;
 
@@ -157,12 +157,12 @@ __KERNEL__ void cpu_systick_expires_set(k_time_t millisecond)
     cpu_systick_reload(cycles - 12); /* interrupt delay */
 }
 
-__KERNEL__ void cpu_systick_pending_reset(void)
+__KNL__ void cpu_systick_pending_reset(void)
 {
     port_systick_pending_reset();
 }
 
-__KERNEL__ void cpu_systick_reset(void)
+__KNL__ void cpu_systick_reset(void)
 {
     cpu_systick_reload(k_cpu_cycle_per_tick);
 }
@@ -171,25 +171,25 @@ __KERNEL__ void cpu_systick_reset(void)
 
 #if TOS_CFG_PWR_MGR_EN > 0u
 
-__KERNEL__ void cpu_sleep_mode_enter(void)
+__KNL__ void cpu_sleep_mode_enter(void)
 {
     __bis_SR_register( LPM4_bits + GIE );
     __no_operation();
 }
 
-__KERNEL__ void cpu_stop_mode_enter(void)
+__KNL__ void cpu_stop_mode_enter(void)
 {
 
 }
 
-__KERNEL__ void cpu_standby_mode_enter(void)
+__KNL__ void cpu_standby_mode_enter(void)
 {
 
 }
 
 #endif /* TOS_CFG_PWR_MGR_EN */
 
-__KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
+__KNL__ k_stack_t *cpu_task_stk_init(void *entry,
                                               void *arg,
                                               void *exit,
                                               k_stack_t *stk_base,
@@ -273,7 +273,7 @@ __KERNEL__ k_stack_t *cpu_task_stk_init(void *entry,
 
 #if TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN > 0u
 
-__KERNEL__ k_err_t cpu_task_stack_draught_depth(k_stack_t *stk_base, size_t stk_size, int *depth)
+__KNL__ k_err_t cpu_task_stack_draught_depth(k_stack_t *stk_base, size_t stk_size, int *depth)
 {
     uint8_t *slot;
     uint8_t *sp, *bp;
@@ -302,7 +302,7 @@ __KERNEL__ k_err_t cpu_task_stack_draught_depth(k_stack_t *stk_base, size_t stk_
 
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
 
-__KERNEL__ void cpu_fault_diagnosis(void)
+__KNL__ void cpu_fault_diagnosis(void)
 {
     port_fault_diagnosis();
 }

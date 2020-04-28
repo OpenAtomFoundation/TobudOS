@@ -442,6 +442,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\stm32l4xx_it_module.c</FilePath>
             </File>
+            <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

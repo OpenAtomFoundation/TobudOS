@@ -572,13 +572,13 @@ __STATIC__ void mmheap_ctl_init(void)
     }
 }
 
-__KERNEL__ k_err_t mmheap_init(void)
+__KNL__ k_err_t mmheap_init(void)
 {
     mmheap_ctl_init();
     return K_ERR_NONE;
 }
 
-__KERNEL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size)
+__KNL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size)
 {
     mmheap_ctl_init();
 

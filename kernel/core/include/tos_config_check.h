@@ -40,18 +40,6 @@
 #error  "INVALID config, TOS_CFG_TASK_PRIO_MAX must be >= 8"
 #endif
 
-#if     (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support dynamic task create"
-#endif
-
-#if     (TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support tos_prio_msg_q"
-#endif
-
-#if     (TOS_CFG_PRIORITY_MAIL_QUEUE_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to support tos_prio_mail_q"
-#endif
-
 #if     ((TOS_CFG_TIMER_EN > 0u) && !defined(TOS_CFG_TIMER_AS_PROC))
 #error  "UNDECLARED config, TOS_CFG_TIMER_AS_PROC"
 #endif
@@ -62,15 +50,11 @@
 #endif
 #endif
 
-#if     (TOS_CFG_VFS_EN > 0u) && (TOS_CFG_MMHEAP_EN == 0u)
-#error  "INVALID config, must enable TOS_CFG_MMHEAP_EN to use tos_vfs"
-#endif
-
 #ifndef  TOS_CFG_CPU_HRTIMER_EN
-#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_EN should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_EN should be declared in 'port_config.h'"
 #elif   (TOS_CFG_CPU_HRTIMER_EN > 0u) && !defined(TOS_CFG_CPU_HRTIMER_SIZE)
-#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_SIZE should be declared in 'port.h'"
-#elif  ((TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_08) && \
+#error  "UNDECLARED config, TOS_CFG_CPU_HRTIMER_SIZE should be declared in 'port_config.h'"
+#elif  (TOS_CFG_CPU_HRTIMER_EN > 0u) && ((TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_32) && \
         (TOS_CFG_CPU_HRTIMER_SIZE != CPU_WORD_SIZE_64))
@@ -78,18 +62,22 @@
 #endif
 
 #ifndef  TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT
-#error  "UNDECLARED config, TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT, should be declared in 'port_config.h'"
+#endif
+
+#ifndef TOS_CFG_CPU_BYTE_ORDER
+#error  "UNDECLARED config, TOS_CFG_CPU_BYTE_ORDER, should be declared in 'port_config.h'"
 #endif
 
 #ifndef  TOS_CFG_CPU_STK_GROWTH
-#error  "UNDECLARED config, TOS_CFG_CPU_STK_GROWTH, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_STK_GROWTH, should be declared in 'port_config.h'"
 #elif  ((TOS_CFG_CPU_STK_GROWTH != CPU_STK_GROWTH_ASCENDING) && \
         (TOS_CFG_CPU_STK_GROWTH != CPU_STK_GROWTH_DESCENDING))
 #error  "INVALID config, TOS_CFG_CPU_STK_GROWTH"
 #endif
 
 #ifndef  TOS_CFG_CPU_ADDR_SIZE
-#error  "UNDECLARED config, TOS_CFG_CPU_ADDR_SIZE, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_ADDR_SIZE, should be declared in 'port_config.h'"
 #elif  ((TOS_CFG_CPU_ADDR_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_ADDR_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_ADDR_SIZE != CPU_WORD_SIZE_32) && \
@@ -98,7 +86,7 @@
 #endif
 
 #ifndef  TOS_CFG_CPU_DATA_SIZE
-#error  "UNDECLARED config, TOS_CFG_CPU_DATA_SIZE, should be declared in 'port.h'"
+#error  "UNDECLARED config, TOS_CFG_CPU_DATA_SIZE, should be declared in 'port_config.h'"
 #elif  ((TOS_CFG_CPU_DATA_SIZE != CPU_WORD_SIZE_08) && \
         (TOS_CFG_CPU_DATA_SIZE != CPU_WORD_SIZE_16) && \
         (TOS_CFG_CPU_DATA_SIZE != CPU_WORD_SIZE_32) && \

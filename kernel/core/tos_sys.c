@@ -177,7 +177,7 @@ __API__ int tos_knl_is_running(void)
  *
  * @return The remian ticks of the first oncoming task to be scheduled.
  */
-__KERNEL__ k_tick_t knl_next_expires_get(void)
+__KNL__ k_tick_t knl_next_expires_get(void)
 {
     k_tick_t tick_next_expires;
 #if TOS_CFG_TIMER_EN > 0u
@@ -199,7 +199,7 @@ __KERNEL__ k_tick_t knl_next_expires_get(void)
 
 #endif
 
-__KERNEL__ void knl_sched(void)
+__KNL__ void knl_sched(void)
 {
     TOS_CPU_CPSR_ALLOC();
 
@@ -226,22 +226,22 @@ __KERNEL__ void knl_sched(void)
     TOS_CPU_INT_ENABLE();
 }
 
-__KERNEL__ int knl_is_sched_locked(void)
+__KNL__ int knl_is_sched_locked(void)
 {
     return k_sched_lock_nest_cnt > 0u;
 }
 
-__KERNEL__ int knl_is_inirq(void)
+__KNL__ int knl_is_inirq(void)
 {
     return k_irq_nest_cnt > 0u;
 }
 
-__KERNEL__ int knl_is_idle(k_task_t *task)
+__KNL__ int knl_is_idle(k_task_t *task)
 {
     return task == &k_idle_task;
 }
 
-__KERNEL__ int knl_is_self(k_task_t *task)
+__KNL__ int knl_is_self(k_task_t *task)
 {
     return task == k_curr_task;
 }
@@ -261,7 +261,7 @@ __STATIC__ void knl_idle_entry(void *arg)
     }
 }
 
-__KERNEL__ k_err_t knl_idle_init(void)
+__KNL__ k_err_t knl_idle_init(void)
 {
     return tos_task_create(&k_idle_task, "idle",
             knl_idle_entry, K_NULL,

@@ -57,9 +57,14 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim6;
 extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
-
+extern void prvvUARTTxReadyISR( void );
+extern void prvvUARTRxISR( void );
+extern void prvvTIMERExpiredISR( void );
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -216,6 +221,66 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART2 global interrupt.
+  */
+void USART2_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART2_IRQn 0 */
+
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
+
+  /* USER CODE END USART2_IRQn 1 */
+	
+ /* USER CODE BEGIN USART1_IRQn 0 */
+	uint8_t tmp;
+	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_PE))//???????
+	{
+		HAL_UART_Receive(&huart2,&tmp,1,1);
+	}
+	
+	else if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_RXNE)&&__HAL_UART_GET_IT_SOURCE(&huart2,UART_IT_RXNE))
+	{
+		prvvUARTRxISR();
+		
+	}
+	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TXE)&&__HAL_UART_GET_IT_SOURCE(&huart2,UART_IT_TXE))
+	{
+		prvvUARTTxReadyISR();
+		
+	}
+}
+
+/**
+  * @brief This function handles USART3 global interrupt.
+  */
+void USART3_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART3_IRQn 0 */
+
+  /* USER CODE END USART3_IRQn 0 */
+  HAL_UART_IRQHandler(&huart3);
+  /* USER CODE BEGIN USART3_IRQn 1 */
+
+  /* USER CODE END USART3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
+  */
+void TIM6_DAC_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
+		prvvTIMERExpiredISR();
+  /* USER CODE END TIM6_DAC_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim6);
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
+
+  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

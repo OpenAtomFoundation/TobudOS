@@ -47,27 +47,27 @@ uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
     hints.ai_family = AF_INET;
     hints.ai_protocol = IPPROTO_UDP;
 
-    Log_d("establish tcp connection with server(host=%s port=%s)", host, port_str);
+    Log_d("establish udp connection with server(host=%s port=%s)", host, port_str);
 
     if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {        
-		Log_e("getaddrinfo error,errno:%s",strerror(errno));
+        Log_e("getaddrinfo error,errno:%s",strerror(errno));
         return 0;
     }
 
     for (cur = addr_list; cur != NULL; cur = cur->ai_next) {
-		fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
-		if (fd < 0) {
-			ret = 0;
-			continue;
-		}
+	fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
+	if (fd < 0) {
+	    ret = 0;
+	    continue;
+	}
 
-		if (0 == connect(fd, cur->ai_addr, cur->ai_addrlen)) {
-			ret = fd + LWIP_SOCKET_FD_SHIFT;
-			break;
-		}
+	if (0 == connect(fd, cur->ai_addr, cur->ai_addrlen)) {
+	     ret = fd + LWIP_SOCKET_FD_SHIFT;
+	     break;
+	}
 
-		close(fd);
-		ret = 0;
+	close(fd);
+	ret = 0;
     }
 
     if (0 == ret) {
@@ -158,4 +158,4 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
     return HAL_UDP_Read(fd, p_data, datalen);
 }
 
-#endif
+#endif/*COAP_COMM_ENABLED*/

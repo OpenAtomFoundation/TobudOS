@@ -17,8 +17,6 @@
 
 #include "tos_k.h"
 
-#if TOS_CFG_COMPLETION_EN > 0u
-
 __API__ k_err_t tos_completion_create(k_completion_t *completion)
 {
     TOS_PTR_SANITY_CHECK(completion);
@@ -39,9 +37,7 @@ __API__ k_err_t tos_completion_destroy(k_completion_t *completion)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&completion->pend_obj)) {
-        pend_wakeup_all(&completion->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&completion->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&completion->pend_obj);
 
@@ -57,6 +53,7 @@ __API__ k_err_t tos_completion_pend_timed(k_completion_t *completion, k_tick_t t
 {
     TOS_CPU_CPSR_ALLOC();
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(completion);
     TOS_OBJ_VERIFY(completion, KNL_OBJ_TYPE_COMPLETION);
 
@@ -70,11 +67,6 @@ __API__ k_err_t tos_completion_pend_timed(k_completion_t *completion, k_tick_t t
     if (timeout == TOS_TIME_NOWAIT) { // no wait, return immediately
         TOS_CPU_INT_ENABLE();
         return K_ERR_PEND_NOWAIT;
-    }
-
-    if (knl_is_inirq()) {
-        TOS_CPU_INT_ENABLE();
-        return K_ERR_PEND_IN_IRQ;
     }
 
     if (knl_is_sched_locked()) {
@@ -162,6 +154,4 @@ __API__ int tos_completion_is_done(k_completion_t *completion)
 
     return is_done;
 }
-
-#endif
 

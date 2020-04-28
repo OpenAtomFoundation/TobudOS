@@ -338,6 +338,10 @@
   #include "stm32l4xx_hal_ospi.h"
 #endif /* HAL_OSPI_MODULE_ENABLED */
 
+#ifdef HAL_PKA_MODULE_ENABLED
+  #include "stm32l4xx_hal_pka.h"
+#endif /* HAL_PWR_MODULE_ENABLED */
+
 #ifdef HAL_PWR_MODULE_ENABLED
   #include "stm32l4xx_hal_pwr.h"
 #endif /* HAL_PWR_MODULE_ENABLED */
@@ -413,6 +417,10 @@
 #ifdef HAL_GFXMMU_MODULE_ENABLED
   #include "stm32l4xx_hal_gfxmmu.h"
 #endif /* HAL_GFXMMU_MODULE_ENABLED */
+
+#ifdef HAL_PSSI_MODULE_ENABLED
+  #include "stm32l4xx_hal_pssi.h"
+#endif /* HAL_PSSI_MODULE_ENABLED */
 
 /* Exported macro ------------------------------------------------------------*/
 #ifdef  USE_FULL_ASSERT

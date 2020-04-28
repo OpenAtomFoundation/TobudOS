@@ -112,7 +112,7 @@ __API__ evtdrv_msg_body_t tos_evtdrv_msg_recv(void)
     return K_NULL;
 }
 
-__KERNEL__ void evtdrv_msg_init(void)
+__KNL__ void evtdrv_msg_init(void)
 {
     tos_list_init(&evtdrv_msg_list);
 }

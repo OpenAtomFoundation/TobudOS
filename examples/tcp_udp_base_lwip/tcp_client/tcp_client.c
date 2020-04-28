@@ -22,8 +22,12 @@ void application_entry(void *arg)
 
     MX_LWIP_Init();
 
-    while (1) {
-        socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    while (1) {       
+        if ((socketfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+            printf("create socket error %s errno: %d\n", strerror(errno), errno);
+            goto tcp_client_exit;
+        }
+        
         setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(struct timeval));
         memset(&sockaddr, 0, sizeof(sockaddr));
 
@@ -38,7 +42,7 @@ void application_entry(void *arg)
 
         printf("send(%d): %s:%d :%s\n", ++cnt, server_ip, server_port, str);
         if ((send(socketfd, str, strlen(str), 0)) < 0) {
-            printf("send mes error: %s errno : %d\n", strerror(errno), errno);
+            printf("send msg error: %s errno : %d\n", strerror(errno), errno);
             goto tcp_client_exit;
         }
 

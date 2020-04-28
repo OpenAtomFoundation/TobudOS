@@ -4,6 +4,9 @@ App({
     // 腾讯云物联网通信平台中获取 产品ID和设备名称
     productId: "U1BZWHF7F9", // 产品ID
     deviceName: "dev_01", // 设备名称
+    // 腾讯云控制台-访问管理-访问密钥-API密钥管理中获取 SecretId, SecretKey
+    secretId: "xxx",
+    secretKey: "xxx",
   },
   onLaunch: function () {
     if (!wx.cloud) {

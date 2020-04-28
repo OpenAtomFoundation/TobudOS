@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>TencentOS_tiny/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>130</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1395</ColumnWidth1><ColumnWidth2>372</ColumnWidth2><ColumnWidth3>93</ColumnWidth3></Build>
+      <TerminalIO/>
+      <CodeCoveragePlugin/>
+      <Profiling/>
+      <Debug-Log/>
+    </Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-24042-2046</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>TencentOS_tiny</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-5514-2598</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+          <Tab>
+            <Identity>TabID-14450-14285</Identity>
+            <TabName>Debug Log</TabName>
+            <Factory>Debug-Log</Factory>
+            <Session/>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\tos_task.c</Filename><XPos>0</XPos><YPos>327</YPos><SelStart>8770</SelStart><SelEnd>8770</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\board\ATmega32\BSP\src\tim.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>176</SelStart><SelEnd>176</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\tos_sem.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\arch\AVR\common\tos_cpu.c</Filename><XPos>0</XPos><YPos>102</YPos><SelStart>2470</SelStart><SelEnd>2470</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\include\tos_list.h</Filename><XPos>0</XPos><YPos>127</YPos><SelStart>4515</SelStart><SelEnd>4515</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\tos_timer.c</Filename><XPos>0</XPos><YPos>268</YPos><SelStart>7654</SelStart><SelEnd>7654</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\board\ATMega32\TOS-CONFIG\tos_config.h</Filename><XPos>0</XPos><YPos>15</YPos><SelStart>843</SelStart><SelEnd>843</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\tos_sched.c</Filename><XPos>0</XPos><YPos>67</YPos><SelStart>2376</SelStart><SelEnd>2376</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\tos_tick.c</Filename><XPos>0</XPos><YPos>93</YPos><SelStart>3338</SelStart><SelEnd>3338</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\arch\avr\ATMega32\iccavr\port_s.asm</Filename><XPos>0</XPos><YPos>63</YPos><SelStart>1017</SelStart><SelEnd>1017</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\board\ATmega32\USER\main.c</Filename><XPos>0</XPos><YPos>64</YPos><SelStart>1654</SelStart><SelEnd>1654</SelEnd></Tab><ActiveTab>10</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>D:\TOS\TencentOS-tiny\kernel\core\tos_sys.c</Filename><XPos>0</XPos><YPos>94</YPos><SelStart>2465</SelStart><SelEnd>2465</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-01df9cf0><key>iaridepm1</key></Toolbar-01df9cf0></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>434</Bottom><Right>204</Right><x>-2</x><y>-2</y><xscreen>111</xscreen><yscreen>99</yscreen><sizeHorzCX>77949</sizeHorzCX><sizeHorzCY>154930</sizeHorzCY><sizeVertCX>144663</sizeVertCX><sizeVertCY>682316</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>160</Bottom><Right>1426</Right><x>-2</x><y>-2</y><xscreen>1428</xscreen><yscreen>162</yscreen><sizeHorzCX>1002809</sizeHorzCX><sizeHorzCY>253521</sizeHorzCY><sizeVertCX>77949</sizeVertCX><sizeVertCY>154930</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

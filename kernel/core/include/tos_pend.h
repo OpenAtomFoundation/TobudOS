@@ -18,7 +18,7 @@
 #ifndef _TOS_PEND_H_
 #define  _TOS_PEND_H_
 
-typedef struct k_task_st k_task_t;
+__CDECLS_BEGIN
 
 /**
  * The reason why we wakeup from a pend.
@@ -41,31 +41,33 @@ typedef struct pend_object_st {
     k_list_t        list;
 } pend_obj_t;
 
-__KERNEL__ void     pend_object_init(pend_obj_t *object);
+__KNL__ void        pend_object_init(pend_obj_t *object);
 
-__KERNEL__ void     pend_object_deinit(pend_obj_t *object);
+__KNL__ void        pend_object_deinit(pend_obj_t *object);
 
-__KERNEL__ int      pend_is_nopending(pend_obj_t *object);
+__KNL__ int         pend_is_nopending(pend_obj_t *object);
 
-__KERNEL__ k_prio_t pend_highest_pending_prio_get(pend_obj_t *object);
+__KNL__ k_prio_t    pend_highest_pending_prio_get(pend_obj_t *object);
 
-__KERNEL__ k_task_t *pend_highest_pending_task_get(pend_obj_t *object);
+__KNL__ k_task_t   *pend_highest_pending_task_get(pend_obj_t *object);
 
-__KERNEL__ void     pend_list_remove(k_task_t *task);
+__KNL__ void        pend_list_remove(k_task_t *task);
 
-__KERNEL__ void     pend_list_adjust(k_task_t *task);
+__KNL__ void        pend_list_adjust(k_task_t *task);
 
-__KERNEL__ k_err_t  pend_state2errno(pend_state_t state);
+__KNL__ k_err_t     pend_state2errno(pend_state_t state);
 
-__KERNEL__ void     pend_task_wakeup(k_task_t *task, pend_state_t state);
+__KNL__ void        pend_task_wakeup(k_task_t *task, pend_state_t state);
 
-__KERNEL__ void     pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout);
+__KNL__ void        pend_task_block(k_task_t *task, pend_obj_t *object, k_tick_t timeout);
 
-__KERNEL__ void     pend_wakeup_one(pend_obj_t *object, pend_state_t state);
+__KNL__ void        pend_wakeup_one(pend_obj_t *object, pend_state_t state);
 
-__KERNEL__ void     pend_wakeup_all(pend_obj_t *object, pend_state_t state);
+__KNL__ void        pend_wakeup_all(pend_obj_t *object, pend_state_t state);
 
-__KERNEL__ void     pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt);
+__KNL__ void        pend_wakeup(pend_obj_t *object, pend_state_t state, opt_post_t opt);
+
+__CDECLS_END
 
 #endif /* _TOS_PEND_H_ */
 

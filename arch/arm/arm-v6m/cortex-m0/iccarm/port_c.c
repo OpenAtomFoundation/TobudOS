@@ -42,17 +42,7 @@ __PORT__ void port_systick_suspend(void)
 
 __PORT__ void port_systick_reload(uint32_t cycle_per_tick)
 {
-    uint32_t max_cycle;
-
-    max_cycle = SysTick_LOAD_RELOAD_Msk; // 24 bit
-
-    if (max_cycle - SysTick->VAL > cycle_per_tick - 1u) {
-        SysTick->LOAD = max_cycle;
-    } else {
-        SysTick->LOAD = (cycle_per_tick - 1u) + SysTick->VAL;
-    }
-
-    SysTick->VAL = 0;
+    port_systick_config(cycle_per_tick);
 }
 
 __PORT__ void port_systick_pending_reset(void)

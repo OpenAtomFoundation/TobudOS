@@ -1,0 +1,15 @@
+[TraceHelper]
+Enabled=0
+ShowSource=1
+[DisAssemblyWindow]
+NumStates=_ 1
+State 1=_ 1
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Breakpoints]
+Count=0

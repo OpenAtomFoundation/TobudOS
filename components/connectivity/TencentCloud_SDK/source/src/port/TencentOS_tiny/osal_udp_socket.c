@@ -40,7 +40,7 @@ __QCLOUD_OSAL__ int osal_udp_connect(const char *host, uint16_t port)
     hints.ai_family = AF_INET;
     hints.ai_protocol = IPPROTO_UDP;
 
-    QCLOUD_LOG_D("establish tcp connection with server(host=%s port=%s)", host, port_str);
+    QCLOUD_LOG_D("establish udp connection with server(host=%s port=%s)", host, port_str);
 
     if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {
         QCLOUD_LOG_E("getaddrinfo error,errno:%s", strerror(errno));
@@ -98,7 +98,7 @@ __QCLOUD_OSAL__ qcloud_err_t osal_udp_read(int sockfd, void *buf, size_t len, ui
     fd_set read_fds;
 
     if (sockfd < 0) {
-        return QCLOUD_ERR_TCP_READ_FAIL;
+        return QCLOUD_ERR_UDP_READ_FAIL;
     }
 
     FD_ZERO(&read_fds);

@@ -239,9 +239,7 @@ typedef k_sem_t *osSemaphoreId;
 
 /// Pool ID identifies the memory pool (pointer to a memory pool control block).
 /// \note CAN BE CHANGED: \b os_pool_cb is implementation specific in every CMSIS-RTOS.
-#if TOS_CFG_MMBLK_EN > 0u
 typedef k_mmblk_pool_t *osPoolId;
-#endif
 
 /// Message ID identifies the message queue (pointer to a message queue control block).
 /// \note CAN BE CHANGED: \b os_messageQ_cb is implementation specific in every CMSIS-RTOS.
@@ -297,14 +295,12 @@ typedef struct os_semaphore_def {
 
 /// Definition structure for memory block allocation.
 /// \note CAN BE CHANGED: \b os_pool_def is implementation specific in every CMSIS-RTOS.
-#if TOS_CFG_MMBLK_EN > 0u
 typedef struct os_pool_def {
     uint32_t                    pool_sz;    ///< number of items (elements) in the pool
     uint32_t                    item_sz;    ///< size of an item
     void                       *pool;       ///< pointer to memory for pool
     k_mmblk_pool_t             *mmblk_pool; ///< memory blk pool handler
 } osPoolDef_t;
-#endif
 
 /// Definition structure for message queue.
 /// \note CAN BE CHANGED: \b os_messageQ_def is implementation specific in every CMSIS-RTOS.
@@ -398,12 +394,21 @@ uint32_t osKernelSysTick(void);
 #define osThreadDef(name, priority, instances, stacksz)  \
     extern const osThreadDef_t os_thread_def_##name
 #else                            // define the object
+
 #define osThreadDef(name, priority, instances, stacksz)  \
     k_task_t task_handler_##name; \
     k_stack_t task_stack_##name[(stacksz)]; \
     const osThreadDef_t os_thread_def_##name = \
         { #name, (os_pthread)(name), (osPriority)(priority), (instances), \
         (&((task_stack_##name)[0])), (stacksz), ((k_timeslice_t)0u), (&(task_handler_##name)) }
+
+#if (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u)
+#define osThreadDynamicDef(name, priority, instances, stacksz) \
+    const osThreadDef_t os_thread_def_##name = \
+        { #name, (os_pthread)(name), (osPriority)(priority), (instances), \
+        (K_NULL), (stacksz), ((k_timeslice_t)0u), (K_NULL) }
+#endif
+
 #endif
 
 /// Access a Thread definition.
@@ -651,7 +656,6 @@ osStatus osSemaphoreDelete(osSemaphoreId semaphore_id);
 #endif // Semaphore available
 #endif // TOS_CFG_SEM_EN
 
-#if TOS_CFG_MMBLK_EN > 0u
 //  ==== Memory Pool Management Functions ====
 
 #if (defined (osFeature_Pool) && (osFeature_Pool != 0))  // Memory Pool Management available
@@ -706,7 +710,6 @@ void *osPoolCAlloc(osPoolId pool_id);
 osStatus osPoolFree(osPoolId pool_id, void *block);
 
 #endif // Memory Pool Management available
-#endif // TOS_CFG_MMBLK_EN
 
 #if TOS_CFG_MESSAGE_QUEUE_EN > 0u
 //  ==== Message Queue Management Functions ====

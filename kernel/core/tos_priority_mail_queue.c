@@ -66,9 +66,7 @@ __API__ k_err_t tos_prio_mail_q_destroy(k_prio_mail_q_t *prio_mail_q)
         return err;
     }
 
-    if (!pend_is_nopending(&prio_mail_q->pend_obj)) {
-        pend_wakeup_all(&prio_mail_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&prio_mail_q->pend_obj, PEND_STATE_DESTROY);
 
     tos_mmheap_free(prio_mail_q->prio_q_mgr_array);
     prio_mail_q->prio_q_mgr_array = K_NULL;
@@ -123,9 +121,7 @@ __API__ k_err_t tos_prio_mail_q_destroy_dyn(k_prio_mail_q_t *prio_mail_q)
         return err;
     }
 
-    if (!pend_is_nopending(&prio_mail_q->pend_obj)) {
-        pend_wakeup_all(&prio_mail_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&prio_mail_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&prio_mail_q->pend_obj);
 
@@ -151,6 +147,7 @@ __API__ k_err_t tos_prio_mail_q_pend(k_prio_mail_q_t *prio_mail_q, void *mail_bu
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(prio_mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
     TOS_OBJ_VERIFY(prio_mail_q, KNL_OBJ_TYPE_PRIORITY_MAIL_QUEUE);

@@ -1,7 +1,0 @@
-<!DOCTYPE CrossStudio_Session_File>
-<session>
-  <ARMCrossStudioWindow activeProject="secure_bootloader_ble_s140_pca10056_debug" buildConfiguration="Release"/>
-  <Files>
-    <SessionOpenFile codecName="Default" debugPath="../../main.c" left="0" name="unnamed" path="../../main.c" selected="1" top="0" useBinaryEdit="0" useTextEdit="1" x="0" y="0"/>
-  </Files>
-</session>

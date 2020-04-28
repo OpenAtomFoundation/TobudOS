@@ -62,9 +62,7 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
         return err;
     }
 
-    if (!pend_is_nopending(&mail_q->pend_obj)) {
-        pend_wakeup_all(&mail_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&mail_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&mail_q->pend_obj);
 
@@ -120,9 +118,7 @@ __API__ k_err_t tos_mail_q_destroy_dyn(k_mail_q_t *mail_q)
         return err;
     }
 
-    if (!pend_is_nopending(&mail_q->pend_obj)) {
-        pend_wakeup_all(&mail_q->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&mail_q->pend_obj, PEND_STATE_DESTROY);
 
     pend_object_deinit(&mail_q->pend_obj);
 
@@ -150,6 +146,7 @@ __API__ k_err_t tos_mail_q_pend(k_mail_q_t *mail_q, void *mail_buf, size_t *mail
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(mail_q);
     TOS_PTR_SANITY_CHECK(mail_buf);
     TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);

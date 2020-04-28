@@ -18,23 +18,34 @@
 #ifndef _TOS_COMPILER_H_
 #define  _TOS_COMPILER_H_
 
-// function with __API__ prefix, api for user
+/* function with __API__ prefix, api for user */
 #define __API__
 
-// function with __KERNEL__ prefix, only for kernel
-#define __KERNEL__
+/* function with __KNL__ prefix, only for kernel */
+#define __KNL__
 
-// function with __HOOK__ prefix, should be implemented by user
+/* function with __HOOK__ prefix, should be implemented by user */
 #define __HOOK__
 
-// function with __DEBUG__ prefix, only for debug
+/* function with __DEBUG__ prefix, only for debug */
 #define __DEBUG__
 
-// function with __PORT__ is architecture depended
+/* function with __PORT__ is architecture depended */
 #define __PORT__
+
+/* CPP header guards */
+#ifdef __cplusplus
+#define __CDECLS_BEGIN          extern "C" {
+#define __CDECLS_END            }
+#else
+#define __CDECLS_BEGIN
+#define __CDECLS_END
+#endif
 
 /*------------------ RealView Compiler -----------------*/
 #if defined(__CC_ARM)
+
+#define ARMCC_V5
 
 #define __ASM__             __asm
 #define __VOLATILE__        volatile
@@ -62,6 +73,8 @@
 /*------------------ ARM Compiler V6 -------------------*/
 #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 
+#define ARMCC_V6
+
 #define __ASM__             __asm
 #define __VOLATILE__        volatile
 
@@ -80,6 +93,7 @@
 #define __NO_RETURN__       __attribute__((__noreturn__))
 #define __NAKED__           __attribute__((naked))
 #define __WEAK__            __attribute__((weak))
+
 /*------------------ ICC Compiler ----------------------*/
 #elif defined(__ICCARM__)  || defined(__ICC430__) // __IAR_SYSTEMS_ICC__
 
@@ -102,6 +116,27 @@
 #define __NAKED__
 #define __WEAK__            __weak
 
+/*------------------ ICC Compiler for STM8/AVR ----------------------*/
+#elif defined(__IAR_SYSTEMS_ICC__)
+
+#define __ASM__             __asm
+#define __VOLATILE__        volatile
+
+#define __INLINE__          inline
+#define __STATIC__          static
+#define __STATIC_INLINE__   static inline
+
+#define likely(x)           (x)
+#define unlikely(x)         (x)
+#define __UNUSED__
+#define __USED__
+#define __PACKED__
+#define __ALIGNED__(x)
+#define __PURE__
+#define __CONST__
+#define __NO_RETURN__
+#define __NAKED__
+#define __WEAK__            __weak
 
 /*------------------ GNU Compiler ----------------------*/
 #elif defined(__GNUC__)

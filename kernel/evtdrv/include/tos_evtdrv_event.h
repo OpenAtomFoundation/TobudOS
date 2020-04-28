@@ -68,9 +68,9 @@ __API__ evtdrv_err_t tos_evtdrv_event_set(evtdrv_task_id_t task_id, evtdrv_event
  */
 __API__ evtdrv_err_t tos_evtdrv_event_reset(evtdrv_task_id_t task_id, evtdrv_event_flag_t event_flags);
 
-__KERNEL__ evtdrv_err_t evtdrv_event_init(void);
+__KNL__ evtdrv_err_t evtdrv_event_init(void);
 
-__KERNEL__ evtdrv_event_flag_t evtdrv_event_fetch(evtdrv_task_id_t *task_id);
+__KNL__ evtdrv_event_flag_t evtdrv_event_fetch(evtdrv_task_id_t *task_id);
 
 __STATIC_INLINE__ evtdrv_bool_t evtdrv_event_is_usr(evtdrv_event_flag_t event_flag)
 {

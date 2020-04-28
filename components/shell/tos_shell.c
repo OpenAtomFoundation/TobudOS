@@ -82,7 +82,7 @@ __STATIC__ void shell_cmd_process(void)
     static char *argv[SHELL_CMD_ARGV_MAX];
     char *pos = SHELL_CTL->cmd_buffer;
 
-    printf("%s\n", pos);
+    tos_shell_printf("%s\n", SHELL_CTL->cmd_buffer);
 
     // left strip
     while (*pos == ' ' || *pos == '\t') {

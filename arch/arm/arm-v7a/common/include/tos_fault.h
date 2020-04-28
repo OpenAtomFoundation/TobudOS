@@ -226,9 +226,9 @@ __STATIC_INLINE__ cpu_addr_t fault_msp_limit(void)
 
 __API__ void tos_fault_log_writer_set(k_fault_log_writer_t log_writer);
 
-__KERNEL__ int fault_default_log_writer(const char *format, ...);
+__KNL__ int fault_default_log_writer(const char *format, ...);
 
-__KERNEL__ void fault_backtrace(cpu_addr_t lr, fault_exc_frame_t *frame);
+__KNL__ void fault_backtrace(cpu_addr_t lr, fault_exc_frame_t *frame);
 
 #endif
 

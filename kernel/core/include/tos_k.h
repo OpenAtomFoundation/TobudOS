@@ -20,21 +20,22 @@
 
 #include <tos_compiler.h>
 #include <tos_err.h>
-#include <tos_ktypes.h>
 #include <tos_cpu_def.h>
 #include <tos_config.h>
 #include <tos_config_default.h>
-#include <tos_cpu_types.h>
 #include <port_config.h>
+#include <tos_config_check.h>
+#include <tos_cpu_types.h>
+#include <tos_ktypes.h>
 #include <port.h>
 #include <tos_cpu.h>
-#include <tos_config_check.h>
 #include <tos_fault.h>
 #include <tos_klib.h>
 #include <tos_list.h>
 #include <tos_slist.h>
 #include <tos_pend.h>
 #include <tos_sys.h>
+#include <tos_bitmap.h>
 #include <tos_ring_queue.h>
 #include <tos_char_fifo.h>
 #include <tos_mail_queue.h>
@@ -48,16 +49,23 @@
 #include <tos_mutex.h>
 #include <tos_sem.h>
 #include <tos_event.h>
-#include <tos_countdownlatch.h>
+#include <tos_barrier.h>
 #include <tos_completion.h>
+#include <tos_countdownlatch.h>
+#include <tos_rwlock.h>
 #include <tos_timer.h>
 #include <tos_time.h>
+#include <tos_stopwatch.h>
 #include <tos_mmblk.h>
 #include <tos_mmheap.h>
 #include <tos_tick.h>
 #include <tos_sched.h>
+#if TOS_CFG_PWR_MGR_EN > 0u
 #include <tos_pm.h>
+#if TOS_CFG_TICKLESS_EN > 0u
 #include <tos_tickless.h>
+#endif
+#endif
 #include <tos_global.h>
 
 #endif /* _TOS_K_H_ */

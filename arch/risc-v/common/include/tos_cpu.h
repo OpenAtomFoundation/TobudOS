@@ -65,19 +65,19 @@ __API__ cpu_cpsr_t      tos_cpu_cpsr_save(void);
 __API__ void            tos_cpu_cpsr_restore(cpu_cpsr_t cpsr);
 
 
-__KERNEL__ void         cpu_init(void);
+__KNL__ void            cpu_init(void);
 
-__KERNEL__ void         cpu_reset(void);
+__KNL__ void            cpu_reset(void);
 
-__KERNEL__ void         cpu_systick_init(k_cycle_t cycle_per_tick);
+__KNL__ void            cpu_systick_init(k_cycle_t cycle_per_tick);
 
-__KERNEL__ void         cpu_sched_start(void);
+__KNL__ void            cpu_sched_start(void);
 
-__KERNEL__ void         cpu_context_switch(void);
+__KNL__ void            cpu_context_switch(void);
 
-__KERNEL__ void         cpu_irq_context_switch(void);
+__KNL__ void            cpu_irq_context_switch(void);
 
-__KERNEL__ k_stack_t   *cpu_task_stk_init(void *entry,
+__KNL__ k_stack_t      *cpu_task_stk_init(void *entry,
                                                           void *arg,
                                                           void *exit,
                                                           k_stack_t *stk_base,
@@ -85,29 +85,29 @@ __KERNEL__ k_stack_t   *cpu_task_stk_init(void *entry,
 
 #if TOS_CFG_TICKLESS_EN > 0u
 
-__KERNEL__ void         cpu_systick_resume(void);
+__KNL__ void            cpu_systick_resume(void);
 
-__KERNEL__ void         cpu_systick_suspend(void);
+__KNL__ void            cpu_systick_suspend(void);
 
-__KERNEL__ void         cpu_systick_reload_reset(void);
+__KNL__ void            cpu_systick_reload_reset(void);
 
-__KERNEL__ void         cpu_systick_pending_reset(void);
+__KNL__ void            cpu_systick_pending_reset(void);
 
-__KERNEL__ k_time_t     cpu_systick_max_delay_millisecond(void);
+__KNL__ k_time_t        cpu_systick_max_delay_millisecond(void);
 
-__KERNEL__ void         cpu_systick_expires_set(k_time_t millisecond);
+__KNL__ void            cpu_systick_expires_set(k_time_t millisecond);
 
-__KERNEL__ void         cpu_systick_reset(void);
+__KNL__ void            cpu_systick_reset(void);
 
 #endif
 
 #if TOS_CFG_PWR_MGR_EN > 0u
 
-__KERNEL__ void cpu_sleep_mode_enter(void);
+__KNL__ void            cpu_sleep_mode_enter(void);
 
-__KERNEL__ void cpu_stop_mode_enter(void);
+__KNL__ void            cpu_stop_mode_enter(void);
 
-__KERNEL__ void cpu_standby_mode_enter(void);
+__KNL__ void            cpu_standby_mode_enter(void);
 
 #endif
 

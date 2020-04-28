@@ -1,5 +1,5 @@
-#ifndef _TOS_FATFS_DRV_H_
-#define _TOS_FATFS_DRV_H_
+#ifndef _FATFS_DRV_H_
+#define _FATFS_DRV_H_
 
 #include "tos_hal.h"
 
@@ -13,5 +13,4 @@ int MMC_disk_status(hal_sd_state_t *sd_state);
 
 int MMC_disk_ioctl(BYTE cmd, void *buff);
 
-#endif
-
+#endif /*_FATFS_DRV_H_*/

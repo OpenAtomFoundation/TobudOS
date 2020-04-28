@@ -349,7 +349,7 @@ static void gen_delta_set_unack(struct bt_mesh_model *model,
     int16_t delta_level;
 
     delta_level = (int16_t) net_buf_simple_pull_le16(buf);
-    console_printf("#mesh-level DELTA-SET: delta_level=%d\n", delta_level);
+    console_printf("#mesh-level DELTA-SET-UNACK: delta_level=%d\n", delta_level);
 
     gen_level_state += delta_level;
     console_printf("#mesh-level: level=%d\n", gen_level_state);

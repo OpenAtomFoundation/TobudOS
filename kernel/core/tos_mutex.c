@@ -61,7 +61,7 @@ __STATIC_INLINE__ void mutex_new_owner_mark(k_mutex_t *mutex, k_task_t *task)
     }
 }
 
-__KERNEL__ void mutex_release(k_mutex_t *mutex)
+__KNL__ void mutex_release(k_mutex_t *mutex)
 {
     mutex_old_owner_release(mutex);
     pend_wakeup_all(&mutex->pend_obj, PEND_STATE_OWNER_DIE);
@@ -93,9 +93,7 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 
     TOS_CPU_INT_DISABLE();
 
-    if (!pend_is_nopending(&mutex->pend_obj)) {
-        pend_wakeup_all(&mutex->pend_obj, PEND_STATE_DESTROY);
-    }
+    pend_wakeup_all(&mutex->pend_obj, PEND_STATE_DESTROY);
 
     if (mutex->owner) {
         mutex_old_owner_release(mutex);

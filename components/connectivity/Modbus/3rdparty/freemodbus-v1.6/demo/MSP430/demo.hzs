@@ -1,0 +1,82 @@
+<!DOCTYPE CrossStudio_for_MSP430_Session_File>
+<session>
+ <Breakpoints/>
+ <ExecutionCountWindow/>
+ <Memory1>
+  <MemoryWindow autoEvaluate="0" addressText="2" numColumns="8" sizeText="1" dataSize="1" radix="16" addressSpace="" />
+ </Memory1>
+ <Memory2>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory2>
+ <Memory3>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory3>
+ <Memory4>
+  <MemoryWindow autoEvaluate="0" addressText="" numColumns="8" sizeText="" dataSize="1" radix="16" addressSpace="" />
+ </Memory4>
+ <Project>
+  <ProjectSessionItem path="demo" name="unnamed" />
+  <ProjectSessionItem path="demo;demo" name="unnamed" />
+  <ProjectSessionItem path="demo;demo;Modbus" name="unnamed" />
+  <ProjectSessionItem path="demo;demo;Modbus;ASCII" name="unnamed" />
+  <ProjectSessionItem path="demo;demo;Modbus;Functions" name="unnamed" />
+  <ProjectSessionItem path="demo;demo;Modbus;RTU" name="unnamed" />
+  <ProjectSessionItem path="demo;demo;Port" name="unnamed" />
+  <ProjectSessionItem path="demo;demo;System Files" name="unnamed" />
+ </Project>
+ <Register1>
+  <RegisterWindow unsignedDisplays="" asciiDisplays="" octalDisplays="" visibleGroups="CPU Registers" decimalDisplays="" binaryDisplays="" />
+ </Register1>
+ <Register2>
+  <RegisterWindow unsignedDisplays="" asciiDisplays="" octalDisplays="" visibleGroups="" decimalDisplays="" binaryDisplays="" />
+ </Register2>
+ <Register3>
+  <RegisterWindow unsignedDisplays="" asciiDisplays="" octalDisplays="" visibleGroups="" decimalDisplays="" binaryDisplays="" />
+ </Register3>
+ <Register4>
+  <RegisterWindow unsignedDisplays="" asciiDisplays="" octalDisplays="" visibleGroups="" decimalDisplays="" binaryDisplays="" />
+ </Register4>
+ <SourceNavigatorWindow/>
+ <TraceWindow>
+  <Trace wrap="Yes" type="1" enabled="Yes" />
+ </TraceWindow>
+ <Watch1>
+  <Watches active="1" >
+   <Watchpoint linenumber="281" radix="16" name="eSndState" expression="eSndState" filename="c:\projects\freemodbus\modbus\rtu\mbrtu.c" />
+   <Watchpoint linenumber="178" radix="-1" name="ucCriticalNesting" expression="ucCriticalNesting" filename="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" />
+   <Watchpoint linenumber="66" radix="16" name="IE1" expression="IE1" filename="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" />
+   <Watchpoint linenumber="70" radix="16" name="IE1" expression="IE1" filename="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" />
+   <Watchpoint linenumber="61" radix="-1" name="xTxEnable" expression="xTxEnable" filename="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" />
+   <Watchpoint linenumber="279" radix="16" name="eRcvState" expression="eRcvState" filename="c:\projects\freemodbus\modbus\rtu\mbrtu.c" />
+   <Watchpoint linenumber="149" radix="-1" name="usRcvBufferPos" expression="usRcvBufferPos" filename="c:\projects\freemodbus\modbus\rtu\mbrtu.c" />
+   <Watchpoint linenumber="340" radix="16" name="eEvent" expression="eEvent" filename="c:\projects\freemodbus\modbus\mb.c" />
+   <Watchpoint linenumber="178" radix="-1" name="ucGIEWasEnabled" expression="ucGIEWasEnabled" filename="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" />
+   <Watchpoint linenumber="61" radix="-1" name="xRxEnable" expression="xRxEnable" filename="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" />
+  </Watches>
+ </Watch1>
+ <Watch2>
+  <Watches active="0" />
+ </Watch2>
+ <Watch3>
+  <Watches active="0" />
+ </Watch3>
+ <Watch4>
+  <Watches active="0" />
+ </Watch4>
+ <Files>
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="22" debugPath="C:\Projects\freemodbus\demo\MSP430\port\port.h" y="36" useHTMLEdit="0" path="C:\Projects\freemodbus\demo\MSP430\port\port.h" left="0" selected="0" name="unnamed" top="15" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="0" debugPath="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" y="167" useHTMLEdit="0" path="C:\Projects\freemodbus\demo\MSP430\port\portserial.c" left="0" selected="0" name="unnamed" top="142" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="28" debugPath="c:\projects\freemodbus\demo\msp430\port\porttimer.c" y="1" useHTMLEdit="0" path="c:\projects\freemodbus\demo\msp430\port\porttimer.c" left="0" selected="0" name="unnamed" top="0" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="11" debugPath="C:\Program Files\Rowley Associates Limited\CrossWorks MSP430 1.3\include\msp430x16x.h" y="103" useHTMLEdit="0" path="C:\Program Files\Rowley Associates Limited\CrossWorks MSP430 1.3\include\msp430x16x.h" left="0" selected="0" name="unnamed" top="103" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="18" debugPath="c:\projects\freemodbus\modbus\include\mbport.h" y="35" useHTMLEdit="0" path="c:\projects\freemodbus\modbus\include\mbport.h" left="0" selected="0" name="unnamed" top="24" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="35" debugPath="c:\projects\freemodbus\modbus\include\mbproto.h" y="59" useHTMLEdit="0" path="c:\projects\freemodbus\modbus\include\mbproto.h" left="0" selected="0" name="unnamed" top="26" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="8" debugPath="c:\program files\rowley associates limited\crossworks msp430 1.3\src\crt0.asm" y="39" useHTMLEdit="0" path="c:\program files\rowley associates limited\crossworks msp430 1.3\src\crt0.asm" left="0" selected="0" name="unnamed" top="17" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="41" debugPath="C:\Projects\freemodbus\demo\MSP430\demo.c" y="60" useHTMLEdit="0" path="C:\Projects\freemodbus\demo\MSP430\demo.c" left="0" selected="0" name="unnamed" top="46" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="23" debugPath="C:\Projects\freemodbus\demo\MSP430\system\dco.h" y="25" useHTMLEdit="0" path="C:\Projects\freemodbus\demo\MSP430\system\dco.h" left="0" selected="0" name="unnamed" top="16" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="0" debugPath="c:\projects\freemodbus\modbus\mb.c" y="394" useHTMLEdit="0" path="c:\projects\freemodbus\modbus\mb.c" left="0" selected="0" name="unnamed" top="359" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="7" debugPath="c:\projects\freemodbus\modbus\ascii\mbascii.c" y="462" useHTMLEdit="0" path="c:\projects\freemodbus\modbus\ascii\mbascii.c" left="0" selected="0" name="unnamed" top="90" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="0" debugPath="c:\projects\freemodbus\modbus\rtu\mbrtu.c" y="299" useHTMLEdit="0" path="c:\projects\freemodbus\modbus\rtu\mbrtu.c" left="0" selected="0" name="unnamed" top="264" />
+  <SessionOpenFile useTextEdit="1" useBinaryEdit="0" x="61" debugPath="c:\projects\freemodbus\demo\msp430\port\portevent.c" y="5" useHTMLEdit="0" path="c:\projects\freemodbus\demo\msp430\port\portevent.c" left="0" selected="0" name="unnamed" top="0" />
+ </Files>
+ <MSP430CrossStudioWindow activeProject="demo" ignoreExceptions="" autoConnectTarget="/MSP430 Flash Emulation Tool (MSP-FET430PIF)" debugSearchFileMap="" fileDialogInitialDirectory="C:\Projects\freemodbus\modbus\include" fileDialogDefaultFilter="*" debugSearchPath="" buildConfiguration="Release" />
+</session>

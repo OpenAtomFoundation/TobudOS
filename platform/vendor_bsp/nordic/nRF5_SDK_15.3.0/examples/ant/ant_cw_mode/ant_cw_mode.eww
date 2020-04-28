@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-
-<workspace>  <project>
-    <path>$WS_DIR$\pca10040\s212\iar\ant_cw_mode_pca10040_s212.ewp</path>
-  </project>  <project>
-    <path>$WS_DIR$\d52_starterkit\s212\iar\ant_cw_mode_d52_starterkit_s212.ewp</path>
-  </project>  <batchBuild/>
-</workspace>

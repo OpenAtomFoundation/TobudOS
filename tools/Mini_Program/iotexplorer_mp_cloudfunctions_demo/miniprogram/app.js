@@ -5,11 +5,11 @@ App({
     productId: "U2LPAXBT2C", // 产品ID
     deviceName: "royye_light", // 设备名称
     // 腾讯云控制台-访问管理-访问密钥-API密钥管理中获取 SecretId, secretKey
-    secretId: "AKIDxZ2LTTi84eaR3OfS8hnfxd4JHzQatFpF",
-    secretKey: "UigMrA9rJXUCeoiBQP8dsJuJ6sYzmNjs",
-    // 接口 Region 字段
+    secretId: "xxx",
+    secretKey: "xxx",
+    // 接口 Region 字段。一般不需要修改
     region: "ap-guangzhou",
-    // 云开发的环境名称。此处需要替换为云开发创建的环境名称
+    // 云开发的环境ID。此处需要替换为云开发创建的环境ID
     env: "tos-demo"
   },
   onLaunch: function () {

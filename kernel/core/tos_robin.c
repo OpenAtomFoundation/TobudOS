@@ -56,7 +56,7 @@ __API__ void tos_robin_timeslice_set(k_task_t *task, k_timeslice_t timeslice)
     TOS_CPU_INT_ENABLE();
 }
 
-__KERNEL__ void robin_sched(k_prio_t prio)
+__KNL__ void robin_sched(k_prio_t prio)
 {
     TOS_CPU_CPSR_ALLOC();
     k_task_t *task;
