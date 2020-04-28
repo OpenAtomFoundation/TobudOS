@@ -143,11 +143,8 @@ __KNL__ void tickless_proc(void)
     k_cpu_lpwr_mode_t lpwr_mode;
 
     lpwr_mode = pm_cpu_lpwr_mode_get();
-    if (lpwr_mode == TOS_LOW_POWER_MODE_NONE) {
-        return;
-    }
-
-    if (!tickless_wkup_alarm_is_installed(lpwr_mode)) {
+    if (lpwr_mode == TOS_LOW_POWER_MODE_NONE ||
+        !tickless_wkup_alarm_is_installed(lpwr_mode)) {
         return;
     }
 

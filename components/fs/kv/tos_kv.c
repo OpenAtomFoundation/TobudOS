@@ -1215,11 +1215,6 @@ __API__ kv_err_t tos_kv_init(uint32_t flash_start, uint32_t flash_end, kv_flash_
 
     kv_mgr_ctl_build();
 
-    printf("fresh:   %d\n", KV_MGR_BLK_NUM_FRESH);
-    printf("hanging: %d\n", KV_MGR_BLK_NUM_HANGING);
-    printf("inuse:   %d\n", KV_MGR_BLK_NUM_INUSE);
-    printf("total:   %d\n", KV_MGR_BLK_NUM_TOTAL);
-
     return kv_mgr_workspace_locate();
 }
 
