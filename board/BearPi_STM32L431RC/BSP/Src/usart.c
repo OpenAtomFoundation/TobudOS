@@ -47,7 +47,7 @@ void MX_LPUART1_UART_Init(void)
   {
     Error_Handler();
   }
-
+	HAL_UART_Receive_IT(&hlpuart1, &data, 1);
 }
 /* USART1 init function */
 
