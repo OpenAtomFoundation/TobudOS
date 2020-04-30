@@ -32,54 +32,6 @@ dispatch_r:
     RESTORE_NONSCRATCH_REGS
     j	[blink]
 
-/*
- * void port_int_disable(void);
- */
-    .global port_int_disable
-    .align 4
-port_int_disable:
-    clri
-    j [blink]
-
-/*
- * void port_int_enable(void);
- */
-    .global port_int_enable
-    .align 4
-port_int_enable:
-    seti
-    j [blink]
-
-/*
- * cpu_cpsr_t port_cpsr_save(void);
- */
-    .global port_cpsr_save
-    .align 4
-port_cpsr_save:
-    clri r0
-    j [blink]
-
-/*
- * void port_cpsr_restore(cpu_cpsr_t cpsr);
- */
-    .global port_cpsr_restore
-    .align 4
-port_cpsr_restore:
-    seti r0
-    j [blink]
-
-/*
- * uint32_t port_cpu_clz(uint32_t val)
- * r0 --> val
- */
-	.global port_cpu_clz
-	.align 4
-port_cpu_clz:
-	breq r0, 0, cpu_clz_return
-	ffs r1, r0
-	add r0, r1, 1
-cpu_clz_return:
-	j [blink]
 
 /*
  * void port_sched_start(void)
@@ -128,12 +80,8 @@ start_r:
     pop r2
     pop r0
 
-#if defined(__MW__)
-    j_s.d [r1]
-#else
-    j [r1]
-#endif
     kflag r2
+    j [r1]
 
 /****** exceptions and interrupts handing ******/
 /****** entry for exception handling ******/
@@ -356,9 +304,16 @@ firq_hint_handled:
 firq_return:
     RESTORE_FIQ_EXC_REGS
     rtie
-
-
-
-
-
-
+    
+/*
+ * uint32_t port_cpu_clz(uint32_t val)
+ * r0 --> val
+ */
+	.global port_cpu_clz
+	.align 4
+port_cpu_clz:
+	breq r0, 0, cpu_clz_return
+	ffs r1, r0
+	add r0, r1, 1
+cpu_clz_return:
+	j [blink]

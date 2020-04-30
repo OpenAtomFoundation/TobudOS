@@ -61,22 +61,22 @@ __API__ uint32_t tos_cpu_clz(uint32_t val)
 
 __API__ void tos_cpu_int_disable(void)
 {
-    port_int_disable();
+    arc_lock();
 }
 
 __API__ void tos_cpu_int_enable(void)
 {
-    port_int_enable();
+    arc_unlock();
 }
 
 __API__ cpu_cpsr_t tos_cpu_cpsr_save(void)
 {
-    return port_cpsr_save();
+    return (cpu_cpsr_t)arc_lock_save();
 }
 
 __API__ void tos_cpu_cpsr_restore(cpu_cpsr_t cpsr)
 {
-    port_cpsr_restore(cpsr);
+    arc_unlock_restore(cpsr);
 }
 
 __KNL__ void cpu_init(void)
@@ -219,7 +219,7 @@ __KNL__ k_stack_t *cpu_task_stk_init(void *entry,
     cpu_context_t *regs = 0;
 
     sp = (cpu_data_t *)&stk_base[stk_size];
-    sp = (cpu_data_t *)((cpu_addr_t)sp & 0xFFFFFFC);
+    sp = (cpu_data_t *)((cpu_addr_t)sp & 0xFFFFFFFC);
     sp  -= (sizeof(cpu_context_t)/sizeof(cpu_data_t));
     regs = (cpu_context_t*) sp;
 
@@ -228,7 +228,6 @@ __KNL__ k_stack_t *cpu_task_stk_init(void *entry,
     regs->task = (cpu_data_t)entry;
     regs->status32   = ARC_INIT_STATUS;
     regs->r0    = (cpu_data_t)arg;
-
 
     return (k_stack_t *)sp;
 }
@@ -264,11 +263,4 @@ __KNL__ k_err_t cpu_task_stack_draught_depth(k_stack_t *stk_base, size_t stk_siz
 
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
 
-
-__KNL__ void cpu_fault_diagnosis(void)
-{
-    port_fault_diagnosis();
-}
-
 #endif /* TOS_CFG_FAULT_BACKTRACE_EN */
-

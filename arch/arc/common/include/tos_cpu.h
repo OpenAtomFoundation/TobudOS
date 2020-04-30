@@ -114,20 +114,6 @@ __KNL__ void cpu_standby_mode_enter(void);
 
 #endif
 
-#if TOS_CFG_FAULT_BACKTRACE_EN > 0u
-
-#if defined (TOS_CFG_CPU_ARM_FPU_EN) && (TOS_CFG_CPU_ARM_FPU_EN == 1U)
-
-
-__KNL__ void         cpu_flush_fpu(void);
-
-#endif /* TOS_CFG_CPU_ARM_FPU_EN */
-
-
-__KNL__ void         cpu_fault_diagnosis(void);
-
-#endif
-
 /* Allocates CPU status register word. */
 #define TOS_CPU_CPSR_ALLOC()    cpu_cpsr_t cpu_cpsr = (cpu_cpsr_t)0u
 
