@@ -24,7 +24,4 @@
 #define TOS_CFG_CPU_HRTIMER_EN              0u
 #define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  0u
 
-#define TOS_CFG_CPU_ARM_FPU_EN              0u
-
 #endif /* _PORT_CONFIG_H_ */
-

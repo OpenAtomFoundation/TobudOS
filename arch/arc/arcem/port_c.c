@@ -15,31 +15,6 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2018 Armink (armink.ztl@gmail.com)
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * 'Software'), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 #include "tos_k.h"
 #include "arc/arc_timer.h"
 #include "board.h"
@@ -50,14 +25,14 @@ __PORT__ void port_cpu_reset(void)
     exc_entry_reset();
 }
 
-__PORT__ void port_systick_config(uint32_t cycle_per_tick) // Configure SysTick to generate an interrupt every cycle_per_tick
+__PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {
-    arc_timer_int_clear(0); // nsim #define BOARD_SYS_TIMER_ID          TIMER_0
-    board_timer_update(cycle_per_tick); // board.c
+    arc_timer_int_clear(0);
+    board_timer_update(cycle_per_tick);
 }
-__PORT__ void port_systick_priority_set(uint32_t prio) // Sets the int priority
+__PORT__ void port_systick_priority_set(uint32_t prio)
 {
-    int_pri_set(BOARD_OS_TIMER_INTNO, prio); // get system tick from timer 0 arc_timer.h
+    int_pri_set(BOARD_OS_TIMER_INTNO, prio);
 }
 
 
@@ -76,7 +51,7 @@ __PORT__ k_time_t port_systick_max_delay_millisecond(void)
 __PORT__ void port_systick_resume(void)
 {
     arc_aux_write(AUX_TIMER0_CTRL, TIMER_CTRL_IE); // enables the generation of an interrupt after the timer has reached its limit
-    arc_aux_write(AUX_TIMER0_CNT, 0); //Writing to this register sets 0 for the timer, and restarts the timer
+    arc_aux_write(AUX_TIMER0_CNT, 0); // writing to this register sets 0 for the timer, and restarts the timer
 }
 
 __PORT__ void port_systick_suspend(void)
@@ -126,22 +101,3 @@ __PORT__ void port_standby_mode_enter(void)
 }
 
 #endif
-
-#if TOS_CFG_FAULT_BACKTRACE_EN > 0u
-__STATIC__ void port_fault_do_diagnosis(port_fault_regs_t *regs) // 硬件错误诊断
-{
-    k_fault_log_writer("\n\n====================== Fault Diagnosis =====================\n");
-}
-
-__PORT__ void port_fault_diagnosis(void)
-{
-    k_fault_log_writer("\n\n====================== Fault Diagnosis .. =====================\n");
-}
-
-__PORT__ void __NAKED__ HardFault_Handler(void)
-{
-    k_fault_log_writer("\n\n====================== Fault Diagnosis Handler =====================\n");
-}
-
-#endif /* TOS_CFG_FAULT_BACKTRACE_EN */
-

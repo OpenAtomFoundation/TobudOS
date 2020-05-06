@@ -260,7 +260,3 @@ __KNL__ k_err_t cpu_task_stack_draught_depth(k_stack_t *stk_base, size_t stk_siz
 }
 
 #endif
-
-#if TOS_CFG_FAULT_BACKTRACE_EN > 0u
-
-#endif /* TOS_CFG_FAULT_BACKTRACE_EN */

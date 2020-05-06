@@ -20,17 +20,7 @@
 
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
 
-typedef int (*k_fault_log_writer_t)(const char *format, ...);
-
-#define K_FAULT_STACK_DUMP_DEPTH                10u
-
-#define K_FAULT_CALL_STACK_BACKTRACE_DEPTH          5u
-
-__API__ void tos_fault_log_writer_set(k_fault_log_writer_t log_writer);
-
-__KERNEL__ int fault_default_log_writer(const char *format, ...);
-
-__KERNEL__ void fault_backtrace(cpu_addr_t lr, fault_exc_frame_t *frame);
+#error "unsupport now"
 
 #endif
 

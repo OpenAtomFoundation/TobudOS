@@ -261,7 +261,7 @@ clean:
 	-rm -fR $(BUILD_DIR)
 
 nsim_debug : $(BUILD_DIR)/$(TARGET).elf
-	mdb -nooptions -nogoifmain -toggle=include_local_symbols=1 -nsim -off=binary_stdin -off=binary_stdout  -on=load_at_paddr -on=reset_upon_restart -off=flush_pipe -off=cr_for_more -OKN  @$(MDB_ARG_FILE) $<
+	mdb -nooptions -nogoifmain -toggle=include_local_symbols=1 -nsim -off=binary_stdin -off=binary_stdout  -on=load_at_paddr -on=reset_upon_restart -off=flush_pipe -off=cr_for_more -OKN @$(MDB_ARG_FILE) $<
 #######################################
 # dependencies
 #######################################
