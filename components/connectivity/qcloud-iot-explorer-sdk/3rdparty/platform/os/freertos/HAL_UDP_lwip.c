@@ -49,25 +49,25 @@ uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
 
     Log_d("establish tcp connection with server(host=%s port=%s)", host, port_str);
 
-    if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {        
-		Log_e("getaddrinfo error,errno:%s",strerror(errno));
+    if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {
+        Log_e("getaddrinfo error,errno:%s", strerror(errno));
         return 0;
     }
 
     for (cur = addr_list; cur != NULL; cur = cur->ai_next) {
-		fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
-		if (fd < 0) {
-			ret = 0;
-			continue;
-		}
+        fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
+        if (fd < 0) {
+            ret = 0;
+            continue;
+        }
 
-		if (0 == connect(fd, cur->ai_addr, cur->ai_addrlen)) {
-			ret = fd + LWIP_SOCKET_FD_SHIFT;
-			break;
-		}
+        if (0 == connect(fd, cur->ai_addr, cur->ai_addrlen)) {
+            ret = fd + LWIP_SOCKET_FD_SHIFT;
+            break;
+        }
 
-		close(fd);
-		ret = 0;
+        close(fd);
+        ret = 0;
     }
 
     if (0 == ret) {
@@ -87,7 +87,7 @@ void HAL_UDP_Disconnect(uintptr_t fd)
 {
     long            socket_id = -1;
     fd -= LWIP_SOCKET_FD_SHIFT;
-    
+
     socket_id = (int)fd;
     close(socket_id);
 }
@@ -97,7 +97,7 @@ int HAL_UDP_Write(uintptr_t fd, const unsigned char *p_data, unsigned int datale
     int             rc = -1;
     long            socket_id = -1;
     fd -= LWIP_SOCKET_FD_SHIFT;
-    
+
     socket_id = (int)fd;
     rc = send(socket_id, (char *)p_data, (int)datalen, 0);
     if (-1 == rc) {
@@ -112,7 +112,7 @@ int HAL_UDP_Read(uintptr_t fd, unsigned char *p_data, unsigned int datalen)
     long            socket_id = -1;
     int             count = -1;
     fd -= LWIP_SOCKET_FD_SHIFT;
-    
+
     socket_id = (int)fd;
     count = (int)read(socket_id, p_data, datalen);
 
@@ -126,7 +126,7 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
     fd_set              read_fds;
     int                socket_id = -1;
     fd -= LWIP_SOCKET_FD_SHIFT;
-    
+
     socket_id = (int)fd;
 
     if (socket_id < 0) {

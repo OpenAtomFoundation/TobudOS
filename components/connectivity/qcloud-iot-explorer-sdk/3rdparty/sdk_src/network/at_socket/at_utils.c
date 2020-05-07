@@ -38,29 +38,21 @@ void at_print_raw_cmd(const char *name, const char *buf, int size)
 {
     int i, j;
 
-    for (i = 0; i < size; i += WIDTH_SIZE)
-    {
+    for (i = 0; i < size; i += WIDTH_SIZE) {
         HAL_Printf("%s: %04X-%04X: ", name, i, i + WIDTH_SIZE);
-        for (j = 0; j < WIDTH_SIZE; j++)
-        {
-            if (i + j < size)
-            {
+        for (j = 0; j < WIDTH_SIZE; j++) {
+            if (i + j < size) {
                 HAL_Printf("%02X ", buf[i + j]);
-            }
-            else
-            {
+            } else {
                 HAL_Printf("   ");
             }
-            if ((j + 1) % 8 == 0)
-            {
+            if ((j + 1) % 8 == 0) {
                 HAL_Printf(" ");
             }
         }
         HAL_Printf("  ");
-        for (j = 0; j < WIDTH_SIZE; j++)
-        {
-            if (i + j < size)
-            {
+        for (j = 0; j < WIDTH_SIZE; j++) {
+            if (i + j < size) {
                 HAL_Printf("%c", __is_print(buf[i + j]) ? buf[i + j] : '.');
             }
         }
@@ -98,214 +90,210 @@ int at_vprintfln(const char *format, va_list args)
 
 /**
  * at_sscanf - Unformat a buffer into a list of arguments, rewrite sscanf
- * @buf:	input buffer
- * @fmt:	format of buffer
- * @args:	arguments
+ * @buf:    input buffer
+ * @fmt:    format of buffer
+ * @args:   arguments
  */
 int at_sscanf(const char * buf, const char * fmt, va_list args)
 {
-	const char *str = buf;
-	char *next;
-	int num = 0;
-	int qualifier;
-	int base;
-	int field_width = -1;
-	int is_sign = 0;
+    const char *str = buf;
+    char *next;
+    int num = 0;
+    int qualifier;
+    int base;
+    int field_width = -1;
+    int is_sign = 0;
 
-	while(*fmt && *str) {
-		/* skip any white space in format */
-		/* white space in format matchs any amount of
-		 * white space, including none, in the input.
-		 */
-		if (isspace(*fmt)) {
-			while (isspace(*fmt))
-				++fmt;
-			while (isspace(*str))
-				++str;
-		}
+    while (*fmt && *str) {
+        /* skip any white space in format */
+        /* white space in format matchs any amount of
+         * white space, including none, in the input.
+         */
+        if (isspace(*fmt)) {
+            while (isspace(*fmt))
+                ++fmt;
+            while (isspace(*str))
+                ++str;
+        }
 
-		/* anything that is not a conversion must match exactly */
-		if (*fmt != '%' && *fmt) {
-			if (*fmt++ != *str++)
-				break;
-			continue;
-		}
+        /* anything that is not a conversion must match exactly */
+        if (*fmt != '%' && *fmt) {
+            if (*fmt++ != *str++)
+                break;
+            continue;
+        }
 
-		if (!*fmt)
-			break;
-		++fmt;
-		
-		/* skip this conversion.
-		 * advance both strings to next white space
-		 */
-		if (*fmt == '*') {
-			while (!isspace(*fmt) && *fmt)
-				fmt++;
-			while (!isspace(*str) && *str)
-				str++;
-			continue;
-		}
+        if (!*fmt)
+            break;
+        ++fmt;
 
-		/* get field width */
-		if (isdigit(*fmt))
-			field_width = atoi(fmt);
+        /* skip this conversion.
+         * advance both strings to next white space
+         */
+        if (*fmt == '*') {
+            while (!isspace(*fmt) && *fmt)
+                fmt++;
+            while (!isspace(*str) && *str)
+                str++;
+            continue;
+        }
 
-		/* get conversion qualifier */
-		qualifier = -1;
-		if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L' || *fmt == 'Z') {
-			qualifier = *fmt;
-			fmt++;
-		}
-		base = 10;
-		is_sign = 0;
+        /* get field width */
+        if (isdigit(*fmt))
+            field_width = atoi(fmt);
 
-		if (!*fmt || !*str)
-			break;
+        /* get conversion qualifier */
+        qualifier = -1;
+        if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L' || *fmt == 'Z') {
+            qualifier = *fmt;
+            fmt++;
+        }
+        base = 10;
+        is_sign = 0;
 
-		switch(*fmt++) {
-		case 'c':
-		{
-			char *s = (char *) va_arg(args,char*);
-			if (field_width == -1)
-				field_width = 1;
-			do {
-				*s++ = *str++;
-			} while(field_width-- > 0 && *str);
-			num++;
-		}
-		continue;
-		case 's':
-		{
-			char *s = (char *) va_arg(args, char *);
-			if(field_width == -1)
-				field_width = INT_MAX;
-			/* first, skip leading white space in buffer */
-			while (isspace(*str))
-				str++;
+        if (!*fmt || !*str)
+            break;
 
-			/* now copy until next white space */
-			while (*str && ((*str) != ',')) {
-				if(isspace(*str)){
-					str++;
-				}else{
-					*s++ = *str++;
-				}			
-			}
-			*s = '\0';
-			num++;
-		}
-		continue;
-		/* S for special handling for MQTTPUB JSON content */
-		case 'S':
-		{
-			char *s = (char *) va_arg(args, char *);
-			if(field_width == -1)
-				field_width = INT_MAX;
-			/* first, skip leading white space in buffer */
-			while (isspace(*str))
-				str++;
+        switch (*fmt++) {
+            case 'c': {
+                char *s = (char *) va_arg(args, char*);
+                if (field_width == -1)
+                    field_width = 1;
+                do {
+                    *s++ = *str++;
+                } while (field_width-- > 0 && *str);
+                num++;
+            }
+            continue;
+            case 's': {
+                char *s = (char *) va_arg(args, char *);
+                if (field_width == -1)
+                    field_width = INT_MAX;
+                /* first, skip leading white space in buffer */
+                while (isspace(*str))
+                    str++;
 
-			/* now copy until next white space */
-			while (*str) {
-				if(isspace(*str)){
-					str++;
-				}else{
-					*s++ = *str++;
-				}			
-			}
-			*s = '\0';
-			num++;
-		}
-		continue;
-		case 'n':
-			/* return number of characters read so far */
-		{
-			int *i = (int *)va_arg(args,int*);
-			*i = str - buf;
-		}
-		continue;
-		case 'o':
-			base = 8;
-			break;
-		case 'x':
-		case 'X':
-			base = 16;
-			break;
-		case 'd':
-		case 'i':
-			is_sign = 1;
-		case 'u':
-			break;
-		case '%':
-			/* looking for '%' in str */
-			if (*str++ != '%') 
-				return num;
-			continue;
-		default:
-			/* invalid format; stop here */
-			return num;
-		}
+                /* now copy until next white space */
+                while (*str && ((*str) != ',')) {
+                    if (isspace(*str)) {
+                        str++;
+                    } else {
+                        *s++ = *str++;
+                    }
+                }
+                *s = '\0';
+                num++;
+            }
+            continue;
+            /* S for special handling for MQTTPUB JSON content */
+            case 'S': {
+                char *s = (char *) va_arg(args, char *);
+                if (field_width == -1)
+                    field_width = INT_MAX;
+                /* first, skip leading white space in buffer */
+                while (isspace(*str))
+                    str++;
 
-		/* have some sort of integer conversion.
-		 * first, skip white space in buffer.
-		 */
-		while (isspace(*str))
-			str++;
+                /* now copy until next white space */
+                while (*str) {
+                    if (isspace(*str)) {
+                        str++;
+                    } else {
+                        *s++ = *str++;
+                    }
+                }
+                *s = '\0';
+                num++;
+            }
+            continue;
+            case 'n':
+                /* return number of characters read so far */
+            {
+                int *i = (int *)va_arg(args, int*);
+                *i = str - buf;
+            }
+            continue;
+            case 'o':
+                base = 8;
+                break;
+            case 'x':
+            case 'X':
+                base = 16;
+                break;
+            case 'd':
+            case 'i':
+                is_sign = 1;
+            case 'u':
+                break;
+            case '%':
+                /* looking for '%' in str */
+                if (*str++ != '%')
+                    return num;
+                continue;
+            default:
+                /* invalid format; stop here */
+                return num;
+        }
 
-		if (!*str || !isdigit(*str))
-			break;
+        /* have some sort of integer conversion.
+         * first, skip white space in buffer.
+         */
+        while (isspace(*str))
+            str++;
 
-		switch(qualifier) {
-		case 'h':
-			if (is_sign) {
-				short *s = (short *) va_arg(args,short *);
-				*s = (short) strtol(str,&next,base);
-			} else {
-				unsigned short *s = (unsigned short *) va_arg(args, unsigned short *);
-				*s = (unsigned short) strtoul(str, &next, base);
-			}
-			break;
-		case 'l':
-			if (is_sign) {
-				long *l = (long *) va_arg(args,long *);
-				*l = strtol(str,&next,base);
-			} else {
-				unsigned long *l = (unsigned long*) va_arg(args,unsigned long*);
-				*l = strtoul(str,&next,base);
-			}
-			break;
-		case 'L':
-			if (is_sign) {
-				long long *l = (long long*) va_arg(args,long long *);
-				*l = strtoll(str,&next,base);
-			} else {
-				unsigned long long *l = (unsigned long long*) va_arg(args,unsigned long long*);
-				*l = strtoull(str,&next,base);
-			}
-			break;
-		case 'Z':
-		{
-			unsigned long *s = (unsigned long*) va_arg(args,unsigned long*);
-			*s = (unsigned long) strtoul(str,&next,base);
-		}
-		break;
-		default:
-			if (is_sign) {
-				int *i = (int *) va_arg(args, int*);
-				*i = (int) strtol(str,&next,base);
-			} else {
-				unsigned int *i = (unsigned int*) va_arg(args, unsigned int*);
-				*i = (unsigned int) strtoul(str,&next,base);
-			}
-			break;
-		}
-		num++;
+        if (!*str || !isdigit(*str))
+            break;
 
-		if (!next)
-			break;
-		str = next;
-	}
-	return num;
+        switch (qualifier) {
+            case 'h':
+                if (is_sign) {
+                    short *s = (short *) va_arg(args, short *);
+                    *s = (short) strtol(str, &next, base);
+                } else {
+                    unsigned short *s = (unsigned short *) va_arg(args, unsigned short *);
+                    *s = (unsigned short) strtoul(str, &next, base);
+                }
+                break;
+            case 'l':
+                if (is_sign) {
+                    long *l = (long *) va_arg(args, long *);
+                    *l = strtol(str, &next, base);
+                } else {
+                    unsigned long *l = (unsigned long*) va_arg(args, unsigned long*);
+                    *l = strtoul(str, &next, base);
+                }
+                break;
+            case 'L':
+                if (is_sign) {
+                    long long *l = (long long*) va_arg(args, long long *);
+                    *l = strtoll(str, &next, base);
+                } else {
+                    unsigned long long *l = (unsigned long long*) va_arg(args, unsigned long long*);
+                    *l = strtoull(str, &next, base);
+                }
+                break;
+            case 'Z': {
+                unsigned long *s = (unsigned long*) va_arg(args, unsigned long*);
+                *s = (unsigned long) strtoul(str, &next, base);
+            }
+            break;
+            default:
+                if (is_sign) {
+                    int *i = (int *) va_arg(args, int*);
+                    *i = (int) strtol(str, &next, base);
+                } else {
+                    unsigned int *i = (unsigned int*) va_arg(args, unsigned int*);
+                    *i = (unsigned int) strtoul(str, &next, base);
+                }
+                break;
+        }
+        num++;
+
+        if (!next)
+            break;
+        str = next;
+    }
+    return num;
 }
 
 /**
@@ -316,7 +304,7 @@ int at_sscanf(const char * buf, const char * fmt, va_list args)
  *
  * @return  -1 : parse arguments failed
  *           0 : parse without match
- *          >0 : The number of arguments successfully parsed  
+ *          >0 : The number of arguments successfully parsed
  */
 int at_req_parse_args(const char *req_args, const char *req_expr, ...)
 {
@@ -328,9 +316,9 @@ int at_req_parse_args(const char *req_args, const char *req_expr, ...)
 
     va_start(args, req_expr);
 
-    //req_args_num = vsscanf(req_args, req_expr, args);	
+    //req_args_num = vsscanf(req_args, req_expr, args);
     req_args_num = at_sscanf(req_args, req_expr, args);
-    
+
 
     va_end(args);
 
@@ -339,34 +327,30 @@ int at_req_parse_args(const char *req_args, const char *req_expr, ...)
 
 void at_strip(char *str, const char patten)
 {
-	char *start, *end;
-	
-	start = str;			
-	end = str + strlen(str) -1;	
-	
-	if(*str == patten)
-	{
-		start++;
-	}
+    char *start, *end;
 
-	if(*end == patten)
-	{
-		*end-- = '\0';	
-	}
+    start = str;
+    end = str + strlen(str) - 1;
 
-	strcpy(str, start);
+    if (*str == patten) {
+        start++;
+    }
+
+    if (*end == patten) {
+        *end-- = '\0';
+    }
+
+    strcpy(str, start);
 }
 
 void chr_strip(char *str, const char patten)
 {
-	char *end = str + strlen(str);
-	
- 	while(*str != '\0')
- 	{
-		if(*str == patten)
-		{
-			memmove(str, str+1, end - str);
-		}
-		str++;
-	}
+    char *end = str + strlen(str);
+
+    while (*str != '\0') {
+        if (*str == patten) {
+            memmove(str, str + 1, end - str);
+        }
+        str++;
+    }
 }

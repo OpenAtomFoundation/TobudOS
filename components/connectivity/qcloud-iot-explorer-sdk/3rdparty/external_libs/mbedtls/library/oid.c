@@ -161,8 +161,7 @@ typedef struct {
     const char          *short_name;
 } oid_x520_attr_t;
 
-static const oid_x520_attr_t oid_x520_attr_type[] =
-{
+static const oid_x520_attr_t oid_x520_attr_type[] = {
     {
         { ADD_LEN( MBEDTLS_OID_AT_CN ),          "id-at-commonName",               "Common Name" },
         "CN",
@@ -180,7 +179,7 @@ static const oid_x520_attr_t oid_x520_attr_type[] =
         "ST",
     },
     {
-        { ADD_LEN( MBEDTLS_OID_AT_ORGANIZATION ),"id-at-organizationName",         "Organization" },
+        { ADD_LEN( MBEDTLS_OID_AT_ORGANIZATION ), "id-at-organizationName",         "Organization" },
         "O",
     },
     {
@@ -192,11 +191,11 @@ static const oid_x520_attr_t oid_x520_attr_type[] =
         "emailAddress",
     },
     {
-        { ADD_LEN( MBEDTLS_OID_AT_SERIAL_NUMBER ),"id-at-serialNumber",            "Serial number" },
+        { ADD_LEN( MBEDTLS_OID_AT_SERIAL_NUMBER ), "id-at-serialNumber",            "Serial number" },
         "serialNumber",
     },
     {
-        { ADD_LEN( MBEDTLS_OID_AT_POSTAL_ADDRESS ),"id-at-postalAddress",          "Postal address" },
+        { ADD_LEN( MBEDTLS_OID_AT_POSTAL_ADDRESS ), "id-at-postalAddress",          "Postal address" },
         "postalAddress",
     },
     {
@@ -224,7 +223,7 @@ static const oid_x520_attr_t oid_x520_attr_type[] =
         "title",
     },
     {
-        { ADD_LEN( MBEDTLS_OID_AT_DN_QUALIFIER ),"id-at-dnQualifier",              "Distinguished Name qualifier" },
+        { ADD_LEN( MBEDTLS_OID_AT_DN_QUALIFIER ), "id-at-dnQualifier",              "Distinguished Name qualifier" },
         "dnQualifier",
     },
     {
@@ -256,8 +255,7 @@ typedef struct {
     int                 ext_type;
 } oid_x509_ext_t;
 
-static const oid_x509_ext_t oid_x509_ext[] =
-{
+static const oid_x509_ext_t oid_x509_ext[] = {
     {
         { ADD_LEN( MBEDTLS_OID_BASIC_CONSTRAINTS ),    "id-ce-basicConstraints",   "Basic Constraints" },
         MBEDTLS_X509_EXT_BASIC_CONSTRAINTS,
@@ -287,8 +285,7 @@ static const oid_x509_ext_t oid_x509_ext[] =
 FN_OID_TYPED_FROM_ASN1(oid_x509_ext_t, x509_ext, oid_x509_ext)
 FN_OID_GET_ATTR1(mbedtls_oid_get_x509_ext_type, oid_x509_ext_t, x509_ext, int, ext_type)
 
-static const mbedtls_oid_descriptor_t oid_ext_key_usage[] =
-{
+static const mbedtls_oid_descriptor_t oid_ext_key_usage[] = {
     { ADD_LEN( MBEDTLS_OID_SERVER_AUTH ),      "id-kp-serverAuth",      "TLS Web Server Authentication" },
     { ADD_LEN( MBEDTLS_OID_CLIENT_AUTH ),      "id-kp-clientAuth",      "TLS Web Client Authentication" },
     { ADD_LEN( MBEDTLS_OID_CODE_SIGNING ),     "id-kp-codeSigning",     "Code Signing" },
@@ -312,8 +309,7 @@ typedef struct {
     mbedtls_pk_type_t           pk_alg;
 } oid_sig_alg_t;
 
-static const oid_sig_alg_t oid_sig_alg[] =
-{
+static const oid_sig_alg_t oid_sig_alg[] = {
 #if defined(MBEDTLS_RSA_C)
 #if defined(MBEDTLS_MD2_C)
     {
@@ -420,8 +416,7 @@ typedef struct {
     mbedtls_pk_type_t           pk_alg;
 } oid_pk_alg_t;
 
-static const oid_pk_alg_t oid_pk_alg[] =
-{
+static const oid_pk_alg_t oid_pk_alg[] = {
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_RSA ),      "rsaEncryption",   "RSA" },
         MBEDTLS_PK_RSA,
@@ -453,8 +448,7 @@ typedef struct {
     mbedtls_ecp_group_id        grp_id;
 } oid_ecp_grp_t;
 
-static const oid_ecp_grp_t oid_ecp_grp[] =
-{
+static const oid_ecp_grp_t oid_ecp_grp[] = {
 #if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP192R1 ), "secp192r1",    "secp192r1" },
@@ -505,19 +499,19 @@ static const oid_ecp_grp_t oid_ecp_grp[] =
 #endif /* MBEDTLS_ECP_DP_SECP256K1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
     {
-        { ADD_LEN( MBEDTLS_OID_EC_GRP_BP256R1 ),   "brainpoolP256r1","brainpool256r1" },
+        { ADD_LEN( MBEDTLS_OID_EC_GRP_BP256R1 ),   "brainpoolP256r1", "brainpool256r1" },
         MBEDTLS_ECP_DP_BP256R1,
     },
 #endif /* MBEDTLS_ECP_DP_BP256R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
     {
-        { ADD_LEN( MBEDTLS_OID_EC_GRP_BP384R1 ),   "brainpoolP384r1","brainpool384r1" },
+        { ADD_LEN( MBEDTLS_OID_EC_GRP_BP384R1 ),   "brainpoolP384r1", "brainpool384r1" },
         MBEDTLS_ECP_DP_BP384R1,
     },
 #endif /* MBEDTLS_ECP_DP_BP384R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
     {
-        { ADD_LEN( MBEDTLS_OID_EC_GRP_BP512R1 ),   "brainpoolP512r1","brainpool512r1" },
+        { ADD_LEN( MBEDTLS_OID_EC_GRP_BP512R1 ),   "brainpoolP512r1", "brainpool512r1" },
         MBEDTLS_ECP_DP_BP512R1,
     },
 #endif /* MBEDTLS_ECP_DP_BP512R1_ENABLED */
@@ -541,8 +535,7 @@ typedef struct {
     mbedtls_cipher_type_t       cipher_alg;
 } oid_cipher_alg_t;
 
-static const oid_cipher_alg_t oid_cipher_alg[] =
-{
+static const oid_cipher_alg_t oid_cipher_alg[] = {
     {
         { ADD_LEN( MBEDTLS_OID_DES_CBC ),              "desCBC",       "DES-CBC" },
         MBEDTLS_CIPHER_DES_CBC,
@@ -570,8 +563,7 @@ typedef struct {
     mbedtls_md_type_t           md_alg;
 } oid_md_alg_t;
 
-static const oid_md_alg_t oid_md_alg[] =
-{
+static const oid_md_alg_t oid_md_alg[] = {
 #if defined(MBEDTLS_MD2_C)
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_MD2 ),       "id-md2",       "MD2" },
@@ -637,8 +629,7 @@ typedef struct {
     mbedtls_cipher_type_t       cipher_alg;
 } oid_pkcs12_pbe_alg_t;
 
-static const oid_pkcs12_pbe_alg_t oid_pkcs12_pbe_alg[] =
-{
+static const oid_pkcs12_pbe_alg_t oid_pkcs12_pbe_alg[] = {
     {
         { ADD_LEN( MBEDTLS_OID_PKCS12_PBE_SHA1_DES3_EDE_CBC ), "pbeWithSHAAnd3-KeyTripleDES-CBC", "PBE with SHA1 and 3-Key 3DES" },
         MBEDTLS_MD_SHA1,      MBEDTLS_CIPHER_DES_EDE3_CBC,
@@ -668,7 +659,7 @@ FN_OID_GET_ATTR2(mbedtls_oid_get_pkcs12_pbe_alg, oid_pkcs12_pbe_alg_t, pkcs12_pb
 
 /* Return the x.y.z.... style numeric string for the given OID */
 int mbedtls_oid_get_numeric_string( char *buf, size_t size,
-                            const mbedtls_asn1_buf *oid )
+                                    const mbedtls_asn1_buf *oid )
 {
     int ret;
     size_t i, n;
@@ -679,24 +670,21 @@ int mbedtls_oid_get_numeric_string( char *buf, size_t size,
     n = size;
 
     /* First byte contains first two dots */
-    if( oid->len > 0 )
-    {
+    if ( oid->len > 0 ) {
         ret = mbedtls_snprintf( p, n, "%d.%d", oid->p[0] / 40, oid->p[0] % 40 );
         OID_SAFE_SNPRINTF;
     }
 
     value = 0;
-    for( i = 1; i < oid->len; i++ )
-    {
+    for ( i = 1; i < oid->len; i++ ) {
         /* Prevent overflow in value. */
-        if( ( ( value << 7 ) >> 7 ) != value )
-            return( MBEDTLS_ERR_OID_BUF_TOO_SMALL );
+        if ( ( ( value << 7 ) >> 7 ) != value )
+            return ( MBEDTLS_ERR_OID_BUF_TOO_SMALL );
 
         value <<= 7;
         value += oid->p[i] & 0x7F;
 
-        if( !( oid->p[i] & 0x80 ) )
-        {
+        if ( !( oid->p[i] & 0x80 ) ) {
             /* Last byte */
             ret = mbedtls_snprintf( p, n, ".%d", value );
             OID_SAFE_SNPRINTF;
@@ -704,7 +692,7 @@ int mbedtls_oid_get_numeric_string( char *buf, size_t size,
         }
     }
 
-    return( (int) ( size - n ) );
+    return ( (int) ( size - n ) );
 }
 
 #endif /* MBEDTLS_OID_C */

@@ -19,13 +19,11 @@ set(link_lib
 )
 endif()
 
-if (PLATFORM STREQUAL "linux" AND COMPILE_TOOLS  STREQUAL "gcc")
+if(CMAKE_COMPILER_IS_GNUCC)
 	set(lib -Wl,--start-group ${link_lib} -Wl,--end-group)
-elseif (PLATFORM STREQUAL "windows" AND COMPILE_TOOLS STREQUAL "MSVC")
+else()
 	set(lib ${link_lib})
 endif()
-
-
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/${BUILD_TYPE}/bin)
 
@@ -39,6 +37,22 @@ file(GLOB src_light_data_template_sample	${PROJECT_SOURCE_DIR}/samples/scenarize
 add_executable(light_data_template_sample 	${src_light_data_template_sample})
 target_link_libraries(light_data_template_sample ${lib})
 	
+# MQTT
+file(GLOB src_mqtt_sample 					${PROJECT_SOURCE_DIR}/samples/mqtt/mqtt_sample.c)
+add_executable(mqtt_sample 					${src_mqtt_sample})
+target_link_libraries(mqtt_sample 		    ${lib})
+
+# Raw data
+file(GLOB src_raw_data 							${PROJECT_SOURCE_DIR}/samples/raw_data/raw_data_sample.c)
+add_executable(raw_data_mqtt_sample 			${src_raw_data})
+target_link_libraries(raw_data_mqtt_sample 		${lib})
+
+# GATEWAY
+if(${FEATURE_GATEWAY_ENABLED} STREQUAL "ON")
+	file(GLOB src_gateway_sample  				${PROJECT_SOURCE_DIR}/samples/gateway/*.c)
+	add_executable(gateway_sample 				${src_gateway_sample})
+	target_link_libraries(gateway_sample 			 ${lib})
+endif()
 
 # OTA MQTT
 if(${FEATURE_OTA_COMM_ENABLED} STREQUAL "ON")

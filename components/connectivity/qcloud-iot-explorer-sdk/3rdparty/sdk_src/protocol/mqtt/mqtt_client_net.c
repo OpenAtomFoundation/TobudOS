@@ -19,14 +19,15 @@ extern "C" {
 
 #include "mqtt_client_net.h"
 
-//TODO: how to implement    
+//TODO: how to implement
 /**
  * @brief Check if TLS connection is valid
  *
  * @param pNetwork
  * @return
  */
-int qcloud_iot_mqtt_tls_is_connected(Network *pNetwork) {
+int qcloud_iot_mqtt_tls_is_connected(Network *pNetwork)
+{
     return 1;
 }
 
@@ -37,13 +38,14 @@ int qcloud_iot_mqtt_tls_is_connected(Network *pNetwork) {
  * @param pConnectParams
  * @return
  */
-int qcloud_iot_mqtt_network_init(Network *pNetwork) {
+int qcloud_iot_mqtt_network_init(Network *pNetwork)
+{
     int rc;
 
     /* first choice: TLS */
     pNetwork->type = NETWORK_TLS;
 
-#ifdef AUTH_WITH_NOTLS    
+#ifdef AUTH_WITH_NOTLS
     pNetwork->type = NETWORK_TCP;
 #endif
 

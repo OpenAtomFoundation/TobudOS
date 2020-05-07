@@ -51,94 +51,96 @@
 
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
 /* Implementation that should never be optimized out by the compiler */
-static void mbedtls_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
+static void mbedtls_zeroize( void *v, size_t n )
+{
+    volatile unsigned char *p = v;
+    while ( n-- ) *p++ = 0;
 }
 #endif
 
 #if defined(MBEDTLS_RSA_C)
 static int rsa_can_do( mbedtls_pk_type_t type )
 {
-    return( type == MBEDTLS_PK_RSA ||
-            type == MBEDTLS_PK_RSASSA_PSS );
+    return ( type == MBEDTLS_PK_RSA ||
+             type == MBEDTLS_PK_RSASSA_PSS );
 }
 
 static size_t rsa_get_bitlen( const void *ctx )
 {
-    return( 8 * ((const mbedtls_rsa_context *) ctx)->len );
+    return ( 8 * ((const mbedtls_rsa_context *) ctx)->len );
 }
 
 static int rsa_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                   const unsigned char *hash, size_t hash_len,
-                   const unsigned char *sig, size_t sig_len )
+                            const unsigned char *hash, size_t hash_len,
+                            const unsigned char *sig, size_t sig_len )
 {
     int ret;
 
-    if( sig_len < ((mbedtls_rsa_context *) ctx)->len )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
+    if ( sig_len < ((mbedtls_rsa_context *) ctx)->len )
+        return ( MBEDTLS_ERR_RSA_VERIFY_FAILED );
 
-    if( ( ret = mbedtls_rsa_pkcs1_verify( (mbedtls_rsa_context *) ctx, NULL, NULL,
-                                  MBEDTLS_RSA_PUBLIC, md_alg,
-                                  (unsigned int) hash_len, hash, sig ) ) != 0 )
-        return( ret );
+    if ( ( ret = mbedtls_rsa_pkcs1_verify( (mbedtls_rsa_context *) ctx, NULL, NULL,
+                                           MBEDTLS_RSA_PUBLIC, md_alg,
+                                           (unsigned int) hash_len, hash, sig ) ) != 0 )
+        return ( ret );
 
-    if( sig_len > ((mbedtls_rsa_context *) ctx)->len )
-        return( MBEDTLS_ERR_PK_SIG_LEN_MISMATCH );
+    if ( sig_len > ((mbedtls_rsa_context *) ctx)->len )
+        return ( MBEDTLS_ERR_PK_SIG_LEN_MISMATCH );
 
-    return( 0 );
+    return ( 0 );
 }
 
 static int rsa_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                   const unsigned char *hash, size_t hash_len,
-                   unsigned char *sig, size_t *sig_len,
-                   int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                          const unsigned char *hash, size_t hash_len,
+                          unsigned char *sig, size_t *sig_len,
+                          int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     *sig_len = ((mbedtls_rsa_context *) ctx)->len;
 
-    return( mbedtls_rsa_pkcs1_sign( (mbedtls_rsa_context *) ctx, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
-                md_alg, (unsigned int) hash_len, hash, sig ) );
+    return ( mbedtls_rsa_pkcs1_sign( (mbedtls_rsa_context *) ctx, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
+                                     md_alg, (unsigned int) hash_len, hash, sig ) );
 }
 
 static int rsa_decrypt_wrap( void *ctx,
-                    const unsigned char *input, size_t ilen,
-                    unsigned char *output, size_t *olen, size_t osize,
-                    int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                             const unsigned char *input, size_t ilen,
+                             unsigned char *output, size_t *olen, size_t osize,
+                             int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
-    if( ilen != ((mbedtls_rsa_context *) ctx)->len )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
+    if ( ilen != ((mbedtls_rsa_context *) ctx)->len )
+        return ( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
-    return( mbedtls_rsa_pkcs1_decrypt( (mbedtls_rsa_context *) ctx, f_rng, p_rng,
-                MBEDTLS_RSA_PRIVATE, olen, input, output, osize ) );
+    return ( mbedtls_rsa_pkcs1_decrypt( (mbedtls_rsa_context *) ctx, f_rng, p_rng,
+                                        MBEDTLS_RSA_PRIVATE, olen, input, output, osize ) );
 }
 
 static int rsa_encrypt_wrap( void *ctx,
-                    const unsigned char *input, size_t ilen,
-                    unsigned char *output, size_t *olen, size_t osize,
-                    int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                             const unsigned char *input, size_t ilen,
+                             unsigned char *output, size_t *olen, size_t osize,
+                             int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     *olen = ((mbedtls_rsa_context *) ctx)->len;
 
-    if( *olen > osize )
-        return( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
+    if ( *olen > osize )
+        return ( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
 
-    return( mbedtls_rsa_pkcs1_encrypt( (mbedtls_rsa_context *) ctx,
-                f_rng, p_rng, MBEDTLS_RSA_PUBLIC, ilen, input, output ) );
+    return ( mbedtls_rsa_pkcs1_encrypt( (mbedtls_rsa_context *) ctx,
+                                        f_rng, p_rng, MBEDTLS_RSA_PUBLIC, ilen, input, output ) );
 }
 
 static int rsa_check_pair_wrap( const void *pub, const void *prv )
 {
-    return( mbedtls_rsa_check_pub_priv( (const mbedtls_rsa_context *) pub,
-                                (const mbedtls_rsa_context *) prv ) );
+    return ( mbedtls_rsa_check_pub_priv( (const mbedtls_rsa_context *) pub,
+                                         (const mbedtls_rsa_context *) prv ) );
 }
 
 static void *rsa_alloc_wrap( void )
 {
     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_rsa_context ) );
 
-    if( ctx != NULL )
+    if ( ctx != NULL )
         mbedtls_rsa_init( (mbedtls_rsa_context *) ctx, 0, 0 );
 
-    return( ctx );
+    return ( ctx );
 }
 
 static void rsa_free_wrap( void *ctx )
@@ -182,79 +184,79 @@ const mbedtls_pk_info_t mbedtls_rsa_info = {
  */
 static int eckey_can_do( mbedtls_pk_type_t type )
 {
-    return( type == MBEDTLS_PK_ECKEY ||
-            type == MBEDTLS_PK_ECKEY_DH ||
-            type == MBEDTLS_PK_ECDSA );
+    return ( type == MBEDTLS_PK_ECKEY ||
+             type == MBEDTLS_PK_ECKEY_DH ||
+             type == MBEDTLS_PK_ECDSA );
 }
 
 static size_t eckey_get_bitlen( const void *ctx )
 {
-    return( ((mbedtls_ecp_keypair *) ctx)->grp.pbits );
+    return ( ((mbedtls_ecp_keypair *) ctx)->grp.pbits );
 }
 
 #if defined(MBEDTLS_ECDSA_C)
 /* Forward declarations */
 static int ecdsa_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                       const unsigned char *hash, size_t hash_len,
-                       const unsigned char *sig, size_t sig_len );
+                              const unsigned char *hash, size_t hash_len,
+                              const unsigned char *sig, size_t sig_len );
 
 static int ecdsa_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                   const unsigned char *hash, size_t hash_len,
-                   unsigned char *sig, size_t *sig_len,
-                   int (*f_rng)(void *, unsigned char *, size_t), void *p_rng );
+                            const unsigned char *hash, size_t hash_len,
+                            unsigned char *sig, size_t *sig_len,
+                            int (*f_rng)(void *, unsigned char *, size_t), void *p_rng );
 
 static int eckey_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                       const unsigned char *hash, size_t hash_len,
-                       const unsigned char *sig, size_t sig_len )
+                              const unsigned char *hash, size_t hash_len,
+                              const unsigned char *sig, size_t sig_len )
 {
     int ret;
     mbedtls_ecdsa_context ecdsa;
 
     mbedtls_ecdsa_init( &ecdsa );
 
-    if( ( ret = mbedtls_ecdsa_from_keypair( &ecdsa, ctx ) ) == 0 )
+    if ( ( ret = mbedtls_ecdsa_from_keypair( &ecdsa, ctx ) ) == 0 )
         ret = ecdsa_verify_wrap( &ecdsa, md_alg, hash, hash_len, sig, sig_len );
 
     mbedtls_ecdsa_free( &ecdsa );
 
-    return( ret );
+    return ( ret );
 }
 
 static int eckey_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                   const unsigned char *hash, size_t hash_len,
-                   unsigned char *sig, size_t *sig_len,
-                   int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                            const unsigned char *hash, size_t hash_len,
+                            unsigned char *sig, size_t *sig_len,
+                            int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     int ret;
     mbedtls_ecdsa_context ecdsa;
 
     mbedtls_ecdsa_init( &ecdsa );
 
-    if( ( ret = mbedtls_ecdsa_from_keypair( &ecdsa, ctx ) ) == 0 )
+    if ( ( ret = mbedtls_ecdsa_from_keypair( &ecdsa, ctx ) ) == 0 )
         ret = ecdsa_sign_wrap( &ecdsa, md_alg, hash, hash_len, sig, sig_len,
                                f_rng, p_rng );
 
     mbedtls_ecdsa_free( &ecdsa );
 
-    return( ret );
+    return ( ret );
 }
 
 #endif /* MBEDTLS_ECDSA_C */
 
 static int eckey_check_pair( const void *pub, const void *prv )
 {
-    return( mbedtls_ecp_check_pub_priv( (const mbedtls_ecp_keypair *) pub,
-                                (const mbedtls_ecp_keypair *) prv ) );
+    return ( mbedtls_ecp_check_pub_priv( (const mbedtls_ecp_keypair *) pub,
+                                         (const mbedtls_ecp_keypair *) prv ) );
 }
 
 static void *eckey_alloc_wrap( void )
 {
     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_ecp_keypair ) );
 
-    if( ctx != NULL )
+    if ( ctx != NULL )
         mbedtls_ecp_keypair_init( ctx );
 
-    return( ctx );
+    return ( ctx );
 }
 
 static void eckey_free_wrap( void *ctx )
@@ -295,8 +297,8 @@ const mbedtls_pk_info_t mbedtls_eckey_info = {
  */
 static int eckeydh_can_do( mbedtls_pk_type_t type )
 {
-    return( type == MBEDTLS_PK_ECKEY ||
-            type == MBEDTLS_PK_ECKEY_DH );
+    return ( type == MBEDTLS_PK_ECKEY ||
+             type == MBEDTLS_PK_ECKEY_DH );
 }
 
 const mbedtls_pk_info_t mbedtls_eckeydh_info = {
@@ -318,42 +320,42 @@ const mbedtls_pk_info_t mbedtls_eckeydh_info = {
 #if defined(MBEDTLS_ECDSA_C)
 static int ecdsa_can_do( mbedtls_pk_type_t type )
 {
-    return( type == MBEDTLS_PK_ECDSA );
+    return ( type == MBEDTLS_PK_ECDSA );
 }
 
 static int ecdsa_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                       const unsigned char *hash, size_t hash_len,
-                       const unsigned char *sig, size_t sig_len )
+                              const unsigned char *hash, size_t hash_len,
+                              const unsigned char *sig, size_t sig_len )
 {
     int ret;
     ((void) md_alg);
 
     ret = mbedtls_ecdsa_read_signature( (mbedtls_ecdsa_context *) ctx,
-                                hash, hash_len, sig, sig_len );
+                                        hash, hash_len, sig, sig_len );
 
-    if( ret == MBEDTLS_ERR_ECP_SIG_LEN_MISMATCH )
-        return( MBEDTLS_ERR_PK_SIG_LEN_MISMATCH );
+    if ( ret == MBEDTLS_ERR_ECP_SIG_LEN_MISMATCH )
+        return ( MBEDTLS_ERR_PK_SIG_LEN_MISMATCH );
 
-    return( ret );
+    return ( ret );
 }
 
 static int ecdsa_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                   const unsigned char *hash, size_t hash_len,
-                   unsigned char *sig, size_t *sig_len,
-                   int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                            const unsigned char *hash, size_t hash_len,
+                            unsigned char *sig, size_t *sig_len,
+                            int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
-    return( mbedtls_ecdsa_write_signature( (mbedtls_ecdsa_context *) ctx,
-                md_alg, hash, hash_len, sig, sig_len, f_rng, p_rng ) );
+    return ( mbedtls_ecdsa_write_signature( (mbedtls_ecdsa_context *) ctx,
+                                            md_alg, hash, hash_len, sig, sig_len, f_rng, p_rng ) );
 }
 
 static void *ecdsa_alloc_wrap( void )
 {
     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_ecdsa_context ) );
 
-    if( ctx != NULL )
+    if ( ctx != NULL )
         mbedtls_ecdsa_init( (mbedtls_ecdsa_context *) ctx );
 
-    return( ctx );
+    return ( ctx );
 }
 
 static void ecdsa_free_wrap( void *ctx )
@@ -385,44 +387,44 @@ const mbedtls_pk_info_t mbedtls_ecdsa_info = {
 
 static int rsa_alt_can_do( mbedtls_pk_type_t type )
 {
-    return( type == MBEDTLS_PK_RSA );
+    return ( type == MBEDTLS_PK_RSA );
 }
 
 static size_t rsa_alt_get_bitlen( const void *ctx )
 {
     const mbedtls_rsa_alt_context *rsa_alt = (const mbedtls_rsa_alt_context *) ctx;
 
-    return( 8 * rsa_alt->key_len_func( rsa_alt->key ) );
+    return ( 8 * rsa_alt->key_len_func( rsa_alt->key ) );
 }
 
 static int rsa_alt_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
-                   const unsigned char *hash, size_t hash_len,
-                   unsigned char *sig, size_t *sig_len,
-                   int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                              const unsigned char *hash, size_t hash_len,
+                              unsigned char *sig, size_t *sig_len,
+                              int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     mbedtls_rsa_alt_context *rsa_alt = (mbedtls_rsa_alt_context *) ctx;
 
     *sig_len = rsa_alt->key_len_func( rsa_alt->key );
 
-    return( rsa_alt->sign_func( rsa_alt->key, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
-                md_alg, (unsigned int) hash_len, hash, sig ) );
+    return ( rsa_alt->sign_func( rsa_alt->key, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
+                                 md_alg, (unsigned int) hash_len, hash, sig ) );
 }
 
 static int rsa_alt_decrypt_wrap( void *ctx,
-                    const unsigned char *input, size_t ilen,
-                    unsigned char *output, size_t *olen, size_t osize,
-                    int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+                                 const unsigned char *input, size_t ilen,
+                                 unsigned char *output, size_t *olen, size_t osize,
+                                 int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     mbedtls_rsa_alt_context *rsa_alt = (mbedtls_rsa_alt_context *) ctx;
 
     ((void) f_rng);
     ((void) p_rng);
 
-    if( ilen != rsa_alt->key_len_func( rsa_alt->key ) )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
+    if ( ilen != rsa_alt->key_len_func( rsa_alt->key ) )
+        return ( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
-    return( rsa_alt->decrypt_func( rsa_alt->key,
-                MBEDTLS_RSA_PRIVATE, olen, input, output, osize ) );
+    return ( rsa_alt->decrypt_func( rsa_alt->key,
+                                    MBEDTLS_RSA_PRIVATE, olen, input, output, osize ) );
 }
 
 #if defined(MBEDTLS_RSA_C)
@@ -433,25 +435,23 @@ static int rsa_alt_check_pair( const void *pub, const void *prv )
     size_t sig_len = 0;
     int ret;
 
-    if( rsa_alt_get_bitlen( prv ) != rsa_get_bitlen( pub ) )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
+    if ( rsa_alt_get_bitlen( prv ) != rsa_get_bitlen( pub ) )
+        return ( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
 
     memset( hash, 0x2a, sizeof( hash ) );
 
-    if( ( ret = rsa_alt_sign_wrap( (void *) prv, MBEDTLS_MD_NONE,
-                                   hash, sizeof( hash ),
-                                   sig, &sig_len, NULL, NULL ) ) != 0 )
-    {
-        return( ret );
+    if ( ( ret = rsa_alt_sign_wrap( (void *) prv, MBEDTLS_MD_NONE,
+                                    hash, sizeof( hash ),
+                                    sig, &sig_len, NULL, NULL ) ) != 0 ) {
+        return ( ret );
     }
 
-    if( rsa_verify_wrap( (void *) pub, MBEDTLS_MD_NONE,
-                         hash, sizeof( hash ), sig, sig_len ) != 0 )
-    {
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
+    if ( rsa_verify_wrap( (void *) pub, MBEDTLS_MD_NONE,
+                          hash, sizeof( hash ), sig, sig_len ) != 0 ) {
+        return ( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
     }
 
-    return( 0 );
+    return ( 0 );
 }
 #endif /* MBEDTLS_RSA_C */
 
@@ -459,10 +459,10 @@ static void *rsa_alt_alloc_wrap( void )
 {
     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_rsa_alt_context ) );
 
-    if( ctx != NULL )
+    if ( ctx != NULL )
         memset( ctx, 0, sizeof( mbedtls_rsa_alt_context ) );
 
-    return( ctx );
+    return ( ctx );
 }
 
 static void rsa_alt_free_wrap( void *ctx )

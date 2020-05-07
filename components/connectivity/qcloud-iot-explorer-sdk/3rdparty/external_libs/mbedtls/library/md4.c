@@ -49,8 +49,10 @@
 #if !defined(MBEDTLS_MD4_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-static void mbedtls_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
+static void mbedtls_zeroize( void *v, size_t n )
+{
+    volatile unsigned char *p = v;
+    while ( n-- ) *p++ = 0;
 }
 
 /*
@@ -83,7 +85,7 @@ void mbedtls_md4_init( mbedtls_md4_context *ctx )
 
 void mbedtls_md4_free( mbedtls_md4_context *ctx )
 {
-    if( ctx == NULL )
+    if ( ctx == NULL )
         return;
 
     mbedtls_zeroize( ctx, sizeof( mbedtls_md4_context ) );
@@ -222,7 +224,7 @@ void mbedtls_md4_update( mbedtls_md4_context *ctx, const unsigned char *input, s
     size_t fill;
     uint32_t left;
 
-    if( ilen == 0 )
+    if ( ilen == 0 )
         return;
 
     left = ctx->total[0] & 0x3F;
@@ -231,11 +233,10 @@ void mbedtls_md4_update( mbedtls_md4_context *ctx, const unsigned char *input, s
     ctx->total[0] += (uint32_t) ilen;
     ctx->total[0] &= 0xFFFFFFFF;
 
-    if( ctx->total[0] < (uint32_t) ilen )
+    if ( ctx->total[0] < (uint32_t) ilen )
         ctx->total[1]++;
 
-    if( left && ilen >= fill )
-    {
+    if ( left && ilen >= fill ) {
         memcpy( (void *) (ctx->buffer + left),
                 (void *) input, fill );
         mbedtls_md4_process( ctx, ctx->buffer );
@@ -244,23 +245,20 @@ void mbedtls_md4_update( mbedtls_md4_context *ctx, const unsigned char *input, s
         left = 0;
     }
 
-    while( ilen >= 64 )
-    {
+    while ( ilen >= 64 ) {
         mbedtls_md4_process( ctx, input );
         input += 64;
         ilen  -= 64;
     }
 
-    if( ilen > 0 )
-    {
+    if ( ilen > 0 ) {
         memcpy( (void *) (ctx->buffer + left),
                 (void *) input, ilen );
     }
 }
 
-static const unsigned char md4_padding[64] =
-{
- 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+static const unsigned char md4_padding[64] = {
+    0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -276,7 +274,7 @@ void mbedtls_md4_finish( mbedtls_md4_context *ctx, unsigned char output[16] )
     unsigned char msglen[8];
 
     high = ( ctx->total[0] >> 29 )
-         | ( ctx->total[1] <<  3 );
+           | ( ctx->total[1] <<  3 );
     low  = ( ctx->total[0] <<  3 );
 
     PUT_UINT32_LE( low,  msglen, 0 );
@@ -315,34 +313,48 @@ void mbedtls_md4( const unsigned char *input, size_t ilen, unsigned char output[
 /*
  * RFC 1320 test vectors
  */
-static const char md4_test_str[7][81] =
-{
+static const char md4_test_str[7][81] = {
     { "" },
     { "a" },
     { "abc" },
     { "message digest" },
     { "abcdefghijklmnopqrstuvwxyz" },
     { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" },
-    { "12345678901234567890123456789012345678901234567890123456789012" \
-      "345678901234567890" }
+    {
+        "12345678901234567890123456789012345678901234567890123456789012" \
+        "345678901234567890"
+    }
 };
 
-static const unsigned char md4_test_sum[7][16] =
-{
-    { 0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31,
-      0xB7, 0x3C, 0x59, 0xD7, 0xE0, 0xC0, 0x89, 0xC0 },
-    { 0xBD, 0xE5, 0x2C, 0xB3, 0x1D, 0xE3, 0x3E, 0x46,
-      0x24, 0x5E, 0x05, 0xFB, 0xDB, 0xD6, 0xFB, 0x24 },
-    { 0xA4, 0x48, 0x01, 0x7A, 0xAF, 0x21, 0xD8, 0x52,
-      0x5F, 0xC1, 0x0A, 0xE8, 0x7A, 0xA6, 0x72, 0x9D },
-    { 0xD9, 0x13, 0x0A, 0x81, 0x64, 0x54, 0x9F, 0xE8,
-      0x18, 0x87, 0x48, 0x06, 0xE1, 0xC7, 0x01, 0x4B },
-    { 0xD7, 0x9E, 0x1C, 0x30, 0x8A, 0xA5, 0xBB, 0xCD,
-      0xEE, 0xA8, 0xED, 0x63, 0xDF, 0x41, 0x2D, 0xA9 },
-    { 0x04, 0x3F, 0x85, 0x82, 0xF2, 0x41, 0xDB, 0x35,
-      0x1C, 0xE6, 0x27, 0xE1, 0x53, 0xE7, 0xF0, 0xE4 },
-    { 0xE3, 0x3B, 0x4D, 0xDC, 0x9C, 0x38, 0xF2, 0x19,
-      0x9C, 0x3E, 0x7B, 0x16, 0x4F, 0xCC, 0x05, 0x36 }
+static const unsigned char md4_test_sum[7][16] = {
+    {
+        0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31,
+        0xB7, 0x3C, 0x59, 0xD7, 0xE0, 0xC0, 0x89, 0xC0
+    },
+    {
+        0xBD, 0xE5, 0x2C, 0xB3, 0x1D, 0xE3, 0x3E, 0x46,
+        0x24, 0x5E, 0x05, 0xFB, 0xDB, 0xD6, 0xFB, 0x24
+    },
+    {
+        0xA4, 0x48, 0x01, 0x7A, 0xAF, 0x21, 0xD8, 0x52,
+        0x5F, 0xC1, 0x0A, 0xE8, 0x7A, 0xA6, 0x72, 0x9D
+    },
+    {
+        0xD9, 0x13, 0x0A, 0x81, 0x64, 0x54, 0x9F, 0xE8,
+        0x18, 0x87, 0x48, 0x06, 0xE1, 0xC7, 0x01, 0x4B
+    },
+    {
+        0xD7, 0x9E, 0x1C, 0x30, 0x8A, 0xA5, 0xBB, 0xCD,
+        0xEE, 0xA8, 0xED, 0x63, 0xDF, 0x41, 0x2D, 0xA9
+    },
+    {
+        0x04, 0x3F, 0x85, 0x82, 0xF2, 0x41, 0xDB, 0x35,
+        0x1C, 0xE6, 0x27, 0xE1, 0x53, 0xE7, 0xF0, 0xE4
+    },
+    {
+        0xE3, 0x3B, 0x4D, 0xDC, 0x9C, 0x38, 0xF2, 0x19,
+        0x9C, 0x3E, 0x7B, 0x16, 0x4F, 0xCC, 0x05, 0x36
+    }
 };
 
 /*
@@ -353,30 +365,28 @@ int mbedtls_md4_self_test( int verbose )
     int i;
     unsigned char md4sum[16];
 
-    for( i = 0; i < 7; i++ )
-    {
-        if( verbose != 0 )
+    for ( i = 0; i < 7; i++ ) {
+        if ( verbose != 0 )
             mbedtls_printf( "  MD4 test #%d: ", i + 1 );
 
         mbedtls_md4( (unsigned char *) md4_test_str[i],
-             strlen( md4_test_str[i] ), md4sum );
+                     strlen( md4_test_str[i] ), md4sum );
 
-        if( memcmp( md4sum, md4_test_sum[i], 16 ) != 0 )
-        {
-            if( verbose != 0 )
+        if ( memcmp( md4sum, md4_test_sum[i], 16 ) != 0 ) {
+            if ( verbose != 0 )
                 mbedtls_printf( "failed\n" );
 
-            return( 1 );
+            return ( 1 );
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             mbedtls_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         mbedtls_printf( "\n" );
 
-    return( 0 );
+    return ( 0 );
 }
 
 #endif /* MBEDTLS_SELF_TEST */

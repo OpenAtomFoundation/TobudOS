@@ -28,13 +28,13 @@ extern "C" {
 
 /* OSC, OTA signal channel */
 typedef struct  {
-    void 					*mqtt;									//MQTT cient
+    void                    *mqtt;                                  //MQTT cient
 
-    const char 				*product_id;
-    const char 				*device_name;
+    const char              *product_id;
+    const char              *device_name;
 
-    char 					topic_upgrade[OTA_MAX_TOPIC_LEN];		//OTA MQTT Topic
-    OnOTAMessageCallback 	msg_callback;
+    char                    topic_upgrade[OTA_MAX_TOPIC_LEN];       //OTA MQTT Topic
+    OnOTAMessageCallback    msg_callback;
 
     void *context;
 } OTA_MQTT_Struct_t;
@@ -50,7 +50,7 @@ static int _otamqtt_gen_topic_name(char *buf, size_t bufLen, const char *OTATopi
 
     ret = HAL_Snprintf(buf, bufLen, "$ota/%s/%s/%s", OTATopicType, productId, deviceName);
 
-    if(ret >= bufLen) IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FAIL);
+    if (ret >= bufLen) IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FAIL);
 
     if (ret < 0) {
         Log_e("HAL_Snprintf failed");
@@ -80,8 +80,8 @@ static int _otamqtt_publish(OTA_MQTT_Struct_t *handle, const char *topicType, in
     /* inform OTA to topic: "/ota/device/progress/$(product_id)/$(device_name)" */
     ret = _otamqtt_gen_topic_name(topic_name, OTA_MAX_TOPIC_LEN, topicType, handle->product_id, handle->device_name);
     if (ret < 0) {
-       Log_e("generate topic name of info failed");
-       IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FAIL);
+        Log_e("generate topic name of info failed");
+        IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FAIL);
     }
 
     ret = IOT_MQTT_Publish(handle->mqtt, topic_name, &pub_params);
@@ -147,7 +147,7 @@ void *qcloud_osc_init(const char *productId, const char *deviceName, void *chann
 
 do_exit:
     if (NULL != h_osc) {
-         HAL_Free(h_osc);
+        HAL_Free(h_osc);
     }
 
     return NULL;
@@ -182,7 +182,7 @@ int qcloud_osc_report_upgrade_result(void *handle, const char *msg)
     return _otamqtt_publish(handle, "report", QOS1, msg);
 }
 
-#endif 
+#endif
 
 #ifdef __cplusplus
 }

@@ -25,7 +25,7 @@ extern "C" {
 
 
 /* IoT C-SDK version info */
-#define QCLOUD_IOT_DEVICE_SDK_VERSION                               "3.1.0"
+#define QCLOUD_IOT_DEVICE_SDK_VERSION                               "3.1.1"
 
 /**************** QCloud IoT C-SDK constants begin ************************/
 
@@ -36,22 +36,22 @@ extern "C" {
 #define MAX_SIZE_OF_PRODUCT_ID                                    	(10)
 
 /* MAX size of product secret */
-#define MAX_SIZE_OF_PRODUCT_SECRET                                    	(32)
+#define MAX_SIZE_OF_PRODUCT_SECRET                                  (32)
 
 /* MAX size of device name */
 #define MAX_SIZE_OF_DEVICE_NAME                                     (48)
 
 /* MAX size of device secret */
-#define MAX_SIZE_OF_DEVICE_SECRET                                     (64)
+#define MAX_SIZE_OF_DEVICE_SECRET                                   (64)
 
 /* MAX size of device cert file name */
 #define MAX_SIZE_OF_DEVICE_CERT_FILE_NAME                           (128)
 
 /* MAX size of device key file name */
-#define MAX_SIZE_OF_DEVICE_SECRET_FILE_NAME                            (128)
+#define MAX_SIZE_OF_DEVICE_SECRET_FILE_NAME                         (128)
 
 /* MAX num of subdevice */
-#define MAX_NUM_SUB_DEV                            (5)
+#define MAX_NUM_SUB_DEV                           					(50)
 
 /**************** QCloud IoT C-SDK constants end *************************/
 
@@ -76,7 +76,7 @@ typedef struct {
 typedef struct {
 	DeviceInfo gw_info;
 	DeviceInfo sub_dev_info[MAX_NUM_SUB_DEV];
-	unsigned int sub_dev_num;
+	int sub_dev_num;
 } GatewayDeviceInfo;
 #endif 
 
@@ -85,8 +85,10 @@ typedef struct {
 #include "qcloud_iot_export_error.h"
 #include "qcloud_iot_export_log.h"
 #include "qcloud_iot_export_mqtt.h"
-#include "qcloud_iot_export_ota.h"
 #include "qcloud_iot_export_data_template.h"
+#include "qcloud_iot_export_ota.h"
+#include "qcloud_iot_export_gateway.h"
+
 
 
 #ifdef __cplusplus

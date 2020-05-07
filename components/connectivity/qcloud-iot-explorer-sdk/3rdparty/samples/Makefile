@@ -39,9 +39,9 @@ ifeq ($(FEATURE_AUTH_MODE),CERT)
 CFLAGS += -DAUTH_MODE_CERT
 endif
 
-.PHONY: ota_mqtt_sample data_template_sample
+.PHONY: ota_mqtt_sample data_template_sample gateway_sample  mqtt_sample
 
-all: ota_mqtt_sample data_template_sample
+all: ota_mqtt_sample data_template_sample	gateway_sample	mqtt_sample
 
 
 ifneq (,$(filter -DOTA_COMM_ENABLED,$(CFLAGS)))
@@ -64,6 +64,28 @@ data_template_sample:
 	$(TOP_Q) \
 	mv $@ $(FINAL_DIR)/bin && \
 	mv light_$@ $(FINAL_DIR)/bin 
+endif
+
+ifneq (,$(filter -DMQTT_COMM_ENABLED,$(CFLAGS)))
+mqtt_sample:
+	$(TOP_Q) \
+	$(PLATFORM_CC) $(CFLAGS) $(SAMPLE_DIR)/mqtt/$@.c $(LDFLAGS) -o $@
+	
+	$(TOP_Q) \
+	$(PLATFORM_CC) $(CFLAGS) $(SAMPLE_DIR)/raw_data/*.c $(LDFLAGS) -o raw_data_$@
+	
+	$(TOP_Q) \
+	mv raw_data_$@ $(FINAL_DIR)/bin && \
+	mv $@ $(FINAL_DIR)/bin
+endif
+
+ifneq (,$(filter -DGATEWAY_ENABLED,$(CFLAGS)))
+gateway_sample:
+	$(TOP_Q) \
+	$(PLATFORM_CC) $(CFLAGS) $(SAMPLE_DIR)/gateway/*.c $(LDFLAGS) -o $@
+	
+	$(TOP_Q) \
+	mv $@ $(FINAL_DIR)/bin
 endif
 
 clean:

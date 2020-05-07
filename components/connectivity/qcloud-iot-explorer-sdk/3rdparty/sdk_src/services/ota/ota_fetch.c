@@ -41,30 +41,30 @@ typedef struct {
 
 } OTAHTTPStruct;
 
-static int is_begin_with(const char * str1,char *str2)
+#ifdef OTA_USE_HTTPS
+static int is_begin_with(const char * str1, char *str2)
 {
-    if(str1 == NULL || str2 == NULL)
+    if (str1 == NULL || str2 == NULL)
         return -1;
     int len1 = strlen(str1);
     int len2 = strlen(str2);
-    if((len1 < len2) || (len1 == 0 || len2 == 0))
+    if ((len1 < len2) || (len1 == 0 || len2 == 0))
         return -1;
     char *p = str2;
     int i = 0;
-    while(*p != '\0')
-    {
-        if(*p != str1[i])
-        return 0;
+    while (*p != '\0') {
+        if (*p != str1[i])
+            return 0;
         p++;
         i++;
     }
     return 1;
 }
-
+#endif
 
 static char sg_head_content[OTA_HTTP_HEAD_CONTENT_LEN];
 void *ofc_Init(const char *url, uint32_t offset, uint32_t size)
-{    
+{
     OTAHTTPStruct *h_odc;
 
     if (NULL == (h_odc = HAL_Malloc(sizeof(OTAHTTPStruct)))) {
@@ -73,14 +73,14 @@ void *ofc_Init(const char *url, uint32_t offset, uint32_t size)
     }
 
     memset(h_odc, 0, sizeof(OTAHTTPStruct));
-	memset(sg_head_content, 0, OTA_HTTP_HEAD_CONTENT_LEN);
-	HAL_Snprintf(sg_head_content, OTA_HTTP_HEAD_CONTENT_LEN,\
-					"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"\
-					"Accept-Encoding: gzip, deflate\r\n"\
-					"Range: bytes=%d-%d\r\n",
-					offset, size);
+    memset(sg_head_content, 0, OTA_HTTP_HEAD_CONTENT_LEN);
+    HAL_Snprintf(sg_head_content, OTA_HTTP_HEAD_CONTENT_LEN, \
+                 "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"\
+                 "Accept-Encoding: gzip, deflate\r\n"\
+                 "Range: bytes=%d-%d\r\n",
+                 offset, size);
 
-	Log_d("head_content:%s", sg_head_content);
+    Log_d("head_content:%s", sg_head_content);
     /* set http request-header parameter */
     h_odc->http.header = sg_head_content;
     h_odc->url = url;
@@ -97,11 +97,12 @@ int32_t qcloud_ofc_connect(void *handle)
     int port = 80;
     const char *ca_crt = NULL;
 
-    if (is_begin_with(h_odc->url, "https")) 
-    {
+#ifdef OTA_USE_HTTPS
+    if (is_begin_with(h_odc->url, "https")) {
         port = 443;
         ca_crt = iot_https_ca_get();
     }
+#endif
 
     int32_t rc = qcloud_http_client_common(&h_odc->http, h_odc->url, port, ca_crt, HTTP_GET, &h_odc->http_data);
 
@@ -119,18 +120,18 @@ int32_t qcloud_ofc_fetch(void *handle, char *buf, uint32_t bufLen, uint32_t time
     h_odc->http_data.response_buf = buf;
     h_odc->http_data.response_buf_len = bufLen;
     diff = h_odc->http_data.response_content_len - h_odc->http_data.retrieve_len;
-    
+
     int rc = qcloud_http_recv_data(&h_odc->http, timeout_s * 1000, &h_odc->http_data);
     if (QCLOUD_RET_SUCCESS != rc) {
         if (rc == QCLOUD_ERR_HTTP_NOT_FOUND)
             IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FETCH_NOT_EXIST);
-        
+
         if (rc == QCLOUD_ERR_HTTP_AUTH)
             IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FETCH_AUTH_FAIL);
-        
+
         if (rc == QCLOUD_ERR_HTTP_TIMEOUT)
             IOT_FUNC_EXIT_RC(IOT_OTA_ERR_FETCH_TIMEOUT);
-        
+
         IOT_FUNC_EXIT_RC(rc);
     }
 

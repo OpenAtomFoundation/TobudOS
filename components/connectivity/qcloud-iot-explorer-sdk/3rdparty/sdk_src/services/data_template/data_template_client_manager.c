@@ -46,8 +46,7 @@ static int _unsubscribe_template_downstream_topic(void* pClient)
     char downstream_topic[MAX_SIZE_OF_CLOUD_TOPIC] = {0};
     int size = HAL_Snprintf(downstream_topic, MAX_SIZE_OF_CLOUD_TOPIC, "$thing/down/property/%s/%s", iot_device_info_get()->product_id, iot_device_info_get()->device_name);
 
-    if (size < 0 || size > MAX_SIZE_OF_CLOUD_TOPIC - 1)
-    {
+    if (size < 0 || size > MAX_SIZE_OF_CLOUD_TOPIC - 1) {
         Log_e("buf size < topic length!");
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
@@ -63,14 +62,13 @@ static int _unsubscribe_template_downstream_topic(void* pClient)
 
 /**
 * @brief add request to data_template request wait for reply list
-*/ 
+*/
 static int _add_request_to_template_list(Qcloud_IoT_Template *pTemplate, const char *pClientToken, RequestParams *pParams)
 {
     IOT_FUNC_ENTRY;
 
     HAL_MutexLock(pTemplate->mutex);
-    if (pTemplate->inner_data.reply_list->len >= MAX_APPENDING_REQUEST_AT_ANY_GIVEN_TIME)
-    {
+    if (pTemplate->inner_data.reply_list->len >= MAX_APPENDING_REQUEST_AT_ANY_GIVEN_TIME) {
         HAL_MutexUnlock(pTemplate->mutex);
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MAX_APPENDING_REQUEST);
     }
@@ -112,20 +110,19 @@ static int _add_request_to_template_list(Qcloud_IoT_Template *pTemplate, const c
  * @param method                    method type
  * @param pJsonDoc                  JSON to publish
  * @return QCLOUD_RET_SUCCESS for success, or err code for failure
- */ 
+ */
 int _publish_to_template_upstream_topic(Qcloud_IoT_Template *pTemplate, Method method, char *pJsonDoc)
 {
     IOT_FUNC_ENTRY;
     int rc = QCLOUD_RET_SUCCESS;
 
     char topic[MAX_SIZE_OF_CLOUD_TOPIC] = {0};
-	int size;
-		
+    int size;
 
-	size = HAL_Snprintf(topic, MAX_SIZE_OF_CLOUD_TOPIC, "$thing/up/property/%s/%s", iot_device_info_get()->product_id, iot_device_info_get()->device_name);	
 
-	if (size < 0 || size > MAX_SIZE_OF_CLOUD_TOPIC - 1)
-    {
+    size = HAL_Snprintf(topic, MAX_SIZE_OF_CLOUD_TOPIC, "$thing/up/property/%s/%s", iot_device_info_get()->product_id, iot_device_info_get()->device_name);
+
+    if (size < 0 || size > MAX_SIZE_OF_CLOUD_TOPIC - 1) {
         Log_e("buf size < topic length!");
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
@@ -153,25 +150,25 @@ static int _set_template_json_type(char *pJsonDoc, size_t sizeOfBuffer, Method m
     POINTER_SANITY_CHECK(pJsonDoc, QCLOUD_ERR_INVAL);
     char *method_str = NULL;
     switch (method) {
-      case GET:
-        method_str = GET_STATUS;
-        break;
-      case REPORT:
-        method_str = REPORT_CMD;
-        break;
-      case RINFO:
-        method_str = INFO_CMD;
-		break;
-      case REPLY:
-        method_str = CONTROL_CMD_REPLY;
-        break;
-	  case CLEAR:
-        method_str = CLEAR_CONTROL;
-        break;
-      default:
-        Log_e("unexpected method!");
-        rc = QCLOUD_ERR_INVAL;
-        break;
+        case GET:
+            method_str = GET_STATUS;
+            break;
+        case REPORT:
+            method_str = REPORT_CMD;
+            break;
+        case RINFO:
+            method_str = INFO_CMD;
+            break;
+        case REPLY:
+            method_str = CONTROL_CMD_REPLY;
+            break;
+        case CLEAR:
+            method_str = CLEAR_CONTROL;
+            break;
+        default:
+            Log_e("unexpected method!");
+            rc = QCLOUD_ERR_INVAL;
+            break;
     }
     if (rc != QCLOUD_RET_SUCCESS)
         IOT_FUNC_EXIT_RC(rc);
@@ -242,8 +239,7 @@ static void _handle_template_expired_reply_callback(Qcloud_IoT_Template *pTempla
     if (NULL == request)
         IOT_FUNC_EXIT;
 
-    if (expired(&request->timer))
-    {
+    if (expired(&request->timer)) {
         if (request->callback != NULL) {
             request->callback(pTemplate, request->method, ACK_TIMEOUT, sg_template_cloud_rcv_buf, request);
         }
@@ -257,13 +253,13 @@ static void _handle_template_expired_reply_callback(Qcloud_IoT_Template *pTempla
 
 static void _set_control_clientToken(const char *pClientToken)
 {
-	memset(sg_template_clientToken, '\0', MAX_SIZE_OF_CLIENT_TOKEN);
-	strncpy(sg_template_clientToken, pClientToken, MAX_SIZE_OF_CLIENT_TOKEN);
+    memset(sg_template_clientToken, '\0', MAX_SIZE_OF_CLIENT_TOKEN);
+    strncpy(sg_template_clientToken, pClientToken, MAX_SIZE_OF_CLIENT_TOKEN);
 }
 
 char * get_control_clientToken(void)
 {
-	return sg_template_clientToken;
+    return sg_template_clientToken;
 }
 
 void qcloud_iot_template_reset(void *pClient)
@@ -277,20 +273,18 @@ void qcloud_iot_template_reset(void *pClient)
 
     _unsubscribe_template_downstream_topic(template_client->mqtt);
 
-    if (template_client->inner_data.reply_list)
-    {
+    if (template_client->inner_data.reply_list) {
         list_destroy(template_client->inner_data.reply_list);
     }
 
-	if (template_client->inner_data.event_list)
-    {
+    if (template_client->inner_data.event_list) {
         list_destroy(template_client->inner_data.event_list);
     }
 }
 
-int qcloud_iot_template_init(Qcloud_IoT_Template *pTemplate) 
+int qcloud_iot_template_init(Qcloud_IoT_Template *pTemplate)
 {
-	IOT_FUNC_ENTRY;
+    IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pTemplate, QCLOUD_ERR_INVAL);
 
@@ -299,46 +293,41 @@ int qcloud_iot_template_init(Qcloud_IoT_Template *pTemplate)
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
 
     pTemplate->inner_data.property_handle_list = list_new();
-    if (pTemplate->inner_data.property_handle_list)
-    {
+    if (pTemplate->inner_data.property_handle_list) {
         pTemplate->inner_data.property_handle_list->free = HAL_Free;
+    } else {
+        Log_e("no memory to allocate property_handle_list");
+        IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
-    else {
-    	Log_e("no memory to allocate property_handle_list");
-    	IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
+
+    pTemplate->inner_data.reply_list = list_new();
+    if (pTemplate->inner_data.reply_list) {
+        pTemplate->inner_data.reply_list->free = HAL_Free;
+    } else {
+        Log_e("no memory to allocate reply_list");
+        IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
 
-	pTemplate->inner_data.reply_list = list_new();
-	if (pTemplate->inner_data.reply_list)
-	{
-		pTemplate->inner_data.reply_list->free = HAL_Free;
-	} else {
-		Log_e("no memory to allocate reply_list");
-		IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
-	}
-		
-	pTemplate->inner_data.event_list = list_new();
-	if (pTemplate->inner_data.event_list)
-	{
-		pTemplate->inner_data.event_list->free = HAL_Free;
-	} else {
-		Log_e("no memory to allocate event_list");
-		IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
-	}
+    pTemplate->inner_data.event_list = list_new();
+    if (pTemplate->inner_data.event_list) {
+        pTemplate->inner_data.event_list->free = HAL_Free;
+    } else {
+        Log_e("no memory to allocate event_list");
+        IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
+    }
 
-	pTemplate->inner_data.action_handle_list = list_new();
-	if (pTemplate->inner_data.action_handle_list)
-	{
-		pTemplate->inner_data.action_handle_list->free = HAL_Free;
-	} else {
-		Log_e("no memory to allocate action_handle_list");
-		IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
-	}
+    pTemplate->inner_data.action_handle_list = list_new();
+    if (pTemplate->inner_data.action_handle_list) {
+        pTemplate->inner_data.action_handle_list->free = HAL_Free;
+    } else {
+        Log_e("no memory to allocate action_handle_list");
+        IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
+    }
 
-	IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
+    IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
 }
 
-void handle_template_expired_reply(Qcloud_IoT_Template *pTemplate) 
+void handle_template_expired_reply(Qcloud_IoT_Template *pTemplate)
 {
     IOT_FUNC_ENTRY;
 
@@ -410,11 +399,9 @@ static void _handle_control(Qcloud_IoT_Template *pTemplate, char* control_str)
             }
 
             if (property_handle->property != NULL) {
-                if (update_value_if_key_match(control_str, property_handle->property))
-                {
-                	
-                    if (property_handle->callback != NULL)
-                    {
+                if (update_value_if_key_match(control_str, property_handle->property)) {
+
+                    if (property_handle->callback != NULL) {
                         property_handle->callback(pTemplate, control_str, strlen(control_str), property_handle->property);
                     }
                     node = NULL;
@@ -439,42 +426,39 @@ static void _handle_template_reply_callback(Qcloud_IoT_Template *pTemplate, List
     if (NULL == request)
         IOT_FUNC_EXIT;
 
-    if (strcmp(request->client_token, pClientToken) == 0)
-    {
+    if (strcmp(request->client_token, pClientToken) == 0) {
         ReplyAck status = ACK_NONE;
 
         // check operation success or not according to code field of reply message
         int32_t reply_code = 0;
-        
+
         bool parse_success = parse_code_return(sg_template_cloud_rcv_buf, &reply_code);
         if (parse_success) {
-        	if (reply_code == 0) {
-				status = ACK_ACCEPTED;
-			} else {
-				status = ACK_REJECTED;
-			}
+            if (reply_code == 0) {
+                status = ACK_ACCEPTED;
+            } else {
+                status = ACK_REJECTED;
+            }
 
-			if (strcmp(pType, GET_STATUS_REPLY) == 0 && status == ACK_ACCEPTED)
-			{
-				char* control_str = NULL;
-				if (parse_template_get_control(sg_template_cloud_rcv_buf, &control_str)) {
-					Log_d("control data from get_status_reply");
-					_set_control_clientToken(pClientToken);
-					_handle_control(pTemplate, control_str); 
-					HAL_Free(control_str);
-					*((ReplyAck *)request->user_context) = ACK_ACCEPTED; //prepare for clear_control
-				}
-			}
-		
-			
-			if (request->callback != NULL) {
-				request->callback(pTemplate, request->method, status, sg_template_cloud_rcv_buf, request);
-			}
+            if (strcmp(pType, GET_STATUS_REPLY) == 0 && status == ACK_ACCEPTED) {
+                char* control_str = NULL;
+                if (parse_template_get_control(sg_template_cloud_rcv_buf, &control_str)) {
+                    Log_d("control data from get_status_reply");
+                    _set_control_clientToken(pClientToken);
+                    _handle_control(pTemplate, control_str);
+                    HAL_Free(control_str);
+                    *((ReplyAck *)request->user_context) = ACK_ACCEPTED; //prepare for clear_control
+                }
+            }
+
+
+            if (request->callback != NULL) {
+                request->callback(pTemplate, request->method, status, sg_template_cloud_rcv_buf, request);
+            }
+        } else {
+            Log_e("parse template operation result code failed.");
         }
-        else {
-        	Log_e("parse template operation result code failed.");
-        }
-        
+
         list_remove(list, *node);
         *node = NULL;
 
@@ -490,8 +474,10 @@ static void _on_template_downstream_topic_handler(void *pClient, MQTTMessage *me
     POINTER_SANITY_CHECK_RTN(pClient);
     POINTER_SANITY_CHECK_RTN(message);
 
-    Qcloud_IoT_Client *mqtt_client = (Qcloud_IoT_Client *)pClient;
-    Qcloud_IoT_Template *template_client = (Qcloud_IoT_Template*)mqtt_client->event_handle.context;
+//    Qcloud_IoT_Client *mqtt_client = (Qcloud_IoT_Client *)pClient;
+//    Qcloud_IoT_Template *template_client = (Qcloud_IoT_Template*)mqtt_client->event_handle.context;
+    Qcloud_IoT_Template *template_client = (Qcloud_IoT_Template*)pUserdata;
+
 
     const char *topic = message->ptopic;
     size_t topic_len = message->topic_len;
@@ -508,38 +494,37 @@ static void _on_template_downstream_topic_handler(void *pClient, MQTTMessage *me
     }
 
     int cloud_rcv_len = min(CLOUD_IOT_JSON_RX_BUF_LEN - 1, message->payload_len);
-	memset(sg_template_cloud_rcv_buf, 0, sizeof(sg_template_cloud_rcv_buf));
+    memset(sg_template_cloud_rcv_buf, 0, sizeof(sg_template_cloud_rcv_buf));
     memcpy(sg_template_cloud_rcv_buf, message->payload, cloud_rcv_len + 1);
     sg_template_cloud_rcv_buf[cloud_rcv_len] = '\0';    // jsmn_parse relies on a string
-	//Log_d("recv:%s", sg_template_cloud_rcv_buf);
+    //Log_d("recv:%s", sg_template_cloud_rcv_buf);
 
-	//parse the message type from topic $thing/down/property 
-    if (!parse_template_method_type(sg_template_cloud_rcv_buf, &type_str))
-    {
+    //parse the message type from topic $thing/down/property
+    if (!parse_template_method_type(sg_template_cloud_rcv_buf, &type_str)) {
         Log_e("Fail to parse method!");
         goto End;
     }
 
     if (!parse_client_token(sg_template_cloud_rcv_buf, &client_token)) {
-		Log_e("Fail to parse client token! Json=%s", sg_template_cloud_rcv_buf);
-		goto End;
+        Log_e("Fail to parse client token! Json=%s", sg_template_cloud_rcv_buf);
+        goto End;
     }
-	
-	//handle control message
-    if (!strcmp(type_str, CONTROL_CMD)) {
-	    HAL_MutexLock(template_client->mutex);
-	    char* control_str = NULL;
-	    if (parse_template_cmd_control(sg_template_cloud_rcv_buf, &control_str)) {
-			Log_d("control_str:%s", control_str);
-			_set_control_clientToken(client_token);
-	    	_handle_control(template_client, control_str);
-	    	HAL_Free(control_str);
-	    }
 
-	    HAL_MutexUnlock(template_client->mutex);
-	    goto End;
-	}
-   	
+    //handle control message
+    if (!strcmp(type_str, CONTROL_CMD)) {
+        HAL_MutexLock(template_client->mutex);
+        char* control_str = NULL;
+        if (parse_template_cmd_control(sg_template_cloud_rcv_buf, &control_str)) {
+            Log_d("control_str:%s", control_str);
+            _set_control_clientToken(client_token);
+            _handle_control(template_client, control_str);
+            HAL_Free(control_str);
+        }
+
+        HAL_MutexUnlock(template_client->mutex);
+        goto End;
+    }
+
     if (template_client != NULL)
         _traverse_template_list(template_client, template_client->inner_data.reply_list, client_token, type_str, _handle_template_reply_callback);
 
@@ -555,16 +540,15 @@ int subscribe_template_downstream_topic(Qcloud_IoT_Template *pTemplate)
     IOT_FUNC_ENTRY;
 
     int rc;
-	int size;
-	
+    int size;
+
     if (pTemplate->inner_data.downstream_topic == NULL) {
         char *downstream_topic = (char *)HAL_Malloc(MAX_SIZE_OF_CLOUD_TOPIC * sizeof(char));
         if (downstream_topic == NULL) IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
 
         memset(downstream_topic, 0x0, MAX_SIZE_OF_CLOUD_TOPIC);
-		size = HAL_Snprintf(downstream_topic, MAX_SIZE_OF_CLOUD_TOPIC, "$thing/down/property/%s/%s", iot_device_info_get()->product_id, iot_device_info_get()->device_name);	
-		if (size < 0 || size > MAX_SIZE_OF_CLOUD_TOPIC - 1)
-        {
+        size = HAL_Snprintf(downstream_topic, MAX_SIZE_OF_CLOUD_TOPIC, "$thing/down/property/%s/%s", iot_device_info_get()->product_id, iot_device_info_get()->device_name);
+        if (size < 0 || size > MAX_SIZE_OF_CLOUD_TOPIC - 1) {
             Log_e("buf size < topic length!");
             HAL_Free(downstream_topic);
             IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
@@ -575,6 +559,7 @@ int subscribe_template_downstream_topic(Qcloud_IoT_Template *pTemplate)
     SubscribeParams subscribe_params = DEFAULT_SUB_PARAMS;
     subscribe_params.on_message_handler = _on_template_downstream_topic_handler;
     subscribe_params.qos = QOS0;
+    subscribe_params.user_data = pTemplate;
 
     rc = IOT_MQTT_Subscribe(pTemplate->mqtt, pTemplate->inner_data.downstream_topic, &subscribe_params);
     if (rc < 0) {

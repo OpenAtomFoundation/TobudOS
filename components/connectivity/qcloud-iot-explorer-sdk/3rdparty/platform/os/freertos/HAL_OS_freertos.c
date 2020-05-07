@@ -31,14 +31,14 @@
 //TODO platform dependant
 void HAL_SleepMs(_IN_ uint32_t ms)
 {
-  TickType_t ticks = ms / portTICK_PERIOD_MS;
+    TickType_t ticks = ms / portTICK_PERIOD_MS;
 
-  vTaskDelay(ticks ? ticks : 1);          /* Minimum delay = 1 tick */
+    vTaskDelay(ticks ? ticks : 1);          /* Minimum delay = 1 tick */
 
-  return ;
+    return ;
 }
 
-	
+
 void HAL_Printf(_IN_ const char *fmt, ...)
 {
     va_list args;
@@ -70,12 +70,12 @@ int HAL_Vsnprintf(_IN_ char *str, _IN_ const int len, _IN_ const char *format, v
 
 void *HAL_Malloc(_IN_ uint32_t size)
 {
-	return pvPortMalloc( size);
+    return pvPortMalloc( size);
 }
 
 void HAL_Free(_IN_ void *ptr)
 {
-	vPortFree(ptr);
+    vPortFree(ptr);
 }
 
 
@@ -106,7 +106,7 @@ void HAL_MutexLock(_IN_ void *mutex)
         HAL_Printf("%s: invalid mutex\n", __FUNCTION__);
         return ;
     }
-    
+
     if (xSemaphoreTake(mutex, portMAX_DELAY) != pdTRUE) {
         HAL_Printf("%s: xSemaphoreTake failed\n", __FUNCTION__);
         return ;
@@ -119,12 +119,12 @@ int HAL_MutexTryLock(_IN_ void *mutex)
         HAL_Printf("%s: invalid mutex\n", __FUNCTION__);
         return -1;
     }
-    
+
     if (xSemaphoreTake(mutex, 0) != pdTRUE) {
         HAL_Printf("%s: xSemaphoreTake failed\n", __FUNCTION__);
         return -1;
     }
-    
+
     return 0;
 }
 
@@ -147,55 +147,53 @@ void HAL_MutexUnlock(_IN_ void *mutex)
 /*
 * return void* threadId
 */
-void * HAL_ThreadCreate(uint16_t stack_size, int priority, char * taskname,void *(*fn)(void*), void* arg)
+void * HAL_ThreadCreate(uint16_t stack_size, int priority, char * taskname, void *(*fn)(void*), void* arg)
 {
-	osThreadId thread_t = (osThreadId)HAL_Malloc(sizeof(osThreadId));
+    osThreadId thread_t = (osThreadId)HAL_Malloc(sizeof(osThreadId));
 
-	osThreadDef(taskname, (os_pthread)fn, (osPriority)priority, 0, stack_size);
-	thread_t = osThreadCreate(osThread(taskname), arg);
-	if(NULL == thread_t){
-		HAL_Printf("create thread fail\n\r");
-	}
+    osThreadDef(taskname, (os_pthread)fn, (osPriority)priority, 0, stack_size);
+    thread_t = osThreadCreate(osThread(taskname), arg);
+    if (NULL == thread_t) {
+        HAL_Printf("create thread fail\n\r");
+    }
 
-	return (void *)thread_t;
+    return (void *)thread_t;
 }
 
 int HAL_ThreadDestroy(void* threadId)
 {
-	return osThreadTerminate(threadId);
+    return osThreadTerminate(threadId);
 }
 
 void *HAL_SemaphoreCreate(void)
 {
-	return (void *)osSemaphoreCreate(NULL, 1);
+    return (void *)osSemaphoreCreate(NULL, 1);
 }
 
 void HAL_SemaphoreDestroy(void *sem)
 {
-	osStatus ret;
-	
-	ret = osSemaphoreDelete ((osSemaphoreId)sem);
-	if(osOK != ret)
-	{
-		HAL_Printf("HAL_SemaphoreDestroy err, err:%d\n\r",ret);
-	}
+    osStatus ret;
+
+    ret = osSemaphoreDelete ((osSemaphoreId)sem);
+    if (osOK != ret) {
+        HAL_Printf("HAL_SemaphoreDestroy err, err:%d\n\r", ret);
+    }
 }
 
 void HAL_SemaphorePost(void *sem)
 {
-	osStatus ret;
-	
-	ret = osSemaphoreRelease ((osSemaphoreId) sem);
+    osStatus ret;
 
-	if(osOK != ret)
-	{
-		HAL_Printf("HAL_SemaphorePost err, err:%d\n\r",ret);
-	}
+    ret = osSemaphoreRelease ((osSemaphoreId) sem);
+
+    if (osOK != ret) {
+        HAL_Printf("HAL_SemaphorePost err, err:%d\n\r", ret);
+    }
 }
 
 int HAL_SemaphoreWait(void *sem, uint32_t timeout_ms)
 {
-	return osSemaphoreWait ((osSemaphoreId)sem, timeout_ms);
+    return osSemaphoreWait ((osSemaphoreId)sem, timeout_ms);
 
 }
 #endif
