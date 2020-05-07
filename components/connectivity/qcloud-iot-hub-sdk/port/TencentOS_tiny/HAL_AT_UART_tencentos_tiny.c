@@ -15,21 +15,19 @@
  * limitations under the License.
  *
  */
-#include "qcloud_iot_import.h"
 #include "qcloud_iot_export.h"
+#include "qcloud_iot_import.h"
 
 #ifdef AT_TCP_ENABLED
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <string.h>
 
-#include "utils_ringbuff.h"
 #include "at_client.h"
-
-
 #include "stm32l4xx_hal.h"
+#include "utils_ringbuff.h"
 
 #define HAL_AT_UART_IRQHandler       USART1_IRQHandler
 extern  UART_HandleTypeDef 			 huart1;

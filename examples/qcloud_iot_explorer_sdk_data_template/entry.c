@@ -39,7 +39,7 @@ void application_entry(void *arg)
     data_template_light_thread();
 
     while (1) {
-        printf("This is a tencent cloud sdk data template demo!\r\n");
+        printf("This is a qcloud explorer sdk data template demo!\r\n");
         tos_task_delay(1000);
     }
 }

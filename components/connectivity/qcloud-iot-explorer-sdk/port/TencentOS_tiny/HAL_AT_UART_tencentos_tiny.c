@@ -38,8 +38,6 @@ static  UART_HandleTypeDef          *pAtUart = &huart1;
 extern void AT_Uart_Init(void);
 extern void at_client_uart_rx_isr_cb(uint8_t *pdata, uint8_t len);
 
-
-#include "board.h"
 /**
 * @brief This function handles AT UART global interrupt,push recv char to ringbuff.
 */
@@ -51,7 +49,6 @@ void HAL_AT_UART_IRQHandler(void)
         ch = (uint8_t) READ_REG(pAtUart->Instance->RDR)&0xFF;	
         /*this callback for at_client*/
         at_client_uart_rx_isr_cb(&ch, 1);
-        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     }
     __HAL_UART_CLEAR_PEFLAG(pAtUart);
 }

@@ -20,7 +20,7 @@
 extern "C" {
 #endif
 
-#include <sys/types.h>
+// #include <sys/types.h>
 #include <stdint.h>
 
 #include "qcloud_iot_export_ota.h"

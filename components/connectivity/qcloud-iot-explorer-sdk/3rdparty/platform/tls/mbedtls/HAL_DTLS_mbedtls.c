@@ -56,12 +56,16 @@ typedef struct {
     mbedtls_ctr_drbg_context     ctr_drbg;
     mbedtls_ssl_context          ssl;
     mbedtls_ssl_config           ssl_conf;
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt             ca_cert;
     mbedtls_x509_crt             client_cert;
+#endif
     mbedtls_pk_context           private_key;
 
     mbedtls_timing_delay_context    timer;
+#if 0
     mbedtls_ssl_cookie_ctx          cookie_ctx;
+#endif
 } DTLSDataParams;
 
 /**
@@ -70,14 +74,18 @@ typedef struct {
 static void _free_mebeddtls(DTLSDataParams *pParams)
 {
     mbedtls_net_free(&(pParams->socket_fd));
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt_free(&(pParams->client_cert));
     mbedtls_x509_crt_free(&(pParams->ca_cert));
     mbedtls_pk_free(&(pParams->private_key));
+#endif
     mbedtls_ssl_free(&(pParams->ssl));
     mbedtls_ssl_config_free(&(pParams->ssl_conf));
     mbedtls_ctr_drbg_free(&(pParams->ctr_drbg));
     mbedtls_entropy_free(&(pParams->entropy));
+#if 0
     mbedtls_ssl_cookie_free(&(pParams->cookie_ctx));
+#endif
 
     HAL_Free(pParams);
 }
@@ -100,9 +108,11 @@ static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *
     mbedtls_net_init( &(pDataParams->socket_fd) );
     mbedtls_ssl_init( &(pDataParams->ssl) );
     mbedtls_ssl_config_init( &(pDataParams->ssl_conf) );
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt_init( &(pDataParams->ca_cert) );
     mbedtls_x509_crt_init(&(pDataParams->client_cert));
     mbedtls_pk_init(&(pDataParams->private_key));
+#endif
     mbedtls_ctr_drbg_init( &(pDataParams->ctr_drbg) );
     mbedtls_entropy_init( &(pDataParams->entropy) );
 
@@ -114,26 +124,32 @@ static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *
 
     mbedtls_ssl_conf_authmode(&pDataParams->ssl_conf, MBEDTLS_SSL_VERIFY_NONE );
 
-    if (pConnectParams->ca_crt != NULL) {
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
+    if (pConnectParams->ca_crt != NULL)
+    {
         if ((ret = mbedtls_x509_crt_parse(&(pDataParams->ca_cert), (const unsigned char *)pConnectParams->ca_crt,
                                           (pConnectParams->ca_crt_len + 1)))) {
             Log_e("parse ca crt failed returned -0x%04x", -ret);
             return QCLOUD_ERR_SSL_CERT;
         }
     }
+#endif
 
 #ifdef AUTH_MODE_CERT
     if (pConnectParams->cert_file != NULL && pConnectParams->key_file != NULL) {
-        if ((ret = mbedtls_x509_crt_parse_file(&(pDataParams->client_cert), pConnectParams->cert_file)) != 0) {
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
+            if ((ret = mbedtls_x509_crt_parse_file(&(pDataParams->client_cert), pConnectParams->cert_file)) != 0) {
             Log_e("load client cert file failed returned -0x%x", ret);
             return QCLOUD_ERR_SSL_CERT;
         }
+#endif
 
         if ((ret = mbedtls_pk_parse_keyfile(&(pDataParams->private_key), pConnectParams->key_file, "")) != 0) {
             Log_e("load client key file failed returned -0x%x", ret);
             return QCLOUD_ERR_SSL_CERT;
         }
 
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
         if (0 == ret) {
             mbedtls_ssl_conf_ca_chain(&(pDataParams->ssl_conf), &(pDataParams->ca_cert), NULL);
             if ((ret = mbedtls_ssl_conf_own_cert(&(pDataParams->ssl_conf), &(pDataParams->client_cert), &(pDataParams->private_key))) != 0) {
@@ -141,6 +157,7 @@ static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *
                 return QCLOUD_ERR_SSL_CERT;
             }
         }
+#endif
     } else {
         Log_d("cert_file/key_file is empty!|cert_file=%s|key_file=%s", pConnectParams->cert_file, pConnectParams->key_file);
     }
@@ -188,10 +205,12 @@ int _mbedtls_udp_connect(mbedtls_net_context *socket_fd, const char *host, int p
         }
     }
 
+#if 0
     if ((ret = mbedtls_net_set_block(socket_fd)) != 0) {
         Log_e("set block faliled returned -0x%04x", -ret);
         return QCLOUD_ERR_TCP_CONNECT;
     }
+#endif
 
     return QCLOUD_RET_SUCCESS;
 }
@@ -223,12 +242,14 @@ uintptr_t HAL_DTLS_Connect(DTLSConnectParams *pConnectParams, const char *host, 
     mbedtls_ssl_conf_rng(&pDataParams->ssl_conf, mbedtls_ctr_drbg_random, &pDataParams->ctr_drbg);
     mbedtls_ssl_conf_dbg(&pDataParams->ssl_conf, _dtls_debug, NULL);
 
+#if 0
     if ((ret = mbedtls_ssl_cookie_setup(&pDataParams->cookie_ctx, mbedtls_ctr_drbg_random, &pDataParams->ctr_drbg)) != 0) {
         Log_e("mbedtls_ssl_cookie_setup result 0x%04x", ret);
         goto error;
     }
 
     mbedtls_ssl_conf_dtls_cookies(&pDataParams->ssl_conf, mbedtls_ssl_cookie_write, mbedtls_ssl_cookie_check, &pDataParams->cookie_ctx);
+#endif
 
 #ifndef AUTH_MODE_CERT
     mbedtls_ssl_conf_ciphersuites(&(pDataParams->ssl_conf), ciphersuites);
@@ -255,23 +276,27 @@ uintptr_t HAL_DTLS_Connect(DTLSConnectParams *pConnectParams, const char *host, 
                                  mbedtls_timing_get_delay);
     }
 
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
     if ((ret = mbedtls_ssl_set_hostname(&(pDataParams->ssl), host)) != 0) {
-        Log_e("mbedtls_ssl_set_hostname failed returned -0x%x", -ret);
-        goto error;
-    }
+		Log_e("mbedtls_ssl_set_hostname failed returned -0x%x", -ret);
+		goto error;
+	}
+#endif
 
     mbedtls_ssl_set_bio(&(pDataParams->ssl), (void *)&pDataParams->socket_fd, mbedtls_net_send, mbedtls_net_recv,
                         mbedtls_net_recv_timeout);
 
-    while ((ret = mbedtls_ssl_handshake(&(pDataParams->ssl))) != 0) {
-        if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-            Log_e("mbedtls_ssl_handshake failed returned -0x%x", -ret);
-            if (ret == MBEDTLS_ERR_X509_CERT_VERIFY_FAILED) {
-                Log_e("Unable to verify the server's certificate");
-            }
-            goto error;
-        }
-    }
+	while ((ret = mbedtls_ssl_handshake(&(pDataParams->ssl))) != 0) {
+		if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
+			Log_e("mbedtls_ssl_handshake failed returned -0x%x", -ret);
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
+			if (ret == MBEDTLS_ERR_X509_CERT_VERIFY_FAILED) {
+				Log_e("Unable to verify the server's certificate");
+			}
+#endif
+			goto error;
+		}
+	}
 
     if ((ret = mbedtls_ssl_get_verify_result(&(pDataParams->ssl))) != 0) {
         Log_e("mbedtls_ssl_get_verify_result failed returned -0x%x", -ret);
@@ -299,14 +324,18 @@ void HAL_DTLS_Disconnect(uintptr_t handle)
     } while (ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE);
 
     mbedtls_net_free(&(pParams->socket_fd));
+#ifdef MBEDTLS_X509_CRT_PARSE_C
     mbedtls_x509_crt_free(&(pParams->client_cert));
     mbedtls_x509_crt_free(&(pParams->ca_cert));
     mbedtls_pk_free(&(pParams->private_key));
+#endif
     mbedtls_ssl_free(&(pParams->ssl));
     mbedtls_ssl_config_free(&(pParams->ssl_conf));
     mbedtls_ctr_drbg_free(&(pParams->ctr_drbg));
     mbedtls_entropy_free(&(pParams->entropy));
+#if 0
     mbedtls_ssl_cookie_free(&(pParams->cookie_ctx));
+#endif
 
     HAL_Free((void *)handle);
 }

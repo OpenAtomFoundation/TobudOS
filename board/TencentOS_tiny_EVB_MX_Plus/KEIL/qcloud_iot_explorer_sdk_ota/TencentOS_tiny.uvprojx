@@ -453,24 +453,14 @@
           <GroupName>examples</GroupName>
           <Files>
             <File>
-              <FileName>action_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\action_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_template_sample.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\data_template_sample.c</FilePath>
-            </File>
-            <File>
-              <FileName>events_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\events_config.c</FilePath>
-            </File>
-            <File>
               <FileName>entry.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\entry.c</FilePath>
+              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_ota\entry.c</FilePath>
+            </File>
+            <File>
+              <FileName>ota_mqtt_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_ota\ota_mqtt_sample.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1365,41 +1355,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>qcloud/services/data_template</GroupName>
-          <Files>
-            <File>
-              <FileName>data_template_aciton.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\data_template\data_template_aciton.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_template_client.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\data_template\data_template_client.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_template_client_common.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\data_template\data_template_client_common.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_template_client_json.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\data_template\data_template_client_json.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_template_client_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\data_template\data_template_client_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>data_template_event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\data_template\data_template_event.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>qcloud/utils</GroupName>
           <Files>
             <File>
@@ -1506,6 +1461,41 @@
               <FileName>HAL_TLS_mbedtls.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\platform\tls\mbedtls\HAL_TLS_mbedtls.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>qcloud/services/ota</GroupName>
+          <Files>
+            <File>
+              <FileName>ota_client.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\ota\ota_client.c</FilePath>
+            </File>
+            <File>
+              <FileName>ota_fetch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\ota\ota_fetch.c</FilePath>
+            </File>
+            <File>
+              <FileName>ota_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\ota\ota_lib.c</FilePath>
+            </File>
+            <File>
+              <FileName>ota_mqtt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\services\ota\ota_mqtt.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>qcloud/protocol/http</GroupName>
+          <Files>
+            <File>
+              <FileName>utils_httpc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-explorer-sdk\3rdparty\sdk_src\protocol\http\utils_httpc.c</FilePath>
             </File>
           </Files>
         </Group>
