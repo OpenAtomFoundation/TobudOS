@@ -1,4 +1,3 @@
-# �������ã�������Ҫ�����Դ�ļ�
 
 # UTILS
 file(GLOB src_utils	${CMAKE_CURRENT_SOURCE_DIR}/utils/*.c)
@@ -10,6 +9,12 @@ list(APPEND src_sdk ${src_mqtt})
 
 file(GLOB src_data_template ${CMAKE_CURRENT_SOURCE_DIR}/services/data_template/*.c)
 list(APPEND src_sdk ${src_data_template})
+
+# gateway
+if(${FEATURE_GATEWAY_ENABLED} STREQUAL "ON")
+	file(GLOB src_gateway ${CMAKE_CURRENT_SOURCE_DIR}/services/gateway/*.c)
+	list(APPEND src_sdk ${src_gateway})
+endif()
 
 # ota mqtt
 if(${FEATURE_OTA_COMM_ENABLED} STREQUAL "ON")
@@ -52,7 +57,7 @@ file(GLOB src_network ${CMAKE_CURRENT_SOURCE_DIR}/network/*.c)
 list(APPEND src_sdk ${src_network})
 
 
-# ���ɿ⣬��ȡԴ��
+# code output
 if(${EXTRACT_SRC} STREQUAL  "ON")
 	file(COPY ${src_sdk} DESTINATION ${PROJECT_SOURCE_DIR}/output/qcloud_iot_c_sdk/sdk_src/)
 endif()

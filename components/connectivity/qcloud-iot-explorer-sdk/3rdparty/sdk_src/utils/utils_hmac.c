@@ -26,13 +26,13 @@
 
 void utils_hmac_md5(const char *msg, int msg_len, char *digest, const char *key, int key_len)
 {
-    if((NULL == msg) || (NULL == digest) || (NULL == key)) {
+    if ((NULL == msg) || (NULL == digest) || (NULL == key)) {
         Log_e("parameter is Null,failed!");
         return;
     }
 
-    if(key_len > KEY_IOPAD_SIZE) {
-        Log_e("key_len > size(%d) of array",KEY_IOPAD_SIZE);
+    if (key_len > KEY_IOPAD_SIZE) {
+        Log_e("key_len > size(%d) of array", KEY_IOPAD_SIZE);
         return;
     }
 
@@ -76,13 +76,13 @@ void utils_hmac_md5(const char *msg, int msg_len, char *digest, const char *key,
 
 void utils_hmac_sha1(const char *msg, int msg_len, char *digest, const char *key, int key_len)
 {
-    if((NULL == msg) || (NULL == digest) || (NULL == key)) {
+    if ((NULL == msg) || (NULL == digest) || (NULL == key)) {
         Log_e("parameter is Null,failed!");
         return;
     }
 
-    if(key_len > KEY_IOPAD_SIZE) {
-        Log_e("key_len > size(%d) of array",KEY_IOPAD_SIZE);
+    if (key_len > KEY_IOPAD_SIZE) {
+        Log_e("key_len > size(%d) of array", KEY_IOPAD_SIZE);
         return;
     }
 

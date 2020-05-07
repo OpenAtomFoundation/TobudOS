@@ -29,7 +29,7 @@ static char *level_str[] = {
     "DIS", "ERR", "WRN", "INF", "DBG"
 };
 
-static LogMessageHandler sg_log_message_handler= NULL;
+static LogMessageHandler sg_log_message_handler = NULL;
 
 LOG_LEVEL g_log_print_level = eLOG_INFO;
 
@@ -46,35 +46,37 @@ static const char *_get_filename(const char *p)
 #else
     char ch = '/';
 #endif
-    const char *q = strrchr(p,ch);
-    if(q == NULL)
-    {
+    const char *q = strrchr(p, ch);
+    if (q == NULL) {
         q = p;
-    }
-    else
-    {
+    } else {
         q++;
     }
     return q;
 }
 
-void IOT_Log_Set_Level(LOG_LEVEL logLevel) {
+void IOT_Log_Set_Level(LOG_LEVEL logLevel)
+{
     g_log_print_level = logLevel;
 }
 
-LOG_LEVEL IOT_Log_Get_Level() {
+LOG_LEVEL IOT_Log_Get_Level()
+{
     return g_log_print_level;
 }
 
-void IOT_Log_Set_MessageHandler(LogMessageHandler handler) {
-	sg_log_message_handler = handler;
+void IOT_Log_Set_MessageHandler(LogMessageHandler handler)
+{
+    sg_log_message_handler = handler;
 }
 
-void IOT_Log_Set_Upload_Level(LOG_LEVEL logLevel) {
+void IOT_Log_Set_Upload_Level(LOG_LEVEL logLevel)
+{
     g_log_upload_level = logLevel;
 }
 
-LOG_LEVEL IOT_Log_Get_Upload_Level() {
+LOG_LEVEL IOT_Log_Get_Upload_Level()
+{
     return g_log_upload_level;
 }
 
@@ -91,7 +93,7 @@ void IOT_Log_Fini_Uploader(void)
 {
 #ifdef LOG_UPLOAD
     fini_log_uploader();
-	return;
+    return;
 #else
     return ;
 #endif
@@ -108,16 +110,16 @@ int IOT_Log_Upload(bool force_upload)
 
 void IOT_Log_Gen(const char *file, const char *func, const int line, const int level, const char *fmt, ...)
 {
-	if (level > g_log_print_level && level > g_log_upload_level) {
-		return;
-	}
+    if (level > g_log_print_level && level > g_log_upload_level) {
+        return;
+    }
 
     /* format log content */
-	const char *file_name = _get_filename(file);
+    const char *file_name = _get_filename(file);
 
-	char sg_text_buf[MAX_LOG_MSG_LEN + 1];
-	char		*tmp_buf = sg_text_buf;
-	char        *o = tmp_buf;
+    char sg_text_buf[MAX_LOG_MSG_LEN + 1];
+    char        *tmp_buf = sg_text_buf;
+    char        *o = tmp_buf;
     memset(tmp_buf, 0, sizeof(sg_text_buf));
 
     o += HAL_Snprintf(o, sizeof(sg_text_buf), "%s|%s|%s|%s(%d): ", level_str[level], HAL_Timer_current(), file_name, func, line);
@@ -138,9 +140,9 @@ void IOT_Log_Gen(const char *file, const char *func, const int line, const int l
 
     if (level <= g_log_print_level) {
         /* customer defined log print handler */
-    	if (sg_log_message_handler != NULL && sg_log_message_handler(tmp_buf)) {
-    		return;
-    	}
+        if (sg_log_message_handler != NULL && sg_log_message_handler(tmp_buf)) {
+            return;
+        }
 
         /* default log handler: print to console */
         HAL_Printf("%s", tmp_buf);

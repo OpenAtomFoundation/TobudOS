@@ -35,7 +35,7 @@
 * @brief This function handles AT UART global interrupt,push recv char to ringbuff.
 */
 void HAL_AT_UART_IRQHandler(void)
-{ 
+{
 
 }
 
@@ -48,17 +48,17 @@ void HAL_AT_UART_IRQHandler(void)
  */
 int HAL_AT_Uart_Send(void *data, uint32_t size)
 {
-	return 0;
+    return 0;
 }
 
 int HAL_AT_Uart_Init(void)
 {
-	 return QCLOUD_RET_SUCCESS;
+    return QCLOUD_RET_SUCCESS;
 }
 
 int HAL_AT_Uart_Deinit(void)
 {
-	return QCLOUD_RET_SUCCESS;
+    return QCLOUD_RET_SUCCESS;
 }
 
 #endif

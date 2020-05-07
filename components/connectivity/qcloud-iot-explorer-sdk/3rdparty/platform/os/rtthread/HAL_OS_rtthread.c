@@ -28,8 +28,8 @@ static uint16_t g_mutex_count = 0;
 void HAL_Printf(_IN_ const char *fmt, ...)
 {
     va_list args;
-	char log_buf[HAL_OS_LOG_MAXLEN];
-    
+    char log_buf[HAL_OS_LOG_MAXLEN];
+
     va_start(args, fmt);
     rt_vsnprintf(log_buf, HAL_OS_LOG_MAXLEN, fmt, args);
     va_end(args);
@@ -58,14 +58,14 @@ int HAL_Vsnprintf(_IN_ char *str, _IN_ const int len, _IN_ const char *format, v
 
 void *HAL_MutexCreate(void)
 {
-	rt_mutex_t mutex;
-	char mutexName[RT_NAME_MAX];
+    rt_mutex_t mutex;
+    char mutexName[RT_NAME_MAX];
 
-	memset(mutexName, 0, RT_NAME_MAX);
-	HAL_Snprintf(mutexName, RT_NAME_MAX, "tmutex_%d", g_mutex_count++);	
-	mutex = rt_mutex_create(mutexName, RT_IPC_FLAG_FIFO);
+    memset(mutexName, 0, RT_NAME_MAX);
+    HAL_Snprintf(mutexName, RT_NAME_MAX, "tmutex_%d", g_mutex_count++);
+    mutex = rt_mutex_create(mutexName, RT_IPC_FLAG_FIFO);
     if (NULL == mutex) {
-		HAL_Printf("create mutex failed");
+        HAL_Printf("create mutex failed");
 
     }
 
@@ -76,24 +76,22 @@ void *HAL_MutexCreate(void)
 
 void HAL_MutexDestroy(_IN_ void *mutex)
 {
-	int err_num;
+    int err_num;
 
-	err_num = rt_mutex_delete((rt_mutex_t)mutex);
+    err_num = rt_mutex_delete((rt_mutex_t)mutex);
 
-    if (0 != err_num) 
-	{
+    if (0 != err_num) {
         HAL_Printf("destroy mutex failed");
     }
 }
 
 void HAL_MutexLock(_IN_ void *mutex)
 {
-	int err_num;
-	
-	err_num = rt_mutex_take((rt_mutex_t)mutex, RT_WAITING_FOREVER);
+    int err_num;
 
-    if (0 != err_num)
-	{
+    err_num = rt_mutex_take((rt_mutex_t)mutex, RT_WAITING_FOREVER);
+
+    if (0 != err_num) {
         HAL_Printf("lock mutex failed");
     }
 }
@@ -102,10 +100,9 @@ void HAL_MutexUnlock(_IN_ void *mutex)
 {
     int err_num;
 
-	err_num = rt_mutex_release((rt_mutex_t)mutex);
-	 
-    if (0 != err_num)
-	{
+    err_num = rt_mutex_release((rt_mutex_t)mutex);
+
+    if (0 != err_num) {
         HAL_Printf("unlock mutex failed");
     }
 
@@ -113,12 +110,11 @@ void HAL_MutexUnlock(_IN_ void *mutex)
 
 int HAL_MutexTryLock(_IN_ void *mutex)
 {
-	int err_num;
-	
-	err_num = rt_mutex_take((rt_mutex_t)mutex, RT_WAITING_NO);
+    int err_num;
 
-    if (0 != err_num)
-	{
+    err_num = rt_mutex_take((rt_mutex_t)mutex, RT_WAITING_NO);
+
+    if (0 != err_num) {
         HAL_Printf("trylock mutex failed");
     }
     return err_num;
@@ -127,7 +123,7 @@ int HAL_MutexTryLock(_IN_ void *mutex)
 
 void *HAL_Malloc(_IN_ uint32_t size)
 {
-   return rt_malloc(size);
+    return rt_malloc(size);
 }
 
 void HAL_Free(_IN_ void *ptr)

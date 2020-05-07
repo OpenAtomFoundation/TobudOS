@@ -49,25 +49,25 @@ uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
 
     Log_d("establish tcp connection with server(host=%s port=%s)", host, port_str);
 
-    if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {        
-		Log_e("getaddrinfo error,errno:%s",strerror(errno));
+    if (getaddrinfo(host, port_str, &hints, &addr_list) != 0) {
+        Log_e("getaddrinfo error,errno:%s", strerror(errno));
         return 0;
     }
 
     for (cur = addr_list; cur != NULL; cur = cur->ai_next) {
-		fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
-		if (fd < 0) {
-			ret = 0;
-			continue;
-		}
+        fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
+        if (fd < 0) {
+            ret = 0;
+            continue;
+        }
 
-		if (0 == connect(fd, cur->ai_addr, cur->ai_addrlen)) {
-			ret = fd;
-			break;
-		}
+        if (0 == connect(fd, cur->ai_addr, cur->ai_addrlen)) {
+            ret = fd;
+            break;
+        }
 
-		close(fd);
-		ret = 0;
+        close(fd);
+        ret = 0;
     }
 
     if (0 == ret) {

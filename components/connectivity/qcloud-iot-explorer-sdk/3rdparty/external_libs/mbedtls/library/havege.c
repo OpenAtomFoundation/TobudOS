@@ -40,8 +40,10 @@
 #include <string.h>
 
 /* Implementation that should never be optimized out by the compiler */
-static void mbedtls_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
+static void mbedtls_zeroize( void *v, size_t n )
+{
+    volatile unsigned char *p = v;
+    while ( n-- ) *p++ = 0;
 }
 
 /* ------------------------------------------------------------------------
@@ -178,8 +180,7 @@ static void havege_fill( mbedtls_havege_state *hs )
 
     memset( RES, 0, sizeof( RES ) );
 
-    while( n < MBEDTLS_HAVEGE_COLLECT_SIZE * 4 )
-    {
+    while ( n < MBEDTLS_HAVEGE_COLLECT_SIZE * 4 ) {
         ONE_ITERATION
         ONE_ITERATION
         ONE_ITERATION
@@ -205,7 +206,7 @@ void mbedtls_havege_init( mbedtls_havege_state *hs )
 
 void mbedtls_havege_free( mbedtls_havege_state *hs )
 {
-    if( hs == NULL )
+    if ( hs == NULL )
         return;
 
     mbedtls_zeroize( hs, sizeof( mbedtls_havege_state ) );
@@ -221,13 +222,12 @@ int mbedtls_havege_random( void *p_rng, unsigned char *buf, size_t len )
     mbedtls_havege_state *hs = (mbedtls_havege_state *) p_rng;
     unsigned char *p = buf;
 
-    while( len > 0 )
-    {
+    while ( len > 0 ) {
         use_len = len;
-        if( use_len > sizeof(int) )
+        if ( use_len > sizeof(int) )
             use_len = sizeof(int);
 
-        if( hs->offset[1] >= MBEDTLS_HAVEGE_COLLECT_SIZE )
+        if ( hs->offset[1] >= MBEDTLS_HAVEGE_COLLECT_SIZE )
             havege_fill( hs );
 
         val  = hs->pool[hs->offset[0]++];
@@ -239,7 +239,7 @@ int mbedtls_havege_random( void *p_rng, unsigned char *buf, size_t len )
         p += use_len;
     }
 
-    return( 0 );
+    return ( 0 );
 }
 
 #endif /* MBEDTLS_HAVEGE_C */

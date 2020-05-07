@@ -19,6 +19,12 @@ PLATFORM_AT_DEV					= esp8266
 # 是否打开MQTT通道的总开关
 FEATURE_MQTT_COMM_ENABLED               = y
 
+# 是否打开网关功能
+FEATURE_GATEWAY_ENABLED                 = n
+
+# 是否使能多线程
+FEATURE_MULTITHREAD_ENABLED        		= n
+
 # 是否打开OTA固件升级总开关
 FEATURE_OTA_COMM_ENABLED                = y
 
@@ -51,3 +57,7 @@ FEATURE_AT_OS_USED                      = y
 
 # 是否打开AT模组调试功能
 FEATURE_AT_DEBUG                        = y
+
+# 是否使用HTTPS下载固件
+FEATURE_OTA_USE_HTTPS                   = y
+

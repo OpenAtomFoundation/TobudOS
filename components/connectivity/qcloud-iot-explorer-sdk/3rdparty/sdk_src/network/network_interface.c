@@ -21,13 +21,15 @@ extern "C" {
 #include "qcloud_iot_export_error.h"
 #include "utils_param_check.h"
 
-int is_network_connected(Network *pNetwork) {
-	return pNetwork->handle;
+int is_network_connected(Network *pNetwork)
+{
+    return pNetwork->handle;
 }
 
 #ifdef AT_TCP_ENABLED
-int is_network_at_connected(Network *pNetwork) {
-	return pNetwork->handle== AT_NO_CONNECTED_FD ? 0: pNetwork->handle == AT_NO_CONNECTED_FD;
+int is_network_at_connected(Network *pNetwork)
+{
+    return pNetwork->handle == AT_NO_CONNECTED_FD ? 0 : pNetwork->handle == AT_NO_CONNECTED_FD;
 }
 #endif
 
@@ -36,20 +38,20 @@ int network_init(Network *pNetwork)
     POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
 
     // to avoid process crash when writing to a broken socket
-#if defined(__linux__)   
+#if defined(__linux__)
     signal(SIGPIPE, SIG_IGN);
 #endif
 
-    switch(pNetwork->type) {
+    switch (pNetwork->type) {
         case NETWORK_TCP:
 #ifdef AT_TCP_ENABLED
-			pNetwork->init = network_at_tcp_init;
-			pNetwork->connect = network_at_tcp_connect;
-			pNetwork->read = network_at_tcp_read;
-			pNetwork->write = network_at_tcp_write;
-			pNetwork->disconnect = network_at_tcp_disconnect;
-			pNetwork->is_connected = is_network_at_connected;
-			pNetwork->handle = AT_NO_CONNECTED_FD;
+            pNetwork->init = network_at_tcp_init;
+            pNetwork->connect = network_at_tcp_connect;
+            pNetwork->read = network_at_tcp_read;
+            pNetwork->write = network_at_tcp_write;
+            pNetwork->disconnect = network_at_tcp_disconnect;
+            pNetwork->is_connected = is_network_at_connected;
+            pNetwork->handle = AT_NO_CONNECTED_FD;
 #else
             pNetwork->init = network_tcp_init;
             pNetwork->connect = network_tcp_connect;
@@ -98,7 +100,7 @@ int network_init(Network *pNetwork)
 #endif
         default:
             Log_e("unknown network type: %d", pNetwork->type);
-            return QCLOUD_ERR_INVAL;            
+            return QCLOUD_ERR_INVAL;
     }
     return pNetwork->init(pNetwork);
 }

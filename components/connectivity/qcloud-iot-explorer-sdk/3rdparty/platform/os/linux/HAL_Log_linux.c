@@ -27,16 +27,16 @@
 size_t HAL_Log_Save(const char *log, size_t wLen)
 {
     FILE *fp;
-    size_t len;    
+    size_t len;
 
-    if( ( fp = fopen(LOG_SAVE_FILE_PATH, "a+" ) ) == NULL ) {
+    if ( ( fp = fopen(LOG_SAVE_FILE_PATH, "a+" ) ) == NULL ) {
         Log_e("fail to open file %s", LOG_SAVE_FILE_PATH);
         return 0;
-    }    
-    
+    }
+
     len = fwrite((void *)log, 1, wLen, fp);
     Log_d("write %d of %d to log file", len, wLen);
-    
+
     fclose(fp);
 
     return len;
@@ -46,16 +46,16 @@ size_t HAL_Log_Save(const char *log, size_t wLen)
 size_t HAL_Log_Read   (char *buff, size_t rLen)
 {
     FILE *fp;
-    size_t len;    
+    size_t len;
 
-    if( ( fp = fopen(LOG_SAVE_FILE_PATH, "r" ) ) == NULL ) {
+    if ( ( fp = fopen(LOG_SAVE_FILE_PATH, "r" ) ) == NULL ) {
         Log_e("fail to open file %s", LOG_SAVE_FILE_PATH);
         return 0;
     }
 
     len = fread((void *)buff, 1, rLen, fp);
     Log_d("read %d of %d from log file", len, rLen);
-    
+
     fclose(fp);
 
     return len;
@@ -76,12 +76,12 @@ size_t HAL_Log_Get_Size(void)
     /* check if file exists */
     if (access(LOG_SAVE_FILE_PATH, 0))
         return 0;
-    
-    if( ( fp = fopen(LOG_SAVE_FILE_PATH, "r" ) ) == NULL ) {
+
+    if ( ( fp = fopen(LOG_SAVE_FILE_PATH, "r" ) ) == NULL ) {
         Log_e("fail to open file %s", LOG_SAVE_FILE_PATH);
         return 0;
-    }    
-    
+    }
+
     fseek(fp, 0L, SEEK_END);
     length = ftell(fp);
     fclose(fp);

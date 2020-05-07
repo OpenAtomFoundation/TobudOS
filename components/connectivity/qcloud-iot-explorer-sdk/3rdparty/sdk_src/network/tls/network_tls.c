@@ -21,7 +21,7 @@
 /*
  * TLS/DTLS network API
  */
-#ifndef AUTH_WITH_NOTLS 
+#ifndef AUTH_WITH_NOTLS
 
 int network_tls_init(Network *pNetwork)
 {
@@ -31,14 +31,14 @@ int network_tls_init(Network *pNetwork)
 int network_tls_connect(Network *pNetwork)
 {
     POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
-    
+
     int ret = QCLOUD_ERR_FAILURE;
-    
+
     pNetwork->handle = (uintptr_t)HAL_TLS_Connect(&(pNetwork->ssl_connect_params), pNetwork->host, pNetwork->port);
     if (pNetwork->handle != 0) {
         ret = QCLOUD_RET_SUCCESS;
     }
-    
+
     return ret;
 }
 
@@ -77,40 +77,40 @@ int network_dtls_init(Network *pNetwork)
 
 int network_dtls_read(Network *pNetwork, unsigned char *data, size_t datalen, uint32_t timeout_ms, size_t *read_len)
 {
-	POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
 
-	return HAL_DTLS_Read(pNetwork->handle, data, datalen, timeout_ms, read_len);
+    return HAL_DTLS_Read(pNetwork->handle, data, datalen, timeout_ms, read_len);
 }
 
 int network_dtls_write(Network *pNetwork, unsigned char *data, size_t datalen, uint32_t timeout_ms, size_t *written_len)
 {
-	POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
 
-	return HAL_DTLS_Write(pNetwork->handle, data, datalen, written_len);
+    return HAL_DTLS_Write(pNetwork->handle, data, datalen, written_len);
 }
 
 void network_dtls_disconnect(Network *pNetwork)
 {
-	POINTER_SANITY_CHECK_RTN(pNetwork);
+    POINTER_SANITY_CHECK_RTN(pNetwork);
 
-	HAL_DTLS_Disconnect(pNetwork->handle);
-	pNetwork->handle = 0;
+    HAL_DTLS_Disconnect(pNetwork->handle);
+    pNetwork->handle = 0;
 
-	return ;
+    return ;
 }
 
 int network_dtls_connect(Network *pNetwork)
 {
-	POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(pNetwork, QCLOUD_ERR_INVAL);
 
-	int ret = QCLOUD_ERR_FAILURE;
+    int ret = QCLOUD_ERR_FAILURE;
 
-	pNetwork->handle = (uintptr_t)HAL_DTLS_Connect(&(pNetwork->ssl_connect_params), pNetwork->host, pNetwork->port);
-	if (pNetwork->handle != 0) {
-		ret = QCLOUD_RET_SUCCESS;
-	}
+    pNetwork->handle = (uintptr_t)HAL_DTLS_Connect(&(pNetwork->ssl_connect_params), pNetwork->host, pNetwork->port);
+    if (pNetwork->handle != 0) {
+        ret = QCLOUD_RET_SUCCESS;
+    }
 
-	return ret;
+    return ret;
 }
 #endif
 

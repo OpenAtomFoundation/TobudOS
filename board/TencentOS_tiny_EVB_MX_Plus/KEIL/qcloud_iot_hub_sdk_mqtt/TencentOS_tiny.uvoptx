@@ -2385,7 +2385,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_AT_UART_tencentos_tiny.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_AT_UART_tencentos_tiny.c</PathWithFileName>
       <FilenameWithoutPath>HAL_AT_UART_tencentos_tiny.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2397,7 +2397,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_Device_tencentos_tiny.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_Device_tencentos_tiny.c</PathWithFileName>
       <FilenameWithoutPath>HAL_Device_tencentos_tiny.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2409,7 +2409,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_OS_tencentos_tiny.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_OS_tencentos_tiny.c</PathWithFileName>
       <FilenameWithoutPath>HAL_OS_tencentos_tiny.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2421,7 +2421,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_TCP_module.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_TCP_module.c</PathWithFileName>
       <FilenameWithoutPath>HAL_TCP_module.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2433,7 +2433,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_Timer_tencentos_tiny.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_Timer_tencentos_tiny.c</PathWithFileName>
       <FilenameWithoutPath>HAL_Timer_tencentos_tiny.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2445,7 +2445,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_UDP_module.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_UDP_module.c</PathWithFileName>
       <FilenameWithoutPath>HAL_UDP_module.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2465,7 +2465,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2477,7 +2477,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_common.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_common.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_common.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2489,7 +2489,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_connect.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_connect.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_connect.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2501,7 +2501,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_net.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_net.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_net.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2513,7 +2513,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_publish.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_publish.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_publish.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2525,7 +2525,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_subscribe.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_subscribe.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_subscribe.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2537,7 +2537,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_unsubscribe.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_unsubscribe.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_unsubscribe.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2549,7 +2549,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_yield.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_yield.c</PathWithFileName>
       <FilenameWithoutPath>mqtt_client_yield.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2569,7 +2569,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\json_parser.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\json_parser.c</PathWithFileName>
       <FilenameWithoutPath>json_parser.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2581,7 +2581,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\json_token.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\json_token.c</PathWithFileName>
       <FilenameWithoutPath>json_token.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2593,7 +2593,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\qcloud_iot_ca.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\qcloud_iot_ca.c</PathWithFileName>
       <FilenameWithoutPath>qcloud_iot_ca.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2605,7 +2605,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\qcloud_iot_device.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\qcloud_iot_device.c</PathWithFileName>
       <FilenameWithoutPath>qcloud_iot_device.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2617,7 +2617,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\qcloud_iot_log.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\qcloud_iot_log.c</PathWithFileName>
       <FilenameWithoutPath>qcloud_iot_log.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2629,7 +2629,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\string_utils.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\string_utils.c</PathWithFileName>
       <FilenameWithoutPath>string_utils.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2641,7 +2641,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_aes.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_aes.c</PathWithFileName>
       <FilenameWithoutPath>utils_aes.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2653,7 +2653,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_base64.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_base64.c</PathWithFileName>
       <FilenameWithoutPath>utils_base64.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2665,7 +2665,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_getopt.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_getopt.c</PathWithFileName>
       <FilenameWithoutPath>utils_getopt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2677,7 +2677,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_hmac.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_hmac.c</PathWithFileName>
       <FilenameWithoutPath>utils_hmac.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2689,7 +2689,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_list.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_list.c</PathWithFileName>
       <FilenameWithoutPath>utils_list.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2701,7 +2701,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_md5.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_md5.c</PathWithFileName>
       <FilenameWithoutPath>utils_md5.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2713,7 +2713,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_ringbuff.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_ringbuff.c</PathWithFileName>
       <FilenameWithoutPath>utils_ringbuff.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2725,7 +2725,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_sha1.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_sha1.c</PathWithFileName>
       <FilenameWithoutPath>utils_sha1.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2737,7 +2737,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_timer.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_timer.c</PathWithFileName>
       <FilenameWithoutPath>utils_timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2757,7 +2757,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\network\network_interface.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\network\network_interface.c</PathWithFileName>
       <FilenameWithoutPath>network_interface.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2769,7 +2769,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\network\tls\network_tls.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\network\tls\network_tls.c</PathWithFileName>
       <FilenameWithoutPath>network_tls.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2781,7 +2781,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\network\socket\network_socket.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\network\socket\network_socket.c</PathWithFileName>
       <FilenameWithoutPath>network_socket.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2793,7 +2793,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\platform\tls\mbedtls\HAL_DTLS_mbedtls.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\platform\tls\mbedtls\HAL_DTLS_mbedtls.c</PathWithFileName>
       <FilenameWithoutPath>HAL_DTLS_mbedtls.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2805,7 +2805,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\platform\tls\mbedtls\HAL_TLS_mbedtls.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\platform\tls\mbedtls\HAL_TLS_mbedtls.c</PathWithFileName>
       <FilenameWithoutPath>HAL_TLS_mbedtls.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

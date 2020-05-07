@@ -15,3 +15,6 @@
 #cmakedefine AT_UART_RECV_IRQ
 #cmakedefine AT_OS_USED
 #cmakedefine AT_DEBUG
+#cmakedefine OTA_USE_HTTPS
+#cmakedefine GATEWAY_ENABLED
+#cmakedefine MULTITHREAD_ENABLED

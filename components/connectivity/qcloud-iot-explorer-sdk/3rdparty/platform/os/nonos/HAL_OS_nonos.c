@@ -19,7 +19,7 @@
 #include "qcloud_iot_import.h"
 #include "stm32l4xx_hal.h"
 
-	
+
 void HAL_Printf(_IN_ const char *fmt, ...)
 {
     va_list args;
@@ -50,12 +50,12 @@ int HAL_Vsnprintf(_IN_ char *str, _IN_ const int len, _IN_ const char *format, v
 
 void HAL_SleepMs(_IN_ uint32_t ms)
 {
-   (void)HAL_Delay(ms);
+    (void)HAL_Delay(ms);
 }
 
 void HAL_DelayMs(_IN_ uint32_t ms)
 {
-   (void)HAL_Delay(ms);
+    (void)HAL_Delay(ms);
 }
 
 void HAL_Free(void *ptr)

@@ -35,9 +35,6 @@ char *LITE_format_string(const char *fmt, ...)
 
     va_start(ap, fmt);
     tmp = HAL_Malloc(TEMP_STRING_MAXLEN);
-    if (NULL == tmp) {
-        return NULL;
-    }
     memset(tmp, 0, TEMP_STRING_MAXLEN);
     rc = HAL_Vsnprintf(tmp, TEMP_STRING_MAXLEN, fmt, ap);
     va_end(ap);
@@ -60,12 +57,9 @@ char *LITE_format_nstring(const int len, const char *fmt, ...)
     int             rc = -1;
 
     va_start(ap, fmt);
-    tmp = HAL_Malloc(len+2);
-    if (NULL == tmp) {
-        return NULL;
-    }
-    memset(tmp, 0, len+2);
-    rc = HAL_Vsnprintf(tmp, len+1, fmt, ap);
+    tmp = HAL_Malloc(len + 2);
+    memset(tmp, 0, len + 2);
+    rc = HAL_Vsnprintf(tmp, len + 1, fmt, ap);
     va_end(ap);
     LITE_ASSERT(tmp);
     LITE_ASSERT(rc < 1024);
@@ -176,3 +170,17 @@ void LITE_replace_substr(char originalString[], char key[], char swap[])
         }
     }
 }
+
+void LITE_str_strip_char(char *src, char destCh)
+{
+    char *end = src + strlen(src) + 1;
+
+    while (*src != '\0') {
+        if (*src == destCh) {
+            memmove(src, src + 1, end - src);
+            end--;
+        }
+        src++;
+    }
+}
+

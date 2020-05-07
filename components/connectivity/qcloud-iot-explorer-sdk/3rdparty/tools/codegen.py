@@ -343,10 +343,11 @@ class iot_struct:
                 init_str += "    {}.{} = {};\n".format(var_gProduct, field.get_id_c_member_name(),field.get_id_default_value())
                 init_str += "    {}[{}].data_property.data = &{}.{};\n".format(var_gTemplate, count, var_gProduct, field.get_id_c_member_name())
             init_str += "    {}[{}].data_property.key  = \"{}\";\n".format(var_gTemplate, count, field.id)
-            init_str += "    {}[{}].data_property.type = {};\n\n".format(var_gTemplate, count, field.type_id)
+            init_str += "    {}[{}].data_property.type = {};\n".format(var_gTemplate, count, field.type_id)
+            init_str += "    {}[{}].state = eCHANGED;\n\n".format(var_gTemplate, count)
             count += 1
         init_str += "};\n"
-        return init_str;
+        return init_str
 
     def gen_data_config(self):
         data_config = ""
