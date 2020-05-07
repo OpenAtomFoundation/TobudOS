@@ -162,7 +162,7 @@ int rhf76_set_repeat(uint8_t num)
     char expect[10] = {'\0'};
     snprintf(cmd, sizeof(cmd), RHF76_ATCMD_SET_REPT, num);
     snprintf(expect, sizeof(expect), "+REPT: %d", num);
-    
+
     tos_at_echo_create(&echo, NULL, 0, expect);
 
     while (try++ < 10) {
@@ -183,7 +183,7 @@ int rhf76_set_data_rate(uint8_t num)
     char expect[10] = {'\0'};
     snprintf(cmd, sizeof(cmd), RHF76_ATCMD_SET_DATA_RATE, num);
     snprintf(expect, sizeof(expect), " DR%d", num);
-    
+
     tos_at_echo_fuzzy_matching_create(&echo, NULL, 0, expect);
 
     while (try++ < 10) {
@@ -203,7 +203,7 @@ int rhf76_set_delay(char *param)
     char expect[20] = {'\0'};
     snprintf(cmd, sizeof(cmd), RHF76_ATCMD_SET_DELAY, param);
     snprintf(expect, sizeof(expect), "+DELAY %s", param);
-    
+
     tos_at_echo_create(&echo, NULL, 0, expect);
 
     while (try++ < 10) {
@@ -286,7 +286,7 @@ int rhf76_join_otaa(const char *deveui, const char *appkey)
         return -1;
     }
 
-    at_delay_ms(2000);
+    tos_stopwatch_delay_ms(2000);
 
     tos_at_echo_create(&echo, NULL, 0, "+JOIN: Network joined");
     while (try++ < 10) {
@@ -328,7 +328,7 @@ int rhf76_join_abp(const char *deveui, const char *devaddr, const char *nwkskey,
         return -1;
     }
 
-    at_delay_ms(2000);
+    tos_stopwatch_delay_ms(2000);
 
     tos_at_echo_create(&echo, NULL, 0, "+JOIN: Network joined");
     while (try++ < 10) {
@@ -344,7 +344,7 @@ static int rhf76_init(void)
 {
     printf("Init RHF76 LoRa ...\n" );
 
-    at_delay_ms(1000);
+    tos_stopwatch_delay_ms(1000);
     if (rhf76_exit_low_power() != 0) {
         printf("rhf76 reset FAILED\n");
         return -1;
@@ -379,34 +379,34 @@ static int rhf76_init(void)
         printf("rhf76 set repeat times for unconfirmed message FAILED\n");
         return -1;
     }
-    at_delay_ms(2000);
+    tos_stopwatch_delay_ms(2000);
     printf("Init RHF76 LoRa done\n");
-    
+
     /*----------------------------------------------------*/
     /*--- the following code is only used for debuging ---*/
     /*----------------------------------------------------*/
-    
+
     /*<-- query/set UART Timeout (~TX timeout) -->*/
     // rhf76_at_cmd_exe("AT+UART=TIMEOUT, 300\r\n");
     // rhf76_at_cmd_exe("AT+UART=TIMEOUT\r\n");
-    
+
     /*<-- query current band config -->*/
     // rhf76_at_cmd_exe("AT+DR=SCHEME\r\n");
     // rhf76_at_cmd_exe("AT+LW=CDR\r\n");
-    
+
     /*<-- query current data rate and the corresponding max payload size -->*/
     rhf76_set_data_rate(0);
     // rhf76_at_cmd_exe("at+dr=0\r\n");
     // rhf76_at_cmd_exe("AT+DR\r\n");
     // rhf76_at_cmd_exe("AT+LW=LEN\r\n");
-    
+
     /*<-- query RX1\RX2\JRX1\JRX2 delay config -->*/
     // rhf76_set_delay("?");
-    
+
     /*<-- query RF config -->*/
     // rhf76_at_cmd_exe("AT+MODE=TEST\r\n");
     // rhf76_at_cmd_exe("AT+TEST=?\r\n");
-    
+
     return 0;
 }
 
@@ -571,7 +571,7 @@ int rhf76_lora_init(hal_uart_port_t uart_port)
         return -1;
     }
 
-    at_delay_ms(1000);
+    tos_stopwatch_delay_ms(1000);
 
     if (tos_lora_module_register(&lora_module_rhf76) != 0) {
         return -1;

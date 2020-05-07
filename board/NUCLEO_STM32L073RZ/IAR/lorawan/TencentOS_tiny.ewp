@@ -66,7 +66,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>8.30.1.17146</state>
+                    <state>8.32.1.18618</state>
                 </option>
                 <option>
                     <name>GeneralEnableMisra</name>
@@ -215,7 +215,7 @@
             <name>ICCARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>34</version>
+                <version>35</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -487,6 +487,10 @@
                     <name>IccRTTI2</name>
                     <state>0</state>
                 </option>
+                <option>
+                    <name>OICompilerExtraOption</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -707,7 +711,7 @@
             <name>ILINK</name>
             <archiveVersion>0</archiveVersion>
             <data>
-                <version>21</version>
+                <version>22</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1023,6 +1027,10 @@
                     <name>IlinkTrustzoneImportLibraryOut</name>
                     <state>TencentOS_tiny_import_lib.o</state>
                 </option>
+                <option>
+                    <name>OILinkExtraOption</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -1119,9 +1127,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\net\at\src\tos_at.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\net\at\src\tos_at_utils.c</name>
         </file>
     </group>
     <group>
@@ -1281,6 +1286,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_sem.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_stopwatch.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_sys.c</name>

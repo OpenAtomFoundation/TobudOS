@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.2.0</PackID>
+          <PackID>Keil.STM32L4xx_DFP.2.0.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -737,6 +737,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_timer.c</FilePath>
             </File>
+            <File>
+              <FileName>tos_stopwatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_stopwatch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -806,11 +811,6 @@
               <FileName>tos_at.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_at_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at_utils.c</FilePath>
             </File>
             <File>
               <FileName>lora_module_wrapper.c</FileName>

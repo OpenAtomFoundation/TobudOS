@@ -647,6 +647,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_ring_queue.c</FilePath>
             </File>
+            <File>
+              <FileName>tos_stopwatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_stopwatch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -726,11 +731,6 @@
               <FileName>tos_at.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_at_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at_utils.c</FilePath>
             </File>
           </Files>
         </Group>

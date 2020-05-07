@@ -192,8 +192,8 @@ static int bc26_init(void)
     if (bc26_reset() != 0) {
         printf("bc26 reset FAILED\n");
         return -1;
-    }  
-    at_delay_ms(3000);
+    }
+    tos_stopwatch_delay_ms(3000);
 
     if (bc26_psm_lock() != 0) {
         printf("bc26 psm lock FAILED\n");
@@ -203,7 +203,7 @@ static int bc26_init(void)
     if (bc26_open_cfun() != 0) {
         printf("bc26 open cfun FAILED\n");
         return -1;
-    }  
+    }
 
     if (bc26_echo_close() != 0) {
         printf("echo close FAILED\n");
@@ -238,7 +238,7 @@ static int bc26_init(void)
     if (bc26_signal_quality_check() != 0) {
         printf("check csq FAILED\n");
         return -1;
-    }   
+    }
 
     printf("Init BC26 done\n");
 }
@@ -250,20 +250,20 @@ static int bc26_connect(const char *ip, const char *port, sal_proto_t proto)
     char echo_buffer[32],*str;
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    
+
     tos_at_cmd_exec(&echo, 2000, "AT+QSOC=1,1,1\r\n");
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     str = strstr(echo.buffer, "+QSOC=");
     sscanf(str, "+QSOC=%d", &id);
-    
+
     printf("get socket id is %d\r\n",id);
     id = tos_at_channel_alloc_id(id, ip, port);
     if (id == -1) {
         return -1;
     }
-    
+
     sscanf(port, "%d", &send_port);
     while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+QSOCON=%d,%d,\"%s\"\r\n", id, send_port,ip);
@@ -361,7 +361,7 @@ static int bc26_parse_domain(const char *host_name, char *host_ip, size_t host_i
 static int bc26_close(int id)
 {
     tos_at_cmd_exec(NULL, 1000, "AT+QSODIS=%d",id);
-    
+
     tos_at_cmd_exec(NULL, 1000, "AT+QSOCL=%d",id);
 
     tos_at_channel_free(id);
@@ -443,9 +443,9 @@ __STATIC__ void bc26_incoming_data_process(void)
         we cannot use tos_at_cmd_exec(NULL, timeout) to delay, because we are in at framework's parser
         task now(current function is a callback called by parser task), delay in tos_at_cmd_exec is
         tos_task_delay, this may cause a task switch, data receiving may be interrupted.
-        so we must tos_at_cmd_exec(NULL, 0), and do the delay by at_delay_ms.
+        so we must tos_at_cmd_exec(NULL, 0), and do the delay by tos_stopwatch_delay_ms.
      */
-    at_delay_ms(1000);
+    tos_stopwatch_delay_ms(1000);
 
     /*
     1,xxx.yyy.zzz.www,8000,3,010203,0\r\n
@@ -574,7 +574,7 @@ int bc26_sal_init(hal_uart_port_t uart_port)
         return -1;
     }
 
-    at_delay_ms(1000);
+    tos_stopwatch_delay_ms(1000);
 
     if (tos_sal_module_register(&nb_iot_module_bc26) != 0) {
         return -1;

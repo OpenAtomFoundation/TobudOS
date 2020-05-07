@@ -65,7 +65,7 @@ static int m5310a_connect(const char *ip, const char *port, sal_proto_t proto)
     at_echo_t echo;
     char echo_buffer[32];
 
-    at_delay_ms(10000);
+    tos_stopwatch_delay_ms(10000);
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
 
     tos_at_cmd_exec(&echo, 4000, "AT+NSOCR=%s,%d\r\n",
@@ -84,20 +84,20 @@ static int m5310a_connect(const char *ip, const char *port, sal_proto_t proto)
 
     m5310a_wait_ok();
 
-    at_delay_ms(3000);
+    tos_stopwatch_delay_ms(3000);
 
     while (is_connected == 0 && try < 10) {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "CONNECT OK");
         tos_at_cmd_exec(&echo, 1000, "AT+NSOCO=%d,%s,%s\r\n", id, ip, port);
-		for(int j=0; j<5; j++) {
-			if(echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
-				is_connected = 1;
-				break;
-			}
-			tos_task_delay(tos_millisec2tick(1000));
-		}
+        for(int j=0; j<5; j++) {
+            if(echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+                is_connected = 1;
+                break;
+            }
+            tos_task_delay(tos_millisec2tick(1000));
+        }
 
-		try++;
+        try++;
     }
 
     if (!is_connected) {
@@ -127,25 +127,25 @@ static int m5310a_send(int id, const void *buf, size_t len)
 
     int left_len = len;
     for(int i=0; left_len>0; i++) {
-    	int send_len = left_len > max_send_len ? max_send_len : left_len;
-    	__hex2str((uint8_t *)buf+i*max_send_len, str_buf, send_len);
+        int send_len = left_len > max_send_len ? max_send_len : left_len;
+        __hex2str((uint8_t *)buf+i*max_send_len, str_buf, send_len);
 
-    	char except[8];
-    	snprintf(except, sizeof(except), "%d,%d", id, send_len);
-		tos_at_echo_create(&echo, NULL, 0, except);
-		tos_at_cmd_exec(&echo, 1000, "AT+NSOSD=%d,%d,%s\r\n", id, send_len, str_buf);
+        char except[8];
+        snprintf(except, sizeof(except), "%d,%d", id, send_len);
+        tos_at_echo_create(&echo, NULL, 0, except);
+        tos_at_cmd_exec(&echo, 1000, "AT+NSOSD=%d,%d,%s\r\n", id, send_len, str_buf);
 
-		for(int j=0; j<10; j++) {
-			if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
-				break;
-			}
+        for(int j = 0; j < 10; j++) {
+            if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+                break;
+            }
 
-			if(echo.status != AT_ECHO_STATUS_EXPECT) {
-			    at_delay_ms(1000);
-			}
-		}
+            if(echo.status != AT_ECHO_STATUS_EXPECT) {
+                tos_stopwatch_delay_ms(1000);
+            }
+        }
 
-	    left_len -= send_len;
+        left_len -= send_len;
     }
 
     tos_mmheap_free(str_buf);
