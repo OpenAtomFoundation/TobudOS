@@ -31,7 +31,8 @@ static int m26_sim_card_check(void)
     int try = 0;
     char echo_buffer[32];
 
-    while (try++ < 10) {
+    while (try++ < 10)
+    {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 2000, "AT+CPIN?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
@@ -84,13 +85,15 @@ static int m26_gsm_network_check(void)
     {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK) {
+        if (echo.status != AT_ECHO_STATUS_OK)
+        {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CREG:");
         sscanf(str, "+CREG:%d,%d", &n, &stat);
-        if (stat == 1) {
+        if (stat == 1)
+        {
             return 0;
         }
 	}
@@ -308,9 +311,8 @@ static int m26_connect(const char *ip, const char *port, sal_proto_t proto)
         return -1;
     }
 		
-		tos_at_echo_create(&echo, NULL, 0, NULL);
-		
-		tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+QIHEAD");
+	tos_at_echo_create(&echo, NULL, 0, NULL);	
+	tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+QIHEAD");
     if (echo.status != AT_ECHO_STATUS_OK) {
         tos_at_channel_free(id);
         return -1;
@@ -350,7 +352,8 @@ int m26_send(int id, const void *buf, size_t len)
 {
     at_echo_t echo;
 
-    if (tos_at_global_lock_pend() != 0) {
+    if (tos_at_global_lock_pend() != 0)
+    {
         return -1;
     }
 
@@ -366,14 +369,16 @@ int m26_send(int id, const void *buf, size_t len)
                             id, len);
 #endif
 
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
+    {
         tos_at_global_lock_post();
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -412,7 +417,8 @@ static int m26_parse_domain(const char *host_name, char *host_ip, size_t host_ip
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     tos_at_cmd_exec(&echo, 2000, "AT+QIDNSGIP=\"%s\"\r\n", host_name);
 
-    if (echo.status != AT_ECHO_STATUS_OK) {
+    if (echo.status != AT_ECHO_STATUS_OK)
+    {
         return -1;
     }
 
