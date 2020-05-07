@@ -1,10 +1,10 @@
 /**
- * @brief    Quectel M26 GSM/GPRS Module
+ * @brief    Quectel EC20 LTGE Cat4 Module
  * @author   Mculover666 <2412828003@qq.com>
  * @date     2020/05/07
 */
 
-#include "m26.h"
+#include "ec20.h"
 #include "tos_at.h"
 #include "tos_hal.h"
 #include "sal_module_wrapper.h"
@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-static int m26_echo_close(void)
+static int ec20_echo_close(void)
 {
     at_echo_t echo;
 
@@ -25,14 +25,14 @@ static int m26_echo_close(void)
     }
     return -1;
 }
-static int m26_sim_card_check(void)
+static int ec20_sim_card_check(void)
 {
     at_echo_t echo;
     int try = 0;
     char echo_buffer[32];
 
     while (try++ < 10)
-    {
+	{
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 2000, "AT+CPIN?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
@@ -48,7 +48,7 @@ static int m26_sim_card_check(void)
 	return -1;
 }
 
-static int m26_signal_quality_check(void)
+static int ec20_signal_quality_check(void)
 {
     int rssi, ber;
     at_echo_t echo;
@@ -74,7 +74,7 @@ static int m26_signal_quality_check(void)
 
     return -1;
 }
-static int m26_gsm_network_check(void)
+static int ec20_gsm_network_check(void)
 {
     int n, stat;
     at_echo_t echo;
@@ -85,22 +85,20 @@ static int m26_gsm_network_check(void)
     {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CREG:");
         sscanf(str, "+CREG:%d,%d", &n, &stat);
-        if (stat == 1)
-        {
+        if (stat == 1) {
             return 0;
         }
 	}
     return -1;	
 }
 
-static int m26_gprs_network_check(void)
+static int ec20_gprs_network_check(void)
 {
     int n, stat;
     at_echo_t echo;
@@ -127,250 +125,138 @@ static int m26_gprs_network_check(void)
     return -1;	
 }
 
-static int m26_close_apn(void)
+static int ec20_close_apn(void)
 {
     at_echo_t echo;
-    char echo_buffer[32];
 
-    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    tos_at_cmd_exec(&echo, 3000, "AT+QIDEACT\r\n");
-   	
-    if(strstr(echo.buffer, "DEACT OK") == NULL)
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 3000, "AT+QIDEACT=1\r\n");
+   	if (echo.status == AT_ECHO_STATUS_OK)
 	{
-		return -1;
+		return 0;
 	}
-
-	return 0;
+   
+	return -1;
 }
 
-static int m26_send_mode_set(sal_send_mode_t mode)
-{
-    int try = 0;
-    at_echo_t echo;
-
-    while (try++ < 10)
-    {
-        tos_at_echo_create(&echo, NULL, 0, NULL);
-        tos_at_cmd_exec(&echo, 300, "AT+QIMODE=%d\r\n", mode == SAL_SEND_MODE_NORMAL ? 0 : 1);
-        if (echo.status == AT_ECHO_STATUS_OK)
-        {
-            return 0;
-        }
-    }
-    return -1;
-}
-
-static int m26_multilink_set(sal_multilink_state_t state)
-{
-    int try = 0;
-    at_echo_t echo;
-
-    while (try++ < 10)
-    {
-        tos_at_echo_create(&echo, NULL, 0, NULL);
-        tos_at_cmd_exec(&echo, 300, "AT+QIMUX=%d\r\n", state == SAL_MULTILINK_STATE_ENABLE ? 1 : 0);
-        if (echo.status == AT_ECHO_STATUS_OK)
-        {
-            return 0;
-        }
-    }
-    return -1;
-}
-
-static int m26_recv_mode_set()
+static int ec20_set_apn(void)
 {
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 300, "AT+QINDI=0\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
-        return -1;
-    }
-	return 0;
-}
-
-static int m26_set_apn(void)
-{
-    at_echo_t echo;
-
-    tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 300, "AT+QICSGP=1,\"CMNET\"\r\n");
+    tos_at_cmd_exec(&echo, 300, "AT+QICSGP=1,1,\"CMNET\"\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
     }
 
-    tos_at_cmd_exec(&echo, 300, "AT+QIFGCNT=0\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
-        return -1;
-    }
-		
-		tos_at_cmd_exec(&echo, 300, "AT+QIREGAPP\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
-        return -1;
-    }
-		
-		tos_at_cmd_exec(&echo, 3000, "AT+QIACT\r\n");
+
+	tos_at_cmd_exec(&echo, 3000, "AT+QIACT=1\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
     }	
-		
-    tos_at_cmd_exec(&echo, 300, "AT+QILOCIP\r\n");
 
     return 0;
 }
 
-
-
-static int m26_init(void)
+static int ec20_init(void)
 {
-    printf("Init m26 ...\n" );
+    printf("Init ec20 ...\n" );
 
-    if (m26_echo_close() != 0)
+    if (ec20_echo_close() != 0)
     {
         printf("echo close failed\n");
         return -1;
     }
 		
-    if(m26_sim_card_check() != 0)
+    if(ec20_sim_card_check() != 0)
     {
         printf("sim card check failed,please insert your card\n");
         return -1;
     }
 
-    if (m26_signal_quality_check() != 0)
+    if (ec20_signal_quality_check() != 0)
     {
         printf("signal quality check status failed\n");
         return -1;
     }
 		
-    if(m26_gsm_network_check() != 0)
+    if(ec20_gsm_network_check() != 0)
     {
         printf("GSM network register status check fail\n");
         return -1;
     }
     
-    if(m26_gprs_network_check() != 0)
+    if(ec20_gprs_network_check() != 0)
     {
         printf("GPRS network register status check fail\n");
         return -1;
     }
     
-    if(m26_close_apn() != 0)
+    if(ec20_close_apn() != 0)
     {
         printf("close apn failed\n");
         return -1;
     }
 		
-#if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u		
-    if (m26_multilink_set(SAL_MULTILINK_STATE_DISABLE) != 0)
-    {
-        printf("multilink set FAILED\n");
-        return -1;
-    }
-#else
-	if (m26_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
-    {
-        printf("multilink set FAILED\n");
-        return -1;
-    }
-#endif		
-
-    if (m26_send_mode_set(SAL_SEND_MODE_NORMAL) != 0)
-    {
-        printf("send mode set FAILED\n");
-        return -1;
-    }
-		
-    if(m26_recv_mode_set() != 0)
-    {
-        printf("recv mode set FAILED\n");
-        return -1;
-    }
-		
-    if (m26_set_apn() != 0) {
+    if (ec20_set_apn() != 0) {
         printf("apn set FAILED\n");
         return -1;
     }
 
-    printf("Init m26 ok\n" );
+    printf("Init ec20 ok\n" );
     return 0;
 }
 
-static int m26_connect(const char *ip, const char *port, sal_proto_t proto)
+static int ec20_connect(const char *ip, const char *port, sal_proto_t proto)
 {
     int id;
     at_echo_t echo;
 
     id = tos_at_channel_alloc(ip, port);
-    if (id == -1) {
-        return -1;
-    }
-		
-	tos_at_echo_create(&echo, NULL, 0, NULL);	
-	tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+QIHEAD");
-    if (echo.status != AT_ECHO_STATUS_OK) {
-        tos_at_channel_free(id);
+    if (id == -1)
+	{
         return -1;
     }
 
-#if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
 	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
-    tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=\"%s\",\"%s\",\"%s\"\r\n",
-                        proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
-    if (echo.status == AT_ECHO_STATUS_OK) {
-        return id;
-    }
-#else
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
-    tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=%d,\"%s\",\"%s\",%d\r\n",
+    tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,0\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
-    if (echo.status == AT_ECHO_STATUS_OK) {
+    if (echo.status == AT_ECHO_STATUS_OK)
+	{
         return id;
     }
-#endif
 		
     tos_at_channel_free(id);
     return -1;
 }
 
-static int m26_recv_timeout(int id, void *buf, size_t len, uint32_t timeout)
+static int ec20_recv_timeout(int id, void *buf, size_t len, uint32_t timeout)
 {
     return tos_at_channel_read_timed(id, buf, len, timeout);
 }
 
-static int m26_recv(int id, void *buf, size_t len)
+static int ec20_recv(int id, void *buf, size_t len)
 {
-    return m26_recv_timeout(id, buf, len, (uint32_t)4000);
+    return ec20_recv_timeout(id, buf, len, (uint32_t)4000);
 }
 
-int m26_send(int id, const void *buf, size_t len)
+int ec20_send(int id, const void *buf, size_t len)
 {
     at_echo_t echo;
 
     if (tos_at_global_lock_pend() != 0)
-    {
+	{
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, ">");
-		
-#if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec(&echo, 1000,
-                            "AT+QISEND=%d\r\n",
-                            len);
-#else
-		tos_at_cmd_exec(&echo, 1000,
-                            "AT+QISEND=%d,%d\r\n",
-                            id, len);
-#endif
+
+	tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+	{
         tos_at_global_lock_post();
         return -1;
     }
@@ -378,7 +264,7 @@ int m26_send(int id, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+	{
         tos_at_global_lock_post();
         return -1;
     }
@@ -388,47 +274,47 @@ int m26_send(int id, const void *buf, size_t len)
     return len;
 }
 
-static void m26_transparent_mode_exit(void)
+static void ec20_transparent_mode_exit(void)
 {
     tos_at_cmd_exec(NULL, 500, "+++");
 }
 
-static int m26_close(int id)
+static int ec20_close(int id)
 {
-    m26_transparent_mode_exit();
+    ec20_transparent_mode_exit();
 
-#if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
-#else
 	tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
-#endif
 
     tos_at_channel_free(id);
 
     return 0;
 }
 
-static int m26_parse_domain(const char *host_name, char *host_ip, size_t host_ip_len)
+static int ec20_parse_domain(const char *host_name, char *host_ip, size_t host_ip_len)
 {
     char *str;
     at_echo_t echo;
-    char echo_buffer[64];
+    char echo_buffer[128];
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    tos_at_cmd_exec(&echo, 2000, "AT+QIDNSGIP=\"%s\"\r\n", host_name);
+    tos_at_cmd_exec(&echo, 2000, "AT+QIDNSGIP=1,\"%s\"\r\n", host_name);
 
     if (echo.status != AT_ECHO_STATUS_OK)
-    {
+	{
         return -1;
     }
 
     /*
-        "xxx.xxx.xxx.xxx"
+        +QIURC: "dnsgip",0,1,600
+
+		+QIURC: "dnsgip","xxx.xxx.xxx"
     */
 
     int seg1, seg2, seg3, seg4;
-    str = strstr(echo.buffer, "OK");
-    str += strlen("OK\r\n");
+    str = strstr(echo.buffer, "dnsgip");
+	*str = '0';
+	str = strstr(echo.buffer, "dnsgip");
+    str += strlen("dnsgip\",\"");
     sscanf(str, "%d.%d.%d.%d", &seg1, &seg2, &seg3, &seg4);
     snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
     host_ip[host_ip_len - 1] = '\0';
@@ -438,23 +324,23 @@ static int m26_parse_domain(const char *host_name, char *host_ip, size_t host_ip
     return 0;
 }
 
-__STATIC__ void m26_incoming_data_process(void)
+__STATIC__ void ec20_incoming_data_process(void)
 {
     uint8_t data;
     int channel_id = 0, data_len = 0, read_len;
     uint8_t buffer[128];
+	char recv_check[10];
 
     /*
-        +RECEIVE: 0, <data_len>
-	    IPD<data_len>:<data context>
+		+QIURC: "recv",0
 
-        +RECEIVE:     prefix
-        0:          	scoket id
+        +QIURC:		prefix
+        0:          scoket id
     */
 	if (tos_at_uart_read(&data, 1) != 1)
-    {
-            return;
-    }
+	{
+		return;
+	}
 	
     while (1)
     {
@@ -463,19 +349,35 @@ __STATIC__ void m26_incoming_data_process(void)
             return;
         }
 
-        if (data == ',')
+        if (data == '\r')
         {
             break;
         }
         channel_id = channel_id * 10 + (data - '0');
     }
-		
-    if (tos_at_uart_read(&data, 1) != 1)
+	printf("channel id = %d\n", channel_id);
+	
+	tos_at_cmd_exec(NULL, 0, "AT+QIRD=%d,%d\r\n", channel_id, sizeof(buffer));
+	
+	while (1)
     {
-        return;
-    }
-		 
-    while (1)
+        if (tos_at_uart_read(&data, 1) != 1)
+        {
+            return;
+        }
+
+        if (data == ':')
+        {
+            break;
+        }
+	}
+	
+	if (tos_at_uart_read(&data, 1) != 1)
+	{
+		return;
+	}
+	
+	while (1)
     {
         if (tos_at_uart_read(&data, 1) != 1)
         {
@@ -488,19 +390,12 @@ __STATIC__ void m26_incoming_data_process(void)
         }
         data_len = data_len * 10 + (data - '0');
     }
-		
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
-            return;
-        }
+	printf("data_len = %d\n", data_len);
 
-        if (data == ':')
-        {
-            break;
-        }
-}		
+    if (tos_at_uart_read(&data, 1) != 1)
+    {
+        return;
+    }
 		
     do {
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
@@ -519,29 +414,28 @@ __STATIC__ void m26_incoming_data_process(void)
 	return;
 }
 
-at_event_t m26_at_event[] = {
-	{ "+RECEIVE:", m26_incoming_data_process},
+at_event_t ec20_at_event[] = {
+	{ "+QIURC: \"recv\"", ec20_incoming_data_process},
 };
 
-sal_module_t sal_module_m26 = {
-    .init           = m26_init,
-    .connect        = m26_connect,
-    .send           = m26_send,
-    .recv_timeout   = m26_recv_timeout,
-    .recv           = m26_recv,
-    .close          = m26_close,
-    .parse_domain   = m26_parse_domain,
+sal_module_t sal_module_ec20 = {
+    .init           = ec20_init,
+    .connect        = ec20_connect,
+    .send           = ec20_send,
+    .recv_timeout   = ec20_recv_timeout,
+    .recv           = ec20_recv,
+    .close          = ec20_close,
+    .parse_domain   = ec20_parse_domain,
 };
 
-int m26_sal_init(hal_uart_port_t uart_port)
+int ec20_sal_init(hal_uart_port_t uart_port)
 {
-
-    if (tos_at_init(uart_port, m26_at_event,
-                        sizeof(m26_at_event) / sizeof(m26_at_event[0])) != 0) {
+    if (tos_at_init(uart_port, ec20_at_event,
+                        sizeof(ec20_at_event) / sizeof(ec20_at_event[0])) != 0) {
         return -1;
     }
 
-    if (tos_sal_module_register(&sal_module_m26) != 0) {
+    if (tos_sal_module_register(&sal_module_ec20) != 0) {
         return -1;
     }
     if (tos_sal_module_init() != 0) {
