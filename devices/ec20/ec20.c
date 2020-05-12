@@ -329,7 +329,6 @@ __STATIC__ void ec20_incoming_data_process(void)
     uint8_t data;
     int channel_id = 0, data_len = 0, read_len;
     uint8_t buffer[128];
-	char recv_check[10];
 
     /*
 		+QIURC: "recv",0
