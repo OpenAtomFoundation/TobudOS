@@ -274,6 +274,48 @@ int ec20_send(int id, const void *buf, size_t len)
     return len;
 }
 
+int ec20_recvfrom_timeout(int id, void *buf, size_t len, uint32_t timeout)
+{
+	return tos_at_channel_read_timed(id, buf, len, timeout);
+}
+
+int ec20_recvfrom(int id, void *buf, size_t len)
+{
+	return ec20_recvfrom_timeout(id, buf, len, (uint32_t)4000);
+}
+
+int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
+{
+    at_echo_t echo;
+
+    if (tos_at_global_lock_pend() != 0)
+	{
+        return -1;
+    }
+
+    tos_at_echo_create(&echo, NULL, 0, ">");
+
+	tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
+
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
+	{
+        tos_at_global_lock_post();
+        return -1;
+    }
+
+    tos_at_echo_create(&echo, NULL, 0, "SEND OK");
+    tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
+	{
+        tos_at_global_lock_post();
+        return -1;
+    }
+
+    tos_at_global_lock_post();
+
+    return len;
+}
+
 static void ec20_transparent_mode_exit(void)
 {
     tos_at_cmd_exec(NULL, 500, "+++");
@@ -329,7 +371,6 @@ __STATIC__ void ec20_incoming_data_process(void)
     uint8_t data;
     int channel_id = 0, data_len = 0, read_len;
     uint8_t buffer[128];
-	char recv_check[10];
 
     /*
 		+QIURC: "recv",0
@@ -424,6 +465,9 @@ sal_module_t sal_module_ec20 = {
     .send           = ec20_send,
     .recv_timeout   = ec20_recv_timeout,
     .recv           = ec20_recv,
+    .sendto           = ec20_sendto,
+	.recvfrom         = ec20_recvfrom,
+	.recvfrom_timeout = ec20_recvfrom_timeout,
     .close          = ec20_close,
     .parse_domain   = ec20_parse_domain,
 };
