@@ -58,6 +58,7 @@ HAL_DRIVER_SRC =  \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/i2c.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/usart.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/spi.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/tim.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_it.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_hal_msp.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11/DHT11_BUS.c \

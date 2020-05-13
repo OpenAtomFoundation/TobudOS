@@ -14,7 +14,7 @@ before_install:
 
 
 script:
-  -  cd board/TencentOS_tiny_EVB_MX/GCC/hello_world
+  -  cd board/TencentOS_tiny_EVB_MX_Plus/GCC/hello_world
   -  make
 
 
