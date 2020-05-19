@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32L4xx_DFP.2.2.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER,USE_ESP8266</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\BH1750;..\..\BSP\Hardware\OLED;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\lora_module_wrapper;..\..\..\..\components\connectivity\Eclipse-Paho-MQTT\wrapper\include;..\..\..\..\components\connectivity\Eclipse-Paho-MQTT\3rdparty\include;..\..\..\..\examples\LoRaWAN;..\..\..\..\devices\rhf76_lora</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\BH1750;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\PM25;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\lora_module_wrapper;..\..\..\..\components\connectivity\Eclipse-Paho-MQTT\wrapper\include;..\..\..\..\components\connectivity\Eclipse-Paho-MQTT\3rdparty\include;..\..\BSP\LoRaWAN;..\..\..\..\devices\rhf76_lora</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -438,14 +438,14 @@
               <FilePath>..\..\BSP\Src\spi.c</FilePath>
             </File>
             <File>
-              <FileName>stm32l4xx_it_module.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32l4xx_it_module.c</FilePath>
-            </File>
-            <File>
               <FileName>tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_it_lorawan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\stm32l4xx_it_lorawan.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -455,7 +455,7 @@
             <File>
               <FileName>lora_demo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\LoRaWAN\lora_demo.c</FilePath>
+              <FilePath>..\..\BSP\LoRaWAN\lora_demo.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -816,6 +816,16 @@
               <FileName>lora_module_wrapper.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\net\lora_module_wrapper\lora_module_wrapper.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>sensor_parser</GroupName>
+          <Files>
+            <File>
+              <FileName>sensor_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Hardware\PM25\sensor_parser.c</FilePath>
             </File>
           </Files>
         </Group>

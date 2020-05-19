@@ -22,6 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 uint8_t data;
+uint8_t msg;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef hlpuart1;
@@ -111,7 +112,7 @@ void MX_USART3_UART_Init(void)
   {
     Error_Handler();
   }
-    HAL_UART_Receive_IT(&huart3, &data, 1);//(uint8_t *)aRxBuffer, 1);
+    HAL_UART_Receive_IT(&huart3, &msg, 1);//(uint8_t *)aRxBuffer, 1);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
