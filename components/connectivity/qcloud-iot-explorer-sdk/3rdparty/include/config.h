@@ -11,7 +11,7 @@
 /* #undef LOG_UPLOAD */
 /* #undef IOT_DEBUG */
 /* #undef DEBUG_DEV_INFO_USED */
-#define AT_TCP_ENABLED
+/* #undef AT_TCP_ENABLED */
 #define AT_UART_RECV_IRQ
 /* #undef AT_OS_USED */
 /* #undef AT_DEBUG */

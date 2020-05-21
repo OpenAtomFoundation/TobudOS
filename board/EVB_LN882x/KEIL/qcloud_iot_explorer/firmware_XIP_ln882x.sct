@@ -1,0 +1,78 @@
+#! armcc -E
+#include ".\flash_partition_table.h"
+#include ".\..\..\..\..\platform\vendor_bsp\LN\ln882x\include\cpu\ARM_CM4F\ln88xx\mem_map_ln882x.h"
+
+
+LR_FLASH FLASH_BASE+PRIMARY_PARTITION_OFFSET PRIMARY_PATTITION_SIZE
+{; load region size_region
+
+    ISR_VECTOR RAM_BASE ALIGN 0x100
+    {
+        startup_*.o (RESET, +First)
+    }
+
+    ER_FLASH FLASH_BASE+PRIMARY_PARTITION_OFFSET + ImageLength(ISR_VECTOR) PRIMARY_PATTITION_SIZE
+    {; load address = execution address
+        *(InRoot$$Sections)
+        .ANY (+RO)
+    }
+
+    ER_CODE ImageLimit(ISR_VECTOR)
+    {
+        ;mandatory item
+        ll_qspi.o(+RO)
+        ll_cache.o(+RO)
+        ll_dma.o(+RO)
+        ll_syscon.o(+RO)
+        ll_sleep.o(+RO)
+        ll_rtc.o(+RO)
+        cache.o(+RO)
+        qspi.o(+RO)
+        flash.o(+RO)
+        hal_dma.o(+RO)
+        hal_syscon.o(+RO)
+        hal_sleep.o(+RO)
+        hal_rtc.o(+RO)
+        ;port.o(XIR)
+
+        ;optional item
+        ;ll_uart.o(+RO)
+        ;hal_uart.o(+RO)
+        ;log.o(+RO)
+        ;serial.o(+RO)
+        ;serial_art2000.o(+RO)
+        ;fifobuf.o(+RO)
+    }
+
+    ER_STACK +0
+    {
+        startup_ln*(+RW +ZI)
+    }
+
+    ER_DATA +0
+    {
+        *(.ARM.__at_0x1FFFFFFC)
+        .ANY (+RW +ZI)
+    }
+
+    ;IQ Data area cannot be used by ER_DATA region
+    ;ScatterAssert(ImageLimit(ER_DATA) < (0x20020300))
+
+    HEAP_SPACE +0 EMPTY RETENTION_MEM_BASE-ImageLimit(ER_DATA)
+    {; Heap region
+    }
+
+    NO_INIT_DATA RETENTION_MEM_BASE  UNINIT 0x80
+    {
+        *(no_init_data)
+    }
+
+    RETENTION RETENTION_MEM_BASE+0x80 ANY_SIZE 0x2000-0x80-16 RETENTION_MEM_SIZE
+    {
+        *(retention_data)
+        phy_LN.o(+RW +ZI)
+        ch_info.o(+RW +ZI)
+    }
+}	
+	
+

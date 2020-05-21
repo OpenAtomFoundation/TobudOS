@@ -1253,9 +1253,6 @@
         <file>
             <name>$PROJ_DIR$\..\..\..\..\net\at\src\tos_at.c</name>
         </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\net\at\src\tos_at_utils.c</name>
-        </file>
     </group>
     <group>
         <name>devices</name>
@@ -1414,6 +1411,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_sem.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_stopwatch.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\kernel\core\tos_sys.c</name>

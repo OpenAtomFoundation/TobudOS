@@ -19,7 +19,6 @@
 #define _TOS_AT_H_
 
 #include "tos_k.h"
-#include "tos_at_utils.h"
 #include "tos_hal.h"
 
 #define AT_AGENT_ECHO_OK            "OK"
@@ -114,7 +113,7 @@ typedef struct at_agent_st {
     k_task_t        parser;
     at_cache_t      recv_cache;
 
-    at_timer_t      timer;
+    k_stopwatch_t   timer;
 
     k_mutex_t       global_lock;
 
