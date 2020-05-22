@@ -269,7 +269,7 @@ int ec20_send(int id, const void *buf, size_t len)
     }
 
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
-    tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
+    tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
 	{
         tos_at_global_lock_post();
