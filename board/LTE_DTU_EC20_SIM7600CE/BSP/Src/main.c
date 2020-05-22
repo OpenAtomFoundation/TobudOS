@@ -1,7 +1,7 @@
 #include "mcu_init.h"
 #include "cmsis_os.h"
 
-#define APPLICATION_TASK_STK_SIZE       512
+#define APPLICATION_TASK_STK_SIZE       1024
 extern void application_entry(void *arg);
 osThreadDef(application_entry, osPriorityNormal, 1, APPLICATION_TASK_STK_SIZE);
 
