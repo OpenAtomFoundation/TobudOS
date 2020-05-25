@@ -26,6 +26,7 @@ void tos_cpu_tick_handler(void)
 
 __API__ uint32_t tos_cpu_clz(uint32_t val)
 {
+#if defined(TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT) && (TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT == 0u)
     uint32_t nbr_lead_zeros = 0;
 
     if (!(val & 0XFFFF0000)) {
@@ -57,6 +58,9 @@ __API__ uint32_t tos_cpu_clz(uint32_t val)
     }
 
     return (nbr_lead_zeros);
+#else
+    return (32 - port_cpu_clz(val));
+#endif
 }
 
 __API__ void tos_cpu_int_disable(void)

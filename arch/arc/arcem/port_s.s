@@ -313,7 +313,7 @@ firq_return:
 	.align 4
 port_cpu_clz:
 	breq r0, 0, cpu_clz_return
-	ffs r1, r0
+	fls r1, r0
 	add r0, r1, 1
 cpu_clz_return:
 	j [blink]

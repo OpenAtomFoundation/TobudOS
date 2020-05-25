@@ -23,7 +23,7 @@
 #endif
 
 #if defined(TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT) && (TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT == 1u)
-__PORT__ uint32_t   port_clz(uint32_t val);
+__PORT__ uint32_t   port_cpu_clz(uint32_t);
 #endif
 
 __PORT__ void       port_int_disable(void);
@@ -35,8 +35,6 @@ __PORT__ cpu_cpsr_t port_cpsr_save(void);
 __PORT__ void       port_cpsr_restore(cpu_cpsr_t cpsr);
 
 __PORT__ void       port_cpu_reset(void);
-
-__PORT__ uint32_t   port_cpu_clz(uint32_t);
 
 __PORT__ void       port_sched_start(void) __NO_RETURN__;
 
