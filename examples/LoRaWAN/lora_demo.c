@@ -94,7 +94,7 @@ void application_entry(void *arg)
     rhf76_lora_init(HAL_UART_PORT_1);
     tos_lora_module_recvcb_register(recv_callback);
 
-    tos_lora_module_join_otaa("8cf957200000fa57", "8cf957200000fa572059aaaaad204a72");
+    tos_lora_module_join_otaa("8cf957200000fa57", "8cf957233333fa572059eeeeed204a72");
 
     while (1) {
         temperature = 300;
