@@ -99,7 +99,7 @@ void application_entry(void *arg)
     rhf76_lora_init(HAL_UART_PORT_0);
     tos_lora_module_recvcb_register(recv_callback);
 
-    tos_lora_module_join_otaa("8cf957200000025a", "8cf957200000025a1e29aaaaad204a72");
+    tos_lora_module_join_otaa("8cf957200000025a", "8cf957211111125a1e29bbbbbd204a72");
 
     tos_mail_q_create(&mail_q, pool, DATA_CNT, sizeof(uint8_t));
     tos_shell_init(cmd_buf, sizeof(cmd_buf), uart_output);
