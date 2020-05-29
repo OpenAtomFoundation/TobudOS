@@ -461,7 +461,15 @@ __STATIC__ void rhf76_incoming_data_process(void)
         if (data == '"') {
             break;
         }
-        incoming_data_buffer[ret++] = data;
+		if(ret<128)	
+		{
+			incoming_data_buffer[ret++] = data;
+		}
+		else
+		{
+			printf(" ERR:incomming data is big ,please give more space for incoming_data_buffer\n");
+		}
+
     }
 
     printf("rhf76_incoming_data_process %d: %s\n", ret, incoming_data_buffer);
