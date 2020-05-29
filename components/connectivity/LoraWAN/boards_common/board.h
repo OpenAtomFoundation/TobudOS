@@ -23,6 +23,11 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include "utilities.h"
 /*!
@@ -112,5 +117,9 @@ uint8_t GetBoardPowerSource( void );
  * \retval value  Version
  */
 Version_t BoardGetVersion( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __BOARD_H__

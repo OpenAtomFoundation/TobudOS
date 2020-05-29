@@ -763,11 +763,6 @@
               <FilePath>..\..\..\components\connectivity\LoraWAN\mac\LoRaMacCrypto.c</FilePath>
             </File>
             <File>
-              <FileName>LoRaMacFCntHandler.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\components\connectivity\LoraWAN\mac\LoRaMacFCntHandler.c</FilePath>
-            </File>
-            <File>
               <FileName>LoRaMacParser.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\connectivity\LoraWAN\mac\LoRaMacParser.c</FilePath>
@@ -791,6 +786,11 @@
               <FileName>soft-se.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\connectivity\LoraWAN\peripherals\soft-se\soft-se.c</FilePath>
+            </File>
+            <File>
+              <FileName>soft-se-hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\connectivity\LoraWAN\peripherals\soft-se\soft-se-hal.c</FilePath>
             </File>
           </Files>
         </Group>

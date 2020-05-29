@@ -25,8 +25,10 @@
 #ifndef __LPM_BOARD_H__
 #define __LPM_BOARD_H__
 
+
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include "board-config.h"

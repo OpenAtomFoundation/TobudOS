@@ -23,6 +23,11 @@
 #ifndef __SX1276_REGS_LORA_H__
 #define __SX1276_REGS_LORA_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*!
  * ============================================================================
  * SX1276 Internal registers Address
@@ -569,5 +574,9 @@
 #define RF_PLL_BANDWIDTH_150                        0x40
 #define RF_PLL_BANDWIDTH_225                        0x80
 #define RF_PLL_BANDWIDTH_300                        0xC0  // Default
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __SX1276_REGS_LORA_H__

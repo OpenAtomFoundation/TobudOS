@@ -43,21 +43,21 @@ uint8_t MAG3110Init( void )
         MAG3110Read( MAG3110_ID, &regVal );
         if( regVal != 0xC4 )   // Fixed Device ID Number = 0xC4
         {
-            return LORA_FAIL;
+            return FAIL;
         }
 
         MAG3110Reset( );
     }
-    return LORA_SUCCESS;
+    return SUCCESS;
 }
 
 uint8_t MAG3110Reset( void )
 {
-    if( MAG3110Write( 0x11, 0x10 ) == LORA_SUCCESS ) // Reset the MAG3110 with CTRL_REG2
+    if( MAG3110Write( 0x11, 0x10 ) == SUCCESS ) // Reset the MAG3110 with CTRL_REG2
     {
-        return LORA_SUCCESS;
+        return SUCCESS;
     }
-    return LORA_FAIL;
+    return FAIL;
 }
 
 uint8_t MAG3110Write( uint8_t addr, uint8_t data )

@@ -23,8 +23,17 @@
 #ifndef __SPI_BOARD_H__
 #define __SPI_BOARD_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "spi.h"
 
 // An Spi.c file has to be implmented under system directory.
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __SPI_BOARD_H__

@@ -22,6 +22,7 @@ uint8_t NwkSEncKey[] = { 0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6, 0xAB, 0
 uint8_t AppSKey[] = { 0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6, 0xAB, 0xF7, 0x15, 0x88, 0x09, 0xCF, 0x4F, 0x3C };
 #endif
 
+
 bool NextTx = true;
 uint8_t IsTxConfirmed = false;
 TimerEvent_t TxNextPacketTimer;
@@ -318,8 +319,6 @@ void LoRa_JoinNetwork(uint8_t jointype)
     {
 		MlmeReq_t mlmeReq;
 		mlmeReq.Type = MLME_JOIN;
-		mlmeReq.Req.Join.DevEui = DevEui;
-		mlmeReq.Req.Join.JoinEui = JoinEui;
 		mlmeReq.Req.Join.Datarate = LORAWAN_DEFAULT_DATARATE;
 		LoRaMacMlmeRequest( &mlmeReq );
     }

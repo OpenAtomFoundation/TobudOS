@@ -20,6 +20,8 @@
  *
  * \author    Gregory Cristian ( Semtech )
  */
+#include <stdint.h>
+#include <stdbool.h>
 #include "stm32l0xx.h"
 #include "board-config.h"
 #include "adc-board.h"
@@ -70,6 +72,8 @@ uint16_t AdcMcuReadChannel( Adc_t *obj, uint32_t channel )
 {
     ADC_ChannelConfTypeDef adcConf = { 0 };
     uint16_t adcData = 0;
+    uint32_t tickStart = 0;
+    bool isAdcReady = true;
 
     // Enable HSI
     __HAL_RCC_HSI_ENABLE( );
@@ -83,18 +87,31 @@ uint16_t AdcMcuReadChannel( Adc_t *obj, uint32_t channel )
 
     adcConf.Channel = channel;
     adcConf.Rank = ADC_RANK_CHANNEL_NUMBER;
-
     HAL_ADC_ConfigChannel( &AdcHandle, &adcConf );
 
     // Enable ADC1
     __HAL_ADC_ENABLE( &AdcHandle );
 
-    // Start ADC Software Conversion
-    HAL_ADC_Start( &AdcHandle );
+    // Wait for ADC to effectively be enabled
+    tickStart = HAL_GetTick( );
+    while( __HAL_ADC_GET_FLAG( &AdcHandle, ADC_FLAG_RDY ) == RESET )
+    {
+        if( ( HAL_GetTick( ) - tickStart ) > ADC_ENABLE_TIMEOUT )
+        {
+            isAdcReady = false;
+            break;
+        }
+    }
 
-    HAL_ADC_PollForConversion( &AdcHandle, HAL_MAX_DELAY );
+    if( isAdcReady != false )
+    {
+        // Start ADC Software Conversion
+        HAL_ADC_Start( &AdcHandle );
 
-    adcData = HAL_ADC_GetValue( &AdcHandle );
+        HAL_ADC_PollForConversion( &AdcHandle, HAL_MAX_DELAY );
+
+        adcData = HAL_ADC_GetValue( &AdcHandle );
+    }
 
     __HAL_ADC_DISABLE( &AdcHandle );
 

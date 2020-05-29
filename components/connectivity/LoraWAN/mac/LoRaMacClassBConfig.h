@@ -36,6 +36,11 @@
 #ifndef __LORAMACCLASSBCONFIG_H__
 #define __LORAMACCLASSBCONFIG_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*!
  * Defines the beacon interval in ms
  */
@@ -111,5 +116,9 @@
  * Defines the expansion factor for the beacon movement
  */
 #define CLASSB_WINDOW_MOVE_EXPANSION_FACTOR         2
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __LORAMACCLASSBCONFIG_H__

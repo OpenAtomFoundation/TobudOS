@@ -37,6 +37,11 @@
 #ifndef __REGION_CN779_H__
 #define __REGION_CN779_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "region/Region.h"
 
 /*!
@@ -200,6 +205,11 @@
 #define CN779_BEACON_CHANNEL_FREQ                   785000000
 
 /*!
+ * Ping slot channel frequency
+ */
+#define CN779_PING_SLOT_CHANNEL_FREQ                785000000
+
+/*!
  * Payload size of a beacon frame
  */
 #define CN779_BEACON_SIZE                           17
@@ -236,9 +246,9 @@
 
 /*!
  * Band 0 definition
- * { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define CN779_BAND0                                 { 100, CN779_MAX_TX_POWER, 0, 0, 0 } //  1.0 %
+#define CN779_BAND0                                 { 100, CN779_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
 
 /*!
  * LoRaMac default channel 1
@@ -273,14 +283,9 @@ static const uint8_t DataratesCN779[]  = { 12, 11, 10,  9,  8,  7,  7, 50 };
 static const uint32_t BandwidthsCN779[] = { 125000, 125000, 125000, 125000, 125000, 125000, 250000, 0 };
 
 /*!
- * Maximum payload with respect to the datarate index. Cannot operate with repeater.
+ * Maximum payload with respect to the datarate index.
  */
 static const uint8_t MaxPayloadOfDatarateCN779[] = { 51, 51, 51, 115, 242, 242, 242, 242 };
-
-/*!
- * Maximum payload with respect to the datarate index. Can operate with repeater.
- */
-static const uint8_t MaxPayloadOfDatarateRepeaterCN779[] = { 51, 51, 51, 115, 222, 222, 222, 222 };
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -438,13 +443,6 @@ uint8_t RegionCN779DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 int8_t RegionCN779AlternateDr( int8_t currentDr, AlternateDrType_t type );
 
 /*!
- * \brief Calculates the back-off time.
- *
- * \param [IN] calcBackOff Pointer to the function parameters.
- */
-void RegionCN779CalcBackOff( CalcBackOffParams_t* calcBackOff );
-
-/*!
  * \brief Searches and set the next random available channel
  *
  * \param [OUT] channel Next channel to use for TX.
@@ -504,5 +502,9 @@ uint8_t RegionCN779ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
  void RegionCN779RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 
 /*! \} defgroup REGIONCN779 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REGION_CN779_H__

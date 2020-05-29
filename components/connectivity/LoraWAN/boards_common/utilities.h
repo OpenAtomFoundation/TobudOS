@@ -23,6 +23,11 @@
 #ifndef __UTILITIES_H__
 #define __UTILITIES_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 
 /*!
@@ -43,7 +48,9 @@
  * \param [IN] b 2nd value
  * \retval minValue Minimum value
  */
+#ifndef MIN
 #define MIN( a, b ) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
+#endif
 
 /*!
  * \brief Returns the maximum value between a and b
@@ -52,7 +59,9 @@
  * \param [IN] b 2nd value
  * \retval maxValue Maximum value
  */
+#ifndef MAX
 #define MAX( a, b ) ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
+#endif
 
 /*!
  * \brief Returns 2 raised to the power of n
@@ -69,8 +78,8 @@ typedef union Version_u
 {
     struct Version_s
     {
-        uint8_t Rfu;
         uint8_t Revision;
+        uint8_t Patch;
         uint8_t Minor;
         uint8_t Major;
     }Fields;
@@ -161,5 +170,9 @@ void BoardCriticalSectionBegin( uint32_t *mask );
  * \param [IN] mask Pointer to a variable where the CPU IRQ mask was stored
  */
 void BoardCriticalSectionEnd( uint32_t *mask );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __UTILITIES_H__

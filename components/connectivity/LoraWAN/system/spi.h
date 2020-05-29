@@ -23,6 +23,11 @@
 #ifndef __SPI_H__
 #define __SPI_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "gpio.h"
 
 /*!
@@ -96,5 +101,9 @@ void SpiFrequency( Spi_t *obj, uint32_t hz );
  * \retval inData      Received byte.
  */
 uint16_t SpiInOut( Spi_t *obj, uint16_t outData );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __SPI_H__

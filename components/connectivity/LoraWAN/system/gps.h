@@ -23,6 +23,11 @@
 #ifndef __GPS_H__
 #define __GPS_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -106,7 +111,7 @@ void GpsConvertPositionFromStringToNumerical( void );
  * \param [OUT] lati Latitude value
  * \param [OUT] longi Longitude value
  *
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t GpsGetLatestGpsPositionDouble ( double *lati, double *longi );
 
@@ -117,7 +122,7 @@ uint8_t GpsGetLatestGpsPositionDouble ( double *lati, double *longi );
  * \param [OUT] latiBin Latitude value
  * \param [OUT] longiBin Longitude value
  *
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t GpsGetLatestGpsPositionBinary ( int32_t *latiBin, int32_t *longiBin );
 
@@ -129,7 +134,7 @@ uint8_t GpsGetLatestGpsPositionBinary ( int32_t *latiBin, int32_t *longiBin );
  * \param [IN] rxBuffer Data buffer to be parsed
  * \param [IN] rxBufferSize Size of data buffer
  *
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize );
 
@@ -149,5 +154,9 @@ void GpsFormatGpsData( void );
  * \brief Resets the GPS position variables
  */
 void GpsResetPosition( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __GPS_H__

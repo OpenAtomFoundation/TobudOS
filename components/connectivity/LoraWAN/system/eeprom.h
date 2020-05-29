@@ -23,6 +23,11 @@
 #ifndef __EEPROM_H__
 #define __EEPROM_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 
 /*!
@@ -31,7 +36,7 @@
  * \param[IN] addr EEPROM address to write to
  * \param[IN] buffer Pointer to the buffer to be written.
  * \param[IN] size Size of the buffer to be written.
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t EepromWriteBuffer( uint16_t addr, uint8_t *buffer, uint16_t size );
 
@@ -41,7 +46,7 @@ uint8_t EepromWriteBuffer( uint16_t addr, uint8_t *buffer, uint16_t size );
  * \param[IN] addr EEPROM address to read from
  * \param[OUT] buffer Pointer to the buffer to be written with read data.
  * \param[IN] size Size of the buffer to be read.
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t EepromReadBuffer( uint16_t addr, uint8_t *buffer, uint16_t size );
 
@@ -62,5 +67,9 @@ void EepromSetDeviceAddr( uint8_t addr );
  * \retval addr External EEPROM address
  */
 uint8_t EepromGetDeviceAddr( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __EEPROM_H__

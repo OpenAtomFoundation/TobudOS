@@ -23,6 +23,11 @@
 #ifndef __ADC_H__
 #define __ADC_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include "gpio.h"
 
@@ -57,5 +62,9 @@ void AdcDeInit( Adc_t *obj );
  * \retval value    Analogue pin value
  */
 uint16_t AdcReadChannel( Adc_t *obj, uint32_t channel );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __ADC_H__

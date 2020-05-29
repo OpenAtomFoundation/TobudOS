@@ -23,6 +23,11 @@
 #ifndef __FIFO_H__
 #define __FIFO_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -84,5 +89,9 @@ bool IsFifoEmpty( Fifo_t *fifo );
  * \retval isFull     true: FIFO is full, false FIFO is not full
  */
 bool IsFifoFull( Fifo_t *fifo );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __FIFO_H__

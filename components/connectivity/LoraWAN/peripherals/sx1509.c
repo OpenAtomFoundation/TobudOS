@@ -44,14 +44,14 @@ void SX1509Init( void )
 
 uint8_t SX1509Reset( )
 {
-    if( SX1509Write( RegReset, 0x12 ) == LORA_SUCCESS )
+    if( SX1509Write( RegReset, 0x12 ) == SUCCESS )
     {
-        if( SX1509Write( RegReset, 0x34 ) == LORA_SUCCESS )
+        if( SX1509Write( RegReset, 0x34 ) == SUCCESS )
         {
-            return LORA_SUCCESS;
+            return SUCCESS;
         }
     }
-    return LORA_FAIL;
+    return FAIL;
 }
 
 uint8_t SX1509Write( uint8_t addr, uint8_t data )

@@ -23,6 +23,11 @@
 #ifndef __MAG3110_H__
 #define __MAG3110_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 
 /*!
@@ -38,14 +43,14 @@
 /*!
  * \brief Initializes the device
  *
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MAG3110Init( void );
 
 /*!
  * \brief Resets the device
  *
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MAG3110Reset( void );
 
@@ -54,7 +59,7 @@ uint8_t MAG3110Reset( void );
  *
  * \param [IN]: addr
  * \param [IN]: data
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MAG3110Write( uint8_t addr, uint8_t data );
 
@@ -64,7 +69,7 @@ uint8_t MAG3110Write( uint8_t addr, uint8_t data );
  * \param [IN]: addr
  * \param [IN]: data
  * \param [IN]: size
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MAG3110WriteBuffer( uint8_t addr, uint8_t *data, uint8_t size );
 
@@ -73,7 +78,7 @@ uint8_t MAG3110WriteBuffer( uint8_t addr, uint8_t *data, uint8_t size );
  *
  * \param [IN]: addr
  * \param [OUT]: data
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MAG3110Read( uint8_t addr, uint8_t *data );
 
@@ -83,7 +88,7 @@ uint8_t MAG3110Read( uint8_t addr, uint8_t *data );
  * \param [IN]: addr
  * \param [OUT]: data
  * \param [IN]: size
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MAG3110ReadBuffer( uint8_t addr, uint8_t *data, uint8_t size );
 
@@ -100,5 +105,9 @@ void MAG3110SetDeviceAddr( uint8_t addr );
  * \retval: addr Current device slave address
  */
 uint8_t MAG3110GetDeviceAddr( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __MAG3110_H__
