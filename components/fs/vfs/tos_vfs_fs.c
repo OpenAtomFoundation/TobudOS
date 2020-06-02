@@ -1,7 +1,5 @@
 #include "tos_vfs.h"
 
-#if TOS_CFG_VFS_EN > 0u
-
 extern k_list_t k_vfs_fsmap_list;
 TOS_LIST_DEFINE(k_vfs_fsmap_list);
 
@@ -191,6 +189,4 @@ __API__ vfs_err_t tos_vfs_fs_mkfs(const char *device_path, const char *fs_name, 
 
     return VFS_ERR_NONE;
 }
-
-#endif /* TOS_CFG_VFS_EN */
 

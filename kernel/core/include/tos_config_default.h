@@ -240,10 +240,6 @@
 #define TOS_CFG_TICKLESS_EN                 0u
 #endif
 
-#ifndef TOS_CFG_VFS_EN
-#define TOS_CFG_VFS_EN                      0u
-#endif
-
 #if (TOS_CFG_PWR_MGR_EN > 0u) || (TOS_CFG_TICKLESS_EN > 0u)
 #if TOS_CFG_IDLE_TASK_STK_SIZE < 256
 #undef TOS_CFG_IDLE_TASK_STK_SIZE

@@ -1,8 +1,6 @@
 #ifndef _TOS_VFS_INODE_H_
 #define  _TOS_VFS_INODE_H_
 
-#if TOS_CFG_VFS_EN > 0u
-
 // why your inode's name so long?
 #define VFS_INODE_NAME_MAX              31
 
@@ -52,8 +50,6 @@ __KNL__ vfs_inode_t *vfs_inode_alloc(const char *name);
 __KNL__ void vfs_inode_free(vfs_inode_t *inode);
 
 __KNL__ void vfs_inode_release(vfs_inode_t *inode);
-
-#endif
 
 #endif /* _TOS_VFS_INODE_H_ */
 

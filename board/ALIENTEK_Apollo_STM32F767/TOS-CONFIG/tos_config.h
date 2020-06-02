@@ -29,8 +29,6 @@
 
 #define TOS_CFG_TICKLESS_EN         0u
 
-#define TOS_CFG_VFS_EN              1u
-
 #define TOS_CFG_IDLE_TASK_STK_SIZE          80u
 
 #define TOS_CFG_CPU_TICK_PER_SECOND         1000u

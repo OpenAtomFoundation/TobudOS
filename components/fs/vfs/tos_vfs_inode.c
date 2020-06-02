@@ -1,7 +1,5 @@
 #include "tos_vfs.h"
 
-#if TOS_CFG_VFS_EN > 0u
-
 __STATIC__ TOS_LIST_DEFINE(k_vfs_inode_list);
 
 /*
@@ -158,6 +156,4 @@ __KNL__ void vfs_inode_release(vfs_inode_t *inode)
         vfs_inode_free(inode);
     }
 }
-
-#endif /* TOS_CFG_VFS_EN */
 

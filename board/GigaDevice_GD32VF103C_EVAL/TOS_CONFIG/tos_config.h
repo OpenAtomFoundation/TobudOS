@@ -62,8 +62,6 @@
 // 配置是否将TIMER配置成函数模式
 #define TOS_CFG_TIMER_AS_PROC 1u
 
-#define TOS_CFG_VFS_EN 1u
-
 #define TOS_CFG_MMBLK_EN 1u
 
 

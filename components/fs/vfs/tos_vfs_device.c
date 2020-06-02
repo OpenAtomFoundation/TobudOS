@@ -1,7 +1,5 @@
 #include "tos_vfs.h"
 
-#if TOS_CFG_VFS_EN > 0u
-
 vfs_err_t tos_vfs_block_device_register(const char *device_name, vfs_blkdev_ops_t *ops)
 {
     int path_len = 0;
@@ -115,6 +113,4 @@ vfs_err_t tos_vfs_char_device_unregister(const char *device_name)
     vfs_inode_free(inode);
     return VFS_ERR_NONE;
 }
-
-#endif /* TOS_CFG_VFS_EN */
 
