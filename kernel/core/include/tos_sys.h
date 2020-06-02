@@ -196,8 +196,6 @@ __KNL__ __STATIC_INLINE__ void knl_object_deinit(knl_obj_t *knl_obj)
 
 #endif
 
-#if TOS_CFG_MMHEAP_EN > 0u
-
 __KNL__ __STATIC_INLINE__ void knl_object_alloc_reset(knl_obj_t *knl_obj)
 {
     knl_obj->alloc_type = KNL_OBJ_ALLOC_TYPE_NONE;
@@ -222,8 +220,6 @@ __KNL__ __STATIC_INLINE__ int knl_object_alloc_is_static(knl_obj_t *knl_obj)
 {
     return knl_obj->alloc_type == KNL_OBJ_ALLOC_TYPE_STATIC;
 }
-
-#endif
 
 __CDECLS_END
 

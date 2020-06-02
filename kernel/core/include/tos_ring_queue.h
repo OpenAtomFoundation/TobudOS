@@ -65,8 +65,6 @@ __API__ k_err_t tos_ring_q_create(k_ring_q_t *ring_q, void *pool, size_t item_cn
  */
 __API__ k_err_t tos_ring_q_destroy(k_ring_q_t *ring_q);
 
-#if TOS_CFG_MMHEAP_EN > 0u
-
 /**
  * @brief Create a ring queue with dynamic allocated pool.
  * create a ring queue with dynamic allocated pool.
@@ -96,9 +94,6 @@ __API__ k_err_t tos_ring_q_create_dyn(k_ring_q_t *ring_q, size_t item_cnt, size_
  * @retval  #K_ERR_OBJ_INVALID_ALLOC_TYPE   invalid alloc type(is static allocated not dynamic)
  */
 __API__ k_err_t tos_ring_q_destroy_dyn(k_ring_q_t *ring_q);
-
-#endif
-
 
 /**
  * @brief Enqueue an item.

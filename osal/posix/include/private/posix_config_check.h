@@ -21,10 +21,6 @@
 #include "tos_config.h"
 #include "private/posix_config_default.h"
 
-#if     (TOS_CFG_MMHEAP_EN == 0u)
-#error "INVALID config, Must enable TOS_CFG_MMHEAP_EN to use posix stuff"
-#endif
-
 #if     (POSIX_CFG_PTHREAD_COND_EN > 0u) && (TOS_CFG_SEM_EN == 0u)
 #error "INVALID config, Must enable TOS_CFG_SEM_EN to use pthread_cond"
 #endif

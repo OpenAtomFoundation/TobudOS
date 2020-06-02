@@ -90,7 +90,7 @@
 /////////////////////////////////////////
 // enable mmheap
 #ifndef TOS_CFG_MMHEAP_EN
-#define TOS_CFG_MMHEAP_EN                       1u
+#define TOS_CFG_MMHEAP_EN                       0u
 #endif
 
 #ifndef TOS_CFG_MMHEAP_DEFAULT_POOL_EN

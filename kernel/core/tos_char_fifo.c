@@ -30,9 +30,7 @@ __API__ k_err_t tos_chr_fifo_create(k_chr_fifo_t *chr_fifo, void *buffer, size_t
     }
 
     TOS_OBJ_INIT(chr_fifo, KNL_OBJ_TYPE_CHAR_FIFO);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&chr_fifo->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
@@ -44,11 +42,9 @@ __API__ k_err_t tos_chr_fifo_destroy(k_chr_fifo_t *chr_fifo)
     TOS_PTR_SANITY_CHECK(chr_fifo);
     TOS_OBJ_VERIFY(chr_fifo, KNL_OBJ_TYPE_CHAR_FIFO);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_static(&chr_fifo->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     err = tos_ring_q_destroy(&chr_fifo->ring_q);
     if (err != K_ERR_NONE) {
@@ -56,14 +52,10 @@ __API__ k_err_t tos_chr_fifo_destroy(k_chr_fifo_t *chr_fifo)
     }
 
     TOS_OBJ_DEINIT(chr_fifo);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&chr_fifo->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
-
-#if TOS_CFG_MMHEAP_EN > 0u
 
 __API__ k_err_t tos_chr_fifo_create_dyn(k_chr_fifo_t *chr_fifo, size_t fifo_size)
 {
@@ -103,8 +95,6 @@ __API__ k_err_t tos_chr_fifo_destroy_dyn(k_chr_fifo_t *chr_fifo)
 
     return K_ERR_NONE;
 }
-
-#endif
 
 __API__ k_err_t tos_chr_fifo_push(k_chr_fifo_t *chr_fifo, uint8_t data)
 {

@@ -21,6 +21,7 @@
 
 __API__ evtdrv_err_t tos_evtdrv_sys_init(evtdrv_task_entry_t tasks[], evtdrv_ttb_sz_t task_table_size, k_evtdrv_poll_t poll)
 {
+    k_err_t kerr;
     evtdrv_err_t err;
 
     evtdrv_task_table       = &tasks[0];
@@ -30,12 +31,13 @@ __API__ evtdrv_err_t tos_evtdrv_sys_init(evtdrv_task_entry_t tasks[], evtdrv_ttb
 
 #if TOS_CFG_MMHEAP_EN > 0
 #if TOS_CFG_MMHEAP_DEFAULT_POOL_EN > 0u
-    mmheap_init_with_pool(k_mmheap_default_pool, TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE);
+    kerr = mmheap_init_with_pool(k_mmheap_default_pool, TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE);
 #else
-    mmheap_init();
+    kerr = mmheap_init();
 #endif
-#else
-    return EVTDRV_ERR_MMHEAP_NOT_ENABLED;
+    if (kerr != K_ERR_NONE) {
+        return EVTDRV_ERR_MMHEAP_INIT_FAILED;
+    }
 #endif
 
     err = evtdrv_event_init();

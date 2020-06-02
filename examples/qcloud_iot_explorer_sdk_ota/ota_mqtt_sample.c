@@ -157,7 +157,7 @@ static int update_local_fw_info(const char *version, const char *preVer, const c
     FILE *fp;
     int wlen;
     int ret = QCLOUD_RET_SUCCESS;
-    char dataBuff[INFO_FILE_MAX_LEN];
+    static char dataBuff[INFO_FILE_MAX_LEN];
 
     memset(dataBuff, 0, INFO_FILE_MAX_LEN);
     HAL_Snprintf(dataBuff, INFO_FILE_MAX_LEN, "{\"%s\":\"%s\", \"%s\":\"%s\",\"%s\":%d,\"%s\":\"%s\"}", \
@@ -190,7 +190,7 @@ exit:
 /* get local firmware offset for resuming download from break point */
 static int getFwOffset(void *h_ota, char *local_ver, char *local_md5, char *local_size, uint32_t *offset, uint32_t *size_file)
 {
-    char version[128], md5sum[33];
+    static char version[128], md5sum[33];
     uint32_t local_len;
     int Ret;
 
@@ -217,7 +217,7 @@ static int cal_exist_fw_md5(void *h_ota, FILE *fp, size_t size)
 {
 #define BUFF_LEN 1024
 
-    char buff[BUFF_LEN];
+    static char buff[BUFF_LEN];
     size_t rlen;
     int Ret = QCLOUD_RET_SUCCESS;
 
@@ -273,7 +273,7 @@ static int _setup_connect_init_params(MQTTInitParams* initParams)
     return QCLOUD_RET_SUCCESS;
 }
 
-int ota_thread(int argc, char **argv)
+int ota_thread(void)
 {
     IOT_Log_Set_Level(eLOG_DEBUG);
     int rc;
@@ -341,15 +341,15 @@ int ota_thread(int argc, char **argv)
 			if(offset == size_file) {
 				Log_d("download success last time without report!");
 				upgrade_fetch_success = true;
-			
-			    /* get fw information */			
+
+			    /* get fw information */
                 IOT_OTA_Ioctl(h_ota, IOT_OTAG_MD5SUM, md5sum, 33);
                 IOT_OTA_Ioctl(h_ota, IOT_OTAG_VERSION, version, 128);
 				size_downloaded = size_file;
 				break;
 			}
 
-            /*start http connect*/           
+            /*start http connect*/
             rc = IOT_OTA_StartDownload(h_ota, offset, size_file);
             if (QCLOUD_RET_SUCCESS != rc) {
                 Log_e("OTA download start err,rc:%d", rc);
@@ -381,7 +381,7 @@ int ota_thread(int argc, char **argv)
                     break;
                 }
             }
-	
+
 
             do {
                 len = IOT_OTA_FetchYield(h_ota, buf_ota, OTA_BUF_LEN, 1);

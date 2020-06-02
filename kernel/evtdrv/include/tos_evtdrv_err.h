@@ -24,7 +24,7 @@ typedef enum evtdrv_err_en {
     EVTDRV_ERR_PTR_NULL             = 0x2u,
     EVTDRV_ERR_MSG_BUSY             = 0x3u,
     EVTDRV_ERR_TASK_INVALID         = 0x4u,
-    EVTDRV_ERR_MMHEAP_NOT_ENABLED   = 0x5u,
+    EVTDRV_ERR_MMHEAP_INIT_FAILED      = 0x5u,
 
     EVTDRV_ERR_EVENT_INVALID         = 0x10u,
     EVTDRV_ERR_EVENT_OVERFLOW       = 0x11u,
