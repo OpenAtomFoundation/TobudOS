@@ -37,5 +37,7 @@
 
 #define TOS_CFG_TIMER_AS_PROC               1u
 
+#define TOS_CFG_FAULT_BACKTRACE_EN          1u
+
 #endif
 

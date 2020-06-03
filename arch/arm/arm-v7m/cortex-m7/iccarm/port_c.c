@@ -227,25 +227,6 @@ __PORT__ void port_fault_diagnosis(void)
     port_fault_do_diagnosis(&regs);
 }
 
-/*------------------ RealView Compiler -----------------*/
-/* V5 */
-#if defined(__CC_ARM)
-
-__PORT__ __ASM__ void HardFault_Handler(void)
-{
-    IMPORT  fault_backtrace
-
-    MOV     r0, lr
-    TST     lr, #0x04
-    ITE     EQ
-    MRSEQ   r1, MSP
-    MRSNE   r1, PSP
-    BL      fault_backtrace
-}
-
-/*------------------ ARM Compiler V6 -------------------*/
-#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
-
 __PORT__ void __NAKED__ HardFault_Handler(void)
 {
     __ASM__ __VOLATILE__ (
@@ -254,11 +235,10 @@ __PORT__ void __NAKED__ HardFault_Handler(void)
         "ITE     EQ\n\t"
         "MRSEQ   r1, MSP\n\t"
         "MRSNE   r1, PSP\n\t"
-        "BL      fault_backtrace\n\t"
+        "LDR     r2, =fault_backtrace\n\t"
+        "BX      r2\n\t"
     );
 }
-
-#endif /* ARMCC VERSION */
 
 #endif /* TOS_CFG_FAULT_BACKTRACE_EN */
 

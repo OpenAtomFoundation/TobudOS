@@ -1298,6 +1298,9 @@
         <file>
             <name>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\tos_cpu.c</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\tos_fault.c</name>
+        </file>
     </group>
     <group>
         <name>tos/cmsis-os</name>
