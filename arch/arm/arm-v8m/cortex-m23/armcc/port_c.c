@@ -95,7 +95,7 @@ __PORT__ void port_standby_mode_enter(void)
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
 __PORT__ void port_fault_diagnosis(void)
 {
-    k_fault_log_writer("fault diagnosis does not supported in CORTEX M0\n");
+    k_fault_log_writer("fault diagnosis is not supported in CORTEX M23\n");
 }
 
 /*------------------ RealView Compiler -----------------*/
