@@ -15,6 +15,7 @@
 ## 1、TencentOS tiny整体架构
 
 ![](./doc/image/introduction/TencentOS_tiny_Architecture.png)
+
 TencentOS tiny 主体架构图，从下到上主要包括：
 
 **CPU 库** ：TencentOS tiny 支持的 CPU IP 核架构，当前主要支持 ARM Cortex M0/3/4/7，Cortex A7，RISC-V、MSP430、AVR、STM8等。
