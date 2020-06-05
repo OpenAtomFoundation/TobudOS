@@ -47,10 +47,10 @@ LoRaMacParserStatus_t LoRaMacParserJoinAccept( LoRaMacMessageJoinAccept_t* macMs
 
     macMsg->RxDelay = macMsg->Buffer[bufItr++];
 
-    if( ( macMsg->BufSize - LORAMAC_MIC_FIELD_SIZE - bufItr ) == LORAMAC_C_FLIST_FIELD_SIZE )
+    if( ( macMsg->BufSize - LORAMAC_MIC_FIELD_SIZE - bufItr ) == LORAMAC_CF_LIST_FIELD_SIZE )
     {
-        memcpy1( macMsg->CFList, &macMsg->Buffer[bufItr], LORAMAC_C_FLIST_FIELD_SIZE );
-        bufItr = bufItr + LORAMAC_C_FLIST_FIELD_SIZE;
+        memcpy1( macMsg->CFList, &macMsg->Buffer[bufItr], LORAMAC_CF_LIST_FIELD_SIZE );
+        bufItr = bufItr + LORAMAC_CF_LIST_FIELD_SIZE;
     }
     else if( ( macMsg->BufSize - LORAMAC_MIC_FIELD_SIZE - bufItr ) > 0 )
     {

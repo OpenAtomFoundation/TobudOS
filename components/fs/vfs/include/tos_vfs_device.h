@@ -1,8 +1,6 @@
 #ifndef _TOS_VFS_DEVICE_H_
 #define  _TOS_VFS_DEVICE_H_
 
-#if TOS_CFG_VFS_EN > 0u
-
 typedef struct vfs_inode_st vfs_inode_t;
 
 typedef struct vfs_char_device_operations_st {
@@ -43,8 +41,6 @@ __API__ vfs_err_t tos_vfs_block_device_unregister(const char *device_name);
 __API__ vfs_err_t tos_vfs_char_device_register(const char *device_name, vfs_chrdev_ops_t *ops);
 
 __API__ vfs_err_t tos_vfs_char_device_unregister(const char *device_name);
-
-#endif
 
 #endif /* _TOS_VFS_DEVICE_H_ */
 

@@ -1,8 +1,6 @@
 #ifndef _TOS_VFS_FS_H_
 #define  _TOS_VFS_FS_H_
 
-#if TOS_CFG_VFS_EN > 0u
-
 typedef struct vfs_inode_st vfs_inode_t;
 
 typedef struct vfs_filesystem_operations_st {
@@ -53,8 +51,6 @@ __API__ vfs_err_t tos_vfs_fs_mount(const char *device_path, const char *dir, con
 __API__ vfs_err_t tos_vfs_fs_umount(const char *dir);
 
 __API__ vfs_err_t tos_vfs_fs_mkfs(const char *device_path, const char *fs_name, int opt, unsigned long arg);
-
-#endif
 
 #endif /* _TOS_VFS_FS_H_ */
 

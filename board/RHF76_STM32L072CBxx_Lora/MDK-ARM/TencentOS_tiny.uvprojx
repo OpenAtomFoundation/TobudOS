@@ -403,14 +403,9 @@
               <FilePath>..\apps\common\NvmCtxMgmt.c</FilePath>
             </File>
             <File>
-              <FileName>LoRaApi.c</FileName>
+              <FileName>LoRaDemo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\apps\classA\LoRaApi.c</FilePath>
-            </File>
-            <File>
-              <FileName>at_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\apps\classA\at_parser.c</FilePath>
+              <FilePath>..\apps\classA\LoRaDemo.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -722,11 +717,6 @@
               <FileType>1</FileType>
               <FilePath>..\Src\sysIrqHandlers.c</FilePath>
             </File>
-            <File>
-              <FileName>atcmd-board.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\atcmd-board.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -763,11 +753,6 @@
               <FilePath>..\..\..\components\connectivity\LoraWAN\mac\LoRaMacCrypto.c</FilePath>
             </File>
             <File>
-              <FileName>LoRaMacFCntHandler.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\components\connectivity\LoraWAN\mac\LoRaMacFCntHandler.c</FilePath>
-            </File>
-            <File>
               <FileName>LoRaMacParser.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\connectivity\LoraWAN\mac\LoRaMacParser.c</FilePath>
@@ -791,6 +776,11 @@
               <FileName>soft-se.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\connectivity\LoraWAN\peripherals\soft-se\soft-se.c</FilePath>
+            </File>
+            <File>
+              <FileName>soft-se-hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\connectivity\LoraWAN\peripherals\soft-se\soft-se-hal.c</FilePath>
             </File>
           </Files>
         </Group>

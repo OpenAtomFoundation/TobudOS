@@ -43,7 +43,7 @@ bool PAM7QGetGpsData( uint8_t *nmeaString, uint8_t *nmeaStringSize, uint16_t nme
 
     status = PAM7QReadBuffer( MESSAGE_SIZE_1, nmeaString, 2 );
 
-    if( status == LORA_SUCCESS )
+    if( status == SUCCESS )
     {
         // build a 16bit number
         pendingBytes = ( uint16_t )( ( nmeaString[0] << 8 ) | nmeaString[1] );
@@ -63,7 +63,7 @@ bool PAM7QGetGpsData( uint8_t *nmeaString, uint8_t *nmeaStringSize, uint16_t nme
         status = PAM7QReadBuffer( PAYLOAD, nmeaString, pendingBytes );
 
         // make sure the string is terminated
-        if( status == LORA_SUCCESS )
+        if( status == SUCCESS )
         {
             nmeaString[pendingBytes] = 0x00;
 

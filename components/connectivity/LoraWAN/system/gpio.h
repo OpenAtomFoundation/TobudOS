@@ -27,6 +27,11 @@
 #ifndef __GPIO_H__
 #define __GPIO_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include "pinName-board.h"
 #include "pinName-ioe.h"
@@ -178,5 +183,9 @@ void GpioToggle( Gpio_t *obj );
  * \retval value   Current GPIO input value
  */
 uint32_t GpioRead( Gpio_t *obj );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __GPIO_H__

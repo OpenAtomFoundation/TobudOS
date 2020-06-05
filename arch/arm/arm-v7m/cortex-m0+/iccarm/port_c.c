@@ -93,43 +93,28 @@ __PORT__ void port_standby_mode_enter(void)
 #endif
 
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
+
 __PORT__ void port_fault_diagnosis(void)
 {
-    k_fault_log_writer("fault diagnosis does not supported in CORTEX M0\n");
+    k_fault_log_writer("fault diagnosis is not supported in CORTEX M0+\n");
 }
-
-/*------------------ RealView Compiler -----------------*/
-/* V5 */
-#if defined(__CC_ARM)
-
-__PORT__ __ASM__ void HardFault_Handler(void)
-{
-    IMPORT  fault_backtrace
-
-    MOV     r0, lr
-    TST     lr, #0x04
-    ITE     EQ
-    MRSEQ   r1, MSP
-    MRSNE   r1, PSP
-    BL      fault_backtrace
-}
-
-/*------------------ ARM Compiler V6 -------------------*/
-#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 
 __PORT__ void __NAKED__ HardFault_Handler(void)
 {
     __ASM__ __VOLATILE__ (
         "MOV     r0, lr\n\t"
-        "TST     lr, #0x04\n\t"
-        "ITE     EQ\n\t"
-        "MRSEQ   r1, MSP\n\t"
-        "MRSNE   r1, PSP\n\t"
-        "BL      fault_backtrace\n\t"
+        "MOVS    r1, #0x04\n\t"
+        "TST     r0, r1\n\t"
+        "BEQ     _LD_MSP\n\t"
+        "MRS     r1, PSP\n\t"
+        "B       _EXIT\n"
+        "_LD_MSP:\n\t"
+        "MRS     r1, MSP\n"
+        "_EXIT:\n\t"
+        "LDR     r2, =fault_backtrace\n\t"
+        "BX      r2\n\t"
     );
 }
-
-#endif /* ARMCC VERSION */
 
 #endif /* TOS_CFG_FAULT_BACKTRACE_EN */
 

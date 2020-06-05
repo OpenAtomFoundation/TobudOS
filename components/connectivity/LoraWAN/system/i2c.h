@@ -23,6 +23,11 @@
 #ifndef __I2C_H__
 #define __I2C_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "gpio.h"
 
 /*!
@@ -108,5 +113,9 @@ uint8_t I2cRead( I2c_t *obj, uint8_t deviceAddr, uint16_t addr, uint8_t *data );
  * \param [IN] size             number of data bytes to read
  */
 uint8_t I2cReadBuffer( I2c_t *obj, uint8_t deviceAddr, uint16_t addr, uint8_t *buffer, uint16_t size );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __I2C_H__

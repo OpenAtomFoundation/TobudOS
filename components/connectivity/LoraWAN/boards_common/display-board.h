@@ -28,6 +28,11 @@
 #ifndef __DISPLAY_BOARD_H__
 #define __DISPLAY_BOARD_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -289,5 +294,9 @@ void DisplayPrint( const char *string );
  * \brief Display printf function. (Mimics standard C printf function)
  */
 void DisplayPrintf( const char *format, ... );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __DISPLAY_BOARD_H__

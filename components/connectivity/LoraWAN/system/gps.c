@@ -186,10 +186,10 @@ void GpsConvertPositionFromStringToNumerical( void )
 
 uint8_t GpsGetLatestGpsPositionDouble( double *lati, double *longi )
 {
-    uint8_t status = LORA_FAIL;
+    uint8_t status = FAIL;
     if( HasFix == true )
     {
-        status = LORA_SUCCESS;
+        status = SUCCESS;
     }
     else
     {
@@ -202,12 +202,12 @@ uint8_t GpsGetLatestGpsPositionDouble( double *lati, double *longi )
 
 uint8_t GpsGetLatestGpsPositionBinary( int32_t *latiBin, int32_t *longiBin )
 {
-    uint8_t status = LORA_FAIL;
+    uint8_t status = FAIL;
 
     CRITICAL_SECTION_BEGIN( );
     if( HasFix == true )
     {
-        status = LORA_SUCCESS;
+        status = SUCCESS;
     }
     else
     {
@@ -322,12 +322,12 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
     if( rxBuffer[0] != '$' )
     {
         GpsMcuInvertPpsTrigger( );
-        return LORA_FAIL;
+        return FAIL;
     }
 
     if( GpsNmeaValidateChecksum( rxBuffer, rxBufferSize ) == false )
     {
-        return LORA_FAIL;
+        return FAIL;
     }
 
     fieldSize = 0;
@@ -335,7 +335,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
     {
         if( fieldSize > 6 )
         {
-            return LORA_FAIL;
+            return FAIL;
         }
     }
     for( j = 0; j < fieldSize; j++, i++ )
@@ -351,7 +351,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 11 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -364,7 +364,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 10 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -377,7 +377,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -390,7 +390,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 11 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -403,7 +403,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -416,7 +416,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -429,7 +429,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 3 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -442,7 +442,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 6 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -455,7 +455,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 8 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -468,7 +468,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -481,7 +481,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 8 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -494,7 +494,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -503,7 +503,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         }
 
         GpsFormatGpsData( );
-        return LORA_SUCCESS;
+        return SUCCESS;
     }
     else if ( strncmp( ( const char* )NmeaGpsData.NmeaDataType, ( const char* )NmeaDataTypeGPRMC, 5 ) == 0 )
     {
@@ -513,7 +513,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 11 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -526,7 +526,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -539,7 +539,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 10 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -552,7 +552,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -565,7 +565,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 11 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -578,7 +578,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 2 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -591,7 +591,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 8 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -604,7 +604,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 8 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -617,7 +617,7 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         {
             if( fieldSize > 8 )
             {
-                return LORA_FAIL;
+                return FAIL;
             }
         }
         for( j = 0; j < fieldSize; j++, i++ )
@@ -626,11 +626,11 @@ uint8_t GpsParseGpsData( int8_t *rxBuffer, int32_t rxBufferSize )
         }
 
         GpsFormatGpsData( );
-        return LORA_SUCCESS;
+        return SUCCESS;
     }
     else
     {
-        return LORA_FAIL;
+        return FAIL;
     }
 }
 

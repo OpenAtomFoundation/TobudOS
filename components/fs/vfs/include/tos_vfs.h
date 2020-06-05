@@ -3,8 +3,6 @@
 
 #include "tos_k.h"
 
-#if TOS_CFG_VFS_EN > 0u
-
 #include "tos_vfs_err.h"
 #include "tos_vfs_types.h"
 #include "tos_vfs_file.h"
@@ -53,8 +51,6 @@ __API__ int tos_vfs_rmdir(const char *pathname);
 __API__ int tos_vfs_rename(const char *oldpath, const char *newpath);
 
 __API__ int tos_vfs_stat(const char *pathname, vfs_fstat_t *buf);
-
-#endif
 
 #endif /* _TOS_VFS_H_ */
 

@@ -1,7 +1,5 @@
 #include "tos_vfs.h"
 
-#if TOS_CFG_VFS_EN > 0u
-
 __STATIC__ vfs_file_t vfs_file_pool[VFS_FILE_OPEN_MAX] = { { K_NULL, 0 } };
 
 __KNL__ vfs_file_t *vfs_fd2file(int fd)
@@ -74,6 +72,4 @@ __KNL__ void vfs_dir_free(vfs_dir_t *dir)
 {
     tos_mmheap_free(dir);
 }
-
-#endif
 

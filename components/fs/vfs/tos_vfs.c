@@ -1,7 +1,5 @@
 #include "tos_vfs.h"
 
-#if TOS_CFG_VFS_EN > 0u
-
 __API__ int tos_vfs_open(const char *pathname, vfs_oflag_t flags)
 {
     int path_len = 0, ret = -1;
@@ -676,6 +674,4 @@ __API__ int tos_vfs_stat(const char *pathname, vfs_fstat_t *buf)
 
     return ret;
 }
-
-#endif
 

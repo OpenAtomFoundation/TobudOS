@@ -33,9 +33,7 @@ __API__ k_err_t tos_mail_q_create(k_mail_q_t *mail_q, void *pool, size_t mail_cn
     pend_object_init(&mail_q->pend_obj);
 
     TOS_OBJ_INIT(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&mail_q->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
@@ -48,11 +46,9 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
     TOS_PTR_SANITY_CHECK(mail_q);
     TOS_OBJ_VERIFY(mail_q, KNL_OBJ_TYPE_MAIL_QUEUE);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_static(&mail_q->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     TOS_CPU_INT_DISABLE();
 
@@ -67,17 +63,13 @@ __API__ k_err_t tos_mail_q_destroy(k_mail_q_t *mail_q)
     pend_object_deinit(&mail_q->pend_obj);
 
     TOS_OBJ_DEINIT(mail_q);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&mail_q->knl_obj);
-#endif
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     return K_ERR_NONE;
 }
-
-#if TOS_CFG_MMHEAP_EN > 0u
 
 __API__ k_err_t tos_mail_q_create_dyn(k_mail_q_t *mail_q, size_t mail_cnt, size_t mail_size)
 {
@@ -130,8 +122,6 @@ __API__ k_err_t tos_mail_q_destroy_dyn(k_mail_q_t *mail_q)
 
     return K_ERR_NONE;
 }
-
-#endif
 
 __API__ k_err_t tos_mail_q_flush(k_mail_q_t *mail_q)
 {

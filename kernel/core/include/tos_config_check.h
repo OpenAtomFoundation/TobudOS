@@ -20,10 +20,6 @@
 
 #if TOS_CFG_EVENT_DRIVEN_EN > 0u
 
-#if     TOS_CFG_MMHEAP_EN == 0u
-#error  "INVALID config, must enable tos_mmheap to use event-driven"
-#endif
-
 #if     TOS_CFG_TICKLESS_EN == 1u
 #error  "INVALID config, tickless not supported in event-driven yet"
 #endif

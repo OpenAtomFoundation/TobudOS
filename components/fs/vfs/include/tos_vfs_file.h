@@ -1,8 +1,6 @@
 #ifndef _TOS_VFS_FILE_H_
 #define  _TOS_VFS_FILE_H_
 
-#if TOS_CFG_VFS_EN > 0u
-
 typedef struct vfs_inode_st vfs_inode_t;
 
 // why do you open so many files in a IOT system?
@@ -104,6 +102,5 @@ __KNL__ vfs_dir_t *vfs_dir_alloc(void);
 
 __KNL__ void vfs_dir_free(vfs_dir_t *dir);
 
-#endif
-
 #endif /* _TOS_VFS_FILE_H_ */
+

@@ -180,9 +180,7 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
     prio_q->data_pool   = (uint8_t *)pool;
 
     TOS_OBJ_INIT(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&prio_q->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
@@ -192,11 +190,9 @@ __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q)
     TOS_PTR_SANITY_CHECK(prio_q);
     TOS_OBJ_VERIFY(prio_q, KNL_OBJ_TYPE_PRIORITY_QUEUE);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_static(&prio_q->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     prio_q_pool_mgr_deinit(&prio_q->pool_mgr);
     prio_q_prio_mgr_deinit(&prio_q->prio_mgr);
@@ -208,14 +204,10 @@ __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q)
     prio_q->data_pool   = K_NULL;
 
     TOS_OBJ_DEINIT(prio_q);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&prio_q->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
-
-#if TOS_CFG_MMHEAP_EN > 0u
 
 __API__ k_err_t tos_prio_q_create_dyn(k_prio_q_t *prio_q, size_t item_cnt, size_t item_size)
 {
@@ -272,8 +264,6 @@ __API__ k_err_t tos_prio_q_destroy_dyn(k_prio_q_t *prio_q)
 
     return K_ERR_NONE;
 }
-
-#endif
 
 __STATIC__ void prio_q_do_enqueue(k_prio_q_t *prio_q, void *item, prio_q_slot_t slot, k_prio_t prio)
 {

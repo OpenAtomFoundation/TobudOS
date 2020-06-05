@@ -37,6 +37,11 @@
 #ifndef __REGION_AU915_H__
 #define __REGION_AU915_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "region/Region.h"
 
 /*!
@@ -93,7 +98,7 @@
 /*!
  * Minimal Tx output power that can be used by the node
  */
-#define AU915_MIN_TX_POWER                          TX_POWER_10
+#define AU915_MIN_TX_POWER                          TX_POWER_14
 
 /*!
  * Maximal Tx output power that can be used by the node
@@ -204,6 +209,11 @@
 #define AU915_BEACON_CHANNEL_STEPWIDTH              600000
 
 /*!
+ * Ping slot channel frequency
+ */
+#define AU915_PING_SLOT_CHANNEL_FREQ                923300000
+
+/*!
  * Number of possible beacon channels
  */
 #define AU915_BEACON_NB_CHANNELS                    8
@@ -226,7 +236,7 @@
 /*!
  * Datarate of the beacon channel
  */
-#define AU915_BEACON_CHANNEL_DR                     DR_10
+#define AU915_BEACON_CHANNEL_DR                     DR_8
 
 /*!
  * Bandwith of the beacon channel
@@ -236,7 +246,7 @@
 /*!
  * Ping slot channel datarate
  */
-#define AU915_PING_SLOT_CHANNEL_DR                  DR_10
+#define AU915_PING_SLOT_CHANNEL_DR                  DR_8
 
 /*!
  * LoRaMac maximum number of bands
@@ -245,9 +255,9 @@
 
 /*!
  * Band 0 definition
- * { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define AU915_BAND0                                 { 1, AU915_MAX_TX_POWER, 0, 0, 0 } //  100.0 %
+#define AU915_BAND0                                 { 1, AU915_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * Defines the first channel for RX window 1 for US band
@@ -289,30 +299,16 @@ static const int8_t DatarateOffsetsAU915[7][6] =
 };
 
 /*!
- * Maximum payload with respect to the datarate index. Cannot operate with repeater.
+ * Maximum payload with respect to the datarate index.
  * The table is valid for the dwell time configuration of 0 for uplinks.
  */
-static const uint8_t MaxPayloadOfDatarateDwell0AU915[] = { 51, 51, 51, 115, 242, 242, 242, 242, 0, 53, 129, 242, 242, 242, 242 };
+static const uint8_t MaxPayloadOfDatarateDwell0AU915[] = { 51, 51, 51, 115, 242, 242, 242, 0, 53, 129, 242, 242, 242, 242 };
 
 /*!
- * Maximum payload with respect to the datarate index. Can operate with repeater.
- * The table is valid for the dwell time configuration of 0 for uplinks. The table provides
- * repeater support.
- */
-static const uint8_t MaxPayloadOfDatarateRepeaterDwell0AU915[] = { 51, 51, 51, 115, 222, 222, 222, 0, 33, 109, 222, 222, 222, 222 };
-
-/*!
- * Maximum payload with respect to the datarate index. Cannot operate with repeater.
+ * Maximum payload with respect to the datarate index.
  * The table is valid for the dwell time configuration of 1 for uplinks.
  */
-static const uint8_t MaxPayloadOfDatarateDwell1AU915[] = { 0, 0, 11, 53, 125, 242, 242, 0, 53, 129, 129, 242, 242, 242, 242 };
-
-/*!
- * Maximum payload with respect to the datarate index. Can operate with repeater.
- * The table is valid for the dwell time configuration of 1 for uplinks. The table provides
- * repeater support.
- */
-static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 242, 242, 0, 33, 119, 129, 242, 242, 242, 242 };
+static const uint8_t MaxPayloadOfDatarateDwell1AU915[] = { 0, 0, 11, 53, 125, 242, 242, 0, 53, 129, 242, 242, 242, 242 };
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -470,13 +466,6 @@ uint8_t RegionAU915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 int8_t RegionAU915AlternateDr( int8_t currentDr, AlternateDrType_t type );
 
 /*!
- * \brief Calculates the back-off time.
- *
- * \param [IN] calcBackOff Pointer to the function parameters.
- */
-void RegionAU915CalcBackOff( CalcBackOffParams_t* calcBackOff );
-
-/*!
  * \brief Searches and set the next random available channel
  *
  * \param [OUT] channel Next channel to use for TX.
@@ -536,5 +525,9 @@ uint8_t RegionAU915ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
  void RegionAU915RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 
 /*! \} defgroup REGIONAU915 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REGION_AU915_H__

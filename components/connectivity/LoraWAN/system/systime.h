@@ -29,6 +29,7 @@
 extern "C"
 {
 #endif
+
 #include <stdint.h>
 #include "time.h"
 
@@ -133,7 +134,16 @@ SysTime_t SysTimeGetMcuTime( void );
  * 
  * \retval timeMs The RTC converted time value in ms
  */
-uint32_t SysTime2Ms( SysTime_t sysTime );
+uint32_t SysTimeToMs( SysTime_t sysTime );
+
+/*!
+ * Converts the given RTC value in milliseconds to the equivalent SysTime
+ *
+ * \param [IN] timeMs The RTC time value in ms to be converted
+ * 
+ * \retval sysTime Converted system time
+ */
+SysTime_t SysTimeFromMs( uint32_t timeMs );
 
 /*!
  * \brief Convert a calendar time into time since UNIX epoch as a uint32_t.

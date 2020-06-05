@@ -37,6 +37,11 @@
 #ifndef __REGION_EU868_H__
 #define __REGION_EU868_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "region/Region.h"
 
 /*!
@@ -197,6 +202,11 @@
 #define EU868_BEACON_CHANNEL_FREQ                   869525000
 
 /*!
+ * Ping slot channel frequency
+ */
+#define EU868_PING_SLOT_CHANNEL_FREQ                869525000
+
+/*!
  * Payload size of a beacon frame
  */
 #define EU868_BEACON_SIZE                           17
@@ -229,37 +239,44 @@
 /*!
  * Maximum number of bands
  */
-#define EU868_MAX_NB_BANDS                          5
+#define EU868_MAX_NB_BANDS                          6
 
 /*!
  * Band 0 definition
- * { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND0                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0 } //  1.0 %
+#define EU868_BAND0                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
 
 /*!
  * Band 1 definition
- * { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND1                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0 } //  1.0 %
+#define EU868_BAND1                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
 
 /*!
  * Band 2 definition
- * Band = { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND2                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0 } //  0.1 %
+#define EU868_BAND2                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  0.1 %
 
 /*!
  * Band 3 definition
- * Band = { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND3                                 { 10  , EU868_MAX_TX_POWER, 0, 0, 0 } // 10.0 %
+#define EU868_BAND3                                 { 10  , EU868_MAX_TX_POWER, 0, 0, 0, 0 } // 10.0 %
 
 /*!
  * Band 4 definition
- * Band = { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND4                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0 } //  1.0 %
+#define EU868_BAND4                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
+
+/*!
+ * Band 5 definition
+ * Band = { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff,
+ *          DutyCycleTimePeriod, MaxAllowedTimeOnAir, AggregatedTimeOnAir, StartTimeOfPeriod }
+ */
+#define EU868_BAND5                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  0.1 %
 
 /*!
  * LoRaMac default channel 1
@@ -295,14 +312,9 @@ static const uint8_t DataratesEU868[]  = { 12, 11, 10,  9,  8,  7,  7, 50 };
 static const uint32_t BandwidthsEU868[] = { 125000, 125000, 125000, 125000, 125000, 125000, 250000, 0 };
 
 /*!
- * Maximum payload with respect to the datarate index. Cannot operate with repeater.
+ * Maximum payload with respect to the datarate index.
  */
 static const uint8_t MaxPayloadOfDatarateEU868[] = { 51, 51, 51, 115, 242, 242, 242, 242 };
-
-/*!
- * Maximum payload with respect to the datarate index. Can operate with repeater.
- */
-static const uint8_t MaxPayloadOfDatarateRepeaterEU868[] = { 51, 51, 51, 115, 222, 222, 222, 222 };
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -460,13 +472,6 @@ uint8_t RegionEU868DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 int8_t RegionEU868AlternateDr( int8_t currentDr, AlternateDrType_t type );
 
 /*!
- * \brief Calculates the back-off time.
- *
- * \param [IN] calcBackOff Pointer to the function parameters.
- */
-void RegionEU868CalcBackOff( CalcBackOffParams_t* calcBackOff );
-
-/*!
  * \brief Searches and set the next random available channel
  *
  * \param [OUT] channel Next channel to use for TX.
@@ -526,5 +531,9 @@ uint8_t RegionEU868ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
 void RegionEU868RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 
 /*! \} defgroup REGIONEU868 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REGION_EU868_H__

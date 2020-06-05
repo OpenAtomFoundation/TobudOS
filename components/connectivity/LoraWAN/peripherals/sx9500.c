@@ -44,21 +44,21 @@ uint8_t SX9500Init( void )
         SX9500Read( SX9500_REG_PROXCTRL0, &regVal );
         if( regVal != 0x0F )
         {
-            return LORA_FAIL;
+            return FAIL;
         }
 
         SX9500Reset( );
     }
-    return LORA_SUCCESS;
+    return SUCCESS;
 }
 
 uint8_t SX9500Reset( )
 {
-    if( SX9500Write( SX9500_REG_RESET, SX9500_RESET_CMD ) == LORA_SUCCESS )
+    if( SX9500Write( SX9500_REG_RESET, SX9500_RESET_CMD ) == SUCCESS )
     {
-        return LORA_SUCCESS;
+        return SUCCESS;
     }
-    return LORA_FAIL;
+    return FAIL;
 }
 
 uint8_t SX9500Write( uint8_t addr, uint8_t data )

@@ -23,6 +23,11 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -46,6 +51,7 @@ typedef struct TimerEvent_s
  */
 #ifndef TimerTime_t
 typedef uint32_t TimerTime_t;
+#define TIMERTIME_T_MAX                             ( ( uint32_t )~0 )
 #endif
 
 /*!
@@ -121,6 +127,8 @@ TimerTime_t TimerGetCurrentTime( void );
 /*!
  * \brief Return the Time elapsed since a fix moment in Time
  *
+ * \remark TimerGetElapsedTime will return 0 for argument 0.
+ *
  * \param [IN] past         fix moment in Time
  * \retval time             returns elapsed time
  */
@@ -141,5 +149,9 @@ TimerTime_t TimerTempCompensation( TimerTime_t period, float temperature );
  * \brief Processes pending timer events
  */
 void TimerProcess( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __TIMER_H__

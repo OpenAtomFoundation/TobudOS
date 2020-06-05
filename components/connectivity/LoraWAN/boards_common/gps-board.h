@@ -23,6 +23,11 @@
 #ifndef __GPS_BOARD_H__
 #define __GPS_BOARD_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "uart.h"
 
 /*!
@@ -70,5 +75,9 @@ void GpsMcuProcess( void );
  * \brief IRQ handler for the UART receiver
  */
 void GpsMcuIrqNotify( UartNotifyId_t id );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __GPS_BOARD_H__

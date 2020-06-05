@@ -127,9 +127,7 @@ __API__ k_err_t tos_bin_heap_create(k_bin_heap_t *bin_heap, void *pool, size_t i
     bin_heap->pool      = (uint8_t *)pool;
 
     TOS_OBJ_INIT(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&bin_heap->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
@@ -139,11 +137,9 @@ __API__ k_err_t tos_bin_heap_destroy(k_bin_heap_t *bin_heap)
     TOS_PTR_SANITY_CHECK(bin_heap);
     TOS_OBJ_VERIFY(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_static(&bin_heap->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     bin_heap->total     = 0;
     bin_heap->cmp       = K_NULL;
@@ -152,14 +148,10 @@ __API__ k_err_t tos_bin_heap_destroy(k_bin_heap_t *bin_heap)
     bin_heap->pool      = K_NULL;
 
     TOS_OBJ_DEINIT(bin_heap);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&bin_heap->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
-
-#if TOS_CFG_MMHEAP_EN > 0u
 
 __API__ k_err_t tos_bin_heap_create_dyn(k_bin_heap_t *bin_heap, size_t item_cnt, size_t item_size, k_bin_heap_cmp cmp)
 {
@@ -207,8 +199,6 @@ __API__ k_err_t tos_bin_heap_destroy_dyn(k_bin_heap_t *bin_heap)
 
     return K_ERR_NONE;
 }
-
-#endif
 
 __API__ k_err_t tos_bin_heap_push(k_bin_heap_t *bin_heap, void *item, size_t item_size)
 {
@@ -298,7 +288,7 @@ __API__ int tos_bin_heap_is_full(k_bin_heap_t *bin_heap)
     TOS_OBJ_VERIFY_RC(bin_heap, KNL_OBJ_TYPE_BINARY_HEAP, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
-    is_full = (bin_heap->total == bin_heap->item_cnt);
+    is_full = (bin_heap->total == bin_heap->item_cnt ? K_TRUE : K_FALSE);
     TOS_CPU_INT_ENABLE();
 
     return is_full;

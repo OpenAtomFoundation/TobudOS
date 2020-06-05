@@ -37,6 +37,11 @@
 #ifndef __REGION_KR920_H__
 #define __REGION_KR920_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "region/Region.h"
 
 /*!
@@ -202,6 +207,11 @@
 #define KR920_BEACON_CHANNEL_FREQ                   923100000
 
 /*!
+ * Ping slot channel frequency
+ */
+#define KR920_PING_SLOT_CHANNEL_FREQ                923100000
+
+/*!
  * Payload size of a beacon frame
  */
 #define KR920_BEACON_SIZE                           17
@@ -238,9 +248,9 @@
 
 /*!
  * Band 0 definition
- * { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define KR920_BAND0                                 { 1 , KR920_MAX_TX_POWER, 0, 0, 0 } //  100.0 %
+#define KR920_BAND0                                 { 1 , KR920_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * LoRaMac default channel 1
@@ -286,14 +296,9 @@ static const uint8_t DataratesKR920[]  = { 12, 11, 10,  9,  8,  7 };
 static const uint32_t BandwidthsKR920[] = { 125000, 125000, 125000, 125000, 125000, 125000 };
 
 /*!
- * Maximum payload with respect to the datarate index. Can operate with and without a repeater.
+ * Maximum payload with respect to the datarate index.
  */
 static const uint8_t MaxPayloadOfDatarateKR920[] = { 51, 51, 51, 115, 242, 242 };
-
-/*!
- * Maximum payload with respect to the datarate index. Can operate with repeater.
- */
-static const uint8_t MaxPayloadOfDatarateRepeaterKR920[] = { 51, 51, 51, 115, 222, 222 };
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -451,13 +456,6 @@ uint8_t RegionKR920DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 int8_t RegionKR920AlternateDr( int8_t currentDr, AlternateDrType_t type );
 
 /*!
- * \brief Calculates the back-off time.
- *
- * \param [IN] calcBackOff Pointer to the function parameters.
- */
-void RegionKR920CalcBackOff( CalcBackOffParams_t* calcBackOff );
-
-/*!
  * \brief Searches and set the next random available channel
  *
  * \param [OUT] channel Next channel to use for TX.
@@ -517,5 +515,9 @@ uint8_t RegionKR920ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
  void RegionKR920RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 
 /*! \} defgroup REGIONKR920 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REGION_KR920_H__

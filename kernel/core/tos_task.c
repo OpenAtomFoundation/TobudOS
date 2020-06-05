@@ -255,7 +255,7 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
         return K_ERR_TASK_OUT_OF_MEMORY;
     }
 
-    stk_base = tos_mmheap_aligned_alloc(stk_size, sizeof(cpu_addr_t));
+    stk_base = tos_mmheap_alloc(stk_size);
     if (!stk_base) {
         tos_mmheap_free(the_task);
         return K_ERR_TASK_OUT_OF_MEMORY;
@@ -349,9 +349,9 @@ __API__ k_err_t tos_task_prio_change(k_task_t *task, k_prio_t prio_new)
     k_prio_t highest_pending_prio;
 #endif
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(task);
     TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
-    TOS_IN_IRQ_CHECK();
 
     if (unlikely(prio_new >= K_TASK_PRIO_IDLE)) {
         return K_ERR_TASK_PRIO_INVALID;
@@ -497,9 +497,9 @@ __API__ k_err_t tos_task_delay_abort(k_task_t *task)
 {
     TOS_CPU_CPSR_ALLOC();
 
+    TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(task);
     TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
-    TOS_IN_IRQ_CHECK();
 
     TOS_CPU_INT_DISABLE();
 

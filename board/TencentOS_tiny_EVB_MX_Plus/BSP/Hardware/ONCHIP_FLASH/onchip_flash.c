@@ -1,3 +1,4 @@
+#include "tos_k.h"
 #include "stm32l4xx.h"
 
 #define SECTOR_SIZE                 2048         // sector size for stm32l431RCTX

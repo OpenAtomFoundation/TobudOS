@@ -65,10 +65,6 @@ static bool CalcNextV10X( CalcNextAdrParams_t* adrNext, int8_t* drOut, int8_t* t
             if( adrNext->AdrAckCounter >=  adrNext->AdrAckLimit )
             {
                 adrAckReq = true;
-                // Set TX Power to maximum
-                getPhy.Attribute = PHY_MAX_TX_POWER;
-                phyParam = RegionGetPhyParam( adrNext->Region, &getPhy );
-                txPower = phyParam.Value;
             }
             else
             {
@@ -76,6 +72,11 @@ static bool CalcNextV10X( CalcNextAdrParams_t* adrNext, int8_t* drOut, int8_t* t
             }
             if( adrNext->AdrAckCounter >= ( adrNext->AdrAckLimit + adrNext->AdrAckDelay ) )
             {
+                // Set TX Power to maximum
+                getPhy.Attribute = PHY_MAX_TX_POWER;
+                phyParam = RegionGetPhyParam( adrNext->Region, &getPhy );
+                txPower = phyParam.Value;
+
                 if( ( adrNext->AdrAckCounter % adrNext->AdrAckDelay ) == 1 )
                 {
                     // Decrease the datarate

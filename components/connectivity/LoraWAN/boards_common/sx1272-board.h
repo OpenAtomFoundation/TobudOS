@@ -23,6 +23,11 @@
 #ifndef __SX1272_BOARD_H__
 #define __SX1272_BOARD_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "sx1272/sx1272.h"
@@ -73,6 +78,16 @@ void SX1272IoIrqInit( DioIrqHandler **irqHandlers );
 void SX1272IoDeInit( void );
 
 /*!
+ * \brief Initializes the TCXO power pin.
+ */
+void SX1272IoTcxoInit( void );
+
+/*!
+ * \brief Initializes the radio debug pins.
+ */
+void SX1272IoDbgInit( void );
+
+/*!
  * \brief Resets the radio
  */
 void SX1272Reset( void );
@@ -121,6 +136,13 @@ void SX1272SetAntSw( uint8_t opMode );
 bool SX1272CheckRfFrequency( uint32_t frequency );
 
 /*!
+ * \brief Enables/disables the TCXO if available on board design.
+ *
+ * \param [IN] state TCXO enabled when true and disabled when false.
+ */
+void SX1272SetBoardTcxo( uint8_t state );
+
+/*!
  * \brief Gets the Defines the time required for the TCXO to wakeup [ms].
  *
  * \retval time Board TCXO wakeup time in ms.
@@ -145,5 +167,9 @@ void SX1272DbgPinRxWrite( uint8_t state );
  * Radio hardware and global parameters
  */
 extern SX1272_t SX1272;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __SX1272_BOARD_H__

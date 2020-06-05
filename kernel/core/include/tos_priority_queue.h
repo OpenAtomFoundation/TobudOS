@@ -99,8 +99,6 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
  */
 __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q);
 
-#if TOS_CFG_MMHEAP_EN > 0u
-
 /**
  * @brief Create a priority queue with dynamic allocated mgr array and data pool.
  * create a priority queue with dynamic allocated mgr array and data pool.
@@ -130,8 +128,6 @@ __API__ k_err_t tos_prio_q_create_dyn(k_prio_q_t *prio_q, size_t item_cnt, size_
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_prio_q_destroy_dyn(k_prio_q_t *prio_q);
-
-#endif
 
 /**
  * @brief Enqueue an priority queue.

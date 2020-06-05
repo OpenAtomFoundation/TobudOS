@@ -185,8 +185,8 @@ void RtcInit( void )
         time.Seconds                  = 0;
         time.SubSeconds               = 0;
         time.TimeFormat               = 0;
-        time.StoreOperation           = RTC_DAYLIGHTSAVING_NONE;
-        time.DayLightSaving           = RTC_STOREOPERATION_RESET;
+        time.StoreOperation           = RTC_STOREOPERATION_RESET;
+        time.DayLightSaving           = RTC_DAYLIGHTSAVING_NONE;
         HAL_RTC_SetTime( &RtcHandle, &time, RTC_FORMAT_BIN );
 
         // Enable Direct Read of the calendar registers (not through Shadow registers)
@@ -469,7 +469,7 @@ void RtcSetMcuWakeUpTime( void )
 
         mcuWakeUpTime = ( int16_t )( ( now - hit ) );
         McuWakeUpTimeCal += mcuWakeUpTime;
-        //PRINTF( 3, "Cal=%d, %d\n\r", McuWakeUpTimeCal, mcuWakeUpTime);
+        //PRINTF( 3, "Cal=%d, %d\n", McuWakeUpTimeCal, mcuWakeUpTime);
     }
 }
 
@@ -485,16 +485,13 @@ static uint64_t RtcGetCalendarValue( RTC_DateTypeDef* date, RTC_TimeTypeDef* tim
     uint32_t correction;
     uint32_t seconds;
 
-    // Get Time and Date
-    HAL_RTC_GetTime( &RtcHandle, time, RTC_FORMAT_BIN );
-
     // Make sure it is correct due to asynchronus nature of RTC
     do
     {
-        firstRead = time->SubSeconds;
+        firstRead = RTC->SSR;
         HAL_RTC_GetDate( &RtcHandle, date, RTC_FORMAT_BIN );
         HAL_RTC_GetTime( &RtcHandle, time, RTC_FORMAT_BIN );
-    }while( firstRead != time->SubSeconds );
+    }while( firstRead != RTC->SSR );
 
     // Calculte amount of elapsed days since 01/01/2000
     seconds = DIVC( ( DAYS_IN_YEAR * 3 + DAYS_IN_LEAP_YEAR ) * date->Year , 4 );
@@ -525,7 +522,7 @@ uint32_t RtcGetCalendarTime( uint16_t *milliseconds )
 
     uint64_t calendarValue = RtcGetCalendarValue( &date, &time );
 
-    uint32_t seconds = ( uint32_t )calendarValue >> N_PREDIV_S;
+    uint32_t seconds = ( uint32_t )( calendarValue >> N_PREDIV_S );
 
     ticks =  ( uint32_t )calendarValue & PREDIV_S;
 
@@ -594,10 +591,10 @@ TimerTime_t RtcTempCompensation( TimerTime_t period, float temperature )
     float kDev = RTC_TEMP_DEV_COEFFICIENT;
     float t = RTC_TEMP_TURNOVER;
     float tDev = RTC_TEMP_DEV_TURNOVER;
-    float interim = 0.0;
-    float ppm = 0.0;
+    float interim = 0.0f;
+    float ppm = 0.0f;
 
-    if( k < 0.0 )
+    if( k < 0.0f )
     {
         ppm = ( k - kDev );
     }
@@ -609,12 +606,12 @@ TimerTime_t RtcTempCompensation( TimerTime_t period, float temperature )
     ppm *=  interim * interim;
 
     // Calculate the drift in time
-    interim = ( ( float ) period * ppm ) / 1e6;
+    interim = ( ( float ) period * ppm ) / 1000000.0f;
     // Calculate the resulting time period
     interim += period;
     interim = floor( interim );
 
-    if( interim < 0.0 )
+    if( interim < 0.0f )
     {
         interim = ( float )period;
     }

@@ -23,6 +23,11 @@
 #ifndef __SX9500_H__
 #define __SX9500_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 
 #define SX9500_I2C_ADDRESS                          0x28
@@ -117,5 +122,9 @@ uint8_t SX9500GetDeviceAddr( void );
  * \brief Goes into a loop until a successful capacitive proximity detection
  */
 void SX9500LockUntilDetection( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __SX1509_H__

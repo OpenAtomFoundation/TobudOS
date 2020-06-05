@@ -116,19 +116,24 @@ void SystemClock_Config(void)
   }
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_USART3
                               |RCC_PERIPHCLK_LPUART1|RCC_PERIPHCLK_I2C1
-                              |RCC_PERIPHCLK_ADC;
+                              |RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_SDMMC1;
   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
   PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
   PeriphClkInit.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_PCLK1;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+  PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLSAI1;
   PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_MSI;
   PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
   PeriphClkInit.PLLSAI1.PLLSAI1N = 16;
   PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
   PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
   PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
-  PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_ADC1CLK;
+#if 0
+    PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_ADC1CLK;
+#else
+    PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_48M2CLK;
+#endif
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();

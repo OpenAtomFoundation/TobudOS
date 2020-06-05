@@ -36,6 +36,10 @@ DEALINGS WITH THE SOFTWARE
 #ifndef _CMAC_H_
 #define _CMAC_H_
 
+#ifdef __cplusplus
+extern "C"
+#endif
+
 #include "aes.h" 
   
 #define AES_CMAC_KEY_LENGTH     16
@@ -58,6 +62,10 @@ void     AES_CMAC_Update(AES_CMAC_CTX * ctx, const uint8_t * data, uint32_t len)
 void     AES_CMAC_Final(uint8_t digest[AES_CMAC_DIGEST_LENGTH], AES_CMAC_CTX  * ctx);
             //     __attribute__((__bounded__(__minbytes__,1,AES_CMAC_DIGEST_LENGTH)));
 //__END_DECLS
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _CMAC_H_ */
 
