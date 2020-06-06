@@ -217,7 +217,6 @@ int tos_tf_module_mqtt_state_get(mqtt_state_t *state);
  * @attention None
  *
  * @param[in]   log_level   device information
- * @param[in]   tls_mode    tls mode
  *
  * @return  errcode
  */
