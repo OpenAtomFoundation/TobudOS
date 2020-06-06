@@ -16,7 +16,7 @@
  *---------------------------------------------------------------------------*/
 
 #ifndef _TOS_COUNTDOWNLATCH_H_
-#define  _TOS_COUNTDOWNLATCH_H_
+#define _TOS_COUNTDOWNLATCH_H_
 
 __CDECLS_BEGIN
 
@@ -108,6 +108,7 @@ __API__ k_err_t tos_countdownlatch_post(k_countdownlatch_t *countdownlatch);
  * @attention None.
  *
  * @param[in]   countdownlatch  pointer to the handler of the countdown-latch.
+ * @param[in]   count           the count to wait of the countdown-latch.
  *
  * @return  errcode
  * @retval  #K_ERR_NONE                     return successfully.
