@@ -44,7 +44,7 @@ typedef struct k_barrier_st {
 __API__ k_err_t tos_barrier_create(k_barrier_t *barrier, k_barrier_cnt_t count);
 
 /**
- * @brief Delete a thread barrier.
+ * @brief Destroy a thread barrier.
  *
  * @attention 
  *
