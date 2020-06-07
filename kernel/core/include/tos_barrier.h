@@ -44,12 +44,11 @@ typedef struct k_barrier_st {
 __API__ k_err_t tos_barrier_create(k_barrier_t *barrier, k_barrier_cnt_t count);
 
 /**
- * @brief Create a thread barrier.
+ * @brief Delete a thread barrier.
  *
- * @attention the count must be greater then zero.
+ * @attention 
  *
  * @param[in]   barrier         the barrier.
- * @param[in]   count           the number of threads(task) must call tos_barrier_pend before any of them successfully return from the call.
  *
  * @return  errcode
  * @retval  #K_ERR_NONE                     return successfully.
