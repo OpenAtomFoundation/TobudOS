@@ -9,6 +9,8 @@
 #include "gpio.h"
 #include "tos_k.h"
 #include "stdio.h"
+#include "app_system.h"
+#include "app_lorawan.h"
 
 void board_init(void);
 void SystemClock_Config(void);
