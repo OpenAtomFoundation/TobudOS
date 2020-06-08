@@ -15,8 +15,8 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _TOS_AT_H_
-#define _TOS_AT_H_
+#ifndef _TOS_AT_EVTDRV_H_
+#define _TOS_AT_EVTDRV_H_
 
 #include "tos_evtdrv.h"
 #include "tos_at_utils_evtdrv.h"
@@ -53,8 +53,8 @@ typedef struct at_cache_st {
     uint8_t    *buffer;
     size_t      buffer_size;
     size_t      recv_len;
-	size_t		curr_len;
-	size_t		last_data;
+    size_t      curr_len;
+    size_t      last_data;
 } at_cache_t;
 
 typedef enum at_parse_status_en {
@@ -95,8 +95,8 @@ typedef struct at_echo_st {
     char                   *buffer;
     size_t                  buffer_size;
     char                   *echo_expect;
-    evtdrv_task_id_t          module_task_id;
-    evtdrv_event_flag_t   event_flags;
+    evtdrv_task_id_t        module_task_id;
+    evtdrv_event_flag_t     event_flags;
     int                     line_num;
     at_echo_status_t        status;
     size_t                  __w_idx;
@@ -401,5 +401,5 @@ const char *tos_at_agent_channel_port_get(int channel_id);
 
 evtdrv_event_flag_t tos_at_evtdrv_task(evtdrv_event_flag_t event);
 
-#endif /* __AT_AGENT_H_ */
+#endif /* _TOS_AT_EVTDRV_H_ */
 
