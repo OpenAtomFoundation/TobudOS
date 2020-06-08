@@ -526,12 +526,12 @@ static int rhf76_send(const void *buf, size_t len)
     snprintf(cmd, sizeof(cmd), RHF76_ATCMD_FMT_SEND_CMSGHEX, str_buf);
     cmd[sizeof(cmd) - 1] = '\0';
     tos_mmheap_free(str_buf);
-    tos_at_echo_create(&echo, NULL, 0, "+CMSG: ACK Received");
+    tos_at_echo_create(&echo, NULL, 0, "+CMSGHEX: ACK Received");
     tos_at_cmd_exec(&echo, 6000, cmd);
     if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
-        return -1;
+        return len;
     }
-    return len;
+    return -1;
 }
 
 static int rhf76_send_unconfirmed(const void *buf, size_t len)
@@ -552,9 +552,9 @@ static int rhf76_send_unconfirmed(const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "+MSGHEX: Done");
     tos_at_cmd_exec(&echo, 6000, cmd);
     if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
-        return -1;
+        return len;
     }
-    return len;
+    return -1;
 }
 
 static int rhf76_close(void)
