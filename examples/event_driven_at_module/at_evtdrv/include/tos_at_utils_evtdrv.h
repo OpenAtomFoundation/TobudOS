@@ -1,5 +1,5 @@
-#ifndef _TOS_AT_UTILS_H_
-#define  _TOS_AT_UTILS_H_
+#ifndef _TOS_AT_UTILS_EVTDRV_H_
+#define _TOS_AT_UTILS_EVTDRV_H_
 
 typedef struct at_timer_st {
     evtdrv_tick_t end_time;
@@ -19,5 +19,5 @@ evtdrv_tick_t at_timer_remain(at_timer_t *tmr);
 
 void at_timer_init(at_timer_t *tmr);
 
-#endif
+#endif//_TOS_AT_UTILS_EVTDRV_H_
 

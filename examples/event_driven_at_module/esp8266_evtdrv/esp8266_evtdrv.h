@@ -15,8 +15,8 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef __ESP8266_H__
-#define __ESP8266_H__
+#ifndef __ESP8266_EVTDRV_H__
+#define __ESP8266_EVTDRV_H__
 
 #include "tos_evtdrv.h"
 #include "tos_hal.h"
@@ -50,14 +50,14 @@
 
 typedef struct esp8266_event_header_st {
     evtdrv_event_flag_t   event;
-    evtdrv_task_id_t          sender_id;
+    evtdrv_task_id_t      sender_id;
 } esp8266_event_hdr_t;
 
 typedef struct esp8266_in_msg_init_st {
     esp8266_event_hdr_t header;
     hal_uart_port_t     uart_port;
-    evtdrv_task_id_t      at_task_id;
-    evtdrv_task_id_t      esp8266_task_id;
+    evtdrv_task_id_t    at_task_id;
+    evtdrv_task_id_t    esp8266_task_id;
 } esp8266_imsg_init_t;
 
 typedef struct esp8266_in_msg_join_ap_st {
@@ -130,5 +130,5 @@ int esp8266_join_ap(const char *ssid, const char *pwd);
 
 evtdrv_event_flag_t esp8266_task(evtdrv_event_flag_t event);
 
-#endif /* __ESP8266_H__ */
+#endif /* __ESP8266_EVTDRV_H__ */
 

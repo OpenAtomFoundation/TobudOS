@@ -69,6 +69,7 @@ __API__ k_err_t tos_rwlock_destroy(k_rwlock_t *rwlock);
  *              and no writers can hold the write-lock.
  *
  * @param[in]   rwlock              the read-write lock.
+ * @param[in]   timeout             how much time(in k_tick_t) we would like to wait.
  *
  * @return  errcode
  * @retval  #K_ERR_NONE                     return successfully.
@@ -110,6 +111,7 @@ __API__ k_err_t tos_rwlock_rpend_try(k_rwlock_t *rwlock);
  *              and no readers can hold the read-lock.
  *
  * @param[in]   rwlock              the read-write lock.
+ * @param[in]   timeout             how much time(in k_tick_t) we would like to wait.
  *
  * @return  errcode
  * @retval  #K_ERR_NONE                             return successfully.

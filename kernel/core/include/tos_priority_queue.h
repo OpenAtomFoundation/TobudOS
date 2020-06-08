@@ -106,8 +106,6 @@ __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q);
  * @attention if we wanna create a priority queue, we should offer a manager array buffer of which the size can be calculated by TOS_PRIO_Q_MGR_ARRAY_SIZE.
  *
  * @param[in]   prio_q      pointer to the handler of the priority queue.
- * @param[in]   mgr_array   manager array buffer of the priority queue.
- * @param[in]   pool        pool buffer of the priority queue.
  * @param[in]   item_cnt    item count of the priority queue.
  * @param[in]   item_size   size of each item of the priority queue.
  *

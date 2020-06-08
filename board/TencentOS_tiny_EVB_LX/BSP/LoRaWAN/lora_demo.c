@@ -95,7 +95,8 @@ uint8_t pool[DATA_CNT];
 void application_entry(void *arg)
 {
     int i = 0;
-
+    int ret = 0;
+    int send_failed_count = 0;
     rhf76_lora_init(HAL_UART_PORT_1);
     tos_lora_module_recvcb_register(recv_callback);
 
@@ -113,7 +114,20 @@ void application_entry(void *arg)
         }
         printf("\n\n");
 
-        tos_lora_module_send(&dev_data.data, mail_size);
+        ret = tos_lora_module_send(&dev_data.data, mail_size);
+        if (ret < 0 )
+        {
+            printf("LoRa Send data faild! count is %d\r\n",send_failed_count);
+            send_failed_count++;
+            if (send_failed_count > 10)
+            {
+                eclic_system_reset();// when lora send faied more than 10 times , cpu reset to reconnect.
+            }
+        }
+        else
+        {
+            send_failed_count = 0;
+        }
     }
 }
 
