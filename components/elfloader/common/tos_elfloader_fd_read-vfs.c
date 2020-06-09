@@ -15,33 +15,26 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _TOS_VFS_ERR_H_
-#define  _TOS_VFS_ERR_H_
+#include "tos_vfs.h"
+#include "tos_elfloader.h"
 
-typedef enum vfs_err_en {
-    VFS_ERR_NONE,
-    VFS_ERR_BUFFER_NULL,
-    VFS_ERR_DEVICE_NOT_REGISTERED,
-    VFS_ERR_DEVICE_ALREADY_REGISTERED,
-    VFS_ERR_FILE_NO_AVAILABLE,
-    VFS_ERR_FILE_NOT_OPEN,
-    VFS_ERR_FS_ALREADY_MOUNTED,
-    VFS_ERR_FS_ALREADY_REGISTERED,
-    VFS_ERR_FS_NOT_REGISTERED,
-    VFS_ERR_FS_NOT_MOUNT,
-    VFS_ERR_OPS_NULL,
-    VFS_ERR_OPS_FAILED,
-    VFS_ERR_INODE_NAME_TOO_LONG,
-    VFS_ERR_INODE_CREATE_FAILED,
-    VFS_ERR_INODE_NOT_FOUND,
-    VFS_ERR_INODE_INVALID,
-    VFS_ERR_INODE_BUSY,
-    VFS_ERR_INODE_INAVALIABLE,
-    VFS_ERR_OPEN_DIR,
-    VFS_ERR_OUT_OF_MEMORY,
-    VFS_ERR_PARA_INVALID,
-    VFS_ERR_PATH_TOO_LONG,
-} vfs_err_t;
+/*
+ ATTENTION:
+    if you wanna load the so/obj laying on your flash, you should implement "elfloader_fd_read"
+    with flash driver read/write operation.
 
-#endif /* _TOS_VFS_ERR_H_ */
+    very easy to use whether your module is on a file system or raw flash.
+ */
+__KNL__ __WEAK__ el_err_t elfloader_fd_read(int fd, uint32_t offset, void *buf, size_t len)
+{
+    if (tos_vfs_lseek(fd, (vfs_off_t)offset, VFS_SEEK_SET) < 0) {
+        return ELFLOADER_ERR_FD_READ_FAILED;
+    }
+
+    if (tos_vfs_read(fd, buf, len) < 0) {
+        return ELFLOADER_ERR_FD_READ_FAILED;
+    }
+
+    return ELFLOADER_ERR_NONE;
+}
 
