@@ -18,7 +18,7 @@
 #ifndef _TOS_ELFLOADER_RELOCATE_H_
 #define  _TOS_ELFLOADER_RELOCATE_H_
 
-__KNL__ void elfloader_arch_relocate(uint32_t reloc_addr, int32_t load_bias, uint32_t addr, elf32_rela_t *rela, int is_rela);
+__KNL__ el_err_t elfloader_arch_relocate(uint32_t reloc_addr, int32_t load_bias, uint32_t addr, elf32_rela_t *rela, int is_rela, elf32_sym_t *sym);
 
 #endif /* _TOS_ELFLOADER_RELOCATE_H_ */
 

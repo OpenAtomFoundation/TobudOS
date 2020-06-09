@@ -109,7 +109,9 @@ __STATIC__ el_err_t elfloader_relocate(int fd, int32_t load_bias,
             return ELFLOADER_ERR_SYM_NOT_FOUND;
         }
 
-        elfloader_arch_relocate(rela.r_offset + load_bias, load_bias, (uint32_t)addr, &rela, is_rela);
+        if (elfloader_arch_relocate(rela.r_offset + load_bias, load_bias, (uint32_t)addr, &rela, is_rela, &sym) != ELFLOADER_ERR_NONE) {
+            return ELFLOADER_ERR_RELOCATE_FAILED;
+        }
 
         rel_offset += rel_entsize;
     }
@@ -249,7 +251,7 @@ __API__ el_err_t tos_elfloader_load(el_module_t *module, int fd)
     }
 
     /* reserving memory for LOAD segments */
-    base = tos_mmheap_aligned_alloc(vaddr_end - vaddr_start, 64);
+    base = tos_mmheap_alloc(vaddr_end - vaddr_start);
     if (!base) {
         return ELFLOADER_ERR_OUT_OF_MEMORY;
     }

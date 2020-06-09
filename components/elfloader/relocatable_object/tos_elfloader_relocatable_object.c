@@ -136,7 +136,9 @@ __STATIC__ el_err_t elfloader_relocate(int fd, void *address,
             return ELFLOADER_ERR_SYM_NOT_FOUND;
         }
 
-        elfloader_arch_relocate(rela.r_offset + (uint32_t)address, 0, (uint32_t)addr, &rela, is_rela);
+        if (elfloader_arch_relocate(rela.r_offset + (uint32_t)address, 0, (uint32_t)addr, &rela, is_rela, &sym) != ELFLOADER_ERR_NONE) {
+            return ELFLOADER_ERR_RELOCATE_FAILED;
+        }
 
         rel_offset += rel_entsize;
     }
