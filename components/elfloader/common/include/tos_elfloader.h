@@ -29,7 +29,7 @@
 #include "tos_elfloader_relocate.h"
 
 typedef struct el_section_st {
-    uint8_t         shndx;
+    int8_t          shndx;
     void           *address;
 } el_section_t;
 

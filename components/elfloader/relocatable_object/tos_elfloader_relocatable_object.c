@@ -36,7 +36,7 @@ __STATIC__ void *local_symtab_lookup(int fd, char *sym_name,
         if (sym.st_name) {
             if (elfloader_fd_read(fd, strtab_offset + sym.st_name, name, sizeof(name)) != ELFLOADER_ERR_NONE) {
                  return K_NULL;
-             }
+            }
 
             if (strcmp(name, sym_name) == 0) {
                 if (sym.st_shndx == bss.shndx && bss.address) {
@@ -152,18 +152,15 @@ __API__ el_err_t tos_elfloader_load(el_module_t *module, int fd)
     el_err_t err;
     elf32_ehdr_t ehdr;
     elf32_shdr_t shdr;
-    elf32_shdr_t shstrtab;
 
-    static el_section_t bss, data, rodata, text;
-
-#define SECTION_NAME_MAX    20
-    static char section_name[SECTION_NAME_MAX];
+    static el_section_t bss     = { -1, K_NULL };
+    static el_section_t data    = { -1, K_NULL };
+    static el_section_t rodata  = { -1, K_NULL };
+    static el_section_t text    = { -1, K_NULL };
 
     void *base = K_NULL, *addr_sec2cp;  /* ram base for LOAD sections */
 
     uint32_t shdr_offset;
-
-    uint32_t shstrtab_offset;
 
     uint32_t strtab_offset, strtab_size = 0;
     uint32_t symtab_offset, symtab_size = 0, symtab_entsize;
@@ -202,21 +199,10 @@ __API__ el_err_t tos_elfloader_load(el_module_t *module, int fd)
         return ELFLOADER_ERR_TYPE_INVALID;
     }
 
-    if (elfloader_fd_read(fd, ehdr.e_shoff + ehdr.e_shentsize * ehdr.e_shstrndx,
-                            &shstrtab, ehdr.e_shentsize) != ELFLOADER_ERR_NONE) {
-        return ELFLOADER_ERR_FD_READ_FAILED;
-    }
-
-    shstrtab_offset = shstrtab.sh_offset;
-
     shdr_offset = ehdr.e_shoff;
 
     for (i = 0; i < ehdr.e_shnum; ++i) {
         if (elfloader_fd_read(fd, shdr_offset, &shdr, sizeof(elf32_shdr_t)) != ELFLOADER_ERR_NONE) {
-            return ELFLOADER_ERR_FD_READ_FAILED;
-        }
-
-        if (elfloader_fd_read(fd, shstrtab_offset + shdr.sh_name, section_name, sizeof(section_name)) != ELFLOADER_ERR_NONE) {
             return ELFLOADER_ERR_FD_READ_FAILED;
         }
 
@@ -258,38 +244,34 @@ __API__ el_err_t tos_elfloader_load(el_module_t *module, int fd)
             text_size           = shdr.sh_size;
 
             text.shndx          = i;
-        } else if (shdr.sh_type == SHT_REL &&
-                    strncmp(".rel.data", section_name, 9) == 0) {
-            rel_data_offset     = shdr.sh_offset;
-            rel_data_size       = shdr.sh_size;
-            rel_data_entsize    = shdr.sh_entsize;
-        } else if (shdr.sh_type == SHT_RELA &&
-                    strncmp(".rela.data", section_name, 10) == 0) {
-            rela_data_offset    = shdr.sh_offset;
-            rela_data_size      = shdr.sh_size;
-            rela_data_entsize   = shdr.sh_entsize;
-        } else if (shdr.sh_type == SHT_REL &&
-                    (strncmp(".rel.rodata", section_name, 11) == 0 ||
-                     strncmp(".rel.constdata", section_name, 14) == 0)) {
-            rel_rodata_offset   = shdr.sh_offset;
-            rel_rodata_size     = shdr.sh_size;
-            rel_rodata_entsize  = shdr.sh_entsize;
-        } else if (shdr.sh_type == SHT_RELA &&
-                    (strncmp(".rela.rodata", section_name, 12) == 0 ||
-                    strncmp(".rela.constdata", section_name, 15) == 0)) {
-            rela_rodata_offset  = shdr.sh_offset;
-            rela_rodata_size    = shdr.sh_size;
-            rela_rodata_entsize = shdr.sh_entsize;
-        } else if (shdr.sh_type == SHT_REL &&
-                    strncmp(".rel.text", section_name, 9) == 0) {
-            rel_text_offset     = shdr.sh_offset;
-            rel_text_size       = shdr.sh_size;
-            rel_text_entsize    = shdr.sh_entsize;
-        } else if (shdr.sh_type == SHT_RELA &&
-                    strncmp(".rela.text", section_name, 10) == 0) {
-            rela_text_offset    = shdr.sh_offset;
-            rela_text_size      = shdr.sh_size;
-            rela_text_entsize   = shdr.sh_entsize;
+        } else if (shdr.sh_type == SHT_REL) {
+            if (shdr.sh_info == data.shndx) {
+                rel_data_offset     = shdr.sh_offset;
+                rel_data_size       = shdr.sh_size;
+                rel_data_entsize    = shdr.sh_entsize;
+            } else if (shdr.sh_info == rodata.shndx) {
+                rel_rodata_offset   = shdr.sh_offset;
+                rel_rodata_size     = shdr.sh_size;
+                rel_rodata_entsize  = shdr.sh_entsize;
+            } else if (shdr.sh_info == text.shndx) {
+                rel_text_offset     = shdr.sh_offset;
+                rel_text_size       = shdr.sh_size;
+                rel_text_entsize    = shdr.sh_entsize;
+            }
+        } else if (shdr.sh_type == SHT_RELA) {
+            if (shdr.sh_info == data.shndx) {
+                rela_data_offset    = shdr.sh_offset;
+                rela_data_size      = shdr.sh_size;
+                rela_data_entsize   = shdr.sh_entsize;
+            } else if (shdr.sh_info == rodata.shndx) {
+                rela_rodata_offset  = shdr.sh_offset;
+                rela_rodata_size    = shdr.sh_size;
+                rela_rodata_entsize = shdr.sh_entsize;
+            } else if (shdr.sh_info == text.shndx) {
+                rela_text_offset    = shdr.sh_offset;
+                rela_text_size      = shdr.sh_size;
+                rela_text_entsize   = shdr.sh_entsize;
+            }
         }
 
         shdr_offset += ehdr.e_shentsize;
@@ -343,11 +325,13 @@ __API__ el_err_t tos_elfloader_load(el_module_t *module, int fd)
         addr_sec2cp = (void *)((uint32_t)addr_sec2cp + data_size);
     }
 
+    /* clear bss */
     if (bss_size > 0) {
         bss.address = addr_sec2cp;
         memset(bss.address, 0, bss_size);
     }
 
+    /* do relocation */
     if (rel_data_size > 0) {
         err = elfloader_relocate(fd, data.address,
                                    bss, data, rodata, text,

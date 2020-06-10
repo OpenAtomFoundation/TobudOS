@@ -289,6 +289,7 @@ __API__ el_err_t tos_elfloader_load(el_module_t *module, int fd)
         phdr_offset += ehdr.e_phentsize;
     }
 
+    /* do relocation */
     if (rel_dyn_size > 0) {
         err = elfloader_relocate(fd, load_bias,
                                    rel_dyn_offset, rel_dyn_size, rel_entsize,
