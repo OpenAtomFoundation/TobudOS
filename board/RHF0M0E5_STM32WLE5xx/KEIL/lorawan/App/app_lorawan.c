@@ -53,7 +53,8 @@ static void cycle_send_event(void *context);
 static void Lora_start_send(void);
 
 k_task_t	lora_mac_process_task;
-k_stack_t	lora_mac_process_task_stack[512];
+//4096 is miniest stack size to work normally
+k_stack_t	lora_mac_process_task_stack[4096];
 
 k_sem_t	lora_mac_process_sem;
 

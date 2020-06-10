@@ -71,8 +71,8 @@
 
 
 
-#define ALI_DOWNLINK_FREQ  		 ALI_FREQ470_S
-#define ALI_RX2WIN_FREQ          ALI_RX_WND_2_FREQ_1A2S_1B2D
+#define ALI_DOWNLINK_FREQ  		 ALI_FREQ470_D
+#define ALI_RX2WIN_FREQ          ALI_RX_WND_2_FREQ_1A2D_1B2S
 #define ALI_BEACON_FREQ               
 
 
