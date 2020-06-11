@@ -66,7 +66,6 @@ __API__ k_err_t tos_prio_msg_q_destroy(k_prio_msg_q_t *prio_msg_q);
  * @attention a MESSAGE is a "void *" pointer.
  *
  * @param[in]   prio_msg_q  pointer to the handler of the priority message queue.
- * @param[in]   pool        pool buffer of the priority message queue.
  * @param[in]   msg_cnt     message count of the priority message queue.
  *
  * @return  errcode
