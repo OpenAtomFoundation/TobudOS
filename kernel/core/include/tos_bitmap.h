@@ -145,7 +145,6 @@ __API__ int         tos_bitmap_is_reset(k_bitmap_t *bitmap, uint32_t bit);
  * @attention The very first bit which is set to 1.
  *
  * @param[in]   bitmap          pointer to the handler of the bitmap.
- * @param[in]   bit             the bit to set.
  *
  * @return  the lowest significant bit of the bitmap.
  */
