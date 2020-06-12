@@ -47,12 +47,12 @@
 		<link>
 			<name>Application/LoRaWAN</name>
 			<type>2</type>
-			<location>C:/Users/supowang/Desktop/TencentOS-tiny/board/TencentOS_tiny_EVB_LX/BSP/LoRaWAN</location>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>Application/PM25</name>
 			<type>2</type>
-			<location>C:/Users/supowang/Desktop/TencentOS-tiny/board/TencentOS_tiny_EVB_LX/BSP/Hardware/PM25</location>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>Application/Src</name>
@@ -90,6 +90,26 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>Application/LoRaWAN/lora_demo.c</name>
+			<type>1</type>
+			<location>$%7BPARENT-4-PROJECT_LOC%7D/board/TencentOS_tiny_EVB_LX/BSP/LoRaWAN/lora_demo.c</location>
+		</link>
+		<link>
+			<name>Application/LoRaWAN/lora_demo.h</name>
+			<type>1</type>
+			<location>$%7BPARENT-4-PROJECT_LOC%7D//board/TencentOS_tiny_EVB_LX/BSP/LoRaWAN/lora_demo.h</location>
+		</link>
+		<link>
+			<name>Application/PM25/sensor_parser.c</name>
+			<type>1</type>
+			<location>$%7BPARENT-4-PROJECT_LOC%7D//board/TencentOS_tiny_EVB_LX/BSP/Hardware/PM25/sensor_parser.c</location>
+		</link>
+		<link>
+			<name>Application/PM25/sensor_parser.h</name>
+			<type>1</type>
+			<location>$%7BPARENT-4-PROJECT_LOC%7D//board/TencentOS_tiny_EVB_LX/BSP/Hardware/PM25/sensor_parser.h</location>
+		</link>
+		<link>
 			<name>TencentOS_tiny/arch/risc-v</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -97,7 +117,7 @@
 		<link>
 			<name>TencentOS_tiny/devices/rhf76_lora</name>
 			<type>2</type>
-			<location>C:/Users/Supowang/Desktop/TencentOS-tiny/devices/rhf76_lora</location>
+			<location>$%7BPARENT-4-PROJECT_LOC%7D//devices/rhf76_lora</location>
 		</link>
 		<link>
 			<name>TencentOS_tiny/net/at</name>
@@ -107,7 +127,7 @@
 		<link>
 			<name>TencentOS_tiny/net/lora_module_wrapper</name>
 			<type>2</type>
-			<location>C:/Users/Supowang/Desktop/TencentOS-tiny/net/lora_module_wrapper</location>
+			<location>$%7BPARENT-4-PROJECT_LOC%7D//net/lora_module_wrapper</location>
 		</link>
 		<link>
 			<name>TencentOS_tiny/platform/hal</name>
