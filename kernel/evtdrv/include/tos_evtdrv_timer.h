@@ -70,6 +70,7 @@ __API__ evtdrv_err_t tos_evtdrv_timer_create(evtdrv_timer_t *tmr,
  * @attention None
  *
  * @param[in]   tmr         pointer to the handler of the timer.
+ * @param[in]   timeout     how much time(in evtdrv_tick_t) the timer would be expired.
  *
  * @return  errcode
  * @retval  #EVTDRV_ERR_PTR_NULL                tmr is a NULL pointer.
