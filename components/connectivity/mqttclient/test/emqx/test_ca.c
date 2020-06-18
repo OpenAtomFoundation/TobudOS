@@ -1,0 +1,75 @@
+/*
+ * @Author: jiejie
+ * @Github: https://github.com/jiejieTop
+ * @Date: 2020-01-12 10:51:11
+ * @LastEditTime: 2020-03-21 21:07:24
+ * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
+ */
+static const char *test_ca_crt = {
+    "-----BEGIN CERTIFICATE-----\r\n"
+    "MIIFrTCCBJWgAwIBAgIQDApSGhCHMtFicAaXgcO0vjANBgkqhkiG9w0BAQsFADBy\r\n"
+    "MQswCQYDVQQGEwJDTjElMCMGA1UEChMcVHJ1c3RBc2lhIFRlY2hub2xvZ2llcywg\r\n"
+    "SW5jLjEdMBsGA1UECxMURG9tYWluIFZhbGlkYXRlZCBTU0wxHTAbBgNVBAMTFFRy\r\n"
+    "dXN0QXNpYSBUTFMgUlNBIENBMB4XDTIwMDEyOTAwMDAwMFoXDTIxMDQyODEyMDAw\r\n"
+    "MFowGzEZMBcGA1UEAxMQd3d3LmppZWppZTAxLnRvcDCCASIwDQYJKoZIhvcNAQEB\r\n"
+    "BQADggEPADCCAQoCggEBAKIDMo45w085LaCMG1LWY5b8V94zDqdt+weVhKolgsLZ\r\n"
+    "htAQTDrafBx1sNJtOpa8ADeQkFbWOTEy3tgViOBvBr+8Qhl6vYsESJrg7DXeCVRm\r\n"
+    "04pk+cFrdWYRE70AUz8RXRuaWLv1Fu2L+qlymrnZB/WBJFnETINh6yzqY8FNETUV\r\n"
+    "EL08eE0LoXt/4b7iAJYEFRYTyBKjLpkr04e92SQIuL/l42j92lYNOjYfYOlpWZUC\r\n"
+    "cp4WHXEDd1YXdTMmXpfsU3VlYS3RTusOFsgXpLFET9xGRvtDSu5qw6rPGf/y/PhT\r\n"
+    "1LFB/xlL2E6Rpo/6VWuQ8A5rA+H3D1I/fIBB97orMYUCAwEAAaOCApQwggKQMB8G\r\n"
+    "A1UdIwQYMBaAFH/TmfOgRw4xAFZWIo63zJ7dygGKMB0GA1UdDgQWBBQyzyOTN1l5\r\n"
+    "Rg1Ih1tQ0TPYMqfw+jApBgNVHREEIjAgghB3d3cuamllamllMDEudG9wggxqaWVq\r\n"
+    "aWUwMS50b3AwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggr\r\n"
+    "BgEFBQcDAjBMBgNVHSAERTBDMDcGCWCGSAGG/WwBAjAqMCgGCCsGAQUFBwIBFhxo\r\n"
+    "dHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMAgGBmeBDAECATCBkgYIKwYBBQUH\r\n"
+    "AQEEgYUwgYIwNAYIKwYBBQUHMAGGKGh0dHA6Ly9zdGF0dXNlLmRpZ2l0YWxjZXJ0\r\n"
+    "dmFsaWRhdGlvbi5jb20wSgYIKwYBBQUHMAKGPmh0dHA6Ly9jYWNlcnRzLmRpZ2l0\r\n"
+    "YWxjZXJ0dmFsaWRhdGlvbi5jb20vVHJ1c3RBc2lhVExTUlNBQ0EuY3J0MAkGA1Ud\r\n"
+    "EwQCMAAwggEEBgorBgEEAdZ5AgQCBIH1BIHyAPAAdQB9PvL4j/+IVWgkwsDKnlKJ\r\n"
+    "eSvFDngJfy5ql2iZfiLw1wAAAW/wKSTgAAAEAwBGMEQCIGFq0FdvZfXf4lV20Am1\r\n"
+    "HRP6F7wxzkesK0r1566sNqvxAiBp5W3iTLWEgeJa/PfH5hX/d+K5CIyXScLa4qqa\r\n"
+    "MCLHwwB3AFzcQ5L+5qtFRLFemtRW5hA3+9X6R9yhc5SyXub2xw7KAAABb/ApJJIA\r\n"
+    "AAQDAEgwRgIhANEsjShyRf0GGpwJ6ZTQKBHo933rlSpaNIvor7cG8RBQAiEAkeDf\r\n"
+    "7+n+zyEGZUMOYI0E0R2chjPBJGvtw1yD12sxekowDQYJKoZIhvcNAQELBQADggEB\r\n"
+    "AIzaZ5X1So+xVe2JWkMfmJA8IQhdp9WghCDLRORcIggcY9BtYxFSBdusxIa1bhdt\r\n"
+    "rCY6RoepCwTrhV9PotwMgZtSOu8szHHRlqX8zNUhIh628yzPSTDDZ4xgeJvlGAkT\r\n"
+    "Zlv0XrezkDLRZkKN9R6KX1ccaPNbn9PD6SMtpHPbE7UEZYfrV3wAJhFzsyhp2JF4\r\n"
+    "KLLNPaeDgDM3Lu6tUm/bznDEyxi7/ZoR+7fSQAMF5Jo1ysKUAOC00I9Ne+7eSbTh\r\n"
+    "flV//8NBN+Z2ShCV0uFedf6ugDUMOuOUCtp0c7N+sM1IVE5MOhLRDAGRIUyi7/43\r\n"
+    "dJ0Okust1fXo4UTDGJtyp30=\r\n"
+    "-----END CERTIFICATE-----\r\n"
+    "-----BEGIN CERTIFICATE-----\r\n"
+    "MIIErjCCA5agAwIBAgIQBYAmfwbylVM0jhwYWl7uLjANBgkqhkiG9w0BAQsFADBh\r\n"
+    "MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
+    "d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD\r\n"
+    "QTAeFw0xNzEyMDgxMjI4MjZaFw0yNzEyMDgxMjI4MjZaMHIxCzAJBgNVBAYTAkNO\r\n"
+    "MSUwIwYDVQQKExxUcnVzdEFzaWEgVGVjaG5vbG9naWVzLCBJbmMuMR0wGwYDVQQL\r\n"
+    "ExREb21haW4gVmFsaWRhdGVkIFNTTDEdMBsGA1UEAxMUVHJ1c3RBc2lhIFRMUyBS\r\n"
+    "U0EgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCgWa9X+ph+wAm8\r\n"
+    "Yh1Fk1MjKbQ5QwBOOKVaZR/OfCh+F6f93u7vZHGcUU/lvVGgUQnbzJhR1UV2epJa\r\n"
+    "e+m7cxnXIKdD0/VS9btAgwJszGFvwoqXeaCqFoP71wPmXjjUwLT70+qvX4hdyYfO\r\n"
+    "JcjeTz5QKtg8zQwxaK9x4JT9CoOmoVdVhEBAiD3DwR5fFgOHDwwGxdJWVBvktnoA\r\n"
+    "zjdTLXDdbSVC5jZ0u8oq9BiTDv7jAlsB5F8aZgvSZDOQeFrwaOTbKWSEInEhnchK\r\n"
+    "ZTD1dz6aBlk1xGEI5PZWAnVAba/ofH33ktymaTDsE6xRDnW97pDkimCRak6CEbfe\r\n"
+    "3dXw6OV5AgMBAAGjggFPMIIBSzAdBgNVHQ4EFgQUf9OZ86BHDjEAVlYijrfMnt3K\r\n"
+    "AYowHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUwDgYDVR0PAQH/BAQD\r\n"
+    "AgGGMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjASBgNVHRMBAf8ECDAG\r\n"
+    "AQH/AgEAMDQGCCsGAQUFBwEBBCgwJjAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au\r\n"
+    "ZGlnaWNlcnQuY29tMEIGA1UdHwQ7MDkwN6A1oDOGMWh0dHA6Ly9jcmwzLmRpZ2lj\r\n"
+    "ZXJ0LmNvbS9EaWdpQ2VydEdsb2JhbFJvb3RDQS5jcmwwTAYDVR0gBEUwQzA3Bglg\r\n"
+    "hkgBhv1sAQIwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29t\r\n"
+    "L0NQUzAIBgZngQwBAgEwDQYJKoZIhvcNAQELBQADggEBAK3dVOj5dlv4MzK2i233\r\n"
+    "lDYvyJ3slFY2X2HKTYGte8nbK6i5/fsDImMYihAkp6VaNY/en8WZ5qcrQPVLuJrJ\r\n"
+    "DSXT04NnMeZOQDUoj/NHAmdfCBB/h1bZ5OGK6Sf1h5Yx/5wR4f3TUoPgGlnU7EuP\r\n"
+    "ISLNdMRiDrXntcImDAiRvkh5GJuH4YCVE6XEntqaNIgGkRwxKSgnU3Id3iuFbW9F\r\n"
+    "UQ9Qqtb1GX91AJ7i4153TikGgYCdwYkBURD8gSVe8OAco6IfZOYt/TEwii1Ivi1C\r\n"
+    "qnuUlWpsF1LdQNIdfbW3TSe0BhQa7ifbVIfvPWHYOu3rkg1ZeMo6XRU9B4n5VyJY\r\n"
+    "RmE=\r\n"
+    "-----END CERTIFICATE-----"
+};
+
+const char *test_ca_get()
+{
+    return test_ca_crt;
+}

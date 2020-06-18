@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-10 23:45:59
- * @LastEditTime: 2020-04-25 18:59:28
+ * @LastEditTime: 2020-04-25 17:54:44
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "platform_net_socket.h"
@@ -45,7 +45,7 @@ int platform_net_socket_connect(const char *host, const char *port, int proto)
             break;
         }
 
-        close(fd);
+        platform_net_socket_close(fd);
         ret = MQTT_CONNECT_FAILED_ERROR;
     }
 
@@ -69,30 +69,35 @@ int platform_net_socket_recv_timeout(int fd, unsigned char *buf, int len, int ti
 #ifdef MQTT_NETSOCKET_USE_AT
     return tos_sal_module_recv_timeout(fd, buf, len, timeout);
 #else
-    int rc;
-    int bytes = 0;
-	struct timeval tv = {
+    int nread;
+    int nleft = len;
+    unsigned char *ptr; 
+    ptr = buf;
+
+    struct timeval tv = {
         timeout / 1000, 
         (timeout % 1000) * 1000
     };
     
-	if (tv.tv_sec < 0 || (tv.tv_sec == 0 && tv.tv_usec <= 0)) {
-		tv.tv_sec = 0;
-		tv.tv_usec = 100;
-	}
+    if (tv.tv_sec < 0 || (tv.tv_sec == 0 && tv.tv_usec <= 0)) {
+        tv.tv_sec = 0;
+        tv.tv_usec = 100;
+    }
 
-	platform_net_socket_setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval));
+    platform_net_socket_setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval));
 
-	while (bytes < len) {
-		rc = platform_net_socket_recv(fd, &buf[bytes], (size_t)(len - bytes), 0);
-		if (rc <= 0) {
-			bytes = rc;
-			break;
-		} else {
-			bytes += rc;
-		}
-	}
-	return bytes;
+    while (nleft > 0) {
+        nread = platform_net_socket_recv(fd, ptr, nleft, 0);
+        if (nread < 0) {
+            return -1;
+        } else if (nread == 0) {
+            break;
+        }
+
+        nleft -= nread;
+        ptr += nread;
+    }
+    return len - nleft;
 #endif
 }
 
@@ -110,17 +115,17 @@ int platform_net_socket_write_timeout(int fd, unsigned char *buf, int len, int t
 #ifdef MQTT_NETSOCKET_USE_AT
     return tos_sal_module_send(fd, buf, len);
 #else
-	struct timeval tv = {
+    struct timeval tv = {
         timeout / 1000, 
         (timeout % 1000) * 1000
     };
     
-	if (tv.tv_sec < 0 || (tv.tv_sec == 0 && tv.tv_usec <= 0)) {
-		tv.tv_sec = 0;
-		tv.tv_usec = 100;
-	}
+    if (tv.tv_sec < 0 || (tv.tv_sec == 0 && tv.tv_usec <= 0)) {
+        tv.tv_sec = 0;
+        tv.tv_usec = 100;
+    }
 
-	platform_net_socket_setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
+    platform_net_socket_setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv,sizeof(struct timeval));
 	
     return write(fd, buf, len);
 #endif
