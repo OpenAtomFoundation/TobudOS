@@ -11,7 +11,7 @@
 #include "network.h"
 #include "mqtt_error.h"
 
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
 
 #include "sal_module_wrapper.h"
 
@@ -35,7 +35,7 @@ int platform_net_socket_write(int fd, void *buf, size_t len);
 int platform_net_socket_write_timeout(int fd, unsigned char *buf, int len, int timeout);
 int platform_net_socket_close(int fd);
 
-#ifndef MQTT_NETSOCKET_USE_AT
+#ifndef MQTT_NETSOCKET_USING_AT
 int platform_net_socket_set_block(int fd);
 int platform_net_socket_set_nonblock(int fd);
 int platform_net_socket_setsockopt(int fd, int level, int optname, const void *optval, socklen_t optlen);

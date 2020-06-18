@@ -10,7 +10,7 @@
 int platform_net_socket_connect(const char *host, const char *port, int proto)
 {
     int fd, ret = MQTT_SOCKET_UNKNOWN_HOST_ERROR;
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
 
     fd = tos_sal_module_connect(host, port, TOS_SAL_PROTO_TCP);
     
@@ -57,7 +57,7 @@ int platform_net_socket_connect(const char *host, const char *port, int proto)
 
 int platform_net_socket_recv(int fd, void *buf, size_t len, int flags)
 {
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
     return tos_sal_module_recv(fd, buf, len);
 #else
     return recv(fd, buf, len, flags);
@@ -66,7 +66,7 @@ int platform_net_socket_recv(int fd, void *buf, size_t len, int flags)
 
 int platform_net_socket_recv_timeout(int fd, unsigned char *buf, int len, int timeout)
 {
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
     return tos_sal_module_recv_timeout(fd, buf, len, timeout);
 #else
     int nread;
@@ -103,7 +103,7 @@ int platform_net_socket_recv_timeout(int fd, unsigned char *buf, int len, int ti
 
 int platform_net_socket_write(int fd, void *buf, size_t len)
 {
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
     return tos_sal_module_send(fd, buf, len);
 #else
     return write(fd, buf, len);
@@ -112,7 +112,7 @@ int platform_net_socket_write(int fd, void *buf, size_t len)
 
 int platform_net_socket_write_timeout(int fd, unsigned char *buf, int len, int timeout)
 {
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
     return tos_sal_module_send(fd, buf, len);
 #else
     struct timeval tv = {
@@ -133,14 +133,14 @@ int platform_net_socket_write_timeout(int fd, unsigned char *buf, int len, int t
 
 int platform_net_socket_close(int fd)
 {
-#ifdef MQTT_NETSOCKET_USE_AT
+#ifdef MQTT_NETSOCKET_USING_AT
     return tos_sal_module_close(fd);
 #else
     return close(fd);
 #endif
 }
 
-#ifndef MQTT_NETSOCKET_USE_AT
+#ifndef MQTT_NETSOCKET_USING_AT
 
 int platform_net_socket_set_block(int fd)
 {
