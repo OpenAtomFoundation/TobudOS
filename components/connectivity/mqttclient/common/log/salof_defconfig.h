@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-25 23:56:34
- * @LastEditTime: 2020-03-02 01:32:32
+ * @LastEditTime: 2020-06-17 18:50:26
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _SALOF_DEFCONFIG_H_
@@ -10,45 +10,44 @@
 
 #include "salof_config.h"
 
-#ifdef USE_LOG
+#ifdef SALOF_USING_LOG
 
-#define         USE_RTT             1
-#define         USE_FREERTOS        2
-#define         USE_TENCENTOS       3
-#define         USE_LINUX           4
+#define         SALOF_USING_RTT             1
+#define         SALOF_USING_FREERTOS        2
+#define         SALOF_USING_TENCENTOS       3
+#define         SALOF_USING_LINUX           4
 
-#define         BASE_LEVEL          (0)
-#define         ASSERT_LEVEL        (BASE_LEVEL + 1)
-#define         ERR_LEVEL           (ASSERT_LEVEL + 1)
-#define         WARN_LEVEL          (ERR_LEVEL + 1)
-#define         INFO_LEVEL          (WARN_LEVEL + 1)
-#define         DEBUG_LEVEL         (INFO_LEVEL + 1)
+#define         SALOF_BASE_LEVEL          (0)
+#define         SALOF_ERR_LEVEL           (SALOF_BASE_LEVEL + 1)
+#define         SALOF_WARN_LEVEL          (SALOF_ERR_LEVEL + 1)
+#define         SALOF_INFO_LEVEL          (SALOF_WARN_LEVEL + 1)
+#define         SALOF_DEBUG_LEVEL         (SALOF_INFO_LEVEL + 1)
 
-#ifndef USE_SALOF
-    #define         USE_SALOF                   (1U)
+#ifndef SALOF_USING_SALOF
+    #define         SALOF_USING_SALOF                   (1U)
 #endif
 
-#ifndef USE_IDLE_HOOK
-    #define         USE_IDLE_HOOK               (0U)
+#ifndef SALOF_USING_IDLE_HOOK
+    #define         SALOF_USING_IDLE_HOOK               (0U)
 #endif
 
-#ifndef LOG_COLOR
-    #define         LOG_COLOR                   (1U)
+#ifndef SALOF_LOG_COLOR
+    #define         SALOF_LOG_COLOR                     (1U)
 #endif
 
-#ifndef LOG_TS
-    #define         LOG_TS                     (1U)
+#ifndef SALOF_LOG_TS
+    #define         SALOF_LOG_TS                        (1U)
 #endif
 
-#ifndef LOG_TAR
-    #define         LOG_TAR                     (0U)
+#ifndef SALOF_LOG_TAR
+    #define         SALOF_LOG_TAR                       (0U)
 #endif
 
-#ifndef LOG_LEVEL
-#define         LOG_LEVEL                       DEBUG_LEVEL   //WARN_LEVEL DEBUG_LEVEL
+#ifndef SALOF_LOG_LEVEL
+#define         SALOF_LOG_LEVEL                         SALOF_DEBUG_LEVEL   //SALOF_WARN_LEVEL SALOF_DEBUG_LEVEL
 #endif
 
-#if USE_SALOF
+#if SALOF_USING_SALOF
 
 #ifndef SALOF_BUFF_SIZE
     #define         SALOF_BUFF_SIZE             (512U)
@@ -72,27 +71,27 @@
     #error "SALOF_OS isn't defined in 'salof_config.h'"
 #endif
 
-#if (SALOF_OS == USE_FREERTOS)
+#if (SALOF_OS == SALOF_USING_FREERTOS)
     #include "FreeRTOS.h"
     #include "task.h"
     #include "semphr.h"
     #define salof_mutex     SemaphoreHandle_t
     #define salof_tcb       TaskHandle_t
     #define salof_sem       salof_mutex
-#if USE_IDLE_HOOK
+#if SALOF_USING_IDLE_HOOK
     #define salof_handler   vApplicationIdleHook
 #endif  
     #define SALOF_TASK_PRIO (0U)
 
-#elif (SALOF_OS == USE_TENCENTOS)
+#elif (SALOF_OS == SALOF_USING_TENCENTOS)
     #include "tos_k.h"
     #define salof_mutex     k_mutex_t*
     #define salof_sem       k_sem_t*
     #define salof_tcb       k_task_t*
     #define SALOF_TASK_PRIO (TOS_CFG_TASK_PRIO_MAX - 2u)
-    #undef  USE_IDLE_HOOK
+    #undef  SALOF_USING_IDLE_HOOK
     
-#elif (SALOF_OS == USE_RTT)
+#elif (SALOF_OS == SALOF_USING_RTT)
     #include <rtconfig.h>
     #include <rtthread.h>
     #include <rthw.h>
@@ -102,7 +101,7 @@
     #define salof_tcb       rt_thread_t
     #define SALOF_TASK_PRIO (RT_THREAD_PRIORITY_MAX - 1)
     
-#elif (SALOF_OS == USE_LINUX)
+#elif (SALOF_OS == SALOF_USING_LINUX)
     #include "pthread.h"
     #include "memory.h"
     #include <semaphore.h>
@@ -112,7 +111,7 @@
     #define salof_sem       sem_t*
     #define salof_tcb       pthread_t*
     #define SALOF_TASK_PRIO (0U)
-    #undef  USE_IDLE_HOOK
+    #undef  SALOF_USING_IDLE_HOOK
 
 #else
     #error "not supported OS type"

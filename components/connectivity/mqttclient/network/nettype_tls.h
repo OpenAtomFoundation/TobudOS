@@ -2,20 +2,19 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-11 19:45:44
- * @LastEditTime: 2020-02-25 03:51:37
+ * @LastEditTime: 2020-05-24 17:03:13
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
-#ifndef _PLATFORM_NETTYPE_TLS_H_
-#define _PLATFORM_NETTYPE_TLS_H_
+#ifndef _NETTYPE_TLS_H_
+#define _NETTYPE_TLS_H_
 
-#include "platform_net_socket.h"
 #include "mqtt_defconfig.h"
 #include "network.h"
-#include "error.h"
-#include "log.h"
+#include "mqtt_error.h"
+#include "mqtt_log.h"
 
-#ifdef MQTT_NETWORK_TYPE_TLS
+#ifndef MQTT_NETWORK_TYPE_NO_TLS
 
 typedef struct nettype_tls_params {
     mbedtls_net_context         socket_fd;        /**< mbed TLS network context. */
@@ -30,11 +29,11 @@ typedef struct nettype_tls_params {
     mbedtls_pk_context          private_key;      /**< mbed TLS Client key. */
 } nettype_tls_params_t;
 
-int platform_nettype_tls_read(network_t *n, unsigned char *buf, int len, int timeout);
-int platform_nettype_tls_write(network_t *n, unsigned char *buf, int len, int timeout);
-int platform_nettype_tls_connect(network_t* n);
-void platform_nettype_tls_disconnect(network_t* n);
+int nettype_tls_read(network_t *n, unsigned char *buf, int len, int timeout);
+int nettype_tls_write(network_t *n, unsigned char *buf, int len, int timeout);
+int nettype_tls_connect(network_t* n);
+void nettype_tls_disconnect(network_t* n);
 
-#endif /* MQTT_NETWORK_TYPE_TLS */
+#endif /* MQTT_NETWORK_TYPE_NO_TLS */
 
 #endif

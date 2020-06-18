@@ -32,7 +32,7 @@ extern "C" {
  ******************************************************************************/
 
 /* lw application configuration (Mw is configured by lorawan_conf.h) */
-#define LORAWAN_DEFAULT_ACTIVE_REGION        		LORAMAC_REGION_CN470ALI
+#define LORAWAN_DEFAULT_ACTIVE_REGION        		LORAMAC_REGION_CN470
  
  
 	

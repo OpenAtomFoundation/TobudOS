@@ -2,13 +2,13 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-25 23:54:19
- * @LastEditTime: 2020-02-25 08:12:02
- * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
+ * @LastEditTime: 2020-06-17 15:23:09
+ * @Description: the code belongs to jiejie, please keep the author insalof_formation and source code according to the license.
  */
 #include "format.h"
 #include "salof_defconfig.h"
 
-#ifdef USE_LOG
+#ifdef SALOF_USING_LOG
 
 static int _get_atoi(const char **str)
 {
@@ -36,7 +36,7 @@ static void _buff_put_char(char *buf, unsigned int *pos, unsigned int max, char 
  *  width - how many spaces this should have; padding
  *  flags - above F flags
  */
-static void _format_int(char *buf, unsigned int *len, unsigned int maxlen,
+static void _salof_format_int(char *buf, unsigned int *len, unsigned int maxlen,
         signed long long num, int base, int width, int flags)
 {
     char nbuf[64], sign = 0;
@@ -103,7 +103,7 @@ static void _format_int(char *buf, unsigned int *len, unsigned int maxlen,
             _buff_put_char(buf, len, maxlen, pchar);
 }
 
-static void _format_char(char *buf, unsigned int *pos, unsigned int max, char c,
+static void _salof_format_char(char *buf, unsigned int *pos, unsigned int max, char c,
         int width, int flags)
 {
     int npad = 0;
@@ -132,7 +132,7 @@ static unsigned int _str_len(char *s)
     return i;
 }
 
-static void _format_str(char *buf, unsigned int *pos, unsigned int max, char *s,
+static void _salof_format_str(char *buf, unsigned int *pos, unsigned int max, char *s,
         int width, int flags)
 {
     int npad = 0;
@@ -160,7 +160,7 @@ static void _format_str(char *buf, unsigned int *pos, unsigned int max, char *s,
  * Shrinked down, vsnprintf implementation.
  *  This will not handle floating numbers (yet).
  */
-int format_nstr(char *buf, unsigned int size, const char *fmt, va_list ap)
+int salof_format_nstr(char *buf, unsigned int size, const char *fmt, va_list ap)
 {
     unsigned int n = 0;
     char c, *s;
@@ -248,20 +248,20 @@ int format_nstr(char *buf, unsigned int size, const char *fmt, va_list ap)
                 } else if (c == 'b') {
                     base = 2;
                 }
-                _format_int(buf, &n, size, num, base, width, flags);
+                _salof_format_int(buf, &n, size, num, base, width, flags);
             } else if (c == 'p') {
                 num = (size_t) va_arg(ap, void *);
                 base = 16;
                 flags |= F_SMALL | F_ALTERNATE;
-                _format_int(buf, &n, size, num, base, width, flags);
+                _salof_format_int(buf, &n, size, num, base, width, flags);
             } else if (c == 's') {
                 s = va_arg(ap, char *);
                 if (!s)
                     s = "(null)";
-                _format_str(buf, &n, size, s, width, flags);
+                _salof_format_str(buf, &n, size, s, width, flags);
             } else if (c == 'c') {
                 c = va_arg(ap, int);
-                _format_char(buf, &n, size, c, width, flags);
+                _salof_format_char(buf, &n, size, c, width, flags);
             } else if (c == '%') {
                 _buff_put_char(buf, &n, size, c);
             } else {

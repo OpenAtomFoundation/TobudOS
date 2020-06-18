@@ -93,6 +93,7 @@ typedef struct at_echo_st {
     size_t              __w_idx;
     int                 __is_expecting;
     k_sem_t             __expect_notify;
+    int                 __is_fuzzy_match;
 } at_echo_t;
 
 typedef void (*at_event_callback_t)(void);
@@ -113,7 +114,7 @@ typedef struct at_agent_st {
     k_task_t        parser;
     at_cache_t      recv_cache;
 
-    at_timer_t      timer;
+    k_stopwatch_t   timer;
 
     k_mutex_t       global_lock;
 
@@ -268,7 +269,7 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
  *
  * @attention None
  *
- * @return  
+ * @return
 None
  */
 __API__ void tos_at_deinit(void);
@@ -288,6 +289,22 @@ __API__ void tos_at_deinit(void);
  * @retval  0               create successfully.
  */
 __API__ int tos_at_echo_create(at_echo_t *echo, char *buffer, size_t buffer_size, char *echo_expect);
+
+/**
+ * @brief Create a echo struct with fuzzy matching for expected echo.
+ *
+ * @attention None
+ *
+ * @param[in]   echo                    pointer to the echo struct.
+ * @param[out]  buffer                  buffer to hold the received message from the module.
+ * @param[in]   buffer_size             size of the buffer.
+ * @param[in]   echo_expect_contains    if the echo message contains echo_expect_contains, it is a matching.
+ *
+ * @return  errcode
+ * @retval  -1              create failed(error).
+ * @retval  0               create successfully.
+ */
+__API__ int tos_at_echo_fuzzy_matching_create(at_echo_t *echo, char *buffer, size_t buffer_size, char *echo_expect_contains);
 
 /**
  * @brief Execute an at command.
@@ -456,5 +473,5 @@ __API__ const char *tos_at_agent_channel_ip_get(int channel_id);
  */
 __API__ const char *tos_at_agent_channel_port_get(int channel_id);
 
-#endif /* __AT_AGENT_H_ */
+#endif /* _TOS_AT_H_ */
 

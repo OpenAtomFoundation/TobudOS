@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-10 22:16:41
- * @LastEditTime : 2020-01-11 01:19:35
+ * @LastEditTime: 2020-04-27 22:37:33
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -58,9 +58,13 @@ void platform_timer_usleep(unsigned long usec)
     uint32_t ms;
     k_tick_t tick;
 
-    ms = usec / 1000;
-    if (ms == 0) {
-        ms = 1;
+    if(usec != 0) {
+        
+        ms = usec / TOS_CFG_CPU_TICK_PER_SECOND;
+
+        if (ms == 0) {
+            ms = 1;
+        }
     }
 
     tick = tos_millisec2tick(ms);
