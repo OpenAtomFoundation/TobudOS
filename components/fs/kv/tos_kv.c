@@ -1298,11 +1298,11 @@ __API__ int tos_kv_has_key(const char *key)
     int has_key = K_FALSE;
 
     if (!key) {
-        return KV_ERR_INVALID_PARAM;
+        return K_FALSE;
     }
 
     if (strlen(key) >= (uint8_t)-1) {
-        return KV_ERR_SIZE_EXCEEDED;
+        return K_FALSE;
     }
 
     kv_lock();
