@@ -2,11 +2,11 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-15 00:42:16
- * @LastEditTime: 2020-04-25 18:59:08
+ * @LastEditTime: 2020-04-27 23:35:05
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
-#ifndef _ERROR_H_
-#define _ERROR_H_
+#ifndef _MQTT_ERROR_H_
+#define _MQTT_ERROR_H_
 
 typedef enum mqtt_error {
     MQTT_SSL_CERT_ERROR                                     = -0x001C,      /* cetr parse failed */

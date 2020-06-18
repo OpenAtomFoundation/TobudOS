@@ -12,6 +12,7 @@
 #define RANDOM_MAX 0x7FFFFFFF
 
 int random_number(void);
+int random_number_range(unsigned int min, unsigned int max);
 char *random_string(unsigned int len);
 
 #endif /* _RANDOM_H_ */

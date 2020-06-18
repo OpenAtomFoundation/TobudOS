@@ -2,16 +2,16 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-11 22:47:55
- * @LastEditTime : 2020-01-08 20:39:26
+ * @LastEditTime: 2020-04-27 23:25:37
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
-#ifndef _LIST_H_
-#define _LIST_H_
+#ifndef _MQTT_LIST_H_
+#define _MQTT_LIST_H_
 
-typedef struct list_node {
-    struct list_node *next;
-    struct list_node *prev;
-} list_t;
+typedef struct mqtt_list_node {
+    struct mqtt_list_node *next;
+    struct mqtt_list_node *prev;
+} mqtt_list_t;
 
 #define OFFSET_OF_FIELD(type, field) \
     ((size_t)&(((type *)0)->field))
@@ -23,7 +23,7 @@ typedef struct list_node {
     { &(node), &(node) }
 
 #define LIST_DEFINE(list) \
-    list_t list = { &(list), &(list) }
+    mqtt_list_t list = { &(list), &(list) }
 
 #define LIST_ENTRY(list, type, field) \
     CONTAINER_OF_FIELD(list, type, field)
@@ -32,7 +32,7 @@ typedef struct list_node {
     LIST_ENTRY((list)->next, type, field)
 
 #define LIST_FIRST_ENTRY_OR_NULL(list, type, field) \
-    (list_is_empty(list) ? NULL : LIST_FIRST_ENTRY(list, type, field))
+    (mqtt_list_is_empty(list) ? NULL : LIST_FIRST_ENTRY(list, type, field))
 
 #define LIST_FOR_EACH(curr, list) \
     for (curr = (list)->next; curr != (list); curr = curr->next)
@@ -49,14 +49,14 @@ typedef struct list_node {
             curr != (list); \
             curr = next, next = curr->prev)
 
-void list_init(list_t *list);
-void list_add(list_t *node, list_t *list);
-void list_add_tail(list_t *node, list_t *list);
-void list_del(list_t *entry);
-void list_del_init(list_t *entry);
-void list_move(list_t *node, list_t *list);
-void list_move_tail(list_t *node, list_t *list);
-int list_is_empty(list_t *list);
+void mqtt_list_init(mqtt_list_t *list);
+void mqtt_list_add(mqtt_list_t *node, mqtt_list_t *list);
+void mqtt_list_add_tail(mqtt_list_t *node, mqtt_list_t *list);
+void mqtt_list_del(mqtt_list_t *entry);
+void mqtt_list_del_init(mqtt_list_t *entry);
+void mqtt_list_move(mqtt_list_t *node, mqtt_list_t *list);
+void mqtt_list_move_tail(mqtt_list_t *node, mqtt_list_t *list);
+int mqtt_list_is_empty(mqtt_list_t *list);
 
 #endif /* _LIST_H_ */
 

@@ -1,7 +1,7 @@
 #include "fifo.h"
 #include <string.h>
 
-#ifdef USE_LOG
+#ifdef SALOF_USING_LOG
 
 static unsigned int _flbs(unsigned int x)   /* find last bit set*/
 {
@@ -32,25 +32,25 @@ static unsigned int _flbs(unsigned int x)   /* find last bit set*/
     return r;
 }
 
-static unsigned int _fifo_align(unsigned int x)
+static unsigned int _salof_fifo_align(unsigned int x)
 {
     return (1 << (_flbs(x-1)-1));       //memory down alignment
 }
 
-fifo_t fifo_create(unsigned int size)
+salof_fifo_t salof_fifo_create(unsigned int size)
 {
-    fifo_t fifo;
+    salof_fifo_t fifo;
 
     if (0 == size)
         return NULL;
 
     if (size & (size - 1))
-        size = _fifo_align(size);
+        size = _salof_fifo_align(size);
 
-    fifo = (fifo_t)salof_alloc((sizeof(struct fifo) + size));
+    fifo = (salof_fifo_t)salof_alloc((sizeof(struct salof_fifo) + size));
 
     if (NULL != fifo) {
-        fifo->buff = (unsigned char *)fifo + sizeof(struct fifo);
+        fifo->buff = (unsigned char *)fifo + sizeof(struct salof_fifo);
 
         fifo->mutex = salof_mutex_create();
         fifo->sem = salof_sem_create();
@@ -69,7 +69,7 @@ fifo_t fifo_create(unsigned int size)
     return NULL;
 }
 
-unsigned int fifo_write(fifo_t fifo, void *buff, unsigned int len, unsigned int timeout)
+unsigned int salof_fifo_write(salof_fifo_t fifo, void *buff, unsigned int len, unsigned int timeout)
 {
     int err, l;
 
@@ -94,7 +94,7 @@ unsigned int fifo_write(fifo_t fifo, void *buff, unsigned int len, unsigned int 
     return len;
 }
 
-unsigned int fifo_read(fifo_t fifo, void *buff, unsigned int len, unsigned int timeout)
+unsigned int salof_fifo_read(salof_fifo_t fifo, void *buff, unsigned int len, unsigned int timeout)
 {
     int l;
 
@@ -114,7 +114,7 @@ unsigned int fifo_read(fifo_t fifo, void *buff, unsigned int len, unsigned int t
     return len;
 }
 
-unsigned int fifo_read_able(fifo_t fifo)
+unsigned int salof_fifo_read_able(salof_fifo_t fifo)
 {
     if(NULL == fifo)
         return 0;
@@ -128,9 +128,9 @@ unsigned int fifo_read_able(fifo_t fifo)
     return (fifo->size - (fifo->out - fifo->in));
 }
 
-unsigned int fifo_write_able(fifo_t fifo)
+unsigned int salof_fifo_write_able(salof_fifo_t fifo)
 {
-    return (fifo->size - fifo_read_able(fifo));
+    return (fifo->size - salof_fifo_read_able(fifo));
 }
 
 #endif
