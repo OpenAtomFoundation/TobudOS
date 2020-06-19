@@ -2,7 +2,7 @@
 #define __SERIAL_H__
 #include "proj_config.h"
 
-#include "serial/serial_p.h"
+#include "serial_hw.h"
 #include "utils/fifo/fifobuf.h"
 
 /** Human-readable serial error descriptions */

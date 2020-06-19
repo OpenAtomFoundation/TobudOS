@@ -69,9 +69,9 @@
             <nStopU2X>0</nStopU2X>
           </BeforeCompile>
           <BeforeMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>python ..\..\..\..\platform\vendor_bsp\LN\ln882x\tools\user_cmd\before_build.py flash_partition_cfg.json flash_partition_table.h</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -80,9 +80,9 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name>.\after_build_ln882x.bat</UserProg1Name>
-            <UserProg2Name></UserProg2Name>
+            <RunUserProg2>1</RunUserProg2>
+            <UserProg1Name>python ..\..\..\..\platform\vendor_bsp\LN\ln882x\tools\user_cmd\after_build_soc.py @L</UserProg1Name>
+            <UserProg2Name>..\..\..\..\platform\vendor_bsp\LN\ln882x\tools\bin\mkimage.exe cmd_app ..\..\..\..\platform\vendor_bsp\LN\ln882x\lib\boot_ln882x.bin @L.bin @L.asm flashimage.bin flash_partition_cfg.json ver=1.1</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
             <nStopA1X>0</nStopA1X>
@@ -332,7 +332,7 @@
               <MiscControls></MiscControls>
               <Define>LN882x,ARM_MATH_CM4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\TOS-CONFIG;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\core\include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\helloworld;..\hello_world;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\driver_ln882x;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\driver_ln882x\ll\include;..\..\..\..\components\fs\kv\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\cpu\ARM_CM4F\ln88xx;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\kernel;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\cpu\ARM_CM4F\CMSIS_5.3.0;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\wifi_manager;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\net;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\net\lwip-2.0.3\src\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\net\lwip-2.0.3\src\port;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\net\lwip-2.0.3\src\port\arch;..\..\..\..\examples\wifi_ln882x</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\TOS-CONFIG;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\core\include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\helloworld;..\hello_world;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\driver_ln882x;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\driver_ln882x\ll\include;..\..\..\..\components\fs\kv\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\cpu\ARM_CM4F\ln88xx;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\kernel;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\cpu\ARM_CM4F\CMSIS_5.3.0;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\wifi_manager;..\..\..\..\platform\vendor_bsp\LN\ln882x\include\net;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\net\lwip-2.0.3\src\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\net\lwip-2.0.3\src\port;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\net\lwip-2.0.3\src\port\arch;..\..\..\..\examples\wifi_ln882x;..\wifi_demo;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\kv\kv_port;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\kv\kv;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\nvds;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\partition_mgr;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\driver_ln882x\ll\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\include;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Common;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Controller\AP;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Controller\AP-STA;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Controller\ModeIF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Controller\STA;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Controller\STA\ProtIF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP-STA;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP-STA\M802_11e;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP-STA\M802_11i;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP-STA\M802_11n;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP-STA\ProtIF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP-STA\M802_11e;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP\M802_11e;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP\M802_11i;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP\M802_11n;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP\M802_1x;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\AP\ProtIF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\STA;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\STA\M802_11e;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\STA\M802_11i;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\STA\M802_11n;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\STA\M802_1x;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\STA\ProtIF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Core\ModeIF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\Host;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\IF;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\MACHW;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\RF\ART2000;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\PHY\PHYHW\LN;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\PHY\PHYProt\P802_11n;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\TEMP_CAL;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\RF_HW;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\RF_IMG_CAL\hw_img_cal;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Edge\RF_IMG_CAL\image_cal;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\CSL;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Test\MacSwTest;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Utils\MM;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_mac\Utils\QM;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_port;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_if;..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_cfg\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -362,10 +362,10 @@
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\firmware_XIP_ln882x.sct</ScatterFile>
+            <ScatterFile>.\ln882x.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--no_autoat --keep=main.o(no_init_data)</Misc>
+            <Misc>--no_autoat --keep=*.o(no_init_data)</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -414,16 +414,6 @@
               <FileName>tcp_client_echo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\examples\wifi_ln882x\tcp_client_echo.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Drivers/Drv</GroupName>
-          <Files>
-            <File>
-              <FileName>drv_adc_measure.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\driver_ln882x\drv\drv_adc_measure.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -690,6 +680,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>cmsis</GroupName>
+          <Files>
+            <File>
+              <FileName>cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\osal\cmsis_os\cmsis_os.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>config</GroupName>
           <Files>
             <File>
@@ -705,22 +705,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>cmsis</GroupName>
-          <Files>
-            <File>
-              <FileName>cmsis_os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\osal\cmsis_os\cmsis_os.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>bsp</GroupName>
           <Files>
             <File>
               <FileName>mcu_init.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\serial_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_adc_measure.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\drv_adc_measure.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -731,11 +731,6 @@
               <FileName>serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\serial\serial.c</FilePath>
-            </File>
-            <File>
-              <FileName>serial_hw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\serial\serial_hw.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -913,14 +908,14 @@
               <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\lib\arm_cortexM4lf_math.lib</FilePath>
             </File>
             <File>
+              <FileName>soc_driver.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\lib\soc_driver.lib</FilePath>
+            </File>
+            <File>
               <FileName>wifi_mac.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\lib\wifi_mac.lib</FilePath>
-            </File>
-            <File>
-              <FileName>wifi_driver.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\lib\wifi_driver.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -931,6 +926,11 @@
               <FileName>wifi_manager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_manager\wifi_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>wifi_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\wifi\wifi_port\wifi_port.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1222,22 +1222,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tos_components</GroupName>
-          <Files>
-            <File>
-              <FileName>tos_kv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\fs\kv\tos_kv.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>nvds</GroupName>
+          <GroupName>fs</GroupName>
           <Files>
             <File>
               <FileName>nvds.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\nvds\nvds.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\nvds\nvds.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_partition_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\partition_mgr\flash_partition_mgr.c</FilePath>
+            </File>
+            <File>
+              <FileName>ln_kv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\kv\kv\ln_kv.c</FilePath>
+            </File>
+            <File>
+              <FileName>ln_kv_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\LN\ln882x\src\fs\kv\kv_port\ln_kv_port.c</FilePath>
             </File>
           </Files>
         </Group>

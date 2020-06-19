@@ -4,7 +4,7 @@
 #include "hal/hal_syscon.h"
 #include "utils/debug/log.h"
 
-static hal_sdio_ctrl_t g_hal_sdio_ctrl __attribute__((section("wlan_shared_mem"))) = {0,};
+static hal_sdio_ctrl_t g_hal_sdio_ctrl;
 static hal_sdio_ctrl_t *hal_sdio_ctrl_get_handle(void)
 {
     return &g_hal_sdio_ctrl;

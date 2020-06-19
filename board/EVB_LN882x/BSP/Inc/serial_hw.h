@@ -1,5 +1,5 @@
-#ifndef __SERIAL_P_H__
-#define __SERIAL_P_H__
+#ifndef __SERIAL_HW_H__
+#define __SERIAL_HW_H__
 
 #include "hal/hal_uart.h"
 
@@ -37,4 +37,4 @@ struct SerialHardware *serial_hw_getdesc(SerialPortID port_id);
 
 
 
-#endif /* __SERIAL_P_H__ */
+#endif /* __SERIAL_HW_H__ */

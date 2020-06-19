@@ -1,4 +1,4 @@
-#include "nvds/nvds.h"
+#include "nvds.h"
 #include "hal/flash.h"
 
 

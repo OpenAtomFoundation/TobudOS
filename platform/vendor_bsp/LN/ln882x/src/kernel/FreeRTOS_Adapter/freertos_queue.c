@@ -36,15 +36,8 @@ OS_Status OS_QueueCreate(OS_Queue_t *queue, uint32_t queueLen, uint32_t itemSize
  */
 OS_Status OS_QueueDelete(OS_Queue_t *queue)
 {
-	UBaseType_t ret;
 
 	OS_HANDLE_ASSERT(OS_QueueIsValid(queue), queue->handle);
-
-	ret = uxQueueMessagesWaiting(queue->handle);
-	if (ret > 0) {
-		OS_ERR("queue %"OS_HANDLE_F" is not empty\r\n", queue->handle);
-		return OS_FAIL;
-	}
 
 	vQueueDelete(queue->handle);
 	OS_QueueSetInvalid(queue);
@@ -134,13 +127,3 @@ OS_Status OS_QueueReceive(OS_Queue_t *queue, void *item, OS_Time_t waitMS)
 	return OS_OK;
 }
 
-OS_Status OS_QueueFlush(OS_Queue_t *queue)
-{
-    void *item;
-
-    OS_HANDLE_ASSERT(OS_QueueIsValid(queue), queue->handle);
-    while(uxQueueMessagesWaiting(queue->handle)){
-        OS_QueueReceive(queue,item,OS_WAIT_FOREVER);
-    }
-    return OS_OK;
-}

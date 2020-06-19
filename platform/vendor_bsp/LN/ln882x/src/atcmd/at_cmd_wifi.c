@@ -17,7 +17,7 @@
 #include "ping/ping.h"
 #include "iperf/iperf.h"
 #include "dhcpd/dhcpd.h"
-#include "nvds/nvds.h"
+#include "nvds.h"
 #include "hal/hal_efuse.h"
 
 #define RET_OK_STR   ("\r\nOK\r\n")
@@ -673,7 +673,7 @@ char at_station_scan_no_filter(char *str)
     scan_list_dsiplay_option_t *display_option = &g_scan_list_dsiplay_option;
     int ap_count = 0;
     ap_info_t *item_iterator = NULL;
-    list_t *ap_list = NULL, *iterator;
+    list_t scan_list, *iterator, *prev;
 
 #if WIFI_TRACK
     at_printf("\r\n+CWLAPLN\r\n");
@@ -681,21 +681,40 @@ char at_station_scan_no_filter(char *str)
     at_printf("\r\n+CWLAP\r\n");
 #endif
 
-    ap_count = wifi_station_get_scan_ap_list(&ap_list, (display_option->sort_enable == 1)? true : false);
-    if(ap_list && ap_count > 0)
-    {
+    ap_count = wifi_station_get_scan_list_size();
+    if(ap_count > 0){
+        //prepare scan_list space
+        list_init(&scan_list);
+        for(i = 0; i < ap_count; i++){
+            item_iterator = OS_Malloc(sizeof(ap_info_t));
+            if(item_iterator){
+                list_add(&scan_list, &(item_iterator->list));
+            }
+        }
+
+        //get ap list
+        wifi_station_get_scan_list(&scan_list, ap_count, (display_option->sort_enable == 1)? true : false);
         at_printf("Auth{ 0: Open, 1: WEP, 2: WPA_PSK, 3:WPA2_PSK, 4:WPA_WPA2_PSK, 5: WPA2_ENTERPRISE}\r\n");
         at_printf ("\r\nAP_num SSID                            RSSI Channel Auth_mode  BSSID              IMODE WPS Freq_offset FreqCal\r\n");
-
-        for (iterator = ap_list->next, i = 1; iterator != ap_list; iterator = iterator->next, i++) {
+        for (iterator = scan_list.next, i = 0; iterator != &scan_list; iterator = iterator->next, i++) {
             item_iterator = list_entry(iterator, ap_info_t, list);
             at_printf ("%6d %-31s %4d %7d %9d  "MACSTR"  %2X    %3d %11d %7d\r\n",
-                        i, item_iterator->ssid, item_iterator->rssi, item_iterator->channel, item_iterator->authmode,
+                        (i + 1), item_iterator->ssid, item_iterator->rssi, item_iterator->channel, item_iterator->authmode,
                         MAC2STR(item_iterator->bssid),
                         item_iterator->imode, item_iterator->wps, item_iterator->freq_offset, item_iterator->freqcal_val
                         );
         }
 
+        //free scan_list space
+        for (iterator = scan_list.next; iterator != &scan_list; iterator = iterator->next) {
+            prev = iterator->prev;
+            item_iterator = list_entry(iterator, ap_info_t, list);
+            list_rm(iterator);
+            if(item_iterator){
+                OS_Free(item_iterator);
+            }
+            iterator = prev;
+        }
     }
 
     at_printf(RET_OK_STR);
@@ -710,52 +729,118 @@ char at_notify_aplist(void)
     int i=0;
     int ap_count = 0;
     ap_info_t *item_iterator = NULL;
-    list_t *ap_list = NULL, *iterator;
+    list_t scan_list, *iterator, *prev;
 
-    ap_count = wifi_station_get_scan_ap_list(&ap_list, true);
-    at_printf("\r\nAT+ScanAp\r\n",ap_count);
-    for (iterator = ap_list->next, i = 0; (i < 10) && (iterator != ap_list); iterator = iterator->next, i++)
-    {
-        item_iterator = list_entry(iterator, ap_info_t, list);
-        at_printf(MACSTR";%d;%s\r\n", MAC2STR(item_iterator->bssid), item_iterator->rssi, item_iterator->ssid);
+    ap_count = wifi_station_get_scan_list_size();
+    if(ap_count > 0){
+        //prepare scan_list space
+        list_init(&scan_list);
+        for(i = 0; i < ap_count; i++){
+            item_iterator = OS_Malloc(sizeof(ap_info_t));
+            if(item_iterator){
+                list_add(&scan_list, &(item_iterator->list));
+            }
+        }
+
+        //get ap list
+        wifi_station_get_scan_list(&scan_list, ap_count, true);
+        at_printf("\r\nAT+ScanAp\r\n",ap_count);
+        for (iterator = scan_list.next, i = 0; (i < 10) && iterator != &scan_list; iterator = iterator->next, i++) {
+            item_iterator = list_entry(iterator, ap_info_t, list);
+            at_printf(MACSTR";%d;%s\r\n", MAC2STR(item_iterator->bssid), item_iterator->rssi, item_iterator->ssid);
+        }
+
+        //free scan_list space
+        for (iterator = scan_list.next; iterator != &scan_list; iterator = iterator->next) {
+            prev = iterator->prev;
+            item_iterator = list_entry(iterator, ap_info_t, list);
+            list_rm(iterator);
+            if(item_iterator){
+                OS_Free(item_iterator);
+            }
+            iterator = prev;
+        }
     }
     return AT_OK;
 }
 
 char at_station_aplx(char *str)
 {
-    int ap_count = 0;
+    int ap_count = 0, i;
     ap_info_t *item_iterator = NULL;
-    list_t *ap_list = NULL, *iterator;
+    list_t scan_list, *iterator, *prev;
 
-    ap_count = wifi_station_get_scan_ap_list(&ap_list, true);
-    for (iterator = ap_list->next; iterator != ap_list; iterator = iterator->next)
-    {
-        item_iterator = list_entry(iterator, ap_info_t, list);
-        at_printf("\r\n+CWLAP:%d,\"%s\",%d,\""MACSTR"\",%d",
+    ap_count = wifi_station_get_scan_list_size();
+    if(ap_count > 0){
+        //prepare scan_list space
+        list_init(&scan_list);
+        for(i = 0; i < ap_count; i++){
+            item_iterator = OS_Malloc(sizeof(ap_info_t));
+            if(item_iterator){
+                list_add(&scan_list, &(item_iterator->list));
+            }
+        }
+
+        //get ap list
+        wifi_station_get_scan_list(&scan_list, ap_count, true);
+        for (iterator = scan_list.next; iterator != &scan_list; iterator = iterator->next) {
+            item_iterator = list_entry(iterator, ap_info_t, list);
+            at_printf("\r\n+CWLAP:%d,\"%s\",%d,\""MACSTR"\",%d",
                                             item_iterator->authmode,
                                             item_iterator->ssid,
                                             item_iterator->rssi,
                                             MAC2STR(item_iterator->bssid),
                                             item_iterator->channel);
+        }
+
+        //free scan_list space
+        for (iterator = scan_list.next; iterator != &scan_list; iterator = iterator->next) {
+            prev = iterator->prev;
+            item_iterator = list_entry(iterator, ap_info_t, list);
+            list_rm(iterator);
+            if(item_iterator){
+                OS_Free(item_iterator);
+            }
+            iterator = prev;
+        }
     }
     at_printf("\r\n\r\nOK\r\n",ap_count);
     return AT_OK;
 }
 char at_station_aplist(char *str)
 {
-    int ap_count = 0;
+    int ap_count = 0, i;
     ap_info_t *item_iterator = NULL;
-    list_t *ap_list = NULL, *iterator;
+    list_t scan_list, *iterator, *prev;
 
-    ap_count = wifi_station_get_scan_ap_list(&ap_list, true);
-    if(ap_count > 0)
-    {
+    ap_count = wifi_station_get_scan_list_size();
+    if(ap_count > 0){
+        //prepare scan_list space
+        list_init(&scan_list);
+        for(i = 0; i < ap_count; i++){
+            item_iterator = OS_Malloc(sizeof(ap_info_t));
+            if(item_iterator){
+                list_add(&scan_list, &(item_iterator->list));
+            }
+        }
+
+        //get ap list
+        wifi_station_get_scan_list(&scan_list, ap_count, true);
         at_printf("\r\n+CWLAPLST: %d, ",ap_count);
-        for (iterator = ap_list->next; iterator != ap_list; iterator = iterator->next)
-        {
+        for (iterator = scan_list.next; iterator != &scan_list; iterator = iterator->next) {
             item_iterator = list_entry(iterator, ap_info_t, list);
             at_printf(MACSTR" @ %d, ", MAC2STR(item_iterator->bssid), item_iterator->rssi);
+        }
+
+        //free scan_list space
+        for (iterator = scan_list.next; iterator != &scan_list; iterator = iterator->next) {
+            prev = iterator->prev;
+            item_iterator = list_entry(iterator, ap_info_t, list);
+            list_rm(iterator);
+            if(item_iterator){
+                OS_Free(item_iterator);
+            }
+            iterator = prev;
         }
         at_printf("\r\n\r\nOK\r\n");
     }
@@ -3032,23 +3117,25 @@ char at_iperf(char *str)
 
 #if WIFI_SWITCH
 uint8_t wifi_en=1;
+extern void wifi_track_init(void);
+extern void wifi_track_reinit(void);
+extern void wifi_track_deinit(void);
+extern bool wifi_manager_init(void);
+extern bool wifi_manager_deinit(void);
 char at_wifi_switch(char *str)
 {
     uint8_t  en;
     en=atoi(str);
-    LOG(LOG_LVL_ERROR, "%s() 000  en=%d\r\n",__func__,en);
     if(en&&wifi_en==0){
         wifi_en=1;
-        LOG(LOG_LVL_ERROR, "%s() 111 \r\n",__func__);
-        wifi_init();
-        wifi_manager_init(wifi_manager_get_handle());
-        wifi_sniffer_reinit();//wifi_sniffer_init();//wifi_start(&init_param);
+        //wifi_init();
+        //wifi_manager_init();
+        wifi_track_reinit();
     }else if(0==en&&wifi_en){
         wifi_en=0;
-        LOG(LOG_LVL_ERROR, "%s() 222 \r\n",__func__);
-        wifi_sniffer_deinit();//call wifi_stop()
-        wifi_manager_deinit(wifi_manager_get_handle());
-        wifi_deinit();
+        wifi_track_deinit();//call wifi_stop()
+        //wifi_manager_deinit();
+        //wifi_deinit();
     }
 
     at_printf("OK\r\n");

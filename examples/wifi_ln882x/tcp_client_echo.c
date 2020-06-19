@@ -151,7 +151,7 @@ void tcp_client_echo_task_entry(void *arg)
 
 void tcp_client_echo_task_creat(uint8_t * ser_ip, uint32_t port)
 {
-    target_ser_t ser = {0};
+    static target_ser_t ser = {0};
     ser.ip   = ser_ip;
     ser.port = port;
 

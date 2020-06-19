@@ -332,7 +332,26 @@ void LL_SYSCON_EXT_INTR_Set_Triggle_Condition(SYSTEM_EXT_INT_Wakeup_Index ext_in
 uint8_t LL_SYSCON_EXT_INTR_Stat(void);
 uint8_t LL_SYSCON_EXT_INTR_Stat_Raw(void);
 void LL_SYSCON_EXT_INTR_Clear(void);
-
+void LL_SYSCON_AWO_phy_pd_en(uint8_t en);
+void LL_SYSCON_AWO_phy_po_en(uint8_t en);
+void LL_SYSCON_AWO_ldo18_po_en(uint8_t en);
+void LL_SYSCON_AWO_sram_pd_en(uint8_t en);
+void LL_SYSCON_AWO_sram_po_en(uint8_t en);
+void LL_SYSCON_AWO_pmu_ret_en(uint8_t en);
+void LL_SYSCON_AWO_pmu_unret_en(uint8_t en);
+void LL_SYSCON_AWO_pdcmp_po(uint8_t po);
+void LL_SYSCON_AWO_cpucore_retreg_po(uint8_t po);
+void LL_SYSCON_AWO_idle_reg_set(uint32_t val);
+void LL_SYSCON_AWO_lp_mode_awo(uint8_t lp_mode_awo);
+void LL_SYSCON_AWO_clk_sel_set(uint32_t val);
+void LL_SYSCON_CMP_rfreg_len(uint16_t rfreg_len);
+void LL_SYSCON_CMP_rfreg_base_addr(uint16_t rfreg_base_addr);
+void LL_SYSCON_CMP_rfreg_action_set(uint32_t val);
+uint8_t LL_SYSCON_CMP_save_done_get(void);
+void LL_SYSCON_AWO_sw_pwr_ctrl_set(uint32_t val);
+uint8_t LL_SYSCON_AWO_pmu_fsm_get(void);
+uint8_t LL_SYSCON_CMP_restore_done_get(void);
+void LL_SYSCON_CMP_sw_clkg_set(uint32_t value);
 #ifdef __cplusplus
 }
 #endif

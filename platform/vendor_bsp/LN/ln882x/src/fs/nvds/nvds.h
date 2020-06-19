@@ -2,8 +2,9 @@
 #define __NVDS_H__
 
 #include "ln88xx.h"
+#include "flash_partition_table.h"
 
-#define USR_NVDS_SECT1_OFFSET    (USR_NVDS_PARAM_OFFSET)
+#define USR_NVDS_SECT1_OFFSET    (NVDS_SPACE_OFFSET)
 #define USR_NVDS_SECT2_OFFSET    (USR_NVDS_SECT1_OFFSET + SIZE_4KB)
 #define USR_NVDS_FLAG_OFFSET     (USR_NVDS_SECT2_OFFSET + SIZE_4KB)
 

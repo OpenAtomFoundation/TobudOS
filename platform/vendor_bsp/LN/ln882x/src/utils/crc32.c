@@ -1,7 +1,7 @@
 
 #include "utils/crc32.h"
 
-const uint32_t Crc32Table[256] = {
+static const uint32_t Crc32Table[256] = {
 		0x00000000,0x77073096,0xEE0E612C,0x990951BA,
 		0x076DC419,0x706AF48F,0xE963A535,0x9E6495A3,
 		0x0EDB8832,0x79DCB8A4,0xE0D5E91E,0x97D2D988,
@@ -69,9 +69,27 @@ const uint32_t Crc32Table[256] = {
 };
 
 
-uint32_t GetCrc32(uint8_t *ptr, int len)
+
+void ln_crc32_init(crc32_ctx_t *ctx)
 {
-	
+    ctx->crc = 0xFFFFFFFFL;
+}
+ 
+void ln_crc32_update(crc32_ctx_t *ctx, uint8_t *data, uint32_t len)
+{
+    for (uint32_t i = 0; i < len; i++)
+    {
+        ctx->crc = (ctx->crc >> 8) ^ Crc32Table[(ctx->crc & 0xFF) ^ *data++];
+    }
+}
+
+uint32_t ln_crc32_final(crc32_ctx_t *ctx)
+{
+    return ctx->crc ^= 0xFFFFFFFFUL;
+}
+
+uint32_t ln_crc32_signle_cal(uint8_t *ptr, int len)
+{
 	uint32_t crc = 0xFFFFFFFF;
 	while (len > 0)
 	{		
@@ -80,7 +98,6 @@ uint32_t GetCrc32(uint8_t *ptr, int len)
 		len--;
 	}
 	return crc^0xffffffff;
-
 }
 
 

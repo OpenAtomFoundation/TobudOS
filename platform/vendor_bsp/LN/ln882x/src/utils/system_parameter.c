@@ -17,10 +17,6 @@ typedef struct {
     uint8_t ap_hostname[NETIF_HOSTNAME_LEN_MAX+1];
 } hostname_t;
 
-typedef struct {
-    wifi_psk_info_t psk_info_list[WIFI_PSK_INFO_LIST_SIZE];
-} wifi_psk_info_list_t;
-
 typedef enum {
     WIFI_COMMON_CONFIG = 0,
     WIFI_STA_CONFIG,
@@ -42,7 +38,6 @@ typedef struct system_parameter{
     uint8_t                 dhcp_sw_config;
     hostname_t              hostname_cfg;
     server_config_t         dhcpd_config;
-    wifi_psk_info_list_t    psk_info_list;
     OS_Mutex_t              lock;
 }system_parameter_t;
 
@@ -58,7 +53,6 @@ typedef struct {
         uint8_t                 dhcp_sw_config;          
         hostname_t              hostname_cfg;
 	    server_config_t         dhcpd_config;
-        wifi_psk_info_list_t    psk_info_list;
     }item;
 } system_param_item_t;
 
@@ -221,13 +215,6 @@ void system_parameter_sync_to_flash(system_param_item_t *param_item)
         }
         break;
 
-        case WIFI_PSK_INFO: {
-            cache_content = (uint8_t *)&(param_item->item.psk_info_list);
-            len = sizeof(wifi_psk_info_list_t);
-            start = (uint8_t *)&(system_parameter->psk_info_list) - system_parameter_base;
-        }
-        break;
-		
         default:
             break;
     }
@@ -323,111 +310,6 @@ int system_parameter_get_config(wifi_interface_enum_t if_index, wifi_config_t *c
     }
     OS_MutexUnlock(&system_parameter->lock);
     return 0;
-}
-
-static int system_parameter_set_psk_info_list(wifi_psk_info_list_t *psk_info_list)
-{
-    system_parameter_t *system_parameter = get_system_parameter_handle();
-    system_param_item_t *param_item = get_param_item_cache();
-
-    ART_ASSERT(system_parameter && psk_info_list);
-    OS_MutexLock(&system_parameter->lock, OS_WAIT_FOREVER);
-    param_item->item_id = (uint32_t)WIFI_PSK_INFO;
-    memcpy(&param_item->item.psk_info_list, psk_info_list, sizeof(wifi_psk_info_list_t));
-    system_parameter_sync_to_flash(param_item);
-    OS_MutexUnlock(&system_parameter->lock);
-    return 0;
-}
-static int system_parameter_get_psk_info_list( wifi_psk_info_list_t *psk_info_list)
-{
-    system_parameter_t *system_parameter = get_system_parameter_handle();
-
-    ART_ASSERT(system_parameter && psk_info_list);
-    OS_MutexLock(&system_parameter->lock, OS_WAIT_FOREVER);
-    memcpy(psk_info_list, &(system_parameter->psk_info_list), sizeof(wifi_psk_info_list_t));
-    OS_MutexUnlock(&system_parameter->lock);
-    return 0;
-}
-
-//PSK info
-int system_parameter_set_psk_info(wifi_psk_info_t *psk_info)
-{
-    int i, idx_idle = -1;
-    wifi_psk_info_t *wifi_psk_info = NULL;
-    wifi_psk_info_list_t wifi_psk_info_list = {0,};
-    bool need_flush = false;
-
-    ART_ASSERT(psk_info);
-
-    if(0 == system_parameter_get_psk_info_list(&wifi_psk_info_list))
-    {
-        for(i = 0; i < (sizeof(wifi_psk_info_list_t)/sizeof(wifi_psk_info_t)); i++){
-            wifi_psk_info = &(wifi_psk_info_list.psk_info_list[i]);
-            //Got it
-            if((psk_info->ssid_len == wifi_psk_info->ssid_len)
-                && (psk_info->password_len == wifi_psk_info->password_len)
-                && ((psk_info->password_len > 0) && !memcmp(psk_info->password, wifi_psk_info->password, psk_info->password_len))
-                && ((psk_info->ssid_len > 0) && !memcmp(psk_info->ssid, wifi_psk_info->ssid, psk_info->ssid_len))){
-                break;
-            }
-
-            //First idle
-            if((idx_idle < 0)
-                && (psk_info->password_len == 0)
-                && (psk_info->ssid_len == 0)){
-                idx_idle = i;
-            }
-        }
-        if(i < (sizeof(wifi_psk_info_list_t)/sizeof(wifi_psk_info_t))){//already in list
-            wifi_psk_info = &(wifi_psk_info_list.psk_info_list[i]);
-            if(memcmp(psk_info->psk, wifi_psk_info->psk, 40) != 0){//update
-                memcpy(wifi_psk_info->psk, psk_info->psk, 40);
-                need_flush = true;
-            }
-        }else if(idx_idle >= 0 && idx_idle < (sizeof(wifi_psk_info_list_t)/sizeof(wifi_psk_info_t))){
-            wifi_psk_info = &(wifi_psk_info_list.psk_info_list[i]);
-            memcpy(wifi_psk_info, psk_info, sizeof(wifi_psk_info_t));
-            need_flush = true;
-        }else{
-            wifi_psk_info = &(wifi_psk_info_list.psk_info_list[0]);
-            memcpy(wifi_psk_info, psk_info, sizeof(wifi_psk_info_t));
-            need_flush = true;
-        }
-
-        if(need_flush){
-            system_parameter_set_psk_info_list(&wifi_psk_info_list);
-        }
-        return 0;
-    }
-    return -1;
-}
-int system_parameter_get_psk_info(wifi_psk_info_t *psk_info)
-{
-    int i;
-    wifi_psk_info_t *wifi_psk_info = NULL;
-    wifi_psk_info_list_t wifi_psk_info_list = {0,};
-
-    ART_ASSERT(psk_info);
-
-    if(0 == system_parameter_get_psk_info_list(&wifi_psk_info_list))
-    {
-        for(i = 0; i < (sizeof(wifi_psk_info_list_t)/sizeof(wifi_psk_info_t)); i++){
-            wifi_psk_info = &(wifi_psk_info_list.psk_info_list[i]);
-            //Got it
-            if((psk_info->ssid_len == wifi_psk_info->ssid_len)
-                && (psk_info->password_len == wifi_psk_info->password_len)
-                && ((psk_info->password_len > 0) && !memcmp(psk_info->password, wifi_psk_info->password, psk_info->password_len))
-                && ((psk_info->ssid_len > 0) && !memcmp(psk_info->ssid, wifi_psk_info->ssid, psk_info->ssid_len))){
-                break;
-            }
-        }
-        if(i < (sizeof(wifi_psk_info_list_t)/sizeof(wifi_psk_info_t))){//already in list
-            wifi_psk_info = &(wifi_psk_info_list.psk_info_list[i]);
-            memcpy(psk_info, wifi_psk_info, sizeof(wifi_psk_info_t));
-            return 0;
-        }
-    }
-    return -1;
 }
 
 //ip config
@@ -594,8 +476,12 @@ int system_parameter_get_wifi_config_default (wifi_interface_enum_t if_index, wi
         memcpy(ap->ssid, WIFI_AP_SSID_DEFAULT, ap->ssid_len);
         len = (strlen(WIFI_AP_PASSWORD_DEFAULT) < PASSWORD_MAX_LEN) ? strlen(WIFI_AP_PASSWORD_DEFAULT) : PASSWORD_MAX_LEN;
         memcpy(ap->password, WIFI_AP_PASSWORD_DEFAULT, len);
+        if(strlen((const char *)ap->password) > 0){
+            ap->authmode = WIFI_AUTH_WPA2_PSK;
+        }else{
+            ap->authmode = WIFI_AP_AUTH_MODE_DEFAULT;
+        }
         ap->channel = WIFI_AP_CHANNEL_DEFAULT;
-        ap->authmode = WIFI_AP_AUTH_MODE_DEFAULT;
         ap->ssid_hidden = WIFI_AP_SSID_HIDDEN_DEFAULT;
         ap->max_connection = WIFI_AP_MAX_CONNECTION_DEFAULT;
         ap->beacon_interval = WIFI_AP_BEACON_INTERVAL_DEFAULT;

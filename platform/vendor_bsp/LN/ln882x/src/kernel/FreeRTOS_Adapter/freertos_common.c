@@ -8,10 +8,14 @@
 #include "ln88xx.h"
 
 #ifdef __CC_ARM
-    extern unsigned int Image$$HEAP_SPACE$$ZI$$Base;
-    extern unsigned int Image$$HEAP_SPACE$$ZI$$Limit;
-    #define HEAP_START                      (&Image$$HEAP_SPACE$$ZI$$Base)
-    #define HEAP_END                        (&Image$$HEAP_SPACE$$ZI$$Limit)
+    extern unsigned int Image$$HEAP_SPACE0$$ZI$$Base;
+    extern unsigned int Image$$HEAP_SPACE0$$ZI$$Limit;
+    extern unsigned int Image$$HEAP_SPACE1$$ZI$$Base;
+    extern unsigned int Image$$HEAP_SPACE1$$ZI$$Limit;
+    #define HEAP0_START                      (&Image$$HEAP_SPACE0$$ZI$$Base)
+    #define HEAP0_END                        (&Image$$HEAP_SPACE0$$ZI$$Limit)
+    #define HEAP1_START                      (&Image$$HEAP_SPACE1$$ZI$$Base)
+    #define HEAP1_END                        (&Image$$HEAP_SPACE1$$ZI$$Limit)
 #elif __ICCARM__
     #error "TODO: support iar compiler!!!"
 #elif __GNUC__
@@ -29,11 +33,14 @@ static HeapRegion_t xHeapRegions[] = {
 
 void OS_HeapSizeConfig(void)
 {
-    xHeapRegions[0].pucStartAddress = (uint8_t *)(HEAP_START);
-    xHeapRegions[0].xSizeInBytes    = (size_t)   ((uint8_t *)HEAP_END - (uint8_t *)HEAP_START);
+    xHeapRegions[0].pucStartAddress = (uint8_t *)(HEAP0_START);
+    xHeapRegions[0].xSizeInBytes    = (size_t)   ((uint8_t *)HEAP0_END - (uint8_t *)HEAP0_START);
 
-    xHeapRegions[1].pucStartAddress = NULL;
-    xHeapRegions[1].xSizeInBytes    = 0;
+    xHeapRegions[1].pucStartAddress = (uint8_t *)(HEAP1_START);
+    xHeapRegions[1].xSizeInBytes    = (size_t)   ((uint8_t *)HEAP1_END - (uint8_t *)HEAP1_START);
+
+    xHeapRegions[2].pucStartAddress = NULL;
+    xHeapRegions[2].xSizeInBytes    = 0;
 }
 
 void OS_DefineHeapRegions(void)

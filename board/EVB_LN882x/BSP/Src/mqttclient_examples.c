@@ -8,7 +8,7 @@
 #include "netif/ethernetif.h"
 #include "wifi_manager/wifi_manager.h"
 #include "lwip/tcpip.h"
-#include "drv/drv_adc_measure.h"
+#include "drv_adc_measure.h"
 #include "utils/system_parameter.h"
 #include "hal/hal_adc.h"
 
@@ -161,7 +161,7 @@ void application_entry(void *arg)
         ART_ASSERT(1);
     }
     
-    reg_wifi_msg_callbcak(wifi_manager_get_handle(), WIFI_MSG_ID_STA_DHCP_GOT_IP,wifi_event_sta_got_ip_cb);
+    reg_wifi_msg_callbcak(WIFI_MSG_ID_STA_DHCP_GOT_IP,wifi_event_sta_got_ip_cb);
 
     wifi_mode_enum_t wifi_mode = WIFI_MODE_STATION;
 

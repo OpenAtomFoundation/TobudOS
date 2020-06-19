@@ -102,12 +102,10 @@ typedef struct wifi_manager_ctrl wifi_manager_ctrl_t;
 
 //wifi get mode api (需要wifi_cfg 提供)
 
-bool reg_wifi_msg_callbcak(wifi_manager_ctrl_t *manager_ctrl, wifi_msg_id_enum_t msg_id, wifi_msg_callback_fun callback_fun);
+bool reg_wifi_msg_callbcak(wifi_msg_id_enum_t msg_id, wifi_msg_callback_fun callback_fun);
 void notify_wifi_manager_task(wifi_msg_t * pWifiMsg);
-bool wifi_manager_init(wifi_manager_ctrl_t *manager_ctrl);
-bool wifi_manager_deinit(wifi_manager_ctrl_t *manager_ctrl);
-wifi_manager_ctrl_t *wifi_manager_get_handle(void);
-
+bool wifi_manager_init(void);
+bool wifi_manager_deinit(void);
 
 #ifdef __cplusplus
 }

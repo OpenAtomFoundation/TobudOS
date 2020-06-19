@@ -4,6 +4,7 @@
 #include "serial/serial.h"
 #include "hal/hal_syscon.h"
 #include "hal/hal_uart.h"
+//#include "hal/hal_sleep.h"
 #include "utils/debug/art_assert.h"
 
 #define UART0_TX_BUF_SIZE  CFG_UART0_TX_BUF_SIZE
@@ -158,6 +159,10 @@ static void hw_uart0_init(struct SerialHardware *_hw, struct Serial *serial, uin
     //enable uart master switch
     NVIC_EnableIRQ(UART0_IRQn);
 
+    /*
+    * Register with the sleep module to ensure that the serial port can be used during Light sleep
+    */
+//    hal_sleep_register(MOD_UART0, NULL, NULL, NULL);
 }
 
 static void hw_uart1_init(struct SerialHardware *_hw, struct Serial *serial, uint32_t baudrate)
@@ -192,6 +197,11 @@ static void hw_uart1_init(struct SerialHardware *_hw, struct Serial *serial, uin
 
     //enable uart master switch
     NVIC_EnableIRQ(UART1_IRQn);
+
+    /*
+    * Register with the sleep module to ensure that the serial port can be used during Light sleep
+    */
+//    hal_sleep_register(MOD_UART1, NULL, NULL, NULL);
 }
 
 /*

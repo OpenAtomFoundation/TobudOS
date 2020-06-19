@@ -498,6 +498,7 @@ void HAL_SYSCON_EXT_INTR_Clear(void)
     LL_SYSCON_EXT_INTR_Clear();
 }
 
+
 /**
  * @brief  Reset the mcu by software
  *
@@ -526,13 +527,104 @@ void HAL_SYSCON_Xtal40MCap_Set(uint8_t cap)
     LL_SYSCON_Xtal40MCap_Set(cap);
 }
 
-
 void HAL_SYSCON_PmuCfg(void)
 {  
     LL_SYSCON_PMUReg_Set(0x8B050900);// (BUCK)  r_vtrim: bit[9:8]=0b01 //00: 1.195 / 01: 1.202  / 10: 1.210 / 11: 1.218
-    LL_SYSCON_PMUCfg_Set(0x20001603);// o_digldo_norvdd: bit[10:8]=0b100; o_digldo_retvdd: bit[14:12]=0b001
+    //LL_SYSCON_PMUCfg_Set(0x20001603);// o_digldo_norvdd: bit[10:8]=0b100; o_digldo_retvdd: bit[14:12]=0b001
+    LL_SYSCON_PMUCfg_Set(0x310746fd);// o_digldo_norvdd: bit[10:8]=0b100; o_digldo_retvdd: bit[14:12]=0b110
     LL_SYSCON_Misc_Set(0x00002C0D);
 
     LL_SYSCON_PMUAvdd_Set(0x00055DB6);// Avdd & PLL & RF  voltage  55B75
+}
+void HAL_SYSCON_AWO_phy_pd_en(uint8_t en)
+{
+    LL_SYSCON_AWO_phy_pd_en(en);
+}
+void HAL_SYSCON_AWO_phy_po_en(uint8_t en)
+{
+    LL_SYSCON_AWO_phy_po_en(en);
+}
+void HAL_SYSCON_AWO_ldo18_po_en(uint8_t en)
+{
+    LL_SYSCON_AWO_ldo18_po_en(en);
+}
+void HAL_SYSCON_AWO_sram_pd_en(uint8_t en)
+{
+    LL_SYSCON_AWO_sram_pd_en(en);
+}
+void HAL_SYSCON_AWO_sram_po_en(uint8_t en)
+{
+    LL_SYSCON_AWO_sram_po_en(en);
+}
+
+void HAL_SYSCON_AWO_pmu_ret_en(uint8_t en)
+{
+    LL_SYSCON_AWO_pmu_ret_en(en);
+}
+void HAL_SYSCON_AWO_pmu_unret_en(uint8_t en)
+{
+    LL_SYSCON_AWO_pmu_unret_en(en);
+}
+void HAL_SYSCON_AWO_pdcmp_po(uint8_t po)
+{
+    LL_SYSCON_AWO_pdcmp_po(po);
+}
+
+void HAL_SYSCON_AWO_cpucore_retreg_po(uint8_t po)
+{
+    LL_SYSCON_AWO_cpucore_retreg_po(po);
+}
+void HAL_SYSCON_AWO_idle_reg_set(uint32_t val)
+{
+    LL_SYSCON_AWO_idle_reg_set(val);
+}
+
+void HAL_SYSCON_AWO_lp_mode_awo(uint8_t lp_mode_awo)
+{
+    LL_SYSCON_AWO_lp_mode_awo(lp_mode_awo);
+}
+
+void HAL_SYSCON_AWO_clk_sel_set(uint32_t val)
+{
+    LL_SYSCON_AWO_clk_sel_set(val);
+}
+
+void HAL_SYSCON_CMP_rfreg_len(uint16_t rfreg_len)
+{
+    LL_SYSCON_CMP_rfreg_len(rfreg_len);
+}
+void HAL_SYSCON_CMP_rfreg_base_addr(uint16_t rfreg_base_addr)
+{
+    LL_SYSCON_CMP_rfreg_base_addr(rfreg_base_addr);
+}
+
+void HAL_SYSCON_CMP_rfreg_action_set(uint32_t val)
+{
+    LL_SYSCON_CMP_rfreg_action_set(val);
+}
+
+uint8_t HAL_SYSCON_CMP_save_done_get(void)
+{
+    return LL_SYSCON_CMP_save_done_get();
+}
+
+void HAL_SYSCON_AWO_sw_pwr_ctrl_set(uint32_t value)
+{
+    LL_SYSCON_AWO_sw_pwr_ctrl_set(value);
+}
+
+uint8_t HAL_SYSCON_AWO_pmu_fsm_get(void)
+{
+    return LL_SYSCON_AWO_pmu_fsm_get();
+}
+
+uint8_t HAL_SYSCON_CMP_restore_done_get(void)
+{
+    return LL_SYSCON_CMP_restore_done_get();
+}
+
+void HAL_SYSCON_CMP_sw_clkg_set(uint32_t value)
+{
+    LL_SYSCON_CMP_sw_clkg_set(value);
 }
 

@@ -1,5 +1,5 @@
 #include "hal/hal_adc.h"
-#include "drv/drv_adc_measure.h"
+#include "drv_adc_measure.h"
 
 void drv_adc_init(void)
 {

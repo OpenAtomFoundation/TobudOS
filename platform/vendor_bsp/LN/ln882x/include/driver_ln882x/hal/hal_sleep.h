@@ -6,49 +6,60 @@
 #endif // __cplusplus
 
 #include "types.h"
-#include "hal/hal_gpio.h"
+#include "hal/syscon_types.h"
 #include "ll/ll_sleep.h"
 
+typedef enum
+{
+    ACTIVE = 0,
+    LIGHT_SLEEP,
+    DEEP_SLEEP,
+    RETENTION_SLEEP,
+    FROZEN_SLEEP
+}sleep_mode_enum_t;
+
 typedef enum {
-    SLEEP_TIMER_WAKEUP = (1 << 0),
-    MAC_WAKEUP = (1 << 1),
-    EXT_INT_WAKEUP = (1 << 2),
-    RTC_WAKEUP = (1 << 3),
-}hal_sleep_wakeup_src_enum_t;
+    MOD_QSPI = SW_CLKGATE_QSPI,
+    MOD_ADDC = SW_CLKGATE_ADCC,
+    MOD_I2S = SW_CLKGATE_I2S,
+    MOD_GPIO = SW_CLKGATE_GPIO,
+    MOD_SPIM = SW_CLKGATE_SPIM,
+    MOD_SPIS = SW_CLKGATE_SPIS,
+    MOD_I2C0 = SW_CLKGATE_I2C0,
+    MOD_I2C1 = SW_CLKGATE_I2C1,
+    MOD_UART0 = SW_CLKGATE_UART0,
+    MOD_UART1 = SW_CLKGATE_UART1,
+    MOD_SPIM2 = SW_CLKGATE_SPIM2,
+    MOD_WDT = SW_CLKGATE_WDT,
+    MOD_TIMER0 = SW_CLKGATE_TIMER,
+    MOD_TIMER1 = SW_CLKGATE_TIMER_1,
+    MOD_TIMER2 = SW_CLKGATE_TIMER_2,
+    MOD_TIMER3 = SW_CLKGATE_TIMER_3,
+    MOD_TIMER4 = SW_CLKGATE_TIMER_4,
+    MOD_DGBH = SW_CLKGATE_DBGH,
+    MOD_SDIO = SW_CLKGATE_SDIO,
+    MOD_MAC = SW_CLKGATE_MAC,
+    MOD_CACHE = SW_CLKGATE_CACHE,
+    MOD_DMA = SW_CLKGATE_DMA,
+    MOD_RFREG = SW_CLKGATE_RFREG,
+    MOD_PWM = SW_CLKGATE_PWM,
+    MOD_EF = SW_CLKGATE_EF,
+    MOD_TRNG = SW_CLKGATE_TRNG,
+    MOD_AES = SW_CLKGATE_AES,
+    MOD_EXT_INT,
+    MOD_MAX,
+}hal_peripheral_module_t;
 
-typedef void (* reinitialize_phy_cb_t)(void);
-typedef bool (* wifi_is_slept_cb_t)(void);
-typedef struct
-{
-    GPIO_Num                    gpio;
-    SYSTEM_EXT_INT_Triggle_Type triggle_type;
-}ext_irq_cfg_t ;
-typedef struct {
-    sleep_mode_enum_t       sleep_mode;
-    uint32_t                wakeup_src;//bit[0]--SLEEP_IRQn; bit[1]--MAC_IRQn;bit[2]--EXTERNAL_IRQn;bit[3]--RTC_IRQn
-    ext_irq_cfg_t           ext_irq_cfg;
-}hal_sleep_config_t;
+typedef bool (*sleep_condition_cb_t)(void);
+typedef void (*sleep_processing_cb_t)(void);
 
-typedef struct
-{
-    bool                    flag;
-    hal_sleep_config_t      sleep_config;
-    uint32_t                nvic_int_en[2];
-    uint64_t                compensation;
-    uint32_t                msec;
-    wifi_is_slept_cb_t      wifi_is_slept_cb;
-    reinitialize_phy_cb_t   reinit_phy_cb;
-    bool                    inited;
-}hal_sleep_ctrl_t ;
-
-void hal_sleep_init(hal_sleep_config_t *sleep_config);
-void hal_sleep_deinit(void);
-void hal_sleep_set_config(hal_sleep_config_t *sleep_config);
+int hal_sleep_set_mode(sleep_mode_enum_t sleep_mode);
 sleep_mode_enum_t hal_sleep_get_mode(void);
+int hal_sleep_register(hal_peripheral_module_t peripheral_module, sleep_condition_cb_t sleep_condition, sleep_processing_cb_t pre_sleep_proc, sleep_processing_cb_t post_sleep_proc);
+int hal_sleep_unregister(hal_peripheral_module_t peripheral_module);
 void hal_pre_sleep_processing(uint32_t *ticks);
 uint32_t hal_post_sleep_processing(uint32_t ticks);
-void hal_sleep_register_callback(reinitialize_phy_cb_t reinit_phy_cb, wifi_is_slept_cb_t wifi_is_slept_cb);
-void hal_sleep_wakeup_source_set(hal_sleep_wakeup_src_enum_t wakeup_src);
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

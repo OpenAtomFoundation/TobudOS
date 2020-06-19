@@ -1,6 +1,6 @@
 #include <string.h>
 #include "serial/serial.h"
-#include "serial/serial_p.h"
+#include "serial_hw.h"
 #include "utils/fifo/fifobuf.h"
 #include "utils/debug/art_assert.h"
 

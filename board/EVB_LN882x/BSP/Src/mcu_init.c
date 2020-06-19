@@ -29,29 +29,6 @@ int fgetc(FILE *f)
     return ch;
 }
 
-
-//int flash_write(uint32_t addr, const void *buf, size_t len){
-//    FLASH_Program(addr,len, (uint8_t *)buf);
-//}
-//int flash_read(uint32_t addr, void *buf, size_t len){
-//    FLASH_ReadByCache(addr, len, (uint8_t *)buf);
-//}
-
-//void nvds_kv_init(void)
-//{
-//    kv_flash_drv_t  flash_drv;
-//    kv_flash_prop_t flash_prop;
-//    
-//    flash_drv.write = flash_write;
-//    flash_drv.read  = flash_read;
-//    flash_drv.erase = FLASH_Erase;
-//    
-//    flash_prop.sector_size_log2 = 8;
-//    flash_prop.pgm_type         = KV_FLASH_PROGRAM_TYPE_BYTE;
-//    flash_prop.flash_start      = SYSTEM_PARAMETER_OFFSET;
-//    flash_prop.flash_size       = SIZE_4KB*2;
-//}
-
 void board_init(void)
 {
     SetSysClock();
@@ -64,8 +41,6 @@ void board_init(void)
 
     log_init();//init log serial
     cm_backtrace_init("wifi app", "HD_V2", "SW_V0.8");
-
-//    nvds_kv_init();
 }
 
 
