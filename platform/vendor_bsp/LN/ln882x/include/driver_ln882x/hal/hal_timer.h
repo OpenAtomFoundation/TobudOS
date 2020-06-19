@@ -7,6 +7,11 @@
     extern "C" {
 #endif /* __cplusplus */
 
+
+/** @brief Timer expire callback function definition*/
+typedef void (*timer_cb_func_t)(void);
+
+
 /**
  * @brief There are totally 4 hardware timers.
  *
@@ -39,7 +44,7 @@ typedef enum
 typedef enum
 {
     TIMER_MODE_FREERUNNING = 0,     /**< TIMER_MODE_FREE_RUNNING: Use this mode if you want a single timed interrupt. */
-    TIMER_MODE_USERDEFINED          /**< TIMER_MODE_USER_DEFINED: Use this mode if you want a fixed, timed interrupt. */
+    TIMER_MODE_USERDEFINED          /**< TIMER_MODE_USER_DEFINED: Use this mode if you want a periodic timer, timed interrupt. */
 } TIMER_Mode;
 
 
@@ -62,6 +67,7 @@ typedef struct
     TIMER_Mask mask;        /**< mask: mask or unmask the timer interrupt */
     TIMER_Mode mode;        /**< mode: select the running mode of timer, free-running or user define mode */
     uint32_t user_freq;     /**< user_freq: user-defined timer clock frequency fx, which must meet the request:  321.5KHz <= fx <= 80MHz */
+    timer_cb_func_t cb_func;/**< cb_func: call back function when timer is expired */
 } TIMER_InitTypeDef;
 
 
@@ -188,6 +194,7 @@ void HAL_TIMER_LoadCount2_Set(TIMER_Index index, uint32_t loadCount2);
  * @return uint32_t loadcount2 value.
  */
 uint32_t HAL_TIMER_LoadCount2_Get(TIMER_Index index);
+
 
 #ifdef __cplusplus
 }

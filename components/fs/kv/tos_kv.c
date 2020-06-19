@@ -1294,18 +1294,23 @@ __API__ kv_err_t tos_kv_get(const char *key, void *value_buf, size_t value_buf_s
 
 __API__ int tos_kv_has_key(const char *key)
 {
-    int has_key;
+    kv_item_t *item;
+    int has_key = K_FALSE;
 
     if (!key) {
-        return KV_ERR_INVALID_PARAM;
+        return K_FALSE;
     }
 
     if (strlen(key) >= (uint8_t)-1) {
-        return KV_ERR_SIZE_EXCEEDED;
+        return K_FALSE;
     }
 
     kv_lock();
-    has_key = kv_item_find(key) ? K_TRUE : K_FALSE;
+    item = kv_item_find(key);
+    if (item) {
+        has_key = K_TRUE;
+        kv_item_free(item);
+    }
     kv_unlock();
 
     return has_key;

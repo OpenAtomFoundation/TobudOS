@@ -316,7 +316,26 @@ void HAL_SYSCON_RCO32K_Bitsel_Set(uint8_t bitsel);
 void HAL_SYSCON_RCO32K_Cbit_Set(uint8_t cbit);
 void HAL_SYSCON_Xtal40MCap_Set(uint8_t cap);
 void HAL_SYSCON_PmuCfg(void);
-
+void HAL_SYSCON_AWO_phy_pd_en(uint8_t en);
+void HAL_SYSCON_AWO_phy_po_en(uint8_t en);
+void HAL_SYSCON_AWO_ldo18_po_en(uint8_t en);
+void HAL_SYSCON_AWO_sram_pd_en(uint8_t en);
+void HAL_SYSCON_AWO_sram_po_en(uint8_t en);
+void HAL_SYSCON_AWO_pmu_ret_en(uint8_t en);
+void HAL_SYSCON_AWO_pmu_unret_en(uint8_t en);
+void HAL_SYSCON_AWO_pdcmp_po(uint8_t po);
+void HAL_SYSCON_AWO_cpucore_retreg_po(uint8_t po);
+void HAL_SYSCON_AWO_idle_reg_set(uint32_t val);
+void HAL_SYSCON_AWO_lp_mode_awo(uint8_t lp_mode_awo);
+void HAL_SYSCON_AWO_clk_sel_set(uint32_t val);
+void HAL_SYSCON_CMP_rfreg_len(uint16_t rfreg_len);
+void HAL_SYSCON_CMP_rfreg_base_addr(uint16_t rfreg_base_addr);
+void HAL_SYSCON_CMP_rfreg_action_set(uint32_t val);
+uint8_t HAL_SYSCON_CMP_save_done_get(void);
+void HAL_SYSCON_AWO_sw_pwr_ctrl_set(uint32_t value);
+uint8_t HAL_SYSCON_AWO_pmu_fsm_get(void);
+uint8_t HAL_SYSCON_CMP_restore_done_get(void);
+void HAL_SYSCON_CMP_sw_clkg_set(uint32_t value);
 #ifdef __cplusplus
 }
 #endif

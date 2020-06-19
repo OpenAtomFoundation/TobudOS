@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-09 19:25:05
- * @LastEditTime : 2020-01-10 08:54:24
+ * @LastEditTime: 2020-06-16 14:50:33
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include <stdlib.h>
@@ -23,6 +23,12 @@ int random_number(void)
     unsigned int seed = (unsigned int) platform_timer_now();
     last_seed += (seed >> ((seed ^ last_seed) % 3));
     return do_random(last_seed ^ seed);
+}
+
+// random number range interval [min, max)
+int random_number_range(unsigned int min, unsigned int max)
+{
+    return (random_number() % (max - min)) + min;
 }
 
 char *random_string(unsigned int len)

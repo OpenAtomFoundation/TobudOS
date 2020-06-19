@@ -15,7 +15,6 @@ typedef struct {
 
 
 #define NETIF_HOSTNAME_LEN_MAX                  (8)
-#define WIFI_PSK_INFO_LIST_SIZE                 (2)
 
 int system_parameter_init(void);
 int system_parameter_deinit(void);
@@ -35,11 +34,10 @@ uint8_t system_parameter_get_dhcp_enable(void);
 //ap_hostname config
 int system_parameter_set_hostname(wifi_interface_enum_t if_index, uint8_t *hostname);
 int system_parameter_get_hostname(wifi_interface_enum_t if_index, uint8_t *hostname);
-////PSK info
-int system_parameter_set_psk_info( wifi_psk_info_t *psk_info);
-int system_parameter_get_psk_info(wifi_psk_info_t *psk_info);
+
 int system_parameter_set_wifi_mode(wifi_mode_enum_t wifi_mode);
 wifi_mode_enum_t system_parameter_get_wifi_mode(void);
+
 int system_parameter_set_dhcpd_config(server_config_t *server_config);
 int system_parameter_get_dhcpd_config(server_config_t *server_config);
 

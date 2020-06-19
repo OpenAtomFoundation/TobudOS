@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-25 23:54:38
- * @LastEditTime: 2020-02-25 07:18:09
+ * @LastEditTime: 2020-06-17 15:22:42
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _FORMAT_H_
@@ -37,7 +37,7 @@
 
 #define is_digit(c) (c >= '0' && c <= '9')
 
-int format_nstr(char *buf, unsigned int size, const char *fmt, va_list ap);
+int salof_format_nstr(char *buf, unsigned int size, const char *fmt, va_list ap);
 
 
 #endif // !_FORMAT_H_

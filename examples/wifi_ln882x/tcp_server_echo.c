@@ -156,7 +156,8 @@ void tcp_server_echo_task_entry(void *arg)
 
 void tcp_server_echo_task_creat(uint32_t port)
 {
-    uint32_t server_port = port;
+    static uint32_t server_port;
+    server_port = port;
     osThreadCreate(osThread(tcp_server_echo_task_entry), &server_port);
 }
 

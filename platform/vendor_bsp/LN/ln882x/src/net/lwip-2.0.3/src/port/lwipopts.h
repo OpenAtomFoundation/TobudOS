@@ -53,7 +53,7 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* ---------- Pbuf options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
-#define PBUF_POOL_SIZE          35
+#define PBUF_POOL_SIZE          25
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
 #define PBUF_POOL_BUFSIZE       500//(NETIF_MTU + PBUF_LINK_HLEN)
 
@@ -68,7 +68,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* TCP sender buffer space (bytes). */
 #define TCP_SND_BUF             (7 * TCP_MSS)
 /*  TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. */
-#define TCP_SND_QUEUELEN        (42)//(5 * TCP_SND_BUF/TCP_MSS)
+#define TCP_SND_QUEUELEN        (5 * TCP_SND_BUF/TCP_MSS)
 /* TCP receive window. */
 #define TCP_WND                 (6 * TCP_MSS)
 /* Maximum number of retransmissions of data segments. */

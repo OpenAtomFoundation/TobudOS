@@ -72,7 +72,7 @@ OS_Status OS_SemaphoreWait(OS_Semaphore_t *sem, OS_Time_t waitMS)
     if (err == K_ERR_NONE) {
         return OS_OK;
 	} else {
-        OS_ERR("err:%d,OS_SemaphoreWait filed.\r\n", err);
+//        OS_ERR("err:%d,OS_SemaphoreWait filed.\r\n", err);
         return OS_FAIL;
     }
 }

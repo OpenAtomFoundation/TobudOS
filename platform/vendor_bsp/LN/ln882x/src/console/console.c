@@ -8,9 +8,8 @@
 #include "ln88xx.h"
 #include "utils/debug/log.h"
 #include "utils/debug/art_assert.h"
-#if WIFI_TRACK
-#include "ll/ll_gpio.h"
-#endif
+#include "hal/hal_gpio.h"
+
 #if (CHIP_ROLE == CHIP_MCU)
 
 #include "serial/serial.h"
@@ -132,17 +131,21 @@ void serial_rx_callbcak(void){
     OS_SemaphoreRelease(&g_rx_sem);
 }
 #endif /*__CONFIG_OS_KERNEL */
-#if WIFI_TRACK
-extern GPIO_Value get_gpio_value(GPIO_Num gpio);
-#endif
+
 void console_init(void)
 {
     CONSOLE_CTRL_T  *console = &console_ctrl;
     Serial_t *fd = NULL;
 
 #if WIFI_TRACK
+    GPIO_InitTypeDef gpio_config = {
+            .dir = GPIO_INPUT,
+            .debounce = GPIO_DEBOUNCE_YES,
+        };
+
+    HAL_GPIO_Init(GPIOA_8, gpio_config);
     int bd = 115200;
-    if(get_gpio_value(GPIOA_8) == GPIO_VALUE_LOW)
+    if(HAL_GPIO_ReadPin(GPIOA_8) == GPIO_VALUE_LOW)
         bd = CONSOLE_PORT_BAUDRATE;
     else
         bd = 9600;

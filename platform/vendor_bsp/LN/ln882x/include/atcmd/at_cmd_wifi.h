@@ -37,9 +37,10 @@ char at_station_disconnect(void);
 char at_station_set_scan_list_display_option(char *str);
 char at_station_scan(char *str);
 char at_station_scan_no_filter(char *str);
-#if WIFI_SNIFFER_TEST
+#if WIFI_TRACK
 char at_notify_aplist(void);
 char at_station_aplx(char *str);
+char at_station_aplist(char *str);
 #endif
 
 //softap
@@ -135,13 +136,8 @@ char at_get_cip_mux(char *str);
 char at_set_netconn_disconnect(char *str);
 char at_set_ip_close(char *str);
 char at_get_cip_status(char *str);
-
 #if WIFI_SWITCH
-void wifi_sniffer_deinit(void);
-void wifi_sniffer_reinit(void);
 char at_wifi_switch(char *str);
-bool wifi_init(void);
-bool wifi_deinit(void);
 #endif
 
 char at_iperf(char *str);

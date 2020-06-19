@@ -8,7 +8,7 @@
 #include "netif/ethernetif.h"
 #include "wifi_manager/wifi_manager.h"
 #include "lwip/tcpip.h"
-#include "drv/drv_adc_measure.h"
+#include "drv_adc_measure.h"
 #include "utils/system_parameter.h"
 #include "hal/hal_adc.h"
 
@@ -165,7 +165,7 @@ void application_entry(void *arg)
         ART_ASSERT(1);
     }
     
-    reg_wifi_msg_callbcak(wifi_manager_get_handle(), WIFI_MSG_ID_STA_DHCP_GOT_IP,wifi_event_sta_got_ip_cb);
+    reg_wifi_msg_callbcak(WIFI_MSG_ID_STA_DHCP_GOT_IP,wifi_event_sta_got_ip_cb);
 
     wifi_mode_enum_t wifi_mode = WIFI_MODE_STATION;
 
@@ -198,7 +198,7 @@ void application_entry(void *arg)
     };
     
     tcp_server_echo_task_creat(8087);
-    tcp_client_echo_task_creat((uint8_t *)"39.108.190.129", 8000);//通信猫测试(IP:120.76.100.197) 10002端口
+//    tcp_client_echo_task_creat((uint8_t *)"39.108.190.129", 8000);//通信猫测试(IP:120.76.100.197) 10002端口
     
     while(1)
     {

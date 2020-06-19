@@ -4,6 +4,7 @@
 #include "ll/ll_syscon.h"
 #include "hal/hal_common.h"
 
+timer_cb_func_t Timer_cb_func[4]={NULL};
 
 /**
  * @brief Initialize the timer according to the input param config.
@@ -16,6 +17,7 @@ void HAL_TIMER_Init(TIMER_InitTypeDef config)
     assert_param(IS_TIMER_MODE(config.mode));
     assert_param(IS_TIMER_MASK(config.mask));
     assert_param( ((APBUS0_CLOCK / config.user_freq) >= 1 ) && ( (APBUS0_CLOCK / config.user_freq) <= 256 ));
+    assert_param(config.cb_func);
 
     HAL_TIMER_Enable(config.index, TIMER_DISABLE);
 
@@ -51,6 +53,10 @@ void HAL_TIMER_Init(TIMER_InitTypeDef config)
         }
         default:
             break;
+    }
+    if(config.cb_func)
+    {
+        Timer_cb_func[config.index-1]=config.cb_func;
     }
 }
 
@@ -233,4 +239,14 @@ uint32_t HAL_TIMER_LoadCount2_Get(TIMER_Index index)
 
     return LL_TIMER_LoadCount2_Get(index);
 }
-
+void TIMER_IRQHandler()
+{
+    TIMER_Index index;
+    for(index=TIMER_1;index<=TIMER_4;index++)
+    {
+        if(HAL_TIMER_Int_Status(index)&&Timer_cb_func[index-1])
+        {
+            Timer_cb_func[index-1]();
+        }
+     }
+}

@@ -5,6 +5,8 @@
 #include "utils/debug/log.h"
 #include "utils/debug/art_assert.h"
 
+#define LN_MAC_OUI          "00-50-C2"
+
 /***************************************************************
  *  函 数 名：substring
  *  函数功能：获得字符串中指定位置的子串
@@ -250,12 +252,26 @@ int generate_mac_randomly(unsigned char *addr)
     HAL_TRNG_Init(TRNG, initStruct);
     HAL_TRNG_Start(TRNG);
     while(!HAL_TRNG_isDataReady(TRNG) || HAL_TRNG_isBusy(TRNG));
+#ifdef LN_MAC_OUI
+    uint32_t addr0, addr1, addr2;
+    sscanf(LN_MAC_OUI, "%X-%X-%X", &addr0, &addr1, &addr2);
+    *addr = addr0 & 0xFF;
+    *(addr + 1) = addr1 & 0xFF;
+    *(addr + 2) = addr2 & 0xFF;
+    for (int i = 0; i < 1; i++) {
+        trngNumber[i] = HAL_TRNG_GetRandomNumber(TRNG, i);
+    }
+    HAL_TRNG_Stop(TRNG);
+    memcpy(addr + 3, trngNumber, 3);
+#else
     for (int i = 0; i < 2; i++) {
         trngNumber[i] = HAL_TRNG_GetRandomNumber(TRNG, i);
     }
     HAL_TRNG_Stop(TRNG);
     memcpy(addr, trngNumber, 6);
     CLR_BIT(addr[0],0);
+    CLR_BIT(addr[0],1);
+#endif
     return 0;
 }
 

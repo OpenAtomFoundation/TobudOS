@@ -59,6 +59,7 @@
 							</tool>
 							<tool id="ilg.gnumcueclipse.managedbuild.cross.riscv.tool.c.compiler.578468153" name="GNU RISC-V Cross C Compiler" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.tool.c.compiler">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.compiler.include.paths.1686562117" name="Include paths (-I)" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../BSP/LoRaWAN"/>
 									<listOptionValue builtIn="false" value="../../../TOS_CONFIG"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/TencentOS_tiny/kernel/pm/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/TencentOS_tiny/kernel/hal/include}&quot;"/>
@@ -77,8 +78,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/TencentOS_tiny/net/at/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/TencentOS_tiny/net/lora_module_wrapper}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/TencentOS_tiny/devices/rhf76_lora}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/Application/LoRaWAN}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lorawan/Application/PM25}&quot;"/>
+									<listOptionValue builtIn="false" value="../../../BSP/Hardware/PM25"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.compiler.defs.1188292994" name="Defined symbols (-D)" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.compiler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>

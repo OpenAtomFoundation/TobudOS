@@ -8,11 +8,12 @@
 #include "osal/osal.h"
 #include "utils/eeprom.h"
 #include "utils/system_parameter.h"
+#include "flash_partition_table.h"
 
 #define PAGE_SIZE                   (1*SIZE_4KB)
 
 /* EEPROM start address in Flash */
-#define EEPROM_START_ADDRESS    ((uint32_t)(SYSTEM_PARAMETER_OFFSET))
+#define EEPROM_START_ADDRESS    ((uint32_t)(SIMU_EEPROM_SPACE_OFFSET))
 
 /* Pages 0 and 1 base and end addresses */
 #define PAGE0_BASE_ADDRESS      ((uint32_t)(EEPROM_START_ADDRESS))

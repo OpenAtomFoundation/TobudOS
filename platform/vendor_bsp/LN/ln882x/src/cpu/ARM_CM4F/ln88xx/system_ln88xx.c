@@ -16,9 +16,6 @@ extern uint32_t __Vectors[];
 #define vector_table	__Vectors
 #endif
 
-/* This variable is a placeholder, defined at the junction of two blocks memory(SRAM0 and SRAM1) */
-int placeholder_between_sram0_and_sram1 __attribute__ ((section(".ARM.__at_0x1FFFFFFC"), zero_init));
-
 /*----------------------------------------------------------------------------
   System Core Clock Variable
  *----------------------------------------------------------------------------*/

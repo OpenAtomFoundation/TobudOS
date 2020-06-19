@@ -175,7 +175,6 @@ typedef enum
 
 typedef enum
 {
-    SW_CLKGATE_PATCH   = 0,
     SW_CLKGATE_QSPI    = 1,
     SW_CLKGATE_ADCC    = 2,
     SW_CLKGATE_I2S     = 3,
@@ -198,7 +197,11 @@ typedef enum
     SW_CLKGATE_MAC     = 20,
     SW_CLKGATE_CACHE   = 21,
     SW_CLKGATE_DMA     = 22,
-    SW_CLKGATE_RFREG   = 23
+    SW_CLKGATE_RFREG   = 23,
+    SW_CLKGATE_PWM     = 24,
+    SW_CLKGATE_EF      = 25,
+    SW_CLKGATE_TRNG    = 26,
+    SW_CLKGATE_AES     = 27,
 } SYSCON_ClkGate_Peripheral;
 
 typedef enum
@@ -339,8 +342,7 @@ typedef enum
                                      (clkgate) == SW_CLKGATE_CORE_MAC40M || \
                                      (clkgate) == SW_CLKGATE_CORE_MAC80M)
 
-#define IS_CLKGATE_PERIPHERAL(clkgate)  ((clkgate) == SW_CLKGATE_PATCH   || \
-                                         (clkgate) == SW_CLKGATE_QSPI    || \
+#define IS_CLKGATE_PERIPHERAL(clkgate)  ((clkgate) == SW_CLKGATE_QSPI    || \
                                          (clkgate) == SW_CLKGATE_ADCC    || \
                                          (clkgate) == SW_CLKGATE_I2S     || \
                                          (clkgate) == SW_CLKGATE_GPIO    || \
@@ -362,7 +364,11 @@ typedef enum
                                          (clkgate) == SW_CLKGATE_MAC     || \
                                          (clkgate) == SW_CLKGATE_CACHE   || \
                                          (clkgate) == SW_CLKGATE_DMA     || \
-                                         (clkgate) == SW_CLKGATE_RFREG)
+                                         (clkgate) == SW_CLKGATE_RFREG   || \
+                                         (clkgate) == SW_CLKGATE_PWM     || \
+                                         (clkgate) == SW_CLKGATE_EF      || \
+                                         (clkgate) == SW_CLKGATE_TRNG    || \
+                                         (clkgate) == SW_CLKGATE_AES)
 
 #define IS_SPIM_INDEX(index)    ((index) == SPIM_IO_EN0 || (index) == SPIM_IO_EN1 || (index) == SPIM_IO_EN2)
 

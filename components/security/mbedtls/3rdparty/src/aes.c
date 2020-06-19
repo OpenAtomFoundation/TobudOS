@@ -397,8 +397,8 @@ static int aes_init_done = 0;
 static void aes_gen_tables( void )
 {
     int i, x, y, z;
-    int pow[256];
-    int log[256];
+    static int pow[256];
+    static int log[256];
 
     /*
      * compute pow and log tables over GF(2^8)

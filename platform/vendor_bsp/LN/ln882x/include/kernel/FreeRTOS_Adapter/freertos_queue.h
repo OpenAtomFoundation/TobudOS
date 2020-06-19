@@ -25,7 +25,6 @@ OS_Status OS_QueueCreate(OS_Queue_t *queue, uint32_t queueLen, uint32_t itemSize
 OS_Status OS_QueueDelete(OS_Queue_t *queue);
 OS_Status OS_QueueSend(OS_Queue_t *queue, const void *item, OS_Time_t waitMS);
 OS_Status OS_QueueReceive(OS_Queue_t *queue, void *item, OS_Time_t waitMS);
-OS_Status OS_QueueFlush(OS_Queue_t *queue);
 
 
 /**

@@ -7,7 +7,7 @@
 #include "dhcpd/dhcpd.h"
 
 #define WIFI_MANAGER_TASK_STACK_SIZE     5*256 //Byte
-#define WIFI_MSG_QUEUE_DEPTH        5
+#define WIFI_MSG_QUEUE_DEPTH        10
 
 
 struct wifi_manager_ctrl{
@@ -17,8 +17,14 @@ struct wifi_manager_ctrl{
 };
 static wifi_manager_ctrl_t gwifi_manager_ctrl= {0,};
 
-bool reg_wifi_msg_callbcak(wifi_manager_ctrl_t *manager_ctrl, wifi_msg_id_enum_t msg_id, wifi_msg_callback_fun callback_fun)
+static wifi_manager_ctrl_t *wifi_manager_get_handle(void)
 {
+    return &gwifi_manager_ctrl;
+}
+
+bool reg_wifi_msg_callbcak(wifi_msg_id_enum_t msg_id, wifi_msg_callback_fun callback_fun)
+{
+    wifi_manager_ctrl_t *manager_ctrl = wifi_manager_get_handle();
     wifi_msg_handle_table_t *msg_handler_table = NULL;
     
     ART_ASSERT(manager_ctrl);
@@ -57,15 +63,11 @@ static void wifi_manager_task_entry(void *params)
                 
                 case WIFI_MSG_ID_STA_READY:
                     //turn on WIFI LED
-                    #if (WIFI_TRACK==0)
-                    LOG(LOG_LVL_INFO, "[%s, %d]WIFI_MSG_ID_WIFI_READY\r\n", __func__, __LINE__);
-                    #endif
+                    LOG(LOG_LVL_TRACE, "[%s, %d]WIFI_MSG_ID_WIFI_READY\r\n", __func__, __LINE__);
                     break;
                 
                 case WIFI_MSG_ID_STA_SCAN_DONE:
-                    #if (WIFI_TRACK==0)
-                    LOG(LOG_LVL_INFO, "[%s, %d]WIFI_MSG_ID_STA_SCAN_DONE\r\n", __func__, __LINE__);
-                    #endif
+                    LOG(LOG_LVL_TRACE, "[%s, %d]WIFI_MSG_ID_STA_SCAN_DONE\r\n", __func__, __LINE__);
                     //update ap list
                     break;
                 
@@ -151,9 +153,10 @@ static void wifi_manager_task_entry(void *params)
     }
 }
 
-bool wifi_manager_init(wifi_manager_ctrl_t *manager_ctrl)
+bool wifi_manager_init(void)
 {
     OS_Status ret = OS_OK;
+    wifi_manager_ctrl_t *manager_ctrl = wifi_manager_get_handle();
     
     ART_ASSERT(manager_ctrl);
     ret = OS_QueueCreate(&manager_ctrl->wifi_manager_msgq, WIFI_MSG_QUEUE_DEPTH, sizeof(wifi_msg_t));
@@ -169,11 +172,12 @@ bool wifi_manager_init(wifi_manager_ctrl_t *manager_ctrl)
     return true;
 }
 
-bool wifi_manager_deinit(wifi_manager_ctrl_t *manager_ctrl)
+bool wifi_manager_deinit(void)
 {
     OS_Status ret = OS_OK;
-    ART_ASSERT(manager_ctrl);
+    wifi_manager_ctrl_t *manager_ctrl = wifi_manager_get_handle();
 
+    ART_ASSERT(manager_ctrl);
     ret = OS_ThreadDelete(&manager_ctrl->wifi_manager_thread);
     if (ret != OS_OK){
 		LOG(LOG_LVL_ERROR, "[%s, %d]OS_ThreadDelete manager_ctrl->wifi_manager_thread fail.\r\n", __func__, __LINE__);
@@ -186,11 +190,6 @@ bool wifi_manager_deinit(wifi_manager_ctrl_t *manager_ctrl)
         return false;
     }
     return true;
-}
-
-wifi_manager_ctrl_t *wifi_manager_get_handle(void)
-{
-    return &gwifi_manager_ctrl;
 }
 
 

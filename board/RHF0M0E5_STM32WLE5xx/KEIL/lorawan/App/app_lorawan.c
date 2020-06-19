@@ -83,7 +83,7 @@ void MX_LoRaWAN_Init(void)
 	lw_request_class(CLASS_A);
 	
 	/*channel 8-16*/
-	LWChannel_mask_t ch={0xFF00,0,0,0,0,0};	
+	LWChannel_mask_t ch={0x0000,0,0,0,0,0x00FF};	
 	lw_current_chmask_set(&ch);
 	
 	/*tx dr*/

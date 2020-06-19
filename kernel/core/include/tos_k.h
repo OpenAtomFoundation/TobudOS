@@ -19,7 +19,7 @@
 #define  _TOS_K_H_
 
 #include <tos_compiler.h>
-#include <tos_err.h>
+#include <tos_kerr.h>
 #include <tos_cpu_def.h>
 #include <tos_config.h>
 #include <tos_config_default.h>
