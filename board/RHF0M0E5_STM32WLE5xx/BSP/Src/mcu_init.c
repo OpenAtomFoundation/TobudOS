@@ -27,11 +27,11 @@ int fgetc(FILE *f)
 
 void board_init(void)
 {
-  HAL_Init();
-  SystemClock_Config();
+    HAL_Init();
+    SystemClock_Config();
 	
 	SystemApp_Init();
-	MX_LoRaWAN_Init();
+    MX_LoRaWAN_Init();
 }
 
 /**

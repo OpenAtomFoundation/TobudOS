@@ -3,7 +3,6 @@
 #include "main.h"
 #include "app_system.h"
 #include "adc_if.h"
-//#include "stm32_seq.h"
 
 #include "stm32_systime.h"
 #include "stm32_lpm.h"
@@ -34,6 +33,8 @@ void SystemApp_Init(void)
 	Gpio_PreInit();
 
 	vcom_Init(NULL);
+    
+    MX_USART2_UART_Init();
 
 	/*Initialize the temperature and Battery measurement services */
 	SYS_InitMeasurement();

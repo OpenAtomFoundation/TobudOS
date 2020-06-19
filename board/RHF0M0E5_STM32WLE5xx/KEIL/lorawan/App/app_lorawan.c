@@ -3,18 +3,28 @@
 #include "timer.h"
 #include "app_system.h"
 #include "app_lorawan.h"
-//#include "stm32_seq.h"
 #include "stm32_lpm.h"
 
 #include "adc_if.h"
 #include "lorawan_version.h"
 
 #include <tos_k.h>
-
+#include "sensor_parser.h"
 
 #define APP_TX_DUTYCYCLE                            30000      //ms
 #define LORAWAN_DOWNLINK_PORT						2
 #define LORAWAN_UPLINK_PORT                         10 
+
+
+k_mail_q_t mail_q;
+#define DATA_CNT        26
+uint8_t mail_buf[DATA_CNT];
+
+
+typedef struct device_data_st {
+    uint8_t     data[DATA_CNT];
+} __PACKED__ dev_data_t;
+
 
 /*!
  *  user main_callback function declare , you need to implement them
@@ -47,7 +57,6 @@ lw_app_data_t app_data = { app_data_buff,  0, 0 };
 
 /*send task function  declaration*/
 static TimerEvent_t send_timer;
-//static k_timer_t send_timer;
 static void send_process(void *args);
 static void cycle_send_event(void *context);
 static void Lora_start_send(void);
@@ -82,18 +91,18 @@ void MX_LoRaWAN_Init(void)
 	/*Class*/
 	lw_request_class(CLASS_A);
 	
-	/*channel 8-16*/
+	/*channel 80-87*/
 	LWChannel_mask_t ch={0x0000,0,0,0,0,0x00FF};	
 	lw_current_chmask_set(&ch);
 	
 	/*tx dr*/
-	lw_config_tx_datarate_set(DR_3);
+	lw_config_tx_datarate_set(DR_5);
 	
 	/*OTAA*/
  	lw_config_otaa_set(LORA_ENABLE);
 
 	/*enable adr*/
-	lw_adr_set(LORA_ENABLE);
+	lw_adr_set(LORA_DISABLE);
 	
 	/*set retry*/
 	lw_confirm_retry_set(3);
@@ -101,29 +110,107 @@ void MX_LoRaWAN_Init(void)
 	printf("lorawan init ok.\r\n");
 }
 
-void application_entry(void *arg)
-{
+uint8_t pool[DATA_CNT];
+#define CMD_LEN_MAX     50
+char cmd_buf[CMD_LEN_MAX];
+dev_data_t dev_data;
 
-	//创建信号量
-	tos_sem_create_max(&lora_mac_process_sem, 0, 1);
-	
-		//创建任务
-  tos_task_create(&lora_mac_process_task, 
-				  "lora_mac_process_task", 
-					LoraMacProcess_task_entry, 
-					NULL, 
-					2, 
-					lora_mac_process_task_stack, 
-					sizeof(lora_mac_process_task_stack), 
-					10);
-					
-		Lora_start_send();
+uint16_t report_period = 10;
+
+void uart_output(const char *str)
+{
+    /* if using c lib printf through uart, a simpler one is: */
+    printf(str);
 }
 
+void recv_callback(uint8_t *data, uint8_t len)
+{
+    int i = 0;
 
-/*==============================================================
-create a send task ,the task is periodic trigger
-================================================================*/
+    printf("len: %d\n", len);
+
+    for (i = 0; i < len; ++i) {
+        printf("data[%d]: %d\n", i, data[i]);
+    }
+
+    if (len == 1) {
+        report_period = data[0];
+    } else if (len >= 2) {
+        report_period = data[0] | (data[1] << 8);
+    }
+    printf("report_period: %d\n", report_period);
+}
+
+void application_entry(void *arg)
+{
+    
+    int i = 0;
+    int ret = 0;
+    int send_failed_count = 0;
+    
+    tos_mail_q_create(&mail_q, pool, DATA_CNT, sizeof(uint8_t));
+    tos_shell_init(cmd_buf, sizeof(cmd_buf), uart_output);
+
+    //create task to process loramac
+    tos_sem_create_max(&lora_mac_process_sem, 0, 1);
+    tos_task_create(&lora_mac_process_task, 
+                  "lora_mac_process_task", 
+                    LoraMacProcess_task_entry, 
+                    NULL, 
+                    2, 
+                    lora_mac_process_task_stack, 
+                    sizeof(lora_mac_process_task_stack), 
+                    10);
+
+    //report pm2.5 data
+    while (1) {
+        size_t mail_size;
+
+        tos_mail_q_pend(&mail_q, &dev_data.data, &mail_size, TOS_TIME_FOREVER);
+        
+        /*fill the data*/
+        i = 0;
+        app_data.port = LORAWAN_UPLINK_PORT;
+
+        for (i = 0; i < mail_size; i++) {
+            app_data.buff[i] = dev_data.data[i];
+            printf("[%d] %x\n", i, dev_data.data[i]);
+        }
+        printf("\n\n");
+        app_data.size = i;
+        
+        /*Check if it is in OTAA mode*/
+        if(LORA_ENABLE == lw_config_otaa_get())
+        {
+            /*check if it is already joined*/
+            if(lw_join_status() != LORA_SET)
+            {
+                lw_join();
+                continue;
+            }
+        }
+
+        ret = lw_send(&app_data, LORAWAN_CONFIRMED_MSG);
+        if (ret != LORAMAC_STATUS_OK )
+        {
+            printf("LoRa Send data faild!, retcode = %d, count is %d\r\n",ret, send_failed_count);
+            send_failed_count++;
+            if (send_failed_count > 10)
+            {
+                NVIC_SystemReset();// when lora send faied more than 10 times , cpu reset to reconnect.
+            }
+        }
+        else
+        {
+            send_failed_count = 0;
+        }
+        
+        tos_task_delay(10000);
+    }
+					
+    //Lora_start_send();
+}
+
 void Lora_start_send(void)
 {
 	/* send everytime timer elapses */
@@ -134,8 +221,6 @@ void Lora_start_send(void)
 
 static void cycle_send_event(void *args)
 {
-	//触发此任务
-	//UTIL_SEQ_SetTask(CFG_SEQ_TASK_LORA_SEND_ON_TX_TIMER, CFG_SEQ_Prio_0);
 	send_process(NULL);
 	/*Wait for next tx slot*/
 	TimerStart(&send_timer);
@@ -250,8 +335,6 @@ void mac_event_callback(APP_EVENT_t evt,const void* param)
 }
 static void LoraMacProcessNotify(void)
 {
-	//UTIL_SEQ_SetTask(CFG_SEQ_TASK_LORAMAC_PROCESS, CFG_SEQ_Prio_0);
-	//释放信号量
 	tos_sem_post(&lora_mac_process_sem);
 }
 
