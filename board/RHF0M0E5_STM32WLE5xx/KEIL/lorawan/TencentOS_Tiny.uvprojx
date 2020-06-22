@@ -16,14 +16,14 @@
         <TargetCommonOption>
           <Device>STM32WLE5JCIx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32WLxx_DFP.1.0.2.OEM</PackID>
-          <PackURL>http://www.keil.com/pack</PackURL>
-          <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x40000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <PackID>Keil.STM32WLxx_DFP.1.0.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
+          <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x40000) CPUTYPE("Cortex-M4") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32WLxx_CM4 -FS08000000 -FL040000 -FP0($$Device:STM32WLE5JCIx$Drivers\CMSIS\Flash\STM32WLxx_CM4.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32WLxx_CM4 -FS08000000 -FL040000 -FP0($$Device:STM32WLE5JCIx$CMSIS\Flash\STM32WLxx_CM4.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32WLE5JCIx$Drivers\CMSIS\Device\ST\STM32WLxx\Include\stm32wlxx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32WLE5JCIx$Drivers\Device\ST\STM32WLxx\Include\stm32wlxx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32WLE5JCIx$Drivers\CMSIS\SVD\STM32WL5x_CM4.svd</SFDFile>
+          <SFDFile>$$Device:STM32WLE5JCIx$CMSIS\SVD\STM32WLE5_CM4.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -52,9 +52,9 @@
           <OutputName>TencentOS_Tiny</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>0</BrowseInformation>
+          <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\List\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -183,7 +183,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>1</RvdsVP>
+            <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32WLE5xx,CORE_CM4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32WLxx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\BSP\Middlewares\LoRaWAN\Conf;..\..\BSP\Middlewares\LoRaWAN\Crypto;..\..\BSP\Middlewares\LoRaWAN\Mac;..\..\BSP\Middlewares\LoRaWAN\Patterns\Basic;..\..\BSP\Middlewares\LoRaWAN\Utilities;..\..\BSP\Middlewares\SubGHz_Phy;..\..\BSP\Middlewares\SubGHz_Phy\stm32_radio_driver;..\..\BSP\Inc;.\App;.\Target;..\..\BSP\Utilities\lpm\tiny_lpm;..\..\BSP\Utilities\misc</IncludePath>
+              <IncludePath>..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32WLxx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\BSP\Middlewares\LoRaWAN\Conf;..\..\BSP\Middlewares\LoRaWAN\Crypto;..\..\BSP\Middlewares\LoRaWAN\Mac;..\..\BSP\Middlewares\LoRaWAN\Patterns\Basic;..\..\BSP\Middlewares\LoRaWAN\Utilities;..\..\BSP\Middlewares\SubGHz_Phy;..\..\BSP\Middlewares\SubGHz_Phy\stm32_radio_driver;..\..\BSP\Inc;.\App;.\Target;..\..\BSP\Utilities\lpm\tiny_lpm;..\..\BSP\Utilities\misc;..\..\BSP\Hardware\PM25</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -412,11 +412,6 @@
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\main.c</FilePath>
             </File>
             <File>
               <FileName>mcu_init.c</FileName>
@@ -762,6 +757,11 @@
           <GroupName>TOS-CONFIG</GroupName>
           <Files>
             <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\main.c</FilePath>
+            </File>
+            <File>
               <FileName>tos_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\TOS_CONFIG\tos_config.h</FilePath>
@@ -795,6 +795,16 @@
               <FileName>timer_wrapper.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Target\timer_wrapper.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Hardware</GroupName>
+          <Files>
+            <File>
+              <FileName>sensor_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Hardware\PM25\sensor_parser.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -998,8 +1008,8 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.3.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.6.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.4.0" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.7.0"/>
         <targetInfos>
           <targetInfo name="TencentOS_Tiny"/>
         </targetInfos>

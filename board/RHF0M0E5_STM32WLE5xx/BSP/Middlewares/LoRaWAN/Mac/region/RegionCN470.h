@@ -52,7 +52,7 @@
 /*!
  * Maximal datarate that can be used by the node
  */
-#define CN470_TX_MAX_DATARATE                       DR_5
+#define CN470_TX_MAX_DATARATE                       DR_0
 
 /*!
  * Minimal datarate that can be used by the node
@@ -62,7 +62,7 @@
 /*!
  * Maximal datarate that can be used by the node
  */
-#define CN470_RX_MAX_DATARATE                       DR_5
+#define CN470_RX_MAX_DATARATE                       DR_0
 
 /*!
  * Default datarate used by the node
