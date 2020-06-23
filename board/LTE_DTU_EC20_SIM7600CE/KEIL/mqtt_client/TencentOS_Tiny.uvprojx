@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F103RB</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.2.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.3.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x20004FFF) IROM(0x8000000-0x801FFFF) CLOCK(8000000) CPUTYPE("Cortex-M3")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -833,24 +833,24 @@
           <GroupName>mqttclient/common</GroupName>
           <Files>
             <File>
-              <FileName>list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\list.c</FilePath>
-            </File>
-            <File>
               <FileName>random.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
             </File>
             <File>
-              <FileName>error.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\error.h</FilePath>
+              <FileName>mqtt_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</FilePath>
             </File>
             <File>
-              <FileName>log.h</FileName>
+              <FileName>mqtt_error.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log.h</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_error.h</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_log.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_log.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -861,6 +861,16 @@
               <FileName>network.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -881,16 +891,6 @@
               <FileName>platform_net_socket.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</FilePath>
-            </File>
-            <File>
-              <FileName>platform_nettype_tcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>platform_nettype_tls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tls.c</FilePath>
             </File>
             <File>
               <FileName>platform_thread.c</FileName>
