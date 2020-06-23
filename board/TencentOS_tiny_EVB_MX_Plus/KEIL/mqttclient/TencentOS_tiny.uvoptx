@@ -1493,8 +1493,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\list.c</PathWithFileName>
-      <FilenameWithoutPath>list.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\random.c</PathWithFileName>
+      <FilenameWithoutPath>random.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1505,8 +1505,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\random.c</PathWithFileName>
-      <FilenameWithoutPath>random.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</PathWithFileName>
+      <FilenameWithoutPath>mqtt_list.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1517,8 +1517,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\error.h</PathWithFileName>
-      <FilenameWithoutPath>error.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\mqtt_log.h</PathWithFileName>
+      <FilenameWithoutPath>mqtt_log.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1529,8 +1529,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\log.h</PathWithFileName>
-      <FilenameWithoutPath>log.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\mqtt_error.h</PathWithFileName>
+      <FilenameWithoutPath>mqtt_error.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1554,6 +1554,30 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+    <File>
+      <GroupNumber>18</GroupNumber>
+      <FileNumber>98</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</PathWithFileName>
+      <FilenameWithoutPath>nettype_tls.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>18</GroupNumber>
+      <FileNumber>99</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</PathWithFileName>
+      <FilenameWithoutPath>nettype_tcp.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
@@ -1564,7 +1588,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>19</GroupNumber>
-      <FileNumber>98</FileNumber>
+      <FileNumber>100</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1576,7 +1600,7 @@
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
-      <FileNumber>99</FileNumber>
+      <FileNumber>101</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1588,37 +1612,13 @@
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
-      <FileNumber>100</FileNumber>
+      <FileNumber>102</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</PathWithFileName>
       <FilenameWithoutPath>platform_net_socket.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>19</GroupNumber>
-      <FileNumber>101</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tcp.c</PathWithFileName>
-      <FilenameWithoutPath>platform_nettype_tcp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>19</GroupNumber>
-      <FileNumber>102</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tls.c</PathWithFileName>
-      <FilenameWithoutPath>platform_nettype_tls.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
