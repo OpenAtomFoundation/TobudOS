@@ -10,7 +10,8 @@
       <TargetName>TencentOS_tiny</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>ARMCM4_FP</Device>
@@ -183,6 +184,7 @@
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
+            <RvdsMve>0</RvdsMve>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -323,11 +325,15 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
+            <v6Lto>0</v6Lto>
+            <v6WtE>0</v6WtE>
+            <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>LN882x,ARM_MATH_CM4</Define>
@@ -345,6 +351,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -497,11 +504,15 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
+                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
                     <vShortEn>2</vShortEn>
                     <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -994,11 +1005,15 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
+                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
                     <vShortEn>2</vShortEn>
                     <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -1320,19 +1335,19 @@
               <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
             </File>
             <File>
-              <FileName>error.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\error.h</FilePath>
-            </File>
-            <File>
-              <FileName>log.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log.h</FilePath>
-            </File>
-            <File>
-              <FileName>list.c</FileName>
+              <FileName>mqtt_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\list.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_log.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_log.h</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_error.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_error.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1343,6 +1358,16 @@
               <FileName>network.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1363,16 +1388,6 @@
               <FileName>platform_net_socket.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</FilePath>
-            </File>
-            <File>
-              <FileName>platform_nettype_tcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>platform_nettype_tls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tls.c</FilePath>
             </File>
             <File>
               <FileName>platform_thread.c</FileName>
