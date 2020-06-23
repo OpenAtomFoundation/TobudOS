@@ -100,7 +100,10 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
-        <nTsel>6</nTsel>
+        <bEvRecOn>1</bEvRecOn>
+        <bSchkAxf>0</bSchkAxf>
+        <bTchkAxf>0</bTchkAxf>
+        <nTsel>4</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -231,11 +234,19 @@
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
       <bLintAuto>0</bLintAuto>
-      <Lin2Executable></Lin2Executable>
-      <Lin2ConfigFile></Lin2ConfigFile>
-      <bLin2Auto>0</bLin2Auto>
+      <bAutoGenD>0</bAutoGenD>
+      <LntExFlags>0</LntExFlags>
+      <pMisraName></pMisraName>
+      <pszMrule></pszMrule>
+      <pSingCmds></pSingCmds>
+      <pMultCmds></pMultCmds>
+      <pMisraNamep></pMisraNamep>
+      <pszMrulep></pszMrulep>
+      <pSingCmdsp></pSingCmdsp>
+      <pMultCmdsp></pMultCmdsp>
       <DebugDescription>
         <Enable>1</Enable>
+        <EnableFlashSeq>0</EnableFlashSeq>
         <EnableLog>0</EnableLog>
         <Protocol>2</Protocol>
         <DbgClock>10000000</DbgClock>
@@ -2192,12 +2203,12 @@
     <File>
       <GroupNumber>26</GroupNumber>
       <FileNumber>146</FileNumber>
-      <FileType>5</FileType>
+      <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\error.h</PathWithFileName>
-      <FilenameWithoutPath>error.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</PathWithFileName>
+      <FilenameWithoutPath>mqtt_list.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2208,20 +2219,20 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\log.h</PathWithFileName>
-      <FilenameWithoutPath>log.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\mqtt_log.h</PathWithFileName>
+      <FilenameWithoutPath>mqtt_log.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>26</GroupNumber>
       <FileNumber>148</FileNumber>
-      <FileType>1</FileType>
+      <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\list.c</PathWithFileName>
-      <FilenameWithoutPath>list.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\common\mqtt_error.h</PathWithFileName>
+      <FilenameWithoutPath>mqtt_error.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2245,6 +2256,30 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+    <File>
+      <GroupNumber>27</GroupNumber>
+      <FileNumber>150</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</PathWithFileName>
+      <FilenameWithoutPath>nettype_tls.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>27</GroupNumber>
+      <FileNumber>151</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</PathWithFileName>
+      <FilenameWithoutPath>nettype_tcp.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
@@ -2255,7 +2290,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>28</GroupNumber>
-      <FileNumber>150</FileNumber>
+      <FileNumber>152</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2267,7 +2302,7 @@
     </File>
     <File>
       <GroupNumber>28</GroupNumber>
-      <FileNumber>151</FileNumber>
+      <FileNumber>153</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2279,37 +2314,13 @@
     </File>
     <File>
       <GroupNumber>28</GroupNumber>
-      <FileNumber>152</FileNumber>
+      <FileNumber>154</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</PathWithFileName>
       <FilenameWithoutPath>platform_net_socket.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>28</GroupNumber>
-      <FileNumber>153</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tcp.c</PathWithFileName>
-      <FilenameWithoutPath>platform_nettype_tcp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>28</GroupNumber>
-      <FileNumber>154</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tls.c</PathWithFileName>
-      <FilenameWithoutPath>platform_nettype_tls.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
