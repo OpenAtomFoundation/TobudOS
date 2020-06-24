@@ -109,12 +109,12 @@ typedef struct ota_ping_pong_partitions_st {
 } ota_pp_pts_t;
 
 typedef union ip_un {
-    ota_pt_t        pts[3];
+    ota_pt_t        pts[sizeof(ota_ip_pts_t) / sizeof(ota_pt_t)];
     ota_ip_pts_t    ip_pts;
 } ip_u;
 
 typedef union pp_un {
-    ota_pt_t        pts[4];
+    ota_pt_t        pts[sizeof(ota_pp_pts_t) / sizeof(ota_pt_t)];
     ota_pp_pts_t    pp_pts;
 } pp_u;
 
