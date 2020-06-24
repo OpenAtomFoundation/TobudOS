@@ -20,7 +20,7 @@
 
 static ota_pt_ctrl_t ctrl;
 
-static int partitions_verify(ota_pt_t *pts, int n)
+static ota_err_t partitions_verify(ota_pt_t *pts, int n)
 {
     int i = 0;
 
@@ -34,7 +34,7 @@ static int partitions_verify(ota_pt_t *pts, int n)
         }
     }
 
-    return 0;
+    return OTA_ERR_NONE;
 }
 
 ota_err_t ota_partition_load(ota_updt_type_t updt_type, uint32_t partition_addr)

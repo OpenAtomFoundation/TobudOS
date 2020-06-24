@@ -55,17 +55,17 @@ int main(void)
         return -1;
     }
 
-#if 1
-    if (ota_recovery_xip() != 0) {
-        printf("recovery failed!\n");
+#if 0
+    if ((ret = ota_recovery_xip()) != OTA_ERR_NONE) {
+        printf("recovery failed, OTA errcode = %d!\r\n", ret);
     } else {
-        printf("recovery successfully!\n");
+        printf("recovery successfully!\r\n");
     }
 #else
-    if (ota_recovery() != 0) {
-        printf("recovery failed!\n");
+    if ((ret = ota_recovery()) != OTA_ERR_NONE) {
+        printf("recovery failed, OTA errcode = %d!\r\n", ret);
     } else {
-        printf("recovery successfully!\n");
+        printf("recovery successfully!\r\n");
     }
 #endif
 

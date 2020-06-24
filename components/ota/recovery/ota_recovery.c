@@ -29,7 +29,7 @@
 
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
 
-static int patch_verify(ota_img_hdr_t *img_hdr)
+static ota_err_t patch_verify(ota_img_hdr_t *img_hdr)
 {
 #define BUF_SIZE        128
     static uint8_t buf[BUF_SIZE];
@@ -42,29 +42,29 @@ static int patch_verify(ota_img_hdr_t *img_hdr)
 
     /* drag the ota_img_hdr out of the flash */
     if (ota_flash_read(patch_start, img_hdr, sizeof(ota_img_hdr_t)) < 0) {
-        return -1;
+        return OTA_ERR_PATCH_READ_FAIL;
     }
 
     /* 1. check whether new version patch downloaded */
     if (tos_kv_get("new_version", &new_version, sizeof(ota_img_vs_t), &version_len) != KV_ERR_NONE) {
-        return -1;
+        return OTA_ERR_KV_GET_FAIL;
     }
 
     if (new_version.major != img_hdr->new_version.major ||
         new_version.minor != img_hdr->new_version.minor) {
-        return -1;
+        return OTA_ERR_NEW_VERSION_NOT_SAME;
     }
 
     /* 2. verify magic */
     if (img_hdr->magic != OTA_IMAGE_MAGIC) {
-        return -1;
+        return OTA_ERR_PATCH_MAGIC_NOT_SAME;
     }
 
     /* 3. is this patch for current version? */
     cur_version = ota_info_curr_version();
     if (cur_version.major != img_hdr->old_version.major ||
         cur_version.minor != img_hdr->old_version.minor) {
-        return -1;
+        return OTA_ERR_OLD_VERSION_NOT_SAME;
     }
 
     /* 4. verify the patch crc checksum */
@@ -75,7 +75,7 @@ static int patch_verify(ota_img_hdr_t *img_hdr)
     while (remain_len > 0) {
         read_len = MIN(sizeof(buf), remain_len);
         if (ota_flash_read(patch_start, buf, read_len) < 0) {
-            return -1;
+            return OTA_ERR_PATCH_READ_FAIL;
         }
 
         crc = crc8(crc, buf, read_len);
@@ -85,7 +85,7 @@ static int patch_verify(ota_img_hdr_t *img_hdr)
     }
 
     if (crc != img_hdr->patch_crc) {
-        return -1;
+        return OTA_ERR_PATCH_CRC_FAIL;
     }
 
     /* 5. verify the old crc checksum */
@@ -95,7 +95,7 @@ static int patch_verify(ota_img_hdr_t *img_hdr)
     while (remain_len > 0) {
         read_len = MIN(sizeof(buf), remain_len);
         if (ota_flash_read(active_app_start, buf, read_len) < 0) {
-            return -1;
+            return OTA_ERR_ACTIVE_APP_READ_FAIL;
         }
 
         crc = crc8(crc, buf, read_len);
@@ -105,10 +105,10 @@ static int patch_verify(ota_img_hdr_t *img_hdr)
     }
 
     if (crc != img_hdr->old_crc) {
-        return -1;
+        return OTA_ERR_ACTIVE_APP_CRC_FAIL;
     }
 
-    return 0;
+    return OTA_ERR_NONE;
 }
 
 static int do_recovery(ota_img_hdr_t *hdr)
@@ -154,12 +154,13 @@ static int app_copy(uint32_t dst, uint32_t dst_size, uint32_t src, uint32_t src_
     return 0;
 }
 
-int ota_recovery(void)
+ota_err_t ota_recovery(void)
 {
+    ota_err_t ret;
     ota_img_hdr_t img_hdr;
 
-    if (patch_verify(&img_hdr)) {
-        return -1;
+    if ((ret = patch_verify(&img_hdr)) != OTA_ERR_NONE) {
+        return ret;
     }
 
     /* backup */
@@ -168,11 +169,10 @@ int ota_recovery(void)
                     ota_partition_size(OTA_PARTITION_BACKUP_APP),
                     ota_partition_start(OTA_PARTITION_ACTIVE_APP),
                     ota_partition_size(OTA_PARTITION_ACTIVE_APP)) < 0) {
-        return -1;
+        return OTA_ERR_BACK_UP_FAIL;
     }
 
     if (do_recovery(&img_hdr) != 0) {
-        printf("recovery failed\n");
 
         /* restore */
         if (ota_partition_is_pingpong()) {
@@ -181,13 +181,13 @@ int ota_recovery(void)
                         ota_partition_start(OTA_PARTITION_BACKUP_APP),
                         ota_partition_size(OTA_PARTITION_BACKUP_APP));
         }
-        return -1;
+        return OTA_ERR_RECOVERRY_FAIL;
     }
 
-    if (ota_info_update(img_hdr.new_version) != 0) {
-        return -1;
+    if ((ret = ota_info_update(img_hdr.new_version)) != OTA_ERR_NONE) {
+        return ret;
     }
 
-    return 0;
+    return OTA_ERR_NONE;
 }
 

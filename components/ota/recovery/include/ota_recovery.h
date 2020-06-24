@@ -23,8 +23,9 @@
 #include "ota_flash.h"
 #include "ota_image.h"
 #include "ota_patch.h"
+#include "ota_err.h"
 
-int ota_recovery(void);
+ota_err_t ota_recovery(void);
 
 int ota_recovery_xip(void);
 

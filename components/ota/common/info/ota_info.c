@@ -16,7 +16,6 @@
  *---------------------------------------------------------------------------*/
 
 #include "tos_kv.h"
-#include "ota_image.h"
 #include "ota_info.h"
 #include "ota_partition.h"
 
@@ -35,19 +34,19 @@ ota_img_vs_t ota_info_curr_version(void)
     return version;
 }
 
-int ota_info_update(ota_img_vs_t new_version)
+ota_err_t ota_info_update(ota_img_vs_t new_version)
 {
     kv_err_t err;
 
     err = tos_kv_del("new_version");
     if (err != KV_ERR_NONE && err != KV_ERR_NOT_EXIST) {
-        return -1;
+        return OTA_ERR_KV_DEL_FAIL;
     }
 
     if (tos_kv_set("cur_version", &new_version, sizeof(ota_img_vs_t)) != KV_ERR_NONE) {
-        return -1;
+        return OTA_ERR_KV_SET_FAIL;
     }
 
-    return 0;
+    return OTA_ERR_NONE;
 }
 
