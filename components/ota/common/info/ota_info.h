@@ -18,9 +18,12 @@
 #ifndef _OTA_INFO_H_
 #define  _OTA_INFO_H_
 
+#include "ota_err.h"
+#include "ota_image.h"
+
 ota_img_vs_t ota_info_curr_version(void);
 
-int ota_info_update(ota_img_vs_t new_version);
+ota_err_t ota_info_update(ota_img_vs_t new_version);
 
 #endif /* _OTA_INFO_H_ */
 

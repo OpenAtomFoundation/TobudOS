@@ -35,7 +35,7 @@ ota_err_t ota_env_init(ota_updt_type_t updt_type, uint32_t partition_addr, ota_f
                         ota_partition_end(OTA_PARTITION_KV),
                         (kv_flash_drv_t *)flash_drv,
                         (kv_flash_prop_t *)flash_prop) != KV_ERR_NONE) {
-        return OTA_ERR_KV_FAIL;
+        return OTA_ERR_KV_INIT_FAIL;
     }
 
     return OTA_ERR_NONE;
