@@ -7,18 +7,18 @@
 
   <Targets>
     <Target>
-      <TargetName>LTE_DTU</TargetName>
+      <TargetName>TencentOS_tiny</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F103RB</Device>
+          <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.3.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
-          <Cpu>IRAM(0x20000000-0x20004FFF) IROM(0x8000000-0x801FFFF) CLOCK(8000000) CPUTYPE("Cortex-M3")</Cpu>
+          <PackID>Keil.STM32L4xx_DFP.2.2.0</PackID>
+          <PackURL>http://www.keil.com/pack</PackURL>
+          <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F103RB$SVD\STM32F103xx.svd</SFDFile>
+          <SFDFile>$$Device:STM32L431RCTx$CMSIS\SVD\STM32L4x1.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -48,14 +48,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\OBJ\</OutputDirectory>
-          <OutputName>TencentOS_Tiny</OutputName>
+          <OutputDirectory>.\obj\</OutputDirectory>
+          <OutputName>TencentOS_tiny</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
-          <ListingPath>.\List\</ListingPath>
+          <ListingPath>.\list\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -110,13 +110,13 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments>-REMAP</SimDllArguments>
+          <SimDllArguments>-REMAP -MPU</SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
+          <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments></TargetDllArguments>
+          <TargetDllArguments>-MPU</TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pCM3</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -137,7 +137,7 @@
             <DriverSelection>4107</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -174,7 +174,7 @@
             <AdsLsxf>1</AdsLsxf>
             <RvctClst>0</RvctClst>
             <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M3"</AdsCpuType>
+            <AdsCpuType>"Cortex-M4"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
@@ -183,7 +183,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>0</RvdsVP>
+            <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
@@ -245,12 +245,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x5000</Size>
+                <Size>0x10000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x40000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -275,7 +275,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x40000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -300,7 +300,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x5000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -312,7 +312,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -336,9 +336,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F103xB,USE_HAL_DRIVER,STM32F103xB</Define>
+              <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F1xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m3\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\hal\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\devices\sim7600ce;..\..\..\..\net\sal_module_wrapper;..\..\..\..\net\at\include;..\..\..\..\devices\ec20;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\LCD_ST7789;..\..\BSP\Hardware\BH1750;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\kernel\hal\include;..\..\..\..\components\connectivity\Eclipse-Paho-MQTT\3rdparty\include;..\..\..\..\components\connectivity\Eclipse-Paho-MQTT\wrapper\include;..\..\..\..\examples\tencent_os_mqtt;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -383,9 +383,9 @@
           <GroupName>Application/MDK-ARM</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f103xb.s</FileName>
+              <FileName>startup_stm32l431xx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>startup_stm32f103xb.s</FilePath>
+              <FilePath>startup_stm32l431xx.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -398,11 +398,6 @@
               <FilePath>..\..\BSP\Src\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\main.c</FilePath>
@@ -413,9 +408,9 @@
               <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_msp.c</FileName>
+              <FileName>stm32l4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32f1xx_hal_msp.c</FilePath>
+              <FilePath>..\..\BSP\Src\stm32l4xx_hal_msp.c</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>
@@ -423,89 +418,159 @@
               <FilePath>..\..\BSP\Src\usart.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_it_module.c</FileName>
+              <FileName>adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32f1xx_it_module.c</FilePath>
+              <FilePath>..\..\BSP\Src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_it_module.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\stm32l4xx_it_module.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Drivers/STM32F1xx_HAL_Driver</GroupName>
+          <GroupName>examples</GroupName>
           <Files>
             <File>
-              <FileName>stm32f1xx_hal.c</FileName>
+              <FileName>BearPi_mqttclient.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c</FilePath>
+              <FilePath>..\..\..\..\examples\mqttclient\BearPi_mqttclient.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Drivers/STM32L4xx_HAL_Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>stm32l4xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_tim.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_cortex.c</FileName>
+              <FileName>stm32l4xx_hal_tim_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_tim_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_dma.c</FileName>
+              <FileName>stm32l4xx_hal_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_uart.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_exti.c</FileName>
+              <FileName>stm32l4xx_hal_uart_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_exti.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_uart_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_flash.c</FileName>
+              <FileName>stm32l4xx_hal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_flash_ex.c</FileName>
+              <FileName>stm32l4xx_hal_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_i2c.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_gpio.c</FileName>
+              <FileName>stm32l4xx_hal_i2c_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_i2c_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_gpio_ex.c</FileName>
+              <FileName>stm32l4xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_i2c.c</FileName>
+              <FileName>stm32l4xx_hal_rcc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_i2c.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_pwr.c</FileName>
+              <FileName>stm32l4xx_hal_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_rcc.c</FileName>
+              <FileName>stm32l4xx_hal_flash_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_rcc_ex.c</FileName>
+              <FileName>stm32l4xx_hal_flash_ramfunc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash_ramfunc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_tim.c</FileName>
+              <FileName>stm32l4xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_tim_ex.c</FileName>
+              <FileName>stm32l4xx_hal_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dma.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f1xx_hal_uart.c</FileName>
+              <FileName>stm32l4xx_hal_dma_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dma_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_pwr.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_pwr_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_pwr_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_cortex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_cortex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_adc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_adc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dac.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_dac_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dac_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_spi_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_spi_ex.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -513,75 +578,30 @@
           <GroupName>Drivers/CMSIS</GroupName>
           <Files>
             <File>
-              <FileName>system_stm32f1xx.c</FileName>
+              <FileName>system_stm32l4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\system_stm32f1xx.c</FilePath>
+              <FilePath>..\..\BSP\Src\system_stm32l4xx.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>tos/arch</GroupName>
+          <GroupName>Hardware</GroupName>
           <Files>
             <File>
-              <FileName>tos_cpu.c</FileName>
+              <FileName>BH1750.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\arch\arm\arm-v7m\common\tos_cpu.c</FilePath>
+              <FilePath>..\..\BSP\Hardware\BH1750\BH1750.c</FilePath>
             </File>
             <File>
-              <FileName>port_c.c</FileName>
+              <FileName>lcd_spi2_drv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\arch\arm\arm-v7m\cortex-m3\armcc\port_c.c</FilePath>
-            </File>
-            <File>
-              <FileName>port_s.S</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\..\arch\arm\arm-v7m\cortex-m3\armcc\port_s.S</FilePath>
+              <FilePath>..\..\BSP\Hardware\LCD_ST7789\lcd_spi2_drv.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>tos/kernel</GroupName>
+          <GroupName>kernel</GroupName>
           <Files>
-            <File>
-              <FileName>tos_binary_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_binary_heap.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_char_fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_char_fifo.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_completion.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_completion.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_countdownlatch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_countdownlatch.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_event.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_global.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_global.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_mail_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_mail_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_message_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_message_queue.c</FilePath>
-            </File>
             <File>
               <FileName>tos_mmblk.c</FileName>
               <FileType>1</FileType>
@@ -596,36 +616,6 @@
               <FileName>tos_mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_pend.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_pend.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_priority_mail_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_priority_mail_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_priority_message_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_priority_message_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_priority_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_priority_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_ring_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_ring_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_robin.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_robin.c</FilePath>
             </File>
             <File>
               <FileName>tos_sched.c</FileName>
@@ -663,6 +653,76 @@
               <FilePath>..\..\..\..\kernel\core\tos_timer.c</FilePath>
             </File>
             <File>
+              <FileName>tos_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_global.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_global.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_pend.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_pend.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_robin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_robin.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_binary_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_binary_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_char_fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_char_fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_completion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_completion.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_countdownlatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_countdownlatch.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_ring_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_ring_queue.c</FilePath>
+            </File>
+            <File>
               <FileName>tos_stopwatch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_stopwatch.c</FilePath>
@@ -670,7 +730,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tos/cmsis</GroupName>
+          <GroupName>cpu</GroupName>
+          <Files>
+            <File>
+              <FileName>port_s.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc\port_s.S</FilePath>
+            </File>
+            <File>
+              <FileName>tos_cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\arch\arm\arm-v7m\common\tos_cpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>port_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc\port_c.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cmsis</GroupName>
           <Files>
             <File>
               <FileName>cmsis_os.c</FileName>
@@ -680,22 +760,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>examples</GroupName>
+          <GroupName>config</GroupName>
           <Files>
             <File>
-              <FileName>mqtt_client.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\mqtt_client.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>at_framwork</GroupName>
-          <Files>
-            <File>
-              <FileName>tos_at.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
+              <FileName>tos_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\TOS-CONFIG\tos_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -703,24 +773,9 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>sim7600ce.c</FileName>
+              <FileName>esp8266.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\devices\sim7600ce\sim7600ce.c</FilePath>
-            </File>
-            <File>
-              <FileName>ec20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\devices\ec20\ec20.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>sal_module_wrapper</GroupName>
-          <Files>
-            <File>
-              <FileName>sal_module_wrapper.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\sal_module_wrapper\sal_module_wrapper.c</FilePath>
+              <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -730,7 +785,22 @@
             <File>
               <FileName>tos_hal_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\hal\st\stm32f1xx\src\tos_hal_uart.c</FilePath>
+              <FilePath>..\..\..\..\platform\hal\st\stm32l4xx\src\tos_hal_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>at</GroupName>
+          <Files>
+            <File>
+              <FileName>tos_at.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
+            </File>
+            <File>
+              <FileName>sal_module_wrapper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\net\sal_module_wrapper\sal_module_wrapper.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -741,6 +811,11 @@
               <FileName>mqttclient.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\mqttclient\mqttclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqttclient.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqttclient\mqttclient.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -827,20 +902,25 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log\salof_config.h</FilePath>
             </File>
+            <File>
+              <FileName>salof.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log\salof.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>mqttclient/common</GroupName>
           <Files>
             <File>
-              <FileName>random.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
-            </File>
-            <File>
               <FileName>mqtt_list.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>random.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_error.h</FileName>
@@ -858,9 +938,9 @@
           <GroupName>mqttclient/network</GroupName>
           <Files>
             <File>
-              <FileName>network.c</FileName>
+              <FileName>nettype_tcp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
             </File>
             <File>
               <FileName>nettype_tls.c</FileName>
@@ -868,9 +948,9 @@
               <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</FilePath>
             </File>
             <File>
-              <FileName>nettype_tcp.c</FileName>
+              <FileName>network.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -910,7 +990,7 @@
             <File>
               <FileName>mqtt_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\TOS_CONFIG\mqtt_config.h</FilePath>
+              <FilePath>..\..\TOS-CONFIG\mqtt_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -927,7 +1007,7 @@
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.3.0" condition="CMSIS Core">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0"/>
         <targetInfos>
-          <targetInfo name="LTE_DTU"/>
+          <targetInfo name="TencentOS_tiny"/>
         </targetInfos>
       </component>
     </components>
