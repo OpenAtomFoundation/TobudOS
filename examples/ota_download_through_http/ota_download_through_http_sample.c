@@ -25,7 +25,7 @@ void user_task(void *arg)
     while (K_TRUE) {
         tos_task_delay(1000);
 
-        printf("do sth(v1.1)...\n");
+        printf("do sth(v0.1)...\n");
 
         if (++iter == 2) {
             printf("trigger ota download\n");
@@ -39,16 +39,16 @@ void ota_download_task(void *arg)
     tos_sem_pend(&sem, TOS_TIME_FOREVER);
 
     esp8266_sal_init(HAL_UART_PORT_0);
-    esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
+    esp8266_join_ap("Mculover666", "mculover666");
 
-    uint32_t partition_addr = 0x08024800;
+    uint32_t partition_addr = 0x0803f800;
 
     if (ota_env_init(OTA_UPDATE_IN_POSITION, partition_addr, &stm32l4_norflash_onchip_drv_ota, &stm32l4_norflash_onchip_prop_ota) < 0) {
         printf("env init failed!\n");
         return;
     }
 
-    if (!ota_download_http("http://39.108.190.129:8000/patch.bin")) {
+    if (!ota_download_http("http://122.51.89.94:8000/patch.bin")) {
         printf("download successfully!\n");
     } else {
         printf("download failed!\n");
