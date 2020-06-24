@@ -298,7 +298,7 @@ __STATIC__ void at_parser(void *arg)
         at_parse_status = at_uart_line_parse();
 
         if (at_parse_status == AT_PARSE_STATUS_OVERFLOW) {
-            // TODO: fix me
+            tos_kprintln("AT parse overflow!");
             continue;
         }
 
