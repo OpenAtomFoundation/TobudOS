@@ -19,23 +19,25 @@
 #include "ota_env.h"
 #include "ota_partition.h"
 
-int ota_env_init(ota_updt_type_t updt_type, uint32_t partition_addr, ota_flash_drv_t *flash_drv, ota_flash_prop_t *flash_prop)
+ota_err_t ota_env_init(ota_updt_type_t updt_type, uint32_t partition_addr, ota_flash_drv_t *flash_drv, ota_flash_prop_t *flash_prop)
 {
+    ota_err_t ret;
+    
     if (ota_flash_init(flash_drv, flash_prop) < 0) {
-        return -1;
+        return OTA_ERR_FLASH_INIT_FAIL;
     }
 
-    if (ota_partition_load(updt_type, partition_addr) < 0) {
-        return -1;
+    if ((ret = ota_partition_load(updt_type, partition_addr)) != OTA_ERR_NONE) {
+        return ret;
     }
 
     if (tos_kv_init(ota_partition_start(OTA_PARTITION_KV),
                         ota_partition_end(OTA_PARTITION_KV),
                         (kv_flash_drv_t *)flash_drv,
                         (kv_flash_prop_t *)flash_prop) != KV_ERR_NONE) {
-        return -1;
+        return OTA_ERR_KV_FAIL;
     }
 
-    return 0;
+    return OTA_ERR_NONE;
 }
 

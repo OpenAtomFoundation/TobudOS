@@ -38,6 +38,8 @@ extern ota_flash_prop_t stm32l4_norflash_onchip_prop_ota;
 
 int main(void)
 {
+    ota_err_t ret;
+    
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
 
@@ -46,10 +48,10 @@ int main(void)
 
     MX_USART2_UART_Init();
 
-    uint32_t partition_addr = 0x08024800;
+    uint32_t partition_addr = 0x0803f800;
 
-    if (ota_env_init(OTA_UPDATE_IN_POSITION, partition_addr, &stm32l4_norflash_onchip_drv_ota, &stm32l4_norflash_onchip_prop_ota) < 0) {
-        printf("env init failed!\n");
+    if ((ret = ota_env_init(OTA_UPDATE_IN_POSITION, partition_addr, &stm32l4_norflash_onchip_drv_ota, &stm32l4_norflash_onchip_prop_ota)) != OTA_ERR_NONE) {
+        printf("env init failed!OTA errcode = %d\n", ret);
         return -1;
     }
 

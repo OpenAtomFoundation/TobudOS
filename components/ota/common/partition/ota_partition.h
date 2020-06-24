@@ -20,6 +20,7 @@
 
 #include "crc8.h"
 #include "ota_image.h"
+#include "ota_err.h"
 
 #define OTA_PARTITION_INVALID               (uint32_t)-1
 
@@ -128,7 +129,7 @@ typedef struct ota_partition_control_st {
     ota_pts_t       pts;
 } ota_pt_ctrl_t;
 
-int ota_partition_load(ota_updt_type_t updt_type, uint32_t partition_addr);
+ota_err_t ota_partition_load(ota_updt_type_t updt_type, uint32_t partition_addr);
 
 uint32_t ota_partition_start(ota_pt_type_t pt_type);
 

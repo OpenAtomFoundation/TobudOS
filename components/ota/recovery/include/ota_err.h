@@ -15,15 +15,24 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _OTA_ENV_H_
-#define  _OTA_ENV_H_
+#ifndef _OTA_ERR_H_
+#define  _OTA_ERR_H_
 
-#include "stdint.h"
-#include "ota_flash.h"
-#include "ota_partition.h"
-#include "ota_err.h"
+typedef enum ota_err_en {
+    OTA_ERR_NONE = 0u,
+    
+    OTA_ERR_FLASH_INIT_FAIL = 1u,
+    
+    OTA_ERR_PARTITION_READ_FAIL = 2u,
+    OTA_ERR_PARTITION_MAGIC_NOT_SAME,
+    OTA_ERR_PARTITION_ADDR_FAIL,
+    OTA_ERR_PARTITION_NOT_ALIGN,
+    OTA_ERR_PARTITION_CRC_FAIL,
+    
+    OTA_ERR_UPDT_TYPE_UNKOWN,
+    
+    OTA_ERR_KV_FAIL
+} ota_err_t;
 
-ota_err_t ota_env_init(ota_updt_type_t updt_type, uint32_t partition_addr, ota_flash_drv_t *flash_drv, ota_flash_prop_t *flash_prop);
-
-#endif /* _OTA_ENV_H_ */
+#endif /* _OTA_ERR_H_ */
 

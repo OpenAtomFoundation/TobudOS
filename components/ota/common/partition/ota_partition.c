@@ -26,30 +26,31 @@ static int partitions_verify(ota_pt_t *pts, int n)
 
     for (i = 0; i < n; ++i) {
         if (pts[i].start >= pts[i].end) {
-            return -1;
+            return OTA_ERR_PARTITION_ADDR_FAIL;
         }
 
         if (!ota_flash_size_is_aligned(pts[i].end - pts[i].start)) {
-            return -1;
+            return OTA_ERR_PARTITION_NOT_ALIGN;
         }
     }
 
     return 0;
 }
 
-int ota_partition_load(ota_updt_type_t updt_type, uint32_t partition_addr)
+ota_err_t ota_partition_load(ota_updt_type_t updt_type, uint32_t partition_addr)
 {
     uint8_t crc = 0;
     ota_pt_hdr_t hdr;
+    ota_err_t ret;
 
     memset(&ctrl, 0, sizeof(ota_pt_ctrl_t));
 
     if (ota_flash_read(partition_addr, &hdr, sizeof(ota_pt_hdr_t)) != 0) {
-        return -1;
+        return OTA_ERR_PARTITION_READ_FAIL;
     }
 
     if (hdr.magic != OTA_PARTITION_MAGIC) {
-        return -1;
+        return OTA_ERR_PARTITION_MAGIC_NOT_SAME;
     }
 
     ctrl.updt_type  = updt_type;
@@ -59,33 +60,33 @@ int ota_partition_load(ota_updt_type_t updt_type, uint32_t partition_addr)
 
     if (updt_type == OTA_UPDATE_IN_POSITION) {
         if (ota_flash_read(partition_addr + sizeof(ota_pt_hdr_t), &IP_PTS, sizeof(ota_ip_pts_t)) != 0) {
-            return -1;
+            return OTA_ERR_PARTITION_READ_FAIL;
         }
 
-        if (partitions_verify(IP_PTS_ARRAY, sizeof(IP_PTS) / sizeof(ota_pt_t)) != 0) {
-            return -1;
+        if ((ret = partitions_verify(IP_PTS_ARRAY, sizeof(IP_PTS) / sizeof(ota_pt_t))) != OTA_ERR_NONE) {
+            return ret;
         }
 
         crc = partitions_crc(crc, IP_PTS_ARRAY, sizeof(IP_PTS) / sizeof(ota_pt_t));
     } else if (updt_type == OTA_UPDATE_PING_PONG) {
         if (ota_flash_read(partition_addr + sizeof(ota_pt_hdr_t), &PP_PTS, sizeof(ota_pp_pts_t)) != 0) {
-            return -1;
+            return OTA_ERR_PARTITION_READ_FAIL;
         }
 
         if (partitions_verify(PP_PTS_ARRAY, sizeof(PP_PTS) / sizeof(ota_pt_t)) != 0) {
-            return -1;
+            return ret;
         }
 
         crc = partitions_crc(crc, PP_PTS_ARRAY, sizeof(PP_PTS) / sizeof(ota_pt_t));
     } else {
-        return -1;
+        return OTA_ERR_UPDT_TYPE_UNKOWN;
     }
 
     if (crc != hdr.crc) {
-        return -1;
+        return OTA_ERR_PARTITION_CRC_FAIL;
     }
 
-    return 0;
+    return OTA_ERR_NONE;
 }
 
 uint32_t ota_partition_start(ota_pt_type_t pt_type)
