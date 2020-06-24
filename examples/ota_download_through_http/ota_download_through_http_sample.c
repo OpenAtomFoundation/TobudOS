@@ -3,7 +3,7 @@
 #include "sal_module_wrapper.h"
 #include "cmsis_os.h"
 
-#include "tos_ota_download.h"
+#include "ota_download.h"
 
 extern ota_flash_drv_t stm32l4_norflash_onchip_drv_ota;
 extern ota_flash_prop_t stm32l4_norflash_onchip_prop_ota;
@@ -43,12 +43,12 @@ void ota_download_task(void *arg)
 
     uint32_t partition_addr = 0x08024800;
 
-    if (tos_ota_env_init(OTA_UPDATE_IN_POSITION, partition_addr, &stm32l4_norflash_onchip_drv_ota, &stm32l4_norflash_onchip_prop_ota) < 0) {
+    if (ota_env_init(OTA_UPDATE_IN_POSITION, partition_addr, &stm32l4_norflash_onchip_drv_ota, &stm32l4_norflash_onchip_prop_ota) < 0) {
         printf("env init failed!\n");
         return;
     }
 
-    if (!tos_ota_download_http("http://39.108.190.129:8000/patch.bin")) {
+    if (!ota_download_http("http://39.108.190.129:8000/patch.bin")) {
         printf("download successfully!\n");
     } else {
         printf("download failed!\n");
