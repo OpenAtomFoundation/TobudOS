@@ -14,7 +14,8 @@ NOECHO			:= @
 INCDIRS 		:= \
 				../../common/image			\
 				../../common/crc				\
-				../../common/partition
+				../../common/partition		\
+				../../recovery/include
 
 SRCDIRS			:= \
 				../../common/image			\
