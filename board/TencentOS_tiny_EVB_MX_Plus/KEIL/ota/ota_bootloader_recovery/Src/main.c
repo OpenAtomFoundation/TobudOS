@@ -53,6 +53,8 @@ int main(void)
     if ((ret = ota_env_init(OTA_UPDATE_IN_POSITION, partition_addr, &stm32l4_norflash_onchip_drv_ota, &stm32l4_norflash_onchip_prop_ota)) != OTA_ERR_NONE) {
         printf("env init failed!OTA errcode = %d\n", ret);
         return -1;
+    } else {
+        printf("env init successfully!\r\n");
     }
 
 #if 0
