@@ -54,7 +54,7 @@ summary_t summary = {
     .is_safe_block_ignored          = 0,
 };
 
-static int32_t offtin(uint8_t *buf)
+static int32_t offtin_u32(uint8_t *buf)
 {
     int32_t y;
 
@@ -78,6 +78,26 @@ static uint16_t offtin_u16(uint8_t *buf)
     y = y * 256; y += buf[0];
 
     return y;
+}
+
+static void offtout_u32(int32_t x, uint8_t *buf)
+{
+    int32_t y;
+
+    if (x < 0) {
+        y = -x;
+    } else {
+        y = x;
+    }
+
+    buf[0] = y % 256; y -= buf[0];
+    y = y / 256; buf[1] = y % 256; y -= buf[1];
+    y = y / 256; buf[2] = y % 256; y -= buf[2];
+    y = y / 256; buf[3] = y % 256;
+
+    if (x < 0) {
+        buf[3] |= 0x80;
+    }
 }
 
 static void offtout_u16(uint16_t y, uint8_t *buf)
@@ -381,11 +401,11 @@ static int bspatch_parse(size_t oldsize, size_t newsize, size_t blk_len, uint8_t
     int32_t ctl_from = 0, diff_from = 0, extra_from = 0;
     uint8_t *ctl_blk, *diff_blk, *extra_blk;
 
-    ctl_len         = offtin(patch);
+    ctl_len         = offtin_u32(patch);
     patch          += sizeof(int32_t);
-    diff_len        = offtin(patch);
+    diff_len        = offtin_u32(patch);
     patch          += sizeof(int32_t);
-    new_len         = offtin(patch);
+    new_len         = offtin_u32(patch);
     patch          += sizeof(int32_t);
 
     if (new_len != newsize) {
@@ -398,13 +418,13 @@ static int bspatch_parse(size_t oldsize, size_t newsize, size_t blk_len, uint8_t
 
     while (ctl_from < ctl_len) {
         /* read the original X, Y, Z from ctl block */
-        X               = offtin(ctl_blk + ctl_from);
+        X               = offtin_u32(ctl_blk + ctl_from);
         ctl_from       += sizeof(int32_t);
 
-        Y               = offtin(ctl_blk + ctl_from);
+        Y               = offtin_u32(ctl_blk + ctl_from);
         ctl_from       += sizeof(int32_t);
 
-        Z               = offtin(ctl_blk + ctl_from);
+        Z               = offtin_u32(ctl_blk + ctl_from);
         ctl_from       += sizeof(int32_t);
 
         blk_info_build(X, Y, new_from, old_from, diff_from, extra_from, blk_len);
@@ -739,9 +759,10 @@ static int patch4block_assemble(int new_blk_idx, size_t blk_len, uint8_t *diff_b
      */
     uint8_t X;
     int is_diff_all_zeros = 0;
-    uint16_t I = (uint16_t)new_blk_idx, N = (uint16_t)new_blk_info->cmd_cnt, Y, Z;
+    uint32_t Z;
+    uint16_t I = (uint16_t)new_blk_idx, N = (uint16_t)new_blk_info->cmd_cnt, Y;
     uint8_t header[FOLD_N(sizeof(uint16_t) / sizeof(uint8_t), 4)];
-    uint8_t buf[FOLD_N(sizeof(uint16_t) / sizeof(uint8_t), 1)];
+    uint8_t buf[FOLD_N(sizeof(uint32_t) / sizeof(uint8_t), 1)];
 
     if ((diff = malloc(blk_len)) == NULL) {
         ERROR("malloc failed!\n");
@@ -770,11 +791,11 @@ static int patch4block_assemble(int new_blk_idx, size_t blk_len, uint8_t *diff_b
                 ERROR("wstream full!\n");
             }
             offtout_u16(Y, buf);
-            if (wstream_write_stream(&ws, buf, sizeof(buf)) != 0) {
+            if (wstream_write_stream(&ws, buf, sizeof(uint16_t)) != 0) {
                 ERROR("wstream full!\n");
             }
-            offtout_u16(Z, buf);
-            if (wstream_write_stream(&ws, buf, sizeof(buf)) != 0) {
+            offtout_u32(Z, buf);
+            if (wstream_write_stream(&ws, buf, sizeof(uint32_t)) != 0) {
                 ERROR("wstream full!\n");
             }
 
@@ -794,7 +815,7 @@ static int patch4block_assemble(int new_blk_idx, size_t blk_len, uint8_t *diff_b
                 ERROR("wstream full!\n");
             }
             offtout_u16(Y, buf);
-            if (wstream_write_stream(&ws, buf, sizeof(buf)) != 0) {
+            if (wstream_write_stream(&ws, buf, sizeof(uint16_t)) != 0) {
                 ERROR("wstream full!\n");
             }
 
@@ -1176,7 +1197,8 @@ static int patch_test(uint8_t *old, size_t oldsize, uint8_t *new, size_t newsize
                 copy Y bytes from the extra block
          */
         uint8_t X;
-        uint16_t I, N, Y, Z, C, D;
+        uint32_t Z;
+        uint16_t I, N, Y, C, D;
         uint8_t *ctrl_blk, *diff_blk, *extra_blk;
         uint16_t cursor = 0, size2cmp = 0;
         uint16_t old_idx, old_offset;
@@ -1203,7 +1225,7 @@ static int patch_test(uint8_t *old, size_t oldsize, uint8_t *new, size_t newsize
                 Y           = offtin_u16(ctrl_blk);
                 ctrl_blk   += sizeof(uint16_t);
 
-                Z           = offtin_u16(ctrl_blk);
+                Z           = offtin_u32(ctrl_blk);
                 ctrl_blk   += sizeof(uint16_t);
 
                 old_idx     = BLK_IDX(Z, blk_len);

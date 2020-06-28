@@ -112,7 +112,7 @@ static void process_command_line(int argc, char **argv, diff_param_t *param, arg
 
     param->block_len = 0;
 
-    while ((c = getopt(argc, argv, "vhb:n:o:")) != -1) {
+    while ((c = getopt(argc, argv, "vhsb:n:o:")) != -1) {
         switch (c) {
         case 'h':
             usage();
