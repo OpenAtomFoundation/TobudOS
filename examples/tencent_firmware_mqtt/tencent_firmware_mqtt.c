@@ -8,15 +8,15 @@ void mqtt_demo_task(void)
 
     mqtt_state_t state;
 
-    char *product_id = "03UKNYBUZG";
-    char *device_name = "at_dev";
-    char *key = "ttOARy0PjYgzd9OSs4Z3RA==";
+    char *product_id = "WDRRDCF1TE";
+    char *device_name = "dev1";
+    char *key = "ULtbpSxXtSQyaFyeaax6pw==";
 
     device_info_t dev_info;
     memset(&dev_info, 0, sizeof(device_info_t));
 
-    esp8266_tencent_firmware_sal_init(HAL_UART_PORT_3);
-    esp8266_tencent_firmware_join_ap("SheldonDai", "srnr6x9xbhmb0");
+    esp8266_tencent_firmware_sal_init(HAL_UART_PORT_0);
+    esp8266_tencent_firmware_join_ap("Mculover666", "mculover666");
 
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
     strncpy(dev_info.device_name, device_name, DEVICE_NAME_MAX_SIZE);
@@ -48,17 +48,10 @@ void mqtt_demo_task(void)
 
 	while (1) {
 		HAL_Delay(1000);
+        
+        /* use AT+PUB AT command */
 		memset(payload, 0, 256);
-		//*注意转义的处理，不同模组在json格式数据需要的转义处理有些差别*//
-#if 0
-#ifdef TRANSFER_LABEL_NEED
-		snprintf(payload, 256, "{\\\"action\\\": \\\"publish_test\\\"\\, \\\"count\\\": \\\"%d\\\"}", count++);
-#else
-		snprintf(payload, 256, "{\"action\": \"publish_test\"\, \"count\": \"%d\"}", count++);
-#endif
-#else
         strncpy(payload, "{\\\"type\\\":\\\"get\\\"\\, \\\"clientToken\\\":\\\"03UKNYBUZG-0\\\"}", sizeof(payload));
-#endif
 		printf("message publish: %s\n", payload);
 		if (tos_tf_module_mqtt_pub(topic_name, QOS0, payload) != 0) {
 			printf("module mqtt pub fail\n");
@@ -66,6 +59,10 @@ void mqtt_demo_task(void)
 		} else {
 			printf("module mqtt pub success\n");
 		}
+        
+        /* use AT+PUBL AT command */
+        memset(payload, 0, 256);
+        strncpy(payload, "\"{\\\"type\\\":\\\"get\\\"\\, \\\"clientToken\\\":\\\"03UKNYBUZG-0\\\"}\"", sizeof(payload));
 
 		if (tos_tf_module_mqtt_publ(topic_name, QOS0, payload) != 0) {
 			printf("module mqtt publ fail\n");

@@ -61,7 +61,7 @@ int esp8266_tencent_firmware_module_mqtt_publ(const char *topic, qos_t qos, char
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-    tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload));
+    tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload)-2);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
