@@ -20,6 +20,22 @@
 #include "ota_partition.h"
 #include "lzma_uncompress.h"
 
+static int32_t offtin_u32(uint8_t *buf)
+{
+    int32_t y;
+
+    y = buf[3] & 0x7F;
+    y = y * 256; y += buf[2];
+    y = y * 256; y += buf[1];
+    y = y * 256; y += buf[0];
+
+    if (buf[3] & 0x80) {
+        y = -y;
+    }
+
+    return y;
+}
+
 static uint16_t offtin_u16(uint8_t *buf)
 {
     int32_t y;
@@ -132,7 +148,8 @@ int ota_patch(uint32_t patch, size_t patchsize, size_t ota_size)
 
     /* the patch4blk stuff */
     uint8_t X;
-    uint16_t I, N, Y, Z, C, D;
+    uint32_t Z;
+    uint16_t I, N, Y, C, D;
     uint8_t *ctrl_blk, *diff_blk, *extra_blk;
     uint16_t cursor = 0;
     uint16_t old_idx, old_offset;
@@ -285,8 +302,8 @@ int ota_patch(uint32_t patch, size_t patchsize, size_t ota_size)
                 Y           = offtin_u16(ctrl_blk);
                 ctrl_blk   += sizeof(uint16_t);
 
-                Z           = offtin_u16(ctrl_blk);
-                ctrl_blk   += sizeof(uint16_t);
+                Z           = offtin_u32(ctrl_blk);
+                ctrl_blk   += sizeof(uint32_t);
 
                 old_idx     = BLK_IDX(Z, blk_len);
                 old_offset  = Z - BLK_LOWER_BOUND(old_idx, blk_len);

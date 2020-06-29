@@ -1226,7 +1226,7 @@ static int patch_test(uint8_t *old, size_t oldsize, uint8_t *new, size_t newsize
                 ctrl_blk   += sizeof(uint16_t);
 
                 Z           = offtin_u32(ctrl_blk);
-                ctrl_blk   += sizeof(uint16_t);
+                ctrl_blk   += sizeof(uint32_t);
 
                 old_idx     = BLK_IDX(Z, blk_len);
                 old_offset  = Z - BLK_LOWER_BOUND(old_idx, blk_len);

@@ -24,7 +24,7 @@ int hal_tcp_connect(const char *host, uint16_t port)
     char port_str[PORT_MAX] = { 0 };
 
 #define IP_MAX          16
-    char ip[16] = { 0 };
+    char ip[IP_MAX] = { 0 };
 
     snprintf(port_str, PORT_MAX, "%u", port);
 
