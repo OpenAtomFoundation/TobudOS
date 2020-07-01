@@ -26,11 +26,5 @@
 #define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT      1u
 #define TOS_CFG_CPU_BYTE_ORDER                  CPU_BYTE_ORDER_LITTLE_ENDIAN
 
-#ifndef __ARMVFP__
-#define TOS_CFG_CPU_ARM_FPU_EN 0u
-#else
-#define TOS_CFG_CPU_ARM_FPU_EN 1u
-#endif
-
 #endif /* _PORT_CONFIG_H_ */
 

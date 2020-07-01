@@ -106,7 +106,6 @@ PendSV_Handler:
     SUBS    R0, R0, #0x20
     STM     R0, {R4 - R11}
 
-
     LDR     R1, =k_curr_task
     LDR     R1, [R1]
     STR     R0, [R1]

@@ -88,11 +88,6 @@ port_sched_start
     ; restore r4-11 from new process stack
     LDMFD   SP!, {R4 - R11}
 
-    #if defined(__ARMVFP__)
-    ; ignore EXC_RETURN the first switch
-    LDMFD   SP!, {R0}
-    #endif
-
     ; restore r0, r3
     LDMFD    SP!, {R0 - R3}
     ; load R12 and LR
@@ -124,16 +119,6 @@ PendSV_Handler
 
 _context_save
     ; R0-R3, R12, LR, PC, xPSR is saved automatically here
-    #if defined(__ARMVFP__)
-    ; is it extended frame?
-    TST     LR, #0x10
-    IT      EQ
-    VSTMDBEQ  R0!, {S16 - S31}
-    ; S0 - S16, FPSCR saved automatically here
-
-    ; save EXC_RETURN
-    STMFD   R0!, {LR}
-    #endif
 
     ; save remaining regs r4-11 on process stack
     STMFD   R0!, {R4 - R11}
@@ -155,15 +140,6 @@ _context_restore
 
     ; restore R4 - R11
     LDMFD   R0!, {R4 - R11}
-
-    #if defined(__ARMVFP__)
-    ; restore EXC_RETURN
-    LDMFD   R0!, {LR}
-    ; is it extended frame?
-    TST     LR, #0x10
-    IT      EQ
-    VLDMIAEQ    R0!, {S16 - S31}
-    #endif
 
     ; Load PSP with new process SP
     MSR     PSP, R0
