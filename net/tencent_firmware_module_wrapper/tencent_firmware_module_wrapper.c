@@ -91,3 +91,26 @@ int tos_tf_module_debug_level_set(int log_level)
     return -1;
 }
 
+int tos_tf_module_ota_set(ota_mode_t mode, char *version)
+{
+    if (g_tencent_firmware_module && g_tencent_firmware_module->ota_set) {
+        return g_tencent_firmware_module->ota_set(mode, version);
+    }
+    return -1;
+}
+
+int tos_tf_module_ota_read_fwinfo(ota_fw_info_t *ota_fw_info)
+{
+    if (g_tencent_firmware_module && g_tencent_firmware_module->ota_read_fwinfo) {
+        return g_tencent_firmware_module->ota_read_fwinfo(ota_fw_info);
+    }
+    return -1;
+}
+
+int tos_tf_module_ota_read_fwdata(uint8_t *ota_fw_data_buffer,uint16_t buf_size)
+{
+    if (g_tencent_firmware_module && g_tencent_firmware_module->ota_read_fwdata) {
+        return g_tencent_firmware_module->ota_read_fwdata(ota_fw_data_buffer, buf_size);
+    }
+    return -1;
+}
