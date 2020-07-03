@@ -336,6 +336,7 @@ static int air724_recv(int id, void *buf, size_t len)
 int air724_send(int id, const void *buf, size_t len)
 {
     at_echo_t echo;
+    char expect[10] = "";
 
     if (tos_at_global_lock_pend() != 0)
     {
@@ -349,9 +350,9 @@ int air724_send(int id, const void *buf, size_t len)
                             "AT+CIPSEND=%d\r\n",
                             len);
 #else
-		tos_at_cmd_exec(&echo, 1000,
-                            "AT+CIPSEND=%d,%d\r\n",
-                            id, len);
+    tos_at_cmd_exec(&echo, 1000,
+                        "AT+CIPSEND=%d,%d\r\n",
+                        id, len);
 #endif
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
@@ -360,8 +361,9 @@ int air724_send(int id, const void *buf, size_t len)
         return -1;
     }
 
-    tos_at_echo_create(&echo, NULL, 0, "SEND OK");
-    tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
+    sprintf(expect, "%d, SEND OK", id);
+    tos_at_echo_create(&echo, NULL, 0, expect);
+    tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
     {
         tos_at_global_lock_post();
@@ -399,9 +401,9 @@ int air724_sendto(int id, char *ip, char *port, const void *buf, size_t len)
                             "AT+CIPSEND=%d\r\n",
                             len);
 #else
-		tos_at_cmd_exec(&echo, 1000,
-                            "AT+CIPSEND=%d,%d\r\n",
-                            id, len);
+    tos_at_cmd_exec(&echo, 1000,
+                        "AT+CIPSEND=%d,%d\r\n",
+                        id, len);
 #endif
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
@@ -496,7 +498,7 @@ __STATIC__ void air724_incoming_data_process(void)
     */
 	if (tos_at_uart_read(&data, 1) != 1)
     {
-            return;
+        return;
     }
 	
     while (1)
@@ -538,7 +540,7 @@ __STATIC__ void air724_incoming_data_process(void)
         {
             break;
         }
-}		
+    }		
 		
     do {
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
@@ -591,4 +593,3 @@ int air724_sal_init(hal_uart_port_t uart_port)
 		
     return 0;
 }
-
