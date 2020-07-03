@@ -1,7 +1,16 @@
-#include "esp8266.h"
 #include "mcu_init.h"
 #include "cmsis_os.h"
 #include "tos_at_socket.h"
+
+#define USE_ESP8266
+//#define USE_AIR724
+
+#if defined(USE_ESP8266)
+#include "esp8266.h"
+#elif defined(USE_AIR724)
+#include "air724.h"
+#endif
+
 
 #define TCP_TEST_TASK_STK_SIZE         4096
 void tcp_test(void);
@@ -19,8 +28,8 @@ void tcp_test(void)
 
     bzero(&addr, sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr("39.108.190.129");
-    addr.sin_port = htons(8080);
+    addr.sin_addr.s_addr = inet_addr("117.50.111.72");
+    addr.sin_port = htons(8001);
 
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd < 0) {
@@ -58,7 +67,7 @@ void tcp_test(void)
     close(fd);
 }
 
-#define USE_ESP8266
+
 
 void application_entry(void *arg)
 {
@@ -70,6 +79,10 @@ void application_entry(void *arg)
 #ifdef USE_SIM800A
     sim800a_power_on();
     sim800a_sal_init(HAL_UART_PORT_2);
+#endif
+    
+#ifdef USE_AIR724
+    air724_sal_init(HAL_UART_PORT_0);
 #endif
 
     osThreadCreate(osThread(tcp_test), NULL);
