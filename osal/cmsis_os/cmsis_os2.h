@@ -46,6 +46,15 @@
  
 #ifndef CMSIS_OS2_H_
 #define CMSIS_OS2_H_
+
+/* Kernel version and identification string definition */
+#define osCMSIS             0x20001U    ///< API version (main[31:16].sub[15:0])
+ 
+/// \note CAN BE CHANGED: \b osCMSIS_KERNEL identifies the underlying RTOS kernel and version number.
+#define osCMSIS_KERNEL      0x10000U    ///< RTOS identification and version (main[31:16].sub[15:0])
+ 
+/// \note CAN BE CHANGED: \b osKernelSystemId identifies the underlying RTOS kernel.
+#define osKernelSystemId "TencentOS tiny V1.00"  ///< RTOS identification string
  
 #ifndef __NO_RETURN
 #if   defined(__CC_ARM)
@@ -63,6 +72,7 @@
  
 #include <stdint.h>
 #include <stddef.h>
+#include "tos_k.h"
  
 #ifdef  __cplusplus
 extern "C"
