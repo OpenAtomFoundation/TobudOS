@@ -373,6 +373,39 @@ uint32_t osKernelGetSysTimerFreq (void);
  
 //  ==== Thread Management Functions ====
  
+/// Create a Thread Definition with function, priority, and stack requirements.
+/// \param         name         name of the thread function.
+/// \param         priority     initial priority of the thread function.
+/// \param         instances    number of possible thread instances.
+/// \param         stacksz      stack size (in bytes) requirements for the thread function.
+/// \note CAN BE CHANGED: The parameters to \b osThreadDef shall be consistent but the
+///       macro body is implementation specific in every CMSIS-RTOS.
+#if defined (osObjectsExternal)  // object is external
+#define osThreadDef(name, priority, instances, stacksz)  \
+    extern const osThreadAttr_t os_thread_def_##name
+#else                            // define the object
+
+#define osThreadDef(name, priority, instances, stacksz)  \
+    k_task_t task_handler_##name; \
+    k_stack_t task_stack_##name[(stacksz)]; \
+    const osThreadAttr_t os_thread_def_##name = \
+        { #name, 0, (&(task_handler_##name)), sizeof(k_task_t), (&((task_stack_##name)[0])), (stacksz), (osPriority_t)(priority) }
+
+#if (TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u)
+#define osThreadDynamicDef(name, priority, instances, stacksz) \
+    const osThreadAttr_t os_thread_def_##name = \
+        { #name, 0, (K_NULL), sizeof(k_task_t), (K_NULL), (stacksz), (osPriority_t)(priority) }
+#endif
+
+#endif
+
+/// Access a Thread definition.
+/// \param         name          name of the thread definition object.
+/// \note CAN BE CHANGED: The parameter to \b osThread shall be consistent but the
+///       macro body is implementation specific in every CMSIS-RTOS.
+#define osThread(name)  \
+    &os_thread_def_##name
+
 /// Create a thread and add it to Active Threads.
 /// \param[in]     func          thread function.
 /// \param[in]     argument      pointer that is passed to the thread function as start argument.
