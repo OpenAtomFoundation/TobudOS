@@ -23,5 +23,6 @@
 #define TOS_CFG_CPU_STK_GROWTH              CPU_STK_GROWTH_DESCENDING
 #define TOS_CFG_CPU_HRTIMER_EN              0u
 #define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  1u
+#define TOS_CFG_CPU_BYTE_ORDER              0u
 
 #endif /* _PORT_CONFIG_H_ */
