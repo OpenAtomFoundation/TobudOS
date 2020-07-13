@@ -588,18 +588,18 @@ uint32_t osEventFlagsWait(osEventFlagsId_t ef_id,
   } else {
     k_event_flag_t flag_match;
     k_opt_t opt_pend = 0;
-    k_tick_t timeout =
-        (timeout == 0 || timeout == osWaitForever) ? TOS_TIME_FOREVER : timeout;
-    if (options & 0x01 == 0) {
+    timeout =
+        ((timeout == 0) || (timeout == osWaitForever)) ? TOS_TIME_FOREVER : timeout;
+    if (options & (0x01 == 0)) {
       opt_pend |= TOS_OPT_EVENT_PEND_ANY;
     } else {
       opt_pend |= TOS_OPT_EVENT_PEND_ALL;
     }
-    if (options & 0x02 == 0) {
+    if (options & (0x02 == 0)) {
       opt_pend |= TOS_OPT_EVENT_PEND_CLR;
     }
 
-    err = tos_event_pend(eventId, (k_event_flag_t)flags, &flag_match, timeout,
+    err = tos_event_pend(eventId, (k_event_flag_t)flags, &flag_match, (k_tick_t)timeout,
                          opt_pend);
     rflags = err == K_ERR_NONE ? (uint32_t)flag_match
                                : (uint32_t)errno_knl2cmsis(err);
