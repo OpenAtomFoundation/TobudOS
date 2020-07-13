@@ -20,8 +20,6 @@
 
 __CDECLS_BEGIN
 
-#if TOS_CFG_MMBLK_EN > 0u
-
 #define K_MMBLK_NEXT_BLK(blk_curr, blk_size)        ((void *)((cpu_addr_t)blk_curr + blk_size))
 #define K_MMBLK_ALIGN_MASK                          (sizeof(void *) - 1u)
 
@@ -70,15 +68,13 @@ __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, siz
 __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp);
 
 /**
- * @brief Create a memory manage block pool.
- * Create a memory manage block pool.
+ * @brief Allocate a memory manage block.
+ * Allocate a memory manage block.
  *
  * @attention None
  *
  * @param[in]   mbp         pointer to the memory block pool handler.
- * @param[in]   pool_start  start address of the pool.
- * @param[in]   blk_num     number of the blocks in the pool.
- * @param[in]   blk_size    size of each block in the pool.
+ * @param[in]   blk         start address of the memory manage block.
  *
  * @return  errcode
  * @retval  #K_ERR_MMBLK_POOL_EMPTY   the pool is empty.
@@ -87,15 +83,13 @@ __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp);
 __API__ k_err_t tos_mmblk_alloc(k_mmblk_pool_t *mbp, void **blk);
 
 /**
- * @brief Create a memory manage block pool.
- * Create a memory manage block pool.
+ * @brief Free a memory manage block.
+ * Free a memory manage block.
  *
  * @attention None
  *
  * @param[in]   mbp         pointer to the memory block pool handler.
- * @param[in]   pool_start  start address of the pool.
- * @param[in]   blk_num     number of the blocks in the pool.
- * @param[in]   blk_size    size of each block in the pool.
+ * @param[in]   blk         start address of the memory manage block.
  *
  * @return  errcode
  * @retval  #K_ERR_MMBLK_POOL_FULL    the pool is full.
@@ -106,6 +100,4 @@ __API__ k_err_t tos_mmblk_free(k_mmblk_pool_t *mbp, void *blk);
 #endif
 
 __CDECLS_END
-
-#endif /* _TOS_MMBLK_H_ */
 

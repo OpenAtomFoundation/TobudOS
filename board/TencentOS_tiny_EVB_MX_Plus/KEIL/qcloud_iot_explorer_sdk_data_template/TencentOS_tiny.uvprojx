@@ -442,6 +442,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\stm32l4xx_it_module.c</FilePath>
             </File>
+            <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -463,9 +468,9 @@
               <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\events_config.c</FilePath>
             </File>
             <File>
-              <FileName>qcloud_iot_hub_sdk_explorer.c</FileName>
+              <FileName>entry.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\qcloud_iot_hub_sdk_explorer.c</FilePath>
+              <FilePath>..\..\..\..\examples\qcloud_iot_explorer_sdk_data_template\entry.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -747,6 +752,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_timer.c</FilePath>
             </File>
+            <File>
+              <FileName>tos_stopwatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_stopwatch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -856,11 +866,6 @@
               <FileName>tos_at.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_at_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at_utils.c</FilePath>
             </File>
           </Files>
         </Group>

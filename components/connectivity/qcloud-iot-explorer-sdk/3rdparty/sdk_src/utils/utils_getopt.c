@@ -22,12 +22,12 @@
 #include "qcloud_iot_import.h"
 #include "utils_getopt.h"
 
-static int	utils_opterr = 1;			/* if error message should be printed */
-static int	utils_optind = 1;			/* index into parent argv vector */
-static int	utils_optopt;				/* character checked for validity */
-static int	utils_optreset = 1;        /* reset getopt */
+static int  utils_opterr = 1;           /* if error message should be printed */
+static int  utils_optind = 1;           /* index into parent argv vector */
+static int  utils_optopt;               /* character checked for validity */
+static int  utils_optreset = 1;        /* reset getopt */
 
-char*		utils_optarg; /* argument associated with option */
+char*       utils_optarg; /* argument associated with option */
 
 int utils_getopt(int nargc, char* const* nargv, const char* options)
 {
@@ -36,67 +36,63 @@ int utils_getopt(int nargc, char* const* nargv, const char* options)
 #define BADARG  (int)':'
 #define EMSG    ""
 
-	static char* place = EMSG;	/* option letter processing */
-	const char* oli;			/* option letter list index */
+    static char* place = EMSG;  /* option letter processing */
+    const char* oli;            /* option letter list index */
 
-	if (utils_optreset  || !*place)	/* update scanning pointer */
-	{ 
-		utils_optreset = 0;
-	
-		if (utils_optind >= nargc || *(place = nargv[utils_optind]) != '-') 
-		{
-			utils_optind = 1;
-			utils_optreset = 1;
-			place = EMSG;
-			return (-1);
-		}
+    if (utils_optreset  || !*place) { /* update scanning pointer */
+        utils_optreset = 0;
 
-		place++;
-	}
+        if (utils_optind >= nargc || *(place = nargv[utils_optind]) != '-') {
+            utils_optind = 1;
+            utils_optreset = 1;
+            place = EMSG;
+            return (-1);
+        }
 
-	/* option letter okay? */
-	if ((utils_optopt = (int)*place++) == (int)':' ||
-		!(oli = strchr(options, utils_optopt))) {
-		/*
-		* if the user didn't specify '-' as an option,
-		* assume it means -1.
-		*/
-		if (utils_optopt == (int)'-')
-			return (-1);
+        place++;
+    }
 
-		if (!*place)
-			++utils_optind;
+    /* option letter okay? */
+    if ((utils_optopt = (int) * place++) == (int)':' ||
+        !(oli = strchr(options, utils_optopt))) {
+        /*
+        * if the user didn't specify '-' as an option,
+        * assume it means -1.
+        */
+        if (utils_optopt == (int)'-')
+            return (-1);
 
-		if (utils_opterr && *options != ':')
-			HAL_Printf("illegal option - %c\n", utils_optopt);
+        if (!*place)
+            ++utils_optind;
 
-		return (BADCH);
-	}
+        if (utils_opterr && *options != ':')
+            HAL_Printf("illegal option - %c\n", utils_optopt);
 
-	if (*++oli != ':') {                    /* don't need argument */
-		utils_optarg = NULL;
-		if (!*place)
-			++utils_optind;
-	}
-	else 
-	{									/* need an argument */
-		if (*place)                     /* no white space */
-			utils_optarg = place;
-		else if (nargc <= ++utils_optind) {   /* no arg */
-			place = EMSG;
-			if (*options == ':')
-				return (BADARG);
-			if (utils_opterr)
-				HAL_Printf("option requires an argument - %c\n", utils_optopt);
-			return (BADCH);
-		}
-		else                            /* white space */
-			utils_optarg = nargv[utils_optind];
+        return (BADCH);
+    }
 
-		place = EMSG;
-		++utils_optind;
-	}
+    if (*++oli != ':') {                    /* don't need argument */
+        utils_optarg = NULL;
+        if (!*place)
+            ++utils_optind;
+    } else {
+        /* need an argument */
+        if (*place)                     /* no white space */
+            utils_optarg = place;
+        else if (nargc <= ++utils_optind) {   /* no arg */
+            place = EMSG;
+            if (*options == ':')
+                return (BADARG);
+            if (utils_opterr)
+                HAL_Printf("option requires an argument - %c\n", utils_optopt);
+            return (BADCH);
+        } else                          /* white space */
+            utils_optarg = nargv[utils_optind];
 
-	/* dump back option letter */
-	return (utils_optopt);
+        place = EMSG;
+        ++utils_optind;
+    }
+
+    /* dump back option letter */
+    return (utils_optopt);
 }

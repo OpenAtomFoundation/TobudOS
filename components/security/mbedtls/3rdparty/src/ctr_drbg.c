@@ -321,7 +321,7 @@ void mbedtls_ctr_drbg_update( mbedtls_ctr_drbg_context *ctx,
 int mbedtls_ctr_drbg_reseed( mbedtls_ctr_drbg_context *ctx,
                      const unsigned char *additional, size_t len )
 {
-    unsigned char seed[MBEDTLS_CTR_DRBG_MAX_SEED_INPUT];
+    static unsigned char seed[MBEDTLS_CTR_DRBG_MAX_SEED_INPUT];
     size_t seedlen = 0;
     int ret;
 

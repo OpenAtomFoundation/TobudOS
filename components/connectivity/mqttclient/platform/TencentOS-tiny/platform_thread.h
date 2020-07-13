@@ -20,6 +20,9 @@ platform_thread_t *platform_thread_init( const char *name,
                                         unsigned int stack_size,
                                         unsigned int priority,
                                         unsigned int tick);
+void platform_thread_startup(platform_thread_t* thread);
+void platform_thread_stop(platform_thread_t* thread);
+void platform_thread_start(platform_thread_t* thread);
 void platform_thread_destroy(platform_thread_t* thread);
 
 #endif

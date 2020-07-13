@@ -437,7 +437,7 @@ int data_template_light_thread(void) {
 		return rc;
     }
 
-    void *client = IOT_Template_Construct(&init_params);
+    void *client = IOT_Template_Construct(&init_params, NULL);
     if (client != NULL) {
         Log_i("Cloud Device Construct Success");
     } else {

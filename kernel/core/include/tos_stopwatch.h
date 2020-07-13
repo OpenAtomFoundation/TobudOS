@@ -105,7 +105,7 @@ __API__ void tos_stopwatch_delay_ms(k_time_t millisec);
  *
  * @attention
  *
- * @param[in]   stopwatch               ticks remain.
+ * @param[in]   stopwatch               the stopwatch.
  *
  * @return  ticks remain
  */
@@ -116,7 +116,7 @@ __API__ k_tick_t tos_stopwatch_remain(k_stopwatch_t *stopwatch);
  *
  * @attention
  *
- * @param[in]   stopwatch               milliseconds remain.
+ * @param[in]   stopwatch               the stopwatch.
  *
  * @return  milliseconds remain
  */
@@ -127,7 +127,7 @@ __API__ k_time_t tos_stopwatch_remain_ms(k_stopwatch_t *stopwatch);
  *
  * @attention
  *
- * @param[in]   stopwatch               milliseconds remain.
+ * @param[in]   stopwatch               the stopwatch.
  *
  * @return  whether the stopwatch is expired
  * @retval  #K_TRUE     the stopwatch is expired.

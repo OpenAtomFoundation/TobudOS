@@ -39,7 +39,7 @@ void *HAL_MutexCreate(void)
     }
 
     if (0 != (err_num = pthread_mutex_init(mutex, NULL))) {
-		HAL_Printf("%s: create mutex failed\n", __FUNCTION__);
+        HAL_Printf("%s: create mutex failed\n", __FUNCTION__);
         HAL_Free(mutex);
         return NULL;
     }
@@ -51,7 +51,7 @@ void HAL_MutexDestroy(_IN_ void *mutex)
 {
     int err_num;
     if (0 != (err_num = pthread_mutex_destroy((pthread_mutex_t *)mutex))) {
-		HAL_Printf("%s: destroy mutex failed\n", __FUNCTION__);
+        HAL_Printf("%s: destroy mutex failed\n", __FUNCTION__);
     }
 
     HAL_Free(mutex);
@@ -60,8 +60,8 @@ void HAL_MutexDestroy(_IN_ void *mutex)
 void HAL_MutexLock(_IN_ void *mutex)
 {
     int err_num;
-    if (0 != (err_num = pthread_mutex_lock((pthread_mutex_t *)mutex))) {     
-		HAL_Printf("%s: lock mutex failed\n", __FUNCTION__);
+    if (0 != (err_num = pthread_mutex_lock((pthread_mutex_t *)mutex))) {
+        HAL_Printf("%s: lock mutex failed\n", __FUNCTION__);
     }
 }
 
@@ -74,8 +74,8 @@ int HAL_MutexTryLock(_IN_ void *mutex)
 void HAL_MutexUnlock(_IN_ void *mutex)
 {
     int err_num;
-    if (0 != (err_num = pthread_mutex_unlock((pthread_mutex_t *)mutex))) {       
-		HAL_Printf("%s: unlock mutex failed\n", __FUNCTION__);
+    if (0 != (err_num = pthread_mutex_unlock((pthread_mutex_t *)mutex))) {
+        HAL_Printf("%s: unlock mutex failed\n", __FUNCTION__);
     }
 }
 
@@ -118,7 +118,7 @@ int HAL_Vsnprintf(_IN_ char *str, _IN_ const int len, _IN_ const char *format, v
 }
 
 uint32_t HAL_GetTimeMs(void)
-{	
+{
     struct timeval time_val = {0};
     uint32_t time_ms;
 
@@ -133,90 +133,91 @@ void HAL_SleepMs(_IN_ uint32_t ms)
     usleep(1000 * ms);
 }
 
-#ifdef AT_TCP_ENABLED
-
-void HAL_DelayMs(_IN_ uint32_t ms)
+#if ((defined(MULTITHREAD_ENABLED)) || (defined AT_TCP_ENABLED))
+void * HAL_ThreadCreate(uint16_t stack_size, int priority, char * taskname, void *(*fn)(void*), void* arg)
 {
-   usleep(1000 * ms);
-}
-
-void * HAL_ThreadCreate(uint16_t stack_size, int priority, char * taskname,void *(*fn)(void*), void* arg)
-{
-	pthread_t *thread_t = (pthread_t *)HAL_Malloc(sizeof(unsigned long int));
-	return pthread_create(thread_t, NULL, fn, arg) ? NULL  : (void*)thread_t;
+    pthread_t *thread_t = (pthread_t *)HAL_Malloc(sizeof(unsigned long int));
+    return pthread_create(thread_t, NULL, fn, arg) ? NULL  : (void*)thread_t;
 }
 
 int HAL_ThreadDestroy(void* threadId)
 {
-	int ret;
+    int ret;
 
-	if(0 == pthread_cancel(*((pthread_t*)threadId))){
-		ret = QCLOUD_RET_SUCCESS;
-	}else{
-		ret = QCLOUD_ERR_FAILURE;
-	}
+    if (0 == pthread_cancel(*((pthread_t*)threadId))) {
+        ret = QCLOUD_RET_SUCCESS;
+    } else {
+        ret = QCLOUD_ERR_FAILURE;
+    }
 
-	HAL_Free(threadId);	
-	return ret;
+    HAL_Free(threadId);
+    return ret;
+}
+#endif
+
+#ifdef AT_TCP_ENABLED
+
+void HAL_DelayMs(_IN_ uint32_t ms)
+{
+    usleep(1000 * ms);
 }
 
 void *HAL_SemaphoreCreate(void)
 {
-	sem_t *sem = (sem_t *)malloc(sizeof(sem_t));
-	if (NULL == sem) {
-		return NULL;
-	}
+    sem_t *sem = (sem_t *)malloc(sizeof(sem_t));
+    if (NULL == sem) {
+        return NULL;
+    }
 
-	if (0 != sem_init(sem, 0, 0)) {
-		free(sem);
-		return NULL;
-	}
+    if (0 != sem_init(sem, 0, 0)) {
+        free(sem);
+        return NULL;
+    }
 
-	return sem;
+    return sem;
 }
 
 void HAL_SemaphoreDestroy(void *sem)
 {
-	sem_destroy((sem_t *)sem);
-	free(sem);
+    sem_destroy((sem_t *)sem);
+    free(sem);
 }
 
 void HAL_SemaphorePost(void *sem)
 {
-	sem_post((sem_t *)sem);
+    sem_post((sem_t *)sem);
 }
 
 int HAL_SemaphoreWait(void *sem, uint32_t timeout_ms)
 {
 #define PLATFORM_WAIT_INFINITE (~0)
 
-	if (PLATFORM_WAIT_INFINITE == timeout_ms) {
-		sem_wait(sem);
-		return QCLOUD_RET_SUCCESS;
-	}
-	else {
-		struct timespec ts;
-		int s;
-		/* Restart if interrupted by handler */
-		do {
-			if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
-				return QCLOUD_ERR_FAILURE;
-			}
+    if (PLATFORM_WAIT_INFINITE == timeout_ms) {
+        sem_wait(sem);
+        return QCLOUD_RET_SUCCESS;
+    } else {
+        struct timespec ts;
+        int s;
+        /* Restart if interrupted by handler */
+        do {
+            if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+                return QCLOUD_ERR_FAILURE;
+            }
 
-			s = 0;
-			ts.tv_nsec += (timeout_ms % 1000) * 1000000;
-			if (ts.tv_nsec >= 1000000000) {
-				ts.tv_nsec -= 1000000000;
-				s = 1;
-			}
+            s = 0;
+            ts.tv_nsec += (timeout_ms % 1000) * 1000000;
+            if (ts.tv_nsec >= 1000000000) {
+                ts.tv_nsec -= 1000000000;
+                s = 1;
+            }
 
-			ts.tv_sec += timeout_ms / 1000 + s;
+            ts.tv_sec += timeout_ms / 1000 + s;
 
-		} while (((s = sem_timedwait(sem, &ts)) != 0) && errno == EINTR);
+        } while (((s = sem_timedwait(sem, &ts)) != 0) && errno == EINTR);
 
-		return s ? QCLOUD_ERR_FAILURE : QCLOUD_RET_SUCCESS;
-	}
-#undef 	PLATFORM_WAIT_INFINITE
+        return s ? QCLOUD_ERR_FAILURE : QCLOUD_RET_SUCCESS;
+    }
+#undef  PLATFORM_WAIT_INFINITE
 }
 
 #endif

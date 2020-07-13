@@ -132,88 +132,94 @@ void LITE_json_keys_release(list_head_t *keylist)
 }
 
 
-static void _strip_transfer(char *src) 
+static void _strip_transfer(char *src)
 {
-	char *end = src + strlen(src)+ 1;
-	
- 	while(*src != '\0')
- 	{
-		if(*src == '\\')
-		{
-			memmove(src, src+1, end - src);
-			end--;
-		}
-		src++;
-	}
-}
+    char *end = src + strlen(src) + 1;
 
+    while (*src != '\0') {
+        if (*src == '\\') {
+            memmove(src, src + 1, end - src);
+            end--;
+        }
+        src++;
+    }
+}
 
 char *  LITE_json_string_value_strip_transfer(char *key, char *src)
 {
-	char * str = LITE_json_value_of(key, src);
+    char * str = LITE_json_value_of(key, src);
 
-	if(NULL != str){
-		_strip_transfer(str);
-	}
-	return str;
+    if (NULL != str) {
+        _strip_transfer(str);
+    }
+    return str;
 }
 
 
 
-int LITE_get_int32(int32_t *value, char *src) {
-	return (sscanf(src, "%" SCNi32, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_int32(int32_t *value, char *src)
+{
+    return (sscanf(src, "%" SCNi32, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_int16(int16_t *value, char *src) {
-	return (sscanf(src, "%" SCNi16, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_int16(int16_t *value, char *src)
+{
+    return (sscanf(src, "%" SCNi16, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_int8(int8_t *value, char *src) {
-	return (sscanf(src, "%" SCNi8, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_int8(int8_t *value, char *src)
+{
+    return (sscanf(src, "%" SCNi8, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_uint32(uint32_t *value, char *src) {
-	return (sscanf(src, "%" SCNu32, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_uint32(uint32_t *value, char *src)
+{
+    return (sscanf(src, "%" SCNu32, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_uint16(uint16_t *value, char *src) {
-	return (sscanf(src, "%" SCNu16, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_uint16(uint16_t *value, char *src)
+{
+    return (sscanf(src, "%" SCNu16, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_uint8(uint8_t *value, char *src) {
-	return (sscanf(src, "%" SCNu8, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_uint8(uint8_t *value, char *src)
+{
+    return (sscanf(src, "%" SCNu8, value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_float(float *value, char *src) {
-	return (sscanf(src, "%f", value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_float(float *value, char *src)
+{
+    return (sscanf(src, "%f", value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_double(double *value, char *src) {
-	return (sscanf(src, "%lf", value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
+int LITE_get_double(double *value, char *src)
+{
+    return (sscanf(src, "%lf", value) == 1) ? QCLOUD_RET_SUCCESS : QCLOUD_ERR_FAILURE;
 }
 
-int LITE_get_boolean(bool *value, char *src) {
-	if (!strcmp(src, "false")) {
-		*value = false;
-	}
-	else {
-		*value = true;
-	}
+int LITE_get_boolean(bool *value, char *src)
+{
+    if (!strcmp(src, "false")) {
+        *value = false;
+    } else {
+        *value = true;
+    }
 
-	return QCLOUD_RET_SUCCESS;
+    return QCLOUD_RET_SUCCESS;
 }
 
-int LITE_get_string(int8_t        *value, char *src, uint16_t max_len) {
-	int rc;
-	
-	if(NULL != strncpy((char *)value, src, max_len)){
-		value[Min(strlen(src), max_len)] = '\0';
-		rc = QCLOUD_RET_SUCCESS;
-	}else{
-		rc = QCLOUD_ERR_FAILURE;
-	}
-	
-	return rc;
+int LITE_get_string(int8_t        *value, char *src, uint16_t max_len)
+{
+    int rc;
+
+    if (NULL != strncpy((char *)value, src, max_len)) {
+        value[Min(strlen(src), max_len)] = '\0';
+        rc = QCLOUD_RET_SUCCESS;
+    } else {
+        rc = QCLOUD_ERR_FAILURE;
+    }
+
+    return rc;
 }
 
 

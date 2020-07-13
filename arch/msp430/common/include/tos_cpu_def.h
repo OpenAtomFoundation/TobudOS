@@ -9,5 +9,8 @@
 #define CPU_STK_GROWTH_ASCENDING    1
 #define CPU_STK_GROWTH_DESCENDING   2
 
+#define CPU_BYTE_ORDER_LITTLE_ENDIAN    1
+#define CPU_BYTE_ORDER_BIG_ENDIAN       2
+
 #endif /* _TOS_CPU_DEF_H_ */
 

@@ -48,3 +48,4 @@ __PORT__ void port_systick_config(uint32_t cycle_per_tick)
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 4) = 0xFFFFFFFF & (mtimecmp >> 32);
     *(volatile uint32_t *)(CLINT_CTRL_ADDR + CLINT_MTIMECMP + 0) = 0xFFFFFFFF & (mtimecmp >>  0);
 }
+

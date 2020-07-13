@@ -23,6 +23,11 @@
 #ifndef __SX1272_REGS_LORA_H__
 #define __SX1272_REGS_LORA_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*!
  * ============================================================================
  * SX1272 Internal registers Address
@@ -549,5 +554,9 @@
 /*!
  * RegFormerTemp
  */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __SX1272_REGS_LORA_H__

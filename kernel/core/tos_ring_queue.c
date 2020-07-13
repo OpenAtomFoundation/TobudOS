@@ -56,9 +56,7 @@ __STATIC_INLINE__ void ring_q_item_decrease(k_ring_q_t *ring_q)
     ring_q->item_cnt    = item_cnt;
 
     TOS_OBJ_INIT(ring_q, KNL_OBJ_TYPE_RING_QUEUE);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_set_static(&ring_q->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
@@ -68,11 +66,9 @@ __API__ k_err_t tos_ring_q_destroy(k_ring_q_t *ring_q)
     TOS_PTR_SANITY_CHECK(ring_q);
     TOS_OBJ_VERIFY(ring_q, KNL_OBJ_TYPE_RING_QUEUE);
 
-#if TOS_CFG_MMHEAP_EN > 0u
     if (!knl_object_alloc_is_static(&ring_q->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-#endif
 
     ring_q->head        = 0u;
     ring_q->tail        = 0u;
@@ -83,14 +79,10 @@ __API__ k_err_t tos_ring_q_destroy(k_ring_q_t *ring_q)
     ring_q->item_cnt    = 0u;
 
     TOS_OBJ_DEINIT(ring_q);
-#if TOS_CFG_MMHEAP_EN > 0u
     knl_object_alloc_reset(&ring_q->knl_obj);
-#endif
 
     return K_ERR_NONE;
 }
-
-#if TOS_CFG_MMHEAP_EN > 0u
 
  __API__ k_err_t tos_ring_q_create_dyn(k_ring_q_t *ring_q, size_t item_cnt, size_t item_size)
 {
@@ -141,8 +133,6 @@ __API__ k_err_t tos_ring_q_destroy_dyn(k_ring_q_t *ring_q)
 
     return K_ERR_NONE;
 }
-
-#endif
 
 __API__ k_err_t tos_ring_q_enqueue(k_ring_q_t *ring_q, void *item, size_t item_size)
 {
@@ -220,7 +210,7 @@ __API__ int tos_ring_q_is_empty(k_ring_q_t *ring_q)
     TOS_OBJ_VERIFY_RC(ring_q, KNL_OBJ_TYPE_RING_QUEUE, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
-    is_empty = (ring_q->total == 0);
+    is_empty = (ring_q->total == 0 ? K_TRUE : K_FALSE);
     TOS_CPU_INT_ENABLE();
 
     return is_empty;
@@ -235,7 +225,7 @@ __API__ int tos_ring_q_is_full(k_ring_q_t *ring_q)
     TOS_OBJ_VERIFY_RC(ring_q, KNL_OBJ_TYPE_RING_QUEUE, K_FALSE);
 
     TOS_CPU_INT_DISABLE();
-    is_full = (ring_q->total == ring_q->item_cnt);
+    is_full = (ring_q->total == ring_q->item_cnt ? K_TRUE : K_FALSE);
     TOS_CPU_INT_ENABLE();
 
     return is_full;

@@ -1,6 +1,21 @@
-#include "tos_vfs.h"
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
 
-#if TOS_CFG_VFS_EN > 0u
+#include "tos_vfs.h"
 
 extern k_list_t k_vfs_fsmap_list;
 TOS_LIST_DEFINE(k_vfs_fsmap_list);
@@ -191,6 +206,4 @@ __API__ vfs_err_t tos_vfs_fs_mkfs(const char *device_path, const char *fs_name, 
 
     return VFS_ERR_NONE;
 }
-
-#endif /* TOS_CFG_VFS_EN */
 

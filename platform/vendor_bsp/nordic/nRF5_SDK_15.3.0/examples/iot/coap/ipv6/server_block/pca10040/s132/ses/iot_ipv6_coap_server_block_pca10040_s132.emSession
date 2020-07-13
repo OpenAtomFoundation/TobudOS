@@ -1,7 +1,0 @@
-<!DOCTYPE CrossStudio_Session_File>
-<session>
-  <ARMCrossStudioWindow activeProject="iot_ipv6_coap_server_block_pca10040_s132" buildConfiguration="Release"/>
-  <Files>
-    <SessionOpenFile codecName="Default" debugPath="../../../main.c" left="0" name="unnamed" path="../../../main.c" selected="1" top="0" useBinaryEdit="0" useTextEdit="1" x="0" y="0"/>
-  </Files>
-</session>

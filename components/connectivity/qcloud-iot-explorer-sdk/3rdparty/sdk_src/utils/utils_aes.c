@@ -112,8 +112,7 @@ static int aes_padlock_ace = -1;
 /*
  * Forward S-box
  */
-static const unsigned char FSb[256] =
-{
+static const unsigned char FSb[256] = {
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5,
     0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
     0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0,
@@ -243,8 +242,7 @@ static const uint32_t FT3[256] = { FT };
 /*
  * Reverse S-box
  */
-static const unsigned char RSb[256] =
-{
+static const unsigned char RSb[256] = {
     0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38,
     0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
     0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87,
@@ -374,8 +372,7 @@ static const uint32_t RT3[256] = { RT };
 /*
  * Round constants
  */
-static const uint32_t RCON[10] =
-{
+static const uint32_t RCON[10] = {
     0x00000001, 0x00000002, 0x00000004, 0x00000008,
     0x00000010, 0x00000020, 0x00000040, 0x00000080,
     0x0000001B, 0x00000036
@@ -428,8 +425,7 @@ static void aes_gen_tables( void )
     /*
      * compute pow and log tables over GF(2^8)
      */
-    for( i = 0, x = 1; i < 256; i++ )
-    {
+    for ( i = 0, x = 1; i < 256; i++ ) {
         pow[i] = x;
         log[x] = i;
         x = ( x ^ XTIME( x ) ) & 0xFF;
@@ -438,8 +434,7 @@ static void aes_gen_tables( void )
     /*
      * calculate the round constants
      */
-    for( i = 0, x = 1; i < 10; i++ )
-    {
+    for ( i = 0, x = 1; i < 10; i++ ) {
         RCON[i] = (uint32_t) x;
         x = XTIME( x ) & 0xFF;
     }
@@ -450,14 +445,17 @@ static void aes_gen_tables( void )
     FSb[0x00] = 0x63;
     RSb[0x63] = 0x00;
 
-    for( i = 1; i < 256; i++ )
-    {
+    for ( i = 1; i < 256; i++ ) {
         x = pow[255 - log[i]];
 
-        y  = x; y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
-        x ^= y; y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
-        x ^= y; y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
-        x ^= y; y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
+        y  = x;
+        y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
+        x ^= y;
+        y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
+        x ^= y;
+        y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
+        x ^= y;
+        y = ( ( y << 1 ) | ( y >> 7 ) ) & 0xFF;
         x ^= y ^ 0x63;
 
         FSb[i] = (unsigned char) x;
@@ -467,8 +465,7 @@ static void aes_gen_tables( void )
     /*
      * generate the forward and reverse tables
      */
-    for( i = 0; i < 256; i++ )
-    {
+    for ( i = 0; i < 256; i++ ) {
         x = FSb[i];
         y = XTIME( x ) & 0xFF;
         z =  ( y ^ x ) & 0xFF;
@@ -542,7 +539,7 @@ void utils_aes_init( utils_aes_context *ctx )
 
 void utils_aes_free( utils_aes_context *ctx )
 {
-    if( ctx == NULL )
+    if ( ctx == NULL )
         return;
 
     utils_platform_zeroize( ctx, sizeof( utils_aes_context ) );
@@ -553,7 +550,7 @@ void utils_aes_free( utils_aes_context *ctx )
  */
 #if !defined(UTILS_AES_SETKEY_ENC_ALT)
 int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
-                    unsigned int keybits )
+                          unsigned int keybits )
 {
     unsigned int i;
     uint32_t *RK;
@@ -561,17 +558,22 @@ int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
     AES_VALIDATE_RET( ctx != NULL );
     AES_VALIDATE_RET( key != NULL );
 
-    switch( keybits )
-    {
-        case 128: ctx->nr = 10; break;
-        case 192: ctx->nr = 12; break;
-        case 256: ctx->nr = 14; break;
-        default : return( UTILS_ERR_AES_INVALID_KEY_LENGTH );
+    switch ( keybits ) {
+        case 128:
+            ctx->nr = 10;
+            break;
+        case 192:
+            ctx->nr = 12;
+            break;
+        case 256:
+            ctx->nr = 14;
+            break;
+        default :
+            return ( UTILS_ERR_AES_INVALID_KEY_LENGTH );
     }
 
 #if !defined(UTILS_AES_ROM_TABLES)
-    if( aes_init_done == 0 )
-    {
+    if ( aes_init_done == 0 ) {
         aes_gen_tables();
         aes_init_done = 1;
     }
@@ -579,22 +581,19 @@ int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
 
     ctx->rk = RK = ctx->buf;
 
-    for( i = 0; i < ( keybits >> 5 ); i++ )
-    {
+    for ( i = 0; i < ( keybits >> 5 ); i++ ) {
         GET_UINT32_LE( RK[i], key, i << 2 );
     }
 
-    switch( ctx->nr )
-    {
+    switch ( ctx->nr ) {
         case 10:
 
-            for( i = 0; i < 10; i++, RK += 4 )
-            {
+            for ( i = 0; i < 10; i++, RK += 4 ) {
                 RK[4]  = RK[0] ^ RCON[i] ^
-                ( (uint32_t) FSb[ ( RK[3] >>  8 ) & 0xFF ]       ) ^
-                ( (uint32_t) FSb[ ( RK[3] >> 16 ) & 0xFF ] <<  8 ) ^
-                ( (uint32_t) FSb[ ( RK[3] >> 24 ) & 0xFF ] << 16 ) ^
-                ( (uint32_t) FSb[ ( RK[3]       ) & 0xFF ] << 24 );
+                         ( (uint32_t) FSb[ ( RK[3] >>  8 ) & 0xFF ]       ) ^
+                         ( (uint32_t) FSb[ ( RK[3] >> 16 ) & 0xFF ] <<  8 ) ^
+                         ( (uint32_t) FSb[ ( RK[3] >> 24 ) & 0xFF ] << 16 ) ^
+                         ( (uint32_t) FSb[ ( RK[3]       ) & 0xFF ] << 24 );
 
                 RK[5]  = RK[1] ^ RK[4];
                 RK[6]  = RK[2] ^ RK[5];
@@ -604,13 +603,12 @@ int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
 
         case 12:
 
-            for( i = 0; i < 8; i++, RK += 6 )
-            {
+            for ( i = 0; i < 8; i++, RK += 6 ) {
                 RK[6]  = RK[0] ^ RCON[i] ^
-                ( (uint32_t) FSb[ ( RK[5] >>  8 ) & 0xFF ]       ) ^
-                ( (uint32_t) FSb[ ( RK[5] >> 16 ) & 0xFF ] <<  8 ) ^
-                ( (uint32_t) FSb[ ( RK[5] >> 24 ) & 0xFF ] << 16 ) ^
-                ( (uint32_t) FSb[ ( RK[5]       ) & 0xFF ] << 24 );
+                         ( (uint32_t) FSb[ ( RK[5] >>  8 ) & 0xFF ]       ) ^
+                         ( (uint32_t) FSb[ ( RK[5] >> 16 ) & 0xFF ] <<  8 ) ^
+                         ( (uint32_t) FSb[ ( RK[5] >> 24 ) & 0xFF ] << 16 ) ^
+                         ( (uint32_t) FSb[ ( RK[5]       ) & 0xFF ] << 24 );
 
                 RK[7]  = RK[1] ^ RK[6];
                 RK[8]  = RK[2] ^ RK[7];
@@ -622,23 +620,22 @@ int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
 
         case 14:
 
-            for( i = 0; i < 7; i++, RK += 8 )
-            {
+            for ( i = 0; i < 7; i++, RK += 8 ) {
                 RK[8]  = RK[0] ^ RCON[i] ^
-                ( (uint32_t) FSb[ ( RK[7] >>  8 ) & 0xFF ]       ) ^
-                ( (uint32_t) FSb[ ( RK[7] >> 16 ) & 0xFF ] <<  8 ) ^
-                ( (uint32_t) FSb[ ( RK[7] >> 24 ) & 0xFF ] << 16 ) ^
-                ( (uint32_t) FSb[ ( RK[7]       ) & 0xFF ] << 24 );
+                         ( (uint32_t) FSb[ ( RK[7] >>  8 ) & 0xFF ]       ) ^
+                         ( (uint32_t) FSb[ ( RK[7] >> 16 ) & 0xFF ] <<  8 ) ^
+                         ( (uint32_t) FSb[ ( RK[7] >> 24 ) & 0xFF ] << 16 ) ^
+                         ( (uint32_t) FSb[ ( RK[7]       ) & 0xFF ] << 24 );
 
                 RK[9]  = RK[1] ^ RK[8];
                 RK[10] = RK[2] ^ RK[9];
                 RK[11] = RK[3] ^ RK[10];
 
                 RK[12] = RK[4] ^
-                ( (uint32_t) FSb[ ( RK[11]       ) & 0xFF ]       ) ^
-                ( (uint32_t) FSb[ ( RK[11] >>  8 ) & 0xFF ] <<  8 ) ^
-                ( (uint32_t) FSb[ ( RK[11] >> 16 ) & 0xFF ] << 16 ) ^
-                ( (uint32_t) FSb[ ( RK[11] >> 24 ) & 0xFF ] << 24 );
+                         ( (uint32_t) FSb[ ( RK[11]       ) & 0xFF ]       ) ^
+                         ( (uint32_t) FSb[ ( RK[11] >>  8 ) & 0xFF ] <<  8 ) ^
+                         ( (uint32_t) FSb[ ( RK[11] >> 16 ) & 0xFF ] << 16 ) ^
+                         ( (uint32_t) FSb[ ( RK[11] >> 24 ) & 0xFF ] << 24 );
 
                 RK[13] = RK[5] ^ RK[12];
                 RK[14] = RK[6] ^ RK[13];
@@ -647,7 +644,7 @@ int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
             break;
     }
 
-    return( 0 );
+    return ( 0 );
 }
 #endif /* !UTILS_AES_SETKEY_ENC_ALT */
 
@@ -656,7 +653,7 @@ int utils_aes_setkey_enc( utils_aes_context *ctx, const unsigned char *key,
  */
 #if !defined(UTILS_AES_SETKEY_DEC_ALT)
 int utils_aes_setkey_dec( utils_aes_context *ctx, const unsigned char *key,
-                    unsigned int keybits )
+                          unsigned int keybits )
 {
     int i, j, ret;
     utils_aes_context cty;
@@ -671,7 +668,7 @@ int utils_aes_setkey_dec( utils_aes_context *ctx, const unsigned char *key,
     ctx->rk = RK = ctx->buf;
 
     /* Also checks keybits */
-    if( ( ret = utils_aes_setkey_enc( &cty, key, keybits ) ) != 0 )
+    if ( ( ret = utils_aes_setkey_enc( &cty, key, keybits ) ) != 0 )
         goto exit;
 
     ctx->nr = cty.nr;
@@ -684,10 +681,8 @@ int utils_aes_setkey_dec( utils_aes_context *ctx, const unsigned char *key,
     *RK++ = *SK++;
     *RK++ = *SK++;
 
-    for( i = ctx->nr - 1, SK -= 8; i > 0; i--, SK -= 8 )
-    {
-        for( j = 0; j < 4; j++, SK++ )
-        {
+    for ( i = ctx->nr - 1, SK -= 8; i > 0; i--, SK -= 8 ) {
+        for ( j = 0; j < 4; j++, SK++ ) {
             *RK++ = AES_RT0( FSb[ ( *SK       ) & 0xFF ] ) ^
                     AES_RT1( FSb[ ( *SK >>  8 ) & 0xFF ] ) ^
                     AES_RT2( FSb[ ( *SK >> 16 ) & 0xFF ] ) ^
@@ -703,7 +698,7 @@ int utils_aes_setkey_dec( utils_aes_context *ctx, const unsigned char *key,
 exit:
     utils_aes_free( &cty );
 
-    return( ret );
+    return ( ret );
 }
 
 
@@ -760,21 +755,24 @@ exit:
  */
 #if !defined(UTILS_AES_ENCRYPT_ALT)
 int utils_internal_aes_encrypt( utils_aes_context *ctx,
-                                  const unsigned char input[16],
-                                  unsigned char output[16] )
+                                const unsigned char input[16],
+                                unsigned char output[16] )
 {
     int i;
     uint32_t *RK, X0, X1, X2, X3, Y0, Y1, Y2, Y3;
 
     RK = ctx->rk;
 
-    GET_UINT32_LE( X0, input,  0 ); X0 ^= *RK++;
-    GET_UINT32_LE( X1, input,  4 ); X1 ^= *RK++;
-    GET_UINT32_LE( X2, input,  8 ); X2 ^= *RK++;
-    GET_UINT32_LE( X3, input, 12 ); X3 ^= *RK++;
+    GET_UINT32_LE( X0, input,  0 );
+    X0 ^= *RK++;
+    GET_UINT32_LE( X1, input,  4 );
+    X1 ^= *RK++;
+    GET_UINT32_LE( X2, input,  8 );
+    X2 ^= *RK++;
+    GET_UINT32_LE( X3, input, 12 );
+    X3 ^= *RK++;
 
-    for( i = ( ctx->nr >> 1 ) - 1; i > 0; i-- )
-    {
+    for ( i = ( ctx->nr >> 1 ) - 1; i > 0; i-- ) {
         AES_FROUND( Y0, Y1, Y2, Y3, X0, X1, X2, X3 );
         AES_FROUND( X0, X1, X2, X3, Y0, Y1, Y2, Y3 );
     }
@@ -782,42 +780,42 @@ int utils_internal_aes_encrypt( utils_aes_context *ctx,
     AES_FROUND( Y0, Y1, Y2, Y3, X0, X1, X2, X3 );
 
     X0 = *RK++ ^ \
-            ( (uint32_t) FSb[ ( Y0       ) & 0xFF ]       ) ^
-            ( (uint32_t) FSb[ ( Y1 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) FSb[ ( Y2 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) FSb[ ( Y3 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) FSb[ ( Y0       ) & 0xFF ]       ) ^
+         ( (uint32_t) FSb[ ( Y1 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) FSb[ ( Y2 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) FSb[ ( Y3 >> 24 ) & 0xFF ] << 24 );
 
     X1 = *RK++ ^ \
-            ( (uint32_t) FSb[ ( Y1       ) & 0xFF ]       ) ^
-            ( (uint32_t) FSb[ ( Y2 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) FSb[ ( Y3 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) FSb[ ( Y0 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) FSb[ ( Y1       ) & 0xFF ]       ) ^
+         ( (uint32_t) FSb[ ( Y2 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) FSb[ ( Y3 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) FSb[ ( Y0 >> 24 ) & 0xFF ] << 24 );
 
     X2 = *RK++ ^ \
-            ( (uint32_t) FSb[ ( Y2       ) & 0xFF ]       ) ^
-            ( (uint32_t) FSb[ ( Y3 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) FSb[ ( Y0 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) FSb[ ( Y1 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) FSb[ ( Y2       ) & 0xFF ]       ) ^
+         ( (uint32_t) FSb[ ( Y3 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) FSb[ ( Y0 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) FSb[ ( Y1 >> 24 ) & 0xFF ] << 24 );
 
     X3 = *RK++ ^ \
-            ( (uint32_t) FSb[ ( Y3       ) & 0xFF ]       ) ^
-            ( (uint32_t) FSb[ ( Y0 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) FSb[ ( Y1 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) FSb[ ( Y2 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) FSb[ ( Y3       ) & 0xFF ]       ) ^
+         ( (uint32_t) FSb[ ( Y0 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) FSb[ ( Y1 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) FSb[ ( Y2 >> 24 ) & 0xFF ] << 24 );
 
     PUT_UINT32_LE( X0, output,  0 );
     PUT_UINT32_LE( X1, output,  4 );
     PUT_UINT32_LE( X2, output,  8 );
     PUT_UINT32_LE( X3, output, 12 );
 
-    return( 0 );
+    return ( 0 );
 }
 #endif /* !UTILS_AES_ENCRYPT_ALT */
 
 #if !defined(UTILS_DEPRECATED_REMOVED)
 void utils_aes_encrypt( utils_aes_context *ctx,
-                          const unsigned char input[16],
-                          unsigned char output[16] )
+                        const unsigned char input[16],
+                        unsigned char output[16] )
 {
     utils_internal_aes_encrypt( ctx, input, output );
 }
@@ -828,21 +826,24 @@ void utils_aes_encrypt( utils_aes_context *ctx,
  */
 #if !defined(UTILS_AES_DECRYPT_ALT)
 int utils_internal_aes_decrypt( utils_aes_context *ctx,
-                                  const unsigned char input[16],
-                                  unsigned char output[16] )
+                                const unsigned char input[16],
+                                unsigned char output[16] )
 {
     int i;
     uint32_t *RK, X0, X1, X2, X3, Y0, Y1, Y2, Y3;
 
     RK = ctx->rk;
 
-    GET_UINT32_LE( X0, input,  0 ); X0 ^= *RK++;
-    GET_UINT32_LE( X1, input,  4 ); X1 ^= *RK++;
-    GET_UINT32_LE( X2, input,  8 ); X2 ^= *RK++;
-    GET_UINT32_LE( X3, input, 12 ); X3 ^= *RK++;
+    GET_UINT32_LE( X0, input,  0 );
+    X0 ^= *RK++;
+    GET_UINT32_LE( X1, input,  4 );
+    X1 ^= *RK++;
+    GET_UINT32_LE( X2, input,  8 );
+    X2 ^= *RK++;
+    GET_UINT32_LE( X3, input, 12 );
+    X3 ^= *RK++;
 
-    for( i = ( ctx->nr >> 1 ) - 1; i > 0; i-- )
-    {
+    for ( i = ( ctx->nr >> 1 ) - 1; i > 0; i-- ) {
         AES_RROUND( Y0, Y1, Y2, Y3, X0, X1, X2, X3 );
         AES_RROUND( X0, X1, X2, X3, Y0, Y1, Y2, Y3 );
     }
@@ -850,42 +851,42 @@ int utils_internal_aes_decrypt( utils_aes_context *ctx,
     AES_RROUND( Y0, Y1, Y2, Y3, X0, X1, X2, X3 );
 
     X0 = *RK++ ^ \
-            ( (uint32_t) RSb[ ( Y0       ) & 0xFF ]       ) ^
-            ( (uint32_t) RSb[ ( Y3 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) RSb[ ( Y2 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) RSb[ ( Y1 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) RSb[ ( Y0       ) & 0xFF ]       ) ^
+         ( (uint32_t) RSb[ ( Y3 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) RSb[ ( Y2 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) RSb[ ( Y1 >> 24 ) & 0xFF ] << 24 );
 
     X1 = *RK++ ^ \
-            ( (uint32_t) RSb[ ( Y1       ) & 0xFF ]       ) ^
-            ( (uint32_t) RSb[ ( Y0 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) RSb[ ( Y3 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) RSb[ ( Y2 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) RSb[ ( Y1       ) & 0xFF ]       ) ^
+         ( (uint32_t) RSb[ ( Y0 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) RSb[ ( Y3 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) RSb[ ( Y2 >> 24 ) & 0xFF ] << 24 );
 
     X2 = *RK++ ^ \
-            ( (uint32_t) RSb[ ( Y2       ) & 0xFF ]       ) ^
-            ( (uint32_t) RSb[ ( Y1 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) RSb[ ( Y0 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) RSb[ ( Y3 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) RSb[ ( Y2       ) & 0xFF ]       ) ^
+         ( (uint32_t) RSb[ ( Y1 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) RSb[ ( Y0 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) RSb[ ( Y3 >> 24 ) & 0xFF ] << 24 );
 
     X3 = *RK++ ^ \
-            ( (uint32_t) RSb[ ( Y3       ) & 0xFF ]       ) ^
-            ( (uint32_t) RSb[ ( Y2 >>  8 ) & 0xFF ] <<  8 ) ^
-            ( (uint32_t) RSb[ ( Y1 >> 16 ) & 0xFF ] << 16 ) ^
-            ( (uint32_t) RSb[ ( Y0 >> 24 ) & 0xFF ] << 24 );
+         ( (uint32_t) RSb[ ( Y3       ) & 0xFF ]       ) ^
+         ( (uint32_t) RSb[ ( Y2 >>  8 ) & 0xFF ] <<  8 ) ^
+         ( (uint32_t) RSb[ ( Y1 >> 16 ) & 0xFF ] << 16 ) ^
+         ( (uint32_t) RSb[ ( Y0 >> 24 ) & 0xFF ] << 24 );
 
     PUT_UINT32_LE( X0, output,  0 );
     PUT_UINT32_LE( X1, output,  4 );
     PUT_UINT32_LE( X2, output,  8 );
     PUT_UINT32_LE( X3, output, 12 );
 
-    return( 0 );
+    return ( 0 );
 }
 #endif /* !UTILS_AES_DECRYPT_ALT */
 
 #if !defined(UTILS_DEPRECATED_REMOVED)
 void utils_aes_decrypt( utils_aes_context *ctx,
-                          const unsigned char input[16],
-                          unsigned char output[16] )
+                        const unsigned char input[16],
+                        unsigned char output[16] )
 {
     utils_internal_aes_decrypt( ctx, input, output );
 }
@@ -895,9 +896,9 @@ void utils_aes_decrypt( utils_aes_context *ctx,
  * AES-ECB block encryption/decryption
  */
 int utils_aes_crypt_ecb( utils_aes_context *ctx,
-                           int mode,
-                           const unsigned char input[16],
-                           unsigned char output[16] )
+                         int mode,
+                         const unsigned char input[16],
+                         unsigned char output[16] )
 {
     AES_VALIDATE_RET( ctx != NULL );
     AES_VALIDATE_RET( input != NULL );
@@ -905,10 +906,10 @@ int utils_aes_crypt_ecb( utils_aes_context *ctx,
     AES_VALIDATE_RET( mode == UTILS_AES_ENCRYPT ||
                       mode == UTILS_AES_DECRYPT );
 
-    if( mode == UTILS_AES_ENCRYPT )
-        return( utils_internal_aes_encrypt( ctx, input, output ) );
+    if ( mode == UTILS_AES_ENCRYPT )
+        return ( utils_internal_aes_encrypt( ctx, input, output ) );
     else
-        return( utils_internal_aes_decrypt( ctx, input, output ) );
+        return ( utils_internal_aes_decrypt( ctx, input, output ) );
 }
 
 #if defined(UTILS_CIPHER_MODE_CBC)
@@ -916,11 +917,11 @@ int utils_aes_crypt_ecb( utils_aes_context *ctx,
  * AES-CBC buffer encryption/decryption
  */
 int utils_aes_crypt_cbc( utils_aes_context *ctx,
-                    int mode,
-                    size_t length,
-                    unsigned char iv[16],
-                    const unsigned char *input,
-                    unsigned char *output )
+                         int mode,
+                         size_t length,
+                         unsigned char iv[16],
+                         const unsigned char *input,
+                         unsigned char *output )
 {
     int i;
     unsigned char temp[16];
@@ -932,18 +933,16 @@ int utils_aes_crypt_cbc( utils_aes_context *ctx,
     AES_VALIDATE_RET( input != NULL );
     AES_VALIDATE_RET( output != NULL );
 
-    if( length % 16 )
-        return( UTILS_ERR_AES_INVALID_INPUT_LENGTH );
+    if ( length % 16 )
+        return ( UTILS_ERR_AES_INVALID_INPUT_LENGTH );
 
 
-    if( mode == UTILS_AES_DECRYPT )
-    {
-        while( length > 0 )
-        {
+    if ( mode == UTILS_AES_DECRYPT ) {
+        while ( length > 0 ) {
             memcpy( temp, input, 16 );
             utils_aes_crypt_ecb( ctx, mode, input, output );
 
-            for( i = 0; i < 16; i++ )
+            for ( i = 0; i < 16; i++ )
                 output[i] = (unsigned char)( output[i] ^ iv[i] );
 
             memcpy( iv, temp, 16 );
@@ -952,12 +951,9 @@ int utils_aes_crypt_cbc( utils_aes_context *ctx,
             output += 16;
             length -= 16;
         }
-    }
-    else
-    {
-        while( length > 0 )
-        {
-            for( i = 0; i < 16; i++ )
+    } else {
+        while ( length > 0 ) {
+            for ( i = 0; i < 16; i++ )
                 output[i] = (unsigned char)( input[i] ^ iv[i] );
 
             utils_aes_crypt_ecb( ctx, mode, output, output );
@@ -969,59 +965,59 @@ int utils_aes_crypt_cbc( utils_aes_context *ctx,
         }
     }
 
-    return( 0 );
+    return ( 0 );
 }
 
 int utils_aes_cbc(uint8_t *pInData, uint32_t datalen, uint8_t *pOutData, uint32_t outBuffLen,
-									uint8_t mode, uint8_t *pKey, uint16_t keybits, uint8_t *iv)
+                  uint8_t mode, uint8_t *pKey, uint16_t keybits, uint8_t *iv)
 {
-	int ret = QCLOUD_RET_SUCCESS;
-	int padlen;
-	utils_aes_context ctx;
-	
-	utils_aes_init( &ctx );
+    int ret = QCLOUD_RET_SUCCESS;
+    int padlen;
+    utils_aes_context ctx;
 
-	
-	if(UTILS_AES_ENCRYPT == mode){		
-		ret = utils_aes_setkey_enc( &ctx, pKey, keybits);
-		if( ret != 0 ){
-			Log_e("Set encry key err,ret:%d", ret);
-			ret = QCLOUD_ERR_FAILURE;
-			goto exit;
-		}
+    utils_aes_init( &ctx );
 
-		/*zero padding*/	
-		if(outBuffLen < (datalen + UTILS_AES_BLOCK_LEN)){
-			Log_e("Output buffer should not less than datalen+UTILS_AES_BLOCK_LEN for padding");
-			ret = QCLOUD_ERR_FAILURE;
-			goto exit;
-		}
-		padlen = UTILS_AES_BLOCK_LEN - datalen%UTILS_AES_BLOCK_LEN; 
-		memcpy(pOutData, pInData, datalen);
-		memset(pOutData + datalen, '\0', padlen);	/*zero-padding*/
-		datalen += padlen;
-	}else{
-		ret = utils_aes_setkey_dec( &ctx, pKey, keybits);
-		if( ret != 0 ){
-			Log_e("Set dencry key err,ret:%d", ret);
-			ret = QCLOUD_ERR_FAILURE;
-			goto exit;
-		}
-	}
-	
-	ret = utils_aes_crypt_cbc( &ctx, mode, datalen, iv, pInData, pOutData);
-	if( ret != 0 ){
-		Log_e("encryt err,ret:%d",ret);
-		ret = QCLOUD_ERR_FAILURE;
-		goto exit;
-	}else{
-		ret = QCLOUD_RET_SUCCESS;
-	}	
-	
-exit:	
-	
-	return ret;
-}					
+
+    if (UTILS_AES_ENCRYPT == mode) {
+        ret = utils_aes_setkey_enc( &ctx, pKey, keybits);
+        if ( ret != 0 ) {
+            Log_e("Set encry key err,ret:%d", ret);
+            ret = QCLOUD_ERR_FAILURE;
+            goto exit;
+        }
+
+        /*zero padding*/
+        if (outBuffLen < (datalen + UTILS_AES_BLOCK_LEN)) {
+            Log_e("Output buffer should not less than datalen+UTILS_AES_BLOCK_LEN for padding");
+            ret = QCLOUD_ERR_FAILURE;
+            goto exit;
+        }
+        padlen = UTILS_AES_BLOCK_LEN - datalen % UTILS_AES_BLOCK_LEN;
+        memcpy(pOutData, pInData, datalen);
+        memset(pOutData + datalen, '\0', padlen);   /*zero-padding*/
+        datalen += padlen;
+    } else {
+        ret = utils_aes_setkey_dec( &ctx, pKey, keybits);
+        if ( ret != 0 ) {
+            Log_e("Set dencry key err,ret:%d", ret);
+            ret = QCLOUD_ERR_FAILURE;
+            goto exit;
+        }
+    }
+
+    ret = utils_aes_crypt_cbc( &ctx, mode, datalen, iv, pInData, pOutData);
+    if ( ret != 0 ) {
+        Log_e("encryt err,ret:%d", ret);
+        ret = QCLOUD_ERR_FAILURE;
+        goto exit;
+    } else {
+        ret = QCLOUD_RET_SUCCESS;
+    }
+
+exit:
+
+    return ret;
+}
 #endif /* UTILS_CIPHER_MODE_CBC */
 
 #endif /* !UTILS_AES_ALT */
@@ -1033,45 +1029,65 @@ exit:
  *
  * http://csrc.nist.gov/archive/aes/rijndael/rijndael-vals.zip
  */
-static const unsigned char aes_test_ecb_dec[3][16] =
-{
-    { 0x44, 0x41, 0x6A, 0xC2, 0xD1, 0xF5, 0x3C, 0x58,
-      0x33, 0x03, 0x91, 0x7E, 0x6B, 0xE9, 0xEB, 0xE0 },
-    { 0x48, 0xE3, 0x1E, 0x9E, 0x25, 0x67, 0x18, 0xF2,
-      0x92, 0x29, 0x31, 0x9C, 0x19, 0xF1, 0x5B, 0xA4 },
-    { 0x05, 0x8C, 0xCF, 0xFD, 0xBB, 0xCB, 0x38, 0x2D,
-      0x1F, 0x6F, 0x56, 0x58, 0x5D, 0x8A, 0x4A, 0xDE }
+static const unsigned char aes_test_ecb_dec[3][16] = {
+    {
+        0x44, 0x41, 0x6A, 0xC2, 0xD1, 0xF5, 0x3C, 0x58,
+        0x33, 0x03, 0x91, 0x7E, 0x6B, 0xE9, 0xEB, 0xE0
+    },
+    {
+        0x48, 0xE3, 0x1E, 0x9E, 0x25, 0x67, 0x18, 0xF2,
+        0x92, 0x29, 0x31, 0x9C, 0x19, 0xF1, 0x5B, 0xA4
+    },
+    {
+        0x05, 0x8C, 0xCF, 0xFD, 0xBB, 0xCB, 0x38, 0x2D,
+        0x1F, 0x6F, 0x56, 0x58, 0x5D, 0x8A, 0x4A, 0xDE
+    }
 };
 
-static const unsigned char aes_test_ecb_enc[3][16] =
-{
-    { 0xC3, 0x4C, 0x05, 0x2C, 0xC0, 0xDA, 0x8D, 0x73,
-      0x45, 0x1A, 0xFE, 0x5F, 0x03, 0xBE, 0x29, 0x7F },
-    { 0xF3, 0xF6, 0x75, 0x2A, 0xE8, 0xD7, 0x83, 0x11,
-      0x38, 0xF0, 0x41, 0x56, 0x06, 0x31, 0xB1, 0x14 },
-    { 0x8B, 0x79, 0xEE, 0xCC, 0x93, 0xA0, 0xEE, 0x5D,
-      0xFF, 0x30, 0xB4, 0xEA, 0x21, 0x63, 0x6D, 0xA4 }
+static const unsigned char aes_test_ecb_enc[3][16] = {
+    {
+        0xC3, 0x4C, 0x05, 0x2C, 0xC0, 0xDA, 0x8D, 0x73,
+        0x45, 0x1A, 0xFE, 0x5F, 0x03, 0xBE, 0x29, 0x7F
+    },
+    {
+        0xF3, 0xF6, 0x75, 0x2A, 0xE8, 0xD7, 0x83, 0x11,
+        0x38, 0xF0, 0x41, 0x56, 0x06, 0x31, 0xB1, 0x14
+    },
+    {
+        0x8B, 0x79, 0xEE, 0xCC, 0x93, 0xA0, 0xEE, 0x5D,
+        0xFF, 0x30, 0xB4, 0xEA, 0x21, 0x63, 0x6D, 0xA4
+    }
 };
 
 #if defined(UTILS_CIPHER_MODE_CBC)
-static const unsigned char aes_test_cbc_dec[3][16] =
-{
-    { 0xFA, 0xCA, 0x37, 0xE0, 0xB0, 0xC8, 0x53, 0x73,
-      0xDF, 0x70, 0x6E, 0x73, 0xF7, 0xC9, 0xAF, 0x86 },
-    { 0x5D, 0xF6, 0x78, 0xDD, 0x17, 0xBA, 0x4E, 0x75,
-      0xB6, 0x17, 0x68, 0xC6, 0xAD, 0xEF, 0x7C, 0x7B },
-    { 0x48, 0x04, 0xE1, 0x81, 0x8F, 0xE6, 0x29, 0x75,
-      0x19, 0xA3, 0xE8, 0x8C, 0x57, 0x31, 0x04, 0x13 }
+static const unsigned char aes_test_cbc_dec[3][16] = {
+    {
+        0xFA, 0xCA, 0x37, 0xE0, 0xB0, 0xC8, 0x53, 0x73,
+        0xDF, 0x70, 0x6E, 0x73, 0xF7, 0xC9, 0xAF, 0x86
+    },
+    {
+        0x5D, 0xF6, 0x78, 0xDD, 0x17, 0xBA, 0x4E, 0x75,
+        0xB6, 0x17, 0x68, 0xC6, 0xAD, 0xEF, 0x7C, 0x7B
+    },
+    {
+        0x48, 0x04, 0xE1, 0x81, 0x8F, 0xE6, 0x29, 0x75,
+        0x19, 0xA3, 0xE8, 0x8C, 0x57, 0x31, 0x04, 0x13
+    }
 };
 
-static const unsigned char aes_test_cbc_enc[3][16] =
-{
-    { 0x8A, 0x05, 0xFC, 0x5E, 0x09, 0x5A, 0xF4, 0x84,
-      0x8A, 0x08, 0xD3, 0x28, 0xD3, 0x68, 0x8E, 0x3D },
-    { 0x7B, 0xD9, 0x66, 0xD5, 0x3A, 0xD8, 0xC1, 0xBB,
-      0x85, 0xD2, 0xAD, 0xFA, 0xE8, 0x7B, 0xB1, 0x04 },
-    { 0xFE, 0x3C, 0x53, 0x65, 0x3E, 0x2F, 0x45, 0xB5,
-      0x6F, 0xCD, 0x88, 0xB2, 0xCC, 0x89, 0x8F, 0xF0 }
+static const unsigned char aes_test_cbc_enc[3][16] = {
+    {
+        0x8A, 0x05, 0xFC, 0x5E, 0x09, 0x5A, 0xF4, 0x84,
+        0x8A, 0x08, 0xD3, 0x28, 0xD3, 0x68, 0x8E, 0x3D
+    },
+    {
+        0x7B, 0xD9, 0x66, 0xD5, 0x3A, 0xD8, 0xC1, 0xBB,
+        0x85, 0xD2, 0xAD, 0xFA, 0xE8, 0x7B, 0xB1, 0x04
+    },
+    {
+        0xFE, 0x3C, 0x53, 0x65, 0x3E, 0x2F, 0x45, 0xB5,
+        0x6F, 0xCD, 0x88, 0xB2, 0xCC, 0x89, 0x8F, 0xF0
+    }
 };
 #endif /* UTILS_CIPHER_MODE_CBC */
 
@@ -1114,25 +1130,21 @@ int utils_aes_self_test( int verbose )
     /*
      * ECB mode
      */
-    for( i = 0; i < 6; i++ )
-    {
+    for ( i = 0; i < 6; i++ ) {
         u = i >> 1;
         keybits = 128 + u * 64;
         mode = i & 1;
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "  AES-ECB-%3d (%s): ", keybits,
-                            ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
+                          ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
 
         memset( buf, 0, 16 );
 
-        if( mode == UTILS_AES_DECRYPT )
-        {
+        if ( mode == UTILS_AES_DECRYPT ) {
             ret = utils_aes_setkey_dec( &ctx, key, keybits );
             aes_tests = aes_test_ecb_dec[u];
-        }
-        else
-        {
+        } else {
             ret = utils_aes_setkey_enc( &ctx, key, keybits );
             aes_tests = aes_test_ecb_enc[u];
         }
@@ -1142,61 +1154,52 @@ int utils_aes_self_test( int verbose )
          * there is an alternative underlying implementation i.e. when
          * UTILS_AES_ALT is defined.
          */
-        if( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 )
-        {
+        if ( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 ) {
             utils_printf( "skipped\n" );
             continue;
-        }
-        else if( ret != 0 )
-        {
+        } else if ( ret != 0 ) {
             goto exit;
         }
 
-        for( j = 0; j < 10000; j++ )
-        {
+        for ( j = 0; j < 10000; j++ ) {
             ret = utils_aes_crypt_ecb( &ctx, mode, buf, buf );
-            if( ret != 0 )
+            if ( ret != 0 )
                 goto exit;
         }
 
-        if( memcmp( buf, aes_tests, 16 ) != 0 )
-        {
+        if ( memcmp( buf, aes_tests, 16 ) != 0 ) {
             ret = 1;
             goto exit;
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         utils_printf( "\n" );
 
 #if defined(UTILS_CIPHER_MODE_CBC)
     /*
      * CBC mode
      */
-    for( i = 0; i < 6; i++ )
-    {
+    for ( i = 0; i < 6; i++ ) {
         u = i >> 1;
         keybits = 128 + u * 64;
         mode = i & 1;
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "  AES-CBC-%3d (%s): ", keybits,
-                            ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
+                          ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
 
-        memset( iv , 0, 16 );
+        memset( iv, 0, 16 );
         memset( prv, 0, 16 );
         memset( buf, 0, 16 );
 
-        if( mode == UTILS_AES_DECRYPT )
-        {
+        if ( mode == UTILS_AES_DECRYPT ) {
             ret = utils_aes_setkey_dec( &ctx, key, keybits );
             aes_tests = aes_test_cbc_dec[u];
-        }
-        else
-        {
+        } else {
             ret = utils_aes_setkey_enc( &ctx, key, keybits );
             aes_tests = aes_test_cbc_enc[u];
         }
@@ -1206,20 +1209,15 @@ int utils_aes_self_test( int verbose )
          * there is an alternative underlying implementation i.e. when
          * UTILS_AES_ALT is defined.
          */
-        if( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 )
-        {
+        if ( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 ) {
             utils_printf( "skipped\n" );
             continue;
-        }
-        else if( ret != 0 )
-        {
+        } else if ( ret != 0 ) {
             goto exit;
         }
 
-        for( j = 0; j < 10000; j++ )
-        {
-            if( mode == UTILS_AES_ENCRYPT )
-            {
+        for ( j = 0; j < 10000; j++ ) {
+            if ( mode == UTILS_AES_ENCRYPT ) {
                 unsigned char tmp[16];
 
                 memcpy( tmp, prv, 16 );
@@ -1228,22 +1226,21 @@ int utils_aes_self_test( int verbose )
             }
 
             ret = utils_aes_crypt_cbc( &ctx, mode, 16, iv, buf, buf );
-            if( ret != 0 )
+            if ( ret != 0 )
                 goto exit;
 
         }
 
-        if( memcmp( buf, aes_tests, 16 ) != 0 )
-        {
+        if ( memcmp( buf, aes_tests, 16 ) != 0 ) {
             ret = 1;
             goto exit;
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         utils_printf( "\n" );
 #endif /* UTILS_CIPHER_MODE_CBC */
 
@@ -1251,15 +1248,14 @@ int utils_aes_self_test( int verbose )
     /*
      * CFB128 mode
      */
-    for( i = 0; i < 6; i++ )
-    {
+    for ( i = 0; i < 6; i++ ) {
         u = i >> 1;
         keybits = 128 + u * 64;
         mode = i & 1;
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "  AES-CFB128-%3d (%s): ", keybits,
-                            ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
+                          ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
 
         memcpy( iv,  aes_test_cfb128_iv, 16 );
         memcpy( key, aes_test_cfb128_key[u], keybits / 8 );
@@ -1271,42 +1267,35 @@ int utils_aes_self_test( int verbose )
          * there is an alternative underlying implementation i.e. when
          * UTILS_AES_ALT is defined.
          */
-        if( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 )
-        {
+        if ( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 ) {
             utils_printf( "skipped\n" );
             continue;
-        }
-        else if( ret != 0 )
-        {
+        } else if ( ret != 0 ) {
             goto exit;
         }
 
-        if( mode == UTILS_AES_DECRYPT )
-        {
+        if ( mode == UTILS_AES_DECRYPT ) {
             memcpy( buf, aes_test_cfb128_ct[u], 64 );
             aes_tests = aes_test_cfb128_pt;
-        }
-        else
-        {
+        } else {
             memcpy( buf, aes_test_cfb128_pt, 64 );
             aes_tests = aes_test_cfb128_ct[u];
         }
 
         ret = utils_aes_crypt_cfb128( &ctx, mode, 64, &offset, iv, buf, buf );
-        if( ret != 0 )
+        if ( ret != 0 )
             goto exit;
 
-        if( memcmp( buf, aes_tests, 64 ) != 0 )
-        {
+        if ( memcmp( buf, aes_tests, 64 ) != 0 ) {
             ret = 1;
             goto exit;
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         utils_printf( "\n" );
 #endif /* UTILS_CIPHER_MODE_CFB */
 
@@ -1314,15 +1303,14 @@ int utils_aes_self_test( int verbose )
     /*
      * OFB mode
      */
-    for( i = 0; i < 6; i++ )
-    {
+    for ( i = 0; i < 6; i++ ) {
         u = i >> 1;
         keybits = 128 + u * 64;
         mode = i & 1;
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "  AES-OFB-%3d (%s): ", keybits,
-                            ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
+                          ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
 
         memcpy( iv,  aes_test_ofb_iv, 16 );
         memcpy( key, aes_test_ofb_key[u], keybits / 8 );
@@ -1334,42 +1322,35 @@ int utils_aes_self_test( int verbose )
          * there is an alternative underlying implementation i.e. when
          * UTILS_AES_ALT is defined.
          */
-        if( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 )
-        {
+        if ( ret == UTILS_ERR_PLATFORM_FEATURE_UNSUPPORTED && keybits == 192 ) {
             utils_printf( "skipped\n" );
             continue;
-        }
-        else if( ret != 0 )
-        {
+        } else if ( ret != 0 ) {
             goto exit;
         }
 
-        if( mode == UTILS_AES_DECRYPT )
-        {
+        if ( mode == UTILS_AES_DECRYPT ) {
             memcpy( buf, aes_test_ofb_ct[u], 64 );
             aes_tests = aes_test_ofb_pt;
-        }
-        else
-        {
+        } else {
             memcpy( buf, aes_test_ofb_pt, 64 );
             aes_tests = aes_test_ofb_ct[u];
         }
 
         ret = utils_aes_crypt_ofb( &ctx, 64, &offset, iv, buf, buf );
-        if( ret != 0 )
+        if ( ret != 0 )
             goto exit;
 
-        if( memcmp( buf, aes_tests, 64 ) != 0 )
-        {
+        if ( memcmp( buf, aes_tests, 64 ) != 0 ) {
             ret = 1;
             goto exit;
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         utils_printf( "\n" );
 #endif /* UTILS_CIPHER_MODE_OFB */
 
@@ -1377,184 +1358,173 @@ int utils_aes_self_test( int verbose )
     /*
      * CTR mode
      */
-    for( i = 0; i < 6; i++ )
-    {
+    for ( i = 0; i < 6; i++ ) {
         u = i >> 1;
         mode = i & 1;
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "  AES-CTR-128 (%s): ",
-                            ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
+                          ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
 
         memcpy( nonce_counter, aes_test_ctr_nonce_counter[u], 16 );
         memcpy( key, aes_test_ctr_key[u], 16 );
 
         offset = 0;
-        if( ( ret = utils_aes_setkey_enc( &ctx, key, 128 ) ) != 0 )
+        if ( ( ret = utils_aes_setkey_enc( &ctx, key, 128 ) ) != 0 )
             goto exit;
 
         len = aes_test_ctr_len[u];
 
-        if( mode == UTILS_AES_DECRYPT )
-        {
+        if ( mode == UTILS_AES_DECRYPT ) {
             memcpy( buf, aes_test_ctr_ct[u], len );
             aes_tests = aes_test_ctr_pt[u];
-        }
-        else
-        {
+        } else {
             memcpy( buf, aes_test_ctr_pt[u], len );
             aes_tests = aes_test_ctr_ct[u];
         }
 
         ret = utils_aes_crypt_ctr( &ctx, len, &offset, nonce_counter,
-                                     stream_block, buf, buf );
-        if( ret != 0 )
+                                   stream_block, buf, buf );
+        if ( ret != 0 )
             goto exit;
 
-        if( memcmp( buf, aes_tests, len ) != 0 )
-        {
+        if ( memcmp( buf, aes_tests, len ) != 0 ) {
             ret = 1;
             goto exit;
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             utils_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         utils_printf( "\n" );
 #endif /* UTILS_CIPHER_MODE_CTR */
 
 #if defined(UTILS_CIPHER_MODE_XTS)
     {
-    static const int num_tests =
-        sizeof(aes_test_xts_key) / sizeof(*aes_test_xts_key);
-    utils_aes_xts_context ctx_xts;
+        static const int num_tests =
+            sizeof(aes_test_xts_key) / sizeof(*aes_test_xts_key);
+        utils_aes_xts_context ctx_xts;
 
-    /*
-     * XTS mode
-     */
-    utils_aes_xts_init( &ctx_xts );
+        /*
+         * XTS mode
+         */
+        utils_aes_xts_init( &ctx_xts );
 
-    for( i = 0; i < num_tests << 1; i++ )
-    {
-        const unsigned char *data_unit;
-        u = i >> 1;
-        mode = i & 1;
+        for ( i = 0; i < num_tests << 1; i++ ) {
+            const unsigned char *data_unit;
+            u = i >> 1;
+            mode = i & 1;
 
-        if( verbose != 0 )
-            utils_printf( "  AES-XTS-128 (%s): ",
-                            ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
+            if ( verbose != 0 )
+                utils_printf( "  AES-XTS-128 (%s): ",
+                              ( mode == UTILS_AES_DECRYPT ) ? "dec" : "enc" );
 
-        memset( key, 0, sizeof( key ) );
-        memcpy( key, aes_test_xts_key[u], 32 );
-        data_unit = aes_test_xts_data_unit[u];
+            memset( key, 0, sizeof( key ) );
+            memcpy( key, aes_test_xts_key[u], 32 );
+            data_unit = aes_test_xts_data_unit[u];
 
-        len = sizeof( *aes_test_xts_ct32 );
+            len = sizeof( *aes_test_xts_ct32 );
 
-        if( mode == UTILS_AES_DECRYPT )
-        {
-            ret = utils_aes_xts_setkey_dec( &ctx_xts, key, 256 );
-            if( ret != 0)
+            if ( mode == UTILS_AES_DECRYPT ) {
+                ret = utils_aes_xts_setkey_dec( &ctx_xts, key, 256 );
+                if ( ret != 0)
+                    goto exit;
+                memcpy( buf, aes_test_xts_ct32[u], len );
+                aes_tests = aes_test_xts_pt32[u];
+            } else {
+                ret = utils_aes_xts_setkey_enc( &ctx_xts, key, 256 );
+                if ( ret != 0)
+                    goto exit;
+                memcpy( buf, aes_test_xts_pt32[u], len );
+                aes_tests = aes_test_xts_ct32[u];
+            }
+
+
+            ret = utils_aes_crypt_xts( &ctx_xts, mode, len, data_unit,
+                                       buf, buf );
+            if ( ret != 0 )
                 goto exit;
-            memcpy( buf, aes_test_xts_ct32[u], len );
-            aes_tests = aes_test_xts_pt32[u];
-        }
-        else
-        {
-            ret = utils_aes_xts_setkey_enc( &ctx_xts, key, 256 );
-            if( ret != 0)
+
+            if ( memcmp( buf, aes_tests, len ) != 0 ) {
+                ret = 1;
                 goto exit;
-            memcpy( buf, aes_test_xts_pt32[u], len );
-            aes_tests = aes_test_xts_ct32[u];
+            }
+
+            if ( verbose != 0 )
+                utils_printf( "passed\n" );
         }
 
+        if ( verbose != 0 )
+            utils_printf( "\n" );
 
-        ret = utils_aes_crypt_xts( &ctx_xts, mode, len, data_unit,
-                                     buf, buf );
-        if( ret != 0 )
-            goto exit;
-
-        if( memcmp( buf, aes_tests, len ) != 0 )
-        {
-            ret = 1;
-            goto exit;
-        }
-
-        if( verbose != 0 )
-            utils_printf( "passed\n" );
-    }
-
-    if( verbose != 0 )
-        utils_printf( "\n" );
-
-    utils_aes_xts_free( &ctx_xts );
+        utils_aes_xts_free( &ctx_xts );
     }
 #endif /* UTILS_CIPHER_MODE_XTS */
 
     ret = 0;
 
 exit:
-    if( ret != 0 && verbose != 0 )
+    if ( ret != 0 && verbose != 0 )
         utils_printf( "failed\n" );
 
     utils_aes_free( &ctx );
 
-    return( ret );
+    return ( ret );
 }
-																	
+
 /*aes128-cbc*/
 int aes_sample(int verbose)
 {
-	int ret = 0,i;
-	unsigned int keybits;
-	unsigned char key[UTILS_AES_BLOCK_LEN] = "1234567890abcdef";
-	char dataIn[1024] = {0};
-	unsigned char iv[16];
-	int sLen;
-	int datalen;
+    int ret = 0, i;
+    unsigned int keybits;
+    unsigned char key[UTILS_AES_BLOCK_LEN] = "1234567890abcdef";
+    char dataIn[1024] = {0};
+    unsigned char iv[16];
+    int sLen;
+    int datalen;
 
-	utils_printf("\nAES-CBC-128 enc ");
-	keybits = AES_KEY_BITS_128;
-	memset( iv , '0', 16);
+    utils_printf("\nAES-CBC-128 enc ");
+    keybits = AES_KEY_BITS_128;
+    memset( iv, '0', 16);
 
-	sLen = strlen("{\"code\":0,\"message\":\"success\",\"encryptionType\":1,\"psk\":\"VI04Eh4N8VgM29U/dnu9cQ==\"}");
-	strncpy(dataIn,"{\"code\":0,\"message\":\"success\",\"encryptionType\":1,\"psk\":\"VI04Eh4N8VgM29U/dnu9cQ==\"}",sLen);
+    sLen = strlen("{\"code\":0,\"message\":\"success\",\"encryptionType\":1,\"psk\":\"VI04Eh4N8VgM29U/dnu9cQ==\"}");
+    strncpy(dataIn, "{\"code\":0,\"message\":\"success\",\"encryptionType\":1,\"psk\":\"VI04Eh4N8VgM29U/dnu9cQ==\"}", sLen);
 
-	utils_printf("\nthe data to encrypt(%d):\n",sLen);	
-	for (i = 0; i<sLen; i++){
-		HAL_Printf("%02x ", (uint8_t)dataIn[i]);
-	}
+    utils_printf("\nthe data to encrypt(%d):\n", sLen);
+    for (i = 0; i < sLen; i++) {
+        HAL_Printf("%02x ", (uint8_t)dataIn[i]);
+    }
 
-	if(QCLOUD_RET_SUCCESS == utils_aes_cbc((uint8_t *)dataIn, sLen, (uint8_t *)dataIn, 
-											sLen + UTILS_AES_BLOCK_LEN, UTILS_AES_ENCRYPT, key, keybits, iv)){
-		utils_printf("\nThe encrypted data is:\n");
-		for (i = 0; i < sLen; i++){
-			HAL_Printf("%02x ", (uint8_t)dataIn[i]);
-		}		
-	}
+    if (QCLOUD_RET_SUCCESS == utils_aes_cbc((uint8_t *)dataIn, sLen, (uint8_t *)dataIn,
+                                            sLen + UTILS_AES_BLOCK_LEN, UTILS_AES_ENCRYPT, key, keybits, iv)) {
+        utils_printf("\nThe encrypted data is:\n");
+        for (i = 0; i < sLen; i++) {
+            HAL_Printf("%02x ", (uint8_t)dataIn[i]);
+        }
+    }
 
-	datalen = sLen+ (UTILS_AES_BLOCK_LEN - sLen%UTILS_AES_BLOCK_LEN);
-	keybits = AES_KEY_BITS_128;
-	memset( iv , '0', UTILS_AES_BLOCK_LEN);	
-	if(QCLOUD_RET_SUCCESS == utils_aes_cbc((uint8_t *)dataIn, datalen, (uint8_t *)dataIn, 
-											datalen, UTILS_AES_DECRYPT, key, keybits, iv)){
-		utils_printf("\nThe decrypted data is:\n");
-		for (i = 0; i < datalen; i++)
-		{
-			//HAL_Printf("%02x ", (uint8_t)dataIn[i]);
-			if(dataIn[i] == '\0'){
-				Log_d("payload len:%d",i);
-				break;
-			}
-			HAL_Printf("%c", dataIn[i]);
-		}		
-	}
+    datalen = sLen + (UTILS_AES_BLOCK_LEN - sLen % UTILS_AES_BLOCK_LEN);
+    keybits = AES_KEY_BITS_128;
+    memset( iv, '0', UTILS_AES_BLOCK_LEN);
+    if (QCLOUD_RET_SUCCESS == utils_aes_cbc((uint8_t *)dataIn, datalen, (uint8_t *)dataIn,
+                                            datalen, UTILS_AES_DECRYPT, key, keybits, iv)) {
+        utils_printf("\nThe decrypted data is:\n");
+        for (i = 0; i < datalen; i++) {
+            //HAL_Printf("%02x ", (uint8_t)dataIn[i]);
+            if (dataIn[i] == '\0') {
+                Log_d("payload len:%d", i);
+                break;
+            }
+            HAL_Printf("%c", dataIn[i]);
+        }
+    }
 
-	if( ret != 0 && verbose != 0 )
-		utils_printf( "failed\n" );
+    if ( ret != 0 && verbose != 0 )
+        utils_printf( "failed\n" );
 
-	return( ret );
+    return ( ret );
 }
 
 #endif /* UTILS_SELF_TEST */
@@ -1564,6 +1534,6 @@ int aes_sample(int verbose)
 
 
 #ifdef __cplusplus
-	}
+}
 #endif
 

@@ -2,11 +2,12 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-26 19:11:34
- * @LastEditTime : 2019-12-28 01:51:38
+ * @LastEditTime: 2020-03-02 01:32:23
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
-#include "config.h"
+#include "salof_defconfig.h"
 
+#ifdef SALOF_USING_LOG
 
 void *salof_alloc(unsigned int size)
 {
@@ -119,3 +120,4 @@ char *salof_get_task_name(void)
     return k_curr_task->name;
 }
 
+#endif 

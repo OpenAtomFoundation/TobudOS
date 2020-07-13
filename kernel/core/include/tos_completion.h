@@ -83,7 +83,6 @@ __API__ k_err_t tos_completion_pend_timed(k_completion_t *completion, k_tick_t t
  * @attention None
  *
  * @param[in]   completion  pointer to the handler of the completion.
- * @param[in]   timeout     how much time(in k_tick_t) we would like to wait.
  *
  * @return  errcode
  * @retval  #K_ERR_PEND_SCHED_LOCKED          we can wait, but scheduler is locked.

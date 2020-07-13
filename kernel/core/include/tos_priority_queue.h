@@ -99,8 +99,6 @@ __API__ k_err_t tos_prio_q_create(k_prio_q_t *prio_q, void *mgr_array, void *poo
  */
 __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q);
 
-#if TOS_CFG_MMHEAP_EN > 0u
-
 /**
  * @brief Create a priority queue with dynamic allocated mgr array and data pool.
  * create a priority queue with dynamic allocated mgr array and data pool.
@@ -108,8 +106,6 @@ __API__ k_err_t tos_prio_q_destroy(k_prio_q_t *prio_q);
  * @attention if we wanna create a priority queue, we should offer a manager array buffer of which the size can be calculated by TOS_PRIO_Q_MGR_ARRAY_SIZE.
  *
  * @param[in]   prio_q      pointer to the handler of the priority queue.
- * @param[in]   mgr_array   manager array buffer of the priority queue.
- * @param[in]   pool        pool buffer of the priority queue.
  * @param[in]   item_cnt    item count of the priority queue.
  * @param[in]   item_size   size of each item of the priority queue.
  *
@@ -130,8 +126,6 @@ __API__ k_err_t tos_prio_q_create_dyn(k_prio_q_t *prio_q, size_t item_cnt, size_
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_prio_q_destroy_dyn(k_prio_q_t *prio_q);
-
-#endif
 
 /**
  * @brief Enqueue an priority queue.

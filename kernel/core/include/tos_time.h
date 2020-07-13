@@ -49,7 +49,7 @@ __API__ k_tick_t    tos_systick_get(void);
  *
  * @param   tick        systick count to set
  *
- * @return  tick count since boot
+ * @return  None
  */
 __API__ void        tos_systick_set(k_tick_t tick);
 

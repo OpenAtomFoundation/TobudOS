@@ -1,7 +1,13 @@
 /*---------------------------------------------------------------------------/
 /  FatFs Functional Configurations
 /---------------------------------------------------------------------------*/
+#ifndef _FFCONF_DEFINED
+#define _FFCONF_DEFINED
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+  
 #define FFCONF_DEF	86604	/* Revision ID */
 
 /*---------------------------------------------------------------------------/
@@ -284,5 +290,9 @@
 /  included somewhere in the scope of ff.h. */
 
 
+#ifdef __cplusplus
+}
+#endif
 
+#endif/* _FFCONF_DEFINED */
 /*--- End of configuration options ---*/

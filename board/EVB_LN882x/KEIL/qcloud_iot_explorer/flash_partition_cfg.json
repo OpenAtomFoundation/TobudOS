@@ -1,0 +1,22 @@
+{
+    "Warning1":"警告，系统定义用户不可修改!!!",
+    "vendor_define":
+    [
+        {"partition_type": "BOOT",        "start_addr": "0x00000000",  "size_KB": 36  },
+        {"partition_type": "PART_TAB",    "start_addr": "0x00009000",  "size_KB": 4   }
+    ],
+    
+    
+    "Warning2":"以下数据,用户根据SOC flash容量以及具体需求修改，仅可以修改start_addr值和size值，且必须4KB对齐!!!",
+    "user_define":
+    [
+        {"partition_type": "KV",          "start_addr": "0x0000A000",  "size_KB": 8   },
+        {"partition_type": "SIMU_EEPROM", "start_addr": "0x0000C000",  "size_KB": 8   },
+        {"partition_type": "APP",         "start_addr": "0x0000E000",  "size_KB": 800 },
+        {"partition_type": "OTA",         "start_addr": "0x000D6000",  "size_KB": 800 },
+        {"partition_type": "NVDS",        "start_addr": "0x0019E000",  "size_KB": 12  },
+        {"partition_type": "USER",        "start_addr": "0x001A1000",  "size_KB": 12  }
+    ]
+}
+
+

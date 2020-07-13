@@ -219,12 +219,7 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
-                    <name>CCOptimizationNoSizeConstraints</name>
-                    <state>0</state>
-                </option>
-                <option>
                     <name>CCDefines</name>
-                    <state>USE_HAL_DRIVER</state>
                     <state>STM32L073xx</state>
                 </option>
                 <option>
@@ -237,7 +232,7 @@
                 </option>
                 <option>
                     <name>CCPreprocLine</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCListCFile</name>
@@ -286,7 +281,7 @@
                 <option>
                     <name>CCAllowList</name>
                     <version>1</version>
-                    <state>11111110</state>
+                    <state>00000000</state>
                 </option>
                 <option>
                     <name>CCDebugInfo</name>
@@ -351,17 +346,14 @@
                 <option>
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$\..\..\BSP\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Inc</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Inc\Legacy</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L0xx\Include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\CMSIS\Include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m0+\iccarm</state>
                     <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
-                    <state>$PROJ_DIR$\..\..\..\..\kernel\pm\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\osal\cmsis_os</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L0xx\Include</state>
                     <state>$PROJ_DIR$\..\..\TOS_CONFIG</state>
-                    <state>$PROJ_DIR$\..\..\..\..\examples\helloworld</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Inc</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\CMSIS\Core\Include</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -377,16 +369,16 @@
                 </option>
                 <option>
                     <name>CCOptLevel</name>
-                    <state>3</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCOptStrategy</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
-                    <state>3</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CompilerMisraRules98</name>
@@ -424,7 +416,7 @@
                 </option>
                 <option>
                     <name>IccStaticDestr</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IccCppInlineSemantics</name>
@@ -439,13 +431,17 @@
                     <state>0</state>
                 </option>
                 <option>
+                    <name>CCOptimizationNoSizeConstraints</name>
+                    <state>0</state>
+                </option>
+                <option>
                     <name>CCNoLiteralPool</name>
                     <state>0</state>
                 </option>
                 <option>
                     <name>CCOptStrategySlave</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCGuardCalls</name>
@@ -535,7 +531,7 @@
                 </option>
                 <option>
                     <name>ADefines</name>
-                    <state></state>
+                    <state>STM32L073xx</state>
                 </option>
                 <option>
                     <name>AList</name>
@@ -627,7 +623,16 @@
                 </option>
                 <option>
                     <name>AUserIncludes</name>
-                    <state></state>
+                    <state>$PROJ_DIR$\..\..\TOS_CONFIG</state>
+                    <state>$PROJ_DIR$\..\..\BSP\Inc</state>
+                    <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\cortex-m0+\iccarm</state>
+                    <state>$PROJ_DIR$\..\..\..\..\kernel\core\include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\osal\cmsis_os</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L0xx\Include</state>
+                    <state>$PROJ_DIR$\..\..\TOS_CONFIG</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\STM32L0xx_HAL_Driver\Inc</state>
+                    <state>$PROJ_DIR$\..\..\..\..\platform\vendor_bsp\st\CMSIS\Core\Include</state>
                 </option>
                 <option>
                     <name>AExtraOptionsCheckV2</name>
@@ -776,11 +781,11 @@
                 </option>
                 <option>
                     <name>IlinkIcfOverride</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$PROJ_DIR$/stm32l073xx_flash.icf</state>
+                    <state>$TOOLKIT_DIR$\config\linker\ST\stm32l073xZ.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1013,7 +1018,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>TencentOS_tiny_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -1160,6 +1165,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\tos_cpu.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\arch\arm\arm-v7m\common\tos_fault.c</name>
         </file>
     </group>
     <group>

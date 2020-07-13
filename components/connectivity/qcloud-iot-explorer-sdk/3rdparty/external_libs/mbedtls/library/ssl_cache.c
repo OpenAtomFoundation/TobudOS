@@ -65,31 +65,30 @@ int mbedtls_ssl_cache_get( void *data, mbedtls_ssl_session *session )
     mbedtls_ssl_cache_entry *cur, *entry;
 
 #if defined(MBEDTLS_THREADING_C)
-    if( mbedtls_mutex_lock( &cache->mutex ) != 0 )
-        return( 1 );
+    if ( mbedtls_mutex_lock( &cache->mutex ) != 0 )
+        return ( 1 );
 #endif
 
     cur = cache->chain;
     entry = NULL;
 
-    while( cur != NULL )
-    {
+    while ( cur != NULL ) {
         entry = cur;
         cur = cur->next;
 
 #if defined(MBEDTLS_HAVE_TIME)
-        if( cache->timeout != 0 &&
-            (int) ( t - entry->timestamp ) > cache->timeout )
+        if ( cache->timeout != 0 &&
+             (int) ( t - entry->timestamp ) > cache->timeout )
             continue;
 #endif
 
-        if( session->ciphersuite != entry->session.ciphersuite ||
-            session->compression != entry->session.compression ||
-            session->id_len != entry->session.id_len )
+        if ( session->ciphersuite != entry->session.ciphersuite ||
+             session->compression != entry->session.compression ||
+             session->id_len != entry->session.id_len )
             continue;
 
-        if( memcmp( session->id, entry->session.id,
-                    entry->session.id_len ) != 0 )
+        if ( memcmp( session->id, entry->session.id,
+                     entry->session.id_len ) != 0 )
             continue;
 
         memcpy( session->master, entry->session.master, 48 );
@@ -100,19 +99,16 @@ int mbedtls_ssl_cache_get( void *data, mbedtls_ssl_session *session )
         /*
          * Restore peer certificate (without rest of the original chain)
          */
-        if( entry->peer_cert.p != NULL )
-        {
-            if( ( session->peer_cert = mbedtls_calloc( 1,
-                                 sizeof(mbedtls_x509_crt) ) ) == NULL )
-            {
+        if ( entry->peer_cert.p != NULL ) {
+            if ( ( session->peer_cert = mbedtls_calloc( 1,
+                                        sizeof(mbedtls_x509_crt) ) ) == NULL ) {
                 ret = 1;
                 goto exit;
             }
 
             mbedtls_x509_crt_init( session->peer_cert );
-            if( mbedtls_x509_crt_parse( session->peer_cert, entry->peer_cert.p,
-                                entry->peer_cert.len ) != 0 )
-            {
+            if ( mbedtls_x509_crt_parse( session->peer_cert, entry->peer_cert.p,
+                                         entry->peer_cert.len ) != 0 ) {
                 mbedtls_free( session->peer_cert );
                 session->peer_cert = NULL;
                 ret = 1;
@@ -127,11 +123,11 @@ int mbedtls_ssl_cache_get( void *data, mbedtls_ssl_session *session )
 
 exit:
 #if defined(MBEDTLS_THREADING_C)
-    if( mbedtls_mutex_unlock( &cache->mutex ) != 0 )
+    if ( mbedtls_mutex_unlock( &cache->mutex ) != 0 )
         ret = 1;
 #endif
 
-    return( ret );
+    return ( ret );
 }
 
 int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
@@ -146,32 +142,29 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
     int count = 0;
 
 #if defined(MBEDTLS_THREADING_C)
-    if( ( ret = mbedtls_mutex_lock( &cache->mutex ) ) != 0 )
-        return( ret );
+    if ( ( ret = mbedtls_mutex_lock( &cache->mutex ) ) != 0 )
+        return ( ret );
 #endif
 
     cur = cache->chain;
     prv = NULL;
 
-    while( cur != NULL )
-    {
+    while ( cur != NULL ) {
         count++;
 
 #if defined(MBEDTLS_HAVE_TIME)
-        if( cache->timeout != 0 &&
-            (int) ( t - cur->timestamp ) > cache->timeout )
-        {
+        if ( cache->timeout != 0 &&
+             (int) ( t - cur->timestamp ) > cache->timeout ) {
             cur->timestamp = t;
             break; /* expired, reuse this slot, update timestamp */
         }
 #endif
 
-        if( memcmp( session->id, cur->session.id, cur->session.id_len ) == 0 )
+        if ( memcmp( session->id, cur->session.id, cur->session.id_len ) == 0 )
             break; /* client reconnected, keep timestamp for session id */
 
 #if defined(MBEDTLS_HAVE_TIME)
-        if( oldest == 0 || cur->timestamp < oldest )
-        {
+        if ( oldest == 0 || cur->timestamp < oldest ) {
             oldest = cur->timestamp;
             old = cur;
         }
@@ -181,16 +174,13 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
         cur = cur->next;
     }
 
-    if( cur == NULL )
-    {
+    if ( cur == NULL ) {
 #if defined(MBEDTLS_HAVE_TIME)
         /*
          * Reuse oldest entry if max_entries reached
          */
-        if( count >= cache->max_entries )
-        {
-            if( old == NULL )
-            {
+        if ( count >= cache->max_entries ) {
+            if ( old == NULL ) {
                 ret = 1;
                 goto exit;
             }
@@ -202,10 +192,8 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
          * Reuse first entry in chain if max_entries reached,
          * but move to last place
          */
-        if( count >= cache->max_entries )
-        {
-            if( cache->chain == NULL )
-            {
+        if ( count >= cache->max_entries ) {
+            if ( cache->chain == NULL ) {
                 ret = 1;
                 goto exit;
             }
@@ -216,19 +204,17 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
             prv->next = cur;
         }
 #endif /* MBEDTLS_HAVE_TIME */
-        else
-        {
+        else {
             /*
              * max_entries not reached, create new entry
              */
             cur = mbedtls_calloc( 1, sizeof(mbedtls_ssl_cache_entry) );
-            if( cur == NULL )
-            {
+            if ( cur == NULL ) {
                 ret = 1;
                 goto exit;
             }
 
-            if( prv == NULL )
+            if ( prv == NULL )
                 cache->chain = cur;
             else
                 prv->next = cur;
@@ -245,8 +231,7 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
     /*
      * If we're reusing an entry, free its certificate first
      */
-    if( cur->peer_cert.p != NULL )
-    {
+    if ( cur->peer_cert.p != NULL ) {
         mbedtls_free( cur->peer_cert.p );
         memset( &cur->peer_cert, 0, sizeof(mbedtls_x509_buf) );
     }
@@ -254,11 +239,9 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
     /*
      * Store peer certificate
      */
-    if( session->peer_cert != NULL )
-    {
+    if ( session->peer_cert != NULL ) {
         cur->peer_cert.p = mbedtls_calloc( 1, session->peer_cert->raw.len );
-        if( cur->peer_cert.p == NULL )
-        {
+        if ( cur->peer_cert.p == NULL ) {
             ret = 1;
             goto exit;
         }
@@ -275,17 +258,17 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
 
 exit:
 #if defined(MBEDTLS_THREADING_C)
-    if( mbedtls_mutex_unlock( &cache->mutex ) != 0 )
+    if ( mbedtls_mutex_unlock( &cache->mutex ) != 0 )
         ret = 1;
 #endif
 
-    return( ret );
+    return ( ret );
 }
 
 #if defined(MBEDTLS_HAVE_TIME)
 void mbedtls_ssl_cache_set_timeout( mbedtls_ssl_cache_context *cache, int timeout )
 {
-    if( timeout < 0 ) timeout = 0;
+    if ( timeout < 0 ) timeout = 0;
 
     cache->timeout = timeout;
 }
@@ -293,7 +276,7 @@ void mbedtls_ssl_cache_set_timeout( mbedtls_ssl_cache_context *cache, int timeou
 
 void mbedtls_ssl_cache_set_max_entries( mbedtls_ssl_cache_context *cache, int max )
 {
-    if( max < 0 ) max = 0;
+    if ( max < 0 ) max = 0;
 
     cache->max_entries = max;
 }
@@ -304,8 +287,7 @@ void mbedtls_ssl_cache_free( mbedtls_ssl_cache_context *cache )
 
     cur = cache->chain;
 
-    while( cur != NULL )
-    {
+    while ( cur != NULL ) {
         prv = cur;
         cur = cur->next;
 

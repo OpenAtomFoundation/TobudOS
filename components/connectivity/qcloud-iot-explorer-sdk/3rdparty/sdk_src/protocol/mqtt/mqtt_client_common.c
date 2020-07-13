@@ -27,7 +27,7 @@ extern "C" {
 #include "utils_list.h"
 
 /* remain waiting time after MQTT header is received (unit: ms) */
-#define QCLOUD_IOT_MQTT_MAX_REMAIN_WAIT_MS     						 (2000)
+#define QCLOUD_IOT_MQTT_MAX_REMAIN_WAIT_MS                           (2000)
 
 #define MAX_NO_OF_REMAINING_LENGTH_BYTES 4
 
@@ -59,7 +59,8 @@ static int _check_handle_is_identical(SubTopicHandle *sub_handle1, SubTopicHandl
     return 0;
 }
 
-uint16_t get_next_packet_id(Qcloud_IoT_Client *pClient) {
+uint16_t get_next_packet_id(Qcloud_IoT_Client *pClient)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
@@ -71,25 +72,26 @@ uint16_t get_next_packet_id(Qcloud_IoT_Client *pClient) {
     IOT_FUNC_EXIT_RC(pClient->next_packet_id);
 }
 
-void get_next_conn_id(char *conn_id) {
-	int i;
-	srand((unsigned)HAL_GetTimeMs());
-	for (i = 0; i < MAX_CONN_ID_LEN - 1; i++) {
-		int flag = rand() % 3;
-		switch(flag) {
-			case 0:
-				conn_id[i] = (rand() % 26) + 'a';
-				break;
-			case 1:
-				conn_id[i] = (rand() % 26) + 'A';
-				break;
-			case 2:
-				conn_id[i] = (rand() % 10) + '0';
-				break;
-		}
-	}
+void get_next_conn_id(char *conn_id)
+{
+    int i;
+    srand((unsigned)HAL_GetTimeMs());
+    for (i = 0; i < MAX_CONN_ID_LEN - 1; i++) {
+        int flag = rand() % 3;
+        switch (flag) {
+            case 0:
+                conn_id[i] = (rand() % 26) + 'a';
+                break;
+            case 1:
+                conn_id[i] = (rand() % 26) + 'A';
+                break;
+            case 2:
+                conn_id[i] = (rand() % 10) + '0';
+                break;
+        }
+    }
 
-	conn_id[MAX_CONN_ID_LEN - 1] = '\0';
+    conn_id[MAX_CONN_ID_LEN - 1] = '\0';
 }
 
 /**
@@ -98,7 +100,8 @@ void get_next_conn_id(char *conn_id) {
  * @param length the length to be encoded
  * @return the number of bytes written to buffer
  */
-size_t mqtt_write_packet_rem_len(unsigned char *buf, uint32_t length) {
+size_t mqtt_write_packet_rem_len(unsigned char *buf, uint32_t length)
+{
     IOT_FUNC_ENTRY;
 
     size_t outLen = 0;
@@ -117,7 +120,8 @@ size_t mqtt_write_packet_rem_len(unsigned char *buf, uint32_t length) {
     IOT_FUNC_EXIT_RC((int)outLen);
 }
 
-size_t get_mqtt_packet_len(size_t rem_len) {
+size_t get_mqtt_packet_len(size_t rem_len)
+{
     rem_len += 1; /* header byte */
 
     /* now remaining_length field */
@@ -141,7 +145,8 @@ size_t get_mqtt_packet_len(size_t rem_len) {
  * @return the number of bytes read from the socket
  */
 static int _decode_packet_rem_len_from_buf_read(uint32_t (*getcharfn)(unsigned char *, uint32_t), uint32_t *value,
-                                                uint32_t *readBytesLen) {
+        uint32_t *readBytesLen)
+{
     IOT_FUNC_ENTRY;
 
     unsigned char c;
@@ -168,7 +173,8 @@ static int _decode_packet_rem_len_from_buf_read(uint32_t (*getcharfn)(unsigned c
 }
 
 static unsigned char *bufptr;
-uint32_t bufchar(unsigned char *c, uint32_t count) {
+uint32_t bufchar(unsigned char *c, uint32_t count)
+{
     uint32_t i;
 
     for (i = 0; i < count; ++i) {
@@ -178,7 +184,8 @@ uint32_t bufchar(unsigned char *c, uint32_t count) {
     return count;
 }
 
-int mqtt_read_packet_rem_len_form_buf(unsigned char *buf, uint32_t *value, uint32_t *readBytesLen) {
+int mqtt_read_packet_rem_len_form_buf(unsigned char *buf, uint32_t *value, uint32_t *readBytesLen)
+{
     bufptr = buf;
     return _decode_packet_rem_len_from_buf_read(bufchar, value, readBytesLen);
 }
@@ -188,7 +195,8 @@ int mqtt_read_packet_rem_len_form_buf(unsigned char *buf, uint32_t *value, uint3
  * @param pptr pointer to the input buffer - incremented by the number of bytes used & returned
  * @return the value calculated
  */
-uint16_t mqtt_read_uint16_t(unsigned char **pptr) {
+uint16_t mqtt_read_uint16_t(unsigned char **pptr)
+{
     unsigned char *ptr = *pptr;
     uint8_t firstByte = (uint8_t) (*ptr);
     uint8_t secondByte = (uint8_t) (*(ptr + 1));
@@ -202,7 +210,8 @@ uint16_t mqtt_read_uint16_t(unsigned char **pptr) {
  * @param pptr pointer to the input buffer - incremented by the number of bytes used & returned
  * @return the character read
  */
-unsigned char mqtt_read_char(unsigned char **pptr) {
+unsigned char mqtt_read_char(unsigned char **pptr)
+{
     unsigned char c = **pptr;
     (*pptr)++;
     return c;
@@ -213,7 +222,8 @@ unsigned char mqtt_read_char(unsigned char **pptr) {
  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
  * @param c the character to write
  */
-void mqtt_write_char(unsigned char **pptr, unsigned char c) {
+void mqtt_write_char(unsigned char **pptr, unsigned char c)
+{
     **pptr = c;
     (*pptr)++;
 }
@@ -223,7 +233,8 @@ void mqtt_write_char(unsigned char **pptr, unsigned char c) {
  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
  * @param anInt the integer to write
  */
-void mqtt_write_uint_16(unsigned char **pptr, uint16_t anInt) {
+void mqtt_write_uint_16(unsigned char **pptr, uint16_t anInt)
+{
     **pptr = (unsigned char) (anInt / 256);
     (*pptr)++;
     **pptr = (unsigned char) (anInt % 256);
@@ -235,7 +246,8 @@ void mqtt_write_uint_16(unsigned char **pptr, uint16_t anInt) {
  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
  * @param string the C string to write
  */
-void mqtt_write_utf8_string(unsigned char **pptr, const char *string) {
+void mqtt_write_utf8_string(unsigned char **pptr, const char *string)
+{
     size_t len = strlen(string);
     mqtt_write_uint_16(pptr, (uint16_t) len);
     memcpy(*pptr, string, len);
@@ -319,10 +331,10 @@ int mqtt_init_packet_header(unsigned char *header, MessageTypes message_type,
     }
 
     /* Generate the final protocol header by using bitwise operator */
-    *header  = ((type<<MQTT_HEADER_TYPE_SHIFT)&MQTT_HEADER_TYPE_MASK)
-                | ((dup<<MQTT_HEADER_DUP_SHIFT)&MQTT_HEADER_DUP_MASK)
-                | ((qos<<MQTT_HEADER_QOS_SHIFT)&MQTT_HEADER_QOS_MASK)
-                | (retained&MQTT_HEADER_RETAIN_MASK);
+    *header  = ((type << MQTT_HEADER_TYPE_SHIFT)&MQTT_HEADER_TYPE_MASK)
+               | ((dup << MQTT_HEADER_DUP_SHIFT)&MQTT_HEADER_DUP_MASK)
+               | ((qos << MQTT_HEADER_QOS_SHIFT)&MQTT_HEADER_QOS_MASK)
+               | (retained & MQTT_HEADER_RETAIN_MASK);
 
     return QCLOUD_RET_SUCCESS;
 }
@@ -336,7 +348,8 @@ int mqtt_init_packet_header(unsigned char *header, MessageTypes message_type,
   * @param buf_len the length in bytes of the data in the supplied buffer
   * @return error code.  1 is success, 0 is failure
   */
-int deserialize_ack_packet(uint8_t *packet_type, uint8_t *dup, uint16_t *packet_id, unsigned char *buf, size_t buf_len) {
+int deserialize_ack_packet(uint8_t *packet_type, uint8_t *dup, uint16_t *packet_id, unsigned char *buf, size_t buf_len)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(packet_type, QCLOUD_ERR_INVAL);
@@ -355,9 +368,9 @@ int deserialize_ack_packet(uint8_t *packet_type, uint8_t *dup, uint16_t *packet_
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_BUF_TOO_SHORT);
     }
 
-    header = mqtt_read_char(&curdata);        
-    *packet_type = ((header&MQTT_HEADER_TYPE_MASK)>>MQTT_HEADER_TYPE_SHIFT);
-    *dup  = ((header&MQTT_HEADER_DUP_MASK)>>MQTT_HEADER_DUP_SHIFT);
+    header = mqtt_read_char(&curdata);
+    *packet_type = ((header & MQTT_HEADER_TYPE_MASK) >> MQTT_HEADER_TYPE_SHIFT);
+    *dup  = ((header & MQTT_HEADER_DUP_MASK) >> MQTT_HEADER_DUP_SHIFT);
 
     /* read remaining length */
     rc = mqtt_read_packet_rem_len_form_buf(curdata, &decodedLen, &readBytesLen);
@@ -372,7 +385,7 @@ int deserialize_ack_packet(uint8_t *packet_type, uint8_t *dup, uint16_t *packet_
     }
 
     *packet_id = mqtt_read_uint16_t(&curdata);
-    
+
     if (enddata - curdata >= 1) {
         unsigned char ack_code = mqtt_read_char(&curdata);
         if (ack_code != 0) {
@@ -395,7 +408,7 @@ int deserialize_ack_packet(uint8_t *packet_type, uint8_t *dup, uint16_t *packet_
   * @return error code.  1 is success, 0 is failure
   */
 int deserialize_suback_packet(uint16_t *packet_id, uint32_t max_count, uint32_t *count,
-                                     QoS *grantedQoSs, unsigned char *buf, size_t buf_len) 
+                              QoS *grantedQoSs, unsigned char *buf, size_t buf_len)
 {
     IOT_FUNC_ENTRY;
 
@@ -416,12 +429,12 @@ int deserialize_suback_packet(uint16_t *packet_id, uint32_t max_count, uint32_t 
     }
     // read 1st byte in fixed header
     header = mqtt_read_char(&curdata);
-    type = (header&MQTT_HEADER_TYPE_MASK)>>MQTT_HEADER_TYPE_SHIFT;
+    type = (header & MQTT_HEADER_TYPE_MASK) >> MQTT_HEADER_TYPE_SHIFT;
     if (type != SUBACK) {
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
 
-    // read remain part in fixed header 
+    // read remain part in fixed header
     decodeRc = mqtt_read_packet_rem_len_form_buf(curdata, &decodedLen, &readBytesLen);
     if (decodeRc != QCLOUD_RET_SUCCESS) {
         IOT_FUNC_EXIT_RC(decodeRc);
@@ -455,7 +468,7 @@ int deserialize_suback_packet(uint16_t *packet_id, uint32_t max_count, uint32_t 
   * @param buf_len the length in bytes of the data in the supplied buffer
   * @return int indicating function execution status
   */
-int deserialize_unsuback_packet(uint16_t *packet_id, unsigned char *buf, size_t buf_len) 
+int deserialize_unsuback_packet(uint16_t *packet_id, unsigned char *buf, size_t buf_len)
 {
     IOT_FUNC_ENTRY;
 
@@ -482,7 +495,8 @@ int deserialize_unsuback_packet(uint16_t *packet_id, unsigned char *buf, size_t 
   * @param serialized length
   * @return int indicating function execution status
   */
-int serialize_packet_with_zero_payload(unsigned char *buf, size_t buf_len, MessageTypes packetType, uint32_t *serialized_len) {
+int serialize_packet_with_zero_payload(unsigned char *buf, size_t buf_len, MessageTypes packetType, uint32_t *serialized_len)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(buf, QCLOUD_ERR_INVAL);
@@ -512,7 +526,8 @@ int serialize_packet_with_zero_payload(unsigned char *buf, size_t buf_len, Messa
     IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
 }
 
-int send_mqtt_packet(Qcloud_IoT_Client *pClient, size_t length, Timer *timer) {
+int send_mqtt_packet(Qcloud_IoT_Client *pClient, size_t length, Timer *timer)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
@@ -544,7 +559,8 @@ int send_mqtt_packet(Qcloud_IoT_Client *pClient, size_t length, Timer *timer) {
 }
 
 
-static int _decode_packet_rem_len_with_net_read(Qcloud_IoT_Client *pClient, uint32_t *value, uint32_t timeout) {
+static int _decode_packet_rem_len_with_net_read(Qcloud_IoT_Client *pClient, uint32_t *value, uint32_t timeout)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
@@ -591,7 +607,8 @@ static int _decode_packet_rem_len_with_net_read(Qcloud_IoT_Client *pClient, uint
  * @param packet_type    MQTT packet type
  * @return QCLOUD_RET_SUCCESS for success, or err code for failure
  */
-static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *packet_type) {
+static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *packet_type)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
@@ -601,9 +618,9 @@ static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *
     uint32_t rem_len = 0;
     size_t read_len = 0;
     int rc;
-	int timer_left_ms = left_ms(timer);
-	
-	 if (timer_left_ms <= 0) {
+    int timer_left_ms = left_ms(timer);
+
+    if (timer_left_ms <= 0) {
         timer_left_ms = 1;
     }
 
@@ -618,12 +635,12 @@ static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *
     len = 1;
 
     // 2. read the remaining length
-	timer_left_ms = left_ms(timer);
+    timer_left_ms = left_ms(timer);
     if (timer_left_ms <= 0) {
         timer_left_ms = 1;
     }
     timer_left_ms += QCLOUD_IOT_MQTT_MAX_REMAIN_WAIT_MS;
-	
+
     rc = _decode_packet_rem_len_with_net_read(pClient, &rem_len, timer_left_ms);
     if (QCLOUD_RET_SUCCESS != rc) {
         IOT_FUNC_EXIT_RC(rc);
@@ -635,7 +652,7 @@ static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *
         size_t bytes_to_be_read;
         int32_t ret_val = 0;
 
-		timer_left_ms = left_ms(timer);
+        timer_left_ms = left_ms(timer);
         if (timer_left_ms <= 0) {
             timer_left_ms = 1;
         }
@@ -644,7 +661,7 @@ static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *
         bytes_to_be_read = pClient->read_buf_size;
         do {
             ret_val = pClient->network_stack.read(&(pClient->network_stack), pClient->read_buf, bytes_to_be_read, timer_left_ms,
-                                               &read_len);
+                                                  &read_len);
             if (ret_val == QCLOUD_RET_SUCCESS) {
                 total_bytes_read += read_len;
                 if ((rem_len - total_bytes_read) >= pClient->read_buf_size) {
@@ -663,33 +680,32 @@ static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *
 
     // 3. read payload according to remaining length
     if (rem_len > 0 && ((len + rem_len) > pClient->read_buf_size)) {
-		
-		timer_left_ms = left_ms(timer);
+
+        timer_left_ms = left_ms(timer);
         if (timer_left_ms <= 0) {
             timer_left_ms = 1;
         }
         timer_left_ms += QCLOUD_IOT_MQTT_MAX_REMAIN_WAIT_MS;
-	
-    	pClient->network_stack.read(&(pClient->network_stack), pClient->read_buf, rem_len, timer_left_ms, &read_len);
-    	IOT_FUNC_EXIT_RC(QCLOUD_ERR_BUF_TOO_SHORT);
-    }
-    else {
+
+        pClient->network_stack.read(&(pClient->network_stack), pClient->read_buf, rem_len, timer_left_ms, &read_len);
+        IOT_FUNC_EXIT_RC(QCLOUD_ERR_BUF_TOO_SHORT);
+    } else {
         if (rem_len > 0) {
 
-			timer_left_ms = left_ms(timer);
-	        if (timer_left_ms <= 0) {
-	            timer_left_ms = 1;
-	        }
-	        timer_left_ms += QCLOUD_IOT_MQTT_MAX_REMAIN_WAIT_MS;
-        	rc = pClient->network_stack.read(&(pClient->network_stack), pClient->read_buf + len, rem_len, timer_left_ms, &read_len);
-        	if (rc != QCLOUD_RET_SUCCESS) {
-				IOT_FUNC_EXIT_RC(rc);
-        	}
+            timer_left_ms = left_ms(timer);
+            if (timer_left_ms <= 0) {
+                timer_left_ms = 1;
+            }
+            timer_left_ms += QCLOUD_IOT_MQTT_MAX_REMAIN_WAIT_MS;
+            rc = pClient->network_stack.read(&(pClient->network_stack), pClient->read_buf + len, rem_len, timer_left_ms, &read_len);
+            if (rc != QCLOUD_RET_SUCCESS) {
+                IOT_FUNC_EXIT_RC(rc);
+            }
         }
     }
 
-    *packet_type = (pClient->read_buf[0]&MQTT_HEADER_TYPE_MASK)>>MQTT_HEADER_TYPE_SHIFT;
-    
+    *packet_type = (pClient->read_buf[0] & MQTT_HEADER_TYPE_MASK) >> MQTT_HEADER_TYPE_SHIFT;
+
     IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
 }
 
@@ -700,7 +716,8 @@ static int _read_mqtt_packet(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *
  * @param topicName
  * @return
  */
-static uint8_t _is_topic_equals(char *topic_filter, char *topicName) {
+static uint8_t _is_topic_equals(char *topic_filter, char *topicName)
+{
     return (uint8_t) (strlen(topic_filter) == strlen(topicName) && !strcmp(topic_filter, topicName));
 }
 
@@ -716,7 +733,8 @@ static uint8_t _is_topic_equals(char *topic_filter, char *topicName) {
  * @param topicNameLen  length of topic name
  * @return
  */
-static uint8_t _is_topic_matched(char *topic_filter, char *topicName, uint16_t topicNameLen) {
+static uint8_t _is_topic_matched(char *topic_filter, char *topicName, uint16_t topicNameLen)
+{
     char *curf;
     char *curn;
     char *curn_end;
@@ -769,7 +787,8 @@ static uint8_t _is_topic_matched(char *topic_filter, char *topicName, uint16_t t
  * @param message
  * @return
  */
-static int _deliver_message(Qcloud_IoT_Client *pClient, char *topicName, uint16_t topicNameLen, MQTTMessage *message) {
+static int _deliver_message(Qcloud_IoT_Client *pClient, char *topicName, uint16_t topicNameLen, MQTTMessage *message)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
@@ -781,13 +800,12 @@ static int _deliver_message(Qcloud_IoT_Client *pClient, char *topicName, uint16_
 
     uint32_t i;
     int flag_matched = 0;
-    
+
     HAL_MutexLock(pClient->lock_generic);
     for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) {
         if ((pClient->sub_handles[i].topic_filter != NULL)
             && (_is_topic_equals(topicName, (char *) pClient->sub_handles[i].topic_filter) ||
-                _is_topic_matched((char *) pClient->sub_handles[i].topic_filter, topicName, topicNameLen)))
-        {
+                _is_topic_matched((char *) pClient->sub_handles[i].topic_filter, topicName, topicNameLen))) {
             HAL_MutexUnlock(pClient->lock_generic);
             if (pClient->sub_handles[i].message_handler != NULL) {
                 pClient->sub_handles[i].message_handler(pClient, message, pClient->sub_handles[i].handler_user_data);
@@ -904,7 +922,7 @@ static int _mask_sub_info_from(Qcloud_IoT_Client *c, unsigned int msgId, SubTopi
             if (sub_info->msg_id == msgId) {
                 *messageHandler = sub_info->handler; /* return handle */
                 sub_info->node_state = MQTT_NODE_STATE_INVALID; /* mark as invalid node */
-            } 
+            }
         }
 
         list_iterator_destroy(iter);
@@ -956,7 +974,7 @@ static int _handle_suback_packet(Qcloud_IoT_Client *pClient, Timer *timer, QoS q
     QoS grantedQoS[3] = {QOS0, QOS0, QOS0};
     int rc;
     bool sub_nack = false;
-    
+
     rc = deserialize_suback_packet(&packet_id, 1, &count, grantedQoS, pClient->read_buf, pClient->read_buf_size);
     if (QCLOUD_RET_SUCCESS != rc) {
         IOT_FUNC_EXIT_RC(rc);
@@ -965,7 +983,7 @@ static int _handle_suback_packet(Qcloud_IoT_Client *pClient, Timer *timer, QoS q
     int flag_dup = 0, i_free = -1;
     // check return code in SUBACK packet: 0x00(QOS0, SUCCESS),0x01(QOS1, SUCCESS),0x02(QOS2, SUCCESS),0x80(Failure)
     if (grantedQoS[0] == 0x80) {
-        MQTTEventMsg msg;       
+        MQTTEventMsg msg;
 
         msg.event_type = MQTT_EVENT_SUBCRIBE_NACK;
         msg.msg = (void *)(uintptr_t)packet_id;
@@ -975,7 +993,7 @@ static int _handle_suback_packet(Qcloud_IoT_Client *pClient, Timer *timer, QoS q
     }
 
     HAL_MutexLock(pClient->lock_generic);
-    
+
     SubTopicHandle sub_handle;
     memset(&sub_handle, 0, sizeof(SubTopicHandle));
     (void)_mask_sub_info_from(pClient, (unsigned int)packet_id, &sub_handle);
@@ -992,25 +1010,25 @@ static int _handle_suback_packet(Qcloud_IoT_Client *pClient, Timer *timer, QoS q
         /* notify this event to topic subscriber */
         if (NULL != sub_handle.sub_event_handler)
             sub_handle.sub_event_handler(pClient, MQTT_EVENT_SUBCRIBE_NACK, sub_handle.handler_user_data);
-        
+
         HAL_Free((void *)sub_handle.topic_filter);
-        sub_handle.topic_filter = NULL;        
+        sub_handle.topic_filter = NULL;
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MQTT_SUB);
     }
 
     int i;
     for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) {
         if ((NULL != pClient->sub_handles[i].topic_filter)) {
-            if (0 == _check_handle_is_identical(&pClient->sub_handles[i], &sub_handle)) {                
+            if (0 == _check_handle_is_identical(&pClient->sub_handles[i], &sub_handle)) {
                 flag_dup = 1;
                 Log_w("Identical topic found: %s", sub_handle.topic_filter);
                 if (pClient->sub_handles[i].handler_user_data != sub_handle.handler_user_data) {
-                    Log_w("Update handler_user_data %p -> %p!", 
-                        pClient->sub_handles[i].handler_user_data, sub_handle.handler_user_data);
+                    Log_w("Update handler_user_data %p -> %p!",
+                          pClient->sub_handles[i].handler_user_data, sub_handle.handler_user_data);
                     pClient->sub_handles[i].handler_user_data = sub_handle.handler_user_data;
                 }
                 HAL_Free((void *)sub_handle.topic_filter);
-                sub_handle.topic_filter = NULL;                
+                sub_handle.topic_filter = NULL;
                 break;
             }
         } else {
@@ -1033,7 +1051,7 @@ static int _handle_suback_packet(Qcloud_IoT_Client *pClient, Timer *timer, QoS q
             pClient->sub_handles[i_free].handler_user_data = sub_handle.handler_user_data;
         }
     }
-    
+
     HAL_MutexUnlock(pClient->lock_generic);
 
     /* notify this event to user callback */
@@ -1074,18 +1092,18 @@ static int _handle_unsuback_packet(Qcloud_IoT_Client *pClient, Timer *timer)
     HAL_MutexLock(pClient->lock_generic);
 
     /* actually below code is nonsense as unsub handle is different with sub handle even the same topic_filter*/
-    #if 0
+#if 0
     int i;
     for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) {
         if ((pClient->sub_handles[i].topic_filter != NULL)
-            && (0 == _check_handle_is_identical(&pClient->sub_handles[i], &messageHandler))) {            
+            && (0 == _check_handle_is_identical(&pClient->sub_handles[i], &messageHandler))) {
             memset(&pClient->sub_handles[i], 0, sizeof(SubTopicHandle));
 
             /* NOTE: in case of more than one register(subscribe) with different callback function,
              *       so we must keep continuously searching related message handle. */
         }
     }
-    #endif
+#endif
 
     /* Free the topic filter malloced in qcloud_iot_mqtt_unsubscribe */
     if (messageHandler.topic_filter) {
@@ -1115,10 +1133,8 @@ static uint16_t sg_repeat_packet_id_buf[MQTT_MAX_REPEAT_BUF_LEN];
 static int _get_packet_id_in_repeat_buf(uint16_t packet_id)
 {
     int i;
-    for (i = 0; i < MQTT_MAX_REPEAT_BUF_LEN; ++i)
-    {
-        if (packet_id == sg_repeat_packet_id_buf[i])
-        {
+    for (i = 0; i < MQTT_MAX_REPEAT_BUF_LEN; ++i) {
+        if (packet_id == sg_repeat_packet_id_buf[i]) {
             return packet_id;
         }
     }
@@ -1140,8 +1156,7 @@ static void _add_packet_id_to_repeat_buf(uint16_t packet_id)
 void reset_repeat_packet_id_buffer(void)
 {
     int i;
-    for (i = 0; i < MQTT_MAX_REPEAT_BUF_LEN; ++i)
-    {
+    for (i = 0; i < MQTT_MAX_REPEAT_BUF_LEN; ++i) {
         sg_repeat_packet_id_buf[i] = 0;
     }
 }
@@ -1149,7 +1164,8 @@ void reset_repeat_packet_id_buffer(void)
 #endif
 
 
-static int _handle_publish_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
+static int _handle_publish_packet(Qcloud_IoT_Client *pClient, Timer *timer)
+{
     IOT_FUNC_ENTRY;
     char *topic_name;
     uint16_t topic_len;
@@ -1162,18 +1178,17 @@ static int _handle_publish_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
     if (QCLOUD_RET_SUCCESS != rc) {
         IOT_FUNC_EXIT_RC(rc);
     }
-    
+
     // topicName from packet is NOT null terminated
     char fix_topic[MAX_SIZE_OF_CLOUD_TOPIC] = {0};
-	
-	if(topic_len > MAX_SIZE_OF_CLOUD_TOPIC){
-		topic_len = MAX_SIZE_OF_CLOUD_TOPIC - 1;
-		Log_e("topic len exceed buffer len");
-	}
+
+    if (topic_len > MAX_SIZE_OF_CLOUD_TOPIC) {
+        topic_len = MAX_SIZE_OF_CLOUD_TOPIC - 1;
+        Log_e("topic len exceed buffer len");
+    }
     memcpy(fix_topic, topic_name, topic_len);
 
-    if (QOS0 == msg.qos)
-    {
+    if (QOS0 == msg.qos) {
         rc = _deliver_message(pClient, fix_topic, topic_len, &msg);
         if (QCLOUD_RET_SUCCESS != rc)
             IOT_FUNC_EXIT_RC(rc);
@@ -1187,8 +1202,7 @@ static int _handle_publish_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
         int repeat_id = _get_packet_id_in_repeat_buf(msg.id);
 
         // deliver to msg callback
-        if (repeat_id < 0)
-        {
+        if (repeat_id < 0) {
 #endif
             rc = _deliver_message(pClient, fix_topic, topic_len, &msg);
             if (QCLOUD_RET_SUCCESS != rc)
@@ -1198,7 +1212,7 @@ static int _handle_publish_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
         _add_packet_id_to_repeat_buf(msg.id);
 #endif
     }
-    
+
     HAL_MutexLock(pClient->lock_write_buf);
     if (QOS1 == msg.qos) {
         rc = serialize_pub_ack_packet(pClient->write_buf, pClient->write_buf_size, PUBACK, 0, msg.id, &len);
@@ -1222,7 +1236,8 @@ static int _handle_publish_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
 }
 
 
-static int _handle_pubrec_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
+static int _handle_pubrec_packet(Qcloud_IoT_Client *pClient, Timer *timer)
+{
     IOT_FUNC_ENTRY;
     uint16_t packet_id;
     unsigned char dup, type;
@@ -1254,7 +1269,8 @@ static int _handle_pubrec_packet(Qcloud_IoT_Client *pClient, Timer *timer) {
 }
 
 
-static void _handle_pingresp_packet(Qcloud_IoT_Client *pClient) {
+static void _handle_pingresp_packet(Qcloud_IoT_Client *pClient)
+{
     IOT_FUNC_ENTRY;
 
     HAL_MutexLock(pClient->lock_generic);
@@ -1265,7 +1281,8 @@ static void _handle_pingresp_packet(Qcloud_IoT_Client *pClient) {
     IOT_FUNC_EXIT;
 }
 
-int cycle_for_read(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *packet_type, QoS qos) {
+int cycle_for_read(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *packet_type, QoS qos)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
@@ -1309,29 +1326,29 @@ int cycle_for_read(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *packet_typ
         }
         case PUBCOMP:
             break;
-        case PINGRESP: 
+        case PINGRESP:
             break;
         default: {
             /* Either unknown packet type or Failure occurred
              * Should not happen */
-             
+
             IOT_FUNC_EXIT_RC(QCLOUD_ERR_RX_MESSAGE_INVAL);
             break;
         }
     }
 
-    switch (*packet_type) {        
+    switch (*packet_type) {
         /* Recv below msgs are all considered as PING OK */
         case PUBACK:
         case SUBACK:
-        case UNSUBACK:        
+        case UNSUBACK:
         case PINGRESP: {
             _handle_pingresp_packet(pClient);
             break;
         }
         /* Recv downlink pub means link is OK but we still need to send PING request */
         case PUBLISH: {
-            HAL_MutexLock(pClient->lock_generic);    
+            HAL_MutexLock(pClient->lock_generic);
             pClient->is_ping_outstanding = 0;
             HAL_MutexUnlock(pClient->lock_generic);
             break;
@@ -1341,37 +1358,40 @@ int cycle_for_read(Qcloud_IoT_Client *pClient, Timer *timer, uint8_t *packet_typ
     IOT_FUNC_EXIT_RC(rc);
 }
 
-int wait_for_read(Qcloud_IoT_Client *pClient, uint8_t packet_type, Timer *timer, QoS qos) {
-	IOT_FUNC_ENTRY;
-	int rc;
-	uint8_t read_packet_type = 0;
+int wait_for_read(Qcloud_IoT_Client *pClient, uint8_t packet_type, Timer *timer, QoS qos)
+{
+    IOT_FUNC_ENTRY;
+    int rc;
+    uint8_t read_packet_type = 0;
 
-	POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
-	POINTER_SANITY_CHECK(timer, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(pClient, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(timer, QCLOUD_ERR_INVAL);
 
-	do {
-		if (expired(timer)) {
-			rc = QCLOUD_ERR_MQTT_REQUEST_TIMEOUT;
-			break;
-		}
-		rc = cycle_for_read(pClient, timer, &read_packet_type, qos);
-	} while (QCLOUD_RET_SUCCESS == rc && read_packet_type != packet_type );
+    do {
+        if (expired(timer)) {
+            rc = QCLOUD_ERR_MQTT_REQUEST_TIMEOUT;
+            break;
+        }
+        rc = cycle_for_read(pClient, timer, &read_packet_type, qos);
+    } while (QCLOUD_RET_SUCCESS == rc && read_packet_type != packet_type );
 
-	IOT_FUNC_EXIT_RC(rc);
+    IOT_FUNC_EXIT_RC(rc);
 }
 
-void set_client_conn_state(Qcloud_IoT_Client *pClient, uint8_t connected) {
+void set_client_conn_state(Qcloud_IoT_Client *pClient, uint8_t connected)
+{
     HAL_MutexLock(pClient->lock_generic);
     pClient->is_connected = connected;
     HAL_MutexUnlock(pClient->lock_generic);
 }
 
-uint8_t get_client_conn_state(Qcloud_IoT_Client *pClient) {
+uint8_t get_client_conn_state(Qcloud_IoT_Client *pClient)
+{
     IOT_FUNC_ENTRY;
-	uint8_t is_connected = 0;
-	HAL_MutexLock(pClient->lock_generic);
-	is_connected = pClient->is_connected;
-	HAL_MutexUnlock(pClient->lock_generic);
+    uint8_t is_connected = 0;
+    HAL_MutexLock(pClient->lock_generic);
+    is_connected = pClient->is_connected;
+    HAL_MutexUnlock(pClient->lock_generic);
     IOT_FUNC_EXIT_RC(is_connected);
 }
 
@@ -1381,7 +1401,7 @@ uint8_t get_client_conn_state(Qcloud_IoT_Client *pClient) {
  * return: 0, success; NOT 0, fail;
  */
 int push_sub_info_to(Qcloud_IoT_Client *c, int len, unsigned short msgId, MessageTypes type,
-                                   SubTopicHandle *handler, ListNode **node)
+                     SubTopicHandle *handler, ListNode **node)
 {
     IOT_FUNC_ENTRY;
     if (!c || !handler || !node) {
@@ -1398,13 +1418,13 @@ int push_sub_info_to(Qcloud_IoT_Client *c, int len, unsigned short msgId, Messag
     }
 
     QcloudIotSubInfo *sub_info = (QcloudIotSubInfo *)HAL_Malloc(sizeof(
-            QcloudIotSubInfo) + len);
+                                     QcloudIotSubInfo) + len);
     if (NULL == sub_info) {
         HAL_MutexUnlock(c->lock_list_sub);
         Log_e("malloc failed!");
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
-    
+
     sub_info->node_state = MQTT_NODE_STATE_NORMANL;
     sub_info->msg_id = msgId;
     sub_info->len = len;

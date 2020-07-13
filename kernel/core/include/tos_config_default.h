@@ -90,19 +90,11 @@
 /////////////////////////////////////////
 // enable mmheap
 #ifndef TOS_CFG_MMHEAP_EN
-#define TOS_CFG_MMHEAP_EN                       1u
+#define TOS_CFG_MMHEAP_EN                       0u
 #endif
 
 #ifndef TOS_CFG_MMHEAP_DEFAULT_POOL_EN
 #define TOS_CFG_MMHEAP_DEFAULT_POOL_EN          1u
-#endif
-/////////////////////////////////////////
-
-
-/////////////////////////////////////////
-// disable default
-#ifndef TOS_CFG_MMBLK_EN
-#define TOS_CFG_MMBLK_EN                       0u
 #endif
 /////////////////////////////////////////
 
@@ -232,10 +224,6 @@
 #define  TOS_CFG_TASK_PRIO_MAX                  8u
 #endif
 
-#ifndef TOS_CFG_MMBLK_EN
-#define TOS_CFG_MMBLK_EN                       0u
-#endif
-
 #ifndef TOS_CFG_MMHEAP_EN
 #define TOS_CFG_MMHEAP_EN                       0u
 #endif
@@ -250,10 +238,6 @@
 
 #ifndef TOS_CFG_TICKLESS_EN
 #define TOS_CFG_TICKLESS_EN                 0u
-#endif
-
-#ifndef TOS_CFG_VFS_EN
-#define TOS_CFG_VFS_EN                      0u
 #endif
 
 #if (TOS_CFG_PWR_MGR_EN > 0u) || (TOS_CFG_TICKLESS_EN > 0u)

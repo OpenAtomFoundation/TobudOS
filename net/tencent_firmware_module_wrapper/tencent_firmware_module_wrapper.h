@@ -77,6 +77,17 @@ typedef struct device_info_st {
     char device_serc[DEVICE_SERC_MAX_SIZE + 1];
 } device_info_t;
 
+typedef enum ota_mode_en {
+    OTA_DISABLE,
+    OTA_ENABLE
+} ota_mode_t;
+
+typedef struct ota_fw_info_st {
+    char     fw_version[10];
+    uint32_t  fw_size;
+    uint8_t  fw_md5[50];
+} ota_fw_info_t;
+
 typedef struct tencent_firmware_module_st {
     int (*init)(void);
 
@@ -97,6 +108,12 @@ typedef struct tencent_firmware_module_st {
     int (*mqtt_state_get)(mqtt_state_t *state);
 
     int (*debug_level_set)(int log_level);
+    
+    int (*ota_set)(ota_mode_t mode, char *version);
+    
+    int (*ota_read_fwinfo)(ota_fw_info_t *ota_fw_info);
+    
+    int (*ota_read_fwdata)(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
 } tencent_firmware_module_t;
 
 /**
@@ -217,11 +234,45 @@ int tos_tf_module_mqtt_state_get(mqtt_state_t *state);
  * @attention None
  *
  * @param[in]   log_level   device information
- * @param[in]   tls_mode    tls mode
  *
  * @return  errcode
  */
 int tos_tf_module_debug_level_set(int log_level);
+
+/**
+ * @brief Set tencent firmware module OTA mode
+ *
+ * @attention None
+ *
+ * @param[in]   mode   OTA_DISABLE or OTA_ENABLE
+ *
+ * @return  errcode
+ */
+int tos_tf_module_ota_set(ota_mode_t mode, char *version);
+
+/**
+ * @brief Read fw info from tencent firmware module
+ *
+ * @attention None
+ *
+ * @param[in]   ota_fw_info   fw information struct
+ *
+ * @return  errcode
+ */
+int tos_tf_module_ota_read_fwinfo(ota_fw_info_t *ota_fw_info);
+
+/**
+ * @brief Read fw data from tencent firmware module
+ *
+ * @attention None
+ *
+ * @param[in]   ota_fw_data_buffer   fw data buffer
+ *
+ * @param[in]   buf_size   fw data buffer size
+ *
+ * @return  errcode
+ */
+int tos_tf_module_ota_read_fwdata(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
 
 #endif
 

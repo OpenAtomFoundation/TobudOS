@@ -17,7 +17,7 @@
 
 #define TOS_CFG_MMHEAP_EN           1u
 
-#define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE    0x12000
+#define TOS_CFG_MMHEAP_DEFAULT_POOL_SIZE    0x13000
 
 #define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN  1u
 
@@ -38,8 +38,6 @@
 #define TOS_CFG_PWR_MGR_EN          0u
 
 #define TOS_CFG_TICKLESS_EN         0u
-
-#define TOS_CFG_VFS_EN              1u
 
 #define TOS_CFG_IDLE_TASK_STK_SIZE      80u
 

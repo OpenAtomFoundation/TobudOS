@@ -25,7 +25,7 @@
 #include "main.h"
 #include "stm32wlxx_it.h"
 #include "tos_k.h"
-
+#include "sensor_parser.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -61,9 +61,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern UART_HandleTypeDef hlpuart1;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
+extern SUBGHZ_HandleTypeDef hsubghz;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -221,34 +221,35 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART2_IRQn 1 */
 }
 
-/**
-  * @brief This function handles USART3 global interrupt.
-  */
 void USART2_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART2_IRQn 0 */
-
-  /* USER CODE END USART2_IRQn 0 */
-  HAL_UART_IRQHandler(&huart2);
-  /* USER CODE BEGIN USART2_IRQn 1 */
-
-  /* USER CODE END USART2_IRQn 1 */
-}
-
-/**
-  * @brief This function handles LPUART1 global interrupt.
-  */
-void LPUART1_IRQHandler(void)
 {
   /* USER CODE BEGIN LPUART1_IRQn 0 */
 
   /* USER CODE END LPUART1_IRQn 0 */
-  HAL_UART_IRQHandler(&hlpuart1);
+    tos_knl_irq_enter();
+    HAL_UART_IRQHandler(&huart2);
+    tos_knl_irq_leave();
   /* USER CODE BEGIN LPUART1_IRQn 1 */
 
   /* USER CODE END LPUART1_IRQn 1 */
 }
-/* USER CODE BEGIN 1 */
 
+void Radio_IRQHandler(void)
+{
+  HAL_SUBGHZ_IRQHandler(&hsubghz);
+}
+
+/* USER CODE BEGIN 1 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    extern uint8_t msg;
+    
+    if(huart ->Instance == USART2)
+    {
+        tos_shell_input_byte(msg);
+        HAL_UART_Receive_IT(&huart2, (uint8_t*)&msg, 1);
+        
+    }
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

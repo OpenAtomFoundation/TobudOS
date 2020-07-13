@@ -17,13 +17,10 @@
 
 #include "tos_k.h"
 
-#if TOS_CFG_MMBLK_EN > 0u
-
 __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, size_t blk_num, size_t blk_size)
 {
     uint32_t    i;
-    void       *blk_curr;
-    void       *blk_next;
+    void       *blk_curr, *blk_next;
 
     TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(pool_start);
@@ -106,12 +103,11 @@ __API__ k_err_t tos_mmblk_free(k_mmblk_pool_t *mbp, void *blk)
         TOS_CPU_INT_ENABLE();
         return K_ERR_MMBLK_POOL_FULL;
     }
+
     *(void **)blk   = mbp->free_list;
     mbp->free_list  = blk;
     ++mbp->blk_free;
     TOS_CPU_INT_ENABLE();
     return K_ERR_NONE;
 }
-
-#endif
 

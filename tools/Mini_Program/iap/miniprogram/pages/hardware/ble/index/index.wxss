@@ -1,0 +1,27 @@
+page {
+  background-color: #f8f8f8;
+}
+.container {
+  padding: 0 30rpx 0 30rpx;
+  align-items: center;
+}
+.list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0 10px 0;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  border-style: none none solid none;
+  border-bottom-color: lightgray;
+}
+.list-item:last-child {
+  border-style: none;
+}
+.button {
+  position: fixed;
+  width: 690rpx;
+  bottom: 30rpx;
+}

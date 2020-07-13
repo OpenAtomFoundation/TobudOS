@@ -274,7 +274,6 @@ ListNode *list_iterator_next(ListIterator *self)
 void list_iterator_destroy(ListIterator *self)
 {
     HAL_Free(self);
-    self = NULL;
 }
 
 /*

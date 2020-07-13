@@ -32,31 +32,30 @@
 uintptr_t HAL_UDP_Connect(const char *host, unsigned short port)
 {
     int fd;
-	char port_str[PORT_BUFF_LEN];
+    char port_str[PORT_BUFF_LEN] = {0};
 
-	memset(port_str, 0, PORT_BUFF_LEN);
-	snprintf(port_str, PORT_BUFF_LEN, "%u", port);
-	Log_i("osal_udp_connect entry, host=%s port=%d(%s)", host , port, port_str);
+    snprintf(port_str, PORT_BUFF_LEN, "%u", port);
+    Log_i("osal_udp_connect entry, host=%s port=%d(%s)", host , port, port_str);
 
-	fd = tos_sal_module_connect("111.230.127.136", "5684", TOS_SAL_PROTO_UDP);
-	if (fd < 0) {
-		Log_i("net connect fail\n\r");
-		if (QCLOUD_RET_SUCCESS == tos_sal_module_init()) { /* ÖØÐÂ³õÊ¼»¯Ä£×é */
-			Log_i("net reinit success\n\r");
-			fd = tos_sal_module_connect(host, port_str, TOS_SAL_PROTO_UDP);
-			if (fd < 0) {
-				Log_i("net connect fail\n\r");
-				return NULL;
-			} else {
-				Log_i("net connect success, fd=%d\n\r", fd);
-			}
+    fd = tos_sal_module_connect("111.230.127.136", "5684", TOS_SAL_PROTO_UDP);
+    if (fd < 0) {
+        Log_i("net connect fail\n\r");
+        if (QCLOUD_RET_SUCCESS == tos_sal_module_init()) { 
+            Log_i("net reinit success\n\r");
+            fd = tos_sal_module_connect(host, port_str, TOS_SAL_PROTO_UDP);
+            if (fd < 0) {
+                Log_i("net connect fail\n\r");
+                return NULL;
+            } else {
+                Log_i("net connect success, fd=%d\n\r", fd);
+            }
         } else {
-			Log_i("net reinit fail\n\r");
-			return NULL;
-		}
-	}
+            Log_i("net reinit fail\n\r");
+            return NULL;
+        }
+    }
 
-	return fd;
+    return fd;
 }
 
 void HAL_UDP_Disconnect(uintptr_t fd)
@@ -115,4 +114,4 @@ int HAL_UDP_ReadTimeout(uintptr_t fd, unsigned char *p_data, unsigned int datale
     return QCLOUD_RET_SUCCESS;
 }
 
-#endif
+#endif/*COAP_COMM_ENABLED*/

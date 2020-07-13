@@ -16,9 +16,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
 
-#include <rtthread.h>  
+
+#include <rtthread.h>
 #include <string.h>
 #include "qcloud_iot_import.h"
 
@@ -27,68 +27,68 @@ static char now_time_str[20] = {0};
 uint32_t HAL_GetTimeMs(void)
 {
 #if (RT_TICK_PER_SECOND == 1000)
-			/* #define RT_TICK_PER_SECOND 1000 */
-			return (unsigned long)rt_tick_get();
+    /* #define RT_TICK_PER_SECOND 1000 */
+    return (unsigned long)rt_tick_get();
 #else
-			unsigned long tick = 0;
-					
-			tick = rt_tick_get();
-			tick = tick * 1000;
-			return (unsigned long)((tick + RT_TICK_PER_SECOND - 1)/RT_TICK_PER_SECOND);
+    unsigned long tick = 0;
+
+    tick = rt_tick_get();
+    tick = tick * 1000;
+    return (unsigned long)((tick + RT_TICK_PER_SECOND - 1) / RT_TICK_PER_SECOND);
 #endif
 
 }
 
 /*Get timestamp*/
-long HAL_Timer_current_sec(void) 
+long HAL_Timer_current_sec(void)
 {
-	return HAL_GetTimeMs()/1000;
+    return HAL_GetTimeMs() / 1000;
 }
 
 
-char* HAL_Timer_current(void) 
+char* HAL_Timer_current(void)
 {
-	long time_sec;
-	
-	time_sec = HAL_Timer_current_sec();
-	memset(now_time_str, 0, 20);
-	snprintf(now_time_str, 20, "%ld",time_sec);
-	
-	return now_time_str;
+    long time_sec;
+
+    time_sec = HAL_Timer_current_sec();
+    memset(now_time_str, 0, 20);
+    snprintf(now_time_str, 20, "%ld", time_sec);
+
+    return now_time_str;
 }
 
 
-    
-bool HAL_Timer_expired(Timer *timer) 
+
+bool HAL_Timer_expired(Timer *timer)
 {
     uint32_t now_ts;
-	
-	now_ts	= HAL_GetTimeMs();
+
+    now_ts  = HAL_GetTimeMs();
 
 
-    return (now_ts > timer->end_time)?true:false;
+    return (now_ts > timer->end_time) ? true : false;
 }
 
-void HAL_Timer_countdown_ms(Timer *timer, unsigned int timeout_ms) 
-{
-	timer->end_time = HAL_GetTimeMs();
-    timer->end_time += timeout_ms;	
-}
-
-void HAL_Timer_countdown(Timer *timer, unsigned int timeout) 
+void HAL_Timer_countdown_ms(Timer *timer, unsigned int timeout_ms)
 {
     timer->end_time = HAL_GetTimeMs();
-	timer->end_time += timeout*1000;
+    timer->end_time += timeout_ms;
 }
 
-int HAL_Timer_remain(Timer *timer) 
+void HAL_Timer_countdown(Timer *timer, unsigned int timeout)
 {
-	 return (int)(timer->end_time - HAL_GetTimeMs()); 	
+    timer->end_time = HAL_GetTimeMs();
+    timer->end_time += timeout * 1000;
 }
 
-void HAL_Timer_init(Timer *timer) 
+int HAL_Timer_remain(Timer *timer)
 {
-      timer->end_time = 0;
+    return (int)(timer->end_time - HAL_GetTimeMs());
+}
+
+void HAL_Timer_init(Timer *timer)
+{
+    timer->end_time = 0;
 }
 
 #ifdef __cplusplus

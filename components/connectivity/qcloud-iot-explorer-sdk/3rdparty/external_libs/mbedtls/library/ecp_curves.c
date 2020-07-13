@@ -581,7 +581,7 @@ static int ecp_group_load( mbedtls_ecp_group *grp,
                            const mbedtls_mpi_uint *n,  size_t nlen)
 {
     ecp_mpi_load( &grp->P, p, plen );
-    if( a != NULL )
+    if ( a != NULL )
         ecp_mpi_load( &grp->A, a, alen );
     ecp_mpi_load( &grp->B, b, blen );
     ecp_mpi_load( &grp->N, n, nlen );
@@ -595,7 +595,7 @@ static int ecp_group_load( mbedtls_ecp_group *grp,
 
     grp->h = 1;
 
-    return( 0 );
+    return ( 0 );
 }
 
 #if defined(MBEDTLS_ECP_NIST_OPTIM)
@@ -678,10 +678,10 @@ static int ecp_use_curve25519( mbedtls_ecp_group *grp )
     grp->nbits = 254;
 
 cleanup:
-    if( ret != 0 )
+    if ( ret != 0 )
         mbedtls_ecp_group_free( grp );
 
-    return( ret );
+    return ( ret );
 }
 #endif /* MBEDTLS_ECP_DP_CURVE25519_ENABLED */
 
@@ -694,80 +694,79 @@ int mbedtls_ecp_group_load( mbedtls_ecp_group *grp, mbedtls_ecp_group_id id )
 
     grp->id = id;
 
-    switch( id )
-    {
+    switch ( id ) {
 #if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
         case MBEDTLS_ECP_DP_SECP192R1:
             NIST_MODP( p192 );
-            return( LOAD_GROUP( secp192r1 ) );
+            return ( LOAD_GROUP( secp192r1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP192R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP224R1_ENABLED)
         case MBEDTLS_ECP_DP_SECP224R1:
             NIST_MODP( p224 );
-            return( LOAD_GROUP( secp224r1 ) );
+            return ( LOAD_GROUP( secp224r1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP224R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
         case MBEDTLS_ECP_DP_SECP256R1:
             NIST_MODP( p256 );
-            return( LOAD_GROUP( secp256r1 ) );
+            return ( LOAD_GROUP( secp256r1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP256R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED)
         case MBEDTLS_ECP_DP_SECP384R1:
             NIST_MODP( p384 );
-            return( LOAD_GROUP( secp384r1 ) );
+            return ( LOAD_GROUP( secp384r1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP384R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP521R1_ENABLED)
         case MBEDTLS_ECP_DP_SECP521R1:
             NIST_MODP( p521 );
-            return( LOAD_GROUP( secp521r1 ) );
+            return ( LOAD_GROUP( secp521r1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP521R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP192K1_ENABLED)
         case MBEDTLS_ECP_DP_SECP192K1:
             grp->modp = ecp_mod_p192k1;
-            return( LOAD_GROUP_A( secp192k1 ) );
+            return ( LOAD_GROUP_A( secp192k1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP192K1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP224K1_ENABLED)
         case MBEDTLS_ECP_DP_SECP224K1:
             grp->modp = ecp_mod_p224k1;
-            return( LOAD_GROUP_A( secp224k1 ) );
+            return ( LOAD_GROUP_A( secp224k1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP224K1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_SECP256K1_ENABLED)
         case MBEDTLS_ECP_DP_SECP256K1:
             grp->modp = ecp_mod_p256k1;
-            return( LOAD_GROUP_A( secp256k1 ) );
+            return ( LOAD_GROUP_A( secp256k1 ) );
 #endif /* MBEDTLS_ECP_DP_SECP256K1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
         case MBEDTLS_ECP_DP_BP256R1:
-            return( LOAD_GROUP_A( brainpoolP256r1 ) );
+            return ( LOAD_GROUP_A( brainpoolP256r1 ) );
 #endif /* MBEDTLS_ECP_DP_BP256R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
         case MBEDTLS_ECP_DP_BP384R1:
-            return( LOAD_GROUP_A( brainpoolP384r1 ) );
+            return ( LOAD_GROUP_A( brainpoolP384r1 ) );
 #endif /* MBEDTLS_ECP_DP_BP384R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
         case MBEDTLS_ECP_DP_BP512R1:
-            return( LOAD_GROUP_A( brainpoolP512r1 ) );
+            return ( LOAD_GROUP_A( brainpoolP512r1 ) );
 #endif /* MBEDTLS_ECP_DP_BP512R1_ENABLED */
 
 #if defined(MBEDTLS_ECP_DP_CURVE25519_ENABLED)
         case MBEDTLS_ECP_DP_CURVE25519:
             grp->modp = ecp_mod_p255;
-            return( ecp_use_curve25519( grp ) );
+            return ( ecp_use_curve25519( grp ) );
 #endif /* MBEDTLS_ECP_DP_CURVE25519_ENABLED */
 
         default:
             mbedtls_ecp_group_free( grp );
-            return( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
+            return ( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
     }
 }
 
@@ -800,10 +799,11 @@ static inline void add64( mbedtls_mpi_uint *dst, mbedtls_mpi_uint *src, mbedtls_
 {
     unsigned char i;
     mbedtls_mpi_uint c = 0;
-    for( i = 0; i < 8 / sizeof( mbedtls_mpi_uint ); i++, dst++, src++ )
-    {
-        *dst += c;      c  = ( *dst < c );
-        *dst += *src;   c += ( *dst < *src );
+    for ( i = 0; i < 8 / sizeof( mbedtls_mpi_uint ); i++, dst++, src++ ) {
+        *dst += c;
+        c  = ( *dst < c );
+        *dst += *src;
+        c += ( *dst < *src );
     }
     *carry += c;
 }
@@ -812,8 +812,7 @@ static inline void add64( mbedtls_mpi_uint *dst, mbedtls_mpi_uint *src, mbedtls_
 static inline void carry64( mbedtls_mpi_uint *dst, mbedtls_mpi_uint *carry )
 {
     unsigned char i;
-    for( i = 0; i < 8 / sizeof( mbedtls_mpi_uint ); i++, dst++ )
-    {
+    for ( i = 0; i < 8 / sizeof( mbedtls_mpi_uint ); i++, dst++ ) {
         *dst += *carry;
         *carry  = ( *dst < *carry );
     }
@@ -840,12 +839,19 @@ static int ecp_mod_p192( mbedtls_mpi *N )
     p = N->p;
     end = p + N->n;
 
-    ADD( 3 ); ADD( 5 );             NEXT; // A0 += A3 + A5
-    ADD( 3 ); ADD( 4 ); ADD( 5 );   NEXT; // A1 += A3 + A4 + A5
-    ADD( 4 ); ADD( 5 );             LAST; // A2 += A4 + A5
+    ADD( 3 );
+    ADD( 5 );
+    NEXT; // A0 += A3 + A5
+    ADD( 3 );
+    ADD( 4 );
+    ADD( 5 );
+    NEXT; // A1 += A3 + A4 + A5
+    ADD( 4 );
+    ADD( 5 );
+    LAST; // A2 += A4 + A5
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 
 #undef WIDTH
@@ -961,11 +967,11 @@ static inline int fix_negative( mbedtls_mpi *N, signed char c, mbedtls_mpi *C, s
 #if !defined(MBEDTLS_HAVE_INT64)
     ((void) bits);
 #else
-    if( bits == 224 )
-        C->p[ C->n - 1 ] = ((mbedtls_mpi_uint) -c) << 32;
+    if ( bits == 224 )
+        C->p[ C->n - 1 ] = ((mbedtls_mpi_uint) - c) << 32;
     else
 #endif
-        C->p[ C->n - 1 ] = (mbedtls_mpi_uint) -c;
+    C->p[ C->n - 1 ] = (mbedtls_mpi_uint) - c;
 
     /* N = - ( C - N ) */
     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_abs( N, C, N ) );
@@ -973,7 +979,7 @@ static inline int fix_negative( mbedtls_mpi *N, signed char c, mbedtls_mpi *C, s
 
 cleanup:
 
-    return( ret );
+    return ( ret );
 }
 
 #if defined(MBEDTLS_ECP_DP_SECP224R1_ENABLED)
@@ -984,16 +990,33 @@ static int ecp_mod_p224( mbedtls_mpi *N )
 {
     INIT( 224 );
 
-    SUB(  7 ); SUB( 11 );               NEXT; // A0 += -A7 - A11
-    SUB(  8 ); SUB( 12 );               NEXT; // A1 += -A8 - A12
-    SUB(  9 ); SUB( 13 );               NEXT; // A2 += -A9 - A13
-    SUB( 10 ); ADD(  7 ); ADD( 11 );    NEXT; // A3 += -A10 + A7 + A11
-    SUB( 11 ); ADD(  8 ); ADD( 12 );    NEXT; // A4 += -A11 + A8 + A12
-    SUB( 12 ); ADD(  9 ); ADD( 13 );    NEXT; // A5 += -A12 + A9 + A13
-    SUB( 13 ); ADD( 10 );               LAST; // A6 += -A13 + A10
+    SUB(  7 );
+    SUB( 11 );
+    NEXT; // A0 += -A7 - A11
+    SUB(  8 );
+    SUB( 12 );
+    NEXT; // A1 += -A8 - A12
+    SUB(  9 );
+    SUB( 13 );
+    NEXT; // A2 += -A9 - A13
+    SUB( 10 );
+    ADD(  7 );
+    ADD( 11 );
+    NEXT; // A3 += -A10 + A7 + A11
+    SUB( 11 );
+    ADD(  8 );
+    ADD( 12 );
+    NEXT; // A4 += -A11 + A8 + A12
+    SUB( 12 );
+    ADD(  9 );
+    ADD( 13 );
+    NEXT; // A5 += -A12 + A9 + A13
+    SUB( 13 );
+    ADD( 10 );
+    LAST; // A6 += -A13 + A10
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 #endif /* MBEDTLS_ECP_DP_SECP224R1_ENABLED */
 
@@ -1005,32 +1028,79 @@ static int ecp_mod_p256( mbedtls_mpi *N )
 {
     INIT( 256 );
 
-    ADD(  8 ); ADD(  9 );
-    SUB( 11 ); SUB( 12 ); SUB( 13 ); SUB( 14 );             NEXT; // A0
+    ADD(  8 );
+    ADD(  9 );
+    SUB( 11 );
+    SUB( 12 );
+    SUB( 13 );
+    SUB( 14 );
+    NEXT; // A0
 
-    ADD(  9 ); ADD( 10 );
-    SUB( 12 ); SUB( 13 ); SUB( 14 ); SUB( 15 );             NEXT; // A1
+    ADD(  9 );
+    ADD( 10 );
+    SUB( 12 );
+    SUB( 13 );
+    SUB( 14 );
+    SUB( 15 );
+    NEXT; // A1
 
-    ADD( 10 ); ADD( 11 );
-    SUB( 13 ); SUB( 14 ); SUB( 15 );                        NEXT; // A2
+    ADD( 10 );
+    ADD( 11 );
+    SUB( 13 );
+    SUB( 14 );
+    SUB( 15 );
+    NEXT; // A2
 
-    ADD( 11 ); ADD( 11 ); ADD( 12 ); ADD( 12 ); ADD( 13 );
-    SUB( 15 ); SUB(  8 ); SUB(  9 );                        NEXT; // A3
+    ADD( 11 );
+    ADD( 11 );
+    ADD( 12 );
+    ADD( 12 );
+    ADD( 13 );
+    SUB( 15 );
+    SUB(  8 );
+    SUB(  9 );
+    NEXT; // A3
 
-    ADD( 12 ); ADD( 12 ); ADD( 13 ); ADD( 13 ); ADD( 14 );
-    SUB(  9 ); SUB( 10 );                                   NEXT; // A4
+    ADD( 12 );
+    ADD( 12 );
+    ADD( 13 );
+    ADD( 13 );
+    ADD( 14 );
+    SUB(  9 );
+    SUB( 10 );
+    NEXT; // A4
 
-    ADD( 13 ); ADD( 13 ); ADD( 14 ); ADD( 14 ); ADD( 15 );
-    SUB( 10 ); SUB( 11 );                                   NEXT; // A5
+    ADD( 13 );
+    ADD( 13 );
+    ADD( 14 );
+    ADD( 14 );
+    ADD( 15 );
+    SUB( 10 );
+    SUB( 11 );
+    NEXT; // A5
 
-    ADD( 14 ); ADD( 14 ); ADD( 15 ); ADD( 15 ); ADD( 14 ); ADD( 13 );
-    SUB(  8 ); SUB(  9 );                                   NEXT; // A6
+    ADD( 14 );
+    ADD( 14 );
+    ADD( 15 );
+    ADD( 15 );
+    ADD( 14 );
+    ADD( 13 );
+    SUB(  8 );
+    SUB(  9 );
+    NEXT; // A6
 
-    ADD( 15 ); ADD( 15 ); ADD( 15 ); ADD( 8 );
-    SUB( 10 ); SUB( 11 ); SUB( 12 ); SUB( 13 );             LAST; // A7
+    ADD( 15 );
+    ADD( 15 );
+    ADD( 15 );
+    ADD( 8 );
+    SUB( 10 );
+    SUB( 11 );
+    SUB( 12 );
+    SUB( 13 );
+    LAST; // A7
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 #endif /* MBEDTLS_ECP_DP_SECP256R1_ENABLED */
 
@@ -1042,44 +1112,98 @@ static int ecp_mod_p384( mbedtls_mpi *N )
 {
     INIT( 384 );
 
-    ADD( 12 ); ADD( 21 ); ADD( 20 );
-    SUB( 23 );                                              NEXT; // A0
+    ADD( 12 );
+    ADD( 21 );
+    ADD( 20 );
+    SUB( 23 );
+    NEXT; // A0
 
-    ADD( 13 ); ADD( 22 ); ADD( 23 );
-    SUB( 12 ); SUB( 20 );                                   NEXT; // A2
+    ADD( 13 );
+    ADD( 22 );
+    ADD( 23 );
+    SUB( 12 );
+    SUB( 20 );
+    NEXT; // A2
 
-    ADD( 14 ); ADD( 23 );
-    SUB( 13 ); SUB( 21 );                                   NEXT; // A2
+    ADD( 14 );
+    ADD( 23 );
+    SUB( 13 );
+    SUB( 21 );
+    NEXT; // A2
 
-    ADD( 15 ); ADD( 12 ); ADD( 20 ); ADD( 21 );
-    SUB( 14 ); SUB( 22 ); SUB( 23 );                        NEXT; // A3
+    ADD( 15 );
+    ADD( 12 );
+    ADD( 20 );
+    ADD( 21 );
+    SUB( 14 );
+    SUB( 22 );
+    SUB( 23 );
+    NEXT; // A3
 
-    ADD( 21 ); ADD( 21 ); ADD( 16 ); ADD( 13 ); ADD( 12 ); ADD( 20 ); ADD( 22 );
-    SUB( 15 ); SUB( 23 ); SUB( 23 );                        NEXT; // A4
+    ADD( 21 );
+    ADD( 21 );
+    ADD( 16 );
+    ADD( 13 );
+    ADD( 12 );
+    ADD( 20 );
+    ADD( 22 );
+    SUB( 15 );
+    SUB( 23 );
+    SUB( 23 );
+    NEXT; // A4
 
-    ADD( 22 ); ADD( 22 ); ADD( 17 ); ADD( 14 ); ADD( 13 ); ADD( 21 ); ADD( 23 );
-    SUB( 16 );                                              NEXT; // A5
+    ADD( 22 );
+    ADD( 22 );
+    ADD( 17 );
+    ADD( 14 );
+    ADD( 13 );
+    ADD( 21 );
+    ADD( 23 );
+    SUB( 16 );
+    NEXT; // A5
 
-    ADD( 23 ); ADD( 23 ); ADD( 18 ); ADD( 15 ); ADD( 14 ); ADD( 22 );
-    SUB( 17 );                                              NEXT; // A6
+    ADD( 23 );
+    ADD( 23 );
+    ADD( 18 );
+    ADD( 15 );
+    ADD( 14 );
+    ADD( 22 );
+    SUB( 17 );
+    NEXT; // A6
 
-    ADD( 19 ); ADD( 16 ); ADD( 15 ); ADD( 23 );
-    SUB( 18 );                                              NEXT; // A7
+    ADD( 19 );
+    ADD( 16 );
+    ADD( 15 );
+    ADD( 23 );
+    SUB( 18 );
+    NEXT; // A7
 
-    ADD( 20 ); ADD( 17 ); ADD( 16 );
-    SUB( 19 );                                              NEXT; // A8
+    ADD( 20 );
+    ADD( 17 );
+    ADD( 16 );
+    SUB( 19 );
+    NEXT; // A8
 
-    ADD( 21 ); ADD( 18 ); ADD( 17 );
-    SUB( 20 );                                              NEXT; // A9
+    ADD( 21 );
+    ADD( 18 );
+    ADD( 17 );
+    SUB( 20 );
+    NEXT; // A9
 
-    ADD( 22 ); ADD( 19 ); ADD( 18 );
-    SUB( 21 );                                              NEXT; // A10
+    ADD( 22 );
+    ADD( 19 );
+    ADD( 18 );
+    SUB( 21 );
+    NEXT; // A10
 
-    ADD( 23 ); ADD( 20 ); ADD( 19 );
-    SUB( 22 );                                              LAST; // A11
+    ADD( 23 );
+    ADD( 20 );
+    ADD( 19 );
+    SUB( 22 );
+    LAST; // A11
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 #endif /* MBEDTLS_ECP_DP_SECP384R1_ENABLED */
 
@@ -1121,13 +1245,13 @@ static int ecp_mod_p521( mbedtls_mpi *N )
      * we need to hold bits 513 to 1056, which is 34 limbs, that is
      * P521_WIDTH + 1. Otherwise P521_WIDTH is enough. */
 
-    if( N->n < P521_WIDTH )
-        return( 0 );
+    if ( N->n < P521_WIDTH )
+        return ( 0 );
 
     /* M = A1 */
     M.s = 1;
     M.n = N->n - ( P521_WIDTH - 1 );
-    if( M.n > P521_WIDTH + 1 )
+    if ( M.n > P521_WIDTH + 1 )
         M.n = P521_WIDTH + 1;
     M.p = Mp;
     memcpy( Mp, N->p + P521_WIDTH - 1, M.n * sizeof( mbedtls_mpi_uint ) );
@@ -1135,14 +1259,14 @@ static int ecp_mod_p521( mbedtls_mpi *N )
 
     /* N = A0 */
     N->p[P521_WIDTH - 1] &= P521_MASK;
-    for( i = P521_WIDTH; i < N->n; i++ )
+    for ( i = P521_WIDTH; i < N->n; i++ )
         N->p[i] = 0;
 
     /* N = A0 + A1 */
     MBEDTLS_MPI_CHK( mbedtls_mpi_add_abs( N, N, &M ) );
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 
 #undef P521_WIDTH
@@ -1167,13 +1291,13 @@ static int ecp_mod_p255( mbedtls_mpi *N )
     mbedtls_mpi M;
     mbedtls_mpi_uint Mp[P255_WIDTH + 2];
 
-    if( N->n < P255_WIDTH )
-        return( 0 );
+    if ( N->n < P255_WIDTH )
+        return ( 0 );
 
     /* M = A1 */
     M.s = 1;
     M.n = N->n - ( P255_WIDTH - 1 );
-    if( M.n > P255_WIDTH + 1 )
+    if ( M.n > P255_WIDTH + 1 )
         M.n = P255_WIDTH + 1;
     M.p = Mp;
     memset( Mp, 0, sizeof Mp );
@@ -1183,7 +1307,7 @@ static int ecp_mod_p255( mbedtls_mpi *N )
 
     /* N = A0 */
     MBEDTLS_MPI_CHK( mbedtls_mpi_set_bit( N, 255, 0 ) );
-    for( i = P255_WIDTH; i < N->n; i++ )
+    for ( i = P255_WIDTH; i < N->n; i++ )
         N->p[i] = 0;
 
     /* N = A0 + 19 * A1 */
@@ -1191,7 +1315,7 @@ static int ecp_mod_p255( mbedtls_mpi *N )
     MBEDTLS_MPI_CHK( mbedtls_mpi_add_abs( N, N, &M ) );
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 #endif /* MBEDTLS_ECP_DP_CURVE25519_ENABLED */
 
@@ -1215,8 +1339,8 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
     mbedtls_mpi M, R;
     mbedtls_mpi_uint Mp[P_KOBLITZ_MAX + P_KOBLITZ_R];
 
-    if( N->n < p_limbs )
-        return( 0 );
+    if ( N->n < p_limbs )
+        return ( 0 );
 
     /* Init R */
     R.s = 1;
@@ -1229,18 +1353,18 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
 
     /* M = A1 */
     M.n = N->n - ( p_limbs - adjust );
-    if( M.n > p_limbs + adjust )
+    if ( M.n > p_limbs + adjust )
         M.n = p_limbs + adjust;
     memset( Mp, 0, sizeof Mp );
     memcpy( Mp, N->p + p_limbs - adjust, M.n * sizeof( mbedtls_mpi_uint ) );
-    if( shift != 0 )
+    if ( shift != 0 )
         MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &M, shift ) );
     M.n += R.n - adjust; /* Make room for multiplication by R */
 
     /* N = A0 */
-    if( mask != 0 )
+    if ( mask != 0 )
         N->p[p_limbs - 1] &= mask;
-    for( i = p_limbs; i < N->n; i++ )
+    for ( i = p_limbs; i < N->n; i++ )
         N->p[i] = 0;
 
     /* N = A0 + R * A1 */
@@ -1251,18 +1375,18 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
 
     /* M = A1 */
     M.n = N->n - ( p_limbs - adjust );
-    if( M.n > p_limbs + adjust )
+    if ( M.n > p_limbs + adjust )
         M.n = p_limbs + adjust;
     memset( Mp, 0, sizeof Mp );
     memcpy( Mp, N->p + p_limbs - adjust, M.n * sizeof( mbedtls_mpi_uint ) );
-    if( shift != 0 )
+    if ( shift != 0 )
         MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &M, shift ) );
     M.n += R.n - adjust; /* Make room for multiplication by R */
 
     /* N = A0 */
-    if( mask != 0 )
+    if ( mask != 0 )
         N->p[p_limbs - 1] &= mask;
-    for( i = p_limbs; i < N->n; i++ )
+    for ( i = p_limbs; i < N->n; i++ )
         N->p[i] = 0;
 
     /* N = A0 + R * A1 */
@@ -1270,7 +1394,7 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
     MBEDTLS_MPI_CHK( mbedtls_mpi_add_abs( N, N, &M ) );
 
 cleanup:
-    return( ret );
+    return ( ret );
 }
 #endif /* MBEDTLS_ECP_DP_SECP192K1_ENABLED) ||
           MBEDTLS_ECP_DP_SECP224K1_ENABLED) ||
@@ -1284,9 +1408,10 @@ cleanup:
 static int ecp_mod_p192k1( mbedtls_mpi *N )
 {
     static mbedtls_mpi_uint Rp[] = {
-        BYTES_TO_T_UINT_8( 0xC9, 0x11, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 ) };
+        BYTES_TO_T_UINT_8( 0xC9, 0x11, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 )
+    };
 
-    return( ecp_mod_koblitz( N, Rp, 192 / 8 / sizeof( mbedtls_mpi_uint ), 0, 0, 0 ) );
+    return ( ecp_mod_koblitz( N, Rp, 192 / 8 / sizeof( mbedtls_mpi_uint ), 0, 0, 0 ) );
 }
 #endif /* MBEDTLS_ECP_DP_SECP192K1_ENABLED */
 
@@ -1298,12 +1423,13 @@ static int ecp_mod_p192k1( mbedtls_mpi *N )
 static int ecp_mod_p224k1( mbedtls_mpi *N )
 {
     static mbedtls_mpi_uint Rp[] = {
-        BYTES_TO_T_UINT_8( 0x93, 0x1A, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 ) };
+        BYTES_TO_T_UINT_8( 0x93, 0x1A, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 )
+    };
 
 #if defined(MBEDTLS_HAVE_INT64)
-    return( ecp_mod_koblitz( N, Rp, 4, 1, 32, 0xFFFFFFFF ) );
+    return ( ecp_mod_koblitz( N, Rp, 4, 1, 32, 0xFFFFFFFF ) );
 #else
-    return( ecp_mod_koblitz( N, Rp, 224 / 8 / sizeof( mbedtls_mpi_uint ), 0, 0, 0 ) );
+    return ( ecp_mod_koblitz( N, Rp, 224 / 8 / sizeof( mbedtls_mpi_uint ), 0, 0, 0 ) );
 #endif
 }
 
@@ -1317,8 +1443,9 @@ static int ecp_mod_p224k1( mbedtls_mpi *N )
 static int ecp_mod_p256k1( mbedtls_mpi *N )
 {
     static mbedtls_mpi_uint Rp[] = {
-        BYTES_TO_T_UINT_8( 0xD1, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 ) };
-    return( ecp_mod_koblitz( N, Rp, 256 / 8 / sizeof( mbedtls_mpi_uint ), 0, 0, 0 ) );
+        BYTES_TO_T_UINT_8( 0xD1, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 )
+    };
+    return ( ecp_mod_koblitz( N, Rp, 256 / 8 / sizeof( mbedtls_mpi_uint ), 0, 0, 0 ) );
 }
 #endif /* MBEDTLS_ECP_DP_SECP256K1_ENABLED */
 

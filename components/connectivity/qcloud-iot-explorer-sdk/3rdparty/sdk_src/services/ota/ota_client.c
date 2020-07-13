@@ -35,26 +35,26 @@ extern "C" {
 #define OTA_VERSION_STR_LEN_MAX     (32)
 
 typedef struct  {
-    const char 				*product_id;     		/* point to product id */
-    const char 				*device_name;    		/* point to device name */
+    const char              *product_id;            /* point to product id */
+    const char              *device_name;           /* point to device name */
 
-    uint32_t 				id;                		/* message id */
-    IOT_OTA_State_Code 		state;   				/* OTA state */
-    uint32_t 				size_last_fetched; 		/* size of last downloaded */
-    uint32_t 				size_fetched;      		/* size of already downloaded */
-    uint32_t 				size_file;         		/* size of file */
+    uint32_t                id;                     /* message id */
+    IOT_OTA_State_Code      state;                  /* OTA state */
+    uint32_t                size_last_fetched;      /* size of last downloaded */
+    uint32_t                size_fetched;           /* size of already downloaded */
+    uint32_t                size_file;              /* size of file */
 
-    char 					*purl;                 	/* point to URL */
-    char 					*version;              	/* point to string */
-    char 					md5sum[33];            	/* MD5 string */
+    char                    *purl;                  /* point to URL */
+    char                    *version;               /* point to string */
+    char                    md5sum[33];             /* MD5 string */
 
-    void 					*md5;                  	/* MD5 handle */
-    void 					*ch_signal;           	/* channel handle of signal exchanged with OTA server */
-    void 					*ch_fetch;             	/* channel handle of download */
+    void                    *md5;                   /* MD5 handle */
+    void                    *ch_signal;             /* channel handle of signal exchanged with OTA server */
+    void                    *ch_fetch;              /* channel handle of download */
 
-    int 					err;                    /* last error code */
+    int                     err;                    /* last error code */
 
-    short					current_signal_type;
+    short                   current_signal_type;
 
     Timer report_timer;
 
@@ -70,7 +70,8 @@ static int _ota_check_progress(IOT_OTA_Progress_Code progress)
 }
 
 /* callback when OTA topic msg is received */
-static void _ota_callback(void *pcontext, const char *msg, uint32_t msg_len) {
+static void _ota_callback(void *pcontext, const char *msg, uint32_t msg_len)
+{
 #define OTA_JSON_TYPE_VALUE_LENGTH 64
 
     char *json_type = NULL;
@@ -83,8 +84,8 @@ static void _ota_callback(void *pcontext, const char *msg, uint32_t msg_len) {
     }
 
     if (msg == NULL || msg_len <= 0) {
-    	Log_e("OTA response message is NULL");
-    	return;
+        Log_e("OTA response message is NULL");
+        return;
     }
 
     if (qcloud_otalib_get_firmware_type(msg, &json_type) != QCLOUD_RET_SUCCESS) {
@@ -93,29 +94,27 @@ static void _ota_callback(void *pcontext, const char *msg, uint32_t msg_len) {
     }
 
     if (!strcmp(json_type, REPORT_VERSION_RSP)) {
-    	if (qcloud_otalib_get_report_version_result(msg) < QCLOUD_RET_SUCCESS) {
+        if (qcloud_otalib_get_report_version_result(msg) < QCLOUD_RET_SUCCESS) {
             Log_e("Report version failed!");
             h_ota->err = IOT_OTA_ERR_REPORT_VERSION;
             h_ota->state = IOT_OTAS_FETCHED;
-    	}
-    	else {
-    		Log_i("Report version success!");
-    	}
-    	goto End;
-    }
-    else {
+        } else {
+            Log_i("Report version success!");
+        }
+        goto End;
+    } else {
         if (strcmp(json_type, UPDATE_FIRMWARE) != 0) {
-        	Log_e("Netheir Report version result nor update firmware! type: %s", json_type);
+            Log_e("Netheir Report version result nor update firmware! type: %s", json_type);
             goto End;
         }
 
-        if(NULL != json_type) {
+        if (NULL != json_type) {
             HAL_Free(json_type);
             json_type = NULL;
         }
 
         if (0 != qcloud_otalib_get_params(msg, &json_type, &h_ota->purl, &h_ota->version,
-        		h_ota->md5sum, &h_ota->size_file)) {
+                                          h_ota->md5sum, &h_ota->size_file)) {
             Log_e("Get firmware parameter failed");
             goto End;
         }
@@ -124,16 +123,16 @@ static void _ota_callback(void *pcontext, const char *msg, uint32_t msg_len) {
     }
 
 End:
-	if (json_type != NULL) HAL_Free(json_type);
+    if (json_type != NULL) HAL_Free(json_type);
 
 #undef OTA_JSON_TYPE_VALUE_LENGTH
 }
 
 static void IOT_OTA_ResetStatus(void *handle)
 {
-   OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
-   h_ota->state = IOT_OTAS_INITED;
-} 
+    OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
+    h_ota->state = IOT_OTAS_INITED;
+}
 
 static int IOT_OTA_ReportProgress(void *handle, IOT_OTA_Progress_Code progress, IOT_OTAReportType reportType)
 {
@@ -197,7 +196,7 @@ static int IOT_OTA_ReportUpgradeResult(void *handle, const char *version, IOT_OT
 
     POINTER_SANITY_CHECK(handle, IOT_OTA_ERR_INVALID_PARAM);
     POINTER_SANITY_CHECK(version, IOT_OTA_ERR_INVALID_PARAM);
-    
+
     int ret, len;
     char *msg_upgrade;
     OTA_Struct_t *h_ota = (OTA_Struct_t *)handle;
@@ -254,7 +253,7 @@ void *IOT_OTA_Init(const char *product_id, const char *device_name, void *ch_sig
     POINTER_SANITY_CHECK(product_id, NULL);
     POINTER_SANITY_CHECK(device_name, NULL);
     POINTER_SANITY_CHECK(ch_signal, NULL);
-    
+
     OTA_Struct_t *h_ota = NULL;
 
     if (NULL == (h_ota = HAL_Malloc(sizeof(OTA_Struct_t)))) {
@@ -341,31 +340,31 @@ int IOT_OTA_Destroy(void *handle)
 /*support continuous transmission of breakpoints*/
 int IOT_OTA_StartDownload(void *handle, uint32_t offset, uint32_t size)
 {
-	OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
-	int Ret;
+    OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
+    int Ret;
 
-	h_ota->size_fetched += offset;
-	h_ota->ch_fetch = ofc_Init(h_ota->purl, offset, size);
+    h_ota->size_fetched = offset;
+    h_ota->ch_fetch = ofc_Init(h_ota->purl, offset, size);
     if (NULL == h_ota->ch_fetch) {
         Log_e("Initialize fetch module failed");
-		return QCLOUD_ERR_FAILURE;
+        return QCLOUD_ERR_FAILURE;
     }
 
-	Ret = qcloud_ofc_connect(h_ota->ch_fetch);
+    Ret = qcloud_ofc_connect(h_ota->ch_fetch);
     if (QCLOUD_RET_SUCCESS != Ret) {
         Log_e("Connect fetch module failed");
-        h_ota->state = IOT_OTAS_DISCONNECTED;	
+        h_ota->state = IOT_OTAS_DISCONNECTED;
     }
-		
-	return Ret;
+
+    return Ret;
 }
 
 /*support continuous transmission of breakpoints*/
 void IOT_OTA_UpdateClientMd5(void *handle, char * buff, uint32_t size)
 {
-	OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
+    OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
 
-	qcloud_otalib_md5_update(h_ota->md5, buff, size);	
+    qcloud_otalib_md5_update(h_ota->md5, buff, size);
 }
 
 int IOT_OTA_ReportVersion(void *handle, const char *version)
@@ -433,31 +432,31 @@ int IOT_OTA_ReportUpgradeBegin(void *handle)
 
 int IOT_OTA_ReportUpgradeSuccess(void *handle, const char *version)
 {
-	OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
-	int ret;
+    OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
+    int ret;
 
-	if(NULL == version){
-		ret = IOT_OTA_ReportUpgradeResult(handle, h_ota->version, IOT_OTAR_UPGRADE_SUCCESS);
-	}else{
-		ret = IOT_OTA_ReportUpgradeResult(handle, version, IOT_OTAR_UPGRADE_SUCCESS);
-	}
-	
-	return ret;
+    if (NULL == version) {
+        ret = IOT_OTA_ReportUpgradeResult(handle, h_ota->version, IOT_OTAR_UPGRADE_SUCCESS);
+    } else {
+        ret = IOT_OTA_ReportUpgradeResult(handle, version, IOT_OTAR_UPGRADE_SUCCESS);
+    }
+
+    return ret;
 }
 
 
 int IOT_OTA_ReportUpgradeFail(void *handle, const char *version)
 {
-	OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
-	int ret;
+    OTA_Struct_t *h_ota = (OTA_Struct_t *) handle;
+    int ret;
 
-	if(NULL == version){
-		ret = IOT_OTA_ReportUpgradeResult(handle, h_ota->version, IOT_OTAR_UPGRADE_FAIL);
-	}else{
-		ret = IOT_OTA_ReportUpgradeResult(handle, version, IOT_OTAR_UPGRADE_FAIL);
-	}
-	
-	return ret;
+    if (NULL == version) {
+        ret = IOT_OTA_ReportUpgradeResult(handle, h_ota->version, IOT_OTAR_UPGRADE_FAIL);
+    } else {
+        ret = IOT_OTA_ReportUpgradeResult(handle, version, IOT_OTAR_UPGRADE_FAIL);
+    }
+
+    return ret;
 }
 
 
@@ -529,8 +528,8 @@ int IOT_OTA_FetchYield(void *handle, char *buf, uint32_t buf_len, uint32_t timeo
         } else if (ret == IOT_OTA_ERR_FETCH_TIMEOUT) { // fetch timeout
             IOT_OTA_ReportUpgradeResult(h_ota, h_ota->version, IOT_OTAR_DOWNLOAD_TIMEOUT);
             h_ota->err = ret;
-        } 
-            
+        }
+
         return ret;
     } else if (0 == h_ota->size_fetched) {
         /* force report status in the first */

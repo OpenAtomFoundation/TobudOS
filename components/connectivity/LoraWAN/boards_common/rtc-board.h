@@ -23,6 +23,11 @@
 #ifndef __RTC_BOARD_H__
 #define __RTC_BOARD_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "timer.h"
@@ -30,22 +35,22 @@
 /*!
  * \brief Temperature coefficient of the clock source
  */
-#define RTC_TEMP_COEFFICIENT                            ( -0.035 )
+#define RTC_TEMP_COEFFICIENT                            ( -0.035f )
 
 /*!
  * \brief Temperature coefficient deviation of the clock source
  */
-#define RTC_TEMP_DEV_COEFFICIENT                        ( 0.0035 )
+#define RTC_TEMP_DEV_COEFFICIENT                        ( 0.0035f )
 
 /*!
  * \brief Turnover temperature of the clock source
  */
-#define RTC_TEMP_TURNOVER                               ( 25.0 )
+#define RTC_TEMP_TURNOVER                               ( 25.0f )
 
 /*!
  * \brief Turnover temperature deviation of the clock source
  */
-#define RTC_TEMP_DEV_TURNOVER                           ( 5.0 )
+#define RTC_TEMP_DEV_TURNOVER                           ( 5.0f )
 
 /*!
  * \brief Initializes the RTC timer
@@ -188,5 +193,9 @@ void RtcProcess( void );
  * \retval Compensated time period
  */
 TimerTime_t RtcTempCompensation( TimerTime_t period, float temperature );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __RTC_BOARD_H__

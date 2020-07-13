@@ -20,9 +20,9 @@
  * Below variables are dependant on user situation (network status/device memory/application context)
  * Adjust the default value to meet your requirement
  */
- 
+
 /* default MQTT/CoAP timeout value when connect/pub/sub (unit: ms) */
-#define QCLOUD_IOT_MQTT_COMMAND_TIMEOUT                             (5 * 1000)
+#define QCLOUD_IOT_MQTT_COMMAND_TIMEOUT                             (15 * 1000)
 
 /* default MQTT keep alive interval (unit: ms) */
 #define QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL                         (240 * 1000)
@@ -57,7 +57,7 @@
 	#define MAX_LOG_MSG_LEN         (1023)
 #endif
 
-/* 
+/*
  * Log upload related params, which will affect the size of device memory/disk consumption
  * the default value can be changed for different user situation
  */

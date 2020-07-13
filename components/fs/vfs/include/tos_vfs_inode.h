@@ -1,7 +1,22 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_VFS_INODE_H_
 #define  _TOS_VFS_INODE_H_
-
-#if TOS_CFG_VFS_EN > 0u
 
 // why your inode's name so long?
 #define VFS_INODE_NAME_MAX              31
@@ -52,8 +67,6 @@ __KNL__ vfs_inode_t *vfs_inode_alloc(const char *name);
 __KNL__ void vfs_inode_free(vfs_inode_t *inode);
 
 __KNL__ void vfs_inode_release(vfs_inode_t *inode);
-
-#endif
 
 #endif /* _TOS_VFS_INODE_H_ */
 

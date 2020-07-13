@@ -50,8 +50,7 @@ static const int ciphersuites[] = { MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA, MBEDTL
 /**
  * @brief data structure for mbedtls SSL connection
  */
-typedef struct
-{
+typedef struct {
     mbedtls_net_context          socket_fd;
     mbedtls_entropy_context      entropy;
     mbedtls_ctr_drbg_context     ctr_drbg;
@@ -92,15 +91,15 @@ static void _free_mebeddtls(DTLSDataParams *pParams)
 }
 
 static void _dtls_debug( void *ctx, int level,
-                     const char *file, int line,
-                     const char *str )
+                         const char *file, int line,
+                         const char *str )
 {
     Log_i("[mbedTLS]:[%s]:[%d]: %s\r\n", file, line, str);
 }
 
 static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *pConnectParams)
 {
-	int ret = QCLOUD_RET_SUCCESS;
+    int ret = QCLOUD_RET_SUCCESS;
 
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
@@ -117,20 +116,19 @@ static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *
     mbedtls_ctr_drbg_init( &(pDataParams->ctr_drbg) );
     mbedtls_entropy_init( &(pDataParams->entropy) );
 
-    if((ret = mbedtls_ctr_drbg_seed(&pDataParams->ctr_drbg, mbedtls_entropy_func,
-    		&pDataParams->entropy, NULL,0)) != 0)
-    {
+    if ((ret = mbedtls_ctr_drbg_seed(&pDataParams->ctr_drbg, mbedtls_entropy_func,
+                                     &pDataParams->entropy, NULL, 0)) != 0) {
         Log_e("mbedtls_ctr_drbg_seed failed returned -0x%x", -ret);
         return QCLOUD_ERR_SSL_INIT;
     }
 
-	mbedtls_ssl_conf_authmode(&pDataParams->ssl_conf, MBEDTLS_SSL_VERIFY_NONE );
+    mbedtls_ssl_conf_authmode(&pDataParams->ssl_conf, MBEDTLS_SSL_VERIFY_NONE );
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     if (pConnectParams->ca_crt != NULL)
     {
         if ((ret = mbedtls_x509_crt_parse(&(pDataParams->ca_cert), (const unsigned char *)pConnectParams->ca_crt,
-            (pConnectParams->ca_crt_len + 1)))) {
+                                          (pConnectParams->ca_crt_len + 1)))) {
             Log_e("parse ca crt failed returned -0x%04x", -ret);
             return QCLOUD_ERR_SSL_CERT;
         }
@@ -165,18 +163,18 @@ static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *
     }
 
 #else
-    if (pConnectParams->psk != NULL && pConnectParams->psk_id !=NULL) {
+    if (pConnectParams->psk != NULL && pConnectParams->psk_id != NULL) {
         const char *psk_id = pConnectParams->psk_id;
         ret = mbedtls_ssl_conf_psk(&(pDataParams->ssl_conf), (unsigned char *)pConnectParams->psk, pConnectParams->psk_length,
-                                    (const unsigned char *) psk_id, strlen( psk_id ));
+                                   (const unsigned char *) psk_id, strlen( psk_id ));
     } else {
         Log_d("psk/pskid is empty!|psk=%s|psd_id=%s", pConnectParams->psk, pConnectParams->psk_id);
     }
 
-	if (0 != ret) {
-		Log_e("mbedtls_ssl_conf_psk fail: -0x%x", -ret);
-		return ret;
-	}
+    if (0 != ret) {
+        Log_e("mbedtls_ssl_conf_psk fail: -0x%x", -ret);
+        return ret;
+    }
 #endif
 
     return ret;
@@ -190,7 +188,8 @@ static int _mbedtls_client_init(DTLSDataParams *pDataParams, DTLSConnectParams *
  * @param port       server port
  * @return QCLOUD_RET_SUCCESS when success, or err code for failure
  */
-int _mbedtls_udp_connect(mbedtls_net_context *socket_fd, const char *host, int port) {
+int _mbedtls_udp_connect(mbedtls_net_context *socket_fd, const char *host, int port)
+{
     int ret = 0;
     char port_str[6];
     HAL_Snprintf(port_str, 6, "%d", port);
@@ -218,22 +217,22 @@ int _mbedtls_udp_connect(mbedtls_net_context *socket_fd, const char *host, int p
 
 uintptr_t HAL_DTLS_Connect(DTLSConnectParams *pConnectParams, const char *host, int port)
 {
-	IOT_FUNC_ENTRY;
+    IOT_FUNC_ENTRY;
 
     int ret = QCLOUD_RET_SUCCESS;
 
     DTLSDataParams * pDataParams = (DTLSDataParams *)HAL_Malloc(sizeof(DTLSDataParams));
 
     if ((ret = _mbedtls_client_init(pDataParams, pConnectParams)) != QCLOUD_RET_SUCCESS) {
-		goto error;
-	}
+        goto error;
+    }
 
     if ((ret = _mbedtls_udp_connect(&(pDataParams->socket_fd), host, port)) != QCLOUD_RET_SUCCESS) {
-		goto error;
-	}
+        goto error;
+    }
 
     if ((ret = mbedtls_ssl_config_defaults(&pDataParams->ssl_conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_DATAGRAM,
-                                         MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
+                                           MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
         Log_e("mbedtls_ssl_config_defaults result 0x%04x", ret);
         goto error;
     }
@@ -253,30 +252,29 @@ uintptr_t HAL_DTLS_Connect(DTLSConnectParams *pConnectParams, const char *host, 
 #endif
 
 #ifndef AUTH_MODE_CERT
-	mbedtls_ssl_conf_ciphersuites(&(pDataParams->ssl_conf), ciphersuites);
+    mbedtls_ssl_conf_ciphersuites(&(pDataParams->ssl_conf), ciphersuites);
 #endif
 
 #ifdef MBEDTLS_SSL_PROTO_DTLS
-    if (pDataParams->ssl_conf.transport == MBEDTLS_SSL_TRANSPORT_DATAGRAM)
-    {
+    if (pDataParams->ssl_conf.transport == MBEDTLS_SSL_TRANSPORT_DATAGRAM) {
         mbedtls_ssl_conf_min_version(&pDataParams->ssl_conf, MBEDTLS_SSL_MAJOR_VERSION_3, MBEDTLS_SSL_MINOR_VERSION_3);
 
         mbedtls_ssl_conf_max_version(&pDataParams->ssl_conf, MBEDTLS_SSL_MAJOR_VERSION_3, MBEDTLS_SSL_MINOR_VERSION_3);
 
         mbedtls_ssl_conf_handshake_timeout(&pDataParams->ssl_conf, (MBEDTLS_SSL_DTLS_TIMEOUT_DFL_MIN * 2),
-        		(MBEDTLS_SSL_DTLS_TIMEOUT_DFL_MIN * 2 * 4));
+                                           (MBEDTLS_SSL_DTLS_TIMEOUT_DFL_MIN * 2 * 4));
     }
 #endif
 
     if ((ret = mbedtls_ssl_setup(&(pDataParams->ssl), &(pDataParams->ssl_conf))) != 0) {
-		Log_e("mbedtls_ssl_setup failed returned -0x%x", -ret);
-		goto error;
-	}
+        Log_e("mbedtls_ssl_setup failed returned -0x%x", -ret);
+        goto error;
+    }
 
     if (pDataParams->ssl_conf.transport == MBEDTLS_SSL_TRANSPORT_DATAGRAM) {
-		mbedtls_ssl_set_timer_cb(&(pDataParams->ssl), (void *)&pDataParams->timer, mbedtls_timing_set_delay,
-								 mbedtls_timing_get_delay);
-	}
+        mbedtls_ssl_set_timer_cb(&(pDataParams->ssl), (void *)&pDataParams->timer, mbedtls_timing_set_delay,
+                                 mbedtls_timing_get_delay);
+    }
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     if ((ret = mbedtls_ssl_set_hostname(&(pDataParams->ssl), host)) != 0) {
@@ -285,8 +283,8 @@ uintptr_t HAL_DTLS_Connect(DTLSConnectParams *pConnectParams, const char *host, 
 	}
 #endif
 
-	mbedtls_ssl_set_bio(&(pDataParams->ssl), (void *)&pDataParams->socket_fd, mbedtls_net_send, mbedtls_net_recv,
-						mbedtls_net_recv_timeout);
+    mbedtls_ssl_set_bio(&(pDataParams->ssl), (void *)&pDataParams->socket_fd, mbedtls_net_send, mbedtls_net_recv,
+                        mbedtls_net_recv_timeout);
 
 	while ((ret = mbedtls_ssl_handshake(&(pDataParams->ssl))) != 0) {
 		if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
@@ -308,7 +306,7 @@ uintptr_t HAL_DTLS_Connect(DTLSConnectParams *pConnectParams, const char *host, 
     return (uintptr_t)pDataParams;
 
 error:
-	_free_mebeddtls(pDataParams);
+    _free_mebeddtls(pDataParams);
     return 0;
 }
 
@@ -344,61 +342,60 @@ void HAL_DTLS_Disconnect(uintptr_t handle)
 
 int HAL_DTLS_Write(uintptr_t handle, const unsigned char *data, size_t datalen, size_t *written_len)
 {
-	DTLSDataParams *data_params = (DTLSDataParams *)handle;
-	POINTER_SANITY_CHECK(data_params, QCLOUD_ERR_INVAL);
-	POINTER_SANITY_CHECK(data, QCLOUD_ERR_INVAL);
-	POINTER_SANITY_CHECK(written_len, QCLOUD_ERR_INVAL);
+    DTLSDataParams *data_params = (DTLSDataParams *)handle;
+    POINTER_SANITY_CHECK(data_params, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(data, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(written_len, QCLOUD_ERR_INVAL);
 
     int rc = mbedtls_ssl_write(&data_params->ssl, data, datalen);
 
-	if( rc < 0 ) {
-		Log_e("failed! mbedtls_ssl_write returned %d", rc);
-		rc = QCLOUD_ERR_SSL_WRITE;
-	}
+    if ( rc < 0 ) {
+        Log_e("failed! mbedtls_ssl_write returned %d", rc);
+        rc = QCLOUD_ERR_SSL_WRITE;
+    }
 
-	*written_len = rc;
+    *written_len = rc;
     rc = QCLOUD_RET_SUCCESS;
 
     IOT_FUNC_EXIT_RC(rc);
 }
 
 int HAL_DTLS_Read(uintptr_t handle, unsigned char *data, size_t datalen, unsigned int timeout_ms,
-        size_t *read_len)
+                  size_t *read_len)
 {
     DTLSDataParams *data_params = (DTLSDataParams *)handle;
     POINTER_SANITY_CHECK(data_params, QCLOUD_ERR_INVAL);
-	POINTER_SANITY_CHECK(data, QCLOUD_ERR_INVAL);
-	POINTER_SANITY_CHECK(read_len, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(data, QCLOUD_ERR_INVAL);
+    POINTER_SANITY_CHECK(read_len, QCLOUD_ERR_INVAL);
 
     int rc = QCLOUD_ERR_SSL_READ;
 
-	mbedtls_ssl_conf_read_timeout(&(data_params->ssl_conf), timeout_ms);
+    mbedtls_ssl_conf_read_timeout(&(data_params->ssl_conf), timeout_ms);
 
-	do {
-		rc = mbedtls_ssl_read(&(data_params->ssl), data, datalen);
-	} while (rc == MBEDTLS_ERR_SSL_WANT_READ || rc == MBEDTLS_ERR_SSL_WANT_WRITE);
+    do {
+        rc = mbedtls_ssl_read(&(data_params->ssl), data, datalen);
+    } while (rc == MBEDTLS_ERR_SSL_WANT_READ || rc == MBEDTLS_ERR_SSL_WANT_WRITE);
 
-	if( rc <= 0 ) {
-		*read_len = 0;
-		switch( rc )
-		{
-			case MBEDTLS_ERR_SSL_TIMEOUT:
-				rc = QCLOUD_ERR_SSL_READ_TIMEOUT;
-				break;
+    if ( rc <= 0 ) {
+        *read_len = 0;
+        switch ( rc ) {
+            case MBEDTLS_ERR_SSL_TIMEOUT:
+                rc = QCLOUD_ERR_SSL_READ_TIMEOUT;
+                break;
 
-			case MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY:
-				Log_e("connection was closed gracefully");
-				rc = QCLOUD_ERR_DTLS_PEER_CLOSE_NOTIFY;
-				break;
+            case MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY:
+                Log_e("connection was closed gracefully");
+                rc = QCLOUD_ERR_DTLS_PEER_CLOSE_NOTIFY;
+                break;
 
-			default:
-				Log_e( " mbedtls_ssl_read returned -0x%x", -rc );
-				break;
-		}
-	} else {
-		*read_len = rc;
-		rc = QCLOUD_RET_SUCCESS;
-	}
+            default:
+                Log_e( " mbedtls_ssl_read returned -0x%x", -rc );
+                break;
+        }
+    } else {
+        *read_len = rc;
+        rc = QCLOUD_RET_SUCCESS;
+    }
 
     return rc;
 }

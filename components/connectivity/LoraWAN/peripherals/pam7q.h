@@ -23,6 +23,11 @@
 #ifndef __PAM7Q_H__
 #define __PAM7Q_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -54,6 +59,10 @@ void GpsMcuOnPpsSignal( void );
 
 #define PAYLOAD                                 0xFF
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __PAM7Q_H__
 

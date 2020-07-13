@@ -37,6 +37,11 @@
 #ifndef __REGION_US915_H__
 #define __REGION_US915_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "region/Region.h"
 
 /*!
@@ -87,7 +92,7 @@
 /*!
  * Minimal Tx output power that can be used by the node
  */
-#define US915_MIN_TX_POWER                          TX_POWER_10
+#define US915_MIN_TX_POWER                          TX_POWER_14
 
 /*!
  * Maximal Tx output power that can be used by the node
@@ -183,6 +188,11 @@
 #define US915_BEACON_CHANNEL_STEPWIDTH              600000
 
 /*!
+ * Ping slot channel frequency
+ */
+#define US915_PING_SLOT_CHANNEL_FREQ                923300000
+
+/*!
  * Number of possible beacon channels
  */
 #define US915_BEACON_NB_CHANNELS                    8
@@ -224,9 +234,9 @@
 
 /*!
  * Band 0 definition
- * { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define US915_BAND0                                 { 1, US915_MAX_TX_POWER, 0, 0, 0 } //  100.0 %
+#define US915_BAND0                                 { 1, US915_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * Defines the first channel for RX window 1 for US band
@@ -266,14 +276,9 @@ static const int8_t DatarateOffsetsUS915[5][4] =
 };
 
 /*!
- * Maximum payload with respect to the datarate index. Cannot operate with repeater.
+ * Maximum payload with respect to the datarate index.
  */
 static const uint8_t MaxPayloadOfDatarateUS915[] = { 11, 53, 125, 242, 242, 0, 0, 0, 53, 129, 242, 242, 242, 242, 0, 0 };
-
-/*!
- * Maximum payload with respect to the datarate index. Can operate with repeater.
- */
-static const uint8_t MaxPayloadOfDatarateRepeaterUS915[] = { 11, 53, 125, 242, 242, 0, 0, 0, 33, 109, 222, 222, 222, 222, 0, 0 };
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -433,13 +438,6 @@ uint8_t RegionUS915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 int8_t RegionUS915AlternateDr( int8_t currentDr, AlternateDrType_t type );
 
 /*!
- * \brief Calculates the back-off time.
- *
- * \param [IN] calcBackOff Pointer to the function parameters.
- */
-void RegionUS915CalcBackOff( CalcBackOffParams_t* calcBackOff );
-
-/*!
  * \brief Searches and set the next random available channel
  *
  * \param [OUT] channel Next channel to use for TX.
@@ -496,8 +494,12 @@ uint8_t RegionUS915ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
  *
  * \param [IN] rxBeaconSetup Pointer to the function parameters
  */
- void RegionUS915RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
+void RegionUS915RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 
 /*! \} defgroup REGIONUS915 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REGION_US915_H__

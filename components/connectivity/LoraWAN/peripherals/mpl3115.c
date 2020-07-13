@@ -52,7 +52,7 @@ typedef enum
  *
  * \param [IN]:    addr
  * \param [IN]:    data
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MPL3115Write( uint8_t addr, uint8_t data );
 
@@ -62,7 +62,7 @@ uint8_t MPL3115Write( uint8_t addr, uint8_t data );
  * \param [IN]: addr
  * \param [IN]: data
  * \param [IN]: size
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MPL3115WriteBuffer( uint8_t addr, uint8_t *data, uint8_t size );
 
@@ -71,7 +71,7 @@ uint8_t MPL3115WriteBuffer( uint8_t addr, uint8_t *data, uint8_t size );
  *
  * \param [IN]: addr
  * \param [OUT]: data
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MPL3115Read( uint8_t addr, uint8_t *data );
 
@@ -81,7 +81,7 @@ uint8_t MPL3115Read( uint8_t addr, uint8_t *data );
  * \param [IN]: addr
  * \param [OUT]: data
  * \param [IN]: size
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MPL3115ReadBuffer( uint8_t addr, uint8_t *data, uint8_t size );
 
@@ -141,24 +141,24 @@ uint8_t MPL3115Init( void )
         MPL3115Read( MPL3115_ID, &regVal );
         if( regVal != 0xC4 )
         {
-            return LORA_FAIL;
+            return FAIL;
         }
 
         MPL3115Write( PT_DATA_CFG_REG, DREM | PDEFE | TDEFE );      // Enable data ready flags for pressure and temperature )
         MPL3115Write( CTRL_REG1, ALT | OS_32 | SBYB );              // Set sensor to active state with oversampling ratio 128 (512 ms between samples)
         MPL3115Initialized = true;
     }
-    return LORA_SUCCESS;
+    return SUCCESS;
 }
 
 uint8_t MPL3115Reset( void )
 {
     // Reset all registers to POR values
-    if( MPL3115Write( CTRL_REG1, RST ) == LORA_SUCCESS )
+    if( MPL3115Write( CTRL_REG1, RST ) == SUCCESS )
     {
-        return LORA_SUCCESS;
+        return SUCCESS;
     }
-    return LORA_FAIL;
+    return FAIL;
 }
 
 uint8_t MPL3115Write( uint8_t addr, uint8_t data )

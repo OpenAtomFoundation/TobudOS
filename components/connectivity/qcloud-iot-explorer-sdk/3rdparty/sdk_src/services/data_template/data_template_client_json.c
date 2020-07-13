@@ -29,7 +29,8 @@ extern "C" {
 #include "qcloud_iot_export_method.h"
 
 
-int check_snprintf_return(int32_t returnCode, size_t maxSizeOfWrite) {
+int check_snprintf_return(int32_t returnCode, size_t maxSizeOfWrite)
+{
 
     if (returnCode >= maxSizeOfWrite) {
         return QCLOUD_ERR_JSON_BUFFER_TRUNCATED;
@@ -40,7 +41,8 @@ int check_snprintf_return(int32_t returnCode, size_t maxSizeOfWrite) {
     return QCLOUD_RET_SUCCESS;
 }
 
-void insert_str(char *pDestStr, char *pSourceStr, int pos) {
+void insert_str(char *pDestStr, char *pSourceStr, int pos)
+{
     int len = strlen(pDestStr);
     int nlen = strlen(pSourceStr);
     int i;
@@ -55,35 +57,36 @@ void insert_str(char *pDestStr, char *pSourceStr, int pos) {
 }
 
 
-static int _direct_update_value(char *value, DeviceProperty *pProperty) {
+static int _direct_update_value(char *value, DeviceProperty *pProperty)
+{
 
     int rc = QCLOUD_RET_SUCCESS;
 
     if (pProperty->type == JBOOL) {
-    	rc = LITE_get_boolean(pProperty->data, value);
+        rc = LITE_get_boolean(pProperty->data, value);
     } else if (pProperty->type == JINT32) {
-    	rc = LITE_get_int32(pProperty->data, value);
+        rc = LITE_get_int32(pProperty->data, value);
     } else if (pProperty->type == JINT16) {
-    	rc = LITE_get_int16(pProperty->data, value);
+        rc = LITE_get_int16(pProperty->data, value);
     } else if (pProperty->type == JINT8) {
-    	rc = LITE_get_int8(pProperty->data, value);
+        rc = LITE_get_int8(pProperty->data, value);
     } else if (pProperty->type == JUINT32) {
-    	rc = LITE_get_uint32(pProperty->data, value);
+        rc = LITE_get_uint32(pProperty->data, value);
     } else if (pProperty->type == JUINT16) {
-    	rc = LITE_get_uint16(pProperty->data, value);
+        rc = LITE_get_uint16(pProperty->data, value);
     } else if (pProperty->type == JUINT8) {
-    	rc = LITE_get_uint8(pProperty->data, value);
+        rc = LITE_get_uint8(pProperty->data, value);
     } else if (pProperty->type == JFLOAT) {
-    	rc = LITE_get_float(pProperty->data, value);
+        rc = LITE_get_float(pProperty->data, value);
     } else if (pProperty->type == JDOUBLE) {
-    	rc = LITE_get_double(pProperty->data, value);
-    }else if(pProperty->type == JSTRING){
-		rc = LITE_get_string(pProperty->data, value, pProperty->data_buff_len);
-	}else if(pProperty->type == JOBJECT){
-		Log_d("Json type wait to be deal,%s",value);
-	}else{
-		Log_e("pProperty type unknow,%d",pProperty->type);
-	}
+        rc = LITE_get_double(pProperty->data, value);
+    } else if (pProperty->type == JSTRING) {
+        rc = LITE_get_string(pProperty->data, value, pProperty->data_buff_len);
+    } else if (pProperty->type == JOBJECT) {
+        Log_d("Json type wait to be deal,%s", value);
+    } else {
+        Log_e("pProperty type unknow,%d", pProperty->type);
+    }
 
     return rc;
 }
@@ -95,14 +98,16 @@ static int _direct_update_value(char *value, DeviceProperty *pProperty) {
  * @param maxSizeOfJsonDocument     max size of JSON string
  * @return                          length after adding
  */
-static int32_t _add_client_token(char *pJsonDocument, size_t maxSizeOfJsonDocument, uint32_t *tokenNumber) {
+static int32_t _add_client_token(char *pJsonDocument, size_t maxSizeOfJsonDocument, uint32_t *tokenNumber)
+{
 
     int32_t rc_of_snprintf = HAL_Snprintf(pJsonDocument, maxSizeOfJsonDocument, "%s-%u", iot_device_info_get()->product_id, (*tokenNumber)++);
 
     return rc_of_snprintf;
 }
 
-int put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pKey, void *pData, JsonDataType type) {
+int put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pKey, void *pData, JsonDataType type)
+{
 
     int rc;
     int32_t rc_of_snprintf = 0;
@@ -127,35 +132,35 @@ int put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pKey, void 
     } else {
         if (type == JINT32) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIi32
-                                      ",", *(int32_t *) (pData));
+                                          PRIi32
+                                          ",", *(int32_t *) (pData));
         } else if (type == JINT16) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIi16
-                                      ",", *(int16_t *) (pData));
+                                          PRIi16
+                                          ",", *(int16_t *) (pData));
         } else if (type == JINT8) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIi8
-                                      ",", *(int8_t *) (pData));
+                                          PRIi8
+                                          ",", *(int8_t *) (pData));
         } else if (type == JUINT32) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIu32
-                                      ",", *(uint32_t *) (pData));
+                                          PRIu32
+                                          ",", *(uint32_t *) (pData));
         } else if (type == JUINT16) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIu16
-                                      ",", *(uint16_t *) (pData));
+                                          PRIu16
+                                          ",", *(uint16_t *) (pData));
         } else if (type == JUINT8) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIu8
-                                      ",", *(uint8_t *) (pData));
+                                          PRIu8
+                                          ",", *(uint8_t *) (pData));
         } else if (type == JDOUBLE) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%f,", *(double *) (pData));
         } else if (type == JFLOAT) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%f,", *(float *) (pData));
-		} else if (type == JBOOL) {
+        } else if (type == JBOOL) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%s,",
-                                      *(bool *) (pData) ? "true" : "false");			
+                                          *(bool *) (pData) ? "true" : "false");
         } else if (type == JSTRING) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "\"%s\",", (char *) (pData));
         } else if (type == JOBJECT) {
@@ -168,7 +173,8 @@ int put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pKey, void 
     return rc;
 }
 
-int template_put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pKey, void *pData, JsonDataType type) {
+int template_put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pKey, void *pData, JsonDataType type)
+{
 
     int rc;
     int32_t rc_of_snprintf = 0;
@@ -193,35 +199,35 @@ int template_put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pK
     } else {
         if (type == JINT32) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIi32
-                                      ",", *(int32_t *) (pData));
+                                          PRIi32
+                                          ",", *(int32_t *) (pData));
         } else if (type == JINT16) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIi16
-                                      ",", *(int16_t *) (pData));
+                                          PRIi16
+                                          ",", *(int16_t *) (pData));
         } else if (type == JINT8) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIi8
-                                      ",", *(int8_t *) (pData));
+                                          PRIi8
+                                          ",", *(int8_t *) (pData));
         } else if (type == JUINT32) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIu32
-                                      ",", *(uint32_t *) (pData));
+                                          PRIu32
+                                          ",", *(uint32_t *) (pData));
         } else if (type == JUINT16) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIu16
-                                      ",", *(uint16_t *) (pData));
+                                          PRIu16
+                                          ",", *(uint16_t *) (pData));
         } else if (type == JUINT8) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%"
-                                      PRIu8
-                                      ",", *(uint8_t *) (pData));
+                                          PRIu8
+                                          ",", *(uint8_t *) (pData));
         } else if (type == JDOUBLE) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%f,", *(double *) (pData));
         } else if (type == JFLOAT) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%f,", *(float *) (pData));
-		} else if (type == JBOOL) {
+        } else if (type == JBOOL) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "%u,",
-                                      *(bool *) (pData) ? 1 : 0);		
+                                          *(bool *) (pData) ? 1 : 0);
         } else if (type == JSTRING) {
             rc_of_snprintf = HAL_Snprintf(jsonBuffer + strlen(jsonBuffer), remain_size, "\"%s\",", (char *) (pData));
         } else if (type == JOBJECT) {
@@ -234,106 +240,111 @@ int template_put_json_node(char *jsonBuffer, size_t sizeOfBuffer, const char *pK
     return rc;
 }
 
-int generate_client_token(char *pStrBuffer, size_t sizeOfBuffer, uint32_t *tokenNumber) {
+int generate_client_token(char *pStrBuffer, size_t sizeOfBuffer, uint32_t *tokenNumber)
+{
     return _add_client_token(pStrBuffer, sizeOfBuffer, tokenNumber);
 }
 
-void build_empty_json(uint32_t *tokenNumber, char *pJsonBuffer) {
-	HAL_Snprintf(pJsonBuffer, MAX_SIZE_OF_JSON_WITH_CLIENT_TOKEN, "{\"clientToken\":\"%s-%u\"}", iot_device_info_get()->product_id, (*tokenNumber)++);
+void build_empty_json(uint32_t *tokenNumber, char *pJsonBuffer)
+{
+    HAL_Snprintf(pJsonBuffer, MAX_SIZE_OF_JSON_WITH_CLIENT_TOKEN, "{\"clientToken\":\"%s-%u\"}", iot_device_info_get()->product_id, (*tokenNumber)++);
 }
 
-bool parse_client_token(char *pJsonDoc, char **pClientToken) {
-	*pClientToken = LITE_json_value_of(CLIENT_TOKEN_FIELD, pJsonDoc);
-	return *pClientToken == NULL ? false : true;
+bool parse_client_token(char *pJsonDoc, char **pClientToken)
+{
+    *pClientToken = LITE_json_value_of(CLIENT_TOKEN_FIELD, pJsonDoc);
+    return *pClientToken == NULL ? false : true;
 }
 
-bool parse_action_id(char *pJsonDoc, char **pActionID) {
-	*pActionID = LITE_json_value_of(ACTION_ID_FIELD, pJsonDoc);
-	return *pActionID == NULL ? false : true;
+bool parse_action_id(char *pJsonDoc, char **pActionID)
+{
+    *pActionID = LITE_json_value_of(ACTION_ID_FIELD, pJsonDoc);
+    return *pActionID == NULL ? false : true;
 }
 
-bool parse_time_stamp(char *pJsonDoc, int32_t *pTimestamp) {
+bool parse_time_stamp(char *pJsonDoc, int32_t *pTimestamp)
+{
 
-	bool ret = false;
+    bool ret = false;
 
-	char *timestamp = LITE_json_value_of(TIME_STAMP_FIELD, pJsonDoc);
-	if (timestamp == NULL) return false;
+    char *timestamp = LITE_json_value_of(TIME_STAMP_FIELD, pJsonDoc);
+    if (timestamp == NULL) return false;
 
-	if (sscanf(timestamp, "%" SCNu32, pTimestamp) != 1) {
-		Log_e("parse code failed, errCode: %d", QCLOUD_ERR_JSON_PARSE);
-	}
-	else {
-		ret = true;
-	}
+    if (sscanf(timestamp, "%" SCNu32, pTimestamp) != 1) {
+        Log_e("parse code failed, errCode: %d", QCLOUD_ERR_JSON_PARSE);
+    } else {
+        ret = true;
+    }
 
-	HAL_Free(timestamp);
+    HAL_Free(timestamp);
 
-	return ret;
+    return ret;
 }
 
 bool parse_action_input(char *pJsonDoc, char **pActionInput)
 {
     *pActionInput = LITE_json_value_of(CMD_CONTROL_PARA, pJsonDoc);
-	return *pActionInput == NULL ? false : true;
+    return *pActionInput == NULL ? false : true;
 }
 
-bool parse_code_return(char *pJsonDoc, int32_t *pCode) {
+bool parse_code_return(char *pJsonDoc, int32_t *pCode)
+{
 
-	bool ret = false;
+    bool ret = false;
 
-	char *code = LITE_json_value_of(REPLY_CODE, pJsonDoc);
-	if (code == NULL) return false;
+    char *code = LITE_json_value_of(REPLY_CODE, pJsonDoc);
+    if (code == NULL) return false;
 
-	if (sscanf(code, "%" SCNi32, pCode) != 1) {
-		Log_e("parse code failed, errCode: %d", QCLOUD_ERR_JSON_PARSE);
-	}
-	else {
-		ret = true;
-	}
+    if (sscanf(code, "%" SCNi32, pCode) != 1) {
+        Log_e("parse code failed, errCode: %d", QCLOUD_ERR_JSON_PARSE);
+    } else {
+        ret = true;
+    }
 
-	HAL_Free(code);
+    HAL_Free(code);
 
-	return ret;
+    return ret;
 }
 
-bool parse_status_return(char *pJsonDoc, char **pStatus) {
-	*pStatus = LITE_json_value_of(REPLY_STATUS, pJsonDoc);
-	return *pStatus == NULL ? false : true;
+bool parse_status_return(char *pJsonDoc, char **pStatus)
+{
+    *pStatus = LITE_json_value_of(REPLY_STATUS, pJsonDoc);
+    return *pStatus == NULL ? false : true;
 }
 
-bool update_value_if_key_match(char *pJsonDoc, DeviceProperty *pProperty) {
+bool update_value_if_key_match(char *pJsonDoc, DeviceProperty *pProperty)
+{
 
-	bool ret = false;
+    bool ret = false;
 
-	char* property_data = LITE_json_value_of(pProperty->key, pJsonDoc);
-	if ((property_data == NULL) || !(strncmp(property_data, "null", 4))
-		 ||!(strncmp(property_data, "NULL", 4))) {
-	}
-	else {		
-		_direct_update_value(property_data, pProperty);
-		ret = true;
-		HAL_Free(property_data);
-	}
+    char* property_data = LITE_json_value_of(pProperty->key, pJsonDoc);
+    if ((property_data == NULL) || !(strncmp(property_data, "null", 4))
+        || !(strncmp(property_data, "NULL", 4))) {
+    } else {
+        _direct_update_value(property_data, pProperty);
+        ret = true;
+        HAL_Free(property_data);
+    }
 
-	return ret;
+    return ret;
 }
 
 bool parse_template_method_type(char *pJsonDoc, char **pMethod)
 {
-	*pMethod = LITE_json_value_of(METHOD_FIELD, pJsonDoc);
-	return *pMethod == NULL ? false : true;
+    *pMethod = LITE_json_value_of(METHOD_FIELD, pJsonDoc);
+    return *pMethod == NULL ? false : true;
 }
 
 bool parse_template_get_control(char *pJsonDoc, char **control)
 {
     *control = LITE_json_value_of(GET_CONTROL_PARA, pJsonDoc);
-	return *control == NULL ? false : true;
+    return *control == NULL ? false : true;
 }
 
 bool parse_template_cmd_control(char *pJsonDoc, char **control)
 {
     *control = LITE_json_value_of(CMD_CONTROL_PARA, pJsonDoc);
-	return *control == NULL ? false : true;
+    return *control == NULL ? false : true;
 }
 
 

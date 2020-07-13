@@ -16,7 +16,7 @@
  *---------------------------------------------------------------------------*/
 
 #include "tos_k.h"
-#include "core_cm0plus.h"
+#include "core_cm23.h"
 
 __PORT__ void port_cpu_reset(void)
 {
@@ -59,17 +59,7 @@ __PORT__ void port_systick_suspend(void)
 
 __PORT__ void port_systick_reload(uint32_t cycle_per_tick)
 {
-    uint32_t max_cycle;
-
-    max_cycle = SysTick_LOAD_RELOAD_Msk; // 24 bit
-
-    if (max_cycle - SysTick->VAL > cycle_per_tick - 1u) {
-        SysTick->LOAD = max_cycle;
-    } else {
-        SysTick->LOAD = (cycle_per_tick - 1u) + SysTick->VAL;
-    }
-
-    SysTick->VAL = 0;
+    port_systick_config(cycle_per_tick);
 }
 
 __PORT__ void port_systick_pending_reset(void)
@@ -105,7 +95,7 @@ __PORT__ void port_standby_mode_enter(void)
 #if TOS_CFG_FAULT_BACKTRACE_EN > 0u
 __PORT__ void port_fault_diagnosis(void)
 {
-    k_fault_log_writer("fault diagnosis does not supported in CORTEX M0\n");
+    k_fault_log_writer("fault diagnosis is not supported in CORTEX M23\n");
 }
 
 /*------------------ RealView Compiler -----------------*/

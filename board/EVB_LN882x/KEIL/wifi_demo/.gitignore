@@ -1,0 +1,6 @@
+/Listings/
+/Objects/
+*.uvguix.*
+JLinkLog.txt
+*.bin
+*.asm

@@ -351,6 +351,10 @@ TimerTime_t TimerGetCurrentTime( void )
 
 TimerTime_t TimerGetElapsedTime( TimerTime_t past )
 {
+    if ( past == 0 )
+    {
+        return 0;
+    }
     uint32_t nowInTicks = RtcGetTimerValue( );
     uint32_t pastInTicks = RtcMs2Tick( past );
 

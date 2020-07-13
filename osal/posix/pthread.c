@@ -565,6 +565,7 @@ __API__ int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *
     the_ctl->stackaddr      = (is_stk_need_free ? stackaddr : K_NULL);
     the_ctl->start_routine  = start_routine;
     the_ctl->arg            = arg;
+    memset(&the_ctl->ktask, 0, sizeof(k_task_t));
 
     stackaddr               = (void *)((cpu_addr_t)stackaddr + PTHREAD_INFO_SIZE);
     stacksize              -= PTHREAD_INFO_SIZE;

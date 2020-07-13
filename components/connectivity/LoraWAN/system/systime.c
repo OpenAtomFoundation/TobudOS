@@ -139,12 +139,22 @@ SysTime_t SysTimeGetMcuTime( void )
     return calendarTime;
 }
 
-uint32_t SysTime2Ms( SysTime_t sysTime )
+uint32_t SysTimeToMs( SysTime_t sysTime )
 {
     SysTime_t deltaTime;
     RtcBkupRead( &deltaTime.Seconds, ( uint32_t* )&deltaTime.SubSeconds );
     SysTime_t calendarTime = SysTimeSub( sysTime, deltaTime );
     return calendarTime.Seconds * 1000 + calendarTime.SubSeconds;
+}
+
+SysTime_t SysTimeFromMs( uint32_t timeMs )
+{
+    uint32_t seconds = timeMs / 1000;
+    SysTime_t sysTime = { .Seconds = seconds, .SubSeconds =  timeMs - seconds * 1000 };
+    SysTime_t deltaTime = { 0 };
+    RtcBkupRead( &deltaTime.Seconds, ( uint32_t* )&deltaTime.SubSeconds );
+
+    return SysTimeAdd( sysTime, deltaTime );
 }
 
 uint32_t SysTimeMkTime( const struct tm* localtime )

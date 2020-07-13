@@ -262,6 +262,13 @@ __KNL__ k_err_t mmheap_init(void);
 
 __KNL__ k_err_t mmheap_init_with_pool(void *pool_start, size_t pool_size);
 
+#else /* if mmheap is not enabled, use libc instead */
+
+#define tos_mmheap_alloc            malloc
+#define tos_mmheap_calloc           calloc
+#define tos_mmheap_realloc          realloc
+#define tos_mmheap_free             free
+
 #endif
 
 __CDECLS_END

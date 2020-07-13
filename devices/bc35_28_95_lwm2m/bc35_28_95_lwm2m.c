@@ -239,13 +239,13 @@ static int bc35_28_95_print_NBAND(void) {
 static int bc35_28_95_lwm2m_init(void)
 {
     printf("Init BC35_28_95 ...wait reset!\n" );
-    at_delay_ms(5000);
+    tos_stopwatch_delay_ms(5000);
     if (bc35_28_95_echo_close() != 0) {
         printf("echo close FAILED\n");
         return -1;
     }
     if(bc35_28_95_autoconnect_config(0)!=0){
-        printf("autoconnect false FAILED\n");
+        printf("autoconnect config FAILED\n");
         return -1;
     };
     if (bc35_28_95_cfun_set(0) != 0) {

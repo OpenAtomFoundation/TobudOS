@@ -60,7 +60,7 @@ char *json_get_next_object(int type, char *str, char **key, int *key_len,
     char    JsonMark[JSTYPEMAX][2] = { { '\"', '\"' }, { '{', '}' }, { '[', ']' }, { '0', ' ' } };
     int     iMarkDepth = 0, iValueType = JSNONE, iNameLen = 0, iValueLen = 0;
     char   *p_cName = 0, *p_cValue = 0, *p_cPos = str;
-	char 	lastchr = ' ';
+    char    lastchr = ' ';
 
     if (type == JSOBJECT) {
         /* Get Key */
@@ -81,7 +81,7 @@ char *json_get_next_object(int type, char *str, char **key, int *key_len,
     while (p_cPos && *p_cPos) {
         if (*p_cPos == '"') {
             iValueType = JSSTRING;
-			lastchr = *p_cPos;
+            lastchr = *p_cPos;
             p_cValue = ++p_cPos;
             break;
         } else if (*p_cPos == '{') {
@@ -99,12 +99,12 @@ char *json_get_next_object(int type, char *str, char **key, int *key_len,
         } else if (*p_cPos == 't' || *p_cPos == 'T' || *p_cPos == 'f' || *p_cPos == 'F') {
             iValueType = JSBOOLEAN;
             p_cValue = p_cPos;
-            break;					
-        }else if (*p_cPos == 'n' || *p_cPos == 'N') {
+            break;
+        } else if (*p_cPos == 'n' || *p_cPos == 'N') {
             iValueType = JSNULL;
             p_cValue = p_cPos;
             break;
-        }		
+        }
         p_cPos++;
     }
     while (p_cPos && *p_cPos && iValueType > JSNONE) {
@@ -125,40 +125,38 @@ char *json_get_next_object(int type, char *str, char **key, int *key_len,
                 break;
             }
         } else if (iValueType == JSNULL) { //support null/NULL
-        	int     nlen = strlen(p_cValue);
-			
-		    if ((*p_cValue == 'n' || *p_cValue == 'N') && nlen >= 4
+            int     nlen = strlen(p_cValue);
+
+            if ((*p_cValue == 'n' || *p_cValue == 'N') && nlen >= 4
                 && (!strncmp(p_cValue, "null", 4)
                     || !strncmp(p_cValue, "NULL", 4))) {
                 iValueLen = 4;
                 p_cPos = p_cValue + iValueLen;
                 break;
-            }            
-        }
-	    else if (iValueType == JSNUMBER) {
+            }
+        } else if (iValueType == JSNUMBER) {
             //if (*p_cPos < '0' || *p_cPos > '9') {
-            if ((*p_cPos < '0' || *p_cPos > '9')&&(*p_cPos != '.')) { //support float
+            if ((*p_cPos < '0' || *p_cPos > '9') && (*p_cPos != '.')) { //support float
                 iValueLen = p_cPos - p_cValue;
                 break;
             }
-        }    
-		else if (*p_cPos == JsonMark[iValueType][1]) {			
+        } else if (*p_cPos == JsonMark[iValueType][1]) {
             if (iMarkDepth == 0) {
-                iValueLen = p_cPos - p_cValue + (iValueType == JSSTRING ? 0 : 1);								
-                p_cPos++;			
-				if((iValueType == JSSTRING) && (lastchr == '\\')){	
-					lastchr = *p_cPos;
-					continue;
-				}else{
-					break;
-				}                
+                iValueLen = p_cPos - p_cValue + (iValueType == JSSTRING ? 0 : 1);
+                p_cPos++;
+                if ((iValueType == JSSTRING) && (lastchr == '\\')) {
+                    lastchr = *p_cPos;
+                    continue;
+                } else {
+                    break;
+                }
             } else {
                 iMarkDepth--;
             }
         } else if (*p_cPos == JsonMark[iValueType][0]) {
             iMarkDepth++;
         }
-		lastchr = *p_cPos;
+        lastchr = *p_cPos;
         p_cPos++;
     }
 
@@ -233,7 +231,7 @@ int json_get_value_by_name_cb(char *p_cName, int iNameLen, char *p_cValue, int i
 #endif
 
     if ((iNameLen == p_stNameValue->nLen) && !strncmp(p_cName, p_stNameValue->pN, p_stNameValue->nLen)) {
-		
+
         p_stNameValue->pV = p_cValue;
         p_stNameValue->vLen = iValueLen;
         p_stNameValue->vType = iValueType;
@@ -256,9 +254,9 @@ char *json_get_value_by_name(char *p_cJsonStr, int iStrLen, char *p_cName, int *
         }
         if (p_iValueType) {
             *p_iValueType = stNV.vType;
-			if(JSNULL == stNV.vType){
-				stNV.pV = NULL;
-			}
+            if (JSNULL == stNV.vType) {
+                stNV.pV = NULL;
+            }
         }
     }
     return stNV.pV;

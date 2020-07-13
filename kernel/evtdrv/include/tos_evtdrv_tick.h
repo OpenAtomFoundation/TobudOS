@@ -21,7 +21,7 @@
 #if TOS_CFG_EVENT_DRIVEN_EN > 0u
 
 /**
- * @brief Get the current systick cout.
+ * @brief Get the current systick count.
  *
  * @attention
  *

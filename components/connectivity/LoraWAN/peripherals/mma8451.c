@@ -36,7 +36,7 @@ static bool MMA8451Initialized = false;
  *
  * \param [IN]: addr
  * \param [IN]: data
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MMA8451Write( uint8_t addr, uint8_t data );
 
@@ -46,7 +46,7 @@ uint8_t MMA8451Write( uint8_t addr, uint8_t data );
  * \param [IN]: addr
  * \param [IN]: data
  * \param [IN]: size
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MMA8451WriteBuffer( uint8_t addr, uint8_t *data, uint8_t size );
 
@@ -55,7 +55,7 @@ uint8_t MMA8451WriteBuffer( uint8_t addr, uint8_t *data, uint8_t size );
  *
  * \param [IN]: addr
  * \param [OUT]: data
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MMA8451Read( uint8_t addr, uint8_t *data );
 
@@ -65,7 +65,7 @@ uint8_t MMA8451Read( uint8_t addr, uint8_t *data );
  * \param [IN]: addr
  * \param [OUT]: data
  * \param [IN]: size
- * \retval status [LORA_SUCCESS, LORA_FAIL]
+ * \retval status [SUCCESS, FAIL]
  */
 uint8_t MMA8451ReadBuffer( uint8_t addr, uint8_t *data, uint8_t size );
 
@@ -96,7 +96,7 @@ uint8_t MMA8451Init( void )
         MMA8451Read( MMA8451_ID, &regVal );
         if( regVal != 0x1A )   // Fixed Device ID Number = 0x1A
         {
-            return LORA_FAIL;
+            return FAIL;
         }
         MMA8451Reset( );
 
@@ -105,17 +105,17 @@ uint8_t MMA8451Init( void )
         MMA8451Write( MMA8451_CTRL_REG3, 0x01 );
         MMA8451OrientDetect( );
     }
-    return LORA_SUCCESS;
+    return SUCCESS;
 }
 
 
 uint8_t MMA8451Reset( )
 {
-    if( MMA8451Write( 0x2B, 0x40 ) == LORA_SUCCESS ) // Reset the MMA8451 with CTRL_REG2
+    if( MMA8451Write( 0x2B, 0x40 ) == SUCCESS ) // Reset the MMA8451 with CTRL_REG2
     {
-        return LORA_SUCCESS;
+        return SUCCESS;
     }
-    return LORA_FAIL;
+    return FAIL;
 }
 
 uint8_t MMA8451Write( uint8_t addr, uint8_t data )

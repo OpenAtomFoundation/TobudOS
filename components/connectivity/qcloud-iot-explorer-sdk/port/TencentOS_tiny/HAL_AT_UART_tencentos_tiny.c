@@ -38,22 +38,19 @@ static  UART_HandleTypeDef          *pAtUart = &huart1;
 extern void AT_Uart_Init(void);
 extern void at_client_uart_rx_isr_cb(uint8_t *pdata, uint8_t len);
 
-
-#include "board.h"
 /**
 * @brief This function handles AT UART global interrupt,push recv char to ringbuff.
 */
 void HAL_AT_UART_IRQHandler(void)
 { 
-	uint8_t ch;
-	if(__HAL_UART_GET_FLAG(pAtUart, UART_FLAG_RXNE) == SET)
-	{	
-		ch = (uint8_t) READ_REG(pAtUart->Instance->RDR)&0xFF;	
-		/*this callback for at_client*/
-		at_client_uart_rx_isr_cb(&ch, 1);
-		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	}
-	__HAL_UART_CLEAR_PEFLAG(pAtUart);
+    uint8_t ch;
+    if(__HAL_UART_GET_FLAG(pAtUart, UART_FLAG_RXNE) == SET)
+    {	
+        ch = (uint8_t) READ_REG(pAtUart->Instance->RDR)&0xFF;	
+        /*this callback for at_client*/
+        at_client_uart_rx_isr_cb(&ch, 1);
+    }
+    __HAL_UART_CLEAR_PEFLAG(pAtUart);
 }
 
 
@@ -65,24 +62,25 @@ void HAL_AT_UART_IRQHandler(void)
  */
 int HAL_AT_Uart_Send(void *data, uint32_t size)
 {
-	if(HAL_OK == HAL_UART_Transmit(pAtUart, data, size, 0xFFFF))
-	{
-		return size;
-	}
-	else
-	{
-		return 0;
-	}	
+    if(HAL_OK == HAL_UART_Transmit(pAtUart, data, size, 0xFFFF))
+    {
+        return size;
+    }
+    else
+    {
+        return 0;
+    }	
 }
 
 int HAL_AT_Uart_Init(void)
 {
-	 AT_Uart_Init();
-	 return QCLOUD_RET_SUCCESS;
+    AT_Uart_Init();
+    return QCLOUD_RET_SUCCESS;
 }
 
 int HAL_AT_Uart_Deinit(void)
 {
-	return QCLOUD_RET_SUCCESS;
+    return QCLOUD_RET_SUCCESS;
 }
-#endif
+
+#endif/*AT_TCP_ENABLED*/

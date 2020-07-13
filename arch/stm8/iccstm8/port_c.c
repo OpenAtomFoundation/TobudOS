@@ -44,72 +44,40 @@
 
 __PORT__ void port_cpu_reset(void)
 {
-#if 0
-    NVIC_SystemReset();
-#endif
 }
 
 __PORT__ void port_systick_config(uint32_t cycle_per_tick)
 {
-#if 0
-    (void)SysTick_Config(cycle_per_tick);
-#endif
 }
 
 __PORT__ void port_systick_priority_set(uint32_t prio)
 {
-#if 0
-    NVIC_SetPriority(SysTick_IRQn, prio);
-#endif
 }
 
 #if TOS_CFG_TICKLESS_EN > 0u
 
 __PORT__ k_time_t port_systick_max_delay_millisecond(void)
 {
-    k_time_t max_millisecond;
-    uint32_t max_cycle;
-
-    max_cycle = SysTick_LOAD_RELOAD_Msk; // 24 bit
-    max_millisecond = (k_time_t)((uint64_t)max_cycle * K_TIME_MILLISEC_PER_SEC / TOS_CFG_CPU_CLOCK); // CLOCK: cycle per second
-    return max_millisecond;
 }
 
 __PORT__ void port_systick_resume(void)
 {
-    SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
-    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
 
 __PORT__ void port_systick_suspend(void)
 {
-    SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
-    SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 }
 
 __PORT__ k_cycle_t port_systick_max_reload_cycle(void)
 {
-    return SysTick_LOAD_RELOAD_Msk;
 }
 
 __PORT__ void port_systick_reload(uint32_t cycle_per_tick)
 {
-    uint32_t max_cycle;
-
-    max_cycle = SysTick_LOAD_RELOAD_Msk; // 24 bit
-
-    if (max_cycle - SysTick->VAL > cycle_per_tick - 1u) {
-        SysTick->LOAD = max_cycle;
-    } else {
-        SysTick->LOAD = (cycle_per_tick - 1u) + SysTick->VAL;
-    }
-
-    SysTick->VAL = 0;
 }
 
 __PORT__ void port_systick_pending_reset(void)
 {
-    SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
 }
 
 #endif

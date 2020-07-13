@@ -21,17 +21,17 @@
 /* The stack type changes depending on the data model. */
 #if( __DATA_MODEL__ == __DATA_MODEL_SMALL__ )
     #define TOS_CFG_CPU_ADDR_SIZE               CPU_WORD_SIZE_16
-    #define TOS_CFG_CPU_DATA_SIZE               CPU_WORD_SIZE_16 
+    #define TOS_CFG_CPU_DATA_SIZE               CPU_WORD_SIZE_16
 #else
     #define TOS_CFG_CPU_ADDR_SIZE               CPU_WORD_SIZE_32
-    #define TOS_CFG_CPU_DATA_SIZE               CPU_WORD_SIZE_32 
+    #define TOS_CFG_CPU_DATA_SIZE               CPU_WORD_SIZE_32
 #endif
-   
 
-#define TOS_CFG_CPU_STK_GROWTH              CPU_STK_GROWTH_DESCENDING
+#define TOS_CFG_CPU_STK_GROWTH                  CPU_STK_GROWTH_DESCENDING
 // #define TOS_CFG_CPU_HRTIMER_SIZE             CPU_WORD_SIZE_32
-#define TOS_CFG_CPU_HRTIMER_EN               0u
-#define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT  0u
+#define TOS_CFG_CPU_HRTIMER_EN                  0u
+#define TOS_CFG_CPU_LEAD_ZEROS_ASM_PRESENT      0u
+#define TOS_CFG_CPU_BYTE_ORDER                  CPU_BYTE_ORDER_LITTLE_ENDIAN
 
 #endif /* _PORT_CONFIG_H_ */
 

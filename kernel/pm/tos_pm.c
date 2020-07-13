@@ -24,7 +24,8 @@ __API__ k_err_t tos_pm_cpu_lpwr_mode_set(k_cpu_lpwr_mode_t cpu_lpwr_mode)
 {
     TOS_CPU_CPSR_ALLOC();
 
-    if (!tickless_wkup_alarm_is_installed(cpu_lpwr_mode)) {
+    if (cpu_lpwr_mode != TOS_LOW_POWER_MODE_NONE &&
+        !tickless_wkup_alarm_is_installed(cpu_lpwr_mode)) {
         return K_ERR_PM_WKUP_SOURCE_NOT_INSTALL;
     }
 

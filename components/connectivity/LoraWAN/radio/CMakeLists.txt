@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 3.6)
 #---------------------------------------------------------------------------------------
 
 # Allow switching of radios
-set(RADIO_LIST sx1272 sx1276 sx126x)
+set(RADIO_LIST sx1272 sx1276 sx126x lr1110)
 set(RADIO sx1272 CACHE STRING "Default radio is sx1272")
 set_property(CACHE RADIO PROPERTY STRINGS ${RADIO_LIST})
 set_property(CACHE RADIO PROPERTY ADVANCED)
@@ -32,17 +32,47 @@ set_property(CACHE RADIO PROPERTY ADVANCED)
 # Target
 #---------------------------------------------------------------------------------------
 
-file(GLOB ${PROJECT_NAME}_SOURCES "${RADIO}/*.c")
+foreach( R ${RADIO_LIST} )
+    if(${R} MATCHES ${RADIO} )
+        list(APPEND ${PROJECT_NAME}_SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/radio.c
+        )
+        list(APPEND ${PROJECT_NAME}_SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_bootloader.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_crypto_engine.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_gnss.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_radio.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_regmem.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_system.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src/lr1110_wifi.c
+            )
+    else()
+        file(GLOB ${PROJECT_NAME}_SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/*.c
+        )
+    endif()
+endforeach()
 
 add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})
 
 add_dependencies(${PROJECT_NAME} board)
 
+foreach( R ${RADIO_LIST} )
+    if(${R} MATCHES lr1110 )
+        list(APPEND ${PROJECT_NAME}_INCLUDES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO})
+        list(APPEND ${PROJECT_NAME}_INCLUDES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}/${RADIO}_driver/src)
+    else()
+        list(APPEND ${PROJECT_NAME}_INCLUDES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RADIO}
+        )
+    endif()
+endforeach()
+
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/sx126x
-    ${CMAKE_CURRENT_SOURCE_DIR}/sx1272
-    ${CMAKE_CURRENT_SOURCE_DIR}/sx1276
+    ${${PROJECT_NAME}_INCLUDES}
     $<TARGET_PROPERTY:board,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:system,INTERFACE_INCLUDE_DIRECTORIES>
 )

@@ -45,7 +45,7 @@ ARCH_SRC =  \
         C_SOURCES += $(ARCH_SRC)
 
 CMSIS_SRC =  \
-        ${wildcard $(TOP_DIR)/osal/cmsis_os/*.c}
+		$(TOP_DIR)/osal/cmsis_os/cmsis_os.c
         C_SOURCES += $(CMSIS_SRC)
 
 HAL_DRIVER_SRC =  \
@@ -58,6 +58,7 @@ HAL_DRIVER_SRC =  \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/i2c.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/usart.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/spi.c \
+		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/tim.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_it.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_hal_msp.c \
 		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11/DHT11_BUS.c \

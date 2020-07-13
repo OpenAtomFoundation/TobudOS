@@ -19,16 +19,16 @@
 #define  _TOS_K_H_
 
 #include <tos_compiler.h>
-#include <tos_err.h>
-#include <tos_ktypes.h>
+#include <tos_kerr.h>
 #include <tos_cpu_def.h>
 #include <tos_config.h>
 #include <tos_config_default.h>
 #include <port_config.h>
+#include <tos_config_check.h>
 #include <tos_cpu_types.h>
+#include <tos_ktypes.h>
 #include <port.h>
 #include <tos_cpu.h>
-#include <tos_config_check.h>
 #include <tos_fault.h>
 #include <tos_klib.h>
 #include <tos_list.h>

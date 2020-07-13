@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #include "tos_at.h"
 
 __STATIC__ at_agent_t at_agent;
@@ -24,7 +41,7 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
 {
     k_err_t err;
 
-    at_delay(1);
+    tos_stopwatch_delay(1);
 
     if (tos_sem_pend(&AT_AGENT->uart_rx_sem, timeout) != K_ERR_NONE) {
         return -1;
@@ -161,6 +178,13 @@ __STATIC__ int at_is_echo_expect(void)
         return 0;
     }
 
+    if (at_echo->__is_fuzzy_match) {
+        if (strstr(recv_buffer, expect) != NULL) {
+            return 0;
+        }
+        return -1;
+    }
+
     if (strncmp(expect, recv_buffer, expect_len) == 0) {
         return 1;
     }
@@ -274,7 +298,7 @@ __STATIC__ void at_parser(void *arg)
         at_parse_status = at_uart_line_parse();
 
         if (at_parse_status == AT_PARSE_STATUS_OVERFLOW) {
-            // TODO: fix me
+            tos_kprintln("AT parse overflow!");
             continue;
         }
 
@@ -337,6 +361,28 @@ __API__ int tos_at_echo_create(at_echo_t *echo, char *buffer, size_t buffer_size
     echo->status            = AT_ECHO_STATUS_NONE;
     echo->__w_idx           = 0;
     echo->__is_expecting    = K_FALSE;
+    echo->__is_fuzzy_match  = K_FALSE;
+    return 0;
+}
+
+__API__ int tos_at_echo_fuzzy_matching_create(at_echo_t *echo, char *buffer, size_t buffer_size, char *echo_expect_contains)
+{
+    if (!echo) {
+        return -1;
+    }
+
+    if (buffer) {
+        memset(buffer, 0, buffer_size);
+    }
+
+    echo->buffer            = buffer;
+    echo->buffer_size       = buffer_size;
+    echo->echo_expect       = echo_expect_contains;
+    echo->line_num          = 0;
+    echo->status            = AT_ECHO_STATUS_NONE;
+    echo->__w_idx           = 0;
+    echo->__is_expecting    = K_FALSE;
+    echo->__is_fuzzy_match  = K_TRUE;
     return 0;
 }
 
@@ -576,9 +622,9 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
 
     tick = tos_millisec2tick(timeout);
 
-    at_timer_countdown(&AT_AGENT->timer, tick);
-    while (!at_timer_is_expired(&AT_AGENT->timer)) {
-        remain_tick = at_timer_remain(&AT_AGENT->timer);
+    tos_stopwatch_countdown(&AT_AGENT->timer, tick);
+    while (!tos_stopwatch_is_expired(&AT_AGENT->timer)) {
+        remain_tick = tos_stopwatch_remain(&AT_AGENT->timer);
         if (remain_tick == (k_tick_t)0u) {
             return total_read_len;
         }
@@ -793,7 +839,7 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
 
     at_channel_init();
 
-    at_timer_init(&AT_AGENT->timer);
+    tos_stopwatch_create(&AT_AGENT->timer);
 
     buffer = tos_mmheap_alloc(AT_UART_RX_FIFO_BUFFER_SIZE);
     if (!buffer) {
@@ -901,6 +947,8 @@ __API__ void tos_at_deinit(void)
     AT_AGENT->uart_rx_fifo_buffer = K_NULL;
 
     tos_chr_fifo_destroy(&AT_AGENT->uart_rx_fifo);
+
+    tos_stopwatch_destroy(&AT_AGENT->timer);
 
     at_channel_deinit();
 }

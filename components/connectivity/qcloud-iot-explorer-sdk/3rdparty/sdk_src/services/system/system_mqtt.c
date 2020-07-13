@@ -25,7 +25,7 @@ extern "C" {
 #include "qcloud_iot_import.h"
 
 
-#ifdef SYSTEM_COMM 
+#ifdef SYSTEM_COMM
 
 #include "qcloud_iot_export_system.h"
 #include "mqtt_client.h"
@@ -35,27 +35,28 @@ extern "C" {
 typedef struct _sys_mqtt_state {
     bool topic_sub_ok;
     bool result_recv_ok;
-    long  time;    
-}SysMQTTState;
+    long  time;
+} SysMQTTState;
 
 static SysMQTTState sg_state = {
-            .topic_sub_ok = false, 
-            .result_recv_ok = false,
-            .time = 0};
+    .topic_sub_ok = false,
+    .result_recv_ok = false,
+    .time = 0
+};
 
 
 static void _system_mqtt_message_callback(void *pClient, MQTTMessage *message, void *pUserData)
 {
 #define MAX_RECV_LEN (512)
 
-    POINTER_SANITY_CHECK_RTN(message);	
+    POINTER_SANITY_CHECK_RTN(message);
 
     static char rcv_buf[MAX_RECV_LEN + 1];
-	size_t len = (message->payload_len > MAX_RECV_LEN)?MAX_RECV_LEN:(message->payload_len);
+    size_t len = (message->payload_len > MAX_RECV_LEN) ? MAX_RECV_LEN : (message->payload_len);
 
-	if(message->payload_len > MAX_RECV_LEN){
-		Log_e("payload len oversize");
-	}
+    if (message->payload_len > MAX_RECV_LEN) {
+        Log_e("payload len oversize");
+    }
     memcpy(rcv_buf, message->payload, len);
     rcv_buf[len] = '\0';    // jsmn_parse relies on a string
     SysMQTTState *state = (SysMQTTState *)pUserData;
@@ -75,28 +76,28 @@ static void _system_mqtt_sub_event_handler(void *pclient, MQTTEventType event_ty
 {
     SysMQTTState *state = (SysMQTTState *)pUserData;
 
-    switch(event_type) {
+    switch (event_type) {
         case MQTT_EVENT_SUBCRIBE_SUCCESS:
             Log_d("mqtt sys topic subscribe success");
-            state->topic_sub_ok = true;         
+            state->topic_sub_ok = true;
             break;
 
         case MQTT_EVENT_SUBCRIBE_TIMEOUT:
             Log_i("mqtt sys topic subscribe timeout");
-            state->topic_sub_ok = false;            
+            state->topic_sub_ok = false;
             break;
 
         case MQTT_EVENT_SUBCRIBE_NACK:
             Log_i("mqtt sys topic subscribe NACK");
-            state->topic_sub_ok = false;            
+            state->topic_sub_ok = false;
             break;
         case MQTT_EVENT_UNSUBSCRIBE:
             Log_i("mqtt sys topic has been unsubscribed");
-            state->topic_sub_ok = false;;           
+            state->topic_sub_ok = false;;
             break;
         case MQTT_EVENT_CLIENT_DESTROY:
             Log_i("mqtt client has been destroyed");
-            state->topic_sub_ok = false;;           
+            state->topic_sub_ok = false;;
             break;
         default:
             return;
@@ -122,7 +123,7 @@ static int _iot_system_info_get_publish(void *pClient)
     pub_params.payload = payload_content;
     pub_params.payload_len = strlen(payload_content);
 
-	return IOT_MQTT_Publish(mqtt_client, topic_name, &pub_params);
+    return IOT_MQTT_Publish(mqtt_client, topic_name, &pub_params);
 }
 
 static int _iot_system_info_result_subscribe(void *pClient)
@@ -134,8 +135,7 @@ static int _iot_system_info_result_subscribe(void *pClient)
 
     char topic_name[128] = {0};
     int size = HAL_Snprintf(topic_name, sizeof(topic_name), "$sys/operation/result/%s/%s", dev_info->product_id, dev_info->device_name);
-    if (size < 0 || size > sizeof(topic_name) - 1)
-    {
+    if (size < 0 || size > sizeof(topic_name) - 1) {
         Log_e("topic content length not enough! content size:%d  buf size:%d", size, (int)sizeof(topic_name));
         return QCLOUD_ERR_FAILURE;
     }
@@ -159,8 +159,8 @@ int IOT_Get_SysTime(void* pClient, long *time)
 
     // subscribe sys topic: $sys/operation/get/${productid}/${devicename}
     // skip this if the subscription is done and valid
-    if(!sg_state.topic_sub_ok){
-        for(cntSub = 0; cntSub < 3; cntSub++){
+    if (!sg_state.topic_sub_ok) {
+        for (cntSub = 0; cntSub < 3; cntSub++) {
             ret = _iot_system_info_result_subscribe(mqtt_client);
             if (ret < 0) {
                 Log_w("_iot_system_info_result_subscribe failed: %d, cnt: %d", ret, cntSub);
@@ -169,39 +169,39 @@ int IOT_Get_SysTime(void* pClient, long *time)
 
             /* wait for sub ack */
             ret = qcloud_iot_mqtt_yield((Qcloud_IoT_Client *)pClient, 100);
-            if(sg_state.topic_sub_ok) {                
+            if (sg_state.topic_sub_ok) {
                 break;
             }
         }
     }
 
     // return failure if subscribe failed
-    if(!sg_state.topic_sub_ok){
+    if (!sg_state.topic_sub_ok) {
         Log_e("Subscribe sys topic failed!");
         return QCLOUD_ERR_FAILURE;
     }
 
     sg_state.result_recv_ok = false;
     // publish msg to get system timestamp
-	ret = _iot_system_info_get_publish(mqtt_client);
-	if (ret < 0) {
-		Log_e("client publish sys topic failed :%d.", ret);
+    ret = _iot_system_info_get_publish(mqtt_client);
+    if (ret < 0) {
+        Log_e("client publish sys topic failed :%d.", ret);
         return ret;
-	}
+    }
 
     do {
         ret = qcloud_iot_mqtt_yield((Qcloud_IoT_Client *)pClient, 100);
         cntRev++;
-    } while(!sg_state.result_recv_ok && cntRev < 20);
+    } while (!sg_state.result_recv_ok && cntRev < 20);
 
-    
-    if (sg_state.result_recv_ok) {        
+
+    if (sg_state.result_recv_ok) {
         *time = sg_state.time;
-        ret = QCLOUD_RET_SUCCESS;        
+        ret = QCLOUD_RET_SUCCESS;
     } else {
         *time = 0;
         ret = QCLOUD_ERR_FAILURE;
-    }  
+    }
 
     return ret;
 }

@@ -28,7 +28,8 @@ extern "C" {
   * @param topicFilters the array of topic filter strings to be used in the publish
   * @return the length of buffer needed to contain the serialized version of the packet
   */
-static uint32_t _get_subscribe_packet_rem_len(uint32_t count, char **topicFilters) {
+static uint32_t _get_subscribe_packet_rem_len(uint32_t count, char **topicFilters)
+{
     size_t i;
     size_t len = 2; /* packetid */
 
@@ -51,7 +52,8 @@ static uint32_t _get_subscribe_packet_rem_len(uint32_t count, char **topicFilter
   * @return the length of the serialized data.  <= 0 indicates error
   */
 static int _serialize_subscribe_packet(unsigned char *buf, size_t buf_len, uint8_t dup, uint16_t packet_id, uint32_t count,
-                                char **topicFilters, QoS *requestedQoSs, uint32_t *serialized_len) {
+                                       char **topicFilters, QoS *requestedQoSs, uint32_t *serialized_len)
+{
     IOT_FUNC_ENTRY;
 
     POINTER_SANITY_CHECK(buf, QCLOUD_ERR_INVAL);
@@ -90,7 +92,8 @@ static int _serialize_subscribe_packet(unsigned char *buf, size_t buf_len, uint8
     IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
 }
 
-int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, SubscribeParams *pParams) {
+int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, SubscribeParams *pParams)
+{
 
     IOT_FUNC_ENTRY;
     int rc;
@@ -105,7 +108,7 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
     uint16_t packet_id = 0;
 
     ListNode *node = NULL;
-    
+
     size_t topicLen = strlen(topicFilter);
     if (topicLen > MAX_SIZE_OF_CLOUD_TOPIC) {
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MAX_TOPIC_LENGTH);
@@ -115,7 +118,7 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
         Log_e("QoS2 is not supported currently");
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MQTT_QOS_NOT_SUPPORT);
     }
-    
+
     if (!get_client_conn_state(pClient)) {
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MQTT_NO_CONN)
     }
@@ -126,10 +129,10 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
         Log_e("malloc failed");
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_FAILURE);
     }
-    
+
     strcpy(topic_filter_stored, topicFilter);
     topic_filter_stored[topicLen] = 0;
-    
+
     InitTimer(&timer);
     countdown_ms(&timer, pClient->command_timeout_ms);
 
@@ -140,8 +143,8 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
     rc = _serialize_subscribe_packet(pClient->write_buf, pClient->write_buf_size, 0, packet_id, 1, &topic_filter_stored,
                                      &pParams->qos, &len);
     if (QCLOUD_RET_SUCCESS != rc) {
-    	HAL_MutexUnlock(pClient->lock_write_buf);
-    	HAL_Free(topic_filter_stored);
+        HAL_MutexUnlock(pClient->lock_write_buf);
+        HAL_Free(topic_filter_stored);
         IOT_FUNC_EXIT_RC(rc);
     }
 
@@ -160,7 +163,7 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
         HAL_Free(topic_filter_stored);
         IOT_FUNC_EXIT_RC(rc);
     }
-    
+
     // send SUBSCRIBE packet
     rc = send_mqtt_packet(pClient, len, &timer);
     if (QCLOUD_RET_SUCCESS != rc) {
@@ -168,8 +171,8 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
         list_remove(pClient->list_sub_wait_ack, node);
         HAL_MutexUnlock(pClient->lock_list_sub);
 
-    	HAL_MutexUnlock(pClient->lock_write_buf);
-    	HAL_Free(topic_filter_stored);
+        HAL_MutexUnlock(pClient->lock_write_buf);
+        HAL_Free(topic_filter_stored);
         IOT_FUNC_EXIT_RC(rc);
     }
 
@@ -178,7 +181,8 @@ int qcloud_iot_mqtt_subscribe(Qcloud_IoT_Client *pClient, char *topicFilter, Sub
     IOT_FUNC_EXIT_RC(packet_id);
 }
 
-int qcloud_iot_mqtt_resubscribe(Qcloud_IoT_Client *pClient) {
+int qcloud_iot_mqtt_resubscribe(Qcloud_IoT_Client *pClient)
+{
     IOT_FUNC_ENTRY;
     int rc;
 
@@ -208,7 +212,7 @@ int qcloud_iot_mqtt_resubscribe(Qcloud_IoT_Client *pClient) {
 
         rc = qcloud_iot_mqtt_subscribe(pClient, topic, &temp_param);
         if (rc < 0) {
-        	Log_e("resubscribe failed %d, topic: %s", rc, topic);
+            Log_e("resubscribe failed %d, topic: %s", rc, topic);
             IOT_FUNC_EXIT_RC(rc);
         }
     }

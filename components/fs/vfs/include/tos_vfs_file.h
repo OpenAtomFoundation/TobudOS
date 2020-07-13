@@ -1,7 +1,22 @@
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
+
 #ifndef _TOS_VFS_FILE_H_
 #define  _TOS_VFS_FILE_H_
-
-#if TOS_CFG_VFS_EN > 0u
 
 typedef struct vfs_inode_st vfs_inode_t;
 
@@ -12,13 +27,13 @@ typedef struct vfs_inode_st vfs_inode_t;
 #define VFS_PATH_MAX                    31
 
 // open flags(vfs_oflag_t): open method flags (3rd argument of tos_vfs_open)
-#define VFS_OFLAG_READ          0x01
-#define VFS_OFLAG_WRITE         0x02
-#define	VFS_OFLAG_EXISTING      0x00
-#define VFS_OFLAG_CREATE_NEW    0x04
-#define VFS_OFLAG_CREATE_ALWAYS 0x08
-#define VFS_OFLAG_OPEN_ALWAYS   0x10
-#define VFS_OFLAG_OPEN_APPEND   0x30
+#define VFS_OFLAG_READ              0x01
+#define VFS_OFLAG_WRITE             0x02
+#define VFS_OFLAG_EXISTING          0x00
+#define VFS_OFLAG_CREATE_NEW        0x04
+#define VFS_OFLAG_CREATE_ALWAYS     0x08
+#define VFS_OFLAG_OPEN_ALWAYS       0x10
+#define VFS_OFLAG_OPEN_APPEND       0x30
 
 typedef enum vfs_whence_en {
     VFS_SEEK_SET,   /* the offset is set to offset bytes */
@@ -104,6 +119,5 @@ __KNL__ vfs_dir_t *vfs_dir_alloc(void);
 
 __KNL__ void vfs_dir_free(vfs_dir_t *dir);
 
-#endif
-
 #endif /* _TOS_VFS_FILE_H_ */
+

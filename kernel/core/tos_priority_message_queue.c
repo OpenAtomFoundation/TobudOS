@@ -15,7 +15,7 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
- #include "tos_k.h"
+#include "tos_k.h"
 
 #if TOS_CFG_PRIORITY_MESSAGE_QUEUE_EN > 0u
 

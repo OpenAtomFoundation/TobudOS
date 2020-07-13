@@ -1,6 +1,7 @@
 #include "mqtt_wrapper.h"
 
 #define BUFFER_LEN      256
+static unsigned char buffer[BUFFER_LEN];
 
 static MQTTPacket_connectData mqtt_form_connect_packet(mqtt_con_opt_t *opt)
 {
@@ -20,7 +21,6 @@ int tos_mqtt_connect(char *host, const char *port, mqtt_con_opt_t *opt)
     int sock = 0;
     int serialize_len = 0;
     unsigned char session_present, connack_rc;
-    unsigned char buffer[BUFFER_LEN];
     MQTTPacket_connectData connect_packet;
 
     sock = transport_open(host, port);
@@ -61,7 +61,6 @@ errout:
 int tos_mqtt_publish(int sock, mqtt_pub_opt_t*opt)
 {
     int serialize_len;
-    unsigned char buffer[BUFFER_LEN];
     MQTTString pub_topic;
 
     pub_topic.cstring = opt->topic;
@@ -93,7 +92,6 @@ int tos_mqtt_subscribe(int sock, mqtt_sub_opt_t *opt)
     unsigned short packet_id;
     int max_count, granted_qos;
     int serialize_len;
-    unsigned char buffer[BUFFER_LEN];
     MQTTString sub_topic;
 
     sub_topic.cstring = opt->topic;
@@ -129,7 +127,6 @@ int tos_mqtt_receive(char *topic, int topic_len, unsigned char *payload, int pay
     unsigned char *incoming_data;
     int incoming_data_len, payload_copy_len;
     MQTTString incoming_topic;
-    unsigned char buffer[BUFFER_LEN];
 
     if (MQTTPacket_read(buffer, sizeof(buffer), transport_getdata) != PUBLISH)	 {
         return -1;
@@ -151,7 +148,7 @@ int tos_mqtt_receive(char *topic, int topic_len, unsigned char *payload, int pay
         strncpy(topic, incoming_topic.lenstring.data, topic_copy_len);
         if (topic_copy_len <= topic_len - 1) {
             topic[topic_copy_len] = '\0';
-        }   
+        }
     }
 
     return incoming_data_len;

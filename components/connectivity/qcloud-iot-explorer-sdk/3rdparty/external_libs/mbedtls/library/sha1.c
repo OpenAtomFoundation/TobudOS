@@ -48,8 +48,10 @@
 #if !defined(MBEDTLS_SHA1_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-static void mbedtls_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = (unsigned char*)v; while( n-- ) *p++ = 0;
+static void mbedtls_zeroize( void *v, size_t n )
+{
+    volatile unsigned char *p = (unsigned char*)v;
+    while ( n-- ) *p++ = 0;
 }
 
 /*
@@ -82,7 +84,7 @@ void mbedtls_sha1_init( mbedtls_sha1_context *ctx )
 
 void mbedtls_sha1_free( mbedtls_sha1_context *ctx )
 {
-    if( ctx == NULL )
+    if ( ctx == NULL )
         return;
 
     mbedtls_zeroize( ctx, sizeof( mbedtls_sha1_context ) );
@@ -275,7 +277,7 @@ void mbedtls_sha1_update( mbedtls_sha1_context *ctx, const unsigned char *input,
     size_t fill;
     uint32_t left;
 
-    if( ilen == 0 )
+    if ( ilen == 0 )
         return;
 
     left = ctx->total[0] & 0x3F;
@@ -284,11 +286,10 @@ void mbedtls_sha1_update( mbedtls_sha1_context *ctx, const unsigned char *input,
     ctx->total[0] += (uint32_t) ilen;
     ctx->total[0] &= 0xFFFFFFFF;
 
-    if( ctx->total[0] < (uint32_t) ilen )
+    if ( ctx->total[0] < (uint32_t) ilen )
         ctx->total[1]++;
 
-    if( left && ilen >= fill )
-    {
+    if ( left && ilen >= fill ) {
         memcpy( (void *) (ctx->buffer + left), input, fill );
         mbedtls_sha1_process( ctx, ctx->buffer );
         input += fill;
@@ -296,20 +297,18 @@ void mbedtls_sha1_update( mbedtls_sha1_context *ctx, const unsigned char *input,
         left = 0;
     }
 
-    while( ilen >= 64 )
-    {
+    while ( ilen >= 64 ) {
         mbedtls_sha1_process( ctx, input );
         input += 64;
         ilen  -= 64;
     }
 
-    if( ilen > 0 )
+    if ( ilen > 0 )
         memcpy( (void *) (ctx->buffer + left), input, ilen );
 }
 
-static const unsigned char sha1_padding[64] =
-{
- 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+static const unsigned char sha1_padding[64] = {
+    0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -325,7 +324,7 @@ void mbedtls_sha1_finish( mbedtls_sha1_context *ctx, unsigned char output[20] )
     unsigned char msglen[8];
 
     high = ( ctx->total[0] >> 29 )
-         | ( ctx->total[1] <<  3 );
+           | ( ctx->total[1] <<  3 );
     low  = ( ctx->total[0] <<  3 );
 
     PUT_UINT32_BE( high, msglen, 0 );
@@ -364,26 +363,29 @@ void mbedtls_sha1( const unsigned char *input, size_t ilen, unsigned char output
 /*
  * FIPS-180-1 test vectors
  */
-static const unsigned char sha1_test_buf[3][57] =
-{
+static const unsigned char sha1_test_buf[3][57] = {
     { "abc" },
     { "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq" },
     { "" }
 };
 
-static const int sha1_test_buflen[3] =
-{
+static const int sha1_test_buflen[3] = {
     3, 56, 1000
 };
 
-static const unsigned char sha1_test_sum[3][20] =
-{
-    { 0xA9, 0x99, 0x3E, 0x36, 0x47, 0x06, 0x81, 0x6A, 0xBA, 0x3E,
-      0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D },
-    { 0x84, 0x98, 0x3E, 0x44, 0x1C, 0x3B, 0xD2, 0x6E, 0xBA, 0xAE,
-      0x4A, 0xA1, 0xF9, 0x51, 0x29, 0xE5, 0xE5, 0x46, 0x70, 0xF1 },
-    { 0x34, 0xAA, 0x97, 0x3C, 0xD4, 0xC4, 0xDA, 0xA4, 0xF6, 0x1E,
-      0xEB, 0x2B, 0xDB, 0xAD, 0x27, 0x31, 0x65, 0x34, 0x01, 0x6F }
+static const unsigned char sha1_test_sum[3][20] = {
+    {
+        0xA9, 0x99, 0x3E, 0x36, 0x47, 0x06, 0x81, 0x6A, 0xBA, 0x3E,
+        0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D
+    },
+    {
+        0x84, 0x98, 0x3E, 0x44, 0x1C, 0x3B, 0xD2, 0x6E, 0xBA, 0xAE,
+        0x4A, 0xA1, 0xF9, 0x51, 0x29, 0xE5, 0xE5, 0x46, 0x70, 0xF1
+    },
+    {
+        0x34, 0xAA, 0x97, 0x3C, 0xD4, 0xC4, 0xDA, 0xA4, 0xF6, 0x1E,
+        0xEB, 0x2B, 0xDB, 0xAD, 0x27, 0x31, 0x65, 0x34, 0x01, 0x6F
+    }
 };
 
 /*
@@ -401,46 +403,42 @@ int mbedtls_sha1_self_test( int verbose )
     /*
      * SHA-1
      */
-    for( i = 0; i < 3; i++ )
-    {
-        if( verbose != 0 )
+    for ( i = 0; i < 3; i++ ) {
+        if ( verbose != 0 )
             mbedtls_printf( "  SHA-1 test #%d: ", i + 1 );
 
         mbedtls_sha1_starts( &ctx );
 
-        if( i == 2 )
-        {
+        if ( i == 2 ) {
             memset( buf, 'a', buflen = 1000 );
 
-            for( j = 0; j < 1000; j++ )
+            for ( j = 0; j < 1000; j++ )
                 mbedtls_sha1_update( &ctx, buf, buflen );
-        }
-        else
+        } else
             mbedtls_sha1_update( &ctx, sha1_test_buf[i],
-                               sha1_test_buflen[i] );
+                                 sha1_test_buflen[i] );
 
         mbedtls_sha1_finish( &ctx, sha1sum );
 
-        if( memcmp( sha1sum, sha1_test_sum[i], 20 ) != 0 )
-        {
-            if( verbose != 0 )
+        if ( memcmp( sha1sum, sha1_test_sum[i], 20 ) != 0 ) {
+            if ( verbose != 0 )
                 mbedtls_printf( "failed\n" );
 
             ret = 1;
             goto exit;
         }
 
-        if( verbose != 0 )
+        if ( verbose != 0 )
             mbedtls_printf( "passed\n" );
     }
 
-    if( verbose != 0 )
+    if ( verbose != 0 )
         mbedtls_printf( "\n" );
 
 exit:
     mbedtls_sha1_free( &ctx );
 
-    return( ret );
+    return ( ret );
 }
 
 #endif /* MBEDTLS_SELF_TEST */

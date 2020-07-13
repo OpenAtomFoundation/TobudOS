@@ -50,6 +50,10 @@ extern "C" {
 
 /* USER CODE END EM */
 
+#define RTC_N_PREDIV_S             10  /* subsecond number of bits */
+#define RTC_PREDIV_S              ((1<<RTC_N_PREDIV_S)-1)      /* RTC_SYNCH_PREDIV; */
+#define RTC_PREDIV_A              (1<<(15-RTC_N_PREDIV_S))-1   /* RTC_ASYNCH_PREDIV; */
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 

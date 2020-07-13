@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,MBEDTLS_CONFIG_FILE=&lt;qcloud/tls_psk_config.h&gt;</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\hal\include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\osal\cmsis_os;..\..\..\..\devices\esp8266;..\..\..\..\devices\rhf76_lora;..\..\..\..\devices\esp8266_tencent_firmware;..\..\..\..\devices\bc35_28_95;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\TOS-CONFIG;..\..\..\..\examples\helloworld;..\..\..\..\components\security\mbedtls\3rdparty\include;..\..\..\..\components\security\mbedtls\wrapper\include;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\net\lora_module_wrapper;..\..\..\..\net\tencent_firmware_module_wrapper;..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\include;..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\include\exports;..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\internal_inc</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\hal\include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\osal\cmsis_os;..\..\..\..\devices\esp8266;..\..\..\..\devices\rhf76_lora;..\..\..\..\devices\esp8266_tencent_firmware;..\..\..\..\devices\bc35_28_95;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\TOS-CONFIG;..\..\..\..\examples\helloworld;..\..\..\..\components\security\mbedtls\3rdparty\include;..\..\..\..\components\security\mbedtls\wrapper\include;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\net\lora_module_wrapper;..\..\..\..\net\tencent_firmware_module_wrapper;..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\include;..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\include\exports;..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\internal_inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -441,6 +441,11 @@
               <FileName>stm32l4xx_it_module.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\stm32l4xx_it_module.c</FilePath>
+            </File>
+            <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\tim.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -737,6 +742,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_timer.c</FilePath>
             </File>
+            <File>
+              <FileName>tos_stopwatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_stopwatch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -846,11 +856,6 @@
               <FileName>tos_at.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_at_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at_utils.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1275,32 +1280,32 @@
             <File>
               <FileName>HAL_AT_UART_tencentos_tiny.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_AT_UART_tencentos_tiny.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_AT_UART_tencentos_tiny.c</FilePath>
             </File>
             <File>
               <FileName>HAL_Device_tencentos_tiny.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_Device_tencentos_tiny.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_Device_tencentos_tiny.c</FilePath>
             </File>
             <File>
               <FileName>HAL_OS_tencentos_tiny.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_OS_tencentos_tiny.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_OS_tencentos_tiny.c</FilePath>
             </File>
             <File>
               <FileName>HAL_TCP_module.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_TCP_module.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_TCP_module.c</FilePath>
             </File>
             <File>
               <FileName>HAL_Timer_tencentos_tiny.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_Timer_tencentos_tiny.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_Timer_tencentos_tiny.c</FilePath>
             </File>
             <File>
               <FileName>HAL_UDP_module.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\port\TencentOS_tiny\HAL_UDP_module.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\port\TencentOS_tiny\HAL_UDP_module.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1310,42 +1315,42 @@
             <File>
               <FileName>mqtt_client.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_common.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_common.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_connect.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_connect.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_connect.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_net.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_net.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_net.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_publish.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_publish.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_publish.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_subscribe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_subscribe.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_subscribe.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_unsubscribe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_unsubscribe.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_unsubscribe.c</FilePath>
             </File>
             <File>
               <FileName>mqtt_client_yield.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\protocol\mqtt\mqtt_client_yield.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\protocol\mqtt\mqtt_client_yield.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1355,77 +1360,77 @@
             <File>
               <FileName>json_parser.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\json_parser.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\json_parser.c</FilePath>
             </File>
             <File>
               <FileName>json_token.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\json_token.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\json_token.c</FilePath>
             </File>
             <File>
               <FileName>qcloud_iot_ca.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\qcloud_iot_ca.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\qcloud_iot_ca.c</FilePath>
             </File>
             <File>
               <FileName>qcloud_iot_device.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\qcloud_iot_device.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\qcloud_iot_device.c</FilePath>
             </File>
             <File>
               <FileName>qcloud_iot_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\qcloud_iot_log.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\qcloud_iot_log.c</FilePath>
             </File>
             <File>
               <FileName>string_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\string_utils.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\string_utils.c</FilePath>
             </File>
             <File>
               <FileName>utils_aes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_aes.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_aes.c</FilePath>
             </File>
             <File>
               <FileName>utils_base64.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_base64.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_base64.c</FilePath>
             </File>
             <File>
               <FileName>utils_getopt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_getopt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_getopt.c</FilePath>
             </File>
             <File>
               <FileName>utils_hmac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_hmac.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_hmac.c</FilePath>
             </File>
             <File>
               <FileName>utils_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_list.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_list.c</FilePath>
             </File>
             <File>
               <FileName>utils_md5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_md5.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_md5.c</FilePath>
             </File>
             <File>
               <FileName>utils_ringbuff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_ringbuff.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_ringbuff.c</FilePath>
             </File>
             <File>
               <FileName>utils_sha1.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_sha1.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_sha1.c</FilePath>
             </File>
             <File>
               <FileName>utils_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\utils\utils_timer.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\utils\utils_timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1435,27 +1440,27 @@
             <File>
               <FileName>network_interface.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\network\network_interface.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\network\network_interface.c</FilePath>
             </File>
             <File>
               <FileName>network_tls.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\network\tls\network_tls.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\network\tls\network_tls.c</FilePath>
             </File>
             <File>
               <FileName>network_socket.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\sdk_src\network\socket\network_socket.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\sdk_src\network\socket\network_socket.c</FilePath>
             </File>
             <File>
               <FileName>HAL_DTLS_mbedtls.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\platform\tls\mbedtls\HAL_DTLS_mbedtls.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\platform\tls\mbedtls\HAL_DTLS_mbedtls.c</FilePath>
             </File>
             <File>
               <FileName>HAL_TLS_mbedtls.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk-3.1.2\3rdparty\platform\tls\mbedtls\HAL_TLS_mbedtls.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\qcloud-iot-hub-sdk\3rdparty\platform\tls\mbedtls\HAL_TLS_mbedtls.c</FilePath>
             </File>
           </Files>
         </Group>

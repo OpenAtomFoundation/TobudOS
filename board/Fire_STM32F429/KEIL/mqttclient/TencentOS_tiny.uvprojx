@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,MBEDTLS_CONFIG_FILE=&lt;mbedtls_config.h&gt;,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\TOS-CONFIG;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\net\lwip;..\..\..\..\net\lwip\3rdparty\src\include;..\..\..\..\net\lwip\3rdparty\src\include\compat;..\..\..\..\net\lwip\3rdparty\src\include\lwip;..\..\..\..\net\lwip\3rdparty\src\include\netif;..\..\..\..\net\lwip\3rdparty\src\include\lwip\apps;..\..\..\..\net\lwip\3rdparty\src\include\lwip\priv;..\..\..\..\net\lwip\3rdparty\src\include\lwip\prot;..\..\..\..\net\lwip\port\include\arch;..\..\..\..\net\lwip\port\include;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny;..\..\..\..\components\connectivity\mqttclient\common\mbedtls\configs;..\..\..\..\components\connectivity\mqttclient\common\mbedtls\wrapper;..\..\..\..\components\security\mbedtls\3rdparty\include;..\..\..\..\components\security\mbedtls\3rdparty\include\mbedtls</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\TOS-CONFIG;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\net\lwip;..\..\..\..\net\lwip\3rdparty\src\include;..\..\..\..\net\lwip\3rdparty\src\include\compat;..\..\..\..\net\lwip\3rdparty\src\include\lwip;..\..\..\..\net\lwip\3rdparty\src\include\netif;..\..\..\..\net\lwip\3rdparty\src\include\lwip\apps;..\..\..\..\net\lwip\3rdparty\src\include\lwip\priv;..\..\..\..\net\lwip\3rdparty\src\include\lwip\prot;..\..\..\..\net\lwip\port\include\arch;..\..\..\..\net\lwip\port\include;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\network\mbedtls\configs;..\..\..\..\components\connectivity\mqttclient\network\mbedtls\wrapper;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny;..\..\..\..\components\security\mbedtls\3rdparty\include;..\..\..\..\components\security\mbedtls\3rdparty\include\mbedtls</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1327,35 +1327,30 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log\arch\tencentos-tiny\arch.c</FilePath>
             </File>
-            <File>
-              <FileName>config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log\config.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>mqttclient/common</GroupName>
           <Files>
             <File>
-              <FileName>list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\list.c</FilePath>
-            </File>
-            <File>
               <FileName>random.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
             </File>
             <File>
-              <FileName>log.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\log.h</FilePath>
+              <FileName>mqtt_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</FilePath>
             </File>
             <File>
-              <FileName>error.h</FileName>
+              <FileName>mqtt_log.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\error.h</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_log.h</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_error.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_error.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1366,6 +1361,16 @@
               <FileName>network.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1388,16 +1393,6 @@
               <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</FilePath>
             </File>
             <File>
-              <FileName>platform_nettype_tcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>platform_nettype_tls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_nettype_tls.c</FilePath>
-            </File>
-            <File>
               <FileName>platform_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_thread.c</FilePath>
@@ -1415,17 +1410,17 @@
             <File>
               <FileName>entropy_hardware_alt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\wrapper\entropy_hardware_alt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\mbedtls\wrapper\entropy_hardware_alt.c</FilePath>
             </File>
             <File>
               <FileName>net_sockets_alt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\wrapper\net_sockets_alt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\mbedtls\wrapper\net_sockets_alt.c</FilePath>
             </File>
             <File>
               <FileName>timing_alt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mbedtls\wrapper\timing_alt.c</FilePath>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\mbedtls\wrapper\timing_alt.c</FilePath>
             </File>
           </Files>
         </Group>

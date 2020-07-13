@@ -1,4 +1,4 @@
-/*-----------------data config start  -------------------*/ 
+/*-----------------data config start  -------------------*/
 
 #define TOTAL_PROPERTY_COUNT 4
 
@@ -8,7 +8,7 @@ typedef struct _ProductDataDefine {
     TYPE_DEF_TEMPLATE_BOOL m_power_switch;
     TYPE_DEF_TEMPLATE_ENUM m_color;
     TYPE_DEF_TEMPLATE_INT m_brightness;
-    TYPE_DEF_TEMPLATE_STRING m_name[64+1];
+    TYPE_DEF_TEMPLATE_STRING m_name[64 + 1];
 } ProductDataDefine;
 
 static   ProductDataDefine     sg_ProductData;
@@ -32,7 +32,7 @@ static void _init_data_template(void)
 
     sg_ProductData.m_name[0] = '\0';
     sg_DataTemplate[3].data_property.data = sg_ProductData.m_name;
-    sg_DataTemplate[3].data_property.data_buff_len = sizeof(sg_ProductData.m_name)/sizeof(sg_ProductData.m_name[3]);
+    sg_DataTemplate[3].data_property.data_buff_len = sizeof(sg_ProductData.m_name) / sizeof(sg_ProductData.m_name[3]);
     sg_DataTemplate[3].data_property.key  = "name";
     sg_DataTemplate[3].data_property.type = TYPE_TEMPLATE_STRING;
 

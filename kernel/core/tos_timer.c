@@ -278,7 +278,7 @@ __KNL__ void timer_update(void)
 {
     k_timer_t *tmr, *tmp;
 
-    if (k_timer_ctl.next_expires < k_tick_count) {
+    if (k_timer_ctl.next_expires > k_tick_count) { // not yet
         return;
     }
 

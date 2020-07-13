@@ -65,7 +65,6 @@ PLATFORM_SRC =  \
 
 NET_SRC =  \
 		$(TOP_DIR)/net/at/src/tos_at.c \
-		$(TOP_DIR)/net/at/src/tos_at_utils.c \
 		$(TOP_DIR)/net/sal_module_wrapper/sal_module_wrapper.c \
 		$(TOP_DIR)/devices/esp8266/esp8266.c
 		C_SOURCES += $(NET_SRC)

@@ -16,29 +16,34 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 #include "utils_timer.h"
-    
-bool expired(Timer *timer) {
+
+bool expired(Timer *timer)
+{
     return HAL_Timer_expired(timer);
 }
 
-void countdown_ms(Timer *timer, unsigned int timeout_ms) {
+void countdown_ms(Timer *timer, unsigned int timeout_ms)
+{
     HAL_Timer_countdown_ms(timer, timeout_ms);
 }
 
-void countdown(Timer *timer, unsigned int timeout) {
+void countdown(Timer *timer, unsigned int timeout)
+{
     HAL_Timer_countdown(timer, timeout);
 }
 
-int left_ms(Timer *timer) {
+int left_ms(Timer *timer)
+{
     return HAL_Timer_remain(timer);
 }
 
-void InitTimer(Timer *timer) {
+void InitTimer(Timer *timer)
+{
     HAL_Timer_init(timer);
 }
-    
+
 #ifdef __cplusplus
 }
 #endif

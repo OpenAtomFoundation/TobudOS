@@ -37,6 +37,11 @@
 #ifndef __LORAMACCLASSB_H__
 #define __LORAMACCLASSB_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "systime.h"
 #include "LoRaMacTypes.h"
 
@@ -121,42 +126,15 @@ typedef enum ePingSlotState
  */
 typedef struct sPingSlotContext
 {
-    struct sPingSlotCtrl
-    {
-        /*!
-         * Set when the server assigned a ping slot to the node
-         */
-        uint8_t Assigned         : 1;
-        /*!
-         * Set when a custom frequency is used
-         */
-        uint8_t CustomFreq       : 1;
-    }Ctrl;
 
     /*!
      * Ping slot length time in ms
      */
     uint32_t PingSlotWindow;
     /*!
-     * Number of ping slots
-     */
-    uint8_t PingNb;
-    /*!
-     * Period of the ping slots
-     */
-    uint16_t PingPeriod;
-    /*!
      * Ping offset
      */
     uint16_t PingOffset;
-    /*!
-     * Reception frequency of the ping slot windows
-     */
-    uint32_t Frequency;
-    /*!
-     * Datarate of the ping slot
-     */
-    int8_t Datarate;
     /*!
      * Current symbol timeout. The node enlarges this variable in case of beacon
      * loss.
@@ -185,10 +163,6 @@ typedef struct sBeaconContext
          */
         uint8_t BeaconAcquired      : 1;
         /*!
-         * Set if the node has a custom frequency for beaconing and ping slots
-         */
-        uint8_t CustomFreq          : 1;
-        /*!
          * Set if a beacon delay was set for the beacon acquisition
          */
         uint8_t BeaconDelaySet      : 1;
@@ -205,10 +179,7 @@ typedef struct sBeaconContext
          */
         uint8_t ResumeBeaconing      : 1;
     }Ctrl;
-    /*!
-     * Beacon reception frequency
-     */
-    uint32_t Frequency;
+
     /*!
      * Current temperature
      */
@@ -216,15 +187,15 @@ typedef struct sBeaconContext
     /*!
      * Beacon time received with the beacon frame
      */
-    TimerTime_t BeaconTime;
+    SysTime_t BeaconTime;
     /*!
      * Time when the last beacon was received
      */
-    TimerTime_t LastBeaconRx;
+    SysTime_t LastBeaconRx;
     /*!
      * Time when the next beacon will be received
      */
-    TimerTime_t NextBeaconRx;
+    SysTime_t NextBeaconRx;
     /*!
      * This is the time where the RX window will be opened.
      * Its base is NextBeaconRx with temperature compensations
@@ -265,7 +236,7 @@ typedef struct sLoRaMacClassBCallback
     /*!
      *\brief    Will be called each time a Radio IRQ is handled by the MAC
      *          layer.
-     * 
+     *
      *\warning  Runs in a IRQ context. Should only change variables state.
      */
     void ( *MacProcessNotify )( void );
@@ -314,7 +285,7 @@ typedef struct sLoRaMacClassBParams
  * Signature of callback function to be called by this module when the
  * non-volatile needs to be saved.
  */
-typedef void ( *EventNvmCtxChanged )( void );
+typedef void ( *LoRaMacClassBNvmEvent )( void );
 
 /*!
  * \brief Initialize LoRaWAN Class B
@@ -323,7 +294,7 @@ typedef void ( *EventNvmCtxChanged )( void );
  * \param [IN] callbacks Contains the callback which the Class B implementation needs
  * \param [IN] callback function which will be called when the non-volatile context needs to be saved.
  */
-void LoRaMacClassBInit( LoRaMacClassBParams_t *classBParams, LoRaMacClassBCallback_t *callbacks, EventNvmCtxChanged classBNvmCtxChanged );
+void LoRaMacClassBInit( LoRaMacClassBParams_t *classBParams, LoRaMacClassBCallback_t *callbacks, LoRaMacClassBNvmEvent classBNvmCtxChanged );
 
 /*!
  * Restores the internal non-volatile context from passed pointer.
@@ -560,5 +531,9 @@ void LoRaMacClassBStartRxSlots( void );
 void LoRaMacClassBSetMulticastPeriodicity( MulticastCtx_t* multicastChannel );
 
 void LoRaMacClassBProcess( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __LORAMACCLASSB_H__

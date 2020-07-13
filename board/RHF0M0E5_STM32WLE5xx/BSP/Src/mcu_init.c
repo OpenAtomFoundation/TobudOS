@@ -27,11 +27,11 @@ int fgetc(FILE *f)
 
 void board_init(void)
 {
-  HAL_Init();
-  SystemClock_Config();
-  MX_LPUART1_UART_Init();
-  MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
+    HAL_Init();
+    SystemClock_Config();
+	
+	SystemApp_Init();
+    MX_LoRaWAN_Init();
 }
 
 /**
@@ -74,6 +74,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
+
 
 /* USER CODE BEGIN 4 */
 

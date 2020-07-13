@@ -26,7 +26,6 @@ typedef void (*k_evtdrv_poll_t)(void);
  * @brief Initialize the event-driven system.
  *
  * @attention event-driven is a simplified schedule model to support the none-context-switch-based multi-task programming.("the big while 1")
- * must enable TOS_CFG_MMHEAP_EN to use event-driven.
  *
  * @param[in]   tasks               array of the tasks.
  * @param[in]   task_table_size     size of the tasks.
