@@ -47,8 +47,8 @@
   ******************************************************************************
   */
 
-#ifndef _ETHER_NETIF_DRV_H_
-#define  _ETHER_NETIF_DRV_H_
+#ifndef _ETHERNETIF_H_
+#define _ETHERNETIF_H_
 
 #include "lwip/err.h"
 #include "lwip/netif.h"
@@ -66,5 +66,5 @@ int ethernetif_drv_register(ethernetif_drv_t *api);
 err_t ethernetif_init(struct netif *netif);
 void ethernetif_input(void *arg);
 
-#endif
+#endif //_ETHERNETIF_H_
 
