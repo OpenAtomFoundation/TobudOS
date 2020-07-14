@@ -1,0 +1,56 @@
+# QMK for TencentOS
+# @author Jimmin.huang jimmin@163.com
+########################################################################
+
+# Make rules/targets for handling user application
+
+.SECONDARY:: ${LD_O_FILES}
+
+ifeq (,$(strip $(exec)))
+exec = $(shell basename $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
+endif
+
+OUTDIR = ${BLDDIR}/out
+
+targetexec = ${OUTDIR}/${exec}
+
+all:: ${OUTDIR}/.tree ${targetexec}
+
+$(info $(wildcard $(LIBDIR)/%.a) )
+
+ifeq (,$(LD_O_FILES))
+LD_O_FILES = $(sort $(BOBJS))
+endif
+ifeq (2,$(V))
+LD_INFO_OPTS := -Wl,--warn-common -Wl,--verbose
+endif
+ifeq (3,$(V))
+LD_INFO_OPTS := -Wl,--warn-common -Wl,-Map,${OUTDIR}/${exec}.map  -Wl,--verbose
+endif
+
+_LD_START_GROUP := -Wl,--start-group
+_LD_END_GROUP := -Wl,--end-group
+
+$(targetexec): $(OUTDIR)/strip/.tree ${LD_O_FILES}
+	@rm -f $@       # Prevent core dump if currently running
+	@$(ECHO) "[$(BP)] LINK    $@" # This is needed for error parsing
+	$(Q)/bin/ls  $(LIBDIR)
+	$(Q)$(CC) \
+	-o $@ \
+	-L${LIBDIR}  \
+	$(_LD_START_GROUP) $(LD_O_FILES) $(LD_A_FILES) 	$(LD_L_LISTS) $(LDFLAGS) $(_LD_END_GROUP) \
+	$(LD_INFO_OPTS)
+	$(CP) $@ $(QTOP)
+	$(Q)$(STRIP) --strip-debug $@ -o $(OUTDIR)/strip/$(notdir $@)
+
+
+install:: all
+
+clean::
+	$(Q)$(RM) ${BOBJS}
+	$(Q)$(RM) $(filter %.a ,$(LD_A_FILES))
+	$(Q)$(RM) ${bldroot_exec}
+
+distclean:: clean
+        
+.PHONY: $(targetexec)

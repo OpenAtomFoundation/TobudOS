@@ -1,0 +1,8 @@
+
+CFGFLAGS += -I${QTOP}/arch/linux/common/include/
+CFGFLAGS += -I${QTOP}/arch/linux/posix/gcc
+
+
+
+ARCH_LSCRS = $(wildcard ${QTOP}/arch/linux/posix/gcc/*.c)
+ARCH_LSCRS += $(wildcard ${QTOP}/arch/linux/common/*.c)

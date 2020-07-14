@@ -1,4 +1,4 @@
-include $(SCRIPT_DIR)/internal_make_funcs.mk
+-include $(SCRIPT_DIR)/internal_make_funcs.mk
 
 SETTING_VARS := \
     BUILD_TYPE \
