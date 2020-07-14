@@ -1,6 +1,6 @@
 ###################################################################
 #automatic detection QTOP and LOCALDIR
-$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
+CUR_DIR := $(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 TRYQTOP := $(shell if [ -n "$$QTOP" ] ; then\
         echo $$QTOP;\
         else\
