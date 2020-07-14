@@ -96,7 +96,6 @@ BLD_SUFFIX := .tos
 endif
 
 BLDROOT = ${QTOP}/${QTOPBUILD}/$(if ${BLDCONFIG},${BLDCONFIG}/)${BP}.$(notdir  $(firstword $(CC)))${BLD_SUFFIX}
-#$(info BLDROOT=$(BLDROOT))
 
 
 ifdef LOCALDIR
@@ -106,13 +105,12 @@ BLDDIR = ${BLDROOT}
 endif
 
 LIBDIR = ${BLDROOT}
-OUTDIR = ${BLDROOT}/out
+
 
 
 #
 # In each directory, build a list of local sources, objects, and headers
 #
-
 ifeq (,$(strip ${LSRCS})) # LSRCS
 ifeq (,$(filter n no NO 0,$(TREE_LIB_ENABLE))) #  TREE_LIB_ENABLE yes
 
@@ -132,7 +130,12 @@ ifneq (,$(strip ${LSRCS_EXCLUDE_FILES}))
 $(info "ignore LSRCS_EXCLUDE_FILES source files: ${LSRCS_EXCLUDE_FILES}")
 endif
 
+ifndef LSRCS
 LSRCS   = $(filter-out $(patsubst ./%,%,${LSRCS_EXCLUDE_FILES}),${LSRCS_ALL})
+else
+$(info $(shell echo -e "[$(BP)] INFO    LSRCS is defined by users, LSRCS=$(LSRCS)"))
+endif
+
 LOBJS	=	$(addsuffix .o, $(basename ${LSRCS}))
 BOBJS	= 	$(addprefix ${BLDDIR}/,${LOBJS})
 

@@ -41,7 +41,7 @@ endif
 endif
 
 # arch src should be specify by bp
-LSRCS:=$(subst $(QTOP)/$(LOCALDIR)/,, ${ARCH_LSCRS})
+LSRCS := $(subst $(QTOP)/$(LOCALDIR)/,, ${ARCH_LSCRS})
 include ${QTOP}/qmk/generic/Make.tpl
 
 

@@ -6,13 +6,15 @@
 
 .SECONDARY:: ${LD_O_FILES}
 
+include $(QTOP)/qmk/generic/Make.tpl
+
 ifeq (,$(strip $(exec)))
 exec = $(shell basename $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))))
 endif
 
 OUTDIR = ${BLDDIR}/out
 
-targetexec = ${OUTDIR}/${exec}
+targetexec = ${OUTDIR}/${exec}.elf
 
 all:: ${OUTDIR}/.tree ${targetexec}
 
@@ -31,8 +33,12 @@ endif
 _LD_START_GROUP := -Wl,--start-group
 _LD_END_GROUP := -Wl,--end-group
 
-$(targetexec): $(OUTDIR)/strip/.tree ${LD_O_FILES}
-	@rm -f $@       # Prevent core dump if currently running
+ifeq (,$(strip ${OBJCOPY}))
+OBJCOPY=$(subst strip,objcopy,$(STRIP))
+endif
+
+$(targetexec): $(OUTDIR)/.tree ${LD_O_FILES}
+	@/bin/rm -f $@       # Prevent core dump if currently running
 	@$(ECHO) "[$(BP)] LINK    $@" # This is needed for error parsing
 	$(Q)/bin/ls  $(LIBDIR)
 	$(Q)$(CC) \
@@ -40,17 +46,23 @@ $(targetexec): $(OUTDIR)/strip/.tree ${LD_O_FILES}
 	-L${LIBDIR}  \
 	$(_LD_START_GROUP) $(LD_O_FILES) $(LD_A_FILES) 	$(LD_L_LISTS) $(LDFLAGS) $(_LD_END_GROUP) \
 	$(LD_INFO_OPTS)
-	$(CP) $@ $(QTOP)
-	$(Q)$(STRIP) --strip-debug $@ -o $(OUTDIR)/strip/$(notdir $@)
-
+	$(Q)$(STRIP) --strip-debug $@ -o $(OUTDIR)/$(basename $(notdir $@)).strip
+	$(Q)$(OBJCOPY) -O binary -S $@ $(OUTDIR)/$(basename $(notdir $@)).bin
+	$(Q)$(OBJCOPY) -O ihex $@ $(OUTDIR)/$(basename $(notdir $@)).hex
+	$(CP) $(OUTDIR)/$(basename $(notdir $@)).* $(LIBDIR)/
+	@$(ECHO) -e "[$(BP)] INFO    [$(BP)] INFO    \e[1;32mLINK OK,OK,OK!!!\e[m"
+	@$(ECHO) -e "\e[1;32m$$(/bin/ls $(LIBDIR)/$(basename $(notdir $@)).*)\e[m"
+	
 
 install:: all
 
 clean::
 	$(Q)$(RM) ${BOBJS}
 	$(Q)$(RM) $(filter %.a ,$(LD_A_FILES))
-	$(Q)$(RM) ${bldroot_exec}
+	$(Q)$(RM) $(OUTDIR)/$(basename $(notdir ${targetexec})).*
+	$(Q)$(RM) $(LIBDIR)/$(basename $(notdir ${targetexec})).*
 
 distclean:: clean
         
 .PHONY: $(targetexec)
+
