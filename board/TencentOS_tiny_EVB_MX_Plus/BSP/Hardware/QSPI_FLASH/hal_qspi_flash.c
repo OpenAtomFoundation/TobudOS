@@ -43,7 +43,7 @@
 extern QSPI_HandleTypeDef hqspi;
 
 /* This function is called by inner-HAL lib */
-static void HAL_QSPI_MspInit(QSPI_HandleTypeDef* qspiHandle)
+void HAL_QSPI_MspInit(QSPI_HandleTypeDef* qspiHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -75,7 +75,7 @@ static void HAL_QSPI_MspInit(QSPI_HandleTypeDef* qspiHandle)
 }
 
 /* This function is called by inner-HAL lib */
-static void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef* qspiHandle)
+void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef* qspiHandle)
 {
 
   if(qspiHandle->Instance==QUADSPI)

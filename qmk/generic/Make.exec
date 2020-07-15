@@ -42,10 +42,9 @@ $(targetexec): $(OUTDIR)/.tree ${LD_O_FILES}
 	@$(ECHO) "[$(BP)] LINK    $@" # This is needed for error parsing
 	$(Q)/bin/ls  $(LIBDIR)
 	$(Q)$(CC) \
-	-o $@ \
-	-L${LIBDIR}  \
-	$(_LD_START_GROUP) $(LD_O_FILES) $(LD_A_FILES) 	$(LD_L_LISTS) $(LDFLAGS) $(_LD_END_GROUP) \
-	$(LD_INFO_OPTS)
+	$(patsubst -I%,,${CFLAGS} ${EXTRA_CFLAGS} ${LDFLAGS}) \
+	-o $@ -L${LIBDIR} \
+	$(_LD_START_GROUP) $(LD_O_FILES) $(LD_A_FILES) $(_LD_END_GROUP) $(LD_L_LISTS) $(LD_INFO_OPTS)
 	$(Q)$(STRIP) --strip-debug $@ -o $(OUTDIR)/$(basename $(notdir $@)).strip
 	$(Q)$(OBJCOPY) -O binary -S $@ $(OUTDIR)/$(basename $(notdir $@)).bin
 	$(Q)$(OBJCOPY) -O ihex $@ $(OUTDIR)/$(basename $(notdir $@)).hex

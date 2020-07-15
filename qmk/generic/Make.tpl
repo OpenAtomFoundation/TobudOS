@@ -115,13 +115,13 @@ ifeq (,$(strip ${LSRCS})) # LSRCS
 ifeq (,$(filter n no NO 0,$(TREE_LIB_ENABLE))) #  TREE_LIB_ENABLE yes
 
 ifeq (,$(strip ${LSRCS_DIRS})) # LSRCS_DIRS
-LSRCS_ALL = $(patsubst ./%,%, $(sort $(shell find . -name "*.c" -o -name "*.cpp" -o  -name "*.s" -o  -name "*.cc")))
+LSRCS_ALL = $(patsubst ./%,%, $(sort $(shell find . -name "*.c" -o -name "*.cpp" -o -name "*.s" -o -name "*.S" -o  -name "*.cc")))
 else
-LSRCS_ALL = $(patsubst ./%,%, $(sort $(shell find ${LSRCS_DIRS} -name "*.c" -o -name "*.cpp" -o  -name "*.s" -o  -name "*.cc")))
+LSRCS_ALL = $(patsubst ./%,%, $(sort $(shell find ${LSRCS_DIRS} -name "*.c" -o -name "*.cpp" -o  -name "*.s" -o -name "*.S" -o  -name "*.cc")))
 endif # LSRCS_DIRS
 
 else  #  TREE_LIB_ENABLE
-LSRCS_ALL	= $(patsubst ./%,%,$(sort $(wildcard *.c *.cpp *.s *.cc *.C))) # only include src in this dir.
+LSRCS_ALL	= $(patsubst ./%,%,$(sort $(wildcard *.c *.cpp *.s *.S *.cc *.C))) # only include src in this dir.
 endif  #  TREE_LIB_ENABLE
 
 endif # LSRCS
@@ -136,7 +136,7 @@ else
 $(info $(shell echo -e "[$(BP)] INFO    LSRCS is defined by users, LSRCS=$(LSRCS)"))
 endif
 
-LOBJS	=	$(addsuffix .o, $(basename ${LSRCS}))
+LOBJS	=	$(patsubst $(QTOP)/%,%,$(addsuffix .o, $(basename ${LSRCS})))
 BOBJS	= 	$(addprefix ${BLDDIR}/,${LOBJS})
 
 #
@@ -154,7 +154,7 @@ BOBJS	= 	$(addprefix ${BLDDIR}/,${LOBJS})
 # Rule allowing build through CPP only, creates .i file from .c file.
 
 %.i: %.c
-	@$Q$(ECHO) "EEEE    ${LOCALDIR}/$<"
+	@$Q$(ECHO) "[$(BP)] EEEE    ${LOCALDIR}/$<"
 	$Q$(CC) -E ${CFLAGS} $< | $(SED) -e '/^ *$$/d' -e p -e d > $@
 
 # Rule allowing build through source only, creates .s file from .c file.
@@ -170,110 +170,13 @@ NO_QMK_DEPS = 1
 # dependency makefiles
 #
 ifndef NO_QMK_DEPS
-# take the compiler generated .d file and reparse it
-# to generate a dependency graph rule for this object
-# file
-# the two steps generate:
-#  file.o: file.c \
-#	file.h ...
-#
-#  file.h:
-#  header.h:
-# some compilers will generate errors without the latter
-# part of the list
-
-.PHONY: .phony
-
-zDEPS_SED = \
-	$(CP) $(BLDDIR)/$*.d $(BLDDIR)/$*.tmp;\
-	$(ECHO) >> $(BLDDIR)/$*.tmp;\
-	$(SED) -e 's/\#.*//' -e 's/^[^:]*: *//' \
-	-e 's/ *\\$$//' -e '/^$$/ d' -e 's/$$/ :/' \
-	-e '/^ .$$/d' \
-	< $(BLDDIR)/$*.d >> $(BLDDIR)/$*.tmp; \
-	$(SED) -e 's|^\([^\/ ].*\.o\):|'$(BLDDIR)/'\1:|g'  \
-	-e 's|.*?/\(.*\.o\):|'$(BLDDIR)/'\1:|g'  \
-	< $(BLDDIR)/$*.tmp > $(BLDDIR)/$*.P; \
-	$(RM) -f $(BLDDIR)/$*.d $(BLDDIR)/$*.tmp
-zDEPS_CMD = $(zDEPS_SED)
+zDEPS_OPT = -MMD -MP -MF'$(@:%.o=%.d)'
+endif # ifndef NO_QMK_DEPS
 
 
-# newer gnu-based compilers allow -MD -MF
-zDEPS_OPT = -MD -MF $(BLDDIR)/$*.d
-zDEPS_CMD = $(zDEPS_SED)
-
-
-# From gmsl
-
-# Standard definitions for true and false.  true is any non-empty
-# string, false is an empty string. These are intended for use with
-# $(if).
-
-true  := T
-false :=
-
-# ----------------------------------------------------------------------------
-# Function:  not
-# Arguments: 1: A boolean value
-# Returns:   Returns the opposite of the arg. (true -> false, false -> true)
-# ----------------------------------------------------------------------------
-not = $(if $1,$(false),$(true))
-
-# ----------------------------------------------------------------------------
-# Function:  map
-# Arguments: 1: Name of function to $(call) for each element of list
-#            2: List to iterate over calling the function in 1
-# Returns:   The list after calling the function on each element
-# ----------------------------------------------------------------------------
-map = $(strip $(foreach a,$2,$(call $1,$a)))
-
-# ----------------------------------------------------------------------------
-# Function:  seq
-# Arguments: 1: A string to compare against...
-#            2: ...this string
-# Returns:   Returns $(true) if the two strings are identical
-# ----------------------------------------------------------------------------
-seq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),$(false),$(true))
-
-# ----------------------------------------------------------------------------
-# Function:  sne
-# Arguments: 1: A string to compare against...
-#            2: ...this string
-# Returns:   Returns $(true) if the two strings are not the same
-# ----------------------------------------------------------------------------
-sne = $(call not,$(call seq,$1,$2))
-
-# End from gmsl
-
-# Define comma symbol so we can repace it with a variable
-comma :=,
-
-# Signature
-last_target :=
-
-adump_var = $$(eval $1 := $($1))
-
-define new_rule
-@echo '$(call map,adump_var,@ < *)' > $S
-@$(if $(wildcard $F),,touch $F)
-@echo $@: $F >> $S
-endef
-
-define zdo
-$(eval S := $(BLDDIR)/$*.sig)$(eval F := $(BLDDIR)/$*.force)$(eval C := $1)
-$(if $(call sne,$@,$(last_target)),$(call new_rule),$(eval last_target := $@))
-@echo '$$(if $$(call sne,$$(sort $1),$(sort $(subst $(comma),$$(comma),$C))),$$(shell touch $F))' >> $S
-$Q$C
-endef
-
-# end of Signature
-
-
-else # ifndef NO_QMK_DEPS
 # No dependency files, faster compile times
 # no partial compile support
 zDEPS_SED =
-zDEPS_OPT =
 zDEPS_CPY =
 zDEPS_CMD = /bin/true
 
@@ -282,38 +185,58 @@ $(eval C := $1)
 $Q$C
 endef
 
-endif # ifndef NO_QMK_DEPS
 
 #
 # Default Build rules for .c --> .o, leaving the binary in BLDDIR/X.o,
 # even if file not built from directory of source.
 #
-
-${BLDDIR}/%.o: %.c
-ifdef EEEE
-	@$Q$(ECHO) "EEEE    ${LOCALDIR}/$<"
-	$Q$(CC) -E ${CFLAGS} $(EXTRA_CFLAGS) $< | $(SED) -e '/^ *$$/d' -e p -e d > $(@:.o=.i)
-endif
-# echo Compiling needed to properly process errors 
-	$Q$(MKDIR) $(BLDDIR)/
+${BLDDIR}/%.o: $(QTOP)/%.c
 	$Q$(MKDIR) $(dir $@)
 	$Q$(RM) -f $@
+ifdef E
+	@$Q$(ECHO) '[$(BP)] EEEE    ${LOCALDIR}/$<'
+	$Q$(CC) -E ${CFLAGS} $(EXTRA_CFLAGS) $< | $(SED) -e '/^ *$$/d' -e p -e d > $(@:.o=.i)
+endif
+ifdef S
+	@$Q$(ECHO) "[$(BP)] SSSS    ${LOCALDIR}/$<"
+	$Q$(CC) -S ${CFLAGS} $<
+endif
+	@$Q$(ECHO) "[$(BP)] CCCC    $<"
+	$Q$(call zdo,$$(CC) $$(zDEPS_OPT) $$(CFLAGS) $$(EXTRA_CFLAGS) -o $$@ -c $$(realpath $$<))  && ($(zDEPS_CMD))
+
+${BLDDIR}/%.o: %.c
+	$Q$(MKDIR) $(dir $@)
+	$Q$(RM) -f $@
+ifdef E
+	@$Q$(ECHO) "[$(BP)] EEEE    ${LOCALDIR}/$<"
+	$Q$(CC) -E ${CFLAGS} $(EXTRA_CFLAGS) $< | $(SED) -e '/^ *$$/d' -e p -e d > $(@:.o=.i)
+endif
 	@$Q$(ECHO) "[$(BP)] CCCC    ${LOCALDIR}/$<"
 	$Q$(call zdo,$$(CC) $$(zDEPS_OPT) $$(CFLAGS) $$(EXTRA_CFLAGS) -o $$@ -c $$(realpath $$<))  && ($(zDEPS_CMD))
 
 ${BLDDIR}/%.o: %.s
-ifeq (@,$(Q))
-	@$(ECHO) ASAS ${LOCALDIR}/$<
-endif
+	$Q$(MKDIR) $(dir $@)
+	$Q$(ECHO) "[$(BP)] ASAS    ${LOCALDIR}/$<"
+#	$Q$(MKDIR) $(BLDDIR)/
+#	$Q$(MKDIR) $(dir $@)
+	$Q$(RM) -f $@
+	$Q$(CC) ${CFLAGS} ${EXTRA_CFLAGS} -o $@ -c $(realpath $<)
+
+${BLDDIR}/%.o: %.S
+	$Q$(MKDIR) $(dir $@)
+	$Q$(ECHO) "[$(BP)] ASAS    ${LOCALDIR}/$<"
+	$Q$(RM) -f $@
 	$Q$(CC) ${CFLAGS} ${EXTRA_CFLAGS} -o $@ -c $(realpath $<)
 
 ${BLDDIR}/%.o: %.cpp
+	$Q$(MKDIR) $(dir $@)
 ifeq (@,$(Q))
 	@$(ECHO) "[$(BP)] CCCC    ${LOCALDIR}/$<"
 endif
 	$Q$(CXX) ${CXXFLAGS}  -o $@ -c $(realpath $<)
 
-${BLDDIR}/%.o: %.cc ${BLDDIR}/.tree
+${BLDDIR}/%.o: %.cc
+	$Q$(MKDIR) $(dir $@)
 ifeq (@,$(Q))
 	@$(ECHO) "[$(BP)] CCCC    ${LOCALDIR}/$<"
 endif
@@ -342,7 +265,7 @@ help:
 	$Q$(ECHO) -e "\t make clean all"
 	$Q$(ECHO) -e "Debug build, verbose print, generate preprocess .i for .c"
 	$Q$(ECHO) -e "\t make V=1 "
-	$Q$(ECHO) -e "\t make EEEE=1 "
+	$Q$(ECHO) -e "\t make E=1 "
 	$Q$(ECHO) -e "Debug Makefile"
 	$Q$(ECHO) -e "\t make dm"
 endif

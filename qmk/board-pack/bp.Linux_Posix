@@ -22,7 +22,14 @@ ifeq ($(filter-out Linux Darwin,$(uname)),)
  endif
 endif
 
-include ${QTOP}/qmk/arch-pack/ap.linux.posix.gcc
+
+CFGFLAGS += -I${QTOP}/arch/linux/common/include/
+CFGFLAGS += -I${QTOP}/arch/linux/posix/gcc
+
+
+
+ARCH_LSCRS := $(wildcard ${QTOP}/arch/linux/posix/gcc/*.c)
+ARCH_LSCRS += $(wildcard ${QTOP}/arch/linux/common/*.c)
 
 CFGFLAGS += -O0 -Wall -g2 -ggdb
 

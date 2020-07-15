@@ -24,11 +24,24 @@ LOCALDIR = $(patsubst %/,%,$(subst $(realpath $(QTOP))/,,$(CUR_DIR)))
 ####################################################################
 
 
-TREE_LIB_ENABLE=1
+TREE_LIB_ENABLE=0
 lib=
 subdirs=
+ifneq (help,$(findstring help,$(MAKECMDGOALS)))
 
+ifeq (, $(strip ${BP}))
+$(error when compile arch/, must specify BP and PLATFORM_HAL_LSRCS obviously , see `make help`)
+endif
 
+include ${QTOP}/qmk/board-pack/bp.${BP}
+
+ifeq (,$(strip ${PLATFORM_HAL_LSRCS}))
+$(error when compile arch/, must specify BP and PLATFORM_HAL_LSRCS obviously , see `make help`)
+endif
+endif
+
+# arch src should be specify by bp
+LSRCS := $(subst $(QTOP)/$(LOCALDIR)/,, ${PLATFORM_HAL_LSRCS})
 include ${QTOP}/qmk/generic/Make.tpl
 
 

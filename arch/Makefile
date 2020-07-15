@@ -35,13 +35,14 @@ endif
 
 include ${QTOP}/qmk/board-pack/bp.${BP}
 
-ifeq (,$(strip ${ARCH_LSCRS}))
+$(info ${ARCH_LSRCS})
+ifeq (,$(strip ${ARCH_LSRCS}))
 $(error when compile arch/, must specify BP and ARCH_LSRCS obviously , see `make help`)
 endif
 endif
 
 # arch src should be specify by bp
-LSRCS := $(subst $(QTOP)/$(LOCALDIR)/,, ${ARCH_LSCRS})
+LSRCS := $(subst $(QTOP)/arch/,, ${ARCH_LSRCS})
 include ${QTOP}/qmk/generic/Make.tpl
 
 
