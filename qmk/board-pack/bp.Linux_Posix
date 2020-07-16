@@ -22,14 +22,14 @@ ifeq ($(filter-out Linux Darwin,$(uname)),)
  endif
 endif
 
-
+# arch
 CFGFLAGS += -I${QTOP}/arch/linux/common/include/
 CFGFLAGS += -I${QTOP}/arch/linux/posix/gcc
 
 
 
-ARCH_LSCRS := $(wildcard ${QTOP}/arch/linux/posix/gcc/*.c)
-ARCH_LSCRS += $(wildcard ${QTOP}/arch/linux/common/*.c)
+ARCH_LSRCS += $(wildcard ${QTOP}/arch/linux/posix/gcc/*.c)
+ARCH_LSRCS += $(wildcard ${QTOP}/arch/linux/common/*.c)
 
 CFGFLAGS += -O0 -Wall -g2 -ggdb
 
@@ -42,3 +42,39 @@ CFGFLAGS += -I${QTOP}/kernel/pm/include
 
 
 
+# kernel
+
+CFGFLAGS += -I${QTOP}/kernel/core/include
+CFGFLAGS += -I${QTOP}/kernel/evtdrv/include
+CFGFLAGS += -I${QTOP}/kernel/hal/include
+CFGFLAGS += -I${QTOP}/kernel/pm/include
+
+# CMSIS
+
+CFGFLAGS += -I${QTOP}/osal/cmsis_os
+
+
+#net
+
+CFGFLAGS += -I$(QTOP)/net/at/include
+CFGFLAGS += -I$(QTOP)/net/sal_module_wrapper
+
+# components
+
+CFGFLAGS += -I$(QTOP)/components/connectivity/Modbus/3rdparty/freemodbus-v1.6/modbus/include
+CFGFLAGS += -I$(QTOP)/components/shell/include
+CFGFLAGS += -I$(QTOP)/components/connectivity/mqttclient/mqttclient
+CFGFLAGS += -I$(QTOP)/components/connectivity/mqttclient/mqtt
+CFGFLAGS += -I$(QTOP)/components/connectivity/mqttclient/common
+CFGFLAGS += -I$(QTOP)/components/connectivity/mqttclient/platform/TencentOS-tiny
+CFGFLAGS += -I$(QTOP)/components/connectivity/mqttclient/network
+CFGFLAGS += -I$(QTOP)/components/fs/kv/include
+CFGFLAGS += -I$(QTOP)/components/ota/common/flash
+CFGFLAGS += -I$(QTOP)/components/connectivity/Eclipse-Paho-MQTT/wrapper/include
+CFGFLAGS += -I$(QTOP)/components/utils/JSON/include
+
+# devices
+
+
+#  examples
+CFGFLAGS += -I$(QTOP)/examples/event_driven_at_module/at_evtdrv/include

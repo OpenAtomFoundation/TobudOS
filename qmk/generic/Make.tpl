@@ -133,7 +133,13 @@ endif
 ifndef LSRCS
 LSRCS   = $(filter-out $(patsubst ./%,%,${LSRCS_EXCLUDE_FILES}),${LSRCS_ALL})
 else
-$(info $(shell echo -e "[$(BP)] INFO    LSRCS is defined by users, LSRCS=$(LSRCS)"))
+
+$(info  [$(BP)] INFO    LSRCS defined by user, use `make V=1` verbose print )
+
+ifneq (0,$(V))
+$(info  LSRCS=$(LSRCS)")
+endif
+
 endif
 
 LOBJS	=	$(patsubst $(QTOP)/%,%,$(addsuffix .o, $(basename ${LSRCS})))
@@ -169,8 +175,8 @@ NO_QMK_DEPS = 1
 # enable partial recompilation through use of included
 # dependency makefiles
 #
-ifndef NO_QMK_DEPS
-zDEPS_OPT = -MMD -MP -MF'$(@:%.o=%.d)'
+ifdef NO_QMK_DEPS
+zDEPS_OPT = -MMD -MP -MF'$(@:%.o=%.d)'  -Wa,-a,-ad,-alms='$(@:%.o=%.lst)'
 endif # ifndef NO_QMK_DEPS
 
 

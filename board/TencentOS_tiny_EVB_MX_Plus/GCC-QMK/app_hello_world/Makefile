@@ -36,10 +36,16 @@ LSRCS += $(wildcard *.s)
 
 all::
 	make -C ${QTOP}/arch BP=${BP}
+	make -C ${QTOP}/board/TencentOS_tiny_EVB_MX_Plus/BSP BP=${BP}
+	make -C ${QTOP}/components/connectivity/Eclipse-Paho-MQTT BP=${BP}
+	make -C ${QTOP}/devices BP=${BP}
 	make -C ${QTOP}/kernel BP=${BP}
+	make -C ${QTOP}/net/at BP=${BP}
+	make -C ${QTOP}/net/sal_module_wrapper BP=${BP}
+	make -C ${QTOP}/net/socket_wrapper BP=${BP}
+	make -C ${QTOP}/net/tencent_firmware_module_wrapper BP=${BP}
 	make -C ${QTOP}/osal BP=${BP}
 	make -C ${QTOP}/platform BP=${BP}
-	make -C ${QTOP}/board/TencentOS_tiny_EVB_MX_Plus/BSP BP=${BP}
 #exec = 
 LD_A_FILES += $(LIBDIR)/libarch.a
 LD_A_FILES += $(LIBDIR)/libkernel.a

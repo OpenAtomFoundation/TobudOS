@@ -33,11 +33,11 @@ subdirs =
 
 
 all::
-	make -C ${QTOP}/arch BP=Linux_Posix
-	make -C ${QTOP}/kernel
-	make -C ${QTOP}/osal
-	make -C ${QTOP}/net
-	make -C ${QTOP}/devices
+	make -C ${QTOP}/arch BP=${BP}
+	make -C ${QTOP}/kernel BP=${BP}
+	make -C ${QTOP}/osal BP=${BP}
+	make -C ${QTOP}/net BP=${BP}
+	make -C ${QTOP}/devices BP=${BP}
 exec = 
 LD_A_FILES += $(LIBDIR)/libarch.a
 LD_A_FILES += $(LIBDIR)/libkernel.a

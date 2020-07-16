@@ -30,14 +30,14 @@ subdirs=
 ifneq (help,$(findstring help,$(MAKECMDGOALS)))
 
 ifeq (, $(strip ${BP}))
-$(error when compile arch/, must specify BP and ARCH_LSRCS obviously , see `make help`)
+$(error when compile arch/, must specify BP obviously , see `make help`)
 endif
 
 include ${QTOP}/qmk/board-pack/bp.${BP}
 
-$(info ${ARCH_LSRCS})
+
 ifeq (,$(strip ${ARCH_LSRCS}))
-$(error when compile arch/, must specify BP and ARCH_LSRCS obviously , see `make help`)
+$(error when compile arch/, must specify ARCH_LSRCS on your bp.${BP} , see `make help`)
 endif
 endif
 

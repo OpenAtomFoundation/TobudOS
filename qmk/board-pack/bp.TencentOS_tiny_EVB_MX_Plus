@@ -7,31 +7,25 @@ ARFLAGS  = -rc
 STRIP    = $(CROSS_COMPILE)strip
 RANLIB   = $(CROSS_COMPILE)ranlib
 
+# debug
+
+CFGFLAGS += -g -gdwarf-2
+
 # cpu
+###################################
+# cpu/fpu/float-abi
+
 CFGFLAGS += -mcpu=cortex-m4
-
-# fpu
 CFGFLAGS += -mfpu=fpv4-sp-d16
-
-# float-abi
 CFGFLAGS += -mfloat-abi=hard -mthumb
 
 # Device
 CFGFLAGS += -DUSE_HAL_DRIVER -DSTM32L431xx
-
 CFGFLAGS += -Wall -fdata-sections -ffunction-sections
 
-CFGFLAGS += -g -gdwarf-2
 
 
-# C includes
-# Kernel
-CFGFLAGS += -I${QTOP}/kernel/core/include
-CFGFLAGS += -I${QTOP}/kernel/evtdrv/include
-CFGFLAGS += -I${QTOP}/kernel/hal/include
-CFGFLAGS += -I${QTOP}/kernel/pm/include
-
-# Arch
+# arch
 CFGFLAGS += -I$(QTOP)/arch/arm/arm-v7m/common/include
 CFGFLAGS += -I$(QTOP)/arch/arm/arm-v7m/cortex-m4/gcc
 
@@ -42,7 +36,8 @@ ARCH_LSRCS += $(wildcard ${QTOP}/arch/arm/arm-v7m/common/*.c)
 ARCH_LSRCS += $(wildcard ${QTOP}/arch/arm/arm-v7m/common/*.s)
 ARCH_LSRCS += $(wildcard ${QTOP}/arch/arm/arm-v7m/common/*.S)
 
-# Board
+# Board TOS
+
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/TOS-CONFIG
 
 # CMSIS
@@ -58,16 +53,40 @@ CFGFLAGS += -I$(QTOP)/platform/vendor_bsp/st/CMSIS/Include
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/BH1750
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/OLED
-CFGFLAGS += -I$(QTOP)/examples/event_driven_at_module/at_evtdrv/include
 
 
-#board BSP
-CFGFLAGS += -I$(QTOP)/net/at/include
-CFGFLAGS += -I$(QTOP)/net/sal_module_wrapper
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/PM25
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/Modbus_Port
 CFGFLAGS += -I$(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/E53_IA1
-CFGFLAGS += -I$(QTOP)/devices/esp8266
+
+BSP_LSRCS += $(shell find $(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src -name "*.c" -o -name "*.s")
+BSP_LSRCS += $(shell find $(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware -name "*.c" -o -name "*.s")
+
+#platform/vendor_bsp
+
+PLATFORM_VENDOR_BSP_LSRCS += $(shell find $(QTOP)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src -name "*.c" -o -name "*.s")
+PLATFORM_HAL_LSRCS += $(shell find $(QTOP)/platform/hal/st/stm32l4xx -name "*.c" -o -name "*.s")
+
+
+# kernel
+
+CFGFLAGS += -I${QTOP}/kernel/core/include
+CFGFLAGS += -I${QTOP}/kernel/evtdrv/include
+CFGFLAGS += -I${QTOP}/kernel/hal/include
+CFGFLAGS += -I${QTOP}/kernel/pm/include
+
+# CMSIS
+
+CFGFLAGS += -I${QTOP}/osal/cmsis_os
+
+
+#net
+
+CFGFLAGS += -I$(QTOP)/net/at/include
+CFGFLAGS += -I$(QTOP)/net/sal_module_wrapper
+
+# components
+
 CFGFLAGS += -I$(QTOP)/components/connectivity/Modbus/3rdparty/freemodbus-v1.6/modbus/include
 CFGFLAGS += -I$(QTOP)/components/shell/include
 CFGFLAGS += -I$(QTOP)/components/connectivity/mqttclient/mqttclient
@@ -80,9 +99,9 @@ CFGFLAGS += -I$(QTOP)/components/ota/common/flash
 CFGFLAGS += -I$(QTOP)/components/connectivity/Eclipse-Paho-MQTT/wrapper/include
 CFGFLAGS += -I$(QTOP)/components/utils/JSON/include
 
-BSP_LSRCS += $(shell find $(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src -name "*.c" -o -name "*.s")
-BSP_LSRCS += $(shell find $(QTOP)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware -name "*.c" -o -name "*.s")
+# devices
 
-#platform/vendor_bsp
-PLATFORM_VENDOR_BSP_LSRCS += $(shell find $(QTOP)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src -name "*.c" -o -name "*.s")
-PLATFORM_HAL_LSRCS += $(shell find $(QTOP)/platform/hal/st/stm32l4xx -name "*.c" -o -name "*.s")
+CFGFLAGS += -I$(QTOP)/devices/esp8266
+
+#  examples
+CFGFLAGS += -I$(QTOP)/examples/event_driven_at_module/at_evtdrv/include
