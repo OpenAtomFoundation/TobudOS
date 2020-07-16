@@ -16,6 +16,7 @@
   *
   ******************************************************************************
   */
+#if TOS_CFG_EVENT_DRIVEN_EN > 0u
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -301,3 +302,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif
