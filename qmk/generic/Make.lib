@@ -8,10 +8,10 @@
 ifndef lib
 lib = lib$(shell basename ${LOCALDIR})
 endif
-targetlib = ${LIBDIR}/${lib}.a
+targetlib = ${BLDROOT}/${lib}.a
 
 
-${LIBDIR}/%.a: ${BOBJS}
+${BLDROOT}/%.a: ${BOBJS}
 ifeq (@,$(Q))
 	@$(ECHO) "[$(BP)] ARLIB   $(subst $(QTOP)/,,$@)"
 endif
