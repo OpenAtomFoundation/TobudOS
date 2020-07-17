@@ -469,7 +469,7 @@ osMessageQId osMessageCreate(const osMessageQDef_t *queue_def, osThreadId thread
  */
 osStatus osMessagePut(osMessageQId queue_id, uint32_t info, uint32_t millisec)
 {
-    return errno_knl2cmsis(tos_msg_q_post((k_msg_q_t *)queue_id, &info));
+    return errno_knl2cmsis(tos_msg_q_post((k_msg_q_t *)queue_id, (uint32_t*)info));
 }
 
 /**
@@ -495,7 +495,7 @@ osEvent osMessageGet(osMessageQId queue_id, uint32_t millisec)
     if (err == K_ERR_NONE) {
         event.def.message_id    = queue_id;
         event.status            = errno_knl2cmsis(err);
-        event.value.v           = *((uint32_t *)msg_body);
+        event.value.v           = (uint32_t)msg_body;
     } else {
         event.def.message_id    = NULL;
         event.status            = osErrorOS;
