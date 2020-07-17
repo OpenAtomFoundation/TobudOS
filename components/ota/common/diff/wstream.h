@@ -54,5 +54,5 @@ int wstream_length_get(wstream_t *wstream);
 
 uint8_t *wstream_buf_get(wstream_t *wstream);
 
-#endif /*_WSTREAM_H_ */
+#endif /*_WSTREAM_H_ */
 
