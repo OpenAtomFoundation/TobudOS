@@ -123,6 +123,17 @@ osStatus osThreadSetPriority(osThreadId thread_id, osPriority priority)
 }
 
 /**
+ * @brief Pass control to next thread that is in state READY.
+ * @return status code that indicates the execution status of the function.
+ */
+osStatus osThreadYield(void)
+{
+    tos_task_yield();
+    
+    return osOK;
+}
+
+/**
  * @brief Get current priority of an active thread.
  * @param[in]   thread_id   thread ID obtained by \ref osThreadCreate or \ref osThreadGetId.
  * @return current priority value of the thread function.
