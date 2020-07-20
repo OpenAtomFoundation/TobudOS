@@ -173,7 +173,7 @@ int HAL_GetFirmwareVersion(char *version)
     char *ver = "app-1.0.0-20180101.1000";
     int len = strlen(ver);
     memset(version, 0x0, IOTX_FIRMWARE_VER_LEN);
-    strncpy(version, ver, IOTX_FIRMWARE_VER_LEN);
+    strncpy(version, ver, len);
     version[len] = '\0';
     return strlen(version);
 }
@@ -190,7 +190,7 @@ void *HAL_MutexCreate(void)
 
 void HAL_MutexDestroy(void *mutex)
 {
-	k_err_t ret;
+    k_err_t ret;
 
     if (K_ERR_NONE != (ret = tos_mutex_destroy((k_mutex_t *)mutex))) {
         HAL_Printf("osal_mutex_destroy err, err:%d\n\r", ret);
@@ -210,16 +210,16 @@ void HAL_MutexLock(void *mutex)
 
 void HAL_MutexUnlock(void *mutex)
 {
-	k_err_t ret;
+    k_err_t ret;
 
-	if (K_ERR_NONE != (ret = tos_mutex_post((k_mutex_t *)mutex))) {
-		HAL_Printf("osal_mutex_unlock err, err:%d\n\r", ret);
-	}
+    if (K_ERR_NONE != (ret = tos_mutex_post((k_mutex_t *)mutex))) {
+        HAL_Printf("osal_mutex_unlock err, err:%d\n\r", ret);
+    }
 }
 
 void *HAL_Malloc(uint32_t size)
 {
-	return  tos_mmheap_alloc(size);
+    return  tos_mmheap_alloc(size);
 }
 
 void HAL_Free(void *ptr)
