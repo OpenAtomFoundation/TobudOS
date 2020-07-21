@@ -17,8 +17,8 @@
  * under the License.
  */
 
-#ifndef H_BLEHR_SENSOR_
-#define H_BLEHR_SENSOR_
+#ifndef _BLEHR_SENS_H_
+#define _BLEHR_SENS_H_
 
 #include "nimble/ble.h"
 #include "modlog/modlog.h"
@@ -37,4 +37,4 @@ int gatt_svr_init(void);
 }
 #endif
 
-#endif
+#endif //_BLEHR_SENS_H_
