@@ -96,13 +96,13 @@ void MX_LoRaWAN_Init(void)
 	lw_current_chmask_set(&ch);
 	
 	/*tx dr*/
-	lw_config_tx_datarate_set(DR_5);
+	lw_config_tx_datarate_set(DR_3);
 	
 	/*OTAA*/
  	lw_config_otaa_set(LORA_ENABLE);
 
 	/*enable adr*/
-	lw_adr_set(LORA_DISABLE);
+	lw_adr_set(LORA_ENABLE);
 	
 	/*set retry*/
 	lw_confirm_retry_set(3);
