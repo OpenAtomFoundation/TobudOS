@@ -2,6 +2,48 @@
 
 static tencent_firmware_module_t *g_tencent_firmware_module = NULL;
 
+static k_task_t  mqtt_message_handle_task;
+static k_stack_t mqtt_message_handle_task_stack[MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE];
+
+static mqtt_message_t mqtt_message;
+static uint8_t mqtt_message_pool[MQTT_MESSAGE_POOL_SIZE];
+
+static k_list_t mqtt_sub_list;
+static k_mmblk_pool_t sub_list_node_mbp;
+static mqtt_message_handlers_t sub_list_node_pool[MQTT_SUB_TOPIC_HANDLES_POOL_SIZE];
+
+k_mail_q_t mqtt_message_mail;
+
+void mqtt_message_handle_task_entry(void *arg)
+{
+    /*
+        topic:$thing/down/property/xxx/xxx
+        payload:
+        "{
+            "method":"xxx",
+            "clientToken":"xxx",
+            "code":0,
+            "status":"success"
+        }"
+    */
+    size_t message_size;
+    k_list_t *cur;
+    mqtt_message_handlers_t *mqtt_message_handler;
+    
+    while (K_TRUE) {
+        tos_mail_q_pend(&mqtt_message_mail, &mqtt_message, &message_size, TOS_TIME_FOREVER);
+
+        TOS_LIST_FOR_EACH(cur, &mqtt_sub_list) {
+            mqtt_message_handler = TOS_LIST_ENTRY(cur, mqtt_message_handlers_t, list);
+
+            if (strcmp(mqtt_message_handler->topic_filter, mqtt_message.topic) == 0) {
+                mqtt_message_handler->handler(&mqtt_message);
+            }
+        }
+    }
+}
+
+
 int tos_tf_module_register(tencent_firmware_module_t *module)
 {
     if (!g_tencent_firmware_module) {
@@ -12,10 +54,27 @@ int tos_tf_module_register(tencent_firmware_module_t *module)
 }
 
 int tos_tf_module_init(void)
-{
+{        
+    if (tos_mail_q_create(&mqtt_message_mail, mqtt_message_pool, MQTT_MESSAGE_NUM_MAX, sizeof(mqtt_message_t)) != K_ERR_NONE) {
+        return -1;
+    }
+    
+    tos_list_init(&mqtt_sub_list);
+
+    if (tos_mmblk_pool_create(&sub_list_node_mbp, sub_list_node_pool, MQTT_SUB_TOPIC_MAX, sizeof(mqtt_message_handlers_t)) != K_ERR_NONE) {
+        return -1;
+    }
+    
+    if (tos_task_create(&mqtt_message_handle_task, "mqtt_message_handle", 
+                        mqtt_message_handle_task_entry, NULL, MQTT_MESSAGE_HANDLE_TASK_PRIO,
+                        mqtt_message_handle_task_stack, MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE, 10) != K_ERR_NONE) {
+        return -1;
+    }
+    
     if (g_tencent_firmware_module && g_tencent_firmware_module->init) {
         return g_tencent_firmware_module->init();
     }
+
     return -1;
 }
 
@@ -59,8 +118,20 @@ int tos_tf_module_mqtt_publ(const char *topic, qos_t qos, char *payload)
     return -1;
 }
 
-int tos_tf_module_mqtt_sub(char *topic, qos_t qos)
+int tos_tf_module_mqtt_sub(char *topic, qos_t qos, message_handler_t handle)
 {
+    mqtt_message_handlers_t *mqtt_message_handler;
+    
+    if (tos_mmblk_alloc(&sub_list_node_mbp, (void*)&mqtt_message_handler) != K_ERR_NONE) {
+        return -1;
+    }
+    
+    mqtt_message_handler->topic_filter = topic;
+    mqtt_message_handler->qos = qos;
+    mqtt_message_handler->handler = handle;
+    
+    tos_list_add_tail(&mqtt_message_handler->list, &mqtt_sub_list);
+    
     if (g_tencent_firmware_module && g_tencent_firmware_module->mqtt_sub) {
         return g_tencent_firmware_module->mqtt_sub(topic, qos);
     }
@@ -69,6 +140,20 @@ int tos_tf_module_mqtt_sub(char *topic, qos_t qos)
 
 int tos_tf_module_mqtt_unsub(const char *topic)
 {
+    k_list_t *cur;
+    mqtt_message_handlers_t *mqtt_message_handler;
+        
+    TOS_LIST_FOR_EACH(cur, &mqtt_sub_list) {
+        mqtt_message_handler = TOS_LIST_ENTRY(cur, mqtt_message_handlers_t, list);
+
+        if (strcmp(mqtt_message_handler->topic_filter, topic) == 0) { 
+            tos_list_del(&mqtt_message_handler->list);
+            if (tos_mmblk_free(&sub_list_node_mbp, (void*)&mqtt_message_handler) != K_ERR_NONE) {
+                return -1;
+            }
+        }
+    }
+    
     if (g_tencent_firmware_module && g_tencent_firmware_module->mqtt_unsub) {
         return g_tencent_firmware_module->mqtt_unsub(topic);
     }

@@ -20,6 +20,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "tos_k.h"
 
 #define AUTH_MODE_KEY       1
 #define AUTH_MODE_CERT      2
@@ -39,9 +40,17 @@
 
 #define DEVICE_KEY_FILE_NAME_MAX_SIZE       128
 
-#define TOPIC_MAX_SIZE                      ((DEVICE_NAME_MAX_SIZE) + (PRODUCT_ID_MAX_SIZE) + 64)
+#define TOPIC_NAME_MAX_SIZE                      ((DEVICE_NAME_MAX_SIZE) + (PRODUCT_ID_MAX_SIZE) + 64)
 
 #define PUB_PAYLOAD_MAX_SIZE                200
+
+#define MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE 512
+#define MQTT_MESSAGE_HANDLE_TASK_PRIO       3
+#define MQTT_MESSAGE_NUM_MAX                3
+#define MQTT_MESSAGE_POOL_SIZE              MQTT_MESSAGE_NUM_MAX*sizeof(mqtt_message_t)
+
+#define MQTT_SUB_TOPIC_MAX                  5
+#define MQTT_SUB_TOPIC_HANDLES_POOL_SIZE    MQTT_SUB_TOPIC_MAX * sizeof(mqtt_message_handlers_t)
 
 typedef enum mqtt_state_en {
     MQTT_STATE_DISCONNECTED,
@@ -67,6 +76,22 @@ typedef struct mqtt_param_st {
     uint8_t     clean_session;
     uint8_t     auto_connect_enable;
 } mqtt_param_t;
+
+typedef struct mqtt_message_st {
+    char topic[64];
+    char payload[128];
+} mqtt_message_t;
+
+typedef void (*message_handler_t)(mqtt_message_t* msg);
+
+typedef struct mqtt_message_handlers_st {
+    k_list_t            list;
+    qos_t               qos;
+    const char*         topic_filter;
+    message_handler_t   handler;
+} mqtt_message_handlers_t;
+
+extern k_mail_q_t mqtt_message_mail;
 
 #define DEFAULT_MQTT_PARAMS { TLS_MODE_PSK, MQTT_COMMAND_TIMEOUT, 240, 1, 1 }
 
@@ -201,10 +226,11 @@ int tos_tf_module_mqtt_publ(const char *topic, qos_t qos, char *payload);
  *
  * @param[in]   topic       mqtt topic
  * @param[in]   qos         quality of service
+ * @param[in]   handle      will be callback when topic arrive
  *
  * @return  errcode
  */
-int tos_tf_module_mqtt_sub(char *topic, qos_t qos);
+int tos_tf_module_mqtt_sub(char *topic, qos_t qos, message_handler_t handle);
 
 /**
  * @brief Unsubscribe a mqtt topic.
