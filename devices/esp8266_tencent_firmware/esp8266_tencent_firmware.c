@@ -356,6 +356,8 @@ void esp8266_tencent_firmware_recvpub(void)
     uint8_t data;
     int read_len = 0, payload_len = 0;
 
+    memset(&mqtt_message, 0, sizeof(mqtt_message));
+
     while (1) {
         if (tos_at_uart_read(&data, 1) != 1) {
             return;
