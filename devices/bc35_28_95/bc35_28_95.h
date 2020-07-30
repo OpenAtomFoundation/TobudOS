@@ -15,8 +15,8 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef __BC35_28_H__
-#define __BC35_28_H__
+#ifndef __BC35_28_95_H__
+#define __BC35_28_95_H__
 
 #include "tos_at.h"
 
@@ -38,5 +38,5 @@ typedef enum sal_multilink_state {
 
 int bc35_28_95_sal_init(hal_uart_port_t uart_port);
 
-#endif /* __BC35_28_H__ */
+#endif /* __BC35_28_95_H__*/
 
