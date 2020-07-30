@@ -795,6 +795,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Hardware</GroupName>
+          <Files>
+            <File>
+              <FileName>sensor_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\sensor_parser.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>lorawan/pattern</GroupName>
           <Files>
             <File>

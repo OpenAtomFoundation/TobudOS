@@ -233,10 +233,15 @@ void USART2_IRQHandler(void)
   /* USER CODE END LPUART1_IRQn 1 */
 }
 
+void Radio_IRQHandler(void)
+{
+  HAL_SUBGHZ_IRQHandler(&hsubghz);
+}
+
 /* USER CODE BEGIN 1 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    
+
 }
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

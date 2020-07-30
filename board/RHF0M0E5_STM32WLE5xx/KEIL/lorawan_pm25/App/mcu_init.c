@@ -1,4 +1,6 @@
 #include "mcu_init.h"
+#include "app_system.h"
+#include "app_lorawan.h"
 
 int fputc(int ch, FILE *f)
 {
@@ -29,7 +31,8 @@ void board_init(void)
 {
     HAL_Init();
     SystemClock_Config();
-    MX_USART1_UART_Init();
+    SystemApp_Init();
+    MX_LoRaWAN_Init();
 }
 
 /**
