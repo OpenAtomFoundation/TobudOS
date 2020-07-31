@@ -1,5 +1,5 @@
-#ifndef __FARM_AI_DEMO_H__
-#define __FARM_AI_DEMO_H__
+#ifndef _FARM_AI_DEMO_H_
+#define _FARM_AI_DEMO_H_
 
 #include "mcu_init.h"
 #include "tos_at.h"
@@ -13,4 +13,4 @@ extern void application_entry(void *arg);
 extern void motor_control(char mode);
 extern void light_control(char mode);
 
-#endif /* __FARM_AI_DEMO_H__ */
+#endif /* _FARM_AI_DEMO_H_ */
