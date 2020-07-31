@@ -1,5 +1,5 @@
-#ifndef __MQTT_DEMO_H__
-#define __MQTT_DEMO_H__
+#ifndef __FARM_AI_DEMO_H__
+#define __FARM_AI_DEMO_H__
 
 #include "mcu_init.h"
 #include "tos_at.h"
@@ -12,5 +12,5 @@
 extern void application_entry(void *arg);
 extern void motor_control(char mode);
 extern void light_control(char mode);
-#endif /* __MQTT_DEMO_H__ */
 
+#endif /* __FARM_AI_DEMO_H__ */
