@@ -94,6 +94,6 @@ void task(void *arg)
 
 void application_entry(void *arg)
 {
-    osThreadCreate(osThread(task), NULL); // Create task1
+    osThreadCreate(osThread(task), NULL); // Create task
 }
 
