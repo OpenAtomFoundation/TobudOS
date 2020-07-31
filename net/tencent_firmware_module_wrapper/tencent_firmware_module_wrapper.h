@@ -270,7 +270,8 @@ int tos_tf_module_debug_level_set(int log_level);
  *
  * @attention None
  *
- * @param[in]   mode   OTA_DISABLE or OTA_ENABLE
+ * @param[in]   mode       OTA_DISABLE or OTA_ENABLE
+ * @param[in]   version    version string
  *
  * @return  errcode
  */
