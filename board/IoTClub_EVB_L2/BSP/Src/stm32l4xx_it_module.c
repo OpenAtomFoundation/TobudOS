@@ -24,6 +24,7 @@
 #include "tos_k.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "tos_at.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

@@ -6,6 +6,15 @@
 #include "stdbool.h"
 #include "ctype.h"
 
+typedef struct ip_addr_st {
+    int seg1;
+    int seg2;
+    int seg3;
+    int seg4;
+}ip_addr_t;
+
+static ip_addr_t domain_parser_addr={0};
+
 static int bc26_reset(void)
 {
     at_echo_t echo;
@@ -210,6 +219,8 @@ static int bc26_init(void)
         return -1;
     }
     printf("Init BC26 done\n");
+    
+    return 0;
 }
 
 static int bc26_connect(const char *ip, const char *port, sal_proto_t proto)
@@ -235,7 +246,7 @@ static int bc26_connect(const char *ip, const char *port, sal_proto_t proto)
 
     sscanf(port, "%d", &send_port);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 2000, "AT+QSOCON=%d,%d,\"%s\"\r\n", id, send_port,ip);
+        tos_at_cmd_exec(&echo, 8000, "AT+QSOCON=%d,%d,\"%s\"\r\n", id, send_port,ip);
         if (echo.status == AT_ECHO_STATUS_OK) {
             is_connected = 1;
             break;
@@ -321,9 +332,35 @@ static int bc26_recv(int id, void *buf, size_t len)
     return bc26_recv_timeout(id, buf, len, (uint32_t)4000);
 }
 
+k_sem_t domain_parser_sem;
+
 static int bc26_parse_domain(const char *host_name, char *host_ip, size_t host_ip_len)
 {
-    printf("parse_domain-%s,%s.\r\n", host_name, host_ip);
+    at_echo_t echo;
+    char echo_buffer[128];
+    
+    tos_sem_create_max(&domain_parser_sem, 0, 1);
+
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_cmd_exec(&echo, 2000, "AT+QIDNSGIP=1,\"%s\"\r\n", host_name);
+
+    if (echo.status != AT_ECHO_STATUS_OK)
+	{
+        return -1;
+    }
+    
+    tos_sem_pend(&domain_parser_sem, TOS_TIME_FOREVER);
+
+    /*
+        +QIURC: "dnsgip",0,1,0
+
+		+QIURC: "dnsgip","xxx.xxx.xxx"
+    */
+    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", domain_parser_addr.seg1, domain_parser_addr.seg2, domain_parser_addr.seg3, domain_parser_addr.seg4);
+    host_ip[host_ip_len - 1] = '\0';
+
+    printf("GOT IP: %s\n", host_ip);
+
     return 0;
 }
 
@@ -358,9 +395,9 @@ __STATIC__ void __asciistr2hex(char *in, uint8_t *out, int len) {
     }
 }
 
-__STATIC__ uint8_t incoming_data_buffer[512];
-__STATIC__ char ascii_stream[512];
-__STATIC__ uint8_t hex_stream[256];
+__STATIC__ uint8_t incoming_data_buffer[1024];
+__STATIC__ char ascii_stream[1024];
+__STATIC__ uint8_t hex_stream[512];
 
 __STATIC__ void bc26_incoming_data_process(void)
 {
@@ -521,8 +558,64 @@ __STATIC__ void bc26_incoming_data_process(void)
     tos_at_channel_write(channel_id, hex_stream, length);
 }
 
+__STATIC__ void bc26_demoin_parser_data_process(void)
+{
+    uint8_t data;
+    if (tos_at_uart_read(&data, 1) != 1) {
+        return;
+    }
+
+    if (data == '0') {
+        return;
+    }
+    
+    if (data == '\"') {
+        /* start parser domain */
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg1 = domain_parser_addr.seg1 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg2 = domain_parser_addr.seg2 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg3 = domain_parser_addr.seg3 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '\"') {
+                break;
+            }
+            domain_parser_addr.seg4 = domain_parser_addr.seg4 *10 + (data-'0');
+        }
+        tos_sem_post(&domain_parser_sem);
+    }
+    return;
+    
+}
+
 at_event_t bc26_at_event[] = {
     { "+QSONMI=", bc26_incoming_data_process },
+    { "+QIURC: \"dnsgip\",", bc26_demoin_parser_data_process}
 };
 
 sal_module_t nb_iot_module_bc26 = {
