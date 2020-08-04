@@ -59,6 +59,8 @@
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef hlpuart1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -270,7 +272,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t data;
     if (huart->Instance == USART2) {
         HAL_UART_Receive_IT(&huart2, &data, 1);
-        //tos_at_uart_input_byte(data);
+        tos_at_uart_input_byte(data);
     }
 }
 /* USER CODE END 1 */
