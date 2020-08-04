@@ -1,7 +1,16 @@
-#include "esp8266.h"
 #include "mcu_init.h"
 #include "sal_module_wrapper.h"
 #include "cmsis_os.h"
+
+#define USE_ESP8266
+
+#if defined(USE_ESP8266)
+#include "esp8266.h"
+#elif defined(USE_SIM800A)
+#include "sim800a.h"
+#elif defined(USE_BC26)
+#include "bc26.h"
+#endif
 
 #define TCP_TEST_TASK0_STK_SIZE         4096
 void tcp_test0(void);
@@ -60,7 +69,6 @@ void tcp_test1(void)
     }
 }
 
-#define USE_ESP8266
 
 void application_entry(void *arg)
 {
@@ -73,15 +81,19 @@ void application_entry(void *arg)
     sim800a_power_on();
     sim800a_sal_init(HAL_UART_PORT_2);
 #endif
+    
+#ifdef USE_BC26
+    bc26_sal_init(HAL_UART_PORT_2);
+#endif
 
-    socket_id_0 = tos_sal_module_connect("39.108.190.129", "8080", TOS_SAL_PROTO_TCP);
+    socket_id_0 = tos_sal_module_connect("117.50.111.72", "8080", TOS_SAL_PROTO_TCP);
     if (socket_id_0 == -1) {
         printf("TCP0 connect failed\r\n");
     } else {
         printf("TCP0 connect success! fd: %d\n", socket_id_0);
     }
 
-    socket_id_1 = tos_sal_module_connect("39.108.190.129", "8001", TOS_SAL_PROTO_TCP);
+    socket_id_1 = tos_sal_module_connect("117.50.111.72", "8001", TOS_SAL_PROTO_TCP);
     if (socket_id_1 == -1) {
         printf("TCP1 connect failed\r\n");
     } else {

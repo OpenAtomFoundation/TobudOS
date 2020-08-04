@@ -8,19 +8,11 @@
 
 static int bc26_reset(void)
 {
-    int try = 0;
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 3000, "AT+QRST=1\r\n");
     return 0;
-//    while (try++ < 10) {
-//        tos_at_cmd_exec(&echo, 3000, "AT+QRST=1\r\n");
-//        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
-//            return 0;
-//        }
-//    }
-//    return -1;
 }
 
 static int bc26_psm_lock(void)
@@ -96,7 +88,7 @@ static int bc26_get_net(void)
 
     tos_at_echo_create(&echo, NULL, 0, "OK");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 1000, "AT+CGATT=1\r\n");
+        tos_at_cmd_exec(&echo, 2000, "AT+CGATT=1\r\n");
         if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
@@ -127,10 +119,9 @@ static int bc26_signal_quality_check(void)
 
 static int bc26_set_band(void)
 {
-    char * band;
     int try = 0;
     at_echo_t echo;
-    char echo_buffer[32], *str;
+    char echo_buffer[32];
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "OK");
     while (try++ < 10) {
@@ -162,27 +153,6 @@ static int bc26_band_check(void)
     }
 
     return 0;
-}
-
-
-static int bc26_wait_ip(void)
-{
-    char * band;
-    int try = 0;
-    at_echo_t echo;
-    char echo_buffer[32], *str;
-
-    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "+IP:");
-    while (try++ < 10) {
-        tos_at_cmd_exec_until(&echo, 16000, "AT+QBAND=1,8\r\n");
-        if (echo.status == AT_ECHO_STATUS_EXPECT) {
-            str = strstr(echo.buffer, "+IP:");
-            printf("BC26 get ip \r\n : %s",str);
-            return 0;
-        }
-    }
-
-    return -1;
 }
 
 static int bc26_init(void)
@@ -239,7 +209,6 @@ static int bc26_init(void)
         printf("check csq FAILED\n");
         return -1;
     }
-
     printf("Init BC26 done\n");
 }
 
@@ -266,7 +235,7 @@ static int bc26_connect(const char *ip, const char *port, sal_proto_t proto)
 
     sscanf(port, "%d", &send_port);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 1000, "AT+QSOCON=%d,%d,\"%s\"\r\n", id, send_port,ip);
+        tos_at_cmd_exec(&echo, 2000, "AT+QSOCON=%d,%d,\"%s\"\r\n", id, send_port,ip);
         if (echo.status == AT_ECHO_STATUS_OK) {
             is_connected = 1;
             break;
