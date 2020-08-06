@@ -2,7 +2,9 @@
 #include "sal_module_wrapper.h"
 #include "cmsis_os.h"
 
-#define USE_ESP8266
+//#define USE_ESP8266
+#define USE_SIM800A
+#define USE_BC26
 
 #if defined(USE_ESP8266)
 #include "esp8266.h"
