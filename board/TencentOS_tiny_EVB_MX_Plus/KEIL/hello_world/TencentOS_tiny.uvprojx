@@ -337,7 +337,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER,USE_ESP8266</Define>
+              <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\examples\helloworld</IncludePath>
             </VariousControls>
