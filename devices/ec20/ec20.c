@@ -173,7 +173,7 @@ static int ec20_set_apn(void)
     }
 
 
-	tos_at_cmd_exec(&echo, 3000, "AT+QIACT=1\r\n");
+	tos_at_cmd_exec_until(&echo, 3000, "AT+QIACT=1\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
@@ -241,6 +241,8 @@ static int ec20_connect(const char *ip, const char *port, sal_proto_t proto)
 	{
         return -1;
     }
+    
+    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 
 	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
