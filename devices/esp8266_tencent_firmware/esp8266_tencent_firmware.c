@@ -130,6 +130,10 @@ int esp8266_tencent_firmware_module_mqtt_state_get(mqtt_state_t *state)
     }
 
     str = strstr(echo.buffer, "+TCMQTTSTATE:");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+TCMQTTSTATE:%d", &ret_state);
     if (ret_state == 0) {
         *state = MQTT_STATE_DISCONNECTED;
