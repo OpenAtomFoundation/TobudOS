@@ -118,6 +118,10 @@ static int bc26_signal_quality_check(void)
     }
 
     str = strstr(echo.buffer, "+CSQ:");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
     if (rssi == 99) {
         return -1;
@@ -156,6 +160,10 @@ static int bc26_band_check(void)
     }
 
     str = strstr(echo.buffer, "+QBAND:");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+QBAND:%d", &band);
     if (band != 8) {
         return -1;
@@ -236,6 +244,10 @@ static int bc26_connect(const char *ip, const char *port, sal_proto_t proto)
         return -1;
     }
     str = strstr(echo.buffer, "+QSOC=");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+QSOC=%d", &id);
 
     printf("get socket id is %d\r\n",id);
