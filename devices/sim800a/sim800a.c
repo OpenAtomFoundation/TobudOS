@@ -32,6 +32,10 @@ static int sim800a_signal_quality_check(void)
     }
 
     str = strstr(echo.buffer, "+CSQ:");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
     if (rssi == 99 || ber == 99) {
         return -1;
@@ -245,6 +249,10 @@ static int sim800a_parse_domain(const char *host_name, char *host_ip, size_t hos
 
     int seg1, seg2, seg3, seg4;
     str = strstr(echo.buffer, "+CDNSGIP: 1,");
+    if (!str) 
+    {
+        return -1;
+    }
     str += strlen("+CDNSGIP: 1,\"") + strlen(host_name) + 3;
     sscanf(str, "%d.%d.%d.%d", &seg1, &seg2, &seg3, &seg4);
     snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
