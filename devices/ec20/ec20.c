@@ -1,10 +1,19 @@
-/**
- * @brief   Quectel EC20 LTGE Cat4 Module
- * @author  Mculover666 <2412828003@qq.com>
- * @date    2020/05/07
- * @changelog
-            2020/05/21    Mculover666    Change recv mode is Direct Push Mode
-*/
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
 
 #include "ec20.h"
 #include "tos_at.h"
@@ -14,6 +23,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
+
+typedef struct ip_addr_st {
+    uint8_t seg1;
+    uint8_t seg2;
+    uint8_t seg3;
+    uint8_t seg4;
+}ip_addr_t;
+
+static ip_addr_t domain_parser_addr = {0};
+k_sem_t domain_parser_sem;
 
 static int ec20_echo_close(void)
 {
@@ -341,31 +360,20 @@ static int ec20_close(int id)
 
 static int ec20_parse_domain(const char *host_name, char *host_ip, size_t host_ip_len)
 {
-    char *str;
     at_echo_t echo;
     char echo_buffer[128];
+
+    tos_sem_create_max(&domain_parser_sem, 0, 1);
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     tos_at_cmd_exec(&echo, 2000, "AT+QIDNSGIP=1,\"%s\"\r\n", host_name);
 
-    if (echo.status != AT_ECHO_STATUS_OK)
-	{
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
 
-    /*
-        +QIURC: "dnsgip",0,1,600
-
-		+QIURC: "dnsgip","xxx.xxx.xxx"
-    */
-
-    int seg1, seg2, seg3, seg4;
-    str = strstr(echo.buffer, "dnsgip");
-	*str = '0';
-	str = strstr(echo.buffer, "dnsgip");
-    str += strlen("dnsgip\",\"");
-    sscanf(str, "%d.%d.%d.%d", &seg1, &seg2, &seg3, &seg4);
-    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
+    tos_sem_pend(&domain_parser_sem, TOS_TIME_FOREVER);
+    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", domain_parser_addr.seg1, domain_parser_addr.seg2, domain_parser_addr.seg3, domain_parser_addr.seg4);
     host_ip[host_ip_len - 1] = '\0';
 
     printf("GOT IP: %s\n", host_ip);
@@ -383,11 +391,6 @@ __STATIC__ void ec20_incoming_data_process(void)
 		+QIURC: "recv",<sockid>,<datalen>
 		<data content>
     */
-	
-	if (tos_at_uart_read(&data, 1) != 1)
-	{
-		return;
-	}
 	
     while (1)
     {
@@ -439,8 +442,71 @@ __STATIC__ void ec20_incoming_data_process(void)
 	return;
 }
 
+__STATIC__ void ec20_domain_data_process(void)
+{
+    uint8_t data;
+
+    /*
+        +QIURC: "dnsgip",0,1,600
+
+		+QIURC: "dnsgip","xxx.xxx.xxx.xxx"
+    */
+
+    if (tos_at_uart_read(&data, 1) != 1) {
+        return;
+    }
+
+    if (data == '0') {
+        return;
+    }
+    
+    if (data == '\"') {
+        /* start parser domain */
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg1 = domain_parser_addr.seg1 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg2 = domain_parser_addr.seg2 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg3 = domain_parser_addr.seg3 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '\"') {
+                break;
+            }
+            domain_parser_addr.seg4 = domain_parser_addr.seg4 *10 + (data-'0');
+        }
+        tos_sem_post(&domain_parser_sem);
+    }
+    return;
+
+}
+
 at_event_t ec20_at_event[] = {
-	{ "+QIURC: \"recv\"", ec20_incoming_data_process},
+	{ "+QIURC: \"recv\",",   ec20_incoming_data_process},
+    { "+QIURC: \"dnsgip\",", ec20_domain_data_process},
 };
 
 sal_module_t sal_module_ec20 = {
