@@ -7,10 +7,10 @@
 #include "ctype.h"
 
 typedef struct ip_addr_st {
-    int seg1;
-    int seg2;
-    int seg3;
-    int seg4;
+    uint8_t seg1;
+    uint8_t seg2;
+    uint8_t seg3;
+    uint8_t seg4;
 }ip_addr_t;
 
 static ip_addr_t domain_parser_addr={0};
