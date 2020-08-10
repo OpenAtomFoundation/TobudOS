@@ -52,9 +52,9 @@ static int ec20_sim_card_check(void)
     int try = 0;
     char echo_buffer[32];
 	
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10)
-	{
+    {
         
         tos_at_cmd_exec(&echo, 1000, "AT+CPIN?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
@@ -66,8 +66,7 @@ static int ec20_sim_card_check(void)
             return 0;
         }
     }
-		 
-	return -1;
+    return -1;
 }
 
 static int ec20_signal_quality_check(void)
@@ -75,9 +74,9 @@ static int ec20_signal_quality_check(void)
     int rssi, ber;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 	
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) 
     {
         tos_at_cmd_exec(&echo, 1000, "AT+CSQ\r\n");
@@ -87,6 +86,10 @@ static int ec20_signal_quality_check(void)
         }
 
         str = strstr(echo.buffer, "+CSQ:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
@@ -100,10 +103,10 @@ static int ec20_gsm_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 	
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-	while (try++ < 10)
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    while (try++ < 10)
     {
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
@@ -111,11 +114,15 @@ static int ec20_gsm_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
         if (stat == 1) {
             return 0;
         }
-	}
+    }
     return -1;	
 }
 
@@ -124,10 +131,10 @@ static int ec20_gprs_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-	while (try++ < 10)
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    while (try++ < 10)
     {
        
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
@@ -137,12 +144,16 @@ static int ec20_gprs_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CGREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
         if (stat == 1)
         {
             return 0;
         }
-	}
+    }
 		
     return -1;	
 }
@@ -153,12 +164,12 @@ static int ec20_close_apn(void)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 3000, "AT+QIDEACT=1\r\n");
-   	if (echo.status == AT_ECHO_STATUS_OK)
-	{
-		return 0;
-	}
+    if (echo.status == AT_ECHO_STATUS_OK)
+    {
+        return 0;
+    }
    
-	return -1;
+    return -1;
 }
 
 static int ec20_set_apn(void)
@@ -172,8 +183,7 @@ static int ec20_set_apn(void)
         return -1;
     }
 
-
-	tos_at_cmd_exec_until(&echo, 3000, "AT+QIACT=1\r\n");
+    tos_at_cmd_exec_until(&echo, 3000, "AT+QIACT=1\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
@@ -238,17 +248,17 @@ static int ec20_connect(const char *ip, const char *port, sal_proto_t proto)
 
     id = tos_at_channel_alloc(ip, port);
     if (id == -1)
-	{
+    {
         return -1;
     }
     
     tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
+    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
     if (echo.status == AT_ECHO_STATUS_OK)
-	{
+    {
         return id;
     }
 		
@@ -270,21 +280,21 @@ int ec20_send(int id, const void *buf, size_t len)
 {
     at_echo_t echo;
 
-	if (!tos_at_channel_is_working(id)) {
+    if (!tos_at_channel_is_working(id)) {
         return -1;
     }
 	
     if (tos_at_global_lock_pend() != 0)
-	{
+    {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-	tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
+    tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -292,7 +302,7 @@ int ec20_send(int id, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -304,12 +314,12 @@ int ec20_send(int id, const void *buf, size_t len)
 
 int ec20_recvfrom_timeout(int id, void *buf, size_t len, uint32_t timeout)
 {
-	return tos_at_channel_read_timed(id, buf, len, timeout);
+    return tos_at_channel_read_timed(id, buf, len, timeout);
 }
 
 int ec20_recvfrom(int id, void *buf, size_t len)
 {
-	return ec20_recvfrom_timeout(id, buf, len, (uint32_t)4000);
+    return ec20_recvfrom_timeout(id, buf, len, (uint32_t)4000);
 }
 
 int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
@@ -323,10 +333,10 @@ int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-	tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
+    tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -334,7 +344,7 @@ int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -353,7 +363,7 @@ static int ec20_close(int id)
 {
     ec20_transparent_mode_exit();
 
-	tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
+    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 
     tos_at_channel_free(id);
 
@@ -408,7 +418,7 @@ __STATIC__ void ec20_incoming_data_process(void)
         channel_id = channel_id * 10 + (data - '0');
     }
 
-	while (1)
+    while (1)
     {
         if (tos_at_uart_read(&data, 1) != 1)
         {
@@ -441,7 +451,7 @@ __STATIC__ void ec20_incoming_data_process(void)
         data_len -= read_len;
     } while (data_len > 0);
 
-	return;
+    return;
 }
 
 __STATIC__ void ec20_domain_data_process(void)
@@ -517,9 +527,9 @@ sal_module_t sal_module_ec20 = {
     .send           = ec20_send,
     .recv_timeout   = ec20_recv_timeout,
     .recv           = ec20_recv,
-    .sendto           = ec20_sendto,
-	.recvfrom         = ec20_recvfrom,
-	.recvfrom_timeout = ec20_recvfrom_timeout,
+    .sendto         = ec20_sendto,
+    .recvfrom       = ec20_recvfrom,
+    .recvfrom_timeout = ec20_recvfrom_timeout,
     .close          = ec20_close,
     .parse_domain   = ec20_parse_domain,
 };
