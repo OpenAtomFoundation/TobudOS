@@ -1,5 +1,5 @@
-#ifndef _H_TOS_FARM_AI_CONFIG_H  
-#define _H_TOS_FARM_AI_CONFIG_H
+#ifndef _TOS_FARM_AI_CONFIG_H_  
+#define _TOS_FARM_AI_CONFIG_H_
 
 #define MQTT_SERVER_IP          "iotcloud-mqtt.gz.tencentdevices.com"
 #define MQTT_SERVER_PORT        "1883"
@@ -11,5 +11,4 @@
 #define MQTT_SUBSCRIBE_TOPIC    "LOLCIH8A14/AiDev1/control"
 #define MQTT_PUBLISH_TOPIC      "LOLCIH8A14/AiDev1/data"
 
-#endif
-
+#endif /* _TOS_FARM_AI_CONFIG_H_ */
