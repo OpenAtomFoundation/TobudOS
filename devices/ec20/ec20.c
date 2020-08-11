@@ -551,3 +551,18 @@ int ec20_sal_init(hal_uart_port_t uart_port)
     return 0;
 }
 
+int ec20_sal_deinit()
+{
+    int id = 0;
+
+    for (id = 0; id < AT_DATA_CHANNEL_NUM; ++id) {
+        tos_sal_module_close(id);
+    }
+
+    tos_sal_module_register_default();
+
+    tos_at_deinit();
+    
+    return 0;
+}
+

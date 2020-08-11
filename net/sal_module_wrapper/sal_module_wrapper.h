@@ -64,6 +64,17 @@ typedef struct sal_module_st {
 int tos_sal_module_register(sal_module_t *module);
 
 /**
+ * @brief Register a default sal module.
+ *
+ * @attention None
+ *
+ * @param[in] None
+ *
+ * @return  errcode
+ */
+int tos_sal_module_register_default(void);
+
+/**
  * @brief Initialize the module.
  *
  * @attention None
