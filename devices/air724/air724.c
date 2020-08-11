@@ -160,7 +160,7 @@ static int air724_close_apn(void)
     return 0;
 }
 
-static int air724_send_mode_set(sal_send_mode_t mode)
+static int air724_send_mode_set(air724_send_mode_t mode)
 {
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u	
     int try = 0;
@@ -181,7 +181,7 @@ static int air724_send_mode_set(sal_send_mode_t mode)
 #endif
 }
 
-static int air724_multilink_set(sal_multilink_state_t state)
+static int air724_multilink_set(air724_multilink_state_t state)
 {
     int try = 0;
     at_echo_t echo;
@@ -189,7 +189,7 @@ static int air724_multilink_set(sal_multilink_state_t state)
     while (try++ < 10)
     {
         tos_at_echo_create(&echo, NULL, 0, NULL);
-        tos_at_cmd_exec(&echo, 300, "AT+CIPMUX=%d\r\n", state == SAL_MULTILINK_STATE_ENABLE ? 1 : 0);
+        tos_at_cmd_exec(&echo, 300, "AT+CIPMUX=%d\r\n", state == AIR724_MULTILINK_STATE_ENABLE ? 1 : 0);
         if (echo.status == AT_ECHO_STATUS_OK)
         {
             return 0;
@@ -275,14 +275,14 @@ static int air724_init(void)
     }
     
 #else
-    if (air724_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
+    if (air724_multilink_set(AIR724_MULTILINK_STATE_ENABLE) != 0)
     {
         printf("multilink set FAILED\n");
         return -1;
     }
 #endif
 
-    if (air724_send_mode_set(SAL_SEND_MODE_NORMAL) != 0)
+    if (air724_send_mode_set(AIR724_SEND_MODE_NORMAL) != 0)
     {
         printf("send mode set FAILED\n");
         return -1;

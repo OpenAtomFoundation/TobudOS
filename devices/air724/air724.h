@@ -20,15 +20,15 @@
 
 #include "tos_hal.h"
 
-typedef enum sal_send_mode {
-    SAL_SEND_MODE_NORMAL,
-    SAL_SEND_MODE_TRANSPARENT,
-} sal_send_mode_t;
+typedef enum air724_send_mode {
+    AIR724_SEND_MODE_NORMAL,
+    AIR724_SEND_MODE_TRANSPARENT,
+} air724_send_mode_t;
 
-typedef enum sal_multilink_state {
-    SAL_MULTILINK_STATE_ENABLE,
-    SAL_MULTILINK_STATE_DISABLE,
-} sal_multilink_state_t;
+typedef enum air724_multilink_state {
+    AIR724_MULTILINK_STATE_ENABLE,
+    AIR724_MULTILINK_STATE_DISABLE,
+} air724_multilink_state_t;
 
 int air724_sal_init(hal_uart_port_t uart_port);
 
