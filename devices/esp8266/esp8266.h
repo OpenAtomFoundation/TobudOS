@@ -40,5 +40,7 @@ int esp8266_sal_init(hal_uart_port_t uart_port);
 
 int esp8266_join_ap(const char *ssid, const char *pwd);
 
+int esp8266_sal_deinit(void);
+
 #endif /* __ESP8266_H__ */
 
