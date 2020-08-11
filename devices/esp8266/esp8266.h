@@ -20,21 +20,21 @@
 
 #include "tos_hal.h"
 
-typedef enum sal_net_mode {
+typedef enum esp8266_net_mode {
     SAL_NET_MODE_STA,
     SAL_NET_MODE_AP,
     SAL_NET_MODE_STA_AP,
-} sal_net_mode_t ;
+} esp8266_net_mode_t ;
 
-typedef enum sal_send_mode {
+typedef enum esp8266_send_mode {
     SAL_SEND_MODE_NORMAL,
     SAL_SEND_MODE_TRANSPARENT,
-} sal_send_mode_t;
+} esp8266_send_mode_t;
 
-typedef enum sal_multilink_state {
+typedef enum esp8266_multilink_state {
     SAL_MULTILINK_STATE_ENABLE,
     SAL_MULTILINK_STATE_DISABLE,
-} sal_multilink_state_t;
+} esp8266_multilink_state_t;
 
 int esp8266_sal_init(hal_uart_port_t uart_port);
 

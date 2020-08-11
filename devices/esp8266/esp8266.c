@@ -35,7 +35,7 @@ static int esp8266_echo_close(void)
     return -1;
 }
 
-static int esp8266_net_mode_set(sal_net_mode_t mode)
+static int esp8266_net_mode_set(esp8266_net_mode_t mode)
 {
     int try = 0;
     char *cmd = NULL;
@@ -65,7 +65,7 @@ static int esp8266_net_mode_set(sal_net_mode_t mode)
     return -1;
 }
 
-static int esp8266_send_mode_set(sal_send_mode_t mode)
+static int esp8266_send_mode_set(esp8266_send_mode_t mode)
 {
     int try = 0;
     at_echo_t echo;
@@ -80,7 +80,7 @@ static int esp8266_send_mode_set(sal_send_mode_t mode)
     return -1;
 }
 
-static int esp8266_multilink_set(sal_multilink_state_t state)
+static int esp8266_multilink_set(esp8266_multilink_state_t state)
 {
     int try = 0;
     at_echo_t echo;
