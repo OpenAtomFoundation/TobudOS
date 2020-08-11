@@ -51,7 +51,7 @@ static int air724_sim_card_check(void)
         }
     }
 		 
-	return -1;
+    return -1;
 }
 
 static int air724_signal_quality_check(void)
@@ -59,8 +59,7 @@ static int air724_signal_quality_check(void)
     int rssi, ber;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
-	
+    int try = 0;
 	
     while (try++ < 10) 
     {
@@ -72,6 +71,10 @@ static int air724_signal_quality_check(void)
         }
 
         str = strstr(echo.buffer, "+CSQ:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
@@ -85,9 +88,9 @@ static int air724_gsm_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 	
-	while (try++ < 10)
+    while (try++ < 10)
     {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
@@ -97,12 +100,16 @@ static int air724_gsm_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
         if (stat == 1)
         {
             return 0;
         }
-	}
+    }
     return -1;	
 }
 
@@ -111,9 +118,9 @@ static int air724_gprs_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 
-	while (try++ < 10)
+    while (try++ < 10)
     {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
@@ -123,12 +130,16 @@ static int air724_gprs_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CGREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
         if (stat == 1)
         {
             return 0;
         }
-	}
+    }
 		
     return -1;	
 }
@@ -142,11 +153,11 @@ static int air724_close_apn(void)
     tos_at_cmd_exec(&echo, 3000, "AT+CIPSHUT\r\n");
    	
     if(strstr(echo.buffer, "SHUT OK") == NULL)
-	{
-		return -1;
-	}
+    {
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 static int air724_send_mode_set(sal_send_mode_t mode)
@@ -264,7 +275,7 @@ static int air724_init(void)
     }
     
 #else
-	if (air724_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
+    if (air724_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
     {
         printf("multilink set FAILED\n");
         return -1;
@@ -296,22 +307,22 @@ static int air724_connect(const char *ip, const char *port, sal_proto_t proto)
         return -1;
     }
 		
-	tos_at_echo_create(&echo, NULL, 0, NULL);	
-	tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+CIPHEAD");
+    tos_at_echo_create(&echo, NULL, 0, NULL);	
+    tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+CIPHEAD");
     if (echo.status != AT_ECHO_STATUS_OK) {
         tos_at_channel_free(id);
         return -1;
     }
 
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
+    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+CIPSTART=%s,%s,%s\r\n",
                         proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
     if (echo.status == AT_ECHO_STATUS_OK) {
         return id;
     }
 #else
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
+    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+CIPSTART=%d,%s,%s,%d\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
     if (echo.status == AT_ECHO_STATUS_OK) {
@@ -377,12 +388,12 @@ int air724_send(int id, const void *buf, size_t len)
 
 int air724_recvfrom_timeout(int id, void *buf, size_t len, uint32_t timeout)
 {
-	return tos_at_channel_read_timed(id, buf, len, timeout);
+    return tos_at_channel_read_timed(id, buf, len, timeout);
 }
 
 int air724_recvfrom(int id, void *buf, size_t len)
 {
-	return air724_recvfrom_timeout(id, buf, len, (uint32_t)4000);
+    return air724_recvfrom_timeout(id, buf, len, (uint32_t)4000);
 }
 
 int air724_sendto(int id, char *ip, char *port, const void *buf, size_t len)
@@ -390,7 +401,7 @@ int air724_sendto(int id, char *ip, char *port, const void *buf, size_t len)
     at_echo_t echo;
 
     if (tos_at_global_lock_pend() != 0)
-	{
+    {
         return -1;
     }
 
@@ -407,7 +418,7 @@ int air724_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 #endif
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -415,7 +426,7 @@ int air724_sendto(int id, char *ip, char *port, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -437,7 +448,7 @@ static int air724_close(int id)
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
     tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE\r\n");
 #else
-	tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE=%d\r\n", id);
+    tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE=%d\r\n", id);
 #endif
 
     tos_at_channel_free(id);
@@ -464,6 +475,10 @@ static int air724_parse_domain(const char *host_name, char *host_ip, size_t host
     */
     
     str = strstr(echo.buffer, ":");
+    if (!str) 
+    {
+        return -1;
+    }
     str += 1;
     if(*str == '0')
     {
@@ -496,7 +511,7 @@ __STATIC__ void air724_incoming_data_process(void)
         +RECEIVE: prefix
         0: scoket id
     */
-	if (tos_at_uart_read(&data, 1) != 1)
+    if (tos_at_uart_read(&data, 1) != 1)
     {
         return;
     }
@@ -570,8 +585,8 @@ sal_module_t sal_module_air724 = {
     .recv_timeout   = air724_recv_timeout,
     .recv           = air724_recv,
     .sendto         = air724_sendto,
-	.recvfrom       = air724_recvfrom,
-	.recvfrom_timeout = air724_recvfrom_timeout,
+    .recvfrom       = air724_recvfrom,
+    .recvfrom_timeout = air724_recvfrom_timeout,
     .close          = air724_close,
     .parse_domain   = air724_parse_domain,
 };
