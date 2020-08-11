@@ -45,7 +45,7 @@ static int m26_sim_card_check(void)
         }
     }
 		 
-	return -1;
+    return -1;
 }
 
 static int m26_signal_quality_check(void)
@@ -53,8 +53,7 @@ static int m26_signal_quality_check(void)
     int rssi, ber;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
-	
+    int try = 0;
 	
     while (try++ < 10) 
     {
@@ -66,6 +65,10 @@ static int m26_signal_quality_check(void)
         }
 
         str = strstr(echo.buffer, "+CSQ:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
@@ -79,9 +82,9 @@ static int m26_gsm_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 	
-	while (try++ < 10)
+    while (try++ < 10)
     {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
@@ -91,6 +94,10 @@ static int m26_gsm_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
         if (stat == 1)
         {
@@ -105,9 +112,9 @@ static int m26_gprs_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 
-	while (try++ < 10)
+    while (try++ < 10)
     {
         tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
@@ -117,6 +124,10 @@ static int m26_gprs_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CGREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
         if (stat == 1)
         {
@@ -136,11 +147,11 @@ static int m26_close_apn(void)
     tos_at_cmd_exec(&echo, 3000, "AT+QIDEACT\r\n");
    	
     if(strstr(echo.buffer, "DEACT OK") == NULL)
-	{
-		return -1;
-	}
+    {
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 static int m26_send_mode_set(sal_send_mode_t mode)
@@ -187,7 +198,7 @@ static int m26_recv_mode_set()
     {
         return -1;
     }
-	return 0;
+    return 0;
 }
 
 static int m26_set_apn(void)
@@ -207,13 +218,13 @@ static int m26_set_apn(void)
         return -1;
     }
 		
-		tos_at_cmd_exec(&echo, 300, "AT+QIREGAPP\r\n");
+    tos_at_cmd_exec(&echo, 300, "AT+QIREGAPP\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
     }
 		
-		tos_at_cmd_exec(&echo, 3000, "AT+QIACT\r\n");
+    tos_at_cmd_exec(&echo, 3000, "AT+QIACT\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
@@ -273,7 +284,7 @@ static int m26_init(void)
         return -1;
     }
 #else
-	if (m26_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
+    if (m26_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
     {
         printf("multilink set FAILED\n");
         return -1;
@@ -311,22 +322,22 @@ static int m26_connect(const char *ip, const char *port, sal_proto_t proto)
         return -1;
     }
 		
-	tos_at_echo_create(&echo, NULL, 0, NULL);	
-	tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+QIHEAD");
+    tos_at_echo_create(&echo, NULL, 0, NULL);	
+    tos_at_cmd_exec(&echo, 2000, "%s=1\r\n", "AT+QIHEAD");
     if (echo.status != AT_ECHO_STATUS_OK) {
         tos_at_channel_free(id);
         return -1;
     }
 
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
+    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=\"%s\",\"%s\",\"%s\"\r\n",
                         proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
     if (echo.status == AT_ECHO_STATUS_OK) {
         return id;
     }
 #else
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
+    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=%d,\"%s\",\"%s\",%d\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
     if (echo.status == AT_ECHO_STATUS_OK) {
@@ -364,7 +375,7 @@ int m26_send(int id, const void *buf, size_t len)
                             "AT+QISEND=%d\r\n",
                             len);
 #else
-		tos_at_cmd_exec(&echo, 1000,
+    tos_at_cmd_exec(&echo, 1000,
                             "AT+QISEND=%d,%d\r\n",
                             id, len);
 #endif
@@ -400,7 +411,7 @@ static int m26_close(int id)
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
     tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 #else
-	tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
+    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 #endif
 
     tos_at_channel_free(id);
@@ -428,6 +439,10 @@ static int m26_parse_domain(const char *host_name, char *host_ip, size_t host_ip
 
     int seg1, seg2, seg3, seg4;
     str = strstr(echo.buffer, "OK");
+    if (!str) 
+    {
+        return -1;
+    }
     str += strlen("OK\r\n");
     sscanf(str, "%d.%d.%d.%d", &seg1, &seg2, &seg3, &seg4);
     snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
@@ -451,7 +466,7 @@ __STATIC__ void m26_incoming_data_process(void)
         +RECEIVE:     prefix
         0:          	scoket id
     */
-	if (tos_at_uart_read(&data, 1) != 1)
+    if (tos_at_uart_read(&data, 1) != 1)
     {
             return;
     }
