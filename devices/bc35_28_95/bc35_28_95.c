@@ -145,6 +145,10 @@ static int bc35_28_95_parse_domain(const char *host_name, char *host_ip, size_t 
      */
 
     str = strstr((const char *)echo.buffer, "+QDNS:");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+QDNS:%s", host_ip);
     host_ip[host_ip_len - 1] = '\0';
     printf("GOT IP: %s\n", host_ip);
@@ -236,6 +240,10 @@ static int bc35_28_95_signal_quality_check(void)
     }
 
     str = strstr(echo.buffer, "+CSQ:");
+    if (!str) 
+    {
+        return -1;
+    }
     sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
     if (rssi == 99) {
         return -1;
