@@ -1,8 +1,19 @@
-/**
- * @brief    Quectel M26 GSM/GPRS Module
- * @author   Mculover666 <2412828003@qq.com>
- * @date     2020/05/07
-*/
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
 
 #include "m26.h"
 #include "tos_at.h"
@@ -154,7 +165,7 @@ static int m26_close_apn(void)
     return 0;
 }
 
-static int m26_send_mode_set(sal_send_mode_t mode)
+static int m26_send_mode_set(m26_send_mode_t mode)
 {
     int try = 0;
     at_echo_t echo;
@@ -162,7 +173,7 @@ static int m26_send_mode_set(sal_send_mode_t mode)
     while (try++ < 10)
     {
         tos_at_echo_create(&echo, NULL, 0, NULL);
-        tos_at_cmd_exec(&echo, 300, "AT+QIMODE=%d\r\n", mode == SAL_SEND_MODE_NORMAL ? 0 : 1);
+        tos_at_cmd_exec(&echo, 300, "AT+QIMODE=%d\r\n", mode == M26_SEND_MODE_NORMAL ? 0 : 1);
         if (echo.status == AT_ECHO_STATUS_OK)
         {
             return 0;
@@ -171,7 +182,7 @@ static int m26_send_mode_set(sal_send_mode_t mode)
     return -1;
 }
 
-static int m26_multilink_set(sal_multilink_state_t state)
+static int m26_multilink_set(m26_multilink_state_t state)
 {
     int try = 0;
     at_echo_t echo;
@@ -179,7 +190,7 @@ static int m26_multilink_set(sal_multilink_state_t state)
     while (try++ < 10)
     {
         tos_at_echo_create(&echo, NULL, 0, NULL);
-        tos_at_cmd_exec(&echo, 300, "AT+QIMUX=%d\r\n", state == SAL_MULTILINK_STATE_ENABLE ? 1 : 0);
+        tos_at_cmd_exec(&echo, 300, "AT+QIMUX=%d\r\n", state == M26_MULTILINK_STATE_ENABLE ? 1 : 0);
         if (echo.status == AT_ECHO_STATUS_OK)
         {
             return 0;
@@ -284,14 +295,14 @@ static int m26_init(void)
         return -1;
     }
 #else
-    if (m26_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0)
+    if (m26_multilink_set(M26_MULTILINK_STATE_ENABLE) != 0)
     {
         printf("multilink set FAILED\n");
         return -1;
     }
 #endif		
 
-    if (m26_send_mode_set(SAL_SEND_MODE_NORMAL) != 0)
+    if (m26_send_mode_set(M26_SEND_MODE_NORMAL) != 0)
     {
         printf("send mode set FAILED\n");
         return -1;
