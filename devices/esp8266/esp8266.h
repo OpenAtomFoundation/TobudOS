@@ -21,19 +21,19 @@
 #include "tos_hal.h"
 
 typedef enum esp8266_net_mode {
-    SAL_NET_MODE_STA,
-    SAL_NET_MODE_AP,
-    SAL_NET_MODE_STA_AP,
+    ESP8266_NET_MODE_STA,
+    ESP8266_NET_MODE_AP,
+    ESP8266_NET_MODE_STA_AP,
 } esp8266_net_mode_t ;
 
 typedef enum esp8266_send_mode {
-    SAL_SEND_MODE_NORMAL,
-    SAL_SEND_MODE_TRANSPARENT,
+    ESP8266_SEND_MODE_NORMAL,
+    ESP8266_SEND_MODE_TRANSPARENT,
 } esp8266_send_mode_t;
 
 typedef enum esp8266_multilink_state {
-    SAL_MULTILINK_STATE_ENABLE,
-    SAL_MULTILINK_STATE_DISABLE,
+    ESP8266_MULTILINK_STATE_ENABLE,
+    ESP8266_MULTILINK_STATE_DISABLE,
 } esp8266_multilink_state_t;
 
 int esp8266_sal_init(hal_uart_port_t uart_port);
