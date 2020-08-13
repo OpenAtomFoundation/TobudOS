@@ -298,9 +298,17 @@ void LPUART1_IRQHandler(void)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     extern uint8_t data;
+    extern at_agent_t esp8266_at_agent;
+    extern uint8_t ec20_data;
+    extern at_agent_t ec20_at_agent;
+    
     if (huart->Instance == LPUART1) {
         HAL_UART_Receive_IT(&hlpuart1, &data, 1);
-        tos_at_uart_input_byte(data);
+        tos_at_uart_input_byte(&esp8266_at_agent, data);
+    }
+    else if(huart->Instance == USART3) {
+        HAL_UART_Receive_IT(&huart3, &ec20_data, 1);
+        tos_at_uart_input_byte(&ec20_at_agent, ec20_data);
     }
 }
 /* USER CODE END 1 */

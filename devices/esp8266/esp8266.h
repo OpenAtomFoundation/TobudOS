@@ -20,6 +20,9 @@
 
 #include "tos_hal.h"
 
+#define ESP8266_STA_SSID    "Mculover666"
+#define ESP8266_STA_PASSWD  "mculover666"
+
 typedef enum esp8266_net_mode {
     ESP8266_NET_MODE_STA,
     ESP8266_NET_MODE_AP,

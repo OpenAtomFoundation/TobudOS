@@ -5,7 +5,7 @@
 #define USE_ESP8266
 //#define USE_SIM800A
 //#define USE_BC26
-//#define USE_EC20
+#define USE_EC20
 
 #ifdef USE_ESP8266
 #include "esp8266.h"
@@ -85,15 +85,17 @@ void application_entry(void *arg)
 {
 #if defined(USE_ESP8266)
     esp8266_sal_init(HAL_UART_PORT_0);
-    esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
 #elif defined(USE_SIM800A)
     sim800a_power_on();
     sim800a_sal_init(HAL_UART_PORT_2);
 #elif defined(USE_BC26)
     bc26_sal_init(HAL_UART_PORT_2);
 #elif defined(USE_EC20)
-    ec20_sal_deinit(HAL_PORT_0);
+    ec20_sal_init(HAL_UART_PORT_3);
 #endif
+
+    //tos_sal_module_set_default("esp8266");
+    tos_sal_module_set_default("ec20");
     
     socket_id_0 = tos_sal_module_connect("117.50.111.72", "8080", TOS_SAL_PROTO_TCP); 
     if (socket_id_0 == -1) {

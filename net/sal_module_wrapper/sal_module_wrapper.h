@@ -20,13 +20,39 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "tos_k.h"
+
+#define SAL_MODULE_DEVICE_NAME_MAX  10
 
 typedef enum sal_protocol_en {
     TOS_SAL_PROTO_TCP,
     TOS_SAL_PROTO_UDP,
 } sal_proto_t;
 
+typedef enum sal_device_status_en {
+    TOS_SAL_MODULE_AVAILABLE,
+    TOS_SAL_MODULE_UNAVAILABLE,
+} sal_device_status_t;
+
+typedef enum sal_device_type_en {
+    TOS_SAL_MODULE_GPRS,
+    TOS_SAL_MODULE_WIFI,
+    TOS_SAL_MODULE_4G_LTE,
+    TOS_SAL_MODULE_4G_CAT1,
+    TOS_SAL_MODULE_NB_IOT,
+} sal_device_type_t;
+
 typedef struct sal_module_st {
+    char                    sal_module_name[SAL_MODULE_DEVICE_NAME_MAX];
+
+    char                    sal_module_ip[15];
+
+    k_list_t                sal_module_list;
+
+    sal_device_type_t       sal_module_type;
+
+    sal_device_status_t     sal_module_status;
+    
     int (*init)(void);
 
     int (*get_local_mac)(char *mac);
@@ -63,6 +89,8 @@ typedef struct sal_module_st {
  */
 int tos_sal_module_register(sal_module_t *module);
 
+int tos_sal_module_unregister(sal_module_t *module);
+
 /**
  * @brief Register a default sal module.
  *
@@ -72,16 +100,24 @@ int tos_sal_module_register(sal_module_t *module);
  *
  * @return  errcode
  */
-int tos_sal_module_register_default(void);
 
-/**
- * @brief Initialize the module.
- *
- * @attention None
- *
- * @return  errcode
- */
-int tos_sal_module_init(void);
+
+int tos_sal_module_set_status(sal_module_t *module, sal_device_status_t status);
+
+void tos_sal_module_set_local_ip(sal_module_t *module, char* ip);
+
+int tos_sal_module_set_default(char *sal_module_device_name);
+
+int tos_sal_module_get_type(void);
+
+// /**
+//  * @brief Initialize the module.
+//  *
+//  * @attention None
+//  *
+//  * @return  errcode
+//  */
+// int tos_sal_module_init(void);
 
 /**
  * @brief Convert domain to ip address.

@@ -798,6 +798,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
             </File>
+            <File>
+              <FileName>ec20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec20\ec20.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

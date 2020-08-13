@@ -8,6 +8,12 @@
 
 #define TOS_CFG_MODULE_SINGLE_LINK_EN       0u
 
+at_agent_t esp8266_at_agent;
+
+#define AT_AGENT        ((at_agent_t *)(&esp8266_at_agent))
+
+static k_stack_t esp8266_at_parser_task_stack[AT_PARSER_TASK_STACK_SIZE];
+
 static int esp8266_restore(void)
 {
     int try = 0;
@@ -15,7 +21,7 @@ static int esp8266_restore(void)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 3000, "AT+RESTORE\r\n");
+        tos_at_cmd_exec(AT_AGENT, &echo, 3000, "AT+RESTORE\r\n");
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
@@ -28,7 +34,7 @@ static int esp8266_echo_close(void)
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 1000, "ATE0\r\n");
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000, "ATE0\r\n");
     if (echo.status == AT_ECHO_STATUS_OK) {
         return 0;
     }
@@ -57,7 +63,7 @@ static int esp8266_net_mode_set(esp8266_net_mode_t mode)
 
     tos_at_echo_create(&echo, NULL, 0, "no change");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 1000, cmd);
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000, cmd);
         if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
@@ -72,7 +78,7 @@ static int esp8266_send_mode_set(esp8266_send_mode_t mode)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 1000, "AT+CIPMODE=%d\r\n", mode == ESP8266_SEND_MODE_NORMAL ? 0 : 1);
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+CIPMODE=%d\r\n", mode == ESP8266_SEND_MODE_NORMAL ? 0 : 1);
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
@@ -87,7 +93,7 @@ static int esp8266_multilink_set(esp8266_multilink_state_t state)
 
     tos_at_echo_create(&echo, NULL, 0, "link is builded");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 500, "AT+CIPMUX=%d\r\n", state == ESP8266_MULTILINK_STATE_ENABLE ? 1 : 0);
+        tos_at_cmd_exec(AT_AGENT, &echo, 500, "AT+CIPMUX=%d\r\n", state == ESP8266_MULTILINK_STATE_ENABLE ? 1 : 0);
         if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
@@ -102,7 +108,7 @@ int esp8266_join_ap(const char *ssid, const char *pwd)
 
     tos_at_echo_create(&echo, NULL, 0, "OK");
     while (try++ < 10) {
-        tos_at_cmd_exec_until(&echo, 15000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
+        tos_at_cmd_exec_until(AT_AGENT, &echo, 15000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
         if (echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
@@ -141,20 +147,20 @@ static int esp8266_connect(const char *ip, const char *port, sal_proto_t proto)
     int id;
     at_echo_t echo;
 
-    esp8266_reconnect_init();
+    //esp8266_reconnect_init();
 
-    id = tos_at_channel_alloc(ip, port);
+    id = tos_at_channel_alloc(AT_AGENT, ip, port);
     if (id == -1) {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "OK");
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec_until(&echo, 10000,
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 10000,
                         "AT+CIPSTART=\"%s\",\"%s\",%s\r\n",
                         proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, port);
 #else
-    tos_at_cmd_exec_until(&echo, 10000,
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 10000,
                         "AT+CIPSTART=%d,\"%s\",\"%s\",%s\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, port);
 #endif
@@ -162,14 +168,14 @@ static int esp8266_connect(const char *ip, const char *port, sal_proto_t proto)
         return id;
     }
 
-    tos_at_channel_free(id);
+    tos_at_channel_free(AT_AGENT, id);
 
     return -1;
 }
 
 static int esp8266_recv_timeout(int id, void *buf, size_t len, uint32_t timeout)
 {
-    return tos_at_channel_read_timed(id, buf, len, timeout);
+    return tos_at_channel_read_timed(AT_AGENT, id, buf, len, timeout);
 }
 
 static int esp8266_recv(int id, void *buf, size_t len)
@@ -192,29 +198,29 @@ static int esp8266_send(int id, const void *buf, size_t len)
     at_echo_t echo;
     char echo_buffer[64];
 
-    if (!tos_at_channel_is_working(id)) {
+    if (!tos_at_channel_is_working(AT_AGENT, id)) {
         return -1;
     }
 
-    if (tos_at_global_lock_pend() != 0) {
+    if (tos_at_global_lock_pend(AT_AGENT) != 0) {
         return -1;
     }
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), ">");
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec(&echo, 1000,
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000,
                         "AT+CIPSEND=%d\r\n", len);
 #else
-    tos_at_cmd_exec(&echo, 1000,
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000,
                         "AT+CIPSEND=%d,%d\r\n",
                         id, len);
 #endif
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
         if (esp8266_is_link_broken((const char *)echo.buffer)) {
-            tos_at_channel_set_broken(id);
+            tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post();
+        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
@@ -224,17 +230,17 @@ static int esp8266_send(int id, const void *buf, size_t len)
         ATTENTION: we should wait util "SEND OK" is echoed, otherwise the next
         time we execute at command, the esp8266 maybe in a "busy s ..." state.
      */
-    tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
+    tos_at_raw_data_send_until(AT_AGENT, &echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         if (esp8266_is_link_broken((const char *)echo.buffer)) {
-            tos_at_channel_set_broken(id);
+            tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post();
+        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
-    tos_at_global_lock_post();
+    tos_at_global_lock_post(AT_AGENT);
     return len;
 }
 
@@ -243,11 +249,11 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
     at_echo_t echo;
     char echo_buffer[64];
 
-    if (!tos_at_channel_is_working(id)) {
+    if (!tos_at_channel_is_working(AT_AGENT, id)) {
         return -1;
     }
 
-    if (tos_at_global_lock_pend() != 0) {
+    if (tos_at_global_lock_pend(AT_AGENT) != 0) {
         return -1;
     }
 
@@ -255,28 +261,28 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
 
     if (ip && port) {
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000,
                             "AT+CIPSEND=%d,\"%s\",%s\r\n", len, ip, port);
 #else
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000,
                             "AT+CIPSEND=%d,%d,\"%s\",%s\r\n", id, len, ip, port);
 #endif
     } else {
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000,
                             "AT+CIPSEND=%d\r\n", len);
 #else
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000,
                             "AT+CIPSEND=%d,%d\r\n", id, len);
 #endif
     }
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
         if (esp8266_is_link_broken((const char *)echo.buffer)) {
-            tos_at_channel_set_broken(id);
+            tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post();
+        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
@@ -286,23 +292,23 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
         ATTENTION: we should wait util "SEND OK" is echoed, otherwise the next
         time we execute at command, the esp8266 maybe in a "busy s ..." state.
      */
-    tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
+    tos_at_raw_data_send_until(AT_AGENT, &echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         if (esp8266_is_link_broken((const char *)echo.buffer)) {
-            tos_at_channel_set_broken(id);
+            tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post();
+        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
-    tos_at_global_lock_post();
+    tos_at_global_lock_post(AT_AGENT);
     return len;
 }
 
 static int esp8266_recvfrom_timeout(int id, void *buf, size_t len, uint32_t timeout)
 {
-    return tos_at_channel_read_timed(id, buf, len, timeout);
+    return tos_at_channel_read_timed(AT_AGENT, id, buf, len, timeout);
 }
 
 static int esp8266_recvfrom(int id, void *buf, size_t len)
@@ -313,11 +319,11 @@ static int esp8266_recvfrom(int id, void *buf, size_t len)
 static int esp8266_close(int id)
 {
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE\r\n");
+    tos_at_cmd_exec(AT_AGENT, NULL, 1000, "AT+CIPCLOSE\r\n");
 #else
-    tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE=%d\r\n", id);
+    tos_at_cmd_exec(AT_AGENT, NULL, 1000, "AT+CIPCLOSE=%d\r\n", id);
 #endif
-    tos_at_channel_free(id);
+    tos_at_channel_free(AT_AGENT, id);
     return 0;
 }
 
@@ -330,7 +336,7 @@ static int esp8266_parse_domain(const char *host_name, char *host_ip, size_t hos
     esp8266_reconnect_init();
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    tos_at_cmd_exec(&echo, 2000, "AT+CIPDOMAIN=\"%s\"\r\n", host_name);
+    tos_at_cmd_exec(AT_AGENT, &echo, 2000, "AT+CIPDOMAIN=\"%s\"\r\n", host_name);
 
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
@@ -346,6 +352,37 @@ static int esp8266_parse_domain(const char *host_name, char *host_ip, size_t hos
     sscanf(str, "+CIPDOMAIN:%s", host_ip);
     host_ip[host_ip_len - 1] = '\0';
     printf("GOT IP: %s\n", host_ip);
+    return 0;
+}
+
+static int esp8266_get_local_ip(char *ip, char *gw, char *mask)
+{
+    char *str;
+    at_echo_t echo;
+    char echo_buffer[100];
+    int seg1, seg2, seg3, seg4;
+
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_cmd_exec(AT_AGENT, &echo, 2000, "AT+CIFSR\r\n");
+
+    if (echo.status != AT_ECHO_STATUS_OK) {
+        return -1;
+    }
+
+    /*
+        +CIFSR:STAIP,<Station	IP	address>
+        +CIFSR:STAMAC,<Station	MAC	address>
+    */
+    str = strstr((const char *)echo.buffer, "STAIP");
+    if (!str) {
+        return -1;
+    }
+    sscanf(str + strlen("STAIP,"), "\"%d.%d.%d.%d\"", &seg1, &seg2, &seg3, &seg4);
+    sprintf(ip, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
+    printf("GOT MODULE STA IP: %s\n", ip);
+
+    /* esp8266 has not provide the ability to query the subnet mask and gw ip address*/
+
     return 0;
 }
 
@@ -384,6 +421,10 @@ static int esp8266_init(void)
         return -1;
     }
 #endif
+    
+    if (esp8266_join_ap(ESP8266_STA_SSID, ESP8266_STA_PASSWD) != 0) {
+        return -1;
+    }
 
     printf("Init ESP8266 Done\n" );
     return 0;
@@ -405,7 +446,7 @@ __STATIC__ void esp8266_incoming_data_process(void)
     */
 #if TOS_CFG_MODULE_SINGLE_LINK_EN == 0u
     while (1) {
-        if (tos_at_uart_read(&data, 1) != 1) {
+        if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
             return;
         }
         if (data == ',') {
@@ -416,7 +457,7 @@ __STATIC__ void esp8266_incoming_data_process(void)
 #endif
 
     while (1) {
-        if (tos_at_uart_read(&data, 1) != 1) {
+        if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
             return;
         }
         if (data == ':') {
@@ -428,11 +469,11 @@ __STATIC__ void esp8266_incoming_data_process(void)
     do {
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
         read_len = MIN(data_len, sizeof(buffer));
-        if (tos_at_uart_read(buffer, read_len) != read_len) {
+        if (tos_at_uart_read(AT_AGENT, buffer, read_len) != read_len) {
             return;
         }
 
-        if (tos_at_channel_write(channel_id, buffer, read_len) <= 0) {
+        if (tos_at_channel_write(AT_AGENT, channel_id, buffer, read_len) <= 0) {
             return;
         }
 
@@ -445,6 +486,10 @@ at_event_t esp8266_at_event[] = {
 };
 
 sal_module_t sal_module_esp8266 = {
+    .sal_module_name    = "esp8266",
+    .sal_module_ip      = "0.0.0.0",
+    .sal_module_type    = TOS_SAL_MODULE_WIFI,
+    .sal_module_status  = TOS_SAL_MODULE_UNAVAILABLE,
     .init               = esp8266_init,
     .connect            = esp8266_connect,
     .send               = esp8266_send,
@@ -459,8 +504,10 @@ sal_module_t sal_module_esp8266 = {
 
 int esp8266_sal_init(hal_uart_port_t uart_port)
 {
-    if (tos_at_init(uart_port, esp8266_at_event,
-                        sizeof(esp8266_at_event) / sizeof(esp8266_at_event[0])) != 0) {
+    char ip[15] = {0};
+
+    if (tos_at_init(AT_AGENT, esp8266_at_parser_task_stack, uart_port, esp8266_at_event,
+                    sizeof(esp8266_at_event) / sizeof(esp8266_at_event[0])) != 0) {
         return -1;
     }
 
@@ -468,9 +515,19 @@ int esp8266_sal_init(hal_uart_port_t uart_port)
         return -1;
     }
 
-    if (tos_sal_module_init() != 0) {
+    if (esp8266_init() != 0){
+        return -1;    
+    }
+
+    if (esp8266_get_local_ip(ip, NULL, NULL) != 0) {
         return -1;
     }
+    
+    tos_sal_module_set_local_ip(&sal_module_esp8266, ip);
+
+    tos_sal_module_set_status(&sal_module_esp8266, TOS_SAL_MODULE_AVAILABLE);
+
+    printf("%s sal device register success\r\n", sal_module_esp8266.sal_module_name);
 
     return 0;
 }
@@ -483,9 +540,15 @@ int esp8266_sal_deinit()
         tos_sal_module_close(id);
     }
 
-    tos_sal_module_register_default();
+    tos_sal_module_set_local_ip(&sal_module_esp8266, "0.0.0.0");
 
-    tos_at_deinit();
+    tos_sal_module_set_status(&sal_module_esp8266, TOS_SAL_MODULE_UNAVAILABLE);
+
+    tos_sal_module_unregister(&sal_module_esp8266);
+
+    tos_at_deinit(AT_AGENT);
+
+    printf("%s sal device unregister success\r\n", sal_module_esp8266.sal_module_name);
     
     return 0;
 }
