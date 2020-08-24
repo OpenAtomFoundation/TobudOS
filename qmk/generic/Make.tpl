@@ -1,5 +1,5 @@
 # QMK for TencentOS
-# @author Jimmin.huang jimmin@163.com
+# @author Jimmin.huang jimminh@163.com
 # Makefile template
 ########################################################################
 
@@ -103,8 +103,6 @@ BLDDIR = ${BLDROOT}/${LOCALDIR}
 else
 BLDDIR = ${BLDROOT}
 endif
-
-LIBDIR = ${BLDROOT}
 
 
 
