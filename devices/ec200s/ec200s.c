@@ -179,13 +179,13 @@ static int ec200s_set_apn(void)
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 300, "AT+QICSGP=1,1,\"CMNET\"\r\n");
+    tos_at_cmd_exec(&echo, 1000, "AT+QICSGP=1,1,\"CMNET\"\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
     }
 
-    tos_at_cmd_exec_until(&echo, 3000, "AT+QIACT=1\r\n");
+    tos_at_cmd_exec(&echo, 3000, "AT+QIACT=1\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
