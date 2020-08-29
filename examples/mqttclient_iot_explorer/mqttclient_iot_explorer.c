@@ -1,18 +1,21 @@
-#include "stm32l4xx_hal.h"
+#include "stm32f1xx_hal.h"
 #include "mcu_init.h"
 #include "tos_k.h"
 #include "mqttclient.h"
 #include "cjson.h"
 #include "sal_module_wrapper.h"
 
-//#define USE_ESP8266
+#define USE_ESP8266
 //#define USE_NB_BC35
-#define USE_BC26
+//#define USE_BC26
+//#define USE_EC200S
 
 #if defined(USE_ESP8266)
 #include "esp8266.h"
 #elif defined(USE_BC26)
 #include "bc26.h"
+#elif defined(USE_EC200S)
+#include "ec200s.h"
 #endif
 
 #ifdef USE_ESP8266 
@@ -33,7 +36,8 @@ static void tos_topic_handler(void* client, message_data_t* msg)
     cJSON* cjson_root   = NULL;
     cJSON* cjson_status = NULL;
     char* status = NULL;
-    
+    k_event_flag_t event_flag = report_fail;
+
     /* ´òÓ¡ÈÕÖ¾ */
     MQTT_LOG_I("-----------------------------------------------------------------------------------");
     MQTT_LOG_I("%s:%d %s()...\ntopic: %s, qos: %d. \nmessage:\n\t%s\n", __FILE__, __LINE__, __FUNCTION__, 
@@ -44,7 +48,7 @@ static void tos_topic_handler(void* client, message_data_t* msg)
     cjson_root = cJSON_Parse((char*)msg->message->payload);
     if (cjson_root == NULL) {
         printf("report reply message parser fail\r\n");
-        tos_event_post(&report_result_event, report_fail);
+        event_flag = report_fail;
         goto exit;
     }
     
@@ -53,21 +57,24 @@ static void tos_topic_handler(void* client, message_data_t* msg)
     status = cJSON_GetStringValue(cjson_status);
     if (cjson_status == NULL || status == NULL) {
         printf("report reply status parser fail\r\n");
-        tos_event_post(&report_result_event, report_fail);
+        event_flag = report_fail;
         goto exit;
     }
     
     /* ÅÐ¶Ïstatus×´Ì¬ */
     if (strstr(status,"success")) {
-        tos_event_post(&report_result_event, report_success);
+        event_flag = report_success;
     }else {
-        tos_event_post(&report_result_event, report_fail);
+        event_flag = report_fail;
     }
     
 exit:
-    cJSON_free(cjson_root);
+    cJSON_Delete(cjson_root);
     cjson_root = NULL;
     status = NULL;
+    
+    tos_event_post(&report_result_event, event_flag);
+    
     return;
 }
 
@@ -104,7 +111,11 @@ void mqttclient_task(void)
 #ifdef USE_BC26
     bc26_sal_init(HAL_UART_PORT_2);
 #endif
-    
+
+#ifdef USE_EC200S
+    ec200s_sal_init(HAL_UART_PORT_2);
+#endif
+
     mqtt_log_init();
 
     client = mqtt_lease();
@@ -157,7 +168,7 @@ void mqttclient_task(void)
             printf("report to Tencent IoT Explorer fail\r\n");
         }
         
-        tos_task_delay(10000); 
+        tos_task_delay(5000); 
     }
 }
 
