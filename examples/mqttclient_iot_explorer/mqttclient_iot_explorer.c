@@ -5,10 +5,10 @@
 #include "cjson.h"
 #include "sal_module_wrapper.h"
 
-#define USE_ESP8266
+//#define USE_ESP8266
 //#define USE_NB_BC35
 //#define USE_BC26
-//#define USE_EC200S
+#define USE_EC200S
 
 #if defined(USE_ESP8266)
 #include "esp8266.h"
@@ -147,6 +147,10 @@ void mqttclient_task(void)
         memset(&msg, 0, sizeof(msg));
         
         snprintf(report_buf, sizeof(report_buf), REPORT_DATA_TEMPLATE, lightness++);
+        
+        if (lightness > 100) {
+            lightness = 0;
+        }
        
         msg.qos = QOS0;
         msg.payload = (void *) report_buf;
