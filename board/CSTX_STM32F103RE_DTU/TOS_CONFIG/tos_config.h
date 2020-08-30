@@ -21,6 +21,8 @@
 
 #define TOS_CFG_MUTEX_EN                1u
 
+#define TOS_CFG_MAIL_QUEUE_EN        1u
+
 #define TOS_CFG_TIMER_EN                1u
 
 #define TOS_CFG_SEM_EN                  1u
