@@ -99,7 +99,7 @@ void application_entry(void *arg)
 #elif defined(USE_EC20)
     ec20_sal_init(HAL_UART_PORT_0);
 #elif defined(USE_EC200S)
-    ec200s_sal_init(HAL_UART_PORT_0);
+    ec200s_sal_init(HAL_UART_PORT_2);
 #endif
     
     socket_id_0 = tos_sal_module_connect("117.50.111.72", "8080", TOS_SAL_PROTO_TCP); 
