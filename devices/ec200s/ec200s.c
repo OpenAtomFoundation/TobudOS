@@ -33,6 +33,23 @@ typedef struct ip_addr_st {
 
 static ip_addr_t domain_parser_addr = {0};
 k_sem_t domain_parser_sem;
+k_sem_t module_ready_sem;
+
+static int ec200s_check_ready(void)
+{
+    at_echo_t echo;
+    
+    tos_sem_create_max(&module_ready_sem, 0, 1);
+    
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 1000, "AT\r\n");
+    if (echo.status == AT_ECHO_STATUS_OK) {
+        return 0;
+    } else {
+        tos_sem_pend(&module_ready_sem, TOS_TIME_FOREVER);
+        return 0;
+    }   
+}
 
 static int ec200s_echo_close(void)
 {
@@ -59,15 +76,11 @@ static int ec200s_sim_card_check(void)
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CPIN?\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK) {
-                return -1;
-        }
-
-        if(strstr(echo.buffer, "READY"))
-        {
+        if (strstr(echo_buffer, "READY")) {
             return 0;
         }
     }
+    
     return -1;
 }
 
@@ -197,7 +210,12 @@ static int ec200s_set_apn(void)
 static int ec200s_init(void)
 {
     printf("Init ec200s ...\n" );
-
+    
+    if (ec200s_check_ready() != 0) {
+        printf("wait module ready timeout, please check your module\n");
+        return -1;
+    }
+    
     if (ec200s_echo_close() != 0)
     {
         printf("echo close failed,please check your module\n");
@@ -518,9 +536,16 @@ __STATIC__ void ec200s_domain_data_process(void)
 
 }
 
+__STATIC__ void ec200s_ready_data_process(void)
+{
+    printf("mopdule ready\r\n");
+    tos_sem_post(&module_ready_sem);
+}
+
 at_event_t ec200s_at_event[] = {
 	{ "+QIURC: \"recv\",",   ec200s_incoming_data_process},
     { "+QIURC: \"dnsgip\",", ec200s_domain_data_process},
+    { "RDY", ec200s_ready_data_process},
 };
 
 sal_module_t sal_module_ec200s = {
@@ -538,6 +563,7 @@ sal_module_t sal_module_ec200s = {
 
 int ec200s_sal_init(hal_uart_port_t uart_port)
 {
+    
     if (tos_at_init(uart_port, ec200s_at_event,
                         sizeof(ec200s_at_event) / sizeof(ec200s_at_event[0])) != 0) {
         return -1;
