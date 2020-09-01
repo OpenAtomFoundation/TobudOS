@@ -56,19 +56,19 @@ int tos_tf_module_register(tencent_firmware_module_t *module)
 int tos_tf_module_init(void)
 {        
     if (tos_mail_q_create(&mqtt_message_mail, mqtt_message_pool, MQTT_MESSAGE_NUM_MAX, sizeof(mqtt_message_t)) != K_ERR_NONE) {
-        return -1;
+        return -2;
     }
     
     tos_list_init(&mqtt_sub_list);
 
     if (tos_mmblk_pool_create(&sub_list_node_mbp, sub_list_node_pool, MQTT_SUB_TOPIC_MAX, sizeof(mqtt_message_handlers_t)) != K_ERR_NONE) {
-        return -1;
+        return -3;
     }
     
     if (tos_task_create(&mqtt_message_handle_task, "mqtt_message_handle", 
                         mqtt_message_handle_task_entry, NULL, MQTT_MESSAGE_HANDLE_TASK_PRIO,
                         mqtt_message_handle_task_stack, MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE, 10) != K_ERR_NONE) {
-        return -1;
+        return -4;
     }
     
     if (g_tencent_firmware_module && g_tencent_firmware_module->init) {

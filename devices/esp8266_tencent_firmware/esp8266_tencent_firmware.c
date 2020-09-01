@@ -487,6 +487,8 @@ tencent_firmware_module_t tencent_firmware_module_esp8266 = {
 
 int esp8266_tencent_firmware_sal_init(hal_uart_port_t uart_port)
 {
+    int ret = -1;
+    
     if (tos_at_init(uart_port, esp8266_tencent_firmware_at_event,
                         sizeof(esp8266_tencent_firmware_at_event) /
                         sizeof(esp8266_tencent_firmware_at_event[0])) != 0) {
@@ -497,8 +499,8 @@ int esp8266_tencent_firmware_sal_init(hal_uart_port_t uart_port)
         return -1;
     }
 
-    if (tos_tf_module_init() != 0) {
-        return -1;
+    if ((ret = tos_tf_module_init()) != 0) {
+        return ret;
     }
 
     return 0;

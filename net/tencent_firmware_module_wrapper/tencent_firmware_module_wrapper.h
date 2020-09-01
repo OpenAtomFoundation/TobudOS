@@ -79,7 +79,7 @@ typedef struct mqtt_param_st {
 
 typedef struct mqtt_message_st {
     char topic[64];
-    char payload[128];
+    char payload[256];
 } mqtt_message_t;
 
 typedef void (*message_handler_t)(mqtt_message_t* msg);
