@@ -27,7 +27,7 @@ void mqtt_demo_task(void)
     /**
      * Please Choose your AT Port first, default is HAL_UART_0(LPUART)
     */
-    esp8266_tencent_firmware_sal_init(HAL_UART_PORT_0);
+    esp8266_tencent_firmware_sal_init(HAL_UART_PORT_2);
     esp8266_tencent_firmware_join_ap("Mculover666", "mculover666");
 
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
