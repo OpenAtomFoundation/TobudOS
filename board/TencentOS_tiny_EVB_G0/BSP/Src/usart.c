@@ -22,6 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 uint8_t data;
+uint8_t ch20_msg;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -118,6 +119,7 @@ void MX_USART3_UART_Init(void)
   {
     Error_Handler();
   }
+  HAL_UART_Receive_IT(&huart3, &ch20_msg, 1);
 
 }
 /* USART4 init function */
