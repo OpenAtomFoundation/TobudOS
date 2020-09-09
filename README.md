@@ -81,6 +81,9 @@ TencentOS tiny自开源发布以来也在努力发展合作伙伴，期待合作
 - [TencentOS tiny API参考](./doc/05.SDK_Manual.md)
 - [TencentOS tiny对接腾讯云IoTHub开发指南](./doc/08.QCloud_IoTHub_Quick_Start.md)
 
+## 3、TencentOS tiny 腾讯云大学视频教程
+- [TencentOS tiny端侧开发实践课](https://cloud.tencent.com/edu/paths/series/IoT)
+
 # 四、TencentOS tiny 开源协议
 * TencentOS tiny 遵循 [BSD-3开源许可协议](LICENSE)
 
