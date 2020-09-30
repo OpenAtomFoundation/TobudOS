@@ -462,10 +462,10 @@ static int air724_parse_domain(const char *host_name, char *host_ip, size_t host
     at_echo_t echo;
     char echo_buffer[128];
 
-    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    tos_at_cmd_exec(&echo, 2000, "AT+CDNSGIP=\"%s\"\r\n", host_name);
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "+CDNSGIP:");
+    tos_at_cmd_exec(&echo, 8000, "AT+CDNSGIP=\"%s\"\r\n", host_name);
 
-    if (echo.status != AT_ECHO_STATUS_OK)
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
     {
         return -1;
     }
