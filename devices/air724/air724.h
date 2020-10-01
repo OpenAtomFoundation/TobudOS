@@ -30,6 +30,11 @@ typedef enum air724_multilink_state {
     AIR724_MULTILINK_STATE_DISABLE,
 } air724_multilink_state_t;
 
+/* PWRKEY GPIO */
+#define AIR724_USE_PWRKEY_GPIO   0
+#define AIR724_PWR_GPIO_PORT     GPIOB
+#define AIR724_PWR_GPIO_PIN      GPIO_PIN_5
+
 int air724_sal_init(hal_uart_port_t uart_port);
 
 #endif /* __AIR724_H__ */

@@ -7,27 +7,75 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-static int air724_echo_close(void)
+typedef struct ip_addr_st {
+    uint8_t seg1;
+    uint8_t seg2;
+    uint8_t seg3;
+    uint8_t seg4;
+}ip_addr_t;
+
+static ip_addr_t domain_parser_addr = {0};
+static k_sem_t domain_parser_sem;
+
+static int air724_power_on(void)
+{
+#if AIR724_USE_PWRKEY_GPIO
+    HAL_GPIO_WritePin(AIR724_PWR_GPIO_PORT, AIR724_PWR_GPIO_PIN, GPIO_PIN_RESET);
+    tos_sleep_ms(1000);
+    HAL_GPIO_WritePin(AIR724_PWR_GPIO_PORT, AIR724_PWR_GPIO_PIN, GPIO_PIN_SET);
+#else
+    tos_sleep_ms(1000);
+#endif
+    
+    return 0;
+}
+
+static int air724_check_ready(void)
 {
     at_echo_t echo;
-
+    int try = 0;
+    
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 300, "ATE0\r\n");
-    if (echo.status == AT_ECHO_STATUS_OK)
-    {
-        return 0;
+    while (try++ < 10) {
+        tos_at_cmd_exec(&echo, 1000, "AT\r\n");
+        if (echo.status == AT_ECHO_STATUS_OK) {
+            return 0;
+        }
     }
     return -1;
 }
+
+
+static int air724_echo_close(void)
+{
+    at_echo_t echo;
+    int try = 0;
+
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    
+    while(try++ < 10) {
+        tos_at_cmd_exec(&echo, 300, "ATE0\r\n");
+        if (echo.status == AT_ECHO_STATUS_OK)
+        {
+            return 0;
+        }
+    }
+    return -1;
+}
+
 static int air724_cscon_close(void)
 {
     at_echo_t echo;
+    int try = 0;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 300, "AT+CSCON=0\r\n");
-    if (echo.status == AT_ECHO_STATUS_OK)
-    {
-        return 0;
+     while  (try++ < 10) {
+        tos_at_cmd_exec(&echo, 300, "AT+CSCON=0\r\n");
+        if (echo.status == AT_ECHO_STATUS_OK)
+        {
+            return 0;
+        }
+        tos_sleep_ms(1000);
     }
     return -1;
 }
@@ -49,6 +97,8 @@ static int air724_sim_card_check(void)
         {
             return 0;
         }
+        
+        tos_sleep_ms(1000);
     }
 		 
     return -1;
@@ -79,6 +129,8 @@ static int air724_signal_quality_check(void)
         if (rssi != 99) {
             return 0;
         }
+        
+        tos_sleep_ms(2000);
     }
 
     return -1;
@@ -109,6 +161,8 @@ static int air724_gsm_network_check(void)
         {
             return 0;
         }
+        
+        tos_sleep_ms(1000);
     }
     return -1;	
 }
@@ -139,6 +193,8 @@ static int air724_gprs_network_check(void)
         {
             return 0;
         }
+        
+        tos_sleep_ms(1000);
     }
 		
     return -1;	
@@ -156,6 +212,8 @@ static int air724_close_apn(void)
     {
         return -1;
     }
+    
+    tos_sleep_ms(2000);
 
     return 0;
 }
@@ -209,13 +267,14 @@ static int air724_set_apn(void)
         return -1;
     }
 
-		
-    tos_at_cmd_exec(&echo, 3000, "AT+CIICR\r\n");
+	tos_at_echo_create(&echo, NULL, 0, NULL);	
+    tos_at_cmd_exec(&echo, 50000, "AT+CIICR\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
     }	
-		
+	
+    tos_at_echo_create(&echo, NULL, 0, NULL);	
     tos_at_cmd_exec(&echo, 300, "AT+CIFSR\r\n");
 
     return 0;
@@ -226,6 +285,15 @@ static int air724_set_apn(void)
 static int air724_init(void)
 {
     printf("Init air724 ...\n" );
+    
+    air724_power_on();
+    tos_sleep_ms(2000);
+    printf("module power on\n");
+    
+    if (air724_check_ready() != 0) {
+        printf("wait module ready timeout, please check your module\n");
+        return -1;
+    }
 
     if (air724_echo_close() != 0)
     {
@@ -322,10 +390,12 @@ static int air724_connect(const char *ip, const char *port, sal_proto_t proto)
         return id;
     }
 #else
-    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
-    tos_at_cmd_exec(&echo, 4000, "AT+CIPSTART=%d,%s,%s,%d\r\n",
+    char result[20];
+    sprintf(result, "%d, CONNECT OK", id);
+    tos_at_echo_create(&echo, NULL, 0, result);
+    tos_at_cmd_exec_until(&echo, 8000, "AT+CIPSTART=%d,%s,%s,%d\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
-    if (echo.status == AT_ECHO_STATUS_OK) {
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return id;
     }
 #endif
@@ -458,41 +528,23 @@ static int air724_close(int id)
 
 static int air724_parse_domain(const char *host_name, char *host_ip, size_t host_ip_len)
 {
-    char *str;
     at_echo_t echo;
-    char echo_buffer[128];
-
-    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "+CDNSGIP:");
-    tos_at_cmd_exec(&echo, 8000, "AT+CDNSGIP=\"%s\"\r\n", host_name);
-
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
-        return -1;
-    }
-
-    /*
-        +CDNSGIP: 1,"domain","xxx.xxx.xxx.xxx"
-    */
     
-    str = strstr(echo.buffer, ":");
-    if (!str) 
+    tos_sem_create_max(&domain_parser_sem, 0, 1);
+
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 1000, "AT+CDNSGIP=\"%s\"\r\n", host_name);
+
+    if (echo.status != AT_ECHO_STATUS_OK)
     {
-        return -1;
-    }
-    str += 1;
-    if(*str == '0')
-    {
-        /* parse fail */
         return -1;
     }
     
-    str += strlen(host_name) + 7;
+    tos_sem_pend(&domain_parser_sem, TOS_TIME_FOREVER);
 
-    int seg1, seg2, seg3, seg4;
-    sscanf(str, "%d.%d.%d.%d", &seg1, &seg2, &seg3, &seg4);
-    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
+    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", domain_parser_addr.seg1, domain_parser_addr.seg2, domain_parser_addr.seg3, domain_parser_addr.seg4);
     host_ip[host_ip_len - 1] = '\0';
-
+    
     printf("GOT IP: %s\n", host_ip);
 
     return 0;
@@ -574,8 +626,100 @@ __STATIC__ void air724_incoming_data_process(void)
 	return;
 }
 
+__STATIC__ void air724_domain_data_process(void)
+{
+    uint8_t data;
+    int retcode = 0;
+    
+    /*
+        +CDNSGIP: 1,"domain","xxx.xxx.xxx.xxx"
+    */
+
+    if (tos_at_uart_read(&data, 1) != 1) {
+        return;
+    }
+    
+    while (1)
+    {
+        if (tos_at_uart_read(&data, 1) != 1)
+        {
+            return;
+        }
+
+        if (data == ',')
+        {
+            break;
+        }
+        
+        retcode = retcode * 10 + (data - '0');
+    }
+    
+    if (retcode != 1) {
+        return;
+    }
+    
+    while (1)
+    {
+        if (tos_at_uart_read(&data, 1) != 1)
+        {
+            return;
+        }
+
+        if (data == ',')
+        {
+            break;
+        }
+    }		
+
+    if (tos_at_uart_read(&data, 1) != 1) {
+        return;
+    }
+    
+    /* start parser domain */
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
+            return;
+        }
+        if (data == '.') {
+            break;
+        }
+        domain_parser_addr.seg1 = domain_parser_addr.seg1 *10 + (data-'0');
+    }
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
+            return;
+        }
+        if (data == '.') {
+            break;
+        }
+        domain_parser_addr.seg2 = domain_parser_addr.seg2 *10 + (data-'0');
+    }
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
+            return;
+        }
+        if (data == '.') {
+            break;
+        }
+        domain_parser_addr.seg3 = domain_parser_addr.seg3 *10 + (data-'0');
+    }
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
+            return;
+        }
+        if (data == '\"') {
+            break;
+        }
+        domain_parser_addr.seg4 = domain_parser_addr.seg4 *10 + (data-'0');
+    }
+    tos_sem_post(&domain_parser_sem);
+    return;
+
+}
+
 at_event_t air724_at_event[] = {
 	{ "+RECEIVE,", air724_incoming_data_process},
+    { "+CDNSGIP:", air724_domain_data_process},
 };
 
 sal_module_t sal_module_air724 = {
