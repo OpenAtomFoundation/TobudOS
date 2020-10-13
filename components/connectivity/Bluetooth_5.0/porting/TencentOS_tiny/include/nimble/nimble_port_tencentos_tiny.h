@@ -33,5 +33,5 @@ nimble_port_tencentos_tiny_init(k_task_entry_t host_task_fn);
 }
 #endif
 
-#endif /* _NIMBLE_PORT_FREERTOS_H */
+#endif /* _NIMBLE_PORT_TENCENT_OS_TINY_H */
 
