@@ -30,7 +30,7 @@ void task1(void *arg)
 
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
         if (count++ == 3) {
-            printf("###I am task1, kill the dynamic created task\r\n");
+            printf("###I am task1, kill the task3(dynamic created)\r\n");
             osThreadTerminate(task_dyn_created);
         }
 #endif
