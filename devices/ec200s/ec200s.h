@@ -23,5 +23,5 @@
 int ec200s_sal_init(hal_uart_port_t uart_port);
 int ec200s_sal_deinit(void);
 
-#endif /* __EC20_H__ */
+#endif /* __EC200S_H__ */
 
