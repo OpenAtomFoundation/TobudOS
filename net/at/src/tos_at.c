@@ -337,7 +337,9 @@ __STATIC__ int at_uart_send(const uint8_t *buf, size_t size, uint32_t timeout)
 {
     int ret;
 
-    tos_mutex_pend(&AT_AGENT->uart_tx_lock);
+    if (tos_mutex_pend(&AT_AGENT->uart_tx_lock) != K_ERR_NONE) {
+        return -1;
+    }
     ret = tos_hal_uart_write(&AT_AGENT->uart, buf, size, timeout);
     tos_mutex_post(&AT_AGENT->uart_tx_lock);
 
@@ -445,6 +447,7 @@ __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const 
 
 __STATIC__ int at_cmd_do_exec(const char *format, va_list args)
 {
+    int ret = 0;
     size_t cmd_len = 0;
 
     if (tos_mutex_pend(&AT_AGENT->cmd_buf_lock) != K_ERR_NONE) {
@@ -455,11 +458,11 @@ __STATIC__ int at_cmd_do_exec(const char *format, va_list args)
 
     printf("AT CMD:\n%s\n", AT_AGENT->cmd_buf);
 
-    at_uart_send((uint8_t *)AT_AGENT->cmd_buf, cmd_len, 0xFFFF);
+    ret = at_uart_send((uint8_t *)AT_AGENT->cmd_buf, cmd_len, 0xFFFF);
 
     tos_mutex_post(&AT_AGENT->cmd_buf_lock);
 
-    return 0;
+    return ret;
 }
 
 __API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, ...)
