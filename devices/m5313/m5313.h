@@ -22,5 +22,5 @@
 
 int m5313_sal_init(hal_uart_port_t uart_port);
 
-#endif /* __M5310A_H__ */
+#endif /* __M5313_H__ */
 
