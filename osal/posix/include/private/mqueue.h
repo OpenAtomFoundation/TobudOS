@@ -44,4 +44,4 @@ __KNL__ mqueue_ctl_t *mqueue_by_id(mqd_t id);
 
 __CDECLS_END
 
-#endif /* _POSIX_PRIVATE_TIMER_H_*/
+#endif /* _POSIX_PRIVATE_MQUEUE_H_ */
