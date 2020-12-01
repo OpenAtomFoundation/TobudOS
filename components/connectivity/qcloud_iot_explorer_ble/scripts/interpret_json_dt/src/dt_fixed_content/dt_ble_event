@@ -1,0 +1,65 @@
+int ble_event_get_id_array_size(uint8_t event_id)
+{
+    if (event_id >= BLE_QIOT_EVENT_ID_BUTT) {
+        ble_qiot_log_e("invalid event id %d", event_id);
+        return -1;
+    }
+
+    return sg_ble_event_array[event_id].array_size;
+}
+
+uint8_t ble_event_get_param_id_type(uint8_t event_id, uint8_t param_id)
+{
+    if (event_id >= BLE_QIOT_EVENT_ID_BUTT) {
+        ble_qiot_log_e("invalid event id %d", event_id);
+        return BLE_QIOT_DATA_TYPE_BUTT;
+    }
+    if (param_id >= sg_ble_event_array[event_id].array_size) {
+        ble_qiot_log_e("invalid param id %d", param_id);
+        return BLE_QIOT_DATA_TYPE_BUTT;
+    }
+
+    return sg_ble_event_array[event_id].event_array[param_id].type;
+}
+
+int ble_event_get_data_by_id(uint8_t event_id, uint8_t param_id, char *out_buf, uint16_t buf_len)
+{
+    int ret_len = 0;
+
+    if (event_id >= BLE_QIOT_EVENT_ID_BUTT) {
+        ble_qiot_log_e("invalid event id %d", event_id);
+        return -1;
+    }
+    if (param_id >= sg_ble_event_array[event_id].array_size) {
+        ble_qiot_log_e("invalid param id %d", param_id);
+        return -1;
+    }
+    if (NULL == sg_ble_event_array[event_id].event_array[param_id].get_cb) {
+        ble_qiot_log_e("invalid callback, event id %d, param id %d", event_id, param_id);
+        return 0;
+    }
+
+    if (!ble_check_space_enough_by_type(sg_ble_event_array[event_id].event_array[param_id].type, buf_len)) {
+        ble_qiot_log_e("not enough space get data, event id %d, param id %d", event_id, param_id);
+        return -1;
+    }
+    ret_len = sg_ble_event_array[event_id].event_array[param_id].get_cb(out_buf, buf_len);
+    if (ret_len < 0) {
+        ble_qiot_log_e("get event data failed, event id %d, param id %d", event_id, param_id);
+        return -1;
+    }else {
+        if (ble_check_ret_value_by_type(sg_ble_event_array[event_id].event_array[param_id].type, buf_len, ret_len)){
+            return ret_len;
+        }else{
+            ble_qiot_log_e("evnet data length invalid, event id %d, param id %d", event_id, param_id);
+            return -1;
+        }
+    }
+}
+
+int ble_user_event_reply_handle(uint8_t event_id, uint8_t result)
+{
+    ble_qiot_log_d("event id %d, reply result %d", event_id, result);
+
+    return BLE_QIOT_RS_OK;
+}
