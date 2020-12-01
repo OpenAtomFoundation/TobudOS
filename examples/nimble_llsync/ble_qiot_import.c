@@ -34,10 +34,6 @@
 // #define DEVICE_NAME "YOUR_DEVICE_NAME"         // equal or lesser than 48 Bytes
 // #define SECRET_KEY  "YOUR_PRODUCT_SECRET_KEY_" // 24 Bytes
 
-#define PRODUCT_ID  "RF1EOUKV5C"
-#define DEVICE_NAME "ble_device_02"
-#define SECRET_KEY  "3zDmA91czLhz9+XsuPeSzw=="
-
 #define ADV_DEVICE_NAME "tos_llsync"
 
 
