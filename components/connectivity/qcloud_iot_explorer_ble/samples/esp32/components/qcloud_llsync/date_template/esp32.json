@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "profile": {
+    "ProductId": "1NBPCQ7L2O",
+    "CategoryId": "1"
+  },
+  "properties": [
+    {
+      "id": "ch20_ppm_value",
+      "name": "甲醛浓度值",
+      "desc": "",
+      "mode": "r",
+      "define": {
+        "type": "float",
+        "min": "0",
+        "max": "2",
+        "start": "0",
+        "step": "0.001",
+        "unit": "ppm(mg/m3)"
+      },
+      "required": false
+    }
+  ],
+  "events": [],
+  "actions": []
+}

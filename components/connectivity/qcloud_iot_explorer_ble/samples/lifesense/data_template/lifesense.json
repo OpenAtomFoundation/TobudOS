@@ -1,0 +1,237 @@
+{
+  "version": "1.0",
+  "profile": {
+    "ProductId": "0BCDALFUO8",
+    "CategoryId": "141"
+  },
+  "properties": [
+    {
+      "id": "power_switch",
+      "name": "手环开关",
+      "desc": "创建产品必须添加的属性",
+      "required": true,
+      "mode": "rw",
+      "define": {
+        "type": "bool",
+        "mapping": {
+          "0": "关",
+          "1": "开"
+        }
+      }
+    },
+    {
+      "id": "heart_rate",
+      "name": "心率值",
+      "desc": "统计用户心率数据",
+      "required": true,
+      "mode": "r",
+      "define": {
+        "type": "int",
+        "unit": "bpm",
+        "step": "",
+        "min": "0",
+        "max": "255",
+        "start": "0"
+      }
+    },
+    {
+      "id": "blood_oxygen",
+      "name": "血氧值",
+      "desc": "统计用户血氧数据",
+      "required": true,
+      "mode": "r",
+      "define": {
+        "type": "int",
+        "unit": "%",
+        "step": "",
+        "min": "70",
+        "max": "100",
+        "start": "70"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "sleep_report",
+      "name": "睡眠报告",
+      "desc": "用户睡眠报告",
+      "type": "info",
+      "required": true,
+      "params": [
+        {
+          "id": "total_sleep_time",
+          "name": "总睡眠时间",
+          "desc": "用户总睡眠时间记录",
+          "define": {
+            "type": "int",
+            "unit": "秒",
+            "step": "",
+            "min": "0",
+            "max": "86400"
+          }
+        },
+        {
+          "id": "falling_asleep_time",
+          "name": "入睡时间",
+          "desc": "用户入睡时间记录",
+          "define": {
+            "type": "timestamp"
+          }
+        },
+        {
+          "id": "wakeup_time",
+          "name": "醒来时间",
+          "desc": "用户醒来时间记录",
+          "define": {
+            "type": "timestamp"
+          }
+        },
+        {
+          "id": "deep_sleep_time",
+          "name": "深睡时间",
+          "desc": "用户深度睡眠时间记录",
+          "define": {
+            "type": "int",
+            "unit": "分钟",
+            "step": "",
+            "min": "0",
+            "max": "1440"
+          }
+        },
+        {
+          "id": "light_sleep_time",
+          "name": "浅睡时间",
+          "desc": "用户浅度睡眠时间记录",
+          "define": {
+            "type": "int",
+            "unit": "分钟",
+            "step": "",
+            "min": "0",
+            "max": "1440"
+          }
+        },
+        {
+          "id": "sleep_score",
+          "name": "睡眠评分",
+          "desc": "用户睡眠评分，-1为无评分功能",
+          "define": {
+            "type": "int",
+            "unit": "",
+            "step": "",
+            "min": "-1",
+            "max": "100"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sleep_data",
+      "name": "睡眠数据",
+      "desc": "用户睡眠数据记录",
+      "type": "info",
+      "required": true,
+      "params": [
+        {
+          "id": "data",
+          "name": "睡眠数据",
+          "desc": "",
+          "define": {
+            "type": "string",
+            "min": "1",
+            "max": "2048"
+          }
+        }
+      ]
+    },
+    {
+      "id": "heart_rate_data",
+      "name": "心率数据",
+      "desc": "用户心率数据记录",
+      "type": "info",
+      "required": true,
+      "params": [
+        {
+          "id": "data",
+          "name": "心率数据",
+          "desc": "",
+          "define": {
+            "type": "string",
+            "min": "1",
+            "max": "2048"
+          }
+        }
+      ]
+    },
+    {
+      "id": "blood_oxygen_data",
+      "name": "血氧数据",
+      "desc": "用户血氧数据记录",
+      "type": "info",
+      "required": true,
+      "params": [
+        {
+          "id": "data",
+          "name": "血氧数据",
+          "desc": "",
+          "define": {
+            "type": "string",
+            "min": "1",
+            "max": "2048"
+          }
+        }
+      ]
+    },
+    {
+      "id": "today_activity",
+      "name": "今日活动",
+      "desc": "用户今日活动数据记录",
+      "type": "info",
+      "required": true,
+      "params": [
+        {
+          "id": "data",
+          "name": "活动数据",
+          "desc": "",
+          "define": {
+            "type": "string",
+            "min": "1",
+            "max": "2048"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "read_property",
+      "name": "属性读取",
+      "desc": "",
+      "input": [
+        {
+          "id": "id",
+          "name": "属性ID",
+          "define": {
+            "type": "int",
+            "min": "0",
+            "max": "2",
+            "start": "0",
+            "step": "1",
+            "unit": ""
+          }
+        }
+      ],
+      "output": [
+        {
+          "id": "value",
+          "name": "属性值",
+          "define": {
+            "type": "string",
+            "min": "1",
+            "max": "2048"
+          }
+        }
+      ],
+      "required": true
+    }
+  ]
+}

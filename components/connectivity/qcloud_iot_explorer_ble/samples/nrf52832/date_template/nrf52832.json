@@ -1,0 +1,183 @@
+{
+  "version": "1.0",
+  "profile": {
+    "ProductId": "DHZX03IQAZ",
+    "CategoryId": "141"
+  },
+  "properties": [
+    {
+      "id": "power_switch",
+      "name": "电灯开关",
+      "desc": "控制电灯开灭",
+      "required": true,
+      "mode": "rw",
+      "define": {
+        "type": "bool",
+        "mapping": {
+          "0": "关",
+          "1": "开"
+        }
+      }
+    },
+    {
+      "id": "color",
+      "name": "颜色",
+      "desc": "灯光颜色",
+      "mode": "rw",
+      "define": {
+        "type": "enum",
+        "mapping": {
+          "0": "Red",
+          "1": "Green",
+          "2": "Blue"
+        }
+      }
+    },
+    {
+      "id": "brightness",
+      "name": "亮度",
+      "desc": "灯光亮度",
+      "mode": "rw",
+      "define": {
+        "type": "int",
+        "unit": "%",
+        "step": "1",
+        "min": "0",
+        "max": "100",
+        "start": "1"
+      }
+    },
+    {
+      "id": "name",
+      "name": "灯位置名称",
+      "desc": "灯位置名称：书房、客厅等",
+      "mode": "rw",
+      "define": {
+        "type": "string",
+        "min": "0",
+        "max": "640"
+      },
+      "required": false
+    }
+  ],
+  "events": [
+    {
+      "id": "status_report",
+      "name": "DeviceStatus",
+      "desc": "Report the device status",
+      "type": "info",
+      "required": false,
+      "params": [
+        {
+          "id": "status",
+          "name": "running_state",
+          "desc": "Report current device running state",
+          "define": {
+            "type": "bool",
+            "mapping": {
+              "0": "normal",
+              "1": "fault"
+            }
+          }
+        },
+        {
+          "id": "message",
+          "name": "Message",
+          "desc": "Some extra message",
+          "define": {
+            "type": "string",
+            "min": "0",
+            "max": "64"
+          }
+        }
+      ]
+    },
+    {
+      "id": "low_voltage",
+      "name": "LowVoltage",
+      "desc": "Alert for device voltage is low",
+      "type": "alert",
+      "required": false,
+      "params": [
+        {
+          "id": "voltage",
+          "name": "Voltage",
+          "desc": "Current voltage",
+          "define": {
+            "type": "float",
+            "unit": "V",
+            "step": "1",
+            "min": "0.0",
+            "max": "24.0",
+            "start": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hardware_fault",
+      "name": "Hardware_fault",
+      "desc": "Report hardware fault",
+      "type": "fault",
+      "required": false,
+      "params": [
+        {
+          "id": "name",
+          "name": "Name",
+          "desc": "Name like: memory,tf card, censors ...",
+          "define": {
+            "type": "string",
+            "min": "0",
+            "max": "64"
+          }
+        },
+        {
+          "id": "error_code",
+          "name": "Error_Code",
+          "desc": "Error code for fault",
+          "define": {
+            "type": "int",
+            "unit": "",
+            "step": "1",
+            "min": "0",
+            "max": "2000",
+            "start": "1"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "loop",
+      "name": "loop",
+      "desc": "",
+      "input": [
+        {
+          "id": "interval",
+          "name": "interval",
+          "define": {
+            "type": "int",
+            "min": "0",
+            "max": "100",
+            "start": "0",
+            "step": "1",
+            "unit": ""
+          }
+        }
+      ],
+      "output": [
+        {
+          "id": "result",
+          "name": "result",
+          "define": {
+            "type": "string",
+            "min": "0",
+            "max": "320"
+          }
+        }
+      ],
+      "required": false
+    }
+  ]
+}
