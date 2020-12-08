@@ -22,4 +22,3 @@ int main(void)
     osThreadCreate(osThread(application_entry), NULL); // Create TOS Tiny task
     osKernelStart(); // Start TOS Tiny
 }
-
