@@ -3,6 +3,7 @@
 
 extern uint16_t camBuffer[];
 extern uint8_t frame_flag;
+static uint8_t modBuffer[96*96];
 
 #define TASK1_STK_SIZE          1024
 void task1(void *arg);
@@ -12,13 +13,34 @@ osThreadDef(task1, osPriorityNormal, 1, TASK1_STK_SIZE);
 void task2(void *arg);
 osThreadDef(task2, osPriorityNormal, 1, TASK2_STK_SIZE);
 
+uint8_t RGB565toGRAY(uint16_t bg_color)
+{
+    uint8_t bg_r = 0;
+    uint8_t bg_g = 0;
+    uint8_t bg_b = 0;
+    bg_r = ((bg_color>>11)&0xff)<<3;
+    bg_g = ((bg_color>>5)&0x3f)<<2;
+    bg_b = (bg_color&0x1f)<<2;
+    uint8_t gray = (bg_r*299 + bg_g*587 + bg_b*114 + 500) / 1000;
+    return gray;
+}
+
+void input_convert(uint16_t* camera_buffer , uint8_t* model_buffer)
+{
+	for(int i=0 ; i<OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT ; i++)
+	{
+		model_buffer[i] = RGB565toGRAY(camera_buffer[i]);
+	}
+}
+
 void task1(void *arg)
 {
     while (1) {
       if(frame_flag == 1){
 				
 				if(HAL_DCMI_Stop(&hdcmi))Error_Handler(); //stop DCMI
-				
+				input_convert(camBuffer,modBuffer);
+				person_detect(modBuffer);
 				LCD_2IN4_Display(camBuffer,OV2640_PIXEL_WIDTH,OV2640_PIXEL_HEIGHT);
         
 				frame_flag = 0;
