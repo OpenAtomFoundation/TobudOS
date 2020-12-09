@@ -13,6 +13,7 @@
 - TOS、摄像头和LCD工作都正常工作；
 - tflite_micro 以component的形式加到工程
 - retarget.c引入工程，并通过宏进行选择
+- example中行人检测demo已经可以正常工作
 
 ### 3. 未完成的工作：
 
