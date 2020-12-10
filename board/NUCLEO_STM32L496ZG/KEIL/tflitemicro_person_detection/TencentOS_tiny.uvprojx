@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L496xx,NUCLEO_STM32L496ZG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\hello_world;..\..\TOS_CONFIG;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\BSP\Hardware\Inc;..\..\..\..\components\tflite_micro\STM32L496-lib;..\..\..\..\components\tflite_micro\STM32L496-lib\third_party\flatbuffers\include;..\..\..\..\components\tflite_micro\STM32L496-lib\third_party\gemmlowp;..\..\..\..\components\tflite_micro\STM32L496-lib\third_party\kissfft;..\..\..\..\components\tflite_micro\STM32L496-lib\third_party\ruy;..\..\..\..\components\tflite_micro\STM32L496-lib\tensorflow\lite\micro\tools\make\downloads</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\hello_world;..\..\TOS_CONFIG;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\BSP\Hardware\Inc;..\..\..\..\components\tflite_micro\ARM_CortexM4_lib;..\..\..\..\components\tflite_micro\ARM_CortexM4_lib\third_party\flatbuffers\include;..\..\..\..\components\tflite_micro\ARM_CortexM4_lib\third_party\gemmlowp;..\..\..\..\components\tflite_micro\ARM_CortexM4_lib\third_party\kissfft;..\..\..\..\components\tflite_micro\ARM_CortexM4_lib\third_party\ruy;..\..\..\..\components\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro\tools\make\downloads</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -779,14 +779,14 @@
           <GroupName>tensorflow</GroupName>
           <Files>
             <File>
-              <FileName>tflm_person_detection.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\components\tflite_micro\STM32L496-lib\tflm_person_detection.lib</FilePath>
-            </File>
-            <File>
               <FileName>regarget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\tflite_micro\KEIL\regarget.c</FilePath>
+            </File>
+            <File>
+              <FileName>tflm_person_detection.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\components\tflite_micro\ARM_CortexM4_lib\tflm_person_detection.lib</FilePath>
             </File>
           </Files>
         </Group>
