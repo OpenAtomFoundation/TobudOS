@@ -19,32 +19,32 @@
 
 void iot_explorer_handle_power_switch(int power_switch)
 {
-	if (0 == power_switch){
-		if(LED_IS_OPEN){
-			printf("iot-explorer close the light\r\n");
-			LED_CLOSE;
-		}else{
-			printf("the light already closed\r\n");
-		}
-	}else{
-		if(LED_IS_OPEN){
-			printf("iot-explorer already opened\r\n");
-		}else{
-			printf("the light closed already\r\n");
-			LED_OPEN;
-		}
-	}
+    if (0 == power_switch){
+        if(LED_IS_OPEN){
+            printf("iot-explorer close the light\r\n");
+            LED_CLOSE;
+        }else{
+            printf("the light already closed\r\n");
+        }
+    }else{
+        if(LED_IS_OPEN){
+            printf("iot-explorer already opened\r\n");
+        }else{
+            printf("the light closed already\r\n");
+            LED_OPEN;
+        }
+    }
 }
 
 void key1_handle_power_switch(void)
 {
-	if(LED_IS_OPEN){
-		printf("key1 close the light\r\n");
-		LED_CLOSE;
-	}else{
-		printf("key1 open the light\r\n");
-		LED_OPEN;
-	}
+    if(LED_IS_OPEN){
+        printf("key1 close the light\r\n");
+        LED_CLOSE;
+    }else{
+        printf("key1 open the light\r\n");
+        LED_OPEN;
+    }
 }
 
 /***************************************************************
@@ -55,7 +55,7 @@ void key1_handle_power_switch(void)
 ***************************************************************/
 static void Init_BH1750(void)
 {
-    uint8_t t_Data = 0x01;
+	uint8_t t_Data = 0x01;
     HAL_I2C_Master_Transmit(&hi2c2,BH1750_Addr,&t_Data,1,0xff);
 }
 
@@ -129,7 +129,7 @@ void TIM3_Init(uint16_t arr,uint16_t psc)		//arr：自动重装值	psc：时钟�
     HAL_TIM_Base_Init(&TIM3_Handler);			//时基初始化
     
     //HAL_TIM_Base_Start_IT(&TIM3_Handler); //使能定时器3和定时器3更新中断：TIM_IT_UPDATE
-	//HAL_TIM_Base_Stop_IT(&TIM3_Handler);
+    //HAL_TIM_Base_Stop_IT(&TIM3_Handler);
 }
 
 	//TIM3_Init(1, 719);
@@ -138,9 +138,9 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
 {
     if(htim->Instance==TIM3)
 	{
-		__HAL_RCC_TIM3_CLK_ENABLE();            //使能TIM3时钟
-		HAL_NVIC_SetPriority(TIM3_IRQn,1,3);    //设置中断优先级，抢占优先级1，子优先级3
-		HAL_NVIC_EnableIRQ(TIM3_IRQn);          //开启ITM3中断   
+        __HAL_RCC_TIM3_CLK_ENABLE();            //使能TIM3时钟
+        HAL_NVIC_SetPriority(TIM3_IRQn,1,3);    //设置中断优先级，抢占优先级1，子优先级3
+        HAL_NVIC_EnableIRQ(TIM3_IRQn);          //开启ITM3中断   
 	}
 }
 
@@ -153,17 +153,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if(htim==(&TIM3_Handler))
     {
-		if(pwm_count < light_pwm)
-		{
-			set_light(true);
-		} else {
-			set_light(false);
-		}
-		if(pwm_count >= 100)
-		{
-			pwm_count = 0;
-		}
-		pwm_count++;
+        if(pwm_count < light_pwm)
+        {
+            set_light(true);
+        } else {
+            set_light(false);
+        }
+        if(pwm_count >= 100)
+        {
+            pwm_count = 0;
+        }
+        pwm_count++;
     }
 }
 #endif

@@ -30,15 +30,6 @@
 #define BH1750_Addr 0x46
 #define LIGHT_MAX_NAME_LEN	32
 
-#if 0
-typedef enum{
-	LIGHT_LEVEL_LOW = 0,
-	LIGTH_LEVEL_MID = 1,
-	LIGTH_LEVEL_HIGH = 2,
-	LIGTH_LEVEL_BUTT,
-}E_LIGTH_LEVEL;
-#endif
-
 int e53_sc1_init(void);
 
 float e53_scl_read_data(void);
@@ -46,4 +37,13 @@ float e53_scl_read_data(void);
 void iot_explorer_handle_power_switch(int power_switch);
 
 void key1_handle_power_switch(void);
+
+#if 0
+typedef enum{
+    LIGHT_LEVEL_LOW = 0,
+    LIGTH_LEVEL_MID = 1,
+    LIGTH_LEVEL_HIGH = 2,
+    LIGTH_LEVEL_BUTT,
+}E_LIGTH_LEVEL;
+#endif
 #endif /* _E53_SC1_H_ */

@@ -30,28 +30,28 @@ static bool key_pressed = false;
 static void key_check_timer_cb(void *arg)
 {
     if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0)){
-		key_press_count++;
-		key_release_count = 0;
-	} else {
-		key_press_count = 0;
-		key_release_count++;
-	}
-	
-	// 支持按键消抖
-	if (key_press_count > KEY_CHECK_SHAKING_COUNT) {
-		// 按键按下时功能即生效，且只生效一次
-		if (!key_pressed) {
-			//printf("key 1 pressed\r\n");
-			key_pressed = true;
-			key1_handler_callback();
-		}
-	}
-	if (key_release_count > KEY_CHECK_SHAKING_COUNT){
-		if (key_pressed) {
-			key_pressed = false;
-			//printf("key 1 release\r\n");
-		}
-	}
+        key_press_count++;
+        key_release_count = 0;
+    } else {
+        key_press_count = 0;
+        key_release_count++;
+    }
+
+    // 支持按键消抖
+    if (key_press_count > KEY_CHECK_SHAKING_COUNT) {
+        // 按键按下时功能即生效，且只生效一次
+        if (!key_pressed) {
+            //printf("key 1 pressed\r\n");
+            key_pressed = true;
+            key1_handler_callback();
+        }
+    }
+    if (key_release_count > KEY_CHECK_SHAKING_COUNT){
+        if (key_pressed) {
+            key_pressed = false;
+            //printf("key 1 release\r\n");
+        }
+    }
 }
 
 void stm32g0xx_key_init(void)
