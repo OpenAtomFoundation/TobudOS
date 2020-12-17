@@ -17,7 +17,7 @@
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32L4xx_DFP.2.4.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -431,7 +431,7 @@
             <File>
               <FileName>mqttclient_iot_explorer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\mqttclient_iot_explorer\mqttclient_iot_explorer.c</FilePath>
+              <FilePath>.\demo\mqttclient_iot_explorer.c</FilePath>
             </File>
           </Files>
         </Group>
