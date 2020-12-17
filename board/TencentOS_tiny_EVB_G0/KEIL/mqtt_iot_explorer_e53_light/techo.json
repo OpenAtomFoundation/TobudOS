@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "profile": {
+    "ProductId": "LRKSCAZLF1",
+    "CategoryId": "539"
+  },
+  "properties": [
+    {
+      "id": "power_switch",
+      "name": "电灯开关",
+      "desc": "控制电灯开灭",
+      "required": true,
+      "mode": "rw",
+      "define": {
+        "type": "bool",
+        "mapping": {
+          "0": "关",
+          "1": "开"
+        }
+      }
+    },
+    {
+      "id": "lx",
+      "name": "光照强度",
+      "desc": "光照强度",
+      "mode": "r",
+      "define": {
+        "type": "int",
+        "min": "0",
+        "max": "20000",
+        "start": "0",
+        "step": "1",
+        "unit": "lx"
+      },
+      "required": false
+    }
+  ],
+  "events": [],
+  "actions": []
+}

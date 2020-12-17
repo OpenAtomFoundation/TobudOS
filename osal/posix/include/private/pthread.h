@@ -115,5 +115,5 @@ __KNL__ int pthread_init(void);
 
 __CDECLS_END
 
-#endif /* _POSIX_PRIVATE_PTHREAD_PRV_H_ */
+#endif /* _POSIX_PRIVATE_PTHREAD_H_ */
 

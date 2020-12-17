@@ -42,6 +42,8 @@
 extern "C" {
 #endif
 
+#include "apply_old_config.h"
+
 int NVIC_IRQ_IS_ENABLED(unsigned int irq);
 unsigned int nrfx_enter_critical(void);
 void nrfx_exit_critical(unsigned int ctx);
@@ -61,12 +63,13 @@ void nrfx_exit_critical(unsigned int ctx);
 
 //------------------------------------------------------------------------------
 
+#include <nrf_assert.h>
 /**
  * @brief Macro for placing a runtime assertion.
  *
  * @param expression  Expression to evaluate.
  */
-#define NRFX_ASSERT(expression)
+#define NRFX_ASSERT(expression)     ASSERT(expression)
 
 /**
  * @brief Macro for placing a compile time assertion.
@@ -230,15 +233,38 @@ void nrfx_exit_critical(unsigned int ctx);
 #define NRFX_ATOMIC_FETCH_SUB(p_data, value)
 
 //------------------------------------------------------------------------------
+#ifndef NRFX_CUSTOM_ERROR_CODES
 
+#include <sdk_errors.h>
 /**
  * @brief When set to a non-zero value, this macro specifies that the
- *        @ref nrfx_error_codes and the @ref nrfx_err_t type itself are defined
+ *        @ref nrfx_error_codes and the @ref ret_code_t type itself are defined
  *        in a customized way and the default definitions from @c <nrfx_error.h>
  *        should not be used.
  */
-#define NRFX_CUSTOM_ERROR_CODES 0
+#define NRFX_CUSTOM_ERROR_CODES 1
 
+typedef ret_code_t nrfx_err_t;
+
+#define NRFX_SUCCESS                    NRF_SUCCESS
+#define NRFX_ERROR_INTERNAL             NRF_ERROR_INTERNAL
+#define NRFX_ERROR_NO_MEM               NRF_ERROR_NO_MEM
+#define NRFX_ERROR_NOT_SUPPORTED        NRF_ERROR_NOT_SUPPORTED
+#define NRFX_ERROR_INVALID_PARAM        NRF_ERROR_INVALID_PARAM
+#define NRFX_ERROR_INVALID_STATE        NRF_ERROR_INVALID_STATE
+#define NRFX_ERROR_INVALID_LENGTH       NRF_ERROR_INVALID_LENGTH
+#define NRFX_ERROR_TIMEOUT              NRF_ERROR_TIMEOUT
+#define NRFX_ERROR_FORBIDDEN            NRF_ERROR_FORBIDDEN
+#define NRFX_ERROR_NULL                 NRF_ERROR_NULL
+#define NRFX_ERROR_INVALID_ADDR         NRF_ERROR_INVALID_ADDR
+#define NRFX_ERROR_BUSY                 NRF_ERROR_BUSY
+#define NRFX_ERROR_ALREADY_INITIALIZED  NRF_ERROR_MODULE_ALREADY_INITIALIZED
+
+#define NRFX_ERROR_DRV_TWI_ERR_OVERRUN  NRF_ERROR_DRV_TWI_ERR_OVERRUN
+#define NRFX_ERROR_DRV_TWI_ERR_ANACK    NRF_ERROR_DRV_TWI_ERR_ANACK
+#define NRFX_ERROR_DRV_TWI_ERR_DNACK    NRF_ERROR_DRV_TWI_ERR_DNACK
+
+#endif // NRFX_CUSTOM_ERROR_CODES
 //------------------------------------------------------------------------------
 
 /**

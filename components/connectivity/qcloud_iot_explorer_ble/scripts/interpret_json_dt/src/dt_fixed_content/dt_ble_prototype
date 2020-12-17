@@ -1,0 +1,25 @@
+// property module
+#ifdef BLE_QIOT_INCLUDE_PROPERTY
+uint8_t ble_get_property_type_by_id(uint8_t id);
+int ble_user_property_set_data(const e_ble_tlv *tlv);
+int ble_user_property_get_data_by_id(uint8_t id, char *buf, uint16_t buf_len);
+int ble_user_property_report_reply_handle(uint8_t result);
+#endif
+
+// event module
+#ifdef BLE_QIOT_INCLUDE_EVENT
+int ble_event_get_id_array_size(uint8_t event_id);
+uint8_t ble_event_get_param_id_type(uint8_t event_id, uint8_t param_id);
+int ble_event_get_data_by_id(uint8_t event_id, uint8_t param_id, char *out_buf, uint16_t buf_len);
+int ble_user_event_reply_handle(uint8_t event_id, uint8_t result);
+#endif
+
+// action module
+#ifdef BLE_QIOT_INCLUDE_ACTION
+uint8_t ble_action_get_intput_type_by_id(uint8_t action_id, uint8_t input_id);
+uint8_t ble_action_get_output_type_by_id(uint8_t action_id, uint8_t output_id);
+int ble_action_get_input_id_size(uint8_t action_id);
+int ble_action_get_output_id_size(uint8_t action_id);
+int ble_action_user_handle_input_param(uint8_t action_id, e_ble_tlv *input_param_array, uint8_t input_array_size, uint8_t *output_id_array);
+int ble_action_user_handle_output_param(uint8_t action_id, uint8_t output_id, char *buf, uint16_t buf_len);
+#endif

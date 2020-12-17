@@ -19,7 +19,7 @@
  
 #include "tos_k.h"
 
-/* Ê¹ÄÜÊÇ·ñ¿ªÆôµ÷ÊÔÈÕÖ¾ */
+/* ä½¿èƒ½æ˜¯å¦å¼€å¯è°ƒè¯•æ—¥å¿— */
 #define CH20_DEBUG_LOG_EN              0
 
 /* CH20 parser config */
@@ -35,17 +35,17 @@
 #endif
 
 
-/* PM2.5 Êı¾İ½âÎöÆ÷¿ØÖÆ¿é */
+/* ç”²é†›HCHO æ•°æ®è§£æå™¨æ§åˆ¶å— */
 typedef struct CH20_parser_control_st {
-    k_task_t     parser_task;       //½âÎöÆ÷ÈÎÎñ¿ØÖÆ¿é
+    k_task_t     parser_task;       //è§£æå™¨ä»»åŠ¡æ§åˆ¶å—
     
-    k_sem_t      parser_rx_sem;     //±íÊ¾½âÎöÆ÷´Ó´®¿Ú½ÓÊÕµ½Êı¾İ
-    k_chr_fifo_t parser_rx_fifo;    //´æ·Å½âÎöÆ÷½ÓÊÕµ½µÄÊı¾İ
+    k_sem_t      parser_rx_sem;     //è¡¨ç¤ºè§£æå™¨ä»ä¸²å£æ¥æ”¶åˆ°æ•°æ®
+    k_chr_fifo_t parser_rx_fifo;    //å­˜æ”¾è§£æå™¨æ¥æ”¶åˆ°çš„æ•°æ®
 } ch20_parser_ctrl_t;
 
 /**
- * @brief   ½âÎö³öµÄCH20Êı¾İÖµ
- * @note    ¿ÉÒÔ×÷ÎªÓÊ¼ş·¢ËÍ¸øÆäËûÈÎÎñ½øĞĞ½øÒ»²½´¦Àí
+ * @brief   è§£æå‡ºçš„CH20æ•°æ®å€¼
+ * @note    å¯ä»¥ä½œä¸ºé‚®ä»¶å‘é€ç»™å…¶ä»–ä»»åŠ¡è¿›è¡Œè¿›ä¸€æ­¥å¤„ç†
  * @param   
  */
 typedef struct ch20_data_st {
