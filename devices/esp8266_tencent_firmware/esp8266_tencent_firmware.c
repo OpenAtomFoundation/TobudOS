@@ -463,10 +463,85 @@ void esp8266_tencent_firmware_recvfwdata(void)
     return;
 }
 
+k_event_t smart_config_status_event;
+
+const k_event_flag_t event_success  = (k_event_flag_t)(1 << 0);
+const k_event_flag_t event_fail     = (k_event_flag_t)(1 << 1);
+
+int esp8266_tencent_firmware_start_smartconfig(void)
+{
+    k_err_t  err;
+    at_echo_t echo;
+    k_event_flag_t flag_match;
+
+    if (tos_event_create(&smart_config_status_event, (k_event_flag_t)0u) != K_ERR_NONE) {
+        return -1;
+    }
+    
+    tos_at_echo_create(&echo, NULL, 0, "OK");
+    tos_at_cmd_exec(&echo, 2000, "AT+TCSTARTSMART\r\n");
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+        return -1;
+    }
+    
+    err = tos_event_pend(&smart_config_status_event,
+                         event_success | event_fail,
+                         &flag_match, TOS_TIME_FOREVER,
+                         TOS_OPT_EVENT_PEND_ANY | TOS_OPT_EVENT_PEND_CLR);
+    if (err == K_ERR_NONE) {
+        if (flag_match == event_success) {
+            return 0;
+        }
+        else if (flag_match == event_fail) {
+            return -1; 
+        }
+    }
+    
+    return -1;
+}
+
+int esp8266_tencent_firmware_stop_smartconfig(void)
+{
+    at_echo_t echo;
+    
+    tos_at_echo_create(&echo, NULL, 0, "OK");
+
+    tos_at_cmd_exec(&echo, 2000, "AT+TCSTOPSMART\r\n");
+    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+        return -1;
+    }
+    
+    return 0;
+}
+
+void esp8266_tencent_firmware_recvscstatus(void)
+{
+    /*
+    +TCSTARTSMART:WIFI_CONNECT_FAILED,err_code,subcode
+    */
+    static char buffer[40];
+    
+    if (tos_at_uart_read((uint8_t*)buffer, sizeof(buffer) - 1) != (sizeof(buffer) - 1)) {
+        return;
+    }
+    
+    buffer[sizeof(buffer) - 1] = '\0';
+    
+    if (strstr(buffer, "SUCCESS")) {
+        tos_event_post(&smart_config_status_event, event_success);
+    }
+    else {
+        tos_event_post(&smart_config_status_event, event_fail);
+    }
+    
+    return;    
+}
+
 at_event_t esp8266_tencent_firmware_at_event[] = {
     { "+TCMQTTRCVPUB:", esp8266_tencent_firmware_recvpub },
     { "+TCREADFWDATA:", esp8266_tencent_firmware_recvfwdata },
     { "+TCOTASTATUS:", esp8266_tencent_firmware_recvcmd },
+    { "+TCSTARTSMART:", esp8266_tencent_firmware_recvscstatus},
 };
 
 tencent_firmware_module_t tencent_firmware_module_esp8266 = {
@@ -483,6 +558,8 @@ tencent_firmware_module_t tencent_firmware_module_esp8266 = {
     .ota_set            = esp8266_tencent_firmware_ota_set,
     .ota_read_fwinfo    = esp8266_tencent_firmware_ota_read_fwinfo,
     .ota_read_fwdata    = esp8266_tencent_firmware_ota_read_fwdata,
+    .start_smartconfig  = esp8266_tencent_firmware_start_smartconfig,
+    .stop_smartconfig   = esp8266_tencent_firmware_stop_smartconfig,
 };
 
 int esp8266_tencent_firmware_sal_init(hal_uart_port_t uart_port)

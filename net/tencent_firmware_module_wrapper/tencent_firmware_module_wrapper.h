@@ -139,6 +139,10 @@ typedef struct tencent_firmware_module_st {
     int (*ota_read_fwinfo)(ota_fw_info_t *ota_fw_info);
     
     int (*ota_read_fwdata)(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+    
+    int (*start_smartconfig)(void);
+    
+    int (*stop_smartconfig)(void);
 } tencent_firmware_module_t;
 
 /**
@@ -300,6 +304,24 @@ int tos_tf_module_ota_read_fwinfo(ota_fw_info_t *ota_fw_info);
  * @return  errcode
  */
 int tos_tf_module_ota_read_fwdata(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+
+/**
+ * @brief Start smartconfig from tencent firmware module
+ *
+ * @attention None
+ *
+ * @return  errcode
+ */
+int tos_tf_module_smartconfig_start(void);
+
+/**
+ * @brief Stop smartconfig from tencent firmware module
+ *
+ * @attention None
+ *
+ * @return  errcode
+ */
+int tos_tf_module_smartconfig_stop(void);
 
 #endif
 
