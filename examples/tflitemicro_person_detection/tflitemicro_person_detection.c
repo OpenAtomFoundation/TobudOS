@@ -1,9 +1,9 @@
 #include "cmsis_os.h"
 #include "mcu_init.h"
 
-extern uint16_t camBuffer[];
+extern uint16_t camera_buffer[];
 extern uint8_t frame_flag;
-static uint8_t modBuffer[96*96];
+static uint8_t model_buffer[96*96];
 
 #define TASK1_STK_SIZE          1024
 void task1(void *arg);
@@ -13,7 +13,7 @@ osThreadDef(task1, osPriorityNormal, 1, TASK1_STK_SIZE);
 void task2(void *arg);
 osThreadDef(task2, osPriorityNormal, 1, TASK2_STK_SIZE);
 
-uint8_t RGB565toGRAY(uint16_t bg_color)
+uint8_t rgb565_to_gray(uint16_t bg_color)
 {
     uint8_t bg_r = 0;
     uint8_t bg_g = 0;
@@ -29,7 +29,7 @@ void input_convert(uint16_t* camera_buffer , uint8_t* model_buffer)
 {
 	for(int i=0 ; i<OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT ; i++)
 	{
-		model_buffer[i] = RGB565toGRAY(camera_buffer[i]);
+		model_buffer[i] = rgb565_to_gray(camera_buffer[i]);
 	}
 }
 
@@ -39,13 +39,13 @@ void task1(void *arg)
       if(frame_flag == 1){
 				
 				if(HAL_DCMI_Stop(&hdcmi))Error_Handler(); //stop DCMI
-				input_convert(camBuffer,modBuffer);
-				person_detect(modBuffer);
-				LCD_2IN4_Display(camBuffer,OV2640_PIXEL_WIDTH,OV2640_PIXEL_HEIGHT);
+				input_convert(camera_buffer,model_buffer);
+				person_detect(model_buffer);
+				LCD_2IN4_Display(camera_buffer,OV2640_PIXEL_WIDTH,OV2640_PIXEL_HEIGHT);
         
 				frame_flag = 0;
 				
-				if(HAL_DCMI_Start_DMA(&hdcmi,DCMI_MODE_CONTINUOUS,(uint32_t)camBuffer ,\
+				if(HAL_DCMI_Start_DMA(&hdcmi,DCMI_MODE_CONTINUOUS,(uint32_t)camera_buffer ,\
 					 (OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT)/2))Error_Handler(); //restart DCMI
 			}
 			osDelay(50);
