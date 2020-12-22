@@ -44,7 +44,7 @@
 
 #define PUB_PAYLOAD_MAX_SIZE                200
 
-#define MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE 512
+#define MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE 2048
 #define MQTT_MESSAGE_HANDLE_TASK_PRIO       3
 #define MQTT_MESSAGE_NUM_MAX                3
 #define MQTT_MESSAGE_POOL_SIZE              MQTT_MESSAGE_NUM_MAX*sizeof(mqtt_message_t)
