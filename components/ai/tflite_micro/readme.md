@@ -10,8 +10,8 @@ TensorFlow Lite Micro组件以下简称TFLu)是Google TensorFlow团队针对微�
 
 ```
 tflite_micro
-	├─Source           		//放置了TensorFlow Lite Micro的全部源码
-    ├─KEIL  				//针对KEIL环境需要的适配文件
+    ├─Source           		//放置了TensorFlow Lite Micro的全部源码
+    ├─KEIL  			//针对KEIL环境需要的适配文件
     ├─ARM_CortexM4_lib		//针对ARM Cortex M4生成的tensorflow_lite_micro.lib库
     ├─ARM_CortexM7_lib		//针对ARM Cortex M7生成的tensorflow_lite_micro.lib库
     ├─ARM_CortexM55_lib		//针对ARM Cortex M55生成的tensorflow_lite_micro.lib库
@@ -26,4 +26,4 @@ ARM_CortexM4_lib文件夹、ARM_CortexM55_lib和ARM_CortexM7_lib文件夹中分�
 
 ## 3.移植案例
 
-参考[Neclue STM32L496RG案例](./test)
+参考[Neclue STM32L496RG案例](../../../board/NUCLEO_STM32L496ZG/KEIL/tflitemicro_person_detecion/TFlite_Micro_Demo移植参考指南（Keil版）.md)
