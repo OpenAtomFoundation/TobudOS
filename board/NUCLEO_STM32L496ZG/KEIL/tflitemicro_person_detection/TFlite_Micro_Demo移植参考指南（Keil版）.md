@@ -60,16 +60,16 @@
 
 以下是整个例程的目录规划：
 
-| 一级目录  |           二级目录           | 三级目录 |                             说明                             |
-| :-------: | :--------------------------: | :------: | :----------------------------------------------------------: |
-|   arch    |             arm              |          | TencentOS tiny适配的IP核架构（含M核中断、调度、tick相关代码） |
-|   board   |      NUCLEO_STM32L496ZG      |          |                    移植目标芯片的工程文件                    |
-|           |                              |   BSP    |            板级支持包，外设驱动代码在Hardware目录            |
-| component |         tflite_micro         |          |                       tflite_micro源码                       |
-| examples  | tflitemicro_person_detection |          |                       行人检测demo示例                       |
-|  kernel   |             core             |          |                    TencentOS tiny内核源码                    |
-|           |              pm              |          |                 TencentOS tiny低功耗模块源码                 |
-|   osal    |           cmsis_os           |          |              TencentOS tiny提供的cmsis os 适配               |
+| 一级目录  |           二级目录           |   三级目录   |                             说明                             |
+| :-------: | :--------------------------: | :----------: | :----------------------------------------------------------: |
+|   arch    |             arm              |              | TencentOS tiny适配的IP核架构（含M核中断、调度、tick相关代码） |
+|   board   |      NUCLEO_STM32L496ZG      |              |                    移植目标芯片的工程文件                    |
+|           |                              |     BSP      |            板级支持包，外设驱动代码在Hardware目录            |
+| component |              ai              | tflite_micro |                       tflite_micro源码                       |
+| examples  | tflitemicro_person_detection |              |                       行人检测demo示例                       |
+|  kernel   |             core             |              |                    TencentOS tiny内核源码                    |
+|           |              pm              |              |                 TencentOS tiny低功耗模块源码                 |
+|   osal    |           cmsis_os           |              |              TencentOS tiny提供的cmsis os 适配               |
 
 完成TencentOS tiny基础keil工程准备工作后，在这个keil工程的基础上继续添加外设驱动代码。
 
@@ -128,23 +128,59 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 
 ## 三、Tensorflow Lite Micro移植
 
-### 1. tflite_micro源码加入到keil工程
+### 1. tflite_micro组件加入到keil工程
+
+由于NUCLEO-L496ZG芯片中的内核为ARM Cortex M4，所以本次我们可以直接使用ARM Cortex M4版本的tensorflow_lite_micro.lib库来简化tflite_micro搭建流程。
+
+#### 1.1 在project中加入新的文件夹tensorflow：
+
+<div align=center>
+<img src="./image/tflu_tensorflow文件夹增加的内容.png" width=80% />
+</div>
+
+#### 1.2 添加本次与行人检测demo有关的源文件
+
+<div align=center>
+<img src="./image/tflu_需要添加的文件.png" width=80% />
+</div>
 
 
 
-### 2. 解决编译错误
+其中，retarget.c的路径为：`TencentOS-tiny\components\ai\tflite_micro\KEIL\retarget.c`
+
+tensorflow_lite_micro.lib的路径为：`TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow_lite_micro.lib`
+
+其余.cc文件均在当前目录下的`tflu_person_detection`文件夹中。
+
+#### 1.3 关闭Keil的MicroLib库：
+
+<div align=center>
+<img src="./image/tflu_取消Microlib.png" width=80% />
+</div>
+#### 1.4 添加tflite_micro需要的头文件：
+
+<div align=center>
+<img src="./image/tflu_添加include.png" width=80% />
+</div>
+
+注：最下方的路径为：
+
+```
+TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro\tools\make\downloads
+```
+
+#### 1.5 调整优化等级和tflite_micro的交互信息输出串口：
+
+<div align=center>
+<img src="./image/tflu_STM32496宏.png" width=80% />
+</div>
+
+其中宏`NUCLEO_STM32L496ZG`是指定Nucleo STM32L496的hlpuart1为系统printf函数的输出串口，具体定义在Nucleo STM32L496的BSP文件夹中的`mcu_init.c`中。
 
 
+### 2. 编写Person_Detection 任务函数
 
-### 3. 测试行人检测模型
-
-
-
-### 4. 编写Person_Detection 任务函数
-
-
-
-#### 4.1 图像预处理
+#### 2.1 图像预处理
 
 <div align=center>
 <img src="./image/RGB565.jpg" width=50% />
@@ -174,9 +210,7 @@ void input_convert(uint16_t* camera_buffer , uint8_t* model_buffer)
 }
 ```
 
-
-
-#### 4.2 行人检测线程任务函数
+#### 3.2 行人检测线程任务函数
 
 ```c
 void task1(void *arg)
