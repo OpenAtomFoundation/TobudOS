@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32L496ZGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.5.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32L4xx_DFP.2.4.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2004FFFF) IROM(0x8000000-0x80FFFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -739,14 +739,19 @@
           <GroupName>hal</GroupName>
           <Files>
             <File>
-              <FileName>lcd_config.c</FileName>
+              <FileName>delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Hardware\Src\lcd_config.c</FilePath>
+              <FilePath>..\..\BSP\Hardware\Src\delay.c</FilePath>
             </File>
             <File>
               <FileName>lcd_2inch4.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Hardware\Src\lcd_2inch4.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Hardware\Src\lcd_config.c</FilePath>
             </File>
             <File>
               <FileName>ov2640.c</FileName>
@@ -757,11 +762,6 @@
               <FileName>sccb.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Hardware\Src\sccb.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Hardware\Src\delay.c</FilePath>
             </File>
           </Files>
         </Group>
