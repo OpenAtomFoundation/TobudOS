@@ -26,4 +26,4 @@ ARM_CortexM4_lib文件夹、ARM_CortexM55_lib和ARM_CortexM7_lib文件夹中分�
 
 ## 3.移植案例
 
-参考[Neclue STM32L496RG案例](../../../board/NUCLEO_STM32L496ZG/KEIL/tflitemicro_person_detecion/TFlite_Micro_Demo移植参考指南（Keil版）.md)
+参考[Neclue STM32L496RG案例](../../../board/NUCLEO_STM32L496ZG/KEIL/tflitemicro_person_detection/TFlite_Micro_Demo移植参考指南（Keil版）.md)
