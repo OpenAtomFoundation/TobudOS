@@ -157,6 +157,7 @@ tensorflow_lite_micro.lib的路径为：`TencentOS-tiny\components\ai\tflite_mic
 <div align=center>
 <img src="./image/tflu_取消Microlib.png" width=80% />
 </div>
+
 #### 1.4 添加tflite_micro需要的头文件：
 
 <div align=center>
