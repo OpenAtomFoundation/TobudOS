@@ -36,12 +36,12 @@ inline void InfiniteLoop() {
 
 #else  // TF_LITE_MCU_DEBUG_LOG
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
 
 #define DEBUG_LOG(x)            \
   do {                          \
-    printf("%s", (x)); \
+    fprintf(stderr, "%s", (x)); \
   } while (0)
 
 // Report Error for unsupported type by op 'op_name' and returns kTfLiteError.

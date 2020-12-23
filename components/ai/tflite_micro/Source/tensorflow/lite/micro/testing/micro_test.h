@@ -74,26 +74,23 @@ extern tflite::ErrorReporter* reporter;
   tflite::ErrorReporter* reporter;             \
   }                                            \
                                                \
-  int main(void) {            				   \
+  int main(int argc, char** argv) {            \
     micro_test::tests_passed = 0;              \
     micro_test::tests_failed = 0;              \
     tflite::MicroErrorReporter error_reporter; \
-    micro_test::reporter = &error_reporter;	   \
-	HAL_Init();								   \
-	SystemClock_Config();                      \
-	board_init();					           \
-	printf("Init Successful");
-	  
+    micro_test::reporter = &error_reporter;
+
 #define TF_LITE_MICRO_TESTS_END                                \
   micro_test::reporter->Report(                                \
       "%d/%d tests passed", micro_test::tests_passed,          \
       (micro_test::tests_failed + micro_test::tests_passed));  \
   if (micro_test::tests_failed == 0) {                         \
     micro_test::reporter->Report("~~~ALL TESTS PASSED~~~\n");  \
+    return kTfLiteOk;                                          \
   } else {                                                     \
     micro_test::reporter->Report("~~~SOME TESTS FAILED~~~\n"); \
+    return kTfLiteError;                                       \
   }                                                            \
-	while(1);												   \
   }
 
 // TODO(petewarden): I'm going to hell for what I'm doing to this poor for loop.

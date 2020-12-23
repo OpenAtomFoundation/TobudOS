@@ -2735,16 +2735,16 @@ struct TypeTable {
 
 // Weak linkage is culled by VS & doesn't work on cygwin.
 // clang-format off
-//#if !defined(_WIN32) && !defined(__CYGWIN__)
+#if !defined(_WIN32) && !defined(__CYGWIN__)
 
-//extern volatile __attribute__((weak)) const char *flatbuffer_version_string;
-//volatile __attribute__((weak)) const char *flatbuffer_version_string =
-//  "FlatBuffers "
-//  FLATBUFFERS_STRING(FLATBUFFERS_VERSION_MAJOR) "."
-//  FLATBUFFERS_STRING(FLATBUFFERS_VERSION_MINOR) "."
-//  FLATBUFFERS_STRING(FLATBUFFERS_VERSION_REVISION);
+extern volatile __attribute__((weak)) const char *flatbuffer_version_string;
+volatile __attribute__((weak)) const char *flatbuffer_version_string =
+  "FlatBuffers "
+  FLATBUFFERS_STRING(FLATBUFFERS_VERSION_MAJOR) "."
+  FLATBUFFERS_STRING(FLATBUFFERS_VERSION_MINOR) "."
+  FLATBUFFERS_STRING(FLATBUFFERS_VERSION_REVISION);
 
-//#endif  // !defined(_WIN32) && !defined(__CYGWIN__)
+#endif  // !defined(_WIN32) && !defined(__CYGWIN__)
 
 #define FLATBUFFERS_DEFINE_BITMASK_OPERATORS(E, T)\
     inline E operator | (E lhs, E rhs){\

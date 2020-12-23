@@ -15,7 +15,7 @@ limitations under the License.
 #ifndef TENSORFLOW_LITE_MICRO_MICRO_MUTABLE_OP_RESOLVER_H_
 #define TENSORFLOW_LITE_MICRO_MICRO_MUTABLE_OP_RESOLVER_H_
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstring>
 
 #include "tensorflow/lite/c/common.h"

@@ -33,12 +33,12 @@
 #include "cmsis/CMSIS/NN/Include/arm_nnsupportfunctions.h"
 
 // Work around for https://github.com/ARMmbed/mbed-os/issues/12568
-#define  __patched_SXTB16_RORn(op1, rotate) \
-({ \
-  uint32_t result; \
-  __ASM ("sxtb16 %0, %1, ROR %2" : "=r" (result) : "r" (op1), "i" (rotate) ); \
-  result; \
-})
+__STATIC_FORCEINLINE uint32_t __patched_SXTB16_RORn(uint32_t op1, uint32_t rotate) {
+  uint32_t result;
+  __ASM ("sxtb16 %0, %1, ROR %2" : "=r" (result) : "r" (op1), "i" (rotate) );
+  return result;
+}
+
 /**
  * @ingroup groupSupport
  */

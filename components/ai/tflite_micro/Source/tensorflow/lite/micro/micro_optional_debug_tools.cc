@@ -22,7 +22,7 @@ limitations under the License.
 #include <cinttypes>
 #include <cstddef>
 #include <cstdint>
-#include <stdio.h>
+#include <cstdio>
 #include <vector>
 
 #include "flatbuffers/flatbuffers.h"  // from @flatbuffers
