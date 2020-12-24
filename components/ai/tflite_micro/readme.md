@@ -15,7 +15,8 @@ tflite_micro
     ├─ARM_CortexM4_lib		//针对ARM Cortex M4生成的tensorflow_lite_micro.lib库
     ├─ARM_CortexM7_lib		//针对ARM Cortex M7生成的tensorflow_lite_micro.lib库
     ├─ARM_CortexM55_lib		//针对ARM Cortex M55生成的tensorflow_lite_micro.lib库
-    ├─README.md				
+    ├─LICENSE	
+    ├─readme.md				
     └─TFlite_Micro_Component_User_Guide.md //本组件使用指南
     
 ```
