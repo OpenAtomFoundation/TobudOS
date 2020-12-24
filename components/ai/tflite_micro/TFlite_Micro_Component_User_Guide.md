@@ -321,7 +321,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 <img src="image/编译目标为.lib.png" width=80% />
 </div>
 
-最后配置有关的宏、包含的文件路径和优化等级：
+最后包含的文件路径和优化等级，宏等：
 
 <div align=center>
 <img src="image/配置include和优化等级等.png" width=80% />
