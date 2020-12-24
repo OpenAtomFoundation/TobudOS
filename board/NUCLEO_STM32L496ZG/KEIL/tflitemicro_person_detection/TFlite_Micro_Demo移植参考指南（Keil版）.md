@@ -45,15 +45,13 @@ Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@ou
 
 - 移植成功后，工程可以进行线程任务切换，通过串口打印"hello world"，基础keil工程代码准备完毕。
 
-
-
 ####   3. 获取Tensorflow Lite Micro
 
 有三种方式获取tflite_micro：
 
 1. 从TencentOS tiny 代码仓库 `components\ai\tflite_micro`目录获取；
 2. 以lib文件的形式使用tflite_micro组件，lib文件`TencentOS-tiny\components\ai\tflite_micro`的ARM_CortexM4_lib、ARM_CortexM7_lib和ARM_CortexM55_lib文件夹
-3. 从Tensorflow代码仓库获取，TFlite_Micro的源码已经开源，github下载地址为：https://github.com/tensorflow/tensorflow ，TFlite_Micro的代码位于`tensorflow\tensorflow\lite\micro\`目录下。
+3. 从Tensorflow代码仓库获取，TFlite_Micro的源码已经开源，github仓库地址为：https://github.com/tensorflow/tensorflow ，可根据google TFLite Micro官方教程获得Tensorflow Lite Micro的全部源码。
 
 如果没有tflite_micro开发经验，建议以**第一种**或者**第二种**方式获取tflite_micro，希望自行获取最新源码，或者编译lib文件，请参考`TencentOS-tiny\components\tflite_micro`目录的TFlite_Micro_Component_User_Guide.md文档，本指南将直接使用TencentOS tiny 代码仓库内的tflite_micro组件。
 

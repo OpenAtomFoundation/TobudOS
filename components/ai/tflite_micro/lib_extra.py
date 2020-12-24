@@ -40,6 +40,7 @@ shutil.copy(os.path.join(os.path.join(cmsis,"Core/Include/cmsis_armclang.h")),
     os.path.join(tflu_lib_tensorflow,"lite/micro/tools/make/downloads/cmsis/CMSIS/DSP/Include/"))
 shutil.copy(os.path.join(os.path.join(cmsis,"Core/Include/cmsis_compiler.h")),
     os.path.join(tflu_lib_tensorflow,"lite/micro/tools/make/downloads/cmsis/CMSIS/DSP/Include/"))
+shutil.copy("./LICENSE",tflu_lib_path)
 #删除benchmarks和example
 shutil.rmtree(os.path.join(tflu_lib_tensorflow, "lite/micro/benchmarks"))
 shutil.rmtree(os.path.join(tflu_lib_tensorflow, "lite/micro/examples"))

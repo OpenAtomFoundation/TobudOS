@@ -1,10 +1,10 @@
 # Tensorflow Lite Micro组件使用说明
 
-作者：刘恒言，杨庆生，邓可笈
+Github ID: [Derekduke](https://github.com/Derekduke)   E-mail:  dkeji627@gmail.com 
 
-日期：
+Github ID: [QingChuanWS](https://github.com/QingChuanWS)  E-mail: bingshan45@163.com
 
-联系方式：bingshan45@163.com
+Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@outlook.com
 
 # 概述
 
