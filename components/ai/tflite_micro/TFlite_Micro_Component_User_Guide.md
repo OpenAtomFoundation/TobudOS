@@ -285,11 +285,29 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 ## 2. 将源文件加入KEIL工程并生成.lib库
 
-新建目标芯片的KEIL工程（本次示例以ARM Cortex M4为例），将Source目录下的`tensorflow`和`third_party`文件夹拷贝到KEIL工程的根目录下，并添加`Source`目录下的所有源文件（包含.c和.cc)，例如下图所示：
+新建目标芯片的KEIL工程（本次示例以ARM Cortex M4为例），将Source目录下的`tensorflow`和`third_party`文件夹拷贝到KEIL工程的根目录下，并添加`tensorflow`目录下除`lite/micro/kernels`以及`lite/micro/tools`文件夹以外的所有源文件（包含.c和.cc)，例如下图所示：
 
 <div align=center>
 <img src="image/lib文件目录.png" width=80% />
 </div>
+**注意**
+
+在添加`tensorflow/lite/micro/kernel`目录下的源文件时需要区分`reference`算子和应用`CMSIS-NN`加速之后的算子，`tensorflow/lite/micro/kernel`文件夹内容如下图中所示：
+
+<div align=center>
+<img src="image/cmsis和reference.png" width=80% />
+</div>
+
+如果在生成lib库时想要采用CMSIS的算子的话，则：
+
+1. 添加`tensorflow/lite/micro/kernel/cmsis-nn`文件夹中的源文件；
+2. 在添加`tensorflow/lite/micro/kernel/`中的算子时，请不要添加`add.cc`，`conv.cc`，`depthwise_conv.cc`，`softmax.cc`，`fully_connected.cc`，`pooling.cc`，`mul.cc`这七个源文件。
+3. 添加`tensorflow/lite/micro/tools`文件夹下的全部源文件。
+
+如果在生成lib库时想要采用reference的算子的话，则：
+
+1. 添加`tensorflow/lite/micro/kernel/`中的全部算子；
+2. 无需添加`tensorflow/lite/micro/tools`文件夹下的源文件。
 
 同时采用compiler version 6编译器并关闭Microlib：
 
