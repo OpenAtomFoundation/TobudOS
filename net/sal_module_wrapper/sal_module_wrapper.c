@@ -12,6 +12,13 @@ int tos_sal_module_register(sal_module_t *module)
     return -1;
 }
 
+int tos_sal_module_register_default()
+{
+    g_sal_module = NULL;
+
+    return 0;
+}
+
 int tos_sal_module_init(void)
 {
     if (g_sal_module && g_sal_module->init) {

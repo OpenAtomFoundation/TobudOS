@@ -9,17 +9,13 @@
 #include "lorawan_version.h"
 
 #include <tos_k.h>
-#include "sensor_parser.h"
 
 #define APP_TX_DUTYCYCLE                            30000      //ms
 #define LORAWAN_DOWNLINK_PORT						2
 #define LORAWAN_UPLINK_PORT                         10 
 
 
-k_mail_q_t mail_q;
-#define DATA_CNT        26
-uint8_t mail_buf[DATA_CNT];
-
+#define DATA_CNT        3
 
 typedef struct device_data_st {
     uint8_t     data[DATA_CNT];
@@ -96,13 +92,13 @@ void MX_LoRaWAN_Init(void)
 	lw_current_chmask_set(&ch);
 	
 	/*tx dr*/
-	lw_config_tx_datarate_set(DR_5);
+	lw_config_tx_datarate_set(DR_3);
 	
 	/*OTAA*/
  	lw_config_otaa_set(LORA_ENABLE);
 
 	/*enable adr*/
-	lw_adr_set(LORA_DISABLE);
+	lw_adr_set(LORA_ENABLE);
 	
 	/*set retry*/
 	lw_confirm_retry_set(3);
@@ -110,18 +106,11 @@ void MX_LoRaWAN_Init(void)
 	printf("lorawan init ok.\r\n");
 }
 
-uint8_t pool[DATA_CNT];
-#define CMD_LEN_MAX     50
-char cmd_buf[CMD_LEN_MAX];
-dev_data_t dev_data;
+dev_data_t dev_data = {28,78,20};
 
 uint16_t report_period = 10;
 
-void uart_output(const char *str)
-{
-    /* if using c lib printf through uart, a simpler one is: */
-    printf(str);
-}
+
 
 void recv_callback(uint8_t *data, uint8_t len)
 {
@@ -148,8 +137,6 @@ void application_entry(void *arg)
     int ret = 0;
     int send_failed_count = 0;
     
-    tos_mail_q_create(&mail_q, pool, DATA_CNT, sizeof(uint8_t));
-    tos_shell_init(cmd_buf, sizeof(cmd_buf), uart_output);
 
     //create task to process loramac
     tos_sem_create_max(&lora_mac_process_sem, 0, 1);
@@ -163,16 +150,12 @@ void application_entry(void *arg)
                     10);
 
     //report pm2.5 data
-    while (1) {
-        size_t mail_size;
-
-        tos_mail_q_pend(&mail_q, &dev_data.data, &mail_size, TOS_TIME_FOREVER);
-        
+    while (1) {        
         /*fill the data*/
+        tos_task_delay(20000);
         i = 0;
         app_data.port = LORAWAN_UPLINK_PORT;
-
-        for (i = 0; i < mail_size; i++) {
+        for (i = 0; i < DATA_CNT; i++) {
             app_data.buff[i] = dev_data.data[i];
             printf("[%d] %x\n", i, dev_data.data[i]);
         }
@@ -205,7 +188,7 @@ void application_entry(void *arg)
             send_failed_count = 0;
         }
         
-        tos_task_delay(10000);
+
     }
 					
     //Lora_start_send();

@@ -34,7 +34,7 @@ void SystemApp_Init(void)
 
 	vcom_Init(NULL);
     
-    MX_USART2_UART_Init();
+        //MX_USART2_UART_Init();
 
 	/*Initialize the temperature and Battery measurement services */
 	SYS_InitMeasurement();

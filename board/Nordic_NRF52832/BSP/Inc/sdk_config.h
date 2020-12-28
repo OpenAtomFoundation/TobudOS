@@ -7088,7 +7088,7 @@
 // <e> NRF_FSTORAGE_ENABLED - nrf_fstorage - Flash abstraction library
 //==========================================================
 #ifndef NRF_FSTORAGE_ENABLED
-#define NRF_FSTORAGE_ENABLED 0
+#define NRF_FSTORAGE_ENABLED 1
 #endif
 // <h> nrf_fstorage - Common settings
 

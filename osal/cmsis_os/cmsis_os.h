@@ -728,8 +728,9 @@ osStatus osPoolFree(osPoolId pool_id, void *block);
 #else                            // define the object
 #define osMessageQDef(name, queue_sz, type)   \
     k_msg_q_t msg_q_handler_##name; \
+    uint8_t msg_q_pool[queue_sz*sizeof(type)]; \
     const osMessageQDef_t os_messageQ_def_##name = \
-        { (queue_sz), sizeof(type), NULL, (&(msg_q_handler_##name)) }
+        { (queue_sz), sizeof(type), msg_q_pool, (&(msg_q_handler_##name)) }
 #endif
 
 /// \brief Access a Message Queue Definition.

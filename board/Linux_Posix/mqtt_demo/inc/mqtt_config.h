@@ -11,7 +11,7 @@
 #define MQTT_SUBSCRIBE_TOPIC    "$product/$dev/$sub"
 #define MQTT_PUBLISH_TOPIC      "$product/$dev/$pub"
 
-#error please replace yourself server configuration
+//#error please replace yourself server configuration
 /**
  * 1. run python tool
  * ```

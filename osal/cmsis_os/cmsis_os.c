@@ -123,6 +123,17 @@ osStatus osThreadSetPriority(osThreadId thread_id, osPriority priority)
 }
 
 /**
+ * @brief Pass control to next thread that is in state READY.
+ * @return status code that indicates the execution status of the function.
+ */
+osStatus osThreadYield(void)
+{
+    tos_task_yield();
+    
+    return osOK;
+}
+
+/**
  * @brief Get current priority of an active thread.
  * @param[in]   thread_id   thread ID obtained by \ref osThreadCreate or \ref osThreadGetId.
  * @return current priority value of the thread function.
@@ -458,7 +469,7 @@ osMessageQId osMessageCreate(const osMessageQDef_t *queue_def, osThreadId thread
  */
 osStatus osMessagePut(osMessageQId queue_id, uint32_t info, uint32_t millisec)
 {
-    return errno_knl2cmsis(tos_msg_q_post((k_msg_q_t *)queue_id, &info));
+    return errno_knl2cmsis(tos_msg_q_post((k_msg_q_t *)queue_id, (uint32_t*)info));
 }
 
 /**
@@ -484,7 +495,7 @@ osEvent osMessageGet(osMessageQId queue_id, uint32_t millisec)
     if (err == K_ERR_NONE) {
         event.def.message_id    = queue_id;
         event.status            = errno_knl2cmsis(err);
-        event.value.v           = *((uint32_t *)msg_body);
+        event.value.v           = (uint32_t)msg_body;
     } else {
         event.def.message_id    = NULL;
         event.status            = osErrorOS;

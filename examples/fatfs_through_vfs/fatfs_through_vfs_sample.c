@@ -43,7 +43,7 @@ void application_entry(void *arg)
 
     fd = tos_vfs_open("/fs/fatfs_sd/test_file.txt", VFS_OFLAG_EXISTING | VFS_OFLAG_READ);
     if (fd < 0) {
-        printf("open file error: %d\n", ret);
+        printf("open file error!\n");
     }
 
     memset(buf, 0, sizeof(buf));

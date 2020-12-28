@@ -27,12 +27,12 @@ volatile int ble_npl_in_critical = 0;
 void
 npl_tencentos_tiny_eventq_init(struct ble_npl_eventq *evq)
 {
-    void *msg_pool = tos_mmheap_alloc(sizeof(void *));
+#define EVENT_Q_MSG_CNT     32
+    void *msg_pool = tos_mmheap_alloc(sizeof(void *) * EVENT_Q_MSG_CNT);
     if (!msg_pool) {
         return;
     }
 
-#define EVENT_Q_MSG_CNT     32
     tos_msg_q_create(&evq->q, msg_pool, EVENT_Q_MSG_CNT);
 }
 

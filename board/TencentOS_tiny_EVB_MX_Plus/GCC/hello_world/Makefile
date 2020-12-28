@@ -45,7 +45,7 @@ ARCH_SRC =  \
         C_SOURCES += $(ARCH_SRC)
 
 CMSIS_SRC =  \
-        ${wildcard $(TOP_DIR)/osal/cmsis_os/*.c}
+		$(TOP_DIR)/osal/cmsis_os/cmsis_os.c
         C_SOURCES += $(CMSIS_SRC)
 
 HAL_DRIVER_SRC =  \

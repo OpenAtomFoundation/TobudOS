@@ -1,7 +1,32 @@
-#include "esp8266.h"
 #include "mcu_init.h"
 #include "sal_module_wrapper.h"
 #include "cmsis_os.h"
+
+#define USE_ESP8266
+//#define USE_SIM800A
+//#define USE_BC26
+//#define USE_EC20
+//#define USE_EC200S
+
+#ifdef USE_ESP8266
+#include "esp8266.h"
+#endif
+
+#ifdef USE_SIM800A
+#include "sim800a.h"
+#endif
+
+#ifdef USE_BC26
+#include "bc26.h"
+#endif
+
+#ifdef USE_EC20
+#include "ec20.h"
+#endif
+
+#ifdef USE_EC200S
+#include "ec200s.h"
+#endif
 
 #define TCP_TEST_TASK0_STK_SIZE         4096
 void tcp_test0(void);
@@ -60,28 +85,31 @@ void tcp_test1(void)
     }
 }
 
-#define USE_ESP8266
 
 void application_entry(void *arg)
 {
-#ifdef USE_ESP8266
+#if defined(USE_ESP8266)
     esp8266_sal_init(HAL_UART_PORT_0);
     esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
-#endif
-
-#ifdef USE_SIM800A
+#elif defined(USE_SIM800A)
     sim800a_power_on();
     sim800a_sal_init(HAL_UART_PORT_2);
+#elif defined(USE_BC26)
+    bc26_sal_init(HAL_UART_PORT_2);
+#elif defined(USE_EC20)
+    ec20_sal_init(HAL_UART_PORT_0);
+#elif defined(USE_EC200S)
+    ec200s_sal_init(HAL_UART_PORT_2);
 #endif
-
-    socket_id_0 = tos_sal_module_connect("39.108.190.129", "8080", TOS_SAL_PROTO_TCP);
+    
+    socket_id_0 = tos_sal_module_connect("117.50.111.72", "8080", TOS_SAL_PROTO_TCP); 
     if (socket_id_0 == -1) {
         printf("TCP0 connect failed\r\n");
     } else {
         printf("TCP0 connect success! fd: %d\n", socket_id_0);
     }
 
-    socket_id_1 = tos_sal_module_connect("39.108.190.129", "8001", TOS_SAL_PROTO_TCP);
+    socket_id_1 = tos_sal_module_connect("117.50.111.72", "8001", TOS_SAL_PROTO_TCP);
     if (socket_id_1 == -1) {
         printf("TCP1 connect failed\r\n");
     } else {

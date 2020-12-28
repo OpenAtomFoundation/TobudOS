@@ -20,15 +20,15 @@
 
 #include "tos_hal.h"
 
-typedef enum sal_send_mode {
-    SAL_SEND_MODE_NORMAL,
-    SAL_SEND_MODE_TRANSPARENT,
-} sal_send_mode_t;
+typedef enum m26_send_mode {
+    M26_SEND_MODE_NORMAL,
+    M26_SEND_MODE_TRANSPARENT,
+} m26_send_mode_t;
 
-typedef enum sal_multilink_state {
-    SAL_MULTILINK_STATE_ENABLE,
-    SAL_MULTILINK_STATE_DISABLE,
-} sal_multilink_state_t;
+typedef enum m26_multilink_state {
+    M26_MULTILINK_STATE_ENABLE,
+    M26_MULTILINK_STATE_DISABLE,
+} m26_multilink_state_t;
 
 int m26_sal_init(hal_uart_port_t uart_port);
 

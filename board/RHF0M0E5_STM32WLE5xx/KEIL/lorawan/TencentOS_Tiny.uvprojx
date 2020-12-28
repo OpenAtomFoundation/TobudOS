@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32WLE5JCIx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32WLxx_DFP.1.0.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32WLxx_DFP.1.0.2.OEM</PackID>
+          <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x40000) CPUTYPE("Cortex-M4") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32WLE5xx,CORE_CM4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32WLxx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\BSP\Middlewares\LoRaWAN\Conf;..\..\BSP\Middlewares\LoRaWAN\Crypto;..\..\BSP\Middlewares\LoRaWAN\Mac;..\..\BSP\Middlewares\LoRaWAN\Patterns\Basic;..\..\BSP\Middlewares\LoRaWAN\Utilities;..\..\BSP\Middlewares\SubGHz_Phy;..\..\BSP\Middlewares\SubGHz_Phy\stm32_radio_driver;..\..\BSP\Inc;.\App;.\Target;..\..\BSP\Utilities\lpm\tiny_lpm;..\..\BSP\Utilities\misc;..\..\BSP\Hardware\PM25</IncludePath>
+              <IncludePath>..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32WLxx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32WLxx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\BSP\Middlewares\LoRaWAN\Conf;..\..\BSP\Middlewares\LoRaWAN\Crypto;..\..\BSP\Middlewares\LoRaWAN\Mac;..\..\BSP\Middlewares\LoRaWAN\Patterns\Basic;..\..\BSP\Middlewares\LoRaWAN\Utilities;..\..\BSP\Middlewares\SubGHz_Phy;..\..\BSP\Middlewares\SubGHz_Phy\stm32_radio_driver;..\..\BSP\Inc;.\App;.\Target;..\..\BSP\Utilities\lpm\tiny_lpm;..\..\BSP\Utilities\misc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -394,6 +394,11 @@
           <GroupName>Application/User</GroupName>
           <Files>
             <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\main.c</FilePath>
+            </File>
+            <File>
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\adc.c</FilePath>
@@ -412,11 +417,6 @@
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
             </File>
             <File>
               <FileName>rtc.c</FileName>
@@ -439,11 +439,6 @@
               <FilePath>..\..\BSP\Src\stm32wlxx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>stm32wlxx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32wlxx_it.c</FilePath>
-            </File>
-            <File>
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\usart.c</FilePath>
@@ -452,6 +447,16 @@
               <FileName>usart_if.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\usart_if.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\mcu_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\stm32wlxx_it.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -751,16 +756,8 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>examples</GroupName>
-        </Group>
-        <Group>
           <GroupName>TOS-CONFIG</GroupName>
           <Files>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\main.c</FilePath>
-            </File>
             <File>
               <FileName>tos_config.h</FileName>
               <FileType>5</FileType>
@@ -795,16 +792,6 @@
               <FileName>timer_wrapper.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Target\timer_wrapper.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Hardware</GroupName>
-          <Files>
-            <File>
-              <FileName>sensor_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Hardware\PM25\sensor_parser.c</FilePath>
             </File>
           </Files>
         </Group>

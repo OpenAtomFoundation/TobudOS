@@ -20,6 +20,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "tos_k.h"
 
 #define AUTH_MODE_KEY       1
 #define AUTH_MODE_CERT      2
@@ -39,9 +40,17 @@
 
 #define DEVICE_KEY_FILE_NAME_MAX_SIZE       128
 
-#define TOPIC_MAX_SIZE                      ((DEVICE_NAME_MAX_SIZE) + (PRODUCT_ID_MAX_SIZE) + 64)
+#define TOPIC_NAME_MAX_SIZE                      ((DEVICE_NAME_MAX_SIZE) + (PRODUCT_ID_MAX_SIZE) + 64)
 
 #define PUB_PAYLOAD_MAX_SIZE                200
+
+#define MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE 2048
+#define MQTT_MESSAGE_HANDLE_TASK_PRIO       3
+#define MQTT_MESSAGE_NUM_MAX                3
+#define MQTT_MESSAGE_POOL_SIZE              MQTT_MESSAGE_NUM_MAX*sizeof(mqtt_message_t)
+
+#define MQTT_SUB_TOPIC_MAX                  5
+#define MQTT_SUB_TOPIC_HANDLES_POOL_SIZE    MQTT_SUB_TOPIC_MAX * sizeof(mqtt_message_handlers_t)
 
 typedef enum mqtt_state_en {
     MQTT_STATE_DISCONNECTED,
@@ -68,6 +77,22 @@ typedef struct mqtt_param_st {
     uint8_t     auto_connect_enable;
 } mqtt_param_t;
 
+typedef struct mqtt_message_st {
+    char topic[64];
+    char payload[256];
+} mqtt_message_t;
+
+typedef void (*message_handler_t)(mqtt_message_t* msg);
+
+typedef struct mqtt_message_handlers_st {
+    k_list_t            list;
+    qos_t               qos;
+    const char*         topic_filter;
+    message_handler_t   handler;
+} mqtt_message_handlers_t;
+
+extern k_mail_q_t mqtt_message_mail;
+
 #define DEFAULT_MQTT_PARAMS { TLS_MODE_PSK, MQTT_COMMAND_TIMEOUT, 240, 1, 1 }
 
 typedef struct device_info_st {
@@ -76,6 +101,17 @@ typedef struct device_info_st {
 
     char device_serc[DEVICE_SERC_MAX_SIZE + 1];
 } device_info_t;
+
+typedef enum ota_mode_en {
+    OTA_DISABLE,
+    OTA_ENABLE
+} ota_mode_t;
+
+typedef struct ota_fw_info_st {
+    char     fw_version[10];
+    uint32_t  fw_size;
+    uint8_t  fw_md5[50];
+} ota_fw_info_t;
 
 typedef struct tencent_firmware_module_st {
     int (*init)(void);
@@ -97,6 +133,16 @@ typedef struct tencent_firmware_module_st {
     int (*mqtt_state_get)(mqtt_state_t *state);
 
     int (*debug_level_set)(int log_level);
+    
+    int (*ota_set)(ota_mode_t mode, char *version);
+    
+    int (*ota_read_fwinfo)(ota_fw_info_t *ota_fw_info);
+    
+    int (*ota_read_fwdata)(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+    
+    int (*start_smartconfig)(void);
+    
+    int (*stop_smartconfig)(void);
 } tencent_firmware_module_t;
 
 /**
@@ -184,10 +230,11 @@ int tos_tf_module_mqtt_publ(const char *topic, qos_t qos, char *payload);
  *
  * @param[in]   topic       mqtt topic
  * @param[in]   qos         quality of service
+ * @param[in]   handle      will be callback when topic arrive
  *
  * @return  errcode
  */
-int tos_tf_module_mqtt_sub(char *topic, qos_t qos);
+int tos_tf_module_mqtt_sub(char *topic, qos_t qos, message_handler_t handle);
 
 /**
  * @brief Unsubscribe a mqtt topic.
@@ -221,6 +268,60 @@ int tos_tf_module_mqtt_state_get(mqtt_state_t *state);
  * @return  errcode
  */
 int tos_tf_module_debug_level_set(int log_level);
+
+/**
+ * @brief Set tencent firmware module OTA mode
+ *
+ * @attention None
+ *
+ * @param[in]   mode       OTA_DISABLE or OTA_ENABLE
+ * @param[in]   version    version string
+ *
+ * @return  errcode
+ */
+int tos_tf_module_ota_set(ota_mode_t mode, char *version);
+
+/**
+ * @brief Read fw info from tencent firmware module
+ *
+ * @attention None
+ *
+ * @param[in]   ota_fw_info   fw information struct
+ *
+ * @return  errcode
+ */
+int tos_tf_module_ota_read_fwinfo(ota_fw_info_t *ota_fw_info);
+
+/**
+ * @brief Read fw data from tencent firmware module
+ *
+ * @attention None
+ *
+ * @param[in]   ota_fw_data_buffer   fw data buffer
+ *
+ * @param[in]   buf_size   fw data buffer size
+ *
+ * @return  errcode
+ */
+int tos_tf_module_ota_read_fwdata(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+
+/**
+ * @brief Start smartconfig from tencent firmware module
+ *
+ * @attention None
+ *
+ * @return  errcode
+ */
+int tos_tf_module_smartconfig_start(void);
+
+/**
+ * @brief Stop smartconfig from tencent firmware module
+ *
+ * @attention None
+ *
+ * @return  errcode
+ */
+int tos_tf_module_smartconfig_stop(void);
 
 #endif
 

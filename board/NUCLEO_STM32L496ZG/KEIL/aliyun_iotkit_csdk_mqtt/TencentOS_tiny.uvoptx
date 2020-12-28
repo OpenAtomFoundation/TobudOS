@@ -341,8 +341,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\stm32l4xx_it.c</PathWithFileName>
-      <FilenameWithoutPath>stm32l4xx_it.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\BSP\Src\stm32l4xx_it_mqtt.c</PathWithFileName>
+      <FilenameWithoutPath>stm32l4xx_it_mqtt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1553,7 +1553,7 @@
   </Group>
 
   <Group>
-    <GroupName>mbedtls</GroupName>
+    <GroupName>mebdtls</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>

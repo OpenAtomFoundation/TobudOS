@@ -322,5 +322,5 @@ ble_npl_hw_is_in_critical(void)
 }
 #endif
 
-#endif  /* _NPL_H_ */
+#endif  /* _NIMBLE_NPL_OS_H_ */
 

@@ -1,0 +1,6 @@
+# Name,   Type, SubType, Offset,  Size
+phy_init, data, phy,     0xf000,  0x1000
+otadata,data,ota,  0x10000,        8K
+nvs,data,nvs,   0x12000,        56K
+ota_0,app,    ota_0,   0x100000,0x180000
+ota_1,app,    ota_1,   0x280000,0x180000

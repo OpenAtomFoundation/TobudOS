@@ -20,12 +20,8 @@
 
 #include "tos_hal.h"
 
-typedef enum sal_send_mode {
-    SAL_SEND_MODE_NORMAL,
-    SAL_SEND_MODE_TRANSPARENT,
-} sal_send_mode_t;
-
 int ec20_sal_init(hal_uart_port_t uart_port);
+int ec20_sal_deinit(void);
 
 #endif /* __EC20_H__ */
 

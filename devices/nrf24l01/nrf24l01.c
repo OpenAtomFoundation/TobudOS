@@ -53,7 +53,7 @@ void nrf_enable_max_rt_irq() {
 }
 
 void nrf_disable_max_rt_irq() {
-	nrf_clear_reg_bit(REG_CONFIG, MASK_MAX_RT);
+	nrf_set_reg_bit(REG_CONFIG, MASK_MAX_RT);
 }
 
 void nrf_set_rf_channel(uint8_t channel) {

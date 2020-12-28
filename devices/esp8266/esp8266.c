@@ -35,20 +35,20 @@ static int esp8266_echo_close(void)
     return -1;
 }
 
-static int esp8266_net_mode_set(sal_net_mode_t mode)
+static int esp8266_net_mode_set(esp8266_net_mode_t mode)
 {
     int try = 0;
     char *cmd = NULL;
     at_echo_t echo;
 
     switch (mode) {
-        case SAL_NET_MODE_STA:
+        case ESP8266_NET_MODE_STA:
             cmd = "AT+CWMODE=1\r\n";
             break;
-        case SAL_NET_MODE_AP:
+        case ESP8266_NET_MODE_AP:
             cmd = "AT+CWMODE=2\r\n";
             break;
-        case SAL_NET_MODE_STA_AP:
+        case ESP8266_NET_MODE_STA_AP:
             cmd = "AT+CWMODE=3\r\n";
             break;
         default:
@@ -65,14 +65,14 @@ static int esp8266_net_mode_set(sal_net_mode_t mode)
     return -1;
 }
 
-static int esp8266_send_mode_set(sal_send_mode_t mode)
+static int esp8266_send_mode_set(esp8266_send_mode_t mode)
 {
     int try = 0;
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 1000, "AT+CIPMODE=%d\r\n", mode == SAL_SEND_MODE_NORMAL ? 0 : 1);
+        tos_at_cmd_exec(&echo, 1000, "AT+CIPMODE=%d\r\n", mode == ESP8266_SEND_MODE_NORMAL ? 0 : 1);
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
@@ -80,14 +80,14 @@ static int esp8266_send_mode_set(sal_send_mode_t mode)
     return -1;
 }
 
-static int esp8266_multilink_set(sal_multilink_state_t state)
+static int esp8266_multilink_set(esp8266_multilink_state_t state)
 {
     int try = 0;
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, "link is builded");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 500, "AT+CIPMUX=%d\r\n", state == SAL_MULTILINK_STATE_ENABLE ? 1 : 0);
+        tos_at_cmd_exec(&echo, 500, "AT+CIPMUX=%d\r\n", state == ESP8266_MULTILINK_STATE_ENABLE ? 1 : 0);
         if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
@@ -127,7 +127,7 @@ static int esp8266_reconnect_init(void)
         return -1;
     }
 #else
-    if (esp8266_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0) {
+    if (esp8266_multilink_set(ESP8266_MULTILINK_STATE_ENABLE) != 0) {
         printf("esp8266 multilink set FAILED\n");
         return -1;
     }
@@ -363,12 +363,12 @@ static int esp8266_init(void)
         return -1;
     }
 
-    if (esp8266_net_mode_set(SAL_NET_MODE_STA) != 0) {
+    if (esp8266_net_mode_set(ESP8266_NET_MODE_STA) != 0) {
         printf("esp8266 net mode set FAILED\n");
         return -1;
     }
 
-    if (esp8266_send_mode_set(SAL_SEND_MODE_NORMAL) != 0) {
+    if (esp8266_send_mode_set(ESP8266_SEND_MODE_NORMAL) != 0) {
         printf("esp8266 send mode set FAILED\n");
         return -1;
     }
@@ -379,7 +379,7 @@ static int esp8266_init(void)
         return -1;
     }
 #else
-    if (esp8266_multilink_set(SAL_MULTILINK_STATE_ENABLE) != 0) {
+    if (esp8266_multilink_set(ESP8266_MULTILINK_STATE_ENABLE) != 0) {
         printf("esp8266 multilink set FAILED\n");
         return -1;
     }
@@ -472,6 +472,21 @@ int esp8266_sal_init(hal_uart_port_t uart_port)
         return -1;
     }
 
+    return 0;
+}
+
+int esp8266_sal_deinit()
+{
+    int id = 0;
+
+    for (id = 0; id < AT_DATA_CHANNEL_NUM; ++id) {
+        tos_sal_module_close(id);
+    }
+
+    tos_sal_module_register_default();
+
+    tos_at_deinit();
+    
     return 0;
 }
 

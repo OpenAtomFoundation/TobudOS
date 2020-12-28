@@ -22,7 +22,7 @@
 #include "main.h"
 #include "stm32l4xx_it.h"
 #include "tos_k.h"
-#include "tos_at.h"
+//#include "tos_at.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -258,7 +258,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t data;
     if (huart->Instance == USART2) {
         HAL_UART_Receive_IT(&huart2, &data, 1);
-        tos_at_uart_input_byte(data);
+        //tos_at_uart_input_byte(data);
     }
 }
 /* USER CODE END 1 */

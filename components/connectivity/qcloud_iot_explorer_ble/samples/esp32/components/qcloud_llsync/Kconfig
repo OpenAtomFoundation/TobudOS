@@ -1,0 +1,7 @@
+menu "QCloud LLSync"
+config QCLOUD_LLSYNC_SUPPORT
+
+    bool "QCloud LLSync support."
+    default "y"
+
+endmenu

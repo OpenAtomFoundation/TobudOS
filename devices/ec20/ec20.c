@@ -1,10 +1,19 @@
-/**
- * @brief   Quectel EC20 LTGE Cat4 Module
- * @author  Mculover666 <2412828003@qq.com>
- * @date    2020/05/07
- * @changelog
-            2020/05/21    Mculover666    Change recv mode is Direct Push Mode
-*/
+/*----------------------------------------------------------------------------
+ * Tencent is pleased to support the open source community by making TencentOS
+ * available.
+ *
+ * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * If you have downloaded a copy of the TencentOS binary from Tencent, please
+ * note that the TencentOS binary is licensed under the BSD 3-Clause License.
+ *
+ * If you have downloaded a copy of the TencentOS source code from Tencent,
+ * please note that TencentOS source code is licensed under the BSD 3-Clause
+ * License, except for the third-party components listed below which are
+ * subject to different license terms. Your integration of TencentOS into your
+ * own projects may require compliance with the BSD 3-Clause License, as well
+ * as the other licenses applicable to the third-party components included
+ * within TencentOS.
+ *---------------------------------------------------------------------------*/
 
 #include "ec20.h"
 #include "tos_at.h"
@@ -14,6 +23,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
+
+typedef struct ip_addr_st {
+    uint8_t seg1;
+    uint8_t seg2;
+    uint8_t seg3;
+    uint8_t seg4;
+}ip_addr_t;
+
+static ip_addr_t domain_parser_addr = {0};
+k_sem_t domain_parser_sem;
 
 static int ec20_echo_close(void)
 {
@@ -33,9 +52,9 @@ static int ec20_sim_card_check(void)
     int try = 0;
     char echo_buffer[32];
 	
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10)
-	{
+    {
         
         tos_at_cmd_exec(&echo, 1000, "AT+CPIN?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
@@ -47,8 +66,7 @@ static int ec20_sim_card_check(void)
             return 0;
         }
     }
-		 
-	return -1;
+    return -1;
 }
 
 static int ec20_signal_quality_check(void)
@@ -56,9 +74,9 @@ static int ec20_signal_quality_check(void)
     int rssi, ber;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 	
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) 
     {
         tos_at_cmd_exec(&echo, 1000, "AT+CSQ\r\n");
@@ -68,6 +86,10 @@ static int ec20_signal_quality_check(void)
         }
 
         str = strstr(echo.buffer, "+CSQ:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
@@ -81,10 +103,10 @@ static int ec20_gsm_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 	
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-	while (try++ < 10)
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    while (try++ < 10)
     {
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
@@ -92,11 +114,15 @@ static int ec20_gsm_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
         if (stat == 1) {
             return 0;
         }
-	}
+    }
     return -1;	
 }
 
@@ -105,10 +131,10 @@ static int ec20_gprs_network_check(void)
     int n, stat;
     at_echo_t echo;
     char echo_buffer[32], *str;
-	int try = 0;
+    int try = 0;
 
-	tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-	while (try++ < 10)
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    while (try++ < 10)
     {
        
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
@@ -118,12 +144,16 @@ static int ec20_gprs_network_check(void)
         }
 
         str = strstr(echo.buffer, "+CGREG:");
+        if (!str) 
+        {
+            return -1;
+        }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
         if (stat == 1)
         {
             return 0;
         }
-	}
+    }
 		
     return -1;	
 }
@@ -134,12 +164,12 @@ static int ec20_close_apn(void)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 3000, "AT+QIDEACT=1\r\n");
-   	if (echo.status == AT_ECHO_STATUS_OK)
-	{
-		return 0;
-	}
+    if (echo.status == AT_ECHO_STATUS_OK)
+    {
+        return 0;
+    }
    
-	return -1;
+    return -1;
 }
 
 static int ec20_set_apn(void)
@@ -153,8 +183,7 @@ static int ec20_set_apn(void)
         return -1;
     }
 
-
-	tos_at_cmd_exec(&echo, 3000, "AT+QIACT=1\r\n");
+    tos_at_cmd_exec_until(&echo, 3000, "AT+QIACT=1\r\n");
     if (echo.status != AT_ECHO_STATUS_OK)
     {
         return -1;
@@ -219,15 +248,17 @@ static int ec20_connect(const char *ip, const char *port, sal_proto_t proto)
 
     id = tos_at_channel_alloc(ip, port);
     if (id == -1)
-	{
+    {
         return -1;
     }
+    
+    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 
-	tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
+    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
     tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
     if (echo.status == AT_ECHO_STATUS_OK)
-	{
+    {
         return id;
     }
 		
@@ -249,21 +280,21 @@ int ec20_send(int id, const void *buf, size_t len)
 {
     at_echo_t echo;
 
-	if (!tos_at_channel_is_working(id)) {
+    if (!tos_at_channel_is_working(id)) {
         return -1;
     }
 	
     if (tos_at_global_lock_pend() != 0)
-	{
+    {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-	tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
+    tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -271,7 +302,7 @@ int ec20_send(int id, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -283,12 +314,12 @@ int ec20_send(int id, const void *buf, size_t len)
 
 int ec20_recvfrom_timeout(int id, void *buf, size_t len, uint32_t timeout)
 {
-	return tos_at_channel_read_timed(id, buf, len, timeout);
+    return tos_at_channel_read_timed(id, buf, len, timeout);
 }
 
 int ec20_recvfrom(int id, void *buf, size_t len)
 {
-	return ec20_recvfrom_timeout(id, buf, len, (uint32_t)4000);
+    return ec20_recvfrom_timeout(id, buf, len, (uint32_t)4000);
 }
 
 int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
@@ -302,10 +333,10 @@ int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-	tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
+    tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -313,7 +344,7 @@ int ec20_sendto(int id, char *ip, char *port, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-	{
+    {
         tos_at_global_lock_post();
         return -1;
     }
@@ -332,7 +363,7 @@ static int ec20_close(int id)
 {
     ec20_transparent_mode_exit();
 
-	tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
+    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
 
     tos_at_channel_free(id);
 
@@ -341,31 +372,20 @@ static int ec20_close(int id)
 
 static int ec20_parse_domain(const char *host_name, char *host_ip, size_t host_ip_len)
 {
-    char *str;
     at_echo_t echo;
     char echo_buffer[128];
+
+    tos_sem_create_max(&domain_parser_sem, 0, 1);
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     tos_at_cmd_exec(&echo, 2000, "AT+QIDNSGIP=1,\"%s\"\r\n", host_name);
 
-    if (echo.status != AT_ECHO_STATUS_OK)
-	{
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
 
-    /*
-        +QIURC: "dnsgip",0,1,600
-
-		+QIURC: "dnsgip","xxx.xxx.xxx"
-    */
-
-    int seg1, seg2, seg3, seg4;
-    str = strstr(echo.buffer, "dnsgip");
-	*str = '0';
-	str = strstr(echo.buffer, "dnsgip");
-    str += strlen("dnsgip\",\"");
-    sscanf(str, "%d.%d.%d.%d", &seg1, &seg2, &seg3, &seg4);
-    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", seg1, seg2, seg3, seg4);
+    tos_sem_pend(&domain_parser_sem, TOS_TIME_FOREVER);
+    snprintf(host_ip, host_ip_len, "%d.%d.%d.%d", domain_parser_addr.seg1, domain_parser_addr.seg2, domain_parser_addr.seg3, domain_parser_addr.seg4);
     host_ip[host_ip_len - 1] = '\0';
 
     printf("GOT IP: %s\n", host_ip);
@@ -384,11 +404,6 @@ __STATIC__ void ec20_incoming_data_process(void)
 		<data content>
     */
 	
-	if (tos_at_uart_read(&data, 1) != 1)
-	{
-		return;
-	}
-	
     while (1)
     {
         if (tos_at_uart_read(&data, 1) != 1)
@@ -403,7 +418,7 @@ __STATIC__ void ec20_incoming_data_process(void)
         channel_id = channel_id * 10 + (data - '0');
     }
 
-	while (1)
+    while (1)
     {
         if (tos_at_uart_read(&data, 1) != 1)
         {
@@ -436,11 +451,74 @@ __STATIC__ void ec20_incoming_data_process(void)
         data_len -= read_len;
     } while (data_len > 0);
 
-	return;
+    return;
+}
+
+__STATIC__ void ec20_domain_data_process(void)
+{
+    uint8_t data;
+
+    /*
+        +QIURC: "dnsgip",0,1,600
+
+		+QIURC: "dnsgip","xxx.xxx.xxx.xxx"
+    */
+
+    if (tos_at_uart_read(&data, 1) != 1) {
+        return;
+    }
+
+    if (data == '0') {
+        return;
+    }
+    
+    if (data == '\"') {
+        /* start parser domain */
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg1 = domain_parser_addr.seg1 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg2 = domain_parser_addr.seg2 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '.') {
+                break;
+            }
+            domain_parser_addr.seg3 = domain_parser_addr.seg3 *10 + (data-'0');
+        }
+        while (1) {
+            if (tos_at_uart_read(&data, 1) != 1) {
+                return;
+            }
+            if (data == '\"') {
+                break;
+            }
+            domain_parser_addr.seg4 = domain_parser_addr.seg4 *10 + (data-'0');
+        }
+        tos_sem_post(&domain_parser_sem);
+    }
+    return;
+
 }
 
 at_event_t ec20_at_event[] = {
-	{ "+QIURC: \"recv\"", ec20_incoming_data_process},
+	{ "+QIURC: \"recv\",",   ec20_incoming_data_process},
+    { "+QIURC: \"dnsgip\",", ec20_domain_data_process},
 };
 
 sal_module_t sal_module_ec20 = {
@@ -449,9 +527,9 @@ sal_module_t sal_module_ec20 = {
     .send           = ec20_send,
     .recv_timeout   = ec20_recv_timeout,
     .recv           = ec20_recv,
-    .sendto           = ec20_sendto,
-	.recvfrom         = ec20_recvfrom,
-	.recvfrom_timeout = ec20_recvfrom_timeout,
+    .sendto         = ec20_sendto,
+    .recvfrom       = ec20_recvfrom,
+    .recvfrom_timeout = ec20_recvfrom_timeout,
     .close          = ec20_close,
     .parse_domain   = ec20_parse_domain,
 };
@@ -470,6 +548,21 @@ int ec20_sal_init(hal_uart_port_t uart_port)
         return -1;
     }
 		
+    return 0;
+}
+
+int ec20_sal_deinit()
+{
+    int id = 0;
+
+    for (id = 0; id < AT_DATA_CHANNEL_NUM; ++id) {
+        tos_sal_module_close(id);
+    }
+
+    tos_sal_module_register_default();
+
+    tos_at_deinit();
+    
     return 0;
 }
 

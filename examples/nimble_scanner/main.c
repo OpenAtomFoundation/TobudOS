@@ -10,8 +10,8 @@
 #define BLE_RAW_ADV_DATA_LEN        (31U)
 
 typedef enum nimble_scan_status_en {
-    NIMBLE_SCAN_STATUS_STOPPED,
-    NIMBLE_SCAN_STATUS_SCANNING,
+    NIMBLE_SCAN_STATUS_STOPPED  = 0,
+    NIMBLE_SCAN_STATUS_SCANNING = 1,
 } nimble_scan_status_t;
 
 typedef struct nimble_scan_item_st {
@@ -198,7 +198,7 @@ int nimble_scan_start(void)
 {
     int rc;
 
-    if (ble_gap_disc_active() != 0) {
+    if (ble_gap_disc_active() != NIMBLE_SCAN_STATUS_STOPPED) {
         return 0;
     }
 
@@ -216,7 +216,7 @@ void nimble_scan_stop(void)
 {
     int rc;
 
-    if (ble_gap_disc_active() != 1) {
+    if (ble_gap_disc_active() != NIMBLE_SCAN_STATUS_SCANNING) {
         return;
     }
 
