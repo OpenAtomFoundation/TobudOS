@@ -20,7 +20,7 @@ TencentOS tiny main architecture diagram, from bottom to top, mainly includes:
 
 **CPU libs** ：The CPU IP core architecture supported by TencentOS tiny,currently supports ARM Cortex M0/3/4/7.
 
-**Drive management** ：Including board support package (BSP, mainly developed and maintained by MCU chip manufacturers), hardware abstraction (HAL, mainly provided by TencentOS tiny, to facilitate adaptation and porting of different chips), device drivers (Drivers, such as Wi-Fi, GPRS Drivers for modules such as LoRa).
+**Drive management** ：Including board support package (BSP, mainly developed and maintained by MCU chip manufacturers), hardware abstraction layer (HAL, mainly provided by TencentOS tiny, to facilitate adaptation and porting of different chips), device drivers (Drivers, such as Wi-Fi, GPRS Drivers for modules such as LoRa).
 
 **kernel** ：The TencentOS tiny real-time kernel includes tasks management, real-time scheduling, time management, interrupt management, memory management, exception handling, software timers, linked lists, message queues, semaphores, mutex locks, event flags, and more.
 
