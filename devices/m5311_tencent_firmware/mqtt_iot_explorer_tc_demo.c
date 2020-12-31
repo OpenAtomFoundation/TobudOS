@@ -66,7 +66,7 @@ void mqtt_demo_task(void)
         printf("MQTT: %s\n", state == MQTT_STATE_CONNECTED ? "CONNECTED" : "DISCONNECTED");
     }
     
-    /* 开始订阅topic */
+    /* 驴陋脢录露漏脭脛topic */
     size = snprintf(report_reply_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/down/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_reply_topic_name) - 1) {
@@ -78,7 +78,7 @@ void mqtt_demo_task(void)
         printf("module mqtt sub success\n");
     }
     
-    memset(report_topic_name, sizeof(report_topic_name), 0);
+    memset(report_topic_name, 0, sizeof(report_topic_name));
     size = snprintf(report_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/up/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_topic_name) - 1) {
@@ -88,7 +88,7 @@ void mqtt_demo_task(void)
 
     while (1) {
             
-        /* 上报值 */
+        /* 脡脧卤篓脰碌 */
         memset(payload, 0, sizeof(payload));
         snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, ch20_ppm_value);
         
