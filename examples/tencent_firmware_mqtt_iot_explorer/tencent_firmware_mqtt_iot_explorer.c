@@ -73,7 +73,7 @@ void mqtt_demo_task(void)
         printf("module mqtt sub success\n");
     }
     
-    memset(report_topic_name, sizeof(report_topic_name), 0);
+    memset(report_topic_name, 0, sizeof(report_topic_name));
     size = snprintf(report_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/up/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_topic_name) - 1) {
