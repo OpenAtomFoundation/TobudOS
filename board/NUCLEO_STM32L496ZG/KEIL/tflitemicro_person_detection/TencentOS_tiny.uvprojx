@@ -137,7 +137,7 @@
             <DriverSelection>4107</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L496xx,NUCLEO_STM32L496ZG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\hello_world;..\..\TOS_CONFIG;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\BSP\Hardware\Inc;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\flatbuffers\include;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\gemmlowp;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\kissfft;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\ruy;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro\tools\make\downloads</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\hello_world;..\..\TOS_CONFIG;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\BSP\Hardware\Inc;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\flatbuffers\include;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\gemmlowp;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\kissfft;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\third_party\ruy;..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro\tools\make\downloads;..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -779,31 +779,6 @@
           <GroupName>tensorflow</GroupName>
           <Files>
             <File>
-              <FileName>person_detect_model_data.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\person_detect_model_data.cc</FilePath>
-            </File>
-            <File>
-              <FileName>model_settings.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\model_settings.cc</FilePath>
-            </File>
-            <File>
-              <FileName>main_functions.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\main_functions.cc</FilePath>
-            </File>
-            <File>
-              <FileName>image_provider.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\image_provider.cc</FilePath>
-            </File>
-            <File>
-              <FileName>detection_responder.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\detection_responder.cc</FilePath>
-            </File>
-            <File>
               <FileName>retarget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\ai\tflite_micro\KEIL\retarget.c</FilePath>
@@ -812,6 +787,31 @@
               <FileName>tensorflow_lite_micro_M4.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow_lite_micro_M4.lib</FilePath>
+            </File>
+            <File>
+              <FileName>detection_responder.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\detection_responder.cc</FilePath>
+            </File>
+            <File>
+              <FileName>image_provider.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\image_provider.cc</FilePath>
+            </File>
+            <File>
+              <FileName>main_functions.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\main_functions.cc</FilePath>
+            </File>
+            <File>
+              <FileName>model_settings.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\model_settings.cc</FilePath>
+            </File>
+            <File>
+              <FileName>person_detect_model_data.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\person_detect_model_data.cc</FilePath>
             </File>
           </Files>
         </Group>

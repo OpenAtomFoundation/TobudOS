@@ -2,11 +2,11 @@
 
 **作者：**
 
-Github ID: [Derekduke](https://github.com/Derekduke)   E-mail:  dkeji627@gmail.com 
+Github: [Derekduke](https://github.com/Derekduke)   E-mail:  dkeji627@gmail.com 
 
-Github ID: [QingChuanWS](https://github.com/QingChuanWS)  E-mail: bingshan45@163.com
+Github: [QingChuanWS](https://github.com/QingChuanWS)  E-mail: bingshan45@163.com
 
-Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@outlook.com
+Github: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@outlook.com
 
 ## 概述
 
@@ -50,7 +50,7 @@ Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@ou
 有三种方式获取tflite_micro：
 
 1. 从TencentOS tiny 代码仓库 `components\ai\tflite_micro`目录获取；
-2. 以lib文件的形式使用tflite_micro组件，lib文件`TencentOS-tiny\components\ai\tflite_micro`的ARM_CortexM4_lib、ARM_CortexM7_lib和ARM_CortexM55_lib文件夹
+2. 以lib文件的形式使用tflite_micro组件，lib文件`TencentOS-tiny\components\ai\tflite_micro`的ARM_CortexM4_lib、ARM_CortexM7_lib和ARM_CortexM55_lib文件夹；
 3. 从Tensorflow代码仓库获取，TFlite_Micro的源码已经开源，github仓库地址为：https://github.com/tensorflow/tensorflow ，可根据google TFLite Micro官方教程获得Tensorflow Lite Micro的全部源码。
 
 如果没有tflite_micro开发经验，建议以**第一种**或者**第二种**方式获取tflite_micro，希望自行获取最新源码，或者编译lib文件，请参考`TencentOS-tiny\components\tflite_micro`目录的TFlite_Micro_Component_User_Guide.md文档，本指南将直接使用TencentOS tiny 代码仓库内的tflite_micro组件。
@@ -61,16 +61,17 @@ Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@ou
 
 以下是整个例程的目录规划：
 
-| 一级目录  |           二级目录           |   三级目录   |                             说明                             |
-| :-------: | :--------------------------: | :----------: | :----------------------------------------------------------: |
-|   arch    |             arm              |              | TencentOS tiny适配的IP核架构（含M核中断、调度、tick相关代码） |
-|   board   |      NUCLEO_STM32L496ZG      |              |                    移植目标芯片的工程文件                    |
-|           |                              |     BSP      |            板级支持包，外设驱动代码在Hardware目录            |
-| component |              ai              | tflite_micro |                       tflite_micro源码                       |
-| examples  | tflitemicro_person_detection |              |                       行人检测demo示例                       |
-|  kernel   |             core             |              |                    TencentOS tiny内核源码                    |
-|           |              pm              |              |                 TencentOS tiny低功耗模块源码                 |
-|   osal    |           cmsis_os           |              |              TencentOS tiny提供的cmsis os 适配               |
+| 一级目录  |           二级目录           |       三级目录        |                             说明                             |
+| :-------: | :--------------------------: | :-------------------: | :----------------------------------------------------------: |
+|   arch    |             arm              |                       | TencentOS tiny适配的IP核架构（含M核中断、调度、tick相关代码） |
+|   board   |      NUCLEO_STM32L496ZG      |                       |                    移植目标芯片的工程文件                    |
+|           |                              |          BSP          |            板级支持包，外设驱动代码在Hardware目录            |
+| component |              ai              |     tflite_micro      |                 tflite_micro源码及有关库文件                 |
+| examples  | tflitemicro_person_detection |                       |                       行人检测demo示例                       |
+|           |                              | tflu_person_detection |                       行人检测实例代码                       |
+|  kernel   |             core             |                       |                    TencentOS tiny内核源码                    |
+|           |              pm              |                       |                 TencentOS tiny低功耗模块源码                 |
+|   osal    |           cmsis_os           |                       |              TencentOS tiny提供的cmsis os 适配               |
 
 完成TencentOS tiny基础keil工程准备工作后，在这个keil工程的基础上继续添加外设驱动代码。
 
@@ -209,9 +210,9 @@ void task1(void *arg)
 
 其中，retarget.c的路径为：`TencentOS-tiny\components\ai\tflite_micro\KEIL\retarget.c`
 
-tensorflow_lite_micro.lib的路径为：`TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow_lite_micro.lib`
+tensorflow_lite_micro.lib的路径为：`TencentOS-stiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow_lite_micro.lib`
 
-其余.cc文件均在当前目录下的`tflu_person_detection`文件夹中。
+其余.cc文件和.h均在`examples\tflu_person_detection\tflu_person_detection`文件夹中。
 
 #### 1.3 关闭Keil的MicroLib库
 
@@ -243,7 +244,7 @@ TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro
 
 本例程的任务函数在
 
-`TencentOS-tiny\examples\tflitemicro_person_detection\tflitemicro_person_detection.c`目录下
+`TencentOS-tiny\examples\tflitemicro_person_detection\tflitemicro_person_detection.c`
 
 #### 2.1 图像预处理
 
@@ -311,13 +312,13 @@ void task2(void *arg)
 
 #### 2.3 运行效果
 
-通过串行输出实时打印信息，移动摄像头，镜头没有对准行人时，输出如下：
+通过串行输出实时打印信息，移动摄像头，没有对准行人时，输出如下：
 
 <div align=center>
 <img src="./image/reasult_no_person.png" width=70% />
 </div>
 
-当镜头对准行人时，输出如下：
+当摄像头对准行人时，输出如下：
 
 <div align=center>
 <img src="./image/reasult_person.png" width=70% />
