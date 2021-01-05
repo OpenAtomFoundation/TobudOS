@@ -45,7 +45,7 @@ void mqtt_demo_task(void)
 
     
     
-    /* OLEDÏÔÊ¾ÈÕÖ¾ */
+    /* OLEDæ˜¾ç¤ºæ—¥å¿— */
     OLED_ShowString(0, 2, (uint8_t*)"connecting...", 16);
 
     /**
@@ -75,7 +75,7 @@ void mqtt_demo_task(void)
         printf("MQTT: %s\n", state == MQTT_STATE_CONNECTED ? "CONNECTED" : "DISCONNECTED");
     }
     
-    /* ¿ªÊ¼¶©ÔÄtopic */
+    /* å¼€å§‹è®¢é˜…topic */
     size = snprintf(report_reply_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/down/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_reply_topic_name) - 1) {
@@ -87,14 +87,14 @@ void mqtt_demo_task(void)
         printf("module mqtt sub success\n");
     }
     
-    memset(report_topic_name, sizeof(report_topic_name), 0);
+    memset(report_topic_name, 0, sizeof(report_topic_name));
     size = snprintf(report_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/up/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_topic_name) - 1) {
         printf("pub topic content length not enough! content size:%d  buf size:%d", size, (int)sizeof(report_topic_name));
     }
     
-    /* ´´½¨ÓÊÏä */
+    /* åˆ›å»ºé‚®ç®± */
     tos_mail_q_create(&mail_q, pm2d5_value_pool, 3, sizeof(pm2d5_data_u));
     
     HAL_NVIC_DisableIRQ(USART3_4_IRQn);
@@ -105,18 +105,18 @@ void mqtt_demo_task(void)
     }
   
     while (1) {
-        /* Í¨¹ı½ÓÊÕÓÊ¼şÀ´¶ÁÈ¡Êı¾İ */
+        /* é€šè¿‡æ¥æ”¶é‚®ä»¶æ¥è¯»å–æ•°æ® */
         HAL_NVIC_EnableIRQ(USART3_4_IRQn);
         tos_mail_q_pend(&mail_q, (uint8_t*)&pm2d5_value, &mail_size, TOS_TIME_FOREVER);
         HAL_NVIC_DisableIRQ(USART3_4_IRQn);
         
-        //ÊÕµ½Ö®ºó´òÓ¡ĞÅÏ¢
+        //æ”¶åˆ°ä¹‹åæ‰“å°ä¿¡æ¯
         printf("\r\n\r\n\r\n");
         for (i = 0; i < 13; i++) {
             printf("data[%d]:%d ug/m3\r\n", i+1, pm2d5_value.data[i]);
         }
         
-        //ÏÔÊ¾PM2.5µÄÖµ
+        //æ˜¾ç¤ºPM2.5çš„å€¼
         OLED_Clear();
         sprintf(str, "PM1.0:%4d ug/m3", pm2d5_value.pm2d5_data.data1);
         OLED_ShowString(0,0,(uint8_t*)str,16);
@@ -124,7 +124,7 @@ void mqtt_demo_task(void)
         OLED_ShowString(0,2,(uint8_t*)str,16);
 				
         
-        /* ÉÏ±¨Öµ */
+        /* ä¸ŠæŠ¥å€¼ */
         memset(payload, 0, sizeof(payload));
         snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, pm2d5_value.pm2d5_data.data2);
         
@@ -144,7 +144,7 @@ void application_entry(void *arg)
 {
     char *str = "TencentOS-tiny";
     
-    /* ³õÊ¼»¯OLED */
+    /* åˆå§‹åŒ–OLED */
     OLED_Init();
     OLED_Clear();
     OLED_ShowString(0, 0, (uint8_t*)str, 16);
