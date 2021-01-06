@@ -2,17 +2,26 @@
 #define __SCCB_H
 #include "sys.h"
 #include "gpio.h"
+//////////////////////////////////////////////////////////////////////////////////	 
+//æœ¬ç¨‹åºå‚è€ƒè‡ªç½‘å‹guanfu_wangä»£ç ã€‚
+//ALIENTEK STM32F103å¼€å‘æ¿ 
+//SCCB é©±åŠ¨ä»£ç 	   
+//æ­£ç‚¹åŽŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2015/4/16
+//ç‰ˆæœ¬ï¼šV1.0		    							    							  
+//////////////////////////////////////////////////////////////////////////////////
 
-//IO²Ù×÷º¯Êý	 
-#define SCCB_SDA_IN()  {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=0<<5*2;}	//PD7 ÊäÈë
-#define SCCB_SDA_OUT() {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=1<<5*2;} 	//PD7 Êä³ö
-#define SCCB_ID   			0X60  			//OV2640µÄID
+//IOæ“ä½œå‡½æ•°	 
+#define SCCB_SDA_IN()  {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=0<<5*2;}	//PD7 è¾“å…¥
+#define SCCB_SDA_OUT() {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=1<<5*2;} 	//PD7 è¾“å‡º
+#define SCCB_ID   			0X60  			//OV2640çš„ID
 
-//IO·½ÏòÉèÖÃ
-#define SCCB_SDA_IN()  {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=0<<5*2;}	//PD7 ÊäÈë
-#define SCCB_SDA_OUT() {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=1<<5*2;} 	//PD7 Êä³ö
+//IOæ–¹å‘è®¾ç½®
+#define SCCB_SDA_IN()  {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=0<<5*2;}	//PD7 è¾“å…¥
+#define SCCB_SDA_OUT() {GPIOB->MODER&=~(3<<(5*2));GPIOB->MODER|=1<<5*2;} 	//PD7 è¾“å‡º
 
-#define SCCB_ID   			0X60  			//OV2640µÄID
+#define SCCB_ID   			0X60  			//OV2640çš„ID
 
 void SCCB_Init(void);
 void SCCB_Start(void);
