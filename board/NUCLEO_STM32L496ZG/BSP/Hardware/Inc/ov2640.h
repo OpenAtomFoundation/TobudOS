@@ -2,6 +2,18 @@
 #define _OV2640_H
 #include "sys.h"
 #include "sccb.h"
+//////////////////////////////////////////////////////////////////////////////////	 
+//本程序只供学习使用，未经作者许可，不得用于其它任何用途
+//ALIENTEK STM32F407开发板
+//OV2640 驱动代码	   
+//正点原子@ALIENTEK
+//技术论坛:www.openedv.com
+//创建日期:2014/5/14
+//版本：V1.0
+//版权所有，盗版必究。
+//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
+//All rights reserved									  
+////////////////////////////////////////////////////////////////////////////////// 
 
 /*
 *  picture size
@@ -9,8 +21,8 @@
 #define OV2640_PIXEL_WIDTH  ((uint16_t)96)
 #define OV2640_PIXEL_HEIGHT ((uint16_t)96)
 
-//#define OV2640_PWDN  	PGout(9)			//POWER DOWN�����ź� 
-//#define OV2640_RST  	PGout(15)			//��λ�����ź� 
+//#define OV2640_PWDN  	PGout(9)			//POWER DOWN控制信号 
+//#define OV2640_RST  	PGout(15)			//复位控制信号 
 void OV2640_PWDN(uint8_t signal);
 void OV2640_RST(uint8_t signal);
 ////////////////////////////////////////////////////////////////////////////////// 
@@ -18,7 +30,7 @@ void OV2640_RST(uint8_t signal);
 #define OV2640_PID				0X2642
  
 
-//��ѡ��DSP��ַ(0XFF=0X00)ʱ,OV2640��DSP�Ĵ�����ַӳ���
+//当选择DSP地址(0XFF=0X00)时,OV2640的DSP寄存器地址映射表
 #define OV2640_DSP_R_BYPASS     0x05
 #define OV2640_DSP_Qs           0x44
 #define OV2640_DSP_CTRL         0x50
@@ -54,7 +66,7 @@ void OV2640_RST(uint8_t signal);
 #define OV2640_DSP_P_STATUS     0xFE
 #define OV2640_DSP_RA_DLMT      0xFF 
 
-//��ѡ�񴫸�����ַ(0XFF=0X01)ʱ,OV2640��DSP�Ĵ�����ַӳ���
+//当选择传感器地址(0XFF=0X01)时,OV2640的DSP寄存器地址映射表
 #define OV2640_SENSOR_GAIN       0x00
 #define OV2640_SENSOR_COM1       0x03
 #define OV2640_SENSOR_REG04      0x04
