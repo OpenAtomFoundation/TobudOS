@@ -79,8 +79,8 @@ void LCD_2IN4_Init(void)
 {
 	LCD_2IN4_Reset();
 
-	LCD_2IN4_SetBackLight(500);//´ò¿ª±³¹â
-  HAL_Delay(100);
+	LCD_2IN4_SetBackLight(500);
+  	HAL_Delay(100);
 	
 	//************* Start Initial Sequence **********//
 	LCD_2IN4_Write_Command(0x11); //Sleep out 
