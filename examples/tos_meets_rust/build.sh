@@ -6,7 +6,7 @@ set -e
 function cook_rust() {
     RETDIR=$(pwd)
 
-    ROOTDIR=$(git rev-parse --show-toplevel)
+    ROOTDIR=$(git rev-parse --show-toplevel)/examples/tos_meets_rust
     [[ ! -e $ROOTDIR ]] && echo "[x] Cannot ROOTDIR" && return 42
 
     BUILD_DIR=$ROOTDIR/build
