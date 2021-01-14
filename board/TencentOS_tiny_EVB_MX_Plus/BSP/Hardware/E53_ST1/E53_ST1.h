@@ -16,13 +16,13 @@
 #define ST1_GPS_POW_GPIO_CLK_ENABLE() __HAL_RCC_GPIOC_CLK_ENABLE()
 
 /***************************************************************
-* 名		称: GasStatus_ENUM
+* 名    称: E53ST1_Status_ENUM
 * 说    明：枚举状态结构体
 ***************************************************************/
 typedef enum
 {
-	ST1_OFF = 0,
-	ST1_ON
+    ST1_OFF = 0,
+    ST1_ON
 } E53ST1_Status_ENUM;
 
 /***************************************************\
@@ -31,25 +31,25 @@ typedef enum
 \***************************************************/
 __packed typedef struct
 {
-	uint32_t latitude_bd;					//纬度   分扩大100000倍，实际要除以100000
-	uint8_t nshemi_bd;						//北纬/南纬,N:北纬;S:南纬	
-	uint32_t longitude_bd;			  //经度 分扩大100000倍,实际要除以100000
-	uint8_t ewhemi_bd;						//东经/西经,E:东经;W:西经
+    uint32_t latitude_bd;     //纬度 分扩大100000倍,实际要除以100000
+    uint8_t  nshemi_bd;       //北纬/南纬,N:北纬;S:南纬	
+    uint32_t longitude_bd;    //经度 分扩大100000倍,实际要除以100000
+    uint8_t  ewhemi_bd;       //东经/西经,E:东经;W:西经
 }gps_msg;
 
 /* E53_ST1传感器数据类型定义 ------------------------------------------------------------*/
 typedef struct
 {
-		float    Longitude;				//经度
-		float    Latitude;        //纬度
+    float    Longitude;       //经度
+    float    Latitude;        //纬度
 } E53_ST1_Data_TypeDef;
 
 extern E53_ST1_Data_TypeDef E53_ST1_Data;
 
 typedef struct
 {
-		char    Longitude[9];				//经度
-		char    Latitude[8];        //纬度
+    char    Longitude[9];     //经度
+    char    Latitude[8];      //纬度
 } E53_ST1_Send_TypeDef;
 
 extern E53_ST1_Send_TypeDef E53_ST1_Send;
@@ -62,9 +62,5 @@ void E53_ST1_Read_Data(void);
 void E53_ST1_LED_StatusSet(E53ST1_Status_ENUM status);
 void E53_ST1_Beep(E53ST1_Status_ENUM status);
 
-#endif
-
-
-
-
+#endif /* __E53_ST1_H__ */
 
