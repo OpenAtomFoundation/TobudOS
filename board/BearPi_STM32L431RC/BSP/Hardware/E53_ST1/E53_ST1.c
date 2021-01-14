@@ -225,20 +225,20 @@ void Init_E53_ST1(void)
 * 函数名称: NMEA_Comma_Pos
 *	函数功能：从buf里面得到第cx个逗号所在的位置
 *	输入值：
-*	返回值：0~0xFE，代表逗号所在位置的便宜
-*				 	0xFF，代表不存在第cx个逗号
+*	返回值：0~0xFE，代表逗号所在位置的偏移
+*		0xFF，代表不存在第cx个逗号
 \***************************************************/
 
 uint8_t NMEA_Comma_Pos(uint8_t *buf,uint8_t cx)
 {
-	uint8_t *p = buf;
-	while(cx)
-	{
-		if(*buf=='*'||*buf<' '||*buf>'z')return 0xFF;
-		if(*buf==',')cx--;
-		buf++;
-	}
-	return buf-p;
+    uint8_t *p = buf;
+    while(cx)
+    {
+	if(*buf=='*'||*buf<' '||*buf>'z')return 0xFF;
+	if(*buf==',')cx--;
+	buf++;
+    }
+    return buf-p;
 }
 /***************************************************\
 * 函数名称: NMEA_Pow
@@ -346,32 +346,32 @@ void E53_ST1_Read_Data(void)
 }
 
 /***************************************************************
-* 函数名称: E53SF1_LED_StatusSet
-* 说    明: E53SF1开发板上的LED灯的亮灭控制
+* 函数名称: E53_ST1_LED_StatusSet
+* 说    明: E53 ST1开发板上的LED灯的亮灭控制
 * 参    数: status,LED灯的状态
-*									非1,关灯
-*									1,开灯
+*	    非1,关灯
+*	    1,开灯
 * 返 回 值: 无
 ***************************************************************/
 void E53_ST1_LED_StatusSet(E53ST1_Status_ENUM status)
 {
-	HAL_GPIO_WritePin(ST1_LED_GPIO_Port, ST1_LED_Pin, status != ST1_ON ? GPIO_PIN_RESET : GPIO_PIN_SET );	
+    HAL_GPIO_WritePin(ST1_LED_GPIO_Port, ST1_LED_Pin, status != ST1_ON ? GPIO_PIN_RESET : GPIO_PIN_SET );	
 }
 
 /***************************************************************
-* 函数名称: E53SF1_BEEP
-* 说    明: E53SF1蜂鸣器报警与否
+* 函数名称: E53_ST1_Beep
+* 说    明: E53 ST1蜂鸣器报警与否
 * 参    数: status,LED_ENUM枚举的数据
-*									LED_OFF,关灯
-*									LED_ON,开灯
+*	    ST1_OFF,关
+*	    ST1_ON,开
 * 返 回 值: 无
 ***************************************************************/
 void E53_ST1_Beep(E53ST1_Status_ENUM status)
 {
-	if(status == ST1_ON)
-		HAL_TIM_PWM_Start(&htim16,TIM_CHANNEL_1);
-	if(status == ST1_OFF)
-		HAL_TIM_PWM_Stop(&htim16,TIM_CHANNEL_1);
+    if(status == ST1_ON)
+        HAL_TIM_PWM_Start(&htim16,TIM_CHANNEL_1);
+    if(status == ST1_OFF)
+        HAL_TIM_PWM_Stop(&htim16,TIM_CHANNEL_1);
 }
 
 
