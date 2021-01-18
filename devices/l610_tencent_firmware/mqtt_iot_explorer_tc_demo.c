@@ -66,7 +66,7 @@ void mqtt_demo_task(void)
         printf("MQTT: %s\n", state == MQTT_STATE_CONNECTED ? "CONNECTED" : "DISCONNECTED");
     }
     
-    /* ¿ªÊ¼¶©ÔÄtopic */
+
     size = snprintf(report_reply_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/down/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_reply_topic_name) - 1) {
@@ -87,8 +87,7 @@ void mqtt_demo_task(void)
     
 
     while (1) {
-            
-        /* ÉÏ±¨Öµ */
+
         memset(payload, 0, sizeof(payload));
         snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, 30);
         
