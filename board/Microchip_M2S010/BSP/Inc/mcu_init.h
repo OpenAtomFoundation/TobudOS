@@ -12,8 +12,4 @@
 
 void board_init(void);
 
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* _MCU_INIT_H_ */
