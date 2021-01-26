@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32L496ZGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.4.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32L4xx_DFP.2.5.0</PackID>
+          <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2004FFFF) IROM(0x8000000-0x80FFFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -137,7 +137,7 @@
             <DriverSelection>4107</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -779,24 +779,9 @@
           <GroupName>tensorflow</GroupName>
           <Files>
             <File>
-              <FileName>person_detect_model_data.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\person_detect_model_data.cc</FilePath>
-            </File>
-            <File>
-              <FileName>model_settings.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\model_settings.cc</FilePath>
-            </File>
-            <File>
-              <FileName>main_functions.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\main_functions.cc</FilePath>
-            </File>
-            <File>
-              <FileName>image_provider.cc</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\tflu_person_detection\image_provider.cc</FilePath>
+              <FileName>tensorflow_lite_micro_M4.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow_lite_micro_M4.lib</FilePath>
             </File>
             <File>
               <FileName>detection_responder.cc</FileName>
@@ -804,14 +789,24 @@
               <FilePath>.\tflu_person_detection\detection_responder.cc</FilePath>
             </File>
             <File>
-              <FileName>retarget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\components\ai\tflite_micro\KEIL\retarget.c</FilePath>
+              <FileName>image_provider.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\tflu_person_detection\image_provider.cc</FilePath>
             </File>
             <File>
-              <FileName>tensorflow_lite_micro_M4.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow_lite_micro_M4.lib</FilePath>
+              <FileName>main_functions.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\tflu_person_detection\main_functions.cc</FilePath>
+            </File>
+            <File>
+              <FileName>model_settings.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\tflu_person_detection\model_settings.cc</FilePath>
+            </File>
+            <File>
+              <FileName>person_detect_model_data.cc</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\tflu_person_detection\person_detect_model_data.cc</FilePath>
             </File>
           </Files>
         </Group>

@@ -191,7 +191,7 @@ void task1(void *arg)
 
 ### 1. tflite_micro组件加入到keil工程
 
-由于NUCLEO-L496ZG芯片中的内核为ARM Cortex M4，所以本次我们可以直接使用ARM Cortex M4版本的tensorflow_lite_micro.lib库来简化tflite_micro搭建流程。
+由于 NUCLEO-L496ZG 芯片中的内核为 ARM Cortex M4，所以本次我们可以直接使用 ARM Cortex M4 版本的tensorflow_lite_micro.lib 库来简化 tflite_micro 搭建流程。
 
 #### 1.1 在project中加入新的文件夹tensorflow
 
@@ -237,7 +237,7 @@ TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro
 <img src="./image/tflu_STM32496宏.png" width=80% />
 </div>
 
-其中宏`NUCLEO_STM32L496ZG`是指定Nucleo STM32L496的hlpuart1为系统printf函数的输出串口，具体定义在Nucleo STM32L496的BSP文件夹中的`mcu_init.c`中。
+其中宏`NUCLEO_STM32L496ZG`是指定 Nucleo STM32L496 的 hlpuart1 为系统 printf 函数的输出串口，具体定义在 Nucleo STM32L496 的 BSP 文件夹中的`mcu_init.c`中。
 
 ### 2. 编写Person_Detection 任务函数
 
