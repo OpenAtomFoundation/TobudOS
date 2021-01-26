@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.4.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32L4xx_DFP.2.3.0</PackID>
+          <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\devices\ec20</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\devices\ec20;..\..\..\..\devices\ec200s;..\..\..\..\devices\air724;..\..\..\..\devices\l610</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -797,6 +797,26 @@
               <FileName>esp8266.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec200s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec200s\ec200s.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec20\ec20.c</FilePath>
+            </File>
+            <File>
+              <FileName>air724.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\air724\air724.c</FilePath>
+            </File>
+            <File>
+              <FileName>l610.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\l610\l610.c</FilePath>
             </File>
           </Files>
         </Group>
