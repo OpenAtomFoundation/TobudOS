@@ -169,5 +169,5 @@ void gd_eval_com_init(uint32_t com);
 }
 #endif
 
-#endif /* BEARPI_IOT_GD32F303_H */
+#endif /* EVB_LX_IOT_GD32VF103_H */
 
