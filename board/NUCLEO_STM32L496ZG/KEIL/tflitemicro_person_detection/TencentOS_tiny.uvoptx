@@ -103,7 +103,7 @@
         <bEvRecOn>1</bEvRecOn>
         <bSchkAxf>0</bSchkAxf>
         <bTchkAxf>0</bTchkAxf>
-        <nTsel>0</nTsel>
+        <nTsel>6</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -114,7 +114,7 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile></tIfile>
-        <pMon>BIN\UL2CM3.DLL</pMon>
+        <pMon>STLink\ST-LINKIII-KEIL_SWO.dll</pMon>
       </DebugOpt>
       <TargetDriverDllRegistry>
         <SetRegEntry>
@@ -622,7 +622,7 @@
 
   <Group>
     <GroupName>Drivers/CMSIS</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -642,7 +642,7 @@
 
   <Group>
     <GroupName>tos/arch</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -982,7 +982,7 @@
 
   <Group>
     <GroupName>tos/cmsis_os</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1002,7 +1002,7 @@
 
   <Group>
     <GroupName>hal</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1070,7 +1070,7 @@
 
   <Group>
     <GroupName>examples</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1090,13 +1090,25 @@
 
   <Group>
     <GroupName>tensorflow</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>10</GroupNumber>
       <FileNumber>71</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\components\ai\tflite_micro\KEIL\retarget.c</PathWithFileName>
+      <FilenameWithoutPath>retarget.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>72</FileNumber>
       <FileType>4</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1108,25 +1120,13 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>72</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\tflu_person_detection\detection_responder.cc</PathWithFileName>
-      <FilenameWithoutPath>detection_responder.cc</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
       <FileNumber>73</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\tflu_person_detection\image_provider.cc</PathWithFileName>
-      <FilenameWithoutPath>image_provider.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\detection_responder.cc</PathWithFileName>
+      <FilenameWithoutPath>detection_responder.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1137,8 +1137,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\tflu_person_detection\main_functions.cc</PathWithFileName>
-      <FilenameWithoutPath>main_functions.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\image_provider.cc</PathWithFileName>
+      <FilenameWithoutPath>image_provider.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1149,8 +1149,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\tflu_person_detection\model_settings.cc</PathWithFileName>
-      <FilenameWithoutPath>model_settings.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\main_functions.cc</PathWithFileName>
+      <FilenameWithoutPath>main_functions.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1161,7 +1161,19 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\tflu_person_detection\person_detect_model_data.cc</PathWithFileName>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\model_settings.cc</PathWithFileName>
+      <FilenameWithoutPath>model_settings.cc</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>77</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\person_detect_model_data.cc</PathWithFileName>
       <FilenameWithoutPath>person_detect_model_data.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

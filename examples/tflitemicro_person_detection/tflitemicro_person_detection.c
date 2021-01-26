@@ -1,3 +1,13 @@
+/**
+ * @file tflitemicro_person_detection.c
+ * @author Derekduke (dkeji627@gmail.com); QingChuanWS (bingshan45@163.com); yangqings (yangqingsheng12@outlook.com)
+ * @brief  Person detection example based on TencentOS-Tiny and TFlite_Micro.
+ * @version 0.1
+ * @date 2021-01-05
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include "cmsis_os.h"
 #include "mcu_init.h"
 
@@ -37,7 +47,7 @@ void task1(void *arg)
 {
     while (1) {
       if(frame_flag == 1){
-				
+				printf("*person_detect_task\r\n");
 				if(HAL_DCMI_Stop(&hdcmi))Error_Handler(); //stop DCMI
 				input_convert(camera_buffer,model_buffer);
 				person_detect(model_buffer);
@@ -55,8 +65,8 @@ void task1(void *arg)
 void task2(void *arg)
 {
     while (1) {
-        printf("***person detection task\r\n");
-        osDelay(50);
+        //printf("***task2\r\n");
+        osDelay(200);
     }
 }
 
