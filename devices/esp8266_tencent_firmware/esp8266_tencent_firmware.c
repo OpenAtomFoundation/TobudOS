@@ -60,13 +60,15 @@ int esp8266_tencent_firmware_module_mqtt_publ(const char *topic, qos_t qos, char
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, ">");
+    
+    strcat(payload, "\r\n");
 
     tos_at_cmd_exec_until(&echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload)-2);
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB:OK");
+    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUBL:OK");
     tos_at_raw_data_send_until(&echo, 1000, (uint8_t *)payload, strlen(payload));
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
@@ -165,10 +167,11 @@ int esp8266_tencent_firmware_join_ap(const char *ssid, const char *pwd)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 15000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
+        tos_at_cmd_exec(&echo, 30000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
     return -1;
 }
