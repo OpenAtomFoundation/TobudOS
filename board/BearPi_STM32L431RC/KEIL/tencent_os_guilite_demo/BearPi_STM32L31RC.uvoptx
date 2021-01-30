@@ -291,7 +291,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -322,7 +322,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\gpio.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -334,7 +334,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\main.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -346,7 +346,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\mcu_init.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\mcu_init.c</PathWithFileName>
       <FilenameWithoutPath>mcu_init.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -358,7 +358,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\stm32l4xx_hal_msp.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\stm32l4xx_hal_msp.c</PathWithFileName>
       <FilenameWithoutPath>stm32l4xx_hal_msp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -370,7 +370,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\stm32l4xx_it.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\stm32l4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32l4xx_it.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -382,7 +382,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\usart.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\usart.c</PathWithFileName>
       <FilenameWithoutPath>usart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -394,7 +394,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\adc.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\adc.c</PathWithFileName>
       <FilenameWithoutPath>adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -406,7 +406,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\i2c.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -418,7 +418,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\spi.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\spi.c</PathWithFileName>
       <FilenameWithoutPath>spi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -438,8 +438,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\stemwin_gui_demo\tos_stemwin_gui_test_demo.c</PathWithFileName>
-      <FilenameWithoutPath>tos_stemwin_gui_test_demo.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\guilite_demo\guilite_demo.c</PathWithFileName>
+      <FilenameWithoutPath>guilite_demo.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -754,7 +754,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Src\system_stm32l4xx.c</PathWithFileName>
+      <PathWithFileName>.\BSP\Src\system_stm32l4xx.c</PathWithFileName>
       <FilenameWithoutPath>system_stm32l4xx.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -774,8 +774,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Hardware\BH1750\BH1750.c</PathWithFileName>
-      <FilenameWithoutPath>BH1750.c</FilenameWithoutPath>
+      <PathWithFileName>.\BSP\Hardware\LCD_ST7789\lcd_spi2_drv.c</PathWithFileName>
+      <FilenameWithoutPath>lcd_spi2_drv.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -786,8 +786,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\BSP\Hardware\LCD_ST7789\lcd_spi2_drv.c</PathWithFileName>
-      <FilenameWithoutPath>lcd_spi2_drv.c</FilenameWithoutPath>
+      <PathWithFileName>.\BSP\Hardware\BH1750\BH1750.c</PathWithFileName>
+      <FilenameWithoutPath>BH1750.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1174,7 +1174,7 @@
   </Group>
 
   <Group>
-    <GroupName>emwin_config</GroupName>
+    <GroupName>UIcode</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1182,56 +1182,12 @@
     <File>
       <GroupNumber>11</GroupNumber>
       <FileNumber>68</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\STemWin_Config\Config\GUIConf.c</PathWithFileName>
-      <FilenameWithoutPath>GUIConf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>69</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\STemWin_Config\OS\GUI_X_TOS.c</PathWithFileName>
-      <FilenameWithoutPath>GUI_X_TOS.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>70</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\STemWin_Config\Config\LCDConf_FlexColor_Template.c</PathWithFileName>
-      <FilenameWithoutPath>LCDConf_FlexColor_Template.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>emwin_lib</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>71</FileNumber>
-      <FileType>4</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\components\gui\STemWin\Lib\STemWin532_CM4_Keil.lib</PathWithFileName>
-      <FilenameWithoutPath>STemWin532_CM4_Keil.lib</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\components\gui\GuiLite\UIcode\UIcode.cpp</PathWithFileName>
+      <FilenameWithoutPath>UIcode.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
