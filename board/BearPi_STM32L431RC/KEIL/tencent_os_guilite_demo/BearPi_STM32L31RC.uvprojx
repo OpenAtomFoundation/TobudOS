@@ -321,7 +321,7 @@
             <PlainCh>0</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
-            <wLevel>2</wLevel>
+            <wLevel>1</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER,USE_ESP8266</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\LCD_ST7789;..\..\BSP\Hardware\BH1750;..\..\..\..\examples\stemwin_gui_demo;..\..\..\..\components\gui\STemWin\inc;.\STemWin_Config\Config</IncludePath>
+              <IncludePath>.\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;.\BSP\Hardware\BH1750;.\BSP\Hardware\LCD_ST7789;..\..\..\..\components\gui\GuiLite\UIcode;..\..\..\..\examples\guilite_demo</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -395,47 +395,47 @@
             <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\gpio.c</FilePath>
+              <FilePath>.\BSP\Src\gpio.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\main.c</FilePath>
+              <FilePath>.\BSP\Src\main.c</FilePath>
             </File>
             <File>
               <FileName>mcu_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
+              <FilePath>.\BSP\Src\mcu_init.c</FilePath>
             </File>
             <File>
               <FileName>stm32l4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32l4xx_hal_msp.c</FilePath>
+              <FilePath>.\BSP\Src\stm32l4xx_hal_msp.c</FilePath>
             </File>
             <File>
               <FileName>stm32l4xx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\stm32l4xx_it.c</FilePath>
+              <FilePath>.\BSP\Src\stm32l4xx_it.c</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\usart.c</FilePath>
+              <FilePath>.\BSP\Src\usart.c</FilePath>
             </File>
             <File>
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\adc.c</FilePath>
+              <FilePath>.\BSP\Src\adc.c</FilePath>
             </File>
             <File>
               <FileName>i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\i2c.c</FilePath>
+              <FilePath>.\BSP\Src\i2c.c</FilePath>
             </File>
             <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\spi.c</FilePath>
+              <FilePath>.\BSP\Src\spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -443,9 +443,9 @@
           <GroupName>examples</GroupName>
           <Files>
             <File>
-              <FileName>tos_stemwin_gui_test_demo.c</FileName>
+              <FileName>guilite_demo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\stemwin_gui_demo\tos_stemwin_gui_test_demo.c</FilePath>
+              <FilePath>..\..\..\..\examples\guilite_demo\guilite_demo.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -580,7 +580,7 @@
             <File>
               <FileName>system_stm32l4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\system_stm32l4xx.c</FilePath>
+              <FilePath>.\BSP\Src\system_stm32l4xx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -588,14 +588,14 @@
           <GroupName>Hardware</GroupName>
           <Files>
             <File>
-              <FileName>BH1750.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\BSP\Hardware\BH1750\BH1750.c</FilePath>
-            </File>
-            <File>
               <FileName>lcd_spi2_drv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Hardware\LCD_ST7789\lcd_spi2_drv.c</FilePath>
+              <FilePath>.\BSP\Hardware\LCD_ST7789\lcd_spi2_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>BH1750.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Hardware\BH1750\BH1750.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -765,32 +765,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>emwin_config</GroupName>
+          <GroupName>UIcode</GroupName>
           <Files>
             <File>
-              <FileName>GUIConf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\STemWin_Config\Config\GUIConf.c</FilePath>
-            </File>
-            <File>
-              <FileName>GUI_X_TOS.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\STemWin_Config\OS\GUI_X_TOS.c</FilePath>
-            </File>
-            <File>
-              <FileName>LCDConf_FlexColor_Template.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\STemWin_Config\Config\LCDConf_FlexColor_Template.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>emwin_lib</GroupName>
-          <Files>
-            <File>
-              <FileName>STemWin532_CM4_Keil.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\components\gui\STemWin\Lib\STemWin532_CM4_Keil.lib</FilePath>
+              <FileName>UIcode.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\components\gui\GuiLite\UIcode\UIcode.cpp</FilePath>
             </File>
           </Files>
         </Group>
