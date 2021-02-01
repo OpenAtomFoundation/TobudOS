@@ -22,3 +22,4 @@ int main(void)
     osThreadCreate(osThread(application_entry), NULL); // Create TencentOS Tiny task
     osKernelStart(); // Start TencentOS Tiny
 }
+
