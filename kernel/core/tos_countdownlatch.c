@@ -17,6 +17,8 @@
 
 #include "tos_k.h"
 
+#if TOS_CFG_COUNTDOWNLATCH_EN > 0
+
 __API__ k_err_t tos_countdownlatch_create(k_countdownlatch_t *countdownlatch, k_countdownlatch_cnt_t count)
 {
     TOS_PTR_SANITY_CHECK(countdownlatch);
@@ -130,3 +132,4 @@ __API__ k_err_t tos_countdownlatch_reset(k_countdownlatch_t *countdownlatch, k_c
     return K_ERR_NONE;
 }
 
+#endif /* TOS_CFG_COUNTDOWNLATCH_EN */

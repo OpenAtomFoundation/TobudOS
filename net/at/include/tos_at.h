@@ -21,10 +21,6 @@
 #include "tos_k.h"
 #include "tos_hal.h"
 
-#define AT_AGENT_ECHO_OK            "OK"
-#define AT_AGENT_ECHO_FAIL          "FAIL"
-#define AT_AGENT_ECHO_ERROR         "ERROR"
-
 #define AT_DATA_CHANNEL_NUM                     6
 #define AT_DATA_CHANNEL_FIFO_BUFFER_SIZE        (2048 + 1024)
 
@@ -54,6 +50,9 @@ typedef enum at_parse_status_en {
     AT_PARSE_STATUS_EVENT,
     AT_PARSE_STATUS_EXPECT,
     AT_PARSE_STATUS_OVERFLOW,
+    AT_PARSE_STATUS_OK,
+    AT_PARSE_STATUS_FAIL,
+    AT_PARSE_STATUS_ERROR
 } at_parse_status_t;
 
 typedef enum at_echo_status_en {
@@ -92,6 +91,7 @@ typedef struct at_echo_st {
     size_t              __w_idx;
     int                 __is_expecting;
     k_sem_t             __expect_notify;
+    k_sem_t             __status_set_notify;
     int                 __is_fuzzy_match;
 } at_echo_t;
 

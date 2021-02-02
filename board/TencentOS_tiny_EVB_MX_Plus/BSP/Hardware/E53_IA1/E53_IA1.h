@@ -15,19 +15,19 @@
 /* E53_IA1传感器数据类型定义 ------------------------------------------------------------*/
 typedef struct
 {
-		float    Lux;							//光照强度
-		float    Humidity;        //湿度
-    	float    Temperature;     //温度
-		char     MotorMode;
-		char     LightMode;
+    float    Lux;             //光照强度
+    float    Humidity;        //湿度
+    float    Temperature;     //温度
+    char     MotorMode;
+    char     LightMode;
 } E53_IA1_Data_TypeDef;
 
 extern E53_IA1_Data_TypeDef E53_IA1_Data;
 
 /* 寄存器宏定义 --------------------------------------------------------------------*/
-#define I2C_OWN_ADDRESS                            0x0A
+#define I2C_OWN_ADDRESS    0x0A
 
-#define SHT30_Addr 0x44
+#define SHT30_Addr         0x44
 
 #define BH1750_Addr 0x46
 #define BH1750_ON   0x01
@@ -38,9 +38,5 @@ extern E53_IA1_Data_TypeDef E53_IA1_Data;
 void Init_E53_IA1(void);
 void E53_IA1_Read_Data(void);
 
-#endif
-
-
-
-
+#endif /* __E53_IA1_H__ */
 

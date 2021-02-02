@@ -213,7 +213,7 @@ __STATIC__ void fault_gather_information(cpu_data_t lr, fault_exc_frame_t *frame
 
     if (info->is_on_task) {
         info->stack_start = (cpu_addr_t)k_curr_task->stk_base;
-        info->stack_limit = info->stack_start + k_curr_task->stk_size * sizeof(k_task_t);
+        info->stack_limit = info->stack_start + k_curr_task->stk_size// * sizeof(k_task_t);
     } else {
         info->stack_start = fault_msp_start();
         info->stack_limit = fault_msp_limit();

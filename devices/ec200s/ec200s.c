@@ -32,8 +32,8 @@ typedef struct ip_addr_st {
 }ip_addr_t;
 
 static ip_addr_t domain_parser_addr = {0};
-k_sem_t domain_parser_sem;
-k_sem_t module_ready_sem;
+static k_sem_t domain_parser_sem;
+static k_sem_t module_ready_sem;
 
 static int ec200s_check_ready(void)
 {
@@ -92,19 +92,17 @@ static int ec200s_signal_quality_check(void)
     int try = 0;
 	
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10) 
-    {
+    while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CSQ\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CSQ:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
+        
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
@@ -121,16 +119,14 @@ static int ec200s_gsm_network_check(void)
     int try = 0;
 	
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10)
-    {
+    while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CREG:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
@@ -138,6 +134,7 @@ static int ec200s_gsm_network_check(void)
             return 0;
         }
     }
+    
     return -1;	
 }
 
@@ -149,28 +146,24 @@ static int ec200s_gprs_network_check(void)
     int try = 0;
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10)
-    {
+    while (try++ < 10) {
        
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CGREG:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
-        if (stat == 1)
-        {
+        if (stat == 1) {
             return 0;
         }
     }
 		
-    return -1;	
+    return -1;
 }
 
 static int ec200s_close_apn(void)
@@ -179,8 +172,7 @@ static int ec200s_close_apn(void)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 3000, "AT+QIDEACT=1\r\n");
-    if (echo.status == AT_ECHO_STATUS_OK)
-    {
+    if (echo.status == AT_ECHO_STATUS_OK) {
         return 0;
     }
    
@@ -193,16 +185,14 @@ static int ec200s_set_apn(void)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+QICSGP=1,1,\"CMNET\"\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
 
     tos_at_cmd_exec(&echo, 3000, "AT+QIACT=1\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
-    }	
+    }
 
     return 0;
 }
@@ -216,38 +206,32 @@ static int ec200s_init(void)
         return -1;
     }
     
-    if (ec200s_echo_close() != 0)
-    {
+    if (ec200s_echo_close() != 0) {
         printf("echo close failed,please check your module\n");
         return -1;
     }
 		
-    if(ec200s_sim_card_check() != 0)
-    {
+    if(ec200s_sim_card_check() != 0) {
         printf("sim card check failed,please insert your card\n");
         return -1;
     }
 
-    if (ec200s_signal_quality_check() != 0)
-    {
+    if (ec200s_signal_quality_check() != 0) {
         printf("signal quality check status failed\n");
         return -1;
     }
 		
-    if(ec200s_gsm_network_check() != 0)
-    {
+    if(ec200s_gsm_network_check() != 0) {
         printf("GSM network register status check fail\n");
         return -1;
     }
     
-    if(ec200s_gprs_network_check() != 0)
-    {
+    if(ec200s_gprs_network_check() != 0) {
         printf("GPRS network register status check fail\n");
         return -1;
     }
     
-    if(ec200s_close_apn() != 0)
-    {
+    if(ec200s_close_apn() != 0) {
         printf("close apn failed\n");
         return -1;
     }
@@ -265,25 +249,30 @@ static int ec200s_connect(const char *ip, const char *port, sal_proto_t proto)
 {
     int id;
     at_echo_t echo;
+    char except_str[16];
 
     id = tos_at_channel_alloc(ip, port);
-    if (id == -1)
-    {
+    if (id == -1) {
         return -1;
     }
     
-    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
-
-    tos_at_echo_create(&echo, NULL, 0, "CONNECT OK");
-    tos_at_cmd_exec(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
-                        id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
-    if (echo.status == AT_ECHO_STATUS_OK)
-    {
-        return id;
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 1000, "AT+QICLOSE=%d\r\n", id);
+    if (echo.status != AT_ECHO_STATUS_OK) {
+        tos_at_channel_free(id);
+        return -1;
     }
-		
-    tos_at_channel_free(id);
-    return -1;
+
+    sprintf(except_str, "+QIOPEN: %d,0", id);
+    tos_at_echo_create(&echo, NULL, 0, except_str);
+    tos_at_cmd_exec_until(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
+                        id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
+        tos_at_channel_free(id);
+        return -1;
+    }
+    
+    return id;
 }
 
 static int ec200s_recv_timeout(int id, void *buf, size_t len, uint32_t timeout)
@@ -304,25 +293,22 @@ int ec200s_send(int id, const void *buf, size_t len)
         return -1;
     }
 	
-    if (tos_at_global_lock_pend() != 0)
-    {
+    if (tos_at_global_lock_pend() != 0) {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-    tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
+    tos_at_cmd_exec_until(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
@@ -346,25 +332,21 @@ int ec200s_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 {
     at_echo_t echo;
 
-    if (tos_at_global_lock_pend() != 0)
-	{
+    if (tos_at_global_lock_pend() != 0) {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, ">");
+    tos_at_cmd_exec_until(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
-    tos_at_cmd_exec(&echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
-
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(&echo, 1000, (uint8_t *)buf, len);
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
@@ -376,14 +358,20 @@ int ec200s_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 
 static void ec200s_transparent_mode_exit(void)
 {
-    tos_at_cmd_exec(NULL, 500, "+++");
+    at_echo_t echo;
+    
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 500, "+++");
 }
 
 static int ec200s_close(int id)
 {
+    at_echo_t echo;
+    
     ec200s_transparent_mode_exit();
 
-    tos_at_cmd_exec(NULL, 1000, "AT+QICLOSE=%d\r\n", id);
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_cmd_exec(&echo, 1000, "AT+QICLOSE=%d\r\n", id);
 
     tos_at_channel_free(id);
 
@@ -424,36 +412,28 @@ __STATIC__ void ec200s_incoming_data_process(void)
 		<data content>
     */
 	
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
-
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
         channel_id = channel_id * 10 + (data - '0');
     }
 
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == '\r')
-        {
+        if (data == '\r') {
             break;
         }
         data_len = data_len * 10 + (data - '0');
     }
 
-    if (tos_at_uart_read(&data, 1) != 1)
-    {
+    if (tos_at_uart_read(&data, 1) != 1) {
         return;
     }
 		
