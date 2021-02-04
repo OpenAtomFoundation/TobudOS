@@ -18,4 +18,5 @@ void SystemClock_Config(void);
 }
 #endif
 
-#endif /*__MCU_INIT_H */
+#endif /* __MCU_INIT_H */
+
