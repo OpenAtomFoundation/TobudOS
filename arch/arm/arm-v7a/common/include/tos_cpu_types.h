@@ -17,7 +17,7 @@
 
 #ifndef _TOS_CPU_TYPES_H_
 #define  _TOS_CPU_TYPES_H_
-#include <stdint.h>
+
 /* CPU address type based on address bus size.          */
 #if     (TOS_CFG_CPU_ADDR_SIZE == CPU_WORD_SIZE_32)
 typedef uint32_t    cpu_addr_t;
