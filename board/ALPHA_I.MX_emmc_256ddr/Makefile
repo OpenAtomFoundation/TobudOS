@@ -7,13 +7,13 @@ CC			:= $(CROSS_COMPILE)gcc
 LD			:= $(CROSS_COMPILE)ld
 OBJCOPY 		:= $(CROSS_COMPILE)objcopy
 OBJDUMP 		:= $(CROSS_COMPILE)objdump
-GCC_VERSION		:= 6.5.0 # 4.9.4
+GCC_VERSION		:= 4.9.4
 
 LD_SCRIPT_S		:= link.ld.S
 LD_SCRIPT_DIR		:= $(TOP_DIR)/arch/arm/arm-v7a/lds
 LD_SCRIPT		:= link.ld
 
-GCC_DIR			:= D:\Green\gcc-arm-linux-gnueabihf
+GCC_DIR                 := /home/duke/linux/gcc/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf
 OUT_ROOT		:= out
 OBJ_DIR			:= obj
 LIB_DIR			:= lib
