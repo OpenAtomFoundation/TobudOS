@@ -8,7 +8,7 @@ Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@ou
 
 # 概述
 
-`Tensorflow Lite Micro` 是` TensorFlow Lite `针对MCU的实验性端口，专门用于在微控制器和其他只有几千字节内存的设备上运行机器学习模型。
+`Tensorflow Lite Micro` 是 ` TensorFlow Lite ` 针对MCU的实验性端口，专门用于在微控制器和其他只有几千字节内存的设备上运行机器学习模型。
 
 # 1. 建立与转换模型
 
@@ -18,7 +18,7 @@ Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@ou
 
 ## 1.1 模型转换
 
-将一个已训练好的 TensorFlow 模型转换为可以在嵌入式设备中运行的Tensorflow Lite模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型以使用 TensorFlow Lite 支持的运算。
+将一个已训练好的 TensorFlow 模型转换为可以在嵌入式设备中运行的 Tensorflow Lite 模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型以使用 TensorFlow Lite 支持的运算。
 
 ### 1.1.1  量化
 
@@ -107,7 +107,7 @@ unsigned int converted_model_tflite_len = 18200;
 #include "tensorflow/lite/micro/examples/micro_speech/micro_features/model.h"
 ```
 
-- [`model.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro_speech/micro_features/model.h) 包含存储为 `char` 数组的模型。阅读 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert)来了解如何将 Tensorflow Lite 模型转换为该格式。
+- [`model.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro_speech/micro_features/model.h) 包含存储为 `char` 数组的模型。阅读[“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert)来了解如何将 Tensorflow Lite 模型转换为该格式。
 - [`micro_model_settings.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 定义与模型相关的各种常量。
 
 ### 1.3.2 设置日志记录
@@ -283,13 +283,14 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 成功运行之后会打印`--tensorflow lite micro source file extract successful--`字样，并在对应的`tflitemicro_path`路径下生成`Source`文件夹存放生成的tensorflow Lite Micro源文件。
 
-## 2. 将源文件加入KEIL工程并生成.lib库
+## 2.2 将源文件加入 KEIL 工程并生成 .lib 库
 
-新建目标芯片的KEIL工程（本次示例以ARM Cortex M4为例），将Source目录下的`tensorflow`和`third_party`文件夹拷贝到KEIL工程的根目录下，并添加`tensorflow`目录下除`lite/micro/kernels`以及`lite/micro/tools`文件夹以外的所有源文件（包含.c和.cc)，例如下图所示：
+新建目标芯片的KEIL工程（本次示例以 ARM Cortex M4 为例），将Source目录下的`tensorflow`和`third_party`文件夹拷贝到KEIL工程的根目录下，并添加`tensorflow`目录下除`lite/micro/kernels`以及`lite/micro/tools`文件夹以外的所有源文件（包含.c和.cc)，例如下图所示：
 
 <div align=center>
 <img src="image/lib文件目录.png" width=80% />
 </div>
+
 **注意**
 
 在添加`tensorflow/lite/micro/kernel`目录下的源文件时需要区分`reference`算子和应用`CMSIS-NN`加速之后的算子，`tensorflow/lite/micro/kernel`文件夹内容如下图中所示：
@@ -309,7 +310,9 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 1. 添加`tensorflow/lite/micro/kernel/`中的全部算子；
 2. 无需添加`tensorflow/lite/micro/tools`文件夹下的源文件。
 
-同时采用compiler version 6编译器并关闭Microlib：
+**注：如果使用的是 ARM Cortex M4 以上的 MCU 的话，建议采用 CMSIS-NN 算子来生成 lib 库，可以获得较大的性能提升。**
+
+同时采用 compiler version 6 编译器并关闭 Microlib：
 
 <div align=center>
 <img src="image/编译器配置.png" width=80% />
@@ -327,5 +330,4 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 <img src="image/配置include和优化等级等.png" width=80% />
 </div>
 
-最后点击编译链接之后，即可在工程根目录的`Objects`文件夹下生成ARM Cortex M4对应的.lib库，其他内核型号的tflite_micro库以此类推。
-
+最后点击编译链接之后，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库，其他内核型号的 tflite_micro 库以此类推。

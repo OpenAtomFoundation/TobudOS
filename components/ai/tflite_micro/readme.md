@@ -22,11 +22,13 @@ tflite_micro
 
 其中，KEIL 文件夹中放置了针对 KEIL 编程环境需要额外添加的源文件，如果使用的是 KEIL 编程环境则需要将其中的源文件一同加入工程。
 
-ARM_CortexM4_lib 和 ARM_CortexM7_lib 两个文件夹中存放了针对 Cortex M4、M7 平台预先优化、编译好的 tensorflow_lite_micro.lib 库，优化后的性能数据可以参考附录部分；这样做的目的是：如果在开发过程中使用了 ARM Cortex M4 或 M7 系列的芯片可以直接使用对应的 tensorflow_lite_micro.lib 库，并包含相关的头文件，可以极大的简化神经网络任务的部署流程。
+ARM_CortexM4_lib 和 ARM_CortexM7_lib 两个文件夹中存放了针对 Cortex M4、M7 平台预先优化编译好的 tensorflow_lite_micro.lib 库，优化后的性能数据可以参考附录部分；如果在开发过程中使用了 ARM Cortex M4 或 M7 系列的芯片可以直接使用对应的 tensorflow_lite_micro.lib 库，并包含相关的头文件，可以极大的简化神经网络任务的部署流程。
 
-## 3.移植案例
+在 [TFlite_Micro_Component_User_Guide.md](./TFlite_Micro_Component_User_Guide.md) 中提供了本组件的基本使用流程以及上述 .lib 库的制作流程，可以在使用之前进行参考
 
-参考[Neclue STM32L496RG案例](../../../board/NUCLEO_STM32L496ZG/KEIL/tflitemicro_person_detection/TFlite_Micro_Demo移植参考指南（Keil版）.md)
+## 3.组件使用案例
+
+基于本组件我们以 STM32L496RG 为例设计了行人检测案例，具体使用流程可参考[Neclue STM32L496RG案例](../../../board/NUCLEO_STM32L496ZG/KEIL/tflitemicro_person_detection/TFlite_Micro_Demo移植参考指南（Keil版）.md)。
 
 ## 4. 附录：Tensorflow Lite Micro 性能优化情况
 
