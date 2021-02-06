@@ -44,7 +44,7 @@
 
 #define PUB_PAYLOAD_MAX_SIZE                200
 
-#define MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE 512
+#define MQTT_MESSAGE_HANDLE_TASK_STACK_SIZE 2048
 #define MQTT_MESSAGE_HANDLE_TASK_PRIO       3
 #define MQTT_MESSAGE_NUM_MAX                3
 #define MQTT_MESSAGE_POOL_SIZE              MQTT_MESSAGE_NUM_MAX*sizeof(mqtt_message_t)
@@ -93,7 +93,7 @@ typedef struct mqtt_message_handlers_st {
 
 extern k_mail_q_t mqtt_message_mail;
 
-#define DEFAULT_MQTT_PARAMS { TLS_MODE_PSK, MQTT_COMMAND_TIMEOUT, 240, 1, 1 }
+#define DEFAULT_MQTT_PARAMS { TLS_MODE_PSK, MQTT_COMMAND_TIMEOUT, 240, 1, 0 }
 
 typedef struct device_info_st {
     char product_id[PRODUCT_ID_MAX_SIZE + 1];
@@ -139,6 +139,10 @@ typedef struct tencent_firmware_module_st {
     int (*ota_read_fwinfo)(ota_fw_info_t *ota_fw_info);
     
     int (*ota_read_fwdata)(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+    
+    int (*start_smartconfig)(void);
+    
+    int (*stop_smartconfig)(void);
 } tencent_firmware_module_t;
 
 /**
@@ -300,6 +304,24 @@ int tos_tf_module_ota_read_fwinfo(ota_fw_info_t *ota_fw_info);
  * @return  errcode
  */
 int tos_tf_module_ota_read_fwdata(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+
+/**
+ * @brief Start smartconfig from tencent firmware module
+ *
+ * @attention None
+ *
+ * @return  errcode
+ */
+int tos_tf_module_smartconfig_start(void);
+
+/**
+ * @brief Stop smartconfig from tencent firmware module
+ *
+ * @attention None
+ *
+ * @return  errcode
+ */
+int tos_tf_module_smartconfig_stop(void);
 
 #endif
 

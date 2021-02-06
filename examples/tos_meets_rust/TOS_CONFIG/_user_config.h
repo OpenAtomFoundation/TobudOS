@@ -1,0 +1,11 @@
+#ifndef _USER_CONFIG
+#define _USER_CONFIG
+
+#define PRODUCT_ID "BDDSF87WEA"
+#define DEVICE_NAME "dev001"
+#define DEVICE_KEY "2/sOZRAJ6B+vMNNXS41w5g=="
+
+#define WIFI_NAME "1234"
+#define WIFI_PASSWORD "12345678"
+
+#endif

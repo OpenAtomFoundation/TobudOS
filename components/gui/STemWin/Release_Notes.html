@@ -1,0 +1,1068 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="File-List" href="Release_Notes%20%28package%29_files/filelist.xml">
+<link rel="Edit-Time-Data" href="Release_Notes%20%28package%29_files/editdata.mso"><!--[if !mso]> <style> v\:* {behavior:url(#default#VML);} o\:* {behavior:url(#default#VML);} w\:* {behavior:url(#default#VML);} .shape {behavior:url(#default#VML);} </style> <![endif]--><title>Release Notes for STemWin Library</title><!--[if gte mso 9]><xml> <o:DocumentProperties> <o:Author>STMicroelectronics</o:Author> <o:LastAuthor>tguilhot</o:LastAuthor> <o:Revision>145</o:Revision> <o:TotalTime>461</o:TotalTime> <o:Created>2009-02-27T19:26:00Z</o:Created> <o:LastSaved>2010-12-13T14:14:00Z</o:LastSaved> <o:Pages>1</o:Pages> <o:Words>358</o:Words> <o:Characters>2045</o:Characters> <o:Company>STMicroelectronics</o:Company> <o:Lines>17</o:Lines> <o:Paragraphs>4</o:Paragraphs> <o:CharactersWithSpaces>2399</o:CharactersWithSpaces> <o:Version>11.9999</o:Version> </o:DocumentProperties> </xml><![endif]--><!--[if gte mso 9]><xml> <w:WordDocument> <w:View>Normal</w:View> <w:SpellingState>Clean</w:SpellingState> <w:GrammarState>Clean</w:GrammarState> <w:ValidateAgainstSchemas/> <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid> <w:IgnoreMixedContent>false</w:IgnoreMixedContent> <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText> <w:Compatibility> <w:UseFELayout/> </w:Compatibility> <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel> </w:WordDocument> </xml><![endif]--><!--[if gte mso 9]><xml> <w:LatentStyles DefLockedState="false" LatentStyleCount="156"> </w:LatentStyles> </xml><![endif]-->
+
+
+
+<style>
+<!--
+/* Font Definitions */
+@font-face
+{font-family:Wingdings;
+panose-1:5 0 0 0 0 0 0 0 0 0;
+mso-font-charset:2;
+mso-generic-font-family:auto;
+mso-font-pitch:variable;
+mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+{font-family:"MS Mincho";
+panose-1:2 2 6 9 4 2 5 8 3 4;
+mso-font-alt:"Arial Unicode MS";
+mso-font-charset:128;
+mso-generic-font-family:roman;
+mso-font-format:other;
+mso-font-pitch:fixed;
+mso-font-signature:1 134676480 16 0 131072 0;}
+@font-face
+{font-family:Verdana;
+panose-1:2 11 6 4 3 5 4 4 2 4;
+mso-font-charset:0;
+mso-generic-font-family:swiss;
+mso-font-pitch:variable;
+mso-font-signature:536871559 0 0 0 415 0;}
+@font-face
+{font-family:"\@MS Mincho";
+panose-1:0 0 0 0 0 0 0 0 0 0;
+mso-font-charset:128;
+mso-generic-font-family:roman;
+mso-font-format:other;
+mso-font-pitch:fixed;
+mso-font-signature:1 134676480 16 0 131072 0;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+{mso-style-parent:"";
+margin:0cm;
+margin-bottom:.0001pt;
+mso-pagination:widow-orphan;
+font-size:12.0pt;
+font-family:"Times New Roman";
+mso-fareast-font-family:"Times New Roman";}
+h1
+{mso-margin-top-alt:auto;
+margin-right:0cm;
+mso-margin-bottom-alt:auto;
+margin-left:0cm;
+mso-pagination:widow-orphan;
+mso-outline-level:1;
+font-size:24.0pt;
+font-family:"Times New Roman";
+mso-fareast-font-family:"MS Mincho";
+font-weight:bold;}
+h2
+{mso-style-next:Normal;
+margin-top:12.0pt;
+margin-right:0cm;
+margin-bottom:3.0pt;
+margin-left:0cm;
+mso-pagination:widow-orphan;
+page-break-after:avoid;
+mso-outline-level:2;
+font-size:14.0pt;
+font-family:Arial;
+mso-fareast-font-family:"MS Mincho";
+font-weight:bold;
+font-style:italic;}
+h3
+{mso-margin-top-alt:auto;
+margin-right:0cm;
+mso-margin-bottom-alt:auto;
+margin-left:0cm;
+mso-pagination:widow-orphan;
+mso-outline-level:3;
+font-size:13.5pt;
+font-family:"Times New Roman";
+mso-fareast-font-family:"MS Mincho";
+font-weight:bold;}
+a:link, span.MsoHyperlink
+{color:blue;
+text-decoration:underline;
+text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+{color:blue;
+text-decoration:underline;
+text-underline:single;}
+p
+{mso-margin-top-alt:auto;
+margin-right:0cm;
+mso-margin-bottom-alt:auto;
+margin-left:0cm;
+mso-pagination:widow-orphan;
+font-size:12.0pt;
+font-family:"Times New Roman";
+mso-fareast-font-family:"Times New Roman";}
+@page Section1
+{size:612.0pt 792.0pt;
+margin:72.0pt 90.0pt 72.0pt 90.0pt;
+mso-header-margin:36.0pt;
+mso-footer-margin:36.0pt;
+mso-paper-source:0;}
+div.Section1
+{page:Section1;}
+/* List Definitions */
+@list l0
+{mso-list-id:1315182333;
+mso-list-template-ids:555131286;}
+@list l0:level1
+{mso-level-tab-stop:36.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level2
+{mso-level-tab-stop:72.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level3
+{mso-level-tab-stop:108.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level4
+{mso-level-tab-stop:144.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level5
+{mso-level-tab-stop:180.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level6
+{mso-level-tab-stop:216.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level7
+{mso-level-tab-stop:252.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level8
+{mso-level-tab-stop:288.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l0:level9
+{mso-level-tab-stop:324.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l1
+{mso-list-id:2024673066;
+mso-list-template-ids:154433278;}
+@list l1:level1
+{mso-level-number-format:bullet;
+mso-level-text:\F0A7;
+mso-level-tab-stop:36.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;
+mso-ansi-font-size:10.0pt;
+font-family:Wingdings;}
+@list l1:level2
+{mso-level-number-format:bullet;
+mso-level-text:\F0B7;
+mso-level-tab-stop:72.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;
+mso-ansi-font-size:10.0pt;
+font-family:Symbol;}
+@list l1:level3
+{mso-level-number-format:bullet;
+mso-level-text:\F0B0;
+mso-level-tab-stop:108.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;
+font-family:Symbol;}
+@list l1:level4
+{mso-level-tab-stop:144.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l1:level5
+{mso-level-tab-stop:180.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l1:level6
+{mso-level-tab-stop:216.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l1:level7
+{mso-level-tab-stop:252.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l1:level8
+{mso-level-tab-stop:288.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l1:level9
+{mso-level-tab-stop:324.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2
+{mso-list-id:2095200852;
+mso-list-type:hybrid;
+mso-list-template-ids:-391638944 67698693 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l2:level1
+{mso-level-number-format:bullet;
+mso-level-text:\F0A7;
+mso-level-tab-stop:36.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;
+font-family:Wingdings;}
+@list l2:level2
+{mso-level-tab-stop:72.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level3
+{mso-level-tab-stop:108.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level4
+{mso-level-tab-stop:144.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level5
+{mso-level-tab-stop:180.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level6
+{mso-level-tab-stop:216.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level7
+{mso-level-tab-stop:252.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level8
+{mso-level-tab-stop:288.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+@list l2:level9
+{mso-level-tab-stop:324.0pt;
+mso-level-number-position:left;
+text-indent:-18.0pt;}
+ol
+{margin-bottom:0cm;}
+ul
+{margin-bottom:0cm;}
+-->
+</style><!--[if gte mso 10]> <style> /* Style Definitions */ table.MsoNormalTable {mso-style-name:"Table Normal"; mso-tstyle-rowband-size:0; mso-tstyle-colband-size:0; mso-style-noshow:yes; mso-style-parent:""; mso-padding-alt:0cm 5.4pt 0cm 5.4pt; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt; mso-pagination:widow-orphan; font-size:10.0pt; font-family:"Times New Roman"; mso-fareast-font-family:"Times New Roman"; mso-ansi-language:#0400; mso-fareast-language:#0400; mso-bidi-language:#0400;} </style> <![endif]-->
+<style type="disc">
+</style><!--[if gte mso 9]><xml> <o:shapedefaults v:ext="edit" spidmax="45058"/> </xml><![endif]--><!--[if gte mso 9]><xml> <o:shapelayout v:ext="edit"> <o:idmap v:ext="edit" data="1"/> </o:shapelayout></xml><![endif]-->
+<meta content="MCD Application Team" name="author"></head><body style="" link="blue" vlink="blue">
+<div class="Section1">
+<p class="MsoNormal"><span style="font-family: Arial;"><br>
+</span><span style="font-family: Arial;"><o:p></o:p></span></p>
+<div align="center">
+<table class="MsoNormalTable" style="width: 675pt;" border="0" cellpadding="0" cellspacing="0" width="900">
+<tbody>
+<tr>
+<td style="padding: 0cm;" valign="top">
+<table class="MsoNormalTable" style="width: 675pt;" border="0" cellpadding="0" cellspacing="0" width="900">
+<tbody>
+<tr style="">
+<td style="padding: 1.5pt;">
+
+            <h1 style="margin-bottom: 0.25in; text-align: center;" align="center"><span style="font-size: 20pt; font-family: Verdana; color: rgb(51, 102, 255);">Release
+Notes for STemWin Library<br>
+            </span></h1>
+
+<p class="MsoNormal" style="text-align: center;" align="center"><span style="font-size: 10pt; font-family: Arial; color: black;">STemWin, based on SEGGER emWin Library <br>
+</span></p>
+            <p class="MsoNormal" style="text-align: center;" align="center"><span style="font-size: 10pt; font-family: Arial; color: black;">Copyright © 2016 STMicroelectronics<br></span><span style="color: black;"><u1:p></u1:p><o:p></o:p></span></p>
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p class="MsoNormal"><span style="font-family: Arial; display: none;"><o:p>&nbsp;</o:p></span></p>
+<table class="MsoNormalTable" style="width: 675pt;" border="0" cellpadding="0" width="900">
+<tbody>
+<tr style="">
+<td style="padding: 0cm;" valign="top">
+<h2 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="font-size: 12pt; color: white;">Contents<o:p></o:p></span></h2>
+<ol style="margin-top: 0cm;" start="1" type="1">
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;"><a href="#Overview">Overview</a></span></li>
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;"></span><a href="Release_Notes.html#History"><span style="font-size: 10pt; font-family: Verdana;"></span></a><font size="-1"><a style="font-family: Verdana;" href="#History">Update
+history</a></font></li>
+
+</ol>
+<h2 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><a name="Overview"></a><span style="font-size: 12pt; color: white;">Overview<o:p></o:p></span></h2>
+<br>
+            <div style="margin-left: 40px;">
+<div style="text-align: justify;"><span style="font-size: 10pt; font-family: Verdana;"><font size="-1">Thanks to its partner SEGGER, ST is providing the STemWin Library, based on SEGGER emWin one. <span style="font-weight: bold;">STemWin</span> is a <span style="font-weight: bold;">professional graphical stack library</span>, enabling Graphical User Interfaces (<span style="font-weight: bold;">GUI</span>) building up with <span style="font-weight: bold;">any STM32</span>, <span style="font-weight: bold;">any LCD</span> and any <span style="font-weight: bold;">LCD controller</span>, taking benefit from <span style="font-weight: bold;">STM32 hardware accelerations</span>, whenever possible. <br>
+STemWin Library is a full solution, coming with services like JPG, GIF,
+PNG decoding, tons of Widgets (check boxes, buttons, &#8230;), the VNC server
+allowing remote displaying of what is displayed locally, but also
+professional tools: the GUIBuilder, allowing on PC screens creation,
+via drag and drop, the Simulator, allowing to develop and debug one
+interface on the PC, Font Converter...<br>
+</font><span style="font-weight: bold; font-style: italic;"></span></span><font size="-1"><span style="font-family: Verdana;"><br>
+</span></font></div>
+<span style="font-size: 10pt; font-family: Verdana;"><br>
+</span></div>
+            <div style="text-align: justify;">
+            <div style="margin-left: 40px; height: 4px;"><font size="-1"><span style="font-family: Verdana;"><span style="font-weight: bold; font-style: italic;">Licensing
+Information</span></span></font><br style="font-weight: bold;">
+            </div>
+            </div>
+            
+            
+            
+            <div style="margin-left: 40px;">
+            <div style="text-align: left; font-weight: bold;">
+            </div>
+            
+            <div style="text-align: justify;">
+            <div style="text-align: left; font-weight: bold;">
+            </div>
+            
+            <ul>
+
+              <li style="text-align: left;"><font size="-1"><span style="font-family: Verdana;"><span style="font-weight: bold;">STemWin Library GUI </span><span style="font-weight: bold;">files</span> are pr</span></font><font size="-1"><span style="font-family: Verdana;">ovided in <span style="font-weight: bold;">object format</span> and licensed under <span style="font-weight: bold;">MCD-ST Image SW License Agreement V2</span>,
+(the "License"); You may not use this package except in compliance with
+the License. You may obtain a copy of the License at: <a target="_blank" href="http://www.st.com/software_license_agreement_image_v2">http://www.st.com/software_license_agreement_image_v2</a></span></font></li>
+              
+              
+              <li><font size="-1"><span style="font-family: Verdana;"><span style="font-weight: bold;">STemWin Library configuration and header files</span> are provided in <span style="font-weight: bold;">source format</span> and licensed under <span style="font-weight: bold;">MCD-ST Liberty SW License Agreement V2</span>,
+(the "License"); You may not use this package except in compliance with
+the License. You may obtain a copy of the License at: <a target="_blank" href="http://www.st.com/software_license_agreement_liberty_v2">http://www.st.com/software_license_agreement_liberty_v2</a>&nbsp;</span></font></li>
+            </ul>
+            <font size="-1"><span style="font-family: Verdana;"><br>
+Unless
+required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing
+permissions and limitations under the License.<br>
+
+                </span></font><font size="-1"><span style="font-family: Verdana;"></span></font><font size="-1"><span style="font-family: Verdana;">
+            </span></font>
+<font size="-1"><span style="font-family: Verdana;"></span></font></div>
+
+
+
+<font size="-1"><span style="font-family: Verdana;"><br>
+<span style="font-weight: bold; font-style: italic;"><br>
+Package
+content<br>
+</span>
+</span></font>
+<div style="text-align: justify; height: 18px;"><font size="-1"><span style="font-family: Verdana;">This
+version of the STemWin Library package contains the following sub folders:</span></font><br>
+
+<font size="-1"><span style="font-family: Verdana;"></span></font></div>
+            
+            
+            <ul style="font-family: Verdana;">
+              
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;">Config:</span><span style="text-decoration: underline;"></span> contains configuration files for the library and LCD drivers</font></li>
+
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;"></span></font><font size="-1"><span style="text-decoration: underline; font-style: italic;">Documentation</span><span style="font-style: italic;">: </span>contains emWin "User &amp; Reference Guide"</font><font size="-1"><span style="text-decoration: underline; font-style: italic;"></span></font><font size="-1"><span style="text-decoration: underline; font-style: italic;"></span></font></li>
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;">inc</span><span style="font-style: italic;">: </span></font><font size="-1">contains header files of the library components</font><font size="-1"><span style="text-decoration: underline; font-style: italic;"></span></font></li>
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;">Lib</span><span style="font-style: italic;">:</span><span style="font-style: italic;"> </span>contains
+the Library GUI in object format (.a and .lib), running on all STM32
+devices based on CortexM0, CortexM3, </font><font size="-1">CortexM4F</font><font size="-1"> or CortexM7 cores,</font><font size="-1"> all with and without OS support. The naming format is <span style="font-weight: bold;">STemWin<span style="font-style: italic;">v</span>_CM<span style="font-style: italic;">x</span>_<span style="font-style: italic;">YY</span>_<span style="font-style: italic;">C_ot</span>.a</span>, where</font><font size="-1"><span style="font-weight: bold; font-style: italic;"></span></font></li>
+              <ul>
+                <li><font size="-1"><span style="font-weight: bold; font-style: italic;">v</span>: STemWin version (ex. v=522)</font><font size="-1"><span style="font-weight: bold; font-style: italic;"></span></font></li>
+                <li><font size="-1"><span style="font-weight: bold; font-style: italic;">x</span> : the CMx core class (CM0, CM3, CM4 or CM7)<span style="font-weight: bold; font-style: italic;"></span></font></li>
+                <li><font size="-1"><span style="font-weight: bold; font-style: italic;">YY</span>: OS support<br>
+                  </font></li>
+                <li><font size="-1"><span style="font-weight: bold; font-style: italic;">C: </span><span style="font-weight: bold;"></span>compiler (IAR, Keil, GCC)</font></li>
+                <li><font size="-1"><span style="font-weight: bold; font-style: italic;">ot: </span><span style="font-weight: bold;"></span>binary generated with high speed optimization</font></li>
+
+              </ul>
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;">OS</span><span style="font-style: italic;">: </span>contains library interface with RTOS</font></li>
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;">Simulation</span><span style="font-style: italic;">: </span>contains system resources for WIN32 in precompiled library format<br>
+                </font></li>
+
+              <li><font size="-1"><span style="text-decoration: underline; font-style: italic;">Software</span><span style="font-style: italic;">: </span>contains software tools (Bitmap Converter, Font Converter, GUIBuilder, JPEG2Movie and emVNC)</font></li>
+            </ul>
+            <font size="-1"><span style="font-family: Verdana;"></span></font>
+            <ul>
+
+
+
+              
+
+              
+              
+
+              
+              
+
+              
+              
+                
+                
+                
+                
+              <ul style="text-align: justify;">
+
+
+            
+            
+              </ul>
+
+
+
+              
+              
+            </ul>
+
+
+
+<font size="-1"><span style="font-family: Verdana;"></span></font><span style="font-size: 10pt; font-family: Verdana;"></span><span style="font-size: 10pt; font-family: Verdana;"></span></div>
+
+
+
+
+
+<h2 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><a name="History"></a><span style="font-size: 12pt; color: white;">Update history</span></h2>
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">V5.32 / 05-February-2016<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+<li><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin version V5.32</span><span style="font-size: 10pt; font-family: Verdana;">, for more details about the
+changes in this version refer to "Revision History" section in <a target="_blank" href="Documentation/STemWin532.pdf" style="font-style: italic;">STemWin532.pdf</a> document</span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">V5.28 / 26-June-2015<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;"><li><span style="font-size: 10pt; font-family: Verdana;">Fix OS Support mechanism<br></span></li></ul><h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">V5.28 / 15-April-2015<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+              <li><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin version V5.28</span><span style="font-size: 10pt; font-family: Verdana;">, for more details about the
+changes in this version refer to "Revision History" section in <a style="font-style: italic;" href="Documentation/STemWin528.pdf" target="_blank">STemWin528.pdf</a> document</span></li>
+<li><span style="font-size: 10pt; font-family: Verdana;">Add GCC binaries for CortexM7<br>
+                </span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">V5.26 / 06-March-2015<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+<li><span style="font-size: 10pt; font-family: Verdana;">Add new binaries compiled for CortexM7 (GCC version is not yet available)<br>
+</span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Fix bitmap drawing operation with 24bpp</span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">V5.26 / 25-December-2014<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+              <li><span style="font-size: 10pt; font-family: Verdana;">GUI_X_FreeRTOS.c: update to have this file RTOS independent by using the </span><span style="font-size: 10pt; font-family: Verdana;">CMSIS-RTOS APIs instead of FreeRTOS ones</span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;"></span><span style="font-size: 10pt; font-family: Verdana;">Rename <span style="font-style: italic;">GUI_X_FreeRTOS.c</span> file into <span style="font-style: italic;">GUI_X_OS.c</span></span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;"><span style="text-decoration: underline; font-style: italic; font-weight: bold;">Notes</span><span style="font-style: italic;"></span></span></li>
+              <ul>
+                <li><span style="font-size: 10pt; font-family: Verdana;"><span style="font-style: italic;"></span>An </span><span style="font-size: 10pt; font-family: Verdana;">implementation of </span><span style="font-size: 10pt; font-family: Verdana;">CMSIS-RTOS
+APIs for FreeRTOS is available within FreeRTOS's STM32Cube
+distribution, under \Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS</span></li>
+                <li><span style="font-size: 10pt; font-family: Verdana;">This version is compatible with FreeRTOS V8.1.2 "ST modified 20141225", and later<br>
+</span></li>
+              </ul>
+
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">V5.26 / 08-December-2014<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+<li><span style="font-size: 10pt; font-family: Verdana;">Fix CM3 binaries compiled with GCC: configure FPU as "Software Implementation" instead of </span><span style="font-size: 10pt; font-family: Verdana;">"Hardware Implementation"</span><span style="font-size: 10pt; font-family: Verdana;"> </span><span style="font-size: 10pt; font-family: Verdana;"></span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.26 / 20-October-2014<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+<li><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin version V5.26</span><span style="font-size: 10pt; font-family: Verdana;">, for more details about the
+changes in this version refer to "Revision History" section in <a style="font-style: italic;" href="Documentation/STemWin526.pdf" target="_blank">STemWin526.pdf</a> document</span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.24b / 13-June-2014<o:p></o:p></span></h3>
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+<li><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin version V5.24b</span><span style="font-size: 10pt; font-family: Verdana;">, for more details about the
+changes in this version refer to "Revision&nbsp; History" section in
+"STemWin524b.pdf" document</span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Add binaries compiled with high speed optimization</span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Add
+PC simulation resources to allow user to compile the same C source on
+his Windows PC using a native (typically Microsoft) compiler and create
+an executable for the application</span></li>
+              <ul>
+                <li><span style="font-size: 10pt; font-family: Verdana;">Add System resources for WIN32 in precompiled library format file under \Simulation</span></li>
+                <li><span style="font-size: 10pt; font-family: Verdana;">Add WIN32 library (STemWin524b_WIN32.lib) under \Lib</span></li>
+                <li><span style="font-size: 10pt; font-family: Verdana;">Add simulation configuration file (SIMConf.c) under \Config</span></li>
+              </ul>
+            </ul>
+            
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.22 / 25-February-2014<o:p></o:p></span></h3>
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            <ul style="list-style-type: square;">
+              <li><span style="font-size: 10pt; font-family: Verdana;">Fix transparency issue to invert alpha in case of 32bpp pixel format<br>
+                </span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Add new API <span style="font-style: italic;">GUI_MOVIE_ShowScaled()</span><br>
+                </span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Change VNC process to be able to manage both layers<br>
+                </span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Change file chooser to add directory mask</span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Add 2 new&nbsp; software tools: JPEG2Movie and emVNC<br>
+                </span></li>
+              <li><span style="font-size: 10pt; font-family: Verdana;">Miscellaneous enhancement<br>
+                </span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.22 / 15-November-2013<o:p></o:p></span></h3>
+
+
+
+
+
+            
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+
+            
+            
+            
+            
+            <ul style="margin-top: 0cm;" type="square">
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">Add template configuration files for Lin, FlexColor and simple display drivers, under \Config folder.<br>
+</span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.22 / 20-September-2013<o:p></o:p></span></h3>
+
+
+
+
+            
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+
+            
+            
+            
+            <ul style="margin-top: 0cm;" type="square">
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin version V5.22</span><span style="font-size: 10pt; font-family: Verdana;">, for more details about the
+changes in this version refer to "Revision&nbsp; History" section in
+"STemWin5.pdf" document</span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.20d / 22-July-2013<o:p></o:p></span></h3>
+
+
+
+            
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+
+            
+            
+            <ul style="margin-top: 0cm;" type="square">
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin version V5.20d</span></li>
+              <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">Add&nbsp;
+FlexColor (indirect access) driver for serial and parallel bus external
+LCD controllers available on all STM32 EVAL boards<br>
+                </span></li>
+              <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">The generated Library binaries are compiler dependent, three version are available for ARM, IAR and GCC compilers<br>
+                </span></li>
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">\Config: LCD configuration files for STM32 EVAL boards moved under the examples folders<br>
+</span></li>
+            </ul>
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.20 / 18-March-2013<o:p></o:p></span></h3>
+
+
+            
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+            
+            <ul style="margin-top: 0cm;" type="square">
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">Upgrade
+to use SEGGER emWin latest version V5.20, for more details about the
+changes in this version refer to "Revision&nbsp; History" section in
+"STemWin5.pdf" document<br>
+                </span></li>
+              <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">\Lib: Update Library binary name format</span></li>
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">\Config: add configuration files for the following STMicroelectronics Evaluation boards</span></li>
+              <ul>
+                <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32F2 series</span></li>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM322xG-EVAL (FSMC interface)<br>
+                    </span></li>
+                </ul>
+                <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32F1 series</span></li>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM3210C-EVAL (SPI interface)</span></li>
+                </ul>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM3210E-EVAL (FSMC interface)</span></li>
+                </ul>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM3210B-EVAL (SPI interface)</span></li>
+                </ul>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32100E-EVAL (FSMC interface)</span></li>
+                </ul>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32100B-EVAL (SPI interface)</span></li>
+                </ul>
+                <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32F3 series</span></li>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32303C-EVAL (SPI interface)</span></li>
+                </ul>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32373C-EVAL (SPI interface)</span></li>
+                </ul>
+                <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32L1 series</span></li>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32L152-EVAL (SPI interface)</span></li>
+                </ul>
+                <ul>
+                  <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">STM32L152D-EVAL (FSMC interface)<br>
+                    </span></li>
+                </ul>
+              </ul>
+            </ul>
+            
+
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.18 / 04-February-2013<o:p></o:p></span></h3>
+
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+            <ul style="margin-top: 0cm;" type="square">
+              
+              
+              <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">Provides three version of the STemWin Library: Full, Advanced and Basic</span></li>
+              
+              <li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">LCD drivers for STM32 EVAL boards (under \</span><span style="font-size: 10pt; font-family: Verdana;">Config folder) </span><span style="font-size: 10pt; font-family: Verdana;">renamed to "LCDConfig_stm32xxx_eval.c" instead of </span><span style="font-size: 10pt; font-family: Verdana;">"GUIDRV_xxx.c</span><span style="font-size: 10pt; font-family: Verdana;">"</span><span style="font-size: 10pt; font-family: Verdana;"><br>
+                </span></li>
+
+</ul>
+            <h3 style="background: rgb(51, 102, 255) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; margin-right: 500pt; width: 203px;"><span style="font-size: 10pt; font-family: Arial; color: white;">&nbsp;V5.18 /24-January-2013<o:p></o:p></span></h3>
+            <span style="font-size: 10pt; font-family: Verdana;"></span>
+            <p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
+Changes<o:p></o:p></span></u></b></p>
+
+
+            
+            <ul style="margin-top: 0cm;" type="square">
+<li class="MsoNormal" style="color: black; margin-top: 4.5pt; margin-bottom: 4.5pt;"><span style="font-size: 10pt; font-family: Verdana;">First Release</span></li></ul><span style="font-size: 10pt; font-family: Verdana;">
+            </span><br>
+
+            
+
+
+
+
+            <span style="font-size: 10pt; font-family: Verdana; color: black;"><o:p></o:p></span>
+            <span style="font-size: 10pt; font-family: Verdana;"></span><span style="font-size: 10pt; font-family: Verdana;"><span style="text-decoration: underline;"><span style="font-weight: bold;"></span></span></span><span style="font-size: 10pt; font-family: Verdana;"><span style="text-decoration: underline;"></span></span><span style="font-size: 10pt; font-family: Verdana; color: black;"><o:p></o:p></span><ul style="margin-top: 0cm;" type="square">
+</ul>
+<span style="font-size: 10pt; font-family: &quot;Verdana&quot;,&quot;sans-serif&quot;; color: black;"></span>
+<p class="MsoNormal" style="margin: 4.5pt 0cm;"><b><span style="font-size: 10pt; font-family: Verdana; color: black;"></span></b><span style="font-size: 10pt; font-family: Verdana; color: black;"><o:p></o:p></span></p>
+<div class="MsoNormal" style="text-align: center;" align="center"><span style="color: black;">
+<hr align="center" size="2" width="100%"></span></div>
+<p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt; text-align: center;" align="center"><span style="font-size: 10pt; font-family: &quot;Verdana&quot;,&quot;sans-serif&quot;; color: black;">For
+complete documentation on </span><span style="font-size: 10pt; font-family: &quot;Verdana&quot;,&quot;sans-serif&quot;;">STM32<span style="color: black;"> Microcontrollers visit </span><u><span style="color: blue;"><a href="http://www.st.com/internet/mcu/family/141.jsp" target="_blank">www.st.com/STM32</a></span></u></span><span style="font-size: 10pt; font-family: Verdana;"><a target="_blank" href="http://www.st.com/internet/mcu/family/141.jsp"><u><span style="color: blue;"></span></u></a></span><span style="color: black;"><o:p></o:p></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="MsoNormal"><span style="font-size: 10pt;"><o:p></o:p></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body></html>

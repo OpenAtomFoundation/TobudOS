@@ -219,13 +219,21 @@ __STATIC__ at_parse_status_t at_uart_line_parse(void)
             recv_cache->buffer[recv_cache->buffer_size - 1] = '\0';
             return AT_PARSE_STATUS_OVERFLOW;
         }
-
+        
         if (at_get_event() != K_NULL) {
             return AT_PARSE_STATUS_EVENT;
         }
 
         if (at_is_echo_expect()) {
             return AT_PARSE_STATUS_EXPECT;
+        }
+        
+        if (strstr((char*)recv_cache->buffer, "OK")) {
+            return AT_PARSE_STATUS_OK;
+        } else if (strstr((char*)recv_cache->buffer, "FAIL")) {
+            return AT_PARSE_STATUS_FAIL;
+        } else if (strstr((char*)recv_cache->buffer, "ERROR")) {
+            return AT_PARSE_STATUS_ERROR;
         }
 
         if (data == '\n' && last_data == '\r') { // 0xd 0xa
@@ -244,24 +252,6 @@ __STATIC__ at_parse_status_t at_uart_line_parse(void)
         }
 
         last_data = data;
-    }
-}
-
-__STATIC__ void at_echo_status_set(at_echo_t *echo)
-{
-    char *buffer;
-    at_cache_t *at_cache;
-
-    at_cache = &AT_AGENT->recv_cache;
-
-    buffer = (char *)at_cache->buffer;
-
-    if (strstr(buffer, AT_AGENT_ECHO_OK) != K_NULL) {
-        echo->status = AT_ECHO_STATUS_OK;
-    } else if (strstr(buffer, AT_AGENT_ECHO_ERROR) != K_NULL) {
-        echo->status = AT_ECHO_STATUS_ERROR;
-    } else if (strstr(buffer, AT_AGENT_ECHO_FAIL) != K_NULL) {
-        echo->status = AT_ECHO_STATUS_FAIL;
     }
 }
 
@@ -296,6 +286,8 @@ __STATIC__ void at_parser(void *arg)
 
     while (K_TRUE) {
         at_parse_status = at_uart_line_parse();
+        
+        tos_kprintln("--->%s", recv_cache->buffer);
 
         if (at_parse_status == AT_PARSE_STATUS_OVERFLOW) {
             tos_kprintln("AT parse overflow!");
@@ -314,22 +306,32 @@ __STATIC__ void at_parser(void *arg)
         if (!at_echo) {
             continue;
         }
+        
+        if (at_echo->buffer) {
+            at_echo_buffer_copy(recv_cache, at_echo);
+        }
 
         if (at_parse_status == AT_PARSE_STATUS_EXPECT) {
             at_echo->status = AT_ECHO_STATUS_EXPECT;
             if (at_echo->__is_expecting) {
                 tos_sem_post(&at_echo->__expect_notify);
             }
-        } else if (at_parse_status == AT_PARSE_STATUS_NEWLINE &&
-                    at_echo->status == AT_ECHO_STATUS_NONE) {
-            at_echo_status_set(at_echo);
+        } else if (at_parse_status == AT_PARSE_STATUS_OK) {
+            at_echo->status = AT_ECHO_STATUS_OK;
+            if (!at_echo->__is_expecting) {
+                tos_sem_post(&at_echo->__status_set_notify);
+            }
+        } else if (at_parse_status == AT_PARSE_STATUS_FAIL) {
+            at_echo->status = AT_ECHO_STATUS_FAIL;
+            if (!at_echo->__is_expecting) {
+                tos_sem_post(&at_echo->__status_set_notify);
+            }
+        } else if (at_parse_status == AT_PARSE_STATUS_ERROR) {
+            at_echo->status = AT_ECHO_STATUS_ERROR;
+            if (!at_echo->__is_expecting) {
+                tos_sem_post(&at_echo->__status_set_notify);
+            }
         }
-
-        if (at_echo->buffer) {
-            at_echo_buffer_copy(recv_cache, at_echo);
-        }
-
-        tos_kprintln("--->%s", recv_cache->buffer);
     }
 }
 
@@ -466,11 +468,17 @@ __API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, 
 {
     int ret = 0;
     va_list args;
-
-    if (echo) {
-        at_echo_attach(echo);
+    
+    if (tos_sem_create(&echo->__status_set_notify, 0) != K_ERR_NONE) {
+        return -1;
+    }
+    
+    if (!echo) {
+        return -1;
     }
 
+    at_echo_attach(echo);
+    
     va_start(args, cmd);
     ret = at_cmd_do_exec(cmd, args);
     va_end(args);
@@ -480,11 +488,15 @@ __API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, 
         return -1;
     }
 
-    tos_task_delay(tos_millisec2tick(timeout));
+    if (tos_sem_pend(&echo->__status_set_notify, tos_millisec2tick(timeout)) != K_ERR_NONE) {
+        ret = -1;
+    }
+
+    tos_sem_destroy(&echo->__status_set_notify);
 
     AT_AGENT->echo = K_NULL;
 
-    return 0;
+    return ret;
 }
 
 __API__ int tos_at_cmd_exec_until(at_echo_t *echo, uint32_t timeout, const char *cmd, ...)

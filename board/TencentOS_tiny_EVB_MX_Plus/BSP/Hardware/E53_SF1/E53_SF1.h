@@ -20,19 +20,19 @@ extern TIM_HandleTypeDef htim16;
 /* E53_SF1传感器数据类型定义 ------------------------------------------------------------*/
 typedef struct
 {
-		int Smoke_Value;
+    int Smoke_Value;
 } E53_SF1_Data_TypeDef;
 
 extern E53_SF1_Data_TypeDef E53_SF1_Data;
 
 /***************************************************************
-* 名		称: GasStatus_ENUM
+* 名    称: E53SF1_Status_ENUM
 * 说    明：枚举状态结构体
 ***************************************************************/
 typedef enum
 {
-	OFF = 0,
-	ON
+    OFF = 0,
+    ON
 } E53SF1_Status_ENUM;
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
@@ -41,9 +41,5 @@ void E53_SF1_Read_Data(void);
 void E53SF1_LED_StatusSet(E53SF1_Status_ENUM status);
 void E53SF1_Beep(E53SF1_Status_ENUM status);
 
-#endif
-
-
-
-
+#endif /* __E53_SF1_H__ */
 

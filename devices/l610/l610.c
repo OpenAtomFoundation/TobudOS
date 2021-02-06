@@ -53,6 +53,8 @@ static int l610_echo_close(void)
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
+        tos_sleep_ms(1000);
+       
     }
 
     return -1;
@@ -69,6 +71,7 @@ static int l610_sim_card_check(void)
         if (strstr(echo_buffer, "READY")) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
     
     return -1;
@@ -82,23 +85,21 @@ static int l610_signal_quality_check(void)
     int try = 0;
 	
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10) 
-    {
+    while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CSQ\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CSQ:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
 
     return -1;
@@ -111,22 +112,21 @@ static int l610_gsm_network_check(void)
     int try = 0;
 	
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10)
-    {
+    while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CREG:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
         if (stat == 1) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
     return -1;	
 }
@@ -139,25 +139,23 @@ static int l610_gprs_network_check(void)
     int try = 0;
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10)
-    {
+    while (try++ < 10) {
        
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CGREG:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
-        if (stat == 1)
-        {
+        if (stat == 1) {
             return 0;
         }
+        
+        tos_sleep_ms(2000);
     }
 		
     return -1;	
@@ -169,8 +167,7 @@ static int l610_set_data_format(void)
     
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+GTSET=\"IPRFMT\",0\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     
@@ -186,8 +183,7 @@ static int l610_check_apn(void)
     
     tos_at_echo_create(&echo, buffer, 64, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+MIPCALL?\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     
@@ -223,8 +219,7 @@ static int l610_check_close_apn(void)
 
     tos_at_echo_create(&echo, buffer, 64, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+MIPCALL=0\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     
@@ -247,8 +242,7 @@ static int l610_set_apn(void)
 
     tos_at_echo_create(&echo, NULL, 0, "+MIPCALL");
     tos_at_cmd_exec_until(&echo, 10000, "AT+MIPCALL=1,\"CMNET\"\r\n");
-    if (echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
     
@@ -318,16 +312,14 @@ static int l610_connect(const char *ip, const char *port, sal_proto_t proto)
     at_echo_t echo;
 
     id = tos_at_channel_alloc(ip, port);
-    if (id == -1)
-    {
+    if (id == -1) {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "+MIPOPEN");
-    tos_at_cmd_exec(&echo, 4000, "AT+MIPOPEN=%d,,\"%s\",%d,%d\r\n",
+    tos_at_cmd_exec_until(&echo, 4000, "AT+MIPOPEN=%d,,\"%s\",%d,%d\r\n",
                         id + 1, ip, atoi(port), proto == TOS_SAL_PROTO_UDP ? 1 : 0);
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_channel_free(id);
         return -1;
     }
@@ -353,17 +345,15 @@ int l610_send(int id, const void *buf, size_t len)
         return -1;
     }
 	
-    if (tos_at_global_lock_pend() != 0)
-    {
+    if (tos_at_global_lock_pend() != 0) {
         return -1;
     }
     
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-    tos_at_cmd_exec(&echo, 1000, "AT+MIPSEND=%d,%d\r\n", id + 1, len);
+    tos_at_cmd_exec_until(&echo, 1000, "AT+MIPSEND=%d,%d\r\n", id + 1, len);
 
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
@@ -371,8 +361,7 @@ int l610_send(int id, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "+MIPSEND");
     tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
     
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
@@ -400,17 +389,15 @@ int l610_sendto(int id, char *ip, char *port, const void *buf, size_t len)
         return -1;
     }
 	
-    if (tos_at_global_lock_pend() != 0)
-    {
+    if (tos_at_global_lock_pend() != 0) {
         return -1;
     }
     
     tos_at_echo_create(&echo, NULL, 0, ">");
 
-    tos_at_cmd_exec(&echo, 1000, "AT+MIPSEND=%d,%d\r\n", id + 1, len);
+    tos_at_cmd_exec_until(&echo, 1000, "AT+MIPSEND=%d,%d\r\n", id + 1, len);
 
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
@@ -418,8 +405,7 @@ int l610_sendto(int id, char *ip, char *port, const void *buf, size_t len)
     tos_at_echo_create(&echo, NULL, 0, "+MIPSEND");
     tos_at_raw_data_send_until(&echo, 10000, (uint8_t *)buf, len);
     
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         tos_at_global_lock_post();
         return -1;
     }
@@ -436,8 +422,11 @@ static void l610_transparent_mode_exit(void)
 
 static int l610_close(int id)
 {
+    at_echo_t echo;
+    
     l610_transparent_mode_exit();
 
+    tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(NULL, 1000, "AT+MIPCLOSE=%d\r\n", id+1);
 
     tos_at_channel_free(id);
@@ -507,30 +496,24 @@ __STATIC__ void l610_tcp_incoming_data_process(void)
 		+MIPRTCP: <socket id>,<leaf length>,<hex string>
     */
 	
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
         channel_id = channel_id * 10 + (data - '0');
     }
     channel_id--;
 
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
         leaf_data_len = leaf_data_len * 10 + (data - '0');
@@ -555,56 +538,44 @@ __STATIC__ void l610_udp_incoming_data_process(void)
     /*
 		+MIPRUDP: <src ip>,<src port>, <socket id>,<leaf length>,<hex string>
     */
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
     }
     
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
     }
     
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
         channel_id = channel_id * 10 + (data - '0');
     }
     channel_id--;
 
-    while (1)
-    {
-        if (tos_at_uart_read(&data, 1) != 1)
-        {
+    while (1) {
+        if (tos_at_uart_read(&data, 1) != 1) {
             return;
         }
 
-        if (data == ',')
-        {
+        if (data == ',') {
             break;
         }
         leaf_data_len = leaf_data_len * 10 + (data - '0');
