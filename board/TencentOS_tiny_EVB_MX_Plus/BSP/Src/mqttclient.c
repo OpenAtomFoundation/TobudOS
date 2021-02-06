@@ -1,11 +1,19 @@
 #include "stm32l4xx_hal.h"
 #include "mcu_init.h"
 #include "tos_k.h"
-#include "esp8266.h"
 #include "mqttclient.h"
 
 #define USE_ESP8266
 //#define USE_NB_BC35
+//#define USE_EC600S
+
+#ifdef USE_ESP8266
+#include "esp8266.h"
+#endif
+
+#ifdef USE_EC600S
+#include "ec600s.h"
+#endif
 
 /* Tencent IoThub Device Info */
 #define IOTHUB_MQTT_IP          "111.230.189.156"
@@ -47,6 +55,11 @@ void mqttclient_task(void)
     int bc35_28_95_sal_init(hal_uart_port_t uart_port);
     bc35_28_95_sal_init(HAL_UART_PORT_0);
 #endif
+    
+#ifdef USE_EC600S
+    ec600s_sal_init(HAL_UART_PORT_0);
+#endif
+    
     
     mqtt_log_init();
 

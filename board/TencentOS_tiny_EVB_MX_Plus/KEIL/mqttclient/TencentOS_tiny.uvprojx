@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\BH1750;..\..\BSP\Hardware\OLED;..\..\..\..\examples\helloworld;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\examples\mqtt;..\..\..\..\devices\bc35_28_95;..\..\..\..\devices\esp8266;..\..\..\..\devices\m26;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\BH1750;..\..\BSP\Hardware\OLED;..\..\..\..\examples\helloworld;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\examples\mqtt;..\..\..\..\devices\bc35_28_95;..\..\..\..\devices\esp8266;..\..\..\..\devices\ec600s;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -812,6 +812,11 @@
               <FileName>esp8266.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec600s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec600s\ec600s.c</FilePath>
             </File>
           </Files>
         </Group>
