@@ -1,11 +1,8 @@
 #include "mcu_init.h"
 
-uint16_t camera_buffer[OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT];
 uint8_t frame_flag = 0;
-uint8_t tensor_flag = 0;
 
 extern DCMI_HandleTypeDef hdcmi;
-
 
 int fputc(int ch, FILE *f)
 {
@@ -42,18 +39,6 @@ void board_init(void)
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_TIM4_Init();
-	
-	LCD_2IN4_Init();
-	OV2640_Init();
-	OV2640_RGB565_Mode();
-	OV2640_OutSize_Set(OV2640_PIXEL_WIDTH,OV2640_PIXEL_HEIGHT);
-	
-	__HAL_DCMI_DISABLE_IT(&hdcmi, DCMI_IT_LINE | DCMI_IT_VSYNC);
-	if (HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS,  (uint32_t)camera_buffer , (OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT)/2))
-	{
-		Error_Handler();
-	}
-	//setup(); //tensorflow init
 }
 
 /**
