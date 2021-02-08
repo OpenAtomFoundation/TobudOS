@@ -10,8 +10,12 @@
 
 #include "cmsis_os.h"
 #include "mcu_init.h"
+#include "ov2640.h"
+#include "lcd_2inch4.h"
 
-extern uint16_t camera_buffer[];
+uint16_t camera_buffer[OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT];
+uint8_t tensor_flag = 0;
+
 extern uint8_t frame_flag;
 static uint8_t model_buffer[96*96];
 
@@ -73,6 +77,19 @@ void task2(void *arg)
 
 void application_entry(void *arg)
 {
+		LCD_2IN4_Init();
+		OV2640_Init();
+		OV2640_RGB565_Mode();
+		OV2640_OutSize_Set(OV2640_PIXEL_WIDTH,OV2640_PIXEL_HEIGHT);
+	
+		__HAL_DCMI_DISABLE_IT(&hdcmi, DCMI_IT_LINE | DCMI_IT_VSYNC);
+		if (HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS,  (uint32_t)camera_buffer , (OV2640_PIXEL_WIDTH*OV2640_PIXEL_HEIGHT)/2))
+		{
+			Error_Handler();
+		}
+		
+		person_detect_init();
+		
     printf("***Start person detection task! \r\n");
     osThreadCreate(osThread(task1), NULL); // Create task1
     osThreadCreate(osThread(task2), NULL); // Create task2
