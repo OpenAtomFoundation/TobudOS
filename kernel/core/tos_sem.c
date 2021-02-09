@@ -22,14 +22,13 @@
 __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count)
 {
     TOS_PTR_SANITY_CHECK(sem);
-
+    
+    if (unlikely(init_count > max_count)) {
+        init_count = max_count;
+    }
+    
     sem->count      = init_count;
     sem->count_max  = max_count;
-    
-    if(sem->count > sem->count_max)
-    {
-        sem->count_max = sem->count;
-    }
     
     pend_object_init(&sem->pend_obj);
     TOS_OBJ_INIT(sem, KNL_OBJ_TYPE_SEMAPHORE);
