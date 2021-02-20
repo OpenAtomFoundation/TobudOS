@@ -274,8 +274,8 @@ void E53_SF1_Read_Data(void)
 * 函数名称: E53SF1_LED_StatusSet
 * 说    明: E53SF1开发板上的LED灯的亮灭控制
 * 参    数: status,LED灯的状态
-*	    非1,关灯
-*	    1,开灯
+*	    OFF,关灯
+*	    ON,开灯
 * 返 回 值: 无
 ***************************************************************/
 void E53SF1_LED_StatusSet(E53SF1_Status_ENUM status)
@@ -286,9 +286,9 @@ void E53SF1_LED_StatusSet(E53SF1_Status_ENUM status)
 /***************************************************************
 * 函数名称: E53SF1_BEEP
 * 说    明: E53SF1蜂鸣器报警与否
-* 参    数: status,LED_ENUM枚举的数据
-*           LED_OFF,关灯
-*           LED_ON,开灯
+* 参    数: status,E53SF1_Status_ENUM枚举的数据
+*           OFF,关蜂鸣器
+*           ON,开蜂鸣器
 * 返 回 值: 无
 ***************************************************************/
 void E53SF1_Beep(E53SF1_Status_ENUM status)
