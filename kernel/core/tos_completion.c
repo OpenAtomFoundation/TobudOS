@@ -17,6 +17,8 @@
 
 #include "tos_k.h"
 
+#if TOS_CFG_COMPLETION_EN > 0
+
 __API__ k_err_t tos_completion_create(k_completion_t *completion)
 {
     TOS_PTR_SANITY_CHECK(completion);
@@ -155,3 +157,4 @@ __API__ int tos_completion_is_done(k_completion_t *completion)
     return is_done;
 }
 
+#endif /* TOS_CFG_COMPLETION_EN */

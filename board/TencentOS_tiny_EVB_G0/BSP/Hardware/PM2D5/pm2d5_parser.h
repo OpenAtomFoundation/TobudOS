@@ -49,7 +49,8 @@ typedef struct pm2d5_data_st {
     uint16_t    data10;
     uint16_t    data11;
     uint16_t    data12;
-    uint16_t    data13;
+    uint8_t     version;
+    uint8_t     err_code;
 }pm2d5_data_t;
 
 typedef union pm2d5_data_un {

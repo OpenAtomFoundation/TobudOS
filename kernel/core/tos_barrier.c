@@ -17,6 +17,8 @@
 
 #include "tos_k.h"
 
+#if TOS_CFG_BARRIER_EN > 0
+
 __API__ k_err_t tos_barrier_create(k_barrier_t *barrier, k_barrier_cnt_t count)
 {
     TOS_PTR_SANITY_CHECK(barrier);
@@ -104,3 +106,4 @@ __API__ k_err_t tos_barrier_reset(k_barrier_t *barrier, k_barrier_cnt_t count)
     return K_ERR_NONE;
 }
 
+#endif /* TOS_CFG_BARRIER_EN */

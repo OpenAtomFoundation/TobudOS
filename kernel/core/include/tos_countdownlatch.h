@@ -20,6 +20,7 @@
 
 __CDECLS_BEGIN
 
+#if TOS_CFG_COUNTDOWNLATCH_EN > 0
 typedef struct k_countdownlatch_st {
 #if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t               knl_obj;
@@ -114,6 +115,8 @@ __API__ k_err_t tos_countdownlatch_post(k_countdownlatch_t *countdownlatch);
  * @retval  #K_ERR_NONE                     return successfully.
  */
 __API__ k_err_t tos_countdownlatch_reset(k_countdownlatch_t *countdownlatch, k_countdownlatch_cnt_t count);
+
+#endif /* TOS_CFG_COUNTDOWNLATCH_EN */
 
 __CDECLS_END
 

@@ -199,3 +199,19 @@ int tos_tf_module_ota_read_fwdata(uint8_t *ota_fw_data_buffer,uint16_t buf_size)
     }
     return -1;
 }
+
+int tos_tf_module_smartconfig_start(void)
+{
+    if (g_tencent_firmware_module && g_tencent_firmware_module->start_smartconfig) {
+        return g_tencent_firmware_module->start_smartconfig();
+    }
+    return -1;
+}
+
+int tos_tf_module_smartconfig_stop(void)
+{
+    if (g_tencent_firmware_module && g_tencent_firmware_module->stop_smartconfig) {
+        return g_tencent_firmware_module->stop_smartconfig();
+    }
+    return -1;
+}

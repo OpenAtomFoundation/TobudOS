@@ -20,6 +20,8 @@
 
 __CDECLS_BEGIN
 
+#if TOS_CFG_COMPLETION_EN > 0
+
 typedef uint16_t    completion_done_t;
 
 typedef struct k_completion_st {
@@ -145,6 +147,8 @@ __API__ k_err_t tos_completion_reset(k_completion_t *completion);
  * @retval  K_FALSE         the completion is not done.
  */
 __API__ int tos_completion_is_done(k_completion_t *completion);
+
+#endif /* TOS_CFG_COMPLETION_EN */
 
 __CDECLS_END
 

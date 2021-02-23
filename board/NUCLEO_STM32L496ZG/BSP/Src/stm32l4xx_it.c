@@ -22,7 +22,6 @@
 #include "main.h"
 #include "stm32l4xx_it.h"
 #include "tos_k.h"
-//#include "tos_at.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -58,6 +57,8 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef hdma_dcmi;
+extern DCMI_HandleTypeDef hdcmi;
 extern UART_HandleTypeDef hlpuart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
@@ -173,7 +174,7 @@ void DebugMon_Handler(void)
 __weak void PendSV_Handler(void)
 {
   /* USER CODE BEGIN PendSV_IRQn 0 */
-
+	
   /* USER CODE END PendSV_IRQn 0 */
   /* USER CODE BEGIN PendSV_IRQn 1 */
 
@@ -189,15 +190,13 @@ void SysTick_Handler(void)
 
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
-  if (tos_knl_is_running())
-  {
-    tos_knl_irq_enter();
-    tos_tick_handler();
-    tos_knl_irq_leave();
-  }
-  //HAL_SYSTICK_IRQHandler();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-
+	if(tos_knl_is_running())
+	{
+		tos_knl_irq_enter();
+		tos_tick_handler();
+		tos_knl_irq_leave();
+	}
   /* USER CODE END SysTick_IRQn 1 */
 }
 
@@ -209,8 +208,33 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles USART2 global interrupt.
+  * @brief This function handles DMA2 channel6 global interrupt.
   */
+void DMA2_Channel6_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Channel6_IRQn 0 */
+
+  /* USER CODE END DMA2_Channel6_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_dcmi);
+  /* USER CODE BEGIN DMA2_Channel6_IRQn 1 */
+
+  /* USER CODE END DMA2_Channel6_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DCMI global interrupt.
+  */
+void DCMI_IRQHandler(void)
+{
+  /* USER CODE BEGIN DCMI_IRQn 0 */
+
+  /* USER CODE END DCMI_IRQn 0 */
+  HAL_DCMI_IRQHandler(&hdcmi);
+  /* USER CODE BEGIN DCMI_IRQn 1 */
+
+  /* USER CODE END DCMI_IRQn 1 */
+}
+
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
@@ -242,13 +266,13 @@ void USART3_IRQHandler(void)
 void LPUART1_IRQHandler(void)
 {
   /* USER CODE BEGIN LPUART1_IRQn 0 */
-
+		tos_knl_irq_enter();
   /* USER CODE END LPUART1_IRQn 0 */
-    tos_knl_irq_enter();
+    
     HAL_UART_IRQHandler(&hlpuart1);
-    tos_knl_irq_leave();
+    
   /* USER CODE BEGIN LPUART1_IRQn 1 */
-
+		tos_knl_irq_leave();
   /* USER CODE END LPUART1_IRQn 1 */
 }
 
