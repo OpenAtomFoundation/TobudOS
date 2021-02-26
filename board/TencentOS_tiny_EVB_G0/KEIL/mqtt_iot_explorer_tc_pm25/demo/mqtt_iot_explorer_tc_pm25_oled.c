@@ -5,11 +5,11 @@
 #include "oled.h"
 #include "math.h"
 
-#define WIFI_SSID               "MYMi11"
-#define WIFI_PASSWD             "13975428888"
-#define PRODUCT_ID              "XOEHGW66ZD"
-#define DEVICE_NAME             "pm2d5001"
-#define DEVICE_KEY              "ucAiCMvMdafJ4xgdFLdhiw=="
+#define WIFI_SSID               "Tencent-GuestWiFi"
+#define WIFI_PASSWD             ""
+#define PRODUCT_ID              "ZLC54JVTAH"
+#define DEVICE_NAME             "node_20DEBC0A8415"
+#define DEVICE_KEY              "Xqiswx4I1T+bZyHOrHvaqg=="
 
 //#define REPORT_DATA_TEMPLATE1    "{\"method\":\"report\",\"clientToken\":\"%s\"," \
 //    "\"params\":{\"PM1_CF1\":%d,"	\
@@ -41,8 +41,8 @@
     "\"j\":%d," \
     "\"k\":%d," \
     "\"l\":%d," \
-    "\"m\":%d," \
-    "\"n\":%d" \
+    "\"v\":%d," \
+    "\"ec\":%d" \
     "}}"
 
 void default_message_handler(mqtt_message_t* msg)
@@ -182,7 +182,7 @@ void mqtt_demo_task(void)
                 pm2d5_value.pm2d5_data.data7, pm2d5_value.pm2d5_data.data8,
                 pm2d5_value.pm2d5_data.data9, pm2d5_value.pm2d5_data.data10,
                 pm2d5_value.pm2d5_data.data11, pm2d5_value.pm2d5_data.data12,
-                pm2d5_value.pm2d5_data.version, pm2d5_value.pm2d5_data.err_code);
+                2, pm2d5_value.pm2d5_data.err_code);
         
         if (tos_tf_module_mqtt_publ(report_topic_name, QOS0, payload) != 0) {
             report_error_count++;
