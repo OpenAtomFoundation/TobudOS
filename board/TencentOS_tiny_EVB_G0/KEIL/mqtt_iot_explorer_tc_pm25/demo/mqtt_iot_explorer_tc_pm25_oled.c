@@ -8,8 +8,8 @@
 #define WIFI_SSID               "Tencent-GuestWiFi"
 #define WIFI_PASSWD             ""
 #define PRODUCT_ID              "ZLC54JVTAH"
-#define DEVICE_NAME             "node_20DEBC0A8415"
-#define DEVICE_KEY              "Xqiswx4I1T+bZyHOrHvaqg=="
+#define DEVICE_NAME             "node_20DEBC0A0000"
+#define DEVICE_KEY              "QXiswx4I1T+bZyHOrHvaqg=="
 
 //#define REPORT_DATA_TEMPLATE1    "{\"method\":\"report\",\"clientToken\":\"%s\"," \
 //    "\"params\":{\"PM1_CF1\":%d,"	\
