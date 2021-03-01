@@ -195,7 +195,11 @@ void mqtt_demo_task(void)
             sprintf(str, "# report ok");
             OLED_ShowString(0,2,(uint8_t*)str,16);
         }
-        
+
+        if (report_error_count >= 6) {
+            HAL_NVIC_SystemReset();
+        }
+             
         tos_sleep_ms(5000);
         
     }
