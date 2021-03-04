@@ -1,11 +1,11 @@
 /**
- * @file   freertos_thread.h
+ * @file   TencentOS_thread.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_THREAD_H_
-#define _KERNEL_OS_FREERTOS_OS_THREAD_H_
+#ifndef _KERNEL_OS_TENCENT_OS_THREAD_H_
+#define _KERNEL_OS_TENCENT_OS_THREAD_H_
 
 #include "./TencentOS_Adapter/TencentOS_common.h"
 #include "./TencentOS_Adapter/TencentOS_time.h"
@@ -74,4 +74,4 @@ static __always_inline int OS_ThreadIsSchedulerRunning(void)
 }
 #endif
 
-#endif /* _KERNEL_OS_FREERTOS_OS_THREAD_H_ */
+#endif /* _KERNEL_OS_TENCENT_OS_THREAD_H_ */
