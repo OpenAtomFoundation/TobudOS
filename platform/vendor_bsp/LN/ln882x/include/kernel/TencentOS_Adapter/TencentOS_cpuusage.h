@@ -21,4 +21,4 @@ uint16_t osGetCPUUsage (void);
 }
 #endif
 
-#endif /* _FREERTOS_CPUUSAGE_H__ */
+#endif /* _TENCENTOS_CPUUSAGE_H__ */
