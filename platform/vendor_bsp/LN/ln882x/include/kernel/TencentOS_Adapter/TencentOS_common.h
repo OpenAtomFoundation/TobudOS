@@ -1,11 +1,11 @@
 /**
- * @file   freertos_common.h
+ * @file   TencentOS_common.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_COMMON_H_
-#define _KERNEL_OS_FREERTOS_OS_COMMON_H_
+#ifndef _KERNEL_OS_TENCENT_OS_COMMON_H_
+#define _KERNEL_OS_TENCENT_OS_COMMON_H_
 
 #include <stdint.h>
 //#include "compiler.h"
@@ -74,6 +74,6 @@ void os_heap_mem_add_pool(void);
 }
 #endif
 
-#endif /* _KERNEL_OS_FREERTOS_OS_COMMON_H_ */
+#endif /* _KERNEL_OS_TENCENT_OS_COMMON_H_ */
 
 
