@@ -1,11 +1,11 @@
 /**
- * @file freertos_queue.h
+ * @file TencentOS_queue.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_QUEUE_H_
-#define _KERNEL_OS_FREERTOS_OS_QUEUE_H_
+#ifndef _KERNEL_OS_TENCENT_OS_QUEUE_H_
+#define _KERNEL_OS_TENCENT_OS_QUEUE_H_
 
 #include "./TencentOS_Adapter/TencentOS_common.h"
 
