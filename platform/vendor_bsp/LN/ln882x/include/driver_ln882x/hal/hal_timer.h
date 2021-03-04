@@ -200,4 +200,4 @@ uint32_t HAL_TIMER_LoadCount2_Get(TIMER_Index index);
 }
 #endif /* __cplusplus */
 
-#endif /* __HAL_TIMRE_H_ */
+#endif /* __HAL_TIMER_H_ */
