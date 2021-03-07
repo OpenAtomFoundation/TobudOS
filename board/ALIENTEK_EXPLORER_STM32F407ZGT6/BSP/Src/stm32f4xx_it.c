@@ -242,7 +242,7 @@ void USART2_IRQHandler(void)
 	{
 		HAL_UART_Receive(&huart2,&tmp,1,1);
 	}
-        #if defined USE_MODBUS
+        #if defined (USE_MODBUS)
 	else if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_RXNE)&&__HAL_UART_GET_IT_SOURCE(&huart2,UART_IT_RXNE))
 	{
 		prvvUARTRxISR();
@@ -276,7 +276,7 @@ void USART3_IRQHandler(void)
 void TIM6_DAC_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
-  #if defined USE_MODBUS
+  #if defined (USE_MODBUS)
   prvvTIMERExpiredISR();
   #endif/* USE_MODBUS */
   /* USER CODE END TIM6_DAC_IRQn 0 */
