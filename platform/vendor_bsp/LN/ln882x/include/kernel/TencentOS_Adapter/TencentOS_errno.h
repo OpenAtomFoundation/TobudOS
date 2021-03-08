@@ -1,11 +1,11 @@
 /**
- * @file   freertos_errno.h
+ * @file   TencentOS_errno.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_ERRNO_H_
-#define _KERNEL_OS_FREERTOS_OS_ERRNO_H_
+#ifndef _KERNEL_OS_TENCENT_OS_ERRNO_H_
+#define _KERNEL_OS_TENCENT_OS_ERRNO_H_
 
 #include "./TencentOS/adapter_common.h"
 
@@ -39,4 +39,4 @@ static __always_inline void OS_SetErrno(int err)
 }
 #endif
 
-#endif /* _KERNEL_OS_FREERTOS_OS_ERRNO_H_ */
+#endif /* _KERNEL_OS_TENCENT_OS_ERRNO_H_ */

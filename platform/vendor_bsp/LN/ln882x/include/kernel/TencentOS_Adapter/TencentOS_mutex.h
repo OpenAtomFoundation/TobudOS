@@ -1,11 +1,11 @@
 /**
- * @file   freertos_mutex.h
+ * @file   TencentOS_mutex.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_MUTEX_H_
-#define _KERNEL_OS_FREERTOS_OS_MUTEX_H_
+#ifndef _KERNEL_OS_TENCENT_OS_MUTEX_H_
+#define _KERNEL_OS_TENCENT_OS_MUTEX_H_
 
 #include "./TencentOS_Adapter/TencentOS_common.h"
 #include "./TencentOS_Adapter/TencentOS_time.h"
@@ -61,4 +61,4 @@ static __always_inline void OS_MutexSetInvalid(OS_Mutex_t *mutex)
 }
 #endif
 
-#endif /* _KERNEL_OS_FREERTOS_OS_MUTEX_H_ */
+#endif /* _KERNEL_OS_TENCENT_OS_MUTEX_H_ */

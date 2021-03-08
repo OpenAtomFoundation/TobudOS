@@ -1,11 +1,11 @@
 /**
- * @file   freertos_debug.h
+ * @file   TencentOS_debug.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _FREERTOS_DEBUG_H_
-#define _FREERTOS_DEBUG_H_
+#ifndef _TENCENTOS_DEBUG_H_
+#define _TENCENTOS_DEBUG_H_
 
 #include <stdio.h>
 //#include "compiler.h"
@@ -82,4 +82,4 @@ extern void exception_panic(const char *file, const char *func, const int line);
 }
 #endif
 
-#endif /* _FREERTOS_DEBUG_H_ */
+#endif /* _TENCENTOS_DEBUG_H_ */
