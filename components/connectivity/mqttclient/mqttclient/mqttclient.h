@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-06-16 16:57:40
+ * @LastEditTime: 2020-10-17 14:16:58
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTTCLIENT_H_
@@ -23,6 +23,10 @@
 #include "random.h"
 #include "mqtt_error.h"
 #include "mqtt_log.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum mqtt_qos {
     QOS0 = 0,
@@ -118,7 +122,6 @@ typedef struct mqtt_client {
     mqtt_list_t                 mqtt_ack_handler_list;
     network_t                   *mqtt_network;
     platform_thread_t           *mqtt_thread;
-    platform_timer_t            mqtt_reconnect_timer;
     platform_timer_t            mqtt_last_sent;
     platform_timer_t            mqtt_last_received;
     reconnect_handler_t         mqtt_reconnect_handler;
@@ -169,5 +172,9 @@ int mqtt_unsubscribe(mqtt_client_t* c, const char* topic_filter);
 int mqtt_publish(mqtt_client_t* c, const char* topic_filter, mqtt_message_t* msg);
 int mqtt_list_subscribe_topic(mqtt_client_t* c);
 int mqtt_set_will_options(mqtt_client_t* c, char *topic, mqtt_qos_t qos, uint8_t retained, char *message);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _MQTTCLIENT_H_ */
