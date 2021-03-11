@@ -124,6 +124,10 @@ typedef enum k_err_en {
     K_ERR_TIMER_INVALID_OPT,
     K_ERR_TIMER_STOPPED,
     K_ERR_TIMER_RUNNING,
+
+    K_ERR_SEM_OUT_OF_MEMORY                     = 2200u,
+
+    K_ERR_MUTEX_OUT_OF_MEMORY                   = 2300u,
 } k_err_t;
 
 #endif /* _TOS_ERR_H_ */

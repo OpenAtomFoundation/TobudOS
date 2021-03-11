@@ -83,6 +83,32 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
     return K_ERR_NONE;
 }
 
+__API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex)
+{
+    k_mutex_t *the_mutex;
+
+    TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(mutex);
+
+    the_mutex = tos_mmheap_calloc(1, sizeof(k_mutex_t));
+    if (!the_mutex) {
+        return K_ERR_MUTEX_OUT_OF_MEMORY;
+    }
+
+    pend_object_init(&the_mutex->pend_obj);
+    the_mutex->pend_nesting     = (k_nesting_t)0u;
+    the_mutex->owner            = K_NULL;
+    the_mutex->owner_orig_prio  = K_TASK_PRIO_INVALID;
+    tos_list_init(&the_mutex->owner_anchor);
+    TOS_OBJ_INIT(the_mutex, KNL_OBJ_TYPE_MUTEX);
+
+    knl_object_alloc_set_dynamic(&the_mutex->knl_obj);
+
+    *mutex = the_mutex;
+
+    return K_ERR_NONE;
+}
+
 __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 {
     TOS_CPU_CPSR_ALLOC();
@@ -101,7 +127,12 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 
     pend_object_deinit(&mutex->pend_obj);
 
-    TOS_OBJ_DEINIT(mutex);
+    if (knl_object_alloc_is_dynamic(&mutex->knl_obj)) {
+        TOS_OBJ_DEINIT(mutex);
+        tos_mmheap_free(mutex);
+    } else {
+        TOS_OBJ_DEINIT(mutex);
+    }
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

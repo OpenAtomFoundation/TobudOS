@@ -48,6 +48,19 @@ typedef struct k_mutex_st {
 __API__ k_err_t tos_mutex_create(k_mutex_t *mutex);
 
 /**
+ * @brief Create a dynamic mutex.
+ * create a dynamic mutex.
+ *
+ * @attention None
+ *
+ * @param[in]   mutex       pointer to the pointer of the mutex.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex);
+
+/**
  * @brief Destroy a mutex.
  * destroy a mutex.
  *

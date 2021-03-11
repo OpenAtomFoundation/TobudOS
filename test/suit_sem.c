@@ -10,7 +10,9 @@ SUITE(suit_sem);
 k_sem_t test_sem_00;
 k_sem_t test_sem_01;
 k_sem_t test_sem_02;
-
+k_sem_t *test_sem_dyn_00;
+k_sem_t *test_sem_dyn_01;
+k_sem_t *test_sem_dyn_02;
 static void test_sem_pend_task_entry(void *arg)
 {
     k_err_t err;
@@ -76,6 +78,31 @@ TEST test_tos_sem_create(void)
     ASSERT_EQ(err, K_ERR_NONE);
 
     err = tos_sem_destroy(&test_sem_02);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
+TEST test_tos_sem_create_dyn(void)
+{
+    k_err_t err;
+
+    err = tos_sem_create_dyn(&test_sem_dyn_00, (k_sem_cnt_t)0);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_sem_create_dyn(&test_sem_dyn_01, (k_sem_cnt_t)0xFF);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_sem_create_dyn(&test_sem_dyn_02, (k_sem_cnt_t)0xFFFF);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_sem_destroy(test_sem_dyn_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_sem_destroy(test_sem_dyn_01);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_sem_destroy(test_sem_dyn_02);
     ASSERT_EQ(err, K_ERR_NONE);
 
     PASS();
@@ -251,6 +278,7 @@ TEST test_tos_sem_post_all(void)
 SUITE(suit_sem)
 {
     RUN_TEST(test_tos_sem_create);
+    RUN_TEST(test_tos_sem_create_dyn);
     RUN_TEST(test_tos_sem_destroy);
     RUN_TEST(test_tos_sem_pend);
     RUN_TEST(test_tos_sem_pend_timed);
