@@ -74,7 +74,6 @@ INF|2020-03-04 16:50:37|ota_mqtt_sample.c|process_ota(389): wait for ota upgrade
 ```
 INF|2020-03-04 16:50:38|ota_mqtt_sample.c|process_ota(389): wait for ota upgrade command...
 DBG|2020-03-04 16:50:39|ota_mqtt.c|_otamqtt_upgrage_cb(103): topic=$ota/update/S3EUVBRJLB/test_device
-INF|2020-03-04 16:50:39|ota_mqtt.c|_otamqtt_upgrage_cb(104): len=454, topic_msg={"file_size":175436,"md5sum":"ad4615b866c13afb8b293a679bfa5dc4","type":"update_firmware","url":"https://ota-1255858890.cos.ap-guangzhou.myqcloud.com/100008768029_S3EUVBRJLB_1.3.0?sign=q-sign-algorithm%3Dsha1%26q-ak%3DAKIDdO8ldrUa0Uts4H5Gzx6FZ9nfedjpiCd7%26q-sign-time%3D1583311839%3B1583398239%26q-key-time%3D1583311839%3B1583398239%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D1215yt303628f88f31c9a7734ead8a7fa32ed1b3%00","version":"1.3.0"}
 
 INF|2020-03-04 16:50:39|ota_mqtt_sample.c|process_ota(389): wait for ota upgrade command...
 ERR|2020-03-04 16:50:39|ota_mqtt_sample.c|_get_local_fw_info(251): open file ./FW_S3EUVBRJLBtest_device.json failed

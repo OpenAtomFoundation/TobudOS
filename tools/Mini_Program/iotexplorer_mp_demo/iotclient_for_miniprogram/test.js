@@ -1,9 +1,9 @@
 const iotclient = require('./iotclient.js')
 const iotmodel = require('./iotmodel.js')
 
-const SECRETID = "AKIDxZ2LTTi84eaR3OfS8hnfxd4JHzQatFpF";
-const SECRETKEY = "UigMrA9rJXUCeoiBQP8dsJuJ6sYzmNjs";
-const PRODUCTID = "U2LPAXBT2C";
+const SECRETID = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+const SECRETKEY = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+const PRODUCTID = "XXXXXX";
 const DEVICENAME = "royye_light";
 
 
