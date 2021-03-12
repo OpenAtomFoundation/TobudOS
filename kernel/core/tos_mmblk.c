@@ -41,7 +41,7 @@ __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, siz
         blk_curr            = blk_next;
         blk_next            = K_MMBLK_NEXT_BLK(blk_next, blk_size);
     }
-    *(void **)blk_next = K_NULL;
+    *(void **)blk_curr = K_NULL;
 
     mbp->pool_start = pool_start;
     mbp->free_list  = pool_start;
