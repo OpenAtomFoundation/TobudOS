@@ -68,6 +68,37 @@ __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, siz
 __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp);
 
 /**
+ * @brief Create a dynamic memory manage block pool.
+ * Create a dynamic memory manage block pool.
+ *
+ * @attention None
+ *
+ * @param[in]   mbp         pointer to the pointer of memory block pool handler.
+ * @param[in]   blk_num     number of the blocks in the pool.
+ * @param[in]   blk_size    size of each block in the pool.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_MMBLK_INVALID_POOL_ADDR  start address of the pool is invalid.
+ * @retval  #K_ERR_MMBLK_INVALID_BLK_SIZE   size of the block is invalid.
+ * @retval  #K_ERR_NONE                     return successfully.
+ */
+__API__ k_err_t tos_mmblk_pool_create_dyn(k_mmblk_pool_t **mbp, size_t blk_num, size_t blk_size);
+
+/**
+ * @brief Destroy a dynamic memory manage block pool.
+ * Destroy a memory dynamic manage block pool.
+ *
+ * @attention None
+ *
+ * @param[in]   mbp         pointer to the memory block pool handler.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_OBJ_INVALID              mbp is not a valid memory block pool handler.
+ * @retval  #K_ERR_NONE                     return successfully.
+ */
+__API__ k_err_t tos_mmblk_pool_destroy_dyn(k_mmblk_pool_t *mbp);
+
+/**
  * @brief Allocate a memory manage block.
  * Allocate a memory manage block.
  *
