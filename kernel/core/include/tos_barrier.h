@@ -23,9 +23,7 @@ __CDECLS_BEGIN
 #if TOS_CFG_BARRIER_EN > 0
 
 typedef struct k_barrier_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t               knl_obj;
-#endif
 
     pend_obj_t              pend_obj;
     k_barrier_cnt_t         count;

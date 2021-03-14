@@ -25,9 +25,7 @@ __CDECLS_BEGIN
 typedef uint16_t    rw_cnt_t;
 
 typedef struct k_rwlock_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     k_mutex_t       lock;
     k_sem_t         signal;

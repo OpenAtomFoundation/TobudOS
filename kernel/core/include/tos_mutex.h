@@ -23,9 +23,7 @@ __CDECLS_BEGIN
 #if TOS_CFG_MUTEX_EN > 0u
 
 typedef struct k_mutex_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     pend_obj_t      pend_obj;
     k_nesting_t     pend_nesting;

@@ -23,9 +23,7 @@ __CDECLS_BEGIN
 #if TOS_CFG_SEM_EN > 0u
 
 typedef struct k_sem_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     pend_obj_t      pend_obj;
     k_sem_cnt_t     count;

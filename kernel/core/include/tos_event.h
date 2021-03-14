@@ -43,9 +43,7 @@ typedef enum opt_event_post_en {
 } opt_event_post_t;
 
 typedef struct k_event_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     pend_obj_t      pend_obj;
     k_event_flag_t  flag;
@@ -83,7 +81,7 @@ __API__ k_err_t tos_event_destroy(k_event_t *event);
  * pend an event.
  *
  * @attention if opt is TOS_OPT_EVENT_PEND_ANY, any of the flag_expect is set is ok;
- *            if opt is TOS_OPT_EVENT_PEND_ALL£¬ must all the flag_expect is set is ok.
+ *            if opt is TOS_OPT_EVENT_PEND_ALLï¿½ï¿½ must all the flag_expect is set is ok.
  *
  * @param[in]   event       pointer to the handler of the event.
  * @param[in]   flag_expect the flag we expect from the event.

@@ -24,9 +24,7 @@ __CDECLS_BEGIN
 #define K_MMBLK_ALIGN_MASK                          (sizeof(void *) - 1u)
 
 typedef struct k_mmblk_pool_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t   knl_obj;
-#endif
 
     void       *pool_start;
     void       *free_list;

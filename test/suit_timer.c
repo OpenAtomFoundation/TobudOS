@@ -109,8 +109,10 @@ TEST test_tos_timer_stop(void)
     err = tos_timer_stop(K_NULL);
     ASSERT_EQ(err, K_ERR_OBJ_PTR_NULL);
 
+#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     err = tos_timer_stop(&test_timer_00);
     ASSERT_EQ(err, K_ERR_OBJ_INVALID);
+#endif
 
     err = tos_timer_create(&test_timer_00, (k_tick_t)500u, (k_tick_t)0u,
                     test_timer_call_back_dummy, K_NULL,

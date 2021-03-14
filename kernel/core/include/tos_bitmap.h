@@ -21,9 +21,7 @@
 typedef uint32_t                        k_bmtbl_t;
 
 typedef struct k_bitmap_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     uint32_t        bit_ndx_max;
     uint32_t        bit_max;
