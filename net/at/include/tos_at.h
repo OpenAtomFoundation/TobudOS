@@ -78,6 +78,8 @@ typedef struct at_data_channel_st {
 
     at_channel_status_t status;
 
+    k_stopwatch_t       timer;
+
     const char         *remote_ip;
     const char         *remote_port;
 } at_data_channel_t;
@@ -112,8 +114,6 @@ typedef struct at_agent_st {
 
     k_task_t        parser;
     at_cache_t      recv_cache;
-
-    k_stopwatch_t   timer;
 
     k_mutex_t       global_lock;
 

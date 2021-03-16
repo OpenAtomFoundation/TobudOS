@@ -634,9 +634,9 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
 
     tick = tos_millisec2tick(timeout);
 
-    tos_stopwatch_countdown(&AT_AGENT->timer, tick);
-    while (!tos_stopwatch_is_expired(&AT_AGENT->timer)) {
-        remain_tick = tos_stopwatch_remain(&AT_AGENT->timer);
+    tos_stopwatch_countdown(&data_channel->timer, tick);
+    while (!tos_stopwatch_is_expired(&data_channel->timer)) {
+        remain_tick = tos_stopwatch_remain(&data_channel->timer);
         if (remain_tick == (k_tick_t)0u) {
             return total_read_len;
         }
@@ -691,6 +691,10 @@ __STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, cons
     }
 
     if (tos_mutex_create(&data_channel->rx_lock) != K_ERR_NONE) {
+        goto errout;
+    }
+
+    if (tos_stopwatch_create(&data_channel->timer) != K_ERR_NONE) {
         goto errout;
     }
 
@@ -758,6 +762,8 @@ __API__ int tos_at_channel_free(int channel_id)
     }
 
     tos_mutex_destroy(&data_channel->rx_lock);
+
+    tos_stopwatch_destroy(&data_channel->timer);
 
     tos_mmheap_free(data_channel->rx_fifo_buffer);
     tos_chr_fifo_destroy(&data_channel->rx_fifo);
@@ -850,8 +856,6 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
     at_event_table_set(event_table, event_table_size);
 
     at_channel_init();
-
-    tos_stopwatch_create(&AT_AGENT->timer);
 
     buffer = tos_mmheap_alloc(AT_UART_RX_FIFO_BUFFER_SIZE);
     if (!buffer) {
@@ -959,8 +963,6 @@ __API__ void tos_at_deinit(void)
     AT_AGENT->uart_rx_fifo_buffer = K_NULL;
 
     tos_chr_fifo_destroy(&AT_AGENT->uart_rx_fifo);
-
-    tos_stopwatch_destroy(&AT_AGENT->timer);
 
     at_channel_deinit();
 }
