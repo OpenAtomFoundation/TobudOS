@@ -98,13 +98,13 @@ int recv(int socket, void *buffer, size_t length, int flags)
     SOCKET_ID_SET_SANITY_CHECK(socket);
 
     if (!(flags & MSG_WAITALL)) {
-        return tos_sal_module_recv(socket_get_fd(socket), buffer, length);
+        return tos_sal_module_recv_timeout(socket_get_fd(socket), buffer, length, 4000);
     }
 
     while (total_len < length) {
-        recv_len = tos_sal_module_recv(socket_get_fd(socket),
+        recv_len = tos_sal_module_recv_timeout(socket_get_fd(socket),
                                         (uint8_t *)buffer + total_len,
-                                        remain_len);
+                                        remain_len, 4000);
 
         if (recv_len <= 0) {
             continue;

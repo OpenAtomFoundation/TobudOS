@@ -174,7 +174,7 @@ static int esp8266_recv_timeout(int id, void *buf, size_t len, uint32_t timeout)
 
 static int esp8266_recv(int id, void *buf, size_t len)
 {
-    return esp8266_recv_timeout(id, buf, len, (uint32_t)4000);
+    return tos_at_channel_read(id, buf, len);
 }
 
 static int esp8266_is_link_broken(const char *echo_buffer)
@@ -435,6 +435,9 @@ __STATIC__ void esp8266_incoming_data_process(void)
         if (tos_at_uart_read(buffer, read_len) != read_len) {
             return;
         }
+        
+        //delay has two reason, wait for the data to be cached and untrigger scheduling
+        tos_stopwatch_delay(200);
 
         if (tos_at_channel_write(channel_id, buffer, read_len) <= 0) {
             return;
@@ -446,6 +449,7 @@ __STATIC__ void esp8266_incoming_data_process(void)
 
 at_event_t esp8266_at_event[] = {
     { "+IPD,", esp8266_incoming_data_process },
+    { "PD,", esp8266_incoming_data_process },
 };
 
 sal_module_t sal_module_esp8266 = {
