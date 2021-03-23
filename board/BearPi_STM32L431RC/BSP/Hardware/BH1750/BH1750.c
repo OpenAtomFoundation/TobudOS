@@ -40,7 +40,7 @@ void BH1750_Start(void)
 * 参    数: 无
 * 返 回 值: 光强值
 ***************************************************************/
-float BH1750_Convert(void)
+__weak float BH1750_Convert(void)
 {
 	BH1750_Start();
 	HAL_Delay(180);
