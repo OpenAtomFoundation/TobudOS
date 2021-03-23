@@ -54,20 +54,13 @@ Purpose     : This file provides emWin Interface with FreeRTOS
 /* Includes ------------------------------------------------------------------*/
 
 #include "GUI.h"
-    
-/* RT-Thread include files */
-//#include "cmsis_os.h"
 #include "tos_k.h"
     
 /*********************************************************************
 *
 * Global data
 */
-//static osMutexId osMutex;
-//static osSemaphoreId osSemaphore;
-/*定义一个互斥锁*/
 static k_mutex_t osMutex ;
-/*定义一个信号量*/
 static k_sem_t  osSemaphore ;
 /*********************************************************************
 *
@@ -82,13 +75,11 @@ and delay function. Default time unit (tick), normally is
 
 int GUI_X_GetTime(void)
 {
-  //return ((int) xTaskGetTickCount());
 	return (int)tos_systick_get();
 }
 
 void GUI_X_Delay(int ms)
 {
-  //vTaskDelay( ms );
 	tos_sleep_ms(ms);
 }
 
@@ -140,51 +131,35 @@ void GUI_X_ExecIdle(void) {
 #include <stdio.h>
 void GUI_X_InitOS(void)
 { 
-	/*创建互斥信号量,用于资源共享*/
-	//osMutex = rt_mutex_create("osMutex", RT_IPC_FLAG_FIFO);
-	//RT_ASSERT(osMutex != RT_NULL);
-	/*创建信号量,用于事件触发*/
-	//osSemaphore = rt_sem_create("osSem", 0, RT_IPC_FLAG_FIFO);
-	//RT_ASSERT(osSemaphore != RT_NULL);
 	tos_mutex_create(&osMutex);
 	tos_sem_create(&osSemaphore,1);
 }
 
 void GUI_X_Unlock(void)
 { 
-  //osMutexRelease(osMutex);
-	//给出互斥量
 	tos_mutex_post(&osMutex);
 }
 
 void GUI_X_Lock(void)
 {
-  //osMutexWait(osMutex , osWaitForever) ;
-	//获取互斥量
 	tos_mutex_pend(&osMutex);
 }
 
 /* Get Task handle */
 U32 GUI_X_GetTaskId(void) 
 { 
-  //return ((U32) osThreadGetId());
-	/*获取当前线程句柄*/
 	return (U32) tos_task_curr_task_get();
 }
 
 
 void GUI_X_WaitEvent (void) 
 {
- // osSemaphoreWait(osSemaphore , osWaitForever) ;
-	/*获取信号量*/
 	tos_sem_pend(&osSemaphore,TOS_TIME_FOREVER);
 }
 
 
 void GUI_X_SignalEvent (void) 
 {
-  //osMutexRelease(osSemaphore);
-	/*给出信号量*/
 	tos_sem_post(&osSemaphore);
 }
 

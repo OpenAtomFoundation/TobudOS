@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\LCD_ST7789;..\..\BSP\Hardware\BH1750;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\kernel\hal\include;..\..\..\..\devices\esp8266</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\LCD_ST7789;..\..\BSP\Hardware\BH1750;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\kernel\hal\include;..\..\..\..\devices\ml302</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -446,7 +446,7 @@
             <File>
               <FileName>tcp_through_module.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\tcp_through_module\tcp_through_module.c</FilePath>
+              <FilePath>..\..\..\..\examples\tcp_through_ml302_4g_cat_1_module\tcp_through_module.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -799,9 +799,9 @@
           <GroupName>device</GroupName>
           <Files>
             <File>
-              <FileName>esp8266.c</FileName>
+              <FileName>ml302.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
+              <FilePath>..\..\..\..\devices\ml302\ml302.c</FilePath>
             </File>
           </Files>
         </Group>
