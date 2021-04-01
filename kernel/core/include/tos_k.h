@@ -67,6 +67,7 @@
 #endif
 #endif
 #include <tos_global.h>
+#include <tos_version.h>
 
 #endif /* _TOS_K_H_ */
 
