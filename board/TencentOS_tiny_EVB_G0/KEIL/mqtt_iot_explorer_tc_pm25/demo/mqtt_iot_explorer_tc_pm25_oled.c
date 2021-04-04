@@ -54,7 +54,7 @@ void default_message_handler(mqtt_message_t* msg)
     printf("---------------------------------------------------------\r\n");
 }
 
-char payload[256] = {0};
+char payload[1024] = {0};
 static char report_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 static char report_reply_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 
@@ -174,8 +174,8 @@ void mqtt_demo_task(void)
         
         /* 上报值 */
         generate_client_token(client_token, sizeof(client_token));
-        memset(payload, 0, sizeof(payload));
-        snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, client_token,
+        memset(payload, 0, 1024);
+        snprintf(payload, 1024, REPORT_DATA_TEMPLATE, client_token,
                 pm2d5_value.pm2d5_data.data1, pm2d5_value.pm2d5_data.data2,
                 pm2d5_value.pm2d5_data.data3, pm2d5_value.pm2d5_data.data4,
                 pm2d5_value.pm2d5_data.data5, pm2d5_value.pm2d5_data.data6,                
