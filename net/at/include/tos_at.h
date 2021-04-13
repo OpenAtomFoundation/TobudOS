@@ -122,7 +122,7 @@ typedef struct at_agent_st {
 
     hal_uart_t      uart;
     k_mutex_t       uart_tx_lock;
-    k_mutex_t       uart_rx_lock;
+//    k_mutex_t       uart_rx_lock;
     k_sem_t         uart_rx_sem;
     k_chr_fifo_t    uart_rx_fifo;
     uint8_t        *uart_rx_fifo_buffer;

@@ -14,6 +14,15 @@
  * as the other licenses applicable to the third-party components included
  * within TencentOS.
  *---------------------------------------------------------------------------*/
+ 
+/*
+Note:
+    If you find that the AT framework occasionally loses characters,
+    this may be caused by the unnecessary critical section of at_channel,
+    so you can remove the critical section of ring_queue in tos_ring_queue.c.
+    Once you remove, ring queue becomes only a data structure,
+    you must use critical section or mutex to protect the data in ring_queue.
+*/
 
 #include "tos_at.h"
 
@@ -39,6 +48,7 @@ __API__ int tos_at_global_lock_post(void)
 
 __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
 {
+    TOS_CPU_CPSR_ALLOC();
     k_err_t err;
 
     tos_stopwatch_delay(1);
@@ -46,14 +56,24 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
     if (tos_sem_pend(&AT_AGENT->uart_rx_sem, timeout) != K_ERR_NONE) {
         return -1;
     }
-
-    if (tos_mutex_pend(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
-        return -1;
-    }
+    
+    /*
+        the uart_rx_fifo is only read by at_parser task,
+        and it will be written in usart interrupt handler,
+        so it is more effective to use critical sections.
+    */
+    
+//    if (tos_mutex_pend(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
+//        return -1;
+//    }
+    
+    TOS_CPU_INT_DISABLE();
 
     err = tos_chr_fifo_pop(&AT_AGENT->uart_rx_fifo, data);
+    
+    TOS_CPU_INT_ENABLE();
 
-    tos_mutex_post(&AT_AGENT->uart_rx_lock);
+//    tos_mutex_post(&AT_AGENT->uart_rx_lock);
 
     return err == K_ERR_NONE ? 0 : -1;
 }
@@ -469,11 +489,11 @@ __API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, 
     int ret = 0;
     va_list args;
     
-    if (tos_sem_create(&echo->__status_set_notify, 0) != K_ERR_NONE) {
+    if (!echo) {
         return -1;
     }
     
-    if (!echo) {
+    if (tos_sem_create(&echo->__status_set_notify, 0) != K_ERR_NONE) {
         return -1;
     }
 
@@ -883,9 +903,9 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
         goto errout3;
     }
 
-    if (tos_mutex_create(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
-        goto errout4;
-    }
+//    if (tos_mutex_create(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
+//        goto errout4;
+//    }
 
     if (tos_mutex_create(&AT_AGENT->uart_tx_lock) != K_ERR_NONE) {
         goto errout5;
@@ -917,9 +937,9 @@ errout6:
     tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
 
 errout5:
-    tos_mutex_destroy(&AT_AGENT->uart_rx_lock);
+//    tos_mutex_destroy(&AT_AGENT->uart_rx_lock);
 
-errout4:
+//errout4:
     tos_sem_destroy(&AT_AGENT->uart_rx_sem);
 
 errout3:

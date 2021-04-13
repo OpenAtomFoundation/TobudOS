@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\devices\ec20;..\..\..\..\devices\ec200s;..\..\..\..\devices\air724;..\..\..\..\devices\l610</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\devices\ec20;..\..\..\..\devices\ec200s;..\..\..\..\devices\air724;..\..\..\..\devices\l610;..\..\..\..\devices\ec600s</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -817,6 +817,11 @@
               <FileName>l610.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\devices\l610\l610.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec600s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec600s\ec600s.c</FilePath>
             </File>
           </Files>
         </Group>
