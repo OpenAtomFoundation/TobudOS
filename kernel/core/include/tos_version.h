@@ -24,9 +24,9 @@
 // patch is updated for patch changes/bug fixes that should not need user code changes
 
 #define TOS_VERSION_MAJOR   0x02
-#define TOS_VERSION_MINOR   0x02
+#define TOS_VERSION_MINOR   0x03
 #define TOS_VERSION_PATCH   0x01
-#define TOS_VERSION "2.2.1"
+#define TOS_VERSION "2.3.1"
 
 #endif /* _TOS_VERSION_H_ */
 
