@@ -701,11 +701,12 @@ __API__ int tos_at_channel_write(int channel_id, uint8_t *buffer, size_t buffer_
     return ret;
 }
 
-__STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, const char *ip, const char *port)
+__STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, const char *ip, const char *port, size_t socket_buffer_size)
 {
     uint8_t *fifo_buffer = K_NULL;
-
-    fifo_buffer = tos_mmheap_alloc(AT_DATA_CHANNEL_FIFO_BUFFER_SIZE);
+    
+    fifo_buffer = tos_mmheap_alloc(socket_buffer_size);
+    
     if (!fifo_buffer) {
         return -1;
     }
@@ -719,7 +720,7 @@ __STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, cons
     }
 
     data_channel->rx_fifo_buffer = fifo_buffer;
-    tos_chr_fifo_create(&data_channel->rx_fifo, fifo_buffer, AT_DATA_CHANNEL_FIFO_BUFFER_SIZE);
+    tos_chr_fifo_create(&data_channel->rx_fifo, fifo_buffer, socket_buffer_size);
     data_channel->remote_ip = ip;
     data_channel->remote_port = port;
 
@@ -736,13 +737,15 @@ errout:
 __API__ int tos_at_channel_alloc_id(int channel_id, const char *ip, const char *port)
 {
     at_data_channel_t *data_channel = K_NULL;
+    size_t socket_buffer_size = 0;
 
     data_channel = at_channel_get(channel_id, K_TRUE);
     if (!data_channel) {
         return -1;
     }
 
-    if (at_channel_construct(data_channel, ip, port) != 0) {
+    socket_buffer_size = AT_DATA_CHANNEL_FIFO_BUFFER_DEFAULT_SIZE;
+    if (at_channel_construct(data_channel, ip, port, socket_buffer_size) != 0) {
         return -1;
     }
 
@@ -750,6 +753,31 @@ __API__ int tos_at_channel_alloc_id(int channel_id, const char *ip, const char *
 }
 
 __API__ int tos_at_channel_alloc(const char *ip, const char *port)
+{
+    int id = 0;
+    at_data_channel_t *data_channel = K_NULL;
+    size_t socket_buffer_size = 0;
+
+    for (id = 0; id < AT_DATA_CHANNEL_NUM; ++id) {
+        data_channel = &AT_AGENT->data_channel[id];
+        if (data_channel->is_free) {
+            break;
+        }
+    }
+
+    if (id == AT_DATA_CHANNEL_NUM || !data_channel) {
+        return -1;
+    }
+
+    socket_buffer_size = AT_DATA_CHANNEL_FIFO_BUFFER_DEFAULT_SIZE;
+    if (at_channel_construct(data_channel, ip, port, socket_buffer_size) != 0) {
+        return -1;
+    }
+
+    return id;
+}
+
+__API__ int tos_at_channel_alloc_with_size(const char *ip, const char *port, size_t socket_buffer_size)
 {
     int id = 0;
     at_data_channel_t *data_channel = K_NULL;
@@ -765,7 +793,7 @@ __API__ int tos_at_channel_alloc(const char *ip, const char *port)
         return -1;
     }
 
-    if (at_channel_construct(data_channel, ip, port) != 0) {
+    if (at_channel_construct(data_channel, ip, port, socket_buffer_size) != 0) {
         return -1;
     }
 
@@ -846,7 +874,7 @@ __API__ const char *tos_at_channel_ip_get(int channel_id)
         return K_NULL;
     }
 
-    return data_channel[channel_id].remote_ip;
+    return data_channel->remote_ip;
 }
 
 __API__ const char *tos_at_channel_port_get(int channel_id)
@@ -858,7 +886,7 @@ __API__ const char *tos_at_channel_port_get(int channel_id)
         return K_NULL;
     }
 
-    return data_channel[channel_id].remote_port;
+    return data_channel->remote_port;
 }
 
 __STATIC__ void at_event_table_set(at_event_t *event_table, size_t event_table_size)

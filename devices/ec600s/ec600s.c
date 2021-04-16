@@ -249,31 +249,81 @@ static int ec600s_init(void)
     return 0;
 }
 
-static int ec600s_connect(const char *ip, const char *port, sal_proto_t proto)
+static int ec600s_connect_establish(int id, sal_proto_t proto)
 {
-    int id;
     at_echo_t echo;
     char except_str[16];
-
-    id = tos_at_channel_alloc(ip, port);
-    if (id == -1) {
+    char echo_buffer[64];
+    char *query_result_str = NULL;
+    char *remote_ip = NULL;
+    char *remote_port = NULL;
+    
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_cmd_exec(&echo, 1000, "AT+QISTATE=1,%d\r\n", id);
+    if (echo.status != AT_ECHO_STATUS_OK) {
+        printf("query socket %d state fail\r\n", id);
         return -1;
     }
     
-    tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 1000, "AT+QICLOSE=%d\r\n", id);
-    if (echo.status != AT_ECHO_STATUS_OK) {
+    sprintf(except_str, "+QISTATE: %d", id);
+    query_result_str = strstr(echo_buffer, except_str);
+    if (query_result_str) {
+        printf("socket %d established on module already\r\n", id);
+        tos_at_echo_create(&echo, NULL, 0, NULL);
+        tos_at_cmd_exec(&echo, 1000, "AT+QICLOSE=%d\r\n", id);
+    }
+
+    memset(except_str, 0, sizeof(except_str));
+    sprintf(except_str, "+QIOPEN: %d,0", id);
+    
+    remote_ip = (char*)tos_at_channel_ip_get(id);
+    remote_port = (char*)tos_at_channel_port_get(id);
+    if (!remote_ip || !remote_port) {
+        return -2;
+    }
+    
+    tos_at_echo_create(&echo, NULL, 0, except_str);
+    tos_at_cmd_exec_until(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
+                        id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", remote_ip, atoi(remote_port));
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
+        printf("establish socket %d on module fail\r\n", id);
+        return -3;
+    }
+    
+    return 0;
+}
+
+static int ec600s_connect(const char *ip, const char *port, sal_proto_t proto)
+{
+    int id;
+    
+    id = tos_at_channel_alloc(ip, port);
+    if (id == -1) {
+        printf("at channel alloc fail\r\n");
+        return -1;
+    }
+    
+    if (ec600s_connect_establish(id, proto) < 0) {
         tos_at_channel_free(id);
+        return -2;
+    }
+    
+    return id;
+}
+
+static int ec600s_connect_with_size(const char *ip, const char *port, sal_proto_t proto, size_t socket_buffer_size)
+{
+    int id;
+    
+    id = tos_at_channel_alloc_with_size(ip, port, socket_buffer_size);
+    if (id == -1) {
+        printf("at channel alloc fail\r\n");
         return -1;
     }
 
-    sprintf(except_str, "+QIOPEN: %d,0", id);
-    tos_at_echo_create(&echo, NULL, 0, except_str);
-    tos_at_cmd_exec_until(&echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
-                        id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, atoi(port));
-    if (echo.status != AT_ECHO_STATUS_EXPECT) {
+    if (ec600s_connect_establish(id, proto) < 0) {
         tos_at_channel_free(id);
-        return -1;
+        return -2;
     }
     
     return id;
@@ -533,16 +583,17 @@ at_event_t ec600s_at_event[] = {
 };
 
 sal_module_t sal_module_ec600s = {
-    .init           = ec600s_init,
-    .connect        = ec600s_connect,
-    .send           = ec600s_send,
-    .recv_timeout   = ec600s_recv_timeout,
-    .recv           = ec600s_recv,
-    .sendto         = ec600s_sendto,
-    .recvfrom       = ec600s_recvfrom,
-    .recvfrom_timeout = ec600s_recvfrom_timeout,
-    .close          = ec600s_close,
-    .parse_domain   = ec600s_parse_domain,
+    .init               = ec600s_init,
+    .connect            = ec600s_connect,
+    .connect_with_size  = ec600s_connect_with_size,
+    .send               = ec600s_send,
+    .recv_timeout       = ec600s_recv_timeout,
+    .recv               = ec600s_recv,
+    .sendto             = ec600s_sendto,
+    .recvfrom           = ec600s_recvfrom,
+    .recvfrom_timeout   = ec600s_recvfrom_timeout,
+    .close              = ec600s_close,
+    .parse_domain       = ec600s_parse_domain,
 };
 
 int ec600s_sal_init(hal_uart_port_t uart_port)

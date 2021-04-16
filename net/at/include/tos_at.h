@@ -21,16 +21,16 @@
 #include "tos_k.h"
 #include "tos_hal.h"
 
-#define AT_DATA_CHANNEL_NUM                     6
-#define AT_DATA_CHANNEL_FIFO_BUFFER_SIZE        (2048 + 1024)
+#define AT_DATA_CHANNEL_NUM                         6
+#define AT_DATA_CHANNEL_FIFO_BUFFER_DEFAULT_SIZE    (2048 + 1024)
 
-#define AT_UART_RX_FIFO_BUFFER_SIZE             (2048 + 1024)
-#define AT_RECV_CACHE_SIZE                      2048
+#define AT_UART_RX_FIFO_BUFFER_SIZE                 (2048 + 1024)
+#define AT_RECV_CACHE_SIZE                          2048
 
-#define AT_CMD_BUFFER_SIZE                      512
+#define AT_CMD_BUFFER_SIZE                          512
 
-#define AT_PARSER_TASK_STACK_SIZE               2048
-#define AT_PARSER_TASK_PRIO                     2
+#define AT_PARSER_TASK_STACK_SIZE                   2048
+#define AT_PARSER_TASK_PRIO                         2
 
 typedef enum at_status_en {
     AT_STATUS_OK,
@@ -209,6 +209,23 @@ __API__ int tos_at_channel_alloc_id(int channel_id, const char *ip, const char *
  * @retval  none -1         the id of the channel.
  */
 __API__ int tos_at_channel_alloc(const char *ip, const char *port);
+
+/**
+ * @brief Allocate a channel.
+ * Allocate a channel with certain socket buffer size.
+ *
+ * @attention None
+ *
+ * @param[in]   channel_id          id of the channel.
+ * @param[in]   ip                  remote ip of the channel.
+ * @param[in]   port                remote port of the channel.
+ * @param[in]   socket_buffer_size  buffer size of the channel.
+ *
+ * @return  errcode
+ * @retval  -1              allocate failed(error).
+ * @retval  none -1         the id of the channel.
+ */
+__API__ int tos_at_channel_alloc_with_size(const char *ip, const char *port, size_t socket_buffer_size);
 
 /**
  * @brief Free a channel.
@@ -458,7 +475,7 @@ __API__ int tos_at_uart_drain(uint8_t *buffer, size_t buffer_len);
  *
  * @return  remote ip of the channel.
  */
-__API__ const char *tos_at_agent_channel_ip_get(int channel_id);
+__API__ const char *tos_at_channel_ip_get(int channel_id);
 
 /**
  * @brief Get the remote port of a channel.
@@ -470,7 +487,7 @@ __API__ const char *tos_at_agent_channel_ip_get(int channel_id);
  *
  * @return  remote port of the channel.
  */
-__API__ const char *tos_at_agent_channel_port_get(int channel_id);
+__API__ const char *tos_at_channel_port_get(int channel_id);
 
 #endif /* _TOS_AT_H_ */
 
