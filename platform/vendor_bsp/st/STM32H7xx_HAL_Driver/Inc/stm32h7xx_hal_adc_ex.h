@@ -122,7 +122,7 @@ typedef struct
                                                 This parameter is applied only for 16-bit or 8-bit resolution.
                                                 This parameter can be set to ENABLE or DISABLE. */
 #if defined(ADC_VER_V5_V90)
-  uint32_t InjectedOffsetSign;                /*!< Define if the offset should be substracted (negative sign) or added (positive sign) from or to the raw converted data.
+  uint32_t InjectedOffsetSign;                /*!< Define if the offset should be subtracted (negative sign) or added (positive sign) from or to the raw converted data.
                                                This parameter can be a value of @ref ADCEx_OffsetSign.
                                                Note: 
                                                      - This parameter must be modified when no conversion is on going on both regular and injected groups (ADC disabled, or ADC enabled without continuous mode or external trigger that could launch a conversion). 
@@ -295,7 +295,7 @@ typedef struct
 /** @defgroup ADCEx_OffsetSign ADC Extended Offset Sign
   * @{
   */
-#define ADC3_OFFSET_SIGN_NEGATIVE      (0x00000000UL)          /*!< Offset sign negative, offset is substracted */
+#define ADC3_OFFSET_SIGN_NEGATIVE      (0x00000000UL)          /*!< Offset sign negative, offset is subtracted */
 #define ADC3_OFFSET_SIGN_POSITIVE      (ADC3_OFR1_OFFSETPOS)   /*!< Offset sign positive, offset is added  */
 /**
   * @}
@@ -415,7 +415,7 @@ typedef struct
   * @{
   */
 #define ADC_DFSDM_MODE_DISABLE     (0x00000000UL)                     /*!< ADC conversions are not transferred by DFSDM. */
-#define ADC_DFSDM_MODE_ENABLE      (LL_ADC_REG_DFSDM_TRANSFER_ENABLE) /*!< ADC conversion data are transfered to DFSDM for post processing. The ADC conversion data format must be 16-bit signed and right aligned, refer to reference manual. DFSDM transfer cannot be used if DMA transfer is enabled. */
+#define ADC_DFSDM_MODE_ENABLE      (LL_ADC_REG_DFSDM_TRANSFER_ENABLE) /*!< ADC conversion data are transferred to DFSDM for post processing. The ADC conversion data format must be 16-bit signed and right aligned, refer to reference manual. DFSDM transfer cannot be used if DMA transfer is enabled. */
 /**
   * @}
   */
@@ -441,7 +441,7 @@ typedef struct
   *         Usage of this macro is not the Standard way of multimode
   *         configuration and can lead to have HAL ADC handles status
   *         misaligned. Usage of this macro must be limited to cases
-  *         mentionned above.
+  *         mentioned above.
   * @param __HANDLE__ ADC handle.
   * @retval None
   */
@@ -1207,7 +1207,10 @@ typedef struct
                                                   ((__SHIFT__) == ADC_RIGHTBITSHIFT_5   ) || \
                                                   ((__SHIFT__) == ADC_RIGHTBITSHIFT_6   ) || \
                                                   ((__SHIFT__) == ADC_RIGHTBITSHIFT_7   ) || \
-                                                  ((__SHIFT__) == ADC_RIGHTBITSHIFT_8   ))
+                                                  ((__SHIFT__) == ADC_RIGHTBITSHIFT_8   ) || \
+                                                  ((__SHIFT__) == ADC_RIGHTBITSHIFT_9   ) || \
+                                                  ((__SHIFT__) == ADC_RIGHTBITSHIFT_10  ) || \
+                                                  ((__SHIFT__) == ADC_RIGHTBITSHIFT_11  ))
 
 /**
   * @brief Verify the ADC oversampling triggered mode.

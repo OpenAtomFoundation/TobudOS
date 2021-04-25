@@ -22,7 +22,7 @@
        (+) Global readout protection (RDP)
        (+) Write protection
        (+) Secure access only protection
-       (+) Bank / register swapping
+       (+) Bank / register swapping (when Dual-Bank)
        (+) Cyclic Redundancy Check (CRC)
 
                         ##### How to use this driver #####
@@ -1813,7 +1813,7 @@ static void FLASH_OB_SharedRAM_Config(uint32_t SharedRamConfig)
 }
 
 /**
-  * @brief  Get the TCM / AXI Shared RAM configurtion.
+  * @brief  Get the TCM / AXI Shared RAM configuration.
   * @retval SharedRamConfig returns the TCM / AXI Shared RAM configuration.
   *         This return value can be a value of @ref FLASHEx_OB_TCM_AXI_SHARED
   */

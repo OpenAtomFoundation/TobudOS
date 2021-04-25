@@ -82,7 +82,7 @@ typedef struct
                                           this is the number of bytes to be transferred in a single transfer (1 byte to 128 bytes)*/
 
   uint32_t SourceBurst;              /*!< Specifies the Burst transfer configuration for the source memory transfers.
-                                         It specifies the amount of data to be transferred in a single non interruptable
+                                         It specifies the amount of data to be transferred in a single non interruptible
                                          transaction.
                                          This parameter can be a value of @ref MDMA_Source_burst
                                          @note : the burst may be FIXED/INCR based on SourceInc value ,
@@ -90,7 +90,7 @@ typedef struct
                                          BufferTransferLength */
 
   uint32_t DestBurst;                 /*!< Specifies the Burst transfer configuration for the destination memory transfers.
-                                           It specifies the amount of data to be transferred in a single non interruptable
+                                           It specifies the amount of data to be transferred in a single non interruptible
                                            transaction.
                                            This parameter can be a value of @ref MDMA_Destination_burst
                                            @note : the burst may be FIXED/INCR based on DestinationInc value ,
@@ -509,7 +509,7 @@ typedef struct __MDMA_HandleTypeDef
 #define MDMA_FLAG_BRT   ((uint32_t)MDMA_CISR_BRTIF) /*!< Block Repeat Transfer complete flag */
 #define MDMA_FLAG_BT    ((uint32_t)MDMA_CISR_BTIF)  /*!< Block Transfer complete flag        */
 #define MDMA_FLAG_BFTC  ((uint32_t)MDMA_CISR_TCIF)  /*!< BuFfer Transfer complete flag       */
-#define MDMA_FLAG_CRQA  ((uint32_t)MDMA_CISR_CRQA)  /*!< Channel ReQest Active flag          */
+#define MDMA_FLAG_CRQA  ((uint32_t)MDMA_CISR_CRQA)  /*!< Channel request Active flag          */
 
 /**
   * @}
@@ -549,7 +549,7 @@ typedef struct __MDMA_HandleTypeDef
   *            @arg MDMA_FLAG_BRT  : Block Repeat Transfer flag.
   *            @arg MDMA_FLAG_BT   : Block Transfer complete flag.
   *            @arg MDMA_FLAG_BFTC : BuFfer Transfer Complete flag.
-  *            @arg MDMA_FLAG_CRQA : Channel ReQest Active flag.
+  *            @arg MDMA_FLAG_CRQA : Channel request Active flag.
   * @retval The state of FLAG (SET or RESET).
   */
 #define __HAL_MDMA_GET_FLAG(__HANDLE__, __FLAG__)  ((__HANDLE__)->Instance->CISR & (__FLAG__))

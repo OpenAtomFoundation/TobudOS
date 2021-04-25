@@ -102,7 +102,7 @@
    (#) Call HAL_PWREx_EnableUSBReg(), HAL_PWREx_DisableUSBReg(),
        HAL_PWREx_EnableUSBVoltageDetector() and
        HAL_PWREx_DisableUSBVoltageDetector() functions to manage USB power
-       regulation functionnalities.
+       regulation functionalities.
 
    (#) Call HAL_PWREx_EnableBatteryCharging() and
        HAL_PWREx_DisableBatteryCharging() functions to enable and disable the

@@ -1090,7 +1090,7 @@ __STATIC_INLINE void LL_BDMA_DisableDoubleBufferMode(BDMA_TypeDef *BDMAx, uint32
 /**
   * @brief  Configure the Source and Destination addresses.
   * @note   This API must not be called when the BDMA channel is enabled.
-  * @note   Each IP using BDMA provides an API to get directly the register adress (LL_PPP_BDMA_GetRegAddr).
+  * @note   Each IP using BDMA provides an API to get directly the register address (LL_PPP_BDMA_GetRegAddr).
   * @rmtoll CPAR         PA            LL_BDMA_ConfigAddresses\n
   *         CMAR         MA            LL_BDMA_ConfigAddresses
   * @param  BDMAx BDMA Instance

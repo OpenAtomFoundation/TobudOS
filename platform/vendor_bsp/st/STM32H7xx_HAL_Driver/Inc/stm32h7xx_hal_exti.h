@@ -410,33 +410,34 @@ typedef struct
 /** @defgroup EXTI_Private_Macros EXTI Private Macros
   * @{
   */
-#define IS_EXTI_PROPERTY(__LINE__)      ((((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_DIRECT) || \
-                                         (((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_CONFIG)          || \
-                                         (((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_GPIO))
+#define IS_EXTI_PROPERTY(__EXTI_LINE__)      ((((__EXTI_LINE__) & EXTI_PROPERTY_MASK) == EXTI_DIRECT) || \
+                                             (((__EXTI_LINE__) & EXTI_PROPERTY_MASK) == EXTI_CONFIG)          || \
+                                             (((__EXTI_LINE__) & EXTI_PROPERTY_MASK) == EXTI_GPIO))
 #if defined (DUAL_CORE)
-#define IS_EXTI_TARGET(__LINE__)        ((((__LINE__) & EXTI_TARGET_MASK)   == EXTI_TARGET_MSK_CPU1)      || \
-                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU2)    || \
-                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL_CPU) || \
-                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
+#define IS_EXTI_TARGET(__EXTI_LINE__)        ((((__EXTI_LINE__) & EXTI_TARGET_MASK)   == EXTI_TARGET_MSK_CPU1)      || \
+                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU2)    || \
+                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL_CPU) || \
+                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
 #else
-#define IS_EXTI_TARGET(__LINE__)        ((((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU1)   || \
-                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
+#define IS_EXTI_TARGET(__EXTI_LINE__)        ((((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU1)   || \
+                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
 #endif
 
-#define IS_EXTI_LINE(__LINE__)          ((((__LINE__) & ~(EXTI_PROPERTY_MASK | EXTI_EVENT_PRESENCE_MASK | EXTI_REG_MASK | EXTI_PIN_MASK | EXTI_TARGET_MASK)) == 0x00UL) && \
-                                         IS_EXTI_PROPERTY(__LINE__) && IS_EXTI_TARGET(__LINE__) && \
-                                         (((__LINE__) & (EXTI_REG_MASK | EXTI_PIN_MASK))      < \
-                                         (((EXTI_LINE_NB / 32UL) << EXTI_REG_SHIFT) | (EXTI_LINE_NB % 32UL))))
+#define IS_EXTI_LINE(__EXTI_LINE__)          ((((__EXTI_LINE__) & ~(EXTI_PROPERTY_MASK | EXTI_EVENT_PRESENCE_MASK |\
+                                              EXTI_REG_MASK | EXTI_PIN_MASK | EXTI_TARGET_MASK)) == 0x00UL) && \
+                                              IS_EXTI_PROPERTY(__EXTI_LINE__) && IS_EXTI_TARGET(__EXTI_LINE__) && \
+                                             (((__EXTI_LINE__) & (EXTI_REG_MASK | EXTI_PIN_MASK))      < \
+                                             (((EXTI_LINE_NB / 32UL) << EXTI_REG_SHIFT) | (EXTI_LINE_NB % 32UL))))
 
-#define IS_EXTI_MODE(__MODE__)          (((__MODE__) & ~EXTI_MODE_MASK) == 0x00UL)
+#define IS_EXTI_MODE(__MODE__)               (((__MODE__) & ~EXTI_MODE_MASK) == 0x00UL)
 
-#define IS_EXTI_TRIGGER(__LINE__)       (((__LINE__) & ~EXTI_TRIGGER_MASK) == 0x00UL)
+#define IS_EXTI_TRIGGER(__EXTI_LINE__)       (((__EXTI_LINE__) & ~EXTI_TRIGGER_MASK) == 0x00UL)
 
-#define IS_EXTI_PENDING_EDGE(__LINE__)  (((__LINE__) == EXTI_TRIGGER_RISING) || \
-                                         ((__LINE__) == EXTI_TRIGGER_FALLING)|| \
-                                         ((__LINE__) == EXTI_TRIGGER_RISING_FALLING))
+#define IS_EXTI_PENDING_EDGE(__EXTI_LINE__)  (((__EXTI_LINE__) == EXTI_TRIGGER_RISING) || \
+                                             ((__EXTI_LINE__) == EXTI_TRIGGER_FALLING)|| \
+                                             ((__EXTI_LINE__) == EXTI_TRIGGER_RISING_FALLING))
 
-#define IS_EXTI_CONFIG_LINE(__LINE__)   (((__LINE__) & EXTI_CONFIG) != 0x00UL)
+#define IS_EXTI_CONFIG_LINE(__EXTI_LINE__)   (((__EXTI_LINE__) & EXTI_CONFIG) != 0x00UL)
 
 #if defined(GPIOI)
 #define IS_EXTI_GPIO_PORT(__PORT__)     (((__PORT__) == EXTI_GPIOA) || \

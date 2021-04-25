@@ -15,7 +15,8 @@
    The MMC Extension HAL driver can be used as follows:
    (+) Configure Buffer0 and Buffer1 start address and Buffer size using HAL_MMCEx_ConfigDMAMultiBuffer() function.
 
-   (+) Start Read and Write for multibuffer mode using HAL_MMCEx_ReadBlocksDMAMultiBuffer() and HAL_MMCEx_WriteBlocksDMAMultiBuffer() functions.
+   (+) Start Read and Write for multibuffer mode using HAL_MMCEx_ReadBlocksDMAMultiBuffer() and
+       HAL_MMCEx_WriteBlocksDMAMultiBuffer() functions.
 
   @endverbatim
   ******************************************************************************
@@ -60,8 +61,8 @@
 
 
 /** @addtogroup MMCEx_Exported_Functions_Group1
- *  @brief   Multibuffer functions
- *
+  *  @brief   Multibuffer functions
+  *
 @verbatim
   ==============================================================================
           ##### Multibuffer functions #####
@@ -77,18 +78,19 @@
 /**
   * @brief  Configure DMA Dual Buffer mode. The Data transfer is managed by an Internal DMA.
   * @param  hmmc: MMC handle
-  * @param  pDataBuffer0: Pointer to the buffer0 that will contain/receive the transfered data
-  * @param  pDataBuffer1: Pointer to the buffer1 that will contain/receive the transfered data
+  * @param  pDataBuffer0: Pointer to the buffer0 that will contain/receive the transferred data
+  * @param  pDataBuffer1: Pointer to the buffer1 that will contain/receive the transferred data
   * @param  BufferSize: Size of Buffer0 in Blocks. Buffer0 and Buffer1 must have the same size.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_MMCEx_ConfigDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t * pDataBuffer0, uint32_t * pDataBuffer1, uint32_t BufferSize)
+HAL_StatusTypeDef HAL_MMCEx_ConfigDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t *pDataBuffer0,
+                                                 uint32_t *pDataBuffer1, uint32_t BufferSize)
 {
-  if(hmmc->State == HAL_MMC_STATE_READY)
+  if (hmmc->State == HAL_MMC_STATE_READY)
   {
-    hmmc->Instance->IDMABASE0= (uint32_t) pDataBuffer0 ;
-    hmmc->Instance->IDMABASE1= (uint32_t) pDataBuffer1 ;
-    hmmc->Instance->IDMABSIZE= (uint32_t) (MMC_BLOCKSIZE * BufferSize);
+    hmmc->Instance->IDMABASE0 = (uint32_t) pDataBuffer0 ;
+    hmmc->Instance->IDMABASE1 = (uint32_t) pDataBuffer1 ;
+    hmmc->Instance->IDMABSIZE = (uint32_t)(MMC_BLOCKSIZE * BufferSize);
 
     return HAL_OK;
   }
@@ -100,25 +102,46 @@ HAL_StatusTypeDef HAL_MMCEx_ConfigDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32
 
 /**
   * @brief  Reads block(s) from a specified address in a card. The received Data will be stored in Buffer0 and Buffer1.
-  *         Buffer0, Buffer1 and BufferSize need to be configured by function HAL_MMCEx_ConfigDMAMultiBuffer before call this function.
+  *         Buffer0, Buffer1 and BufferSize need to be configured by function HAL_MMCEx_ConfigDMAMultiBuffer before
+  *         call this function.
   * @param  hmmc: MMC handle
   * @param  BlockAdd: Block Address from where data is to be read
   * @param  NumberOfBlocks: Total number of blocks to read
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_MMCEx_ReadBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t BlockAdd, uint32_t NumberOfBlocks)
+HAL_StatusTypeDef HAL_MMCEx_ReadBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t BlockAdd,
+                                                     uint32_t NumberOfBlocks)
 {
   SDMMC_DataInitTypeDef config;
-  uint32_t DmaBase0_reg, DmaBase1_reg;
+  uint32_t DmaBase0_reg;
+  uint32_t DmaBase1_reg;
   uint32_t errorstate;
   uint32_t add = BlockAdd;
 
-  if(hmmc->State == HAL_MMC_STATE_READY)
+  if (hmmc->State == HAL_MMC_STATE_READY)
   {
-    if((BlockAdd + NumberOfBlocks) > (hmmc->MmcCard.LogBlockNbr))
+    if ((BlockAdd + NumberOfBlocks) > (hmmc->MmcCard.LogBlockNbr))
     {
       hmmc->ErrorCode |= HAL_MMC_ERROR_ADDR_OUT_OF_RANGE;
       return HAL_ERROR;
+    }
+
+    /* Check the case of 4kB blocks (field DATA SECTOR SIZE of extended CSD register) */
+    if (((hmmc->Ext_CSD[(MMC_EXT_CSD_DATA_SEC_SIZE_INDEX / 4)] >> MMC_EXT_CSD_DATA_SEC_SIZE_POS) & 0x000000FFU) != 0x0U)
+    {
+      if ((NumberOfBlocks % 8U) != 0U)
+      {
+        /* The number of blocks should be a multiple of 8 sectors of 512 bytes = 4 KBytes */
+        hmmc->ErrorCode |= HAL_MMC_ERROR_BLOCK_LEN_ERR;
+        return HAL_ERROR;
+      }
+
+      if ((BlockAdd % 8U) != 0U)
+      {
+        /* The address should be aligned to 8 (corresponding to 4 KBytes blocks) */
+        hmmc->ErrorCode |= HAL_MMC_ERROR_ADDR_MISALIGNED;
+        return HAL_ERROR;
+      }
     }
 
     DmaBase0_reg = hmmc->Instance->IDMABASE0;
@@ -152,7 +175,7 @@ HAL_StatusTypeDef HAL_MMCEx_ReadBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, ui
 
     hmmc->Instance->DCTRL |= SDMMC_DCTRL_FIFORST;
 
-    __SDMMC_CMDTRANS_ENABLE( hmmc->Instance);
+    __SDMMC_CMDTRANS_ENABLE(hmmc->Instance);
 
     hmmc->Instance->IDMACTRL = SDMMC_ENABLE_IDMA_DOUBLE_BUFF0;
 
@@ -161,14 +184,15 @@ HAL_StatusTypeDef HAL_MMCEx_ReadBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, ui
 
     /* Read Multi Block command */
     errorstate = SDMMC_CmdReadMultiBlock(hmmc->Instance, add);
-    if(errorstate != HAL_MMC_ERROR_NONE)
+    if (errorstate != HAL_MMC_ERROR_NONE)
     {
       hmmc->State = HAL_MMC_STATE_READY;
       hmmc->ErrorCode |= errorstate;
       return HAL_ERROR;
     }
 
-    __HAL_MMC_ENABLE_IT(hmmc, (SDMMC_IT_DCRCFAIL | SDMMC_IT_DTIMEOUT | SDMMC_IT_RXOVERR | SDMMC_IT_DATAEND | SDMMC_FLAG_IDMATE | SDMMC_FLAG_IDMABTC));
+    __HAL_MMC_ENABLE_IT(hmmc, (SDMMC_IT_DCRCFAIL | SDMMC_IT_DTIMEOUT | SDMMC_IT_RXOVERR | SDMMC_IT_DATAEND |
+                               SDMMC_FLAG_IDMATE | SDMMC_FLAG_IDMABTC));
 
     return HAL_OK;
   }
@@ -180,26 +204,47 @@ HAL_StatusTypeDef HAL_MMCEx_ReadBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, ui
 }
 
 /**
-  * @brief  Write block(s) to a specified address in a card. The transfered Data are stored in Buffer0 and Buffer1.
-  *         Buffer0, Buffer1 and BufferSize need to be configured by function HAL_MMCEx_ConfigDMAMultiBuffer before call this function.
+  * @brief  Write block(s) to a specified address in a card. The transferred Data are stored in Buffer0 and Buffer1.
+  *         Buffer0, Buffer1 and BufferSize need to be configured by function HAL_MMCEx_ConfigDMAMultiBuffer before
+  *         call this function.
   * @param  hmmc: MMC handle
   * @param  BlockAdd: Block Address from where data is to be read
   * @param  NumberOfBlocks: Total number of blocks to read
   * @retval HAL status
-*/
-HAL_StatusTypeDef HAL_MMCEx_WriteBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t BlockAdd, uint32_t NumberOfBlocks)
+  */
+HAL_StatusTypeDef HAL_MMCEx_WriteBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t BlockAdd,
+                                                      uint32_t NumberOfBlocks)
 {
   SDMMC_DataInitTypeDef config;
   uint32_t errorstate;
-  uint32_t DmaBase0_reg, DmaBase1_reg;
+  uint32_t DmaBase0_reg;
+  uint32_t DmaBase1_reg;
   uint32_t add = BlockAdd;
 
-  if(hmmc->State == HAL_MMC_STATE_READY)
+  if (hmmc->State == HAL_MMC_STATE_READY)
   {
-    if((BlockAdd + NumberOfBlocks) > (hmmc->MmcCard.LogBlockNbr))
+    if ((BlockAdd + NumberOfBlocks) > (hmmc->MmcCard.LogBlockNbr))
     {
       hmmc->ErrorCode |= HAL_MMC_ERROR_ADDR_OUT_OF_RANGE;
       return HAL_ERROR;
+    }
+
+    /* Check the case of 4kB blocks (field DATA SECTOR SIZE of extended CSD register) */
+    if (((hmmc->Ext_CSD[(MMC_EXT_CSD_DATA_SEC_SIZE_INDEX / 4)] >> MMC_EXT_CSD_DATA_SEC_SIZE_POS) & 0x000000FFU) != 0x0U)
+    {
+      if ((NumberOfBlocks % 8U) != 0U)
+      {
+        /* The number of blocks should be a multiple of 8 sectors of 512 bytes = 4 KBytes */
+        hmmc->ErrorCode |= HAL_MMC_ERROR_BLOCK_LEN_ERR;
+        return HAL_ERROR;
+      }
+
+      if ((BlockAdd % 8U) != 0U)
+      {
+        /* The address should be aligned to 8 (corresponding to 4 KBytes blocks) */
+        hmmc->ErrorCode |= HAL_MMC_ERROR_ADDR_MISALIGNED;
+        return HAL_ERROR;
+      }
     }
 
     DmaBase0_reg = hmmc->Instance->IDMABASE0;
@@ -232,7 +277,7 @@ HAL_StatusTypeDef HAL_MMCEx_WriteBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, u
     config.DPSM          = SDMMC_DPSM_DISABLE;
     (void)SDMMC_ConfigData(hmmc->Instance, &config);
 
-    __SDMMC_CMDTRANS_ENABLE( hmmc->Instance);
+    __SDMMC_CMDTRANS_ENABLE(hmmc->Instance);
 
     hmmc->Instance->IDMACTRL = SDMMC_ENABLE_IDMA_DOUBLE_BUFF0;
 
@@ -241,14 +286,15 @@ HAL_StatusTypeDef HAL_MMCEx_WriteBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, u
 
     /* Write Multi Block command */
     errorstate = SDMMC_CmdWriteMultiBlock(hmmc->Instance, add);
-    if(errorstate != HAL_MMC_ERROR_NONE)
+    if (errorstate != HAL_MMC_ERROR_NONE)
     {
       hmmc->State = HAL_MMC_STATE_READY;
       hmmc->ErrorCode |= errorstate;
       return HAL_ERROR;
     }
 
-    __HAL_MMC_ENABLE_IT(hmmc, (SDMMC_IT_DCRCFAIL | SDMMC_IT_DTIMEOUT | SDMMC_IT_TXUNDERR | SDMMC_IT_DATAEND | SDMMC_FLAG_IDMATE | SDMMC_FLAG_IDMABTC));
+    __HAL_MMC_ENABLE_IT(hmmc, (SDMMC_IT_DCRCFAIL | SDMMC_IT_DTIMEOUT | SDMMC_IT_TXUNDERR | SDMMC_IT_DATAEND |
+                               SDMMC_FLAG_IDMATE | SDMMC_FLAG_IDMABTC));
 
     return HAL_OK;
   }
@@ -270,9 +316,10 @@ HAL_StatusTypeDef HAL_MMCEx_WriteBlocksDMAMultiBuffer(MMC_HandleTypeDef *hmmc, u
   *         transfer use BUFFER0.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_MMCEx_ChangeDMABuffer(MMC_HandleTypeDef *hmmc, HAL_MMCEx_DMABuffer_MemoryTypeDef Buffer, uint32_t *pDataBuffer)
+HAL_StatusTypeDef HAL_MMCEx_ChangeDMABuffer(MMC_HandleTypeDef *hmmc, HAL_MMCEx_DMABuffer_MemoryTypeDef Buffer,
+                                            uint32_t *pDataBuffer)
 {
-  if(Buffer == MMC_DMA_BUFFER0)
+  if (Buffer == MMC_DMA_BUFFER0)
   {
     /* change the buffer0 address */
     hmmc->Instance->IDMABASE0 = (uint32_t)pDataBuffer;

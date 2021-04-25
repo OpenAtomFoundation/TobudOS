@@ -67,7 +67,7 @@
           registers through the configuration functions listed here above.
 
       (#) All other control functions can be called any time after initialization
-          phase, no matter if the FDCAN module is started or stoped.
+          phase, no matter if the FDCAN module is started or stopped.
 
       *** Polling mode operation ***
       ==============================
@@ -2802,7 +2802,7 @@ HAL_StatusTypeDef HAL_FDCAN_AddMessageToTxBuffer(FDCAN_HandleTypeDef *hfdcan, FD
       return HAL_ERROR;
     }
 
-    /* Check that there is no transmittion request pending for the selected buffer */
+    /* Check that there is no transmission request pending for the selected buffer */
     if ((hfdcan->Instance->TXBRP & BufferIndex) != 0U)
     {
       /* Update error code */
@@ -3311,7 +3311,7 @@ uint32_t HAL_FDCAN_IsRxBufferMessageAvailable(FDCAN_HandleTypeDef *hfdcan, uint3
   */
 uint32_t HAL_FDCAN_IsTxBufferMessagePending(FDCAN_HandleTypeDef *hfdcan, uint32_t TxBufferIndex)
 {
-  /* Check pending transmittion request on the selected buffer */
+  /* Check pending transmission request on the selected buffer */
   if ((hfdcan->Instance->TXBRP & TxBufferIndex) == 0U)
   {
     return 0;
@@ -5059,14 +5059,14 @@ HAL_StatusTypeDef HAL_FDCAN_ActivateNotification(FDCAN_HandleTypeDef *hfdcan, ui
     if ((ActiveITs & FDCAN_IT_TX_COMPLETE) != 0U)
     {
       /* Enable Tx Buffer Transmission Interrupt to set TC flag in IR register,
-         but interrupt will only occure if TC is enabled in IE register */
+         but interrupt will only occur if TC is enabled in IE register */
       SET_BIT(hfdcan->Instance->TXBTIE, BufferIndexes);
     }
 
     if ((ActiveITs & FDCAN_IT_TX_ABORT_COMPLETE) != 0U)
     {
       /* Enable Tx Buffer Cancellation Finished Interrupt to set TCF flag in IR register,
-         but interrupt will only occure if TCF is enabled in IE register */
+         but interrupt will only occur if TCF is enabled in IE register */
       SET_BIT(hfdcan->Instance->TXBCIE, BufferIndexes);
     }
 

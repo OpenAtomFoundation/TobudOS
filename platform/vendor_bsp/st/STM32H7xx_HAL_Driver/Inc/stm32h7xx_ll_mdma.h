@@ -279,7 +279,7 @@ typedef struct
 /** @defgroup MDMA_LL_EC_WORD_ENDIANNESS Word Endianness
   * @{
   */
-#define LL_MDMA_WORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for words */
+#define LL_MDMA_WORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianness preserved for words */
 #define LL_MDMA_WORD_ENDIANNESS_EXCHANGE     MDMA_CCR_WEX /*!< word order exchanged when destination data size is double word  */
 
 /**
@@ -289,7 +289,7 @@ typedef struct
 /** @defgroup MDMA_LL_EC_HALFWORD_ENDIANNESS Half Word Endianness
   * @{
   */
-#define LL_MDMA_HALFWORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for half words */
+#define LL_MDMA_HALFWORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianness preserved for half words */
 #define LL_MDMA_HALFWORD_ENDIANNESS_EXCHANGE     MDMA_CCR_HEX /*!< half word order exchanged when destination data size is word or double word  */
 
 /**
@@ -299,7 +299,7 @@ typedef struct
 /** @defgroup MDMA_LL_EC_BYTE_ENDIANNESS Byte Endianness
   * @{
   */
-#define LL_MDMA_BYTE_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for bytes */
+#define LL_MDMA_BYTE_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianness preserved for bytes */
 #define LL_MDMA_BYTE_ENDIANNESS_EXCHANGE     MDMA_CCR_BEX /*!< byte order exchanged when destination data size is half word , word or double word  */
 
 /**
@@ -787,7 +787,7 @@ __STATIC_INLINE void LL_MDMA_GenerateSWRequest(MDMA_TypeDef *MDMAx, uint32_t Cha
 }
 
 /**
-  * @brief Configure Transfer endianness paremeters : Word, Half word and Bytes Endianess.
+  * @brief Configure Transfer endianness parameters : Word, Half word and Bytes Endianness.
   * @rmtoll CCR          WEX            LL_MDMA_ConfigXferEndianness\n
   * @rmtoll CCR          HEX            LL_MDMA_ConfigXferEndianness\n
   * @rmtoll CCR          BEX            LL_MDMA_ConfigXferEndianness
@@ -824,7 +824,7 @@ __STATIC_INLINE void LL_MDMA_ConfigXferEndianness(MDMA_TypeDef *MDMAx, uint32_t 
 }
 
 /**
-  * @brief Set Words Endianess.
+  * @brief Set Words Endianness.
   * @rmtoll CCR          WEX            LL_MDMA_SetWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -857,7 +857,7 @@ __STATIC_INLINE void LL_MDMA_SetWordEndianness(MDMA_TypeDef *MDMAx, uint32_t Cha
 }
 
 /**
-  * @brief Get Words Endianess.
+  * @brief Get Words Endianness.
   * @rmtoll CCR          WEX            LL_MDMA_GetWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -890,7 +890,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetWordEndianness(MDMA_TypeDef *MDMAx, uint32_t
 }
 
 /**
-  * @brief Set Half Words Endianess.
+  * @brief Set Half Words Endianness.
   * @rmtoll CCR          HEX            LL_MDMA_SetHalfWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -923,7 +923,7 @@ __STATIC_INLINE void LL_MDMA_SetHalfWordEndianness(MDMA_TypeDef *MDMAx, uint32_t
 }
 
 /**
-  * @brief Get Half Words Endianess.
+  * @brief Get Half Words Endianness.
   * @rmtoll CCR          HEX            LL_MDMA_GetHalfWordEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -956,7 +956,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetHalfWordEndianness(MDMA_TypeDef *MDMAx, uint
 }
 
 /**
-  * @brief Set Bytes Endianess.
+  * @brief Set Bytes Endianness.
   * @rmtoll CCR          BEX            LL_MDMA_SetByteEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:
@@ -989,7 +989,7 @@ __STATIC_INLINE void LL_MDMA_SetByteEndianness(MDMA_TypeDef *MDMAx, uint32_t Cha
 }
 
 /**
-  * @brief Get Bytes Endianess.
+  * @brief Get Bytes Endianness.
   * @rmtoll CCR          BEX            LL_MDMA_GetByteEndianness
   * @param  MDMAx MDMAx Instance
   * @param  Channel This parameter can be one of the following values:

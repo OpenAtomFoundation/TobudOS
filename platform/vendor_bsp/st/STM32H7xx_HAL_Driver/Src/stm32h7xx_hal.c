@@ -47,10 +47,10 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /**
- * @brief STM32H7xx HAL Driver version number V1.9.0
+ * @brief STM32H7xx HAL Driver version number V1.10.0
    */
 #define __STM32H7xx_HAL_VERSION_MAIN   (0x01UL) /*!< [31:24] main version */
-#define __STM32H7xx_HAL_VERSION_SUB1   (0x09UL) /*!< [23:16] sub1 version */
+#define __STM32H7xx_HAL_VERSION_SUB1   (0x0AUL) /*!< [23:16] sub1 version */
 #define __STM32H7xx_HAL_VERSION_SUB2   (0x00UL) /*!< [15:8]  sub2 version */
 #define __STM32H7xx_HAL_VERSION_RC     (0x00UL) /*!< [7:0]  release candidate */
 #define __STM32H7xx_HAL_VERSION         ((__STM32H7xx_HAL_VERSION_MAIN << 24)\
@@ -507,14 +507,14 @@ uint32_t HAL_GetUIDw2(void)
   * @brief Configure the internal voltage reference buffer voltage scale.
   * @param VoltageScaling  specifies the output voltage to achieve
   *          This parameter can be one of the following values:
-  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE0: VREF_OUT1 around 2.048 V.
-  *                                                This requires VDDA equal to or higher than 2.4 V.
-  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE1: VREF_OUT2 around 2.5 V.
+  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE0: VREF_OUT1 around 2.5 V.
   *                                                This requires VDDA equal to or higher than 2.8 V.
-  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE2: VREF_OUT3 around 1.5 V.
-  *                                                This requires VDDA equal to or higher than 1.8 V.
-  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE3: VREF_OUT4 around 1.8 V.
+  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE1: VREF_OUT2 around 2.048 V.
+  *                                                This requires VDDA equal to or higher than 2.4 V.
+  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE2: VREF_OUT3 around 1.8 V.
   *                                                This requires VDDA equal to or higher than 2.1 V.
+  *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE3: VREF_OUT4 around 1.5 V.
+  *                                                This requires VDDA equal to or higher than 1.8 V.
   * @retval None
   */
 void HAL_SYSCFG_VREFBUF_VoltageScalingConfig(uint32_t VoltageScaling)
@@ -769,7 +769,7 @@ void HAL_SYSCFG_DisableCM4BOOT(void)
 /**
   * @brief  Enables the I/O Compensation Cell.
   * @note   The I/O compensation cell can be used only when the device supply
-  *         voltage ranges from 2.4 to 3.6 V.
+  *         voltage ranges from 1.62 to 2.0 V and from 2.7 to 3.6 V.
   * @retval None
   */
 void HAL_EnableCompensationCell(void)
@@ -780,7 +780,7 @@ void HAL_EnableCompensationCell(void)
 /**
   * @brief  Power-down the I/O Compensation Cell.
   * @note   The I/O compensation cell can be used only when the device supply
-  *         voltage ranges from 2.4 to 3.6 V.
+  *         voltage ranges from 1.62 to 2.0 V and from 2.7 to 3.6 V.
   * @retval None
   */
 void HAL_DisableCompensationCell(void)
@@ -1021,6 +1021,7 @@ void HAL_DisableDomain2DBGStandbyMode(void)
 }
 #endif /*DUAL_CORE*/
 
+#if defined(DBGMCU_CR_DBG_STOPD3)
 /**
   * @brief  Enable the Debug Module during Domain3/SRDomain STOP mode
   * @retval None
@@ -1029,6 +1030,7 @@ void HAL_EnableDomain3DBGStopMode(void)
 {
   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
 }
+
 /**
   * @brief  Disable the Debug Module during Domain3/SRDomain STOP mode
   * @retval None
@@ -1037,7 +1039,9 @@ void HAL_DisableDomain3DBGStopMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
 }
+#endif /*DBGMCU_CR_DBG_STOPD3*/
 
+#if defined(DBGMCU_CR_DBG_STANDBYD3)
 /**
   * @brief  Enable the Debug Module during Domain3/SRDomain STANDBY mode
   * @retval None
@@ -1055,6 +1059,7 @@ void HAL_DisableDomain3DBGStandbyMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD3);
 }
+#endif /*DBGMCU_CR_DBG_STANDBYD3*/
 
 /**
   * @brief  Set the FMC Memory Mapping Swapping config.

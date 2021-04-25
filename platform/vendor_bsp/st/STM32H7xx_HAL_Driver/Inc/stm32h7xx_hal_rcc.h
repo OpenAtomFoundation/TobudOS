@@ -7295,9 +7295,9 @@ typedef struct
 
 /**
   * @brief  Macro to configure the External High Speed oscillator (__HSE__).
-  * @note   After enabling the HSE (RCC_HSE_ON or RCC_HSE_Bypass), the application
-  *         software should wait on HSERDY flag to be set indicating that HSE clock
-  *         is stable and can be used to clock the PLL and/or system clock.
+  * @note   After enabling the HSE (RCC_HSE_ON, RCC_HSE_BYPASS or RCC_HSE_BYPASS_DIGITAL),
+  *         the application software should wait on HSERDY flag to be set indicating
+  *         that HSE clock is stable and can be used to clock the PLL and/or system clock.
   * @note   HSE state can not be changed if it is used directly or through the
   *         PLL as system clock. In this case, you have to select another source
   *         of the system clock then change the HSE state (ex. disable it).
@@ -7311,6 +7311,9 @@ typedef struct
   *                              6 HSE oscillator clock cycles.
   *            @arg RCC_HSE_ON: turn ON the HSE oscillator.
   *            @arg RCC_HSE_BYPASS: HSE oscillator bypassed with external clock.
+  *            @arg RCC_HSE_BYPASS_DIGITAL: HSE oscillator bypassed with digital external clock. (*)
+  *
+  * (*): Only available on stm32h7a3xx, stm32h7b3xx and stm32h7b0xx family lines.
   */
 #if defined(RCC_CR_HSEEXT)
 #define __HAL_RCC_HSE_CONFIG(__STATE__)                                \
@@ -8070,6 +8073,16 @@ void     HAL_RCC_CCSCallback(void);
                                   ((SOURCE) == RCC_PLLSOURCE_HSI)  || \
                                   ((SOURCE) == RCC_PLLSOURCE_NONE) || \
                                   ((SOURCE) == RCC_PLLSOURCE_HSE))
+
+#define IS_RCC_PLLRGE_VALUE(VALUE) (((VALUE) == RCC_PLL1VCIRANGE_0) || \
+                                    ((VALUE) == RCC_PLL1VCIRANGE_1) || \
+                                    ((VALUE) == RCC_PLL1VCIRANGE_2) || \
+                                    ((VALUE) == RCC_PLL1VCIRANGE_3))
+
+#define IS_RCC_PLLVCO_VALUE(VALUE) (((VALUE) == RCC_PLL1VCOWIDE) || ((VALUE) == RCC_PLL1VCOMEDIUM))
+
+#define IS_RCC_PLLFRACN_VALUE(VALUE) ((VALUE) <= 8191U)
+
 #define IS_RCC_PLLM_VALUE(VALUE) ((1U <= (VALUE)) && ((VALUE) <= 63U))
 #if !defined(RCC_VER_2_0)
 #define IS_RCC_PLLN_VALUE(VALUE) ((4U <= (VALUE)) && ((VALUE) <= 512U))

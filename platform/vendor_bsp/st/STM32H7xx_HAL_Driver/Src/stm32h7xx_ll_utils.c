@@ -272,7 +272,7 @@ static ErrorStatus UTILS_IsPLLsReady(void);
   * @note   CPU_Frequency can be calculated thanks to RCC helper macro or function
   *         @ref LL_RCC_GetSystemClocksFreq
   *         LL_RCC_GetSystemClocksFreq() is used to calculate the CM7 clock frequency
-  *         and __LL_RCC_CALC_HCLK_FREQ is used to caluclate the CM4 clock frequency.
+  *         and __LL_RCC_CALC_HCLK_FREQ is used to calculate the CM4 clock frequency.
   * @retval None
   */
 #else
@@ -458,7 +458,7 @@ void LL_mDelay(uint32_t Delay)
   * @note   CPU_Frequency can be calculated thanks to RCC helper macro or function
   *         @ref LL_RCC_GetSystemClocksFreq
   *         LL_RCC_GetSystemClocksFreq() is used to calculate the CM7 clock frequency
-  *         and __LL_RCC_CALC_HCLK_FREQ is used to caluclate the CM4 clock frequency.
+  *         and __LL_RCC_CALC_HCLK_FREQ is used to calculate the CM4 clock frequency.
   * @retval None
   */
 #else

@@ -89,10 +89,15 @@ typedef struct __ETH_BufferTypeDef
   */
 typedef struct
 {
-  uint32_t  TxDesc[ETH_TX_DESC_CNT];     /*<! Tx DMA descriptors addresses */
+  uint32_t  TxDesc[ETH_TX_DESC_CNT];        /*<! Tx DMA descriptors addresses */
   
-  uint32_t  CurTxDesc;               /*<! Current Tx descriptor index for packet transmission */
-  
+  uint32_t  CurTxDesc;                      /*<! Current Tx descriptor index for packet transmission */
+
+  uint32_t* PacketAddress[ETH_TX_DESC_CNT];  /*<! Ethernet packet addresses array */
+
+  uint32_t* CurrentPacketAddress;           /*<! Current transmit NX_PACKET addresses */
+
+  uint32_t BuffersInUse;                   /*<! Buffers in Use */
 }ETH_TxDescListTypeDef;
 /** 
   * 
@@ -546,7 +551,7 @@ typedef struct{
   */
 
 /*
-   DMA Tx Normal Desciptor Read Format
+   DMA Tx Normal Descriptor Read Format
   -----------------------------------------------------------------------------------------------
   TDES0 |                         Buffer1 or Header Address  [31:0]                              |
   -----------------------------------------------------------------------------------------------
@@ -659,7 +664,7 @@ typedef struct{
 
 
 /*
-   DMA Tx Context Desciptor
+   DMA Tx Context Descriptor
   -----------------------------------------------------------------------------------------------
   TDES0 |                               Timestamp Low                                            |
   -----------------------------------------------------------------------------------------------

@@ -1566,6 +1566,16 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
     __HAL_RCC_CLKP_CONFIG(PeriphClkInit->CkperClockSelection);
   }
 
+  /*------------------------------ CEC Configuration ------------------------*/
+  if(((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_CEC) == RCC_PERIPHCLK_CEC)
+  {
+    /* Check the parameters */
+    assert_param(IS_RCC_CECCLKSOURCE(PeriphClkInit->CecClockSelection));
+
+    /* Configure the CEC interface clock source */
+    __HAL_RCC_CEC_CONFIG(PeriphClkInit->CecClockSelection);
+  }
+
   if (status == HAL_OK)
   {
     return HAL_OK;
@@ -1779,7 +1789,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
   PLL2_ClocksTypeDef pll2_clocks;
   PLL3_ClocksTypeDef pll3_clocks;
 
-  /* This variable is used to store the SAI clock frequency (value in Hz) */
+  /* This variable is used to store the clock frequency (value in Hz) */
   uint32_t frequency;
   /* This variable is used to store the SAI and CKP clock source */
   uint32_t saiclocksource;
@@ -1795,21 +1805,42 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
       {
       case RCC_SAI1CLKSOURCE_PLL: /* PLL1 is the clock source for SAI1 */
         {
-          HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
-          frequency = pll1_clocks.PLL1_Q_Frequency;
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
+           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
+           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
       case RCC_SAI1CLKSOURCE_PLL2: /* PLL2 is the clock source for SAI1 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
       case RCC_SAI1CLKSOURCE_PLL3: /* PLL3 is the clock source for SAI1 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
@@ -1818,19 +1849,19 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+          if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -1866,23 +1897,44 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
       switch (saiclocksource)
       {
-      case 0: /* PLL1 is the clock source for SAI2/3 */
+      case RCC_SAI23CLKSOURCE_PLL: /* PLL1 is the clock source for SAI2/3 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
       case RCC_SAI23CLKSOURCE_PLL2: /* PLL2 is the clock source for SAI2/3 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
       case RCC_SAI23CLKSOURCE_PLL3: /* PLL3 is the clock source for SAI2/3 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
@@ -1891,19 +1943,19 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+          if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -1940,23 +1992,44 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
       switch (saiclocksource)
       {
-      case 0: /* PLL1 is the clock source for SAI2A */
+      case RCC_SAI2ACLKSOURCE_PLL: /* PLL1 is the clock source for SAI2A */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
       case RCC_SAI2ACLKSOURCE_PLL2: /* PLLI2 is the clock source for SAI2A */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
       case RCC_SAI2ACLKSOURCE_PLL3: /* PLLI3 is the clock source for SAI2A  */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
@@ -1965,19 +2038,19 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+         if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -2016,23 +2089,44 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
       switch (saiclocksource)
       {
-      case 0: /* PLL1 is the clock source for SAI2B */
+      case RCC_SAI2BCLKSOURCE_PLL: /* PLL1 is the clock source for SAI2B */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
       case RCC_SAI2BCLKSOURCE_PLL2: /* PLLI2 is the clock source for SAI2B */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
       case RCC_SAI2BCLKSOURCE_PLL3: /* PLLI3 is the clock source for SAI2B */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
@@ -2041,19 +2135,19 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+         if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -2090,44 +2184,65 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
       switch (saiclocksource)
       {
-      case 0: /* PLL1 is the clock source for SAI4A */
+      case RCC_SAI4ACLKSOURCE_PLL: /* PLL1 is the clock source for SAI4A */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
-      case RCC_D3CCIPR_SAI4ASEL_0: /* PLLI2 is the clock source for SAI4A */
+      case RCC_SAI4ACLKSOURCE_PLL2: /* PLLI2 is the clock source for SAI4A */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
-      case RCC_D3CCIPR_SAI4ASEL_1: /* PLLI3 is the clock source for SAI4A */
+      case RCC_SAI4ACLKSOURCE_PLL3: /* PLLI3 is the clock source for SAI4A */
         {
+          if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
-      case RCC_D3CCIPR_SAI4ASEL_2: /* CKPER is the clock source for SAI4A*/
+      case RCC_SAI4ACLKSOURCE_CLKP: /* CKPER is the clock source for SAI4A*/
         {
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+          if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -2142,7 +2257,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
           break;
         }
 
-      case (RCC_D3CCIPR_SAI4ASEL_0 | RCC_D3CCIPR_SAI4ASEL_1 ): /* External clock is the clock source for SAI4A */
+      case RCC_SAI4ACLKSOURCE_PIN: /* External clock is the clock source for SAI4A */
         {
           frequency = EXTERNAL_CLOCK_VALUE;
           break;
@@ -2163,44 +2278,65 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
       switch (saiclocksource)
       {
-      case 0: /* PLL1 is the clock source for SAI4B */
+      case RCC_SAI4BCLKSOURCE_PLL: /* PLL1 is the clock source for SAI4B */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
-      case RCC_D3CCIPR_SAI4BSEL_0: /* PLLI2 is the clock source for SAI4B */
+      case RCC_SAI4BCLKSOURCE_PLL2: /* PLLI2 is the clock source for SAI4B */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+          }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
-      case RCC_D3CCIPR_SAI4BSEL_1: /* PLLI3 is the clock source for SAI4B */
+      case RCC_SAI4BCLKSOURCE_PLL3: /* PLLI3 is the clock source for SAI4B */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
-      case RCC_D3CCIPR_SAI4BSEL_2: /* CKPER is the clock source for SAI4B*/
+      case RCC_SAI4BCLKSOURCE_CLKP: /* CKPER is the clock source for SAI4B*/
         {
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+         if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -2215,7 +2351,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
           break;
         }
 
-      case (RCC_D3CCIPR_SAI4BSEL_0 | RCC_D3CCIPR_SAI4BSEL_1 ): /* External clock is the clock source for SAI4B */
+      case RCC_SAI4BCLKSOURCE_PIN: /* External clock is the clock source for SAI4B */
         {
           frequency = EXTERNAL_CLOCK_VALUE;
           break;
@@ -2236,44 +2372,65 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
       switch (srcclk)
       {
-      case RCC_SPI123CLKSOURCE_PLL: /* PLL1 is the clock source for I2S */
+      case RCC_SPI123CLKSOURCE_PLL: /* PLL1 is the clock source for SPI123 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
-      case RCC_SPI123CLKSOURCE_PLL2: /* PLL2 is the clock source for I2S */
+      case RCC_SPI123CLKSOURCE_PLL2: /* PLL2 is the clock source for SPI123 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
-      case RCC_SPI123CLKSOURCE_PLL3: /* PLL3 is the clock source for I2S */
+      case RCC_SPI123CLKSOURCE_PLL3: /* PLL3 is the clock source for SPI123 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
-      case RCC_SPI123CLKSOURCE_CLKP: /* CKPER is the clock source for I2S */
+      case RCC_SPI123CLKSOURCE_CLKP: /* CKPER is the clock source for SPI123 */
         {
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+         if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -2309,14 +2466,28 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
       {
       case RCC_ADCCLKSOURCE_PLL2:
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_P_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
       case RCC_ADCCLKSOURCE_PLL3:
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_R_Frequency;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
 
@@ -2325,19 +2496,19 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 
           ckpclocksource= __HAL_RCC_GET_CLKP_SOURCE();
 
-          if(ckpclocksource== RCC_CLKPSOURCE_HSI)
+         if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSI))
           {
             /* In Case the CKPER Source is HSI */
-            frequency = HSI_VALUE;
+            frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
           }
 
-          else if(ckpclocksource== RCC_CLKPSOURCE_CSI)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY)) && (ckpclocksource == RCC_CLKPSOURCE_CSI))
           {
             /* In Case the CKPER Source is CSI */
             frequency = CSI_VALUE;
           }
 
-          else if (ckpclocksource== RCC_CLKPSOURCE_HSE)
+          else if ((HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY)) && (ckpclocksource == RCC_CLKPSOURCE_HSE))
           {
             /* In Case the CKPER Source is HSE */
             frequency = HSE_VALUE;
@@ -2368,14 +2539,28 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
       {
       case RCC_SDMMCCLKSOURCE_PLL: /* PLL1 is the clock source for SDMMC */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
           HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
           frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+          frequency = 0;
+         }
           break;
         }
       case RCC_SDMMCCLKSOURCE_PLL2: /* PLL2 is the clock source for SDMMC */
         {
+          if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_R_Frequency;
+         }
+         else
+         {
+          frequency = 0;
+         }
           break;
         }
 
@@ -2400,29 +2585,64 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
         }
       case RCC_SPI6CLKSOURCE_PLL2: /* PLL2 is the clock source for SPI6 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
           HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
           frequency = pll2_clocks.PLL2_Q_Frequency;
+         }
+         else
+         {
+          frequency = 0;
+         }
           break;
         }
       case RCC_SPI6CLKSOURCE_PLL3: /* PLL3 is the clock source for SPI6 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL3RDY))
+         {
           HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
           frequency = pll3_clocks.PLL3_Q_Frequency;
+         }
+         else
+         {
+          frequency = 0;
+         }
           break;
         }
       case RCC_SPI6CLKSOURCE_HSI: /* HSI is the clock source for SPI6 */
         {
-          frequency = HSI_VALUE;
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSIRDY))
+         {
+          frequency = (HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER()>> 3));
+         }
+         else
+         {
+          frequency = 0;
+         }
           break;
         }
       case RCC_SPI6CLKSOURCE_CSI: /* CSI is the clock source for SPI6 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_CSIRDY))
+         {
           frequency = CSI_VALUE;
+         }
+         else
+         {
+           frequency = 0;
+         }
           break;
         }
       case RCC_SPI6CLKSOURCE_HSE: /* HSE is the clock source for SPI6 */
         {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY))
+         {
           frequency = HSE_VALUE;
+         }
+         else
+         {
+          frequency = 0;
+         }
           break;
         }
 #if defined(RCC_SPI6CLKSOURCE_PIN)
@@ -2432,6 +2652,58 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
           break;
         }
 #endif /* RCC_SPI6CLKSOURCE_PIN */
+      default :
+        {
+          frequency = 0;
+          break;
+        }
+      }
+    }
+  else if (PeriphClk == RCC_PERIPHCLK_FDCAN)
+    {
+      /* Get FDCAN clock source */
+      srcclk= __HAL_RCC_GET_FDCAN_SOURCE();
+
+      switch (srcclk)
+      {
+      case RCC_FDCANCLKSOURCE_HSE: /* HSE is the clock source for FDCAN */
+        {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_HSERDY))
+         {
+          frequency = HSE_VALUE;
+         }
+         else
+         {
+          frequency = 0;
+         }
+          break;
+        }
+      case RCC_FDCANCLKSOURCE_PLL: /* PLL is the clock source for FDCAN */
+        {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL1RDY))
+         {
+          HAL_RCCEx_GetPLL1ClockFreq(&pll1_clocks);
+          frequency = pll1_clocks.PLL1_Q_Frequency;
+         }
+         else
+         {
+          frequency = 0;
+         }
+          break;
+        }
+      case RCC_FDCANCLKSOURCE_PLL2: /* PLL2 is the clock source for FDCAN */
+        {
+         if (HAL_IS_BIT_SET(RCC->CR, RCC_CR_PLL2RDY))
+         {
+          HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
+          frequency = pll2_clocks.PLL2_Q_Frequency;
+         }
+         else
+         {
+          frequency = 0;
+         }
+          break;
+        }
       default :
         {
           frequency = 0;
@@ -2668,7 +2940,7 @@ void HAL_RCCEx_GetPLL1ClockFreq(PLL1_ClocksTypeDef* PLL1_Clocks)
       break;
 
     default:
-      pll1vco = ((float_t)CSI_VALUE / (float_t)pll1m) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_N1) + (fracn1/(float_t)0x2000) +(float_t)1 );
+      pll1vco = ((float_t)HSI_VALUE / (float_t)pll1m) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_N1) + (fracn1/(float_t)0x2000) +(float_t)1 );
       break;
     }
 

@@ -321,7 +321,7 @@ typedef struct
   */
 __STATIC_INLINE void LL_COMP_SetCommonWindowMode(COMP_Common_TypeDef *COMPxy_COMMON, uint32_t WindowMode)
 {
-  /* Note: On this STM32 serie, window mode can be set only                   */
+  /* Note: On this STM32 series, window mode can be set only                   */
   /*       from COMP instance: COMP2.                                         */
   MODIFY_REG(COMPxy_COMMON->CFGR, COMP_CFGRx_WINMODE, WindowMode);
 }
@@ -391,7 +391,7 @@ __STATIC_INLINE uint32_t LL_COMP_GetPowerMode(COMP_TypeDef *COMPx)
   * @note   In case of comparator input selected to be connected to IO:
   *         GPIO pins are specific to each comparator instance.
   *         Refer to description of parameters or to reference manual.
-  * @note   On this STM32 serie, scaler bridge is configurable:
+  * @note   On this STM32 series, scaler bridge is configurable:
   *         to optimize power consumption, this function enables the
   *         voltage scaler bridge only when required
   *         (when selecting comparator input based on VrefInt: VrefInt or
@@ -489,7 +489,7 @@ __STATIC_INLINE uint32_t LL_COMP_GetInputPlus(COMP_TypeDef *COMPx)
   * @note   In case of comparator input selected to be connected to IO:
   *         GPIO pins are specific to each comparator instance.
   *         Refer to description of parameters or to reference manual.
-  * @note   On this STM32 serie, scaler bridge is configurable:
+  * @note   On this STM32 series, scaler bridge is configurable:
   *         to optimize power consumption, this function enables the
   *         voltage scaler bridge only when required
   *         (when selecting comparator input based on VrefInt: VrefInt or

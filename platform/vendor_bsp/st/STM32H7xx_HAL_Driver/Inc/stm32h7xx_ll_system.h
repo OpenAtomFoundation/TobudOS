@@ -135,7 +135,7 @@ extern "C" {
 * @{
 */
 #define LL_SYSCFG_ETH_MII               0x00000000U                           /*!< ETH Media MII interface */
-#define LL_SYSCFG_ETH_RMII              SYSCFG_PMCR_EPIS_SEL                   /*!< ETH Media RMII interface */
+#define LL_SYSCFG_ETH_RMII              SYSCFG_PMCR_EPIS_SEL_2                /*!< ETH Media RMII interface */
 /**
   * @}
   */
@@ -770,7 +770,7 @@ __STATIC_INLINE uint32_t LL_SYSCFG_GetTIMBreakInputs(void)
   * @brief  Enable the Compensation Cell
   * @rmtoll CCCSR   EN    LL_SYSCFG_EnableCompensationCell
   * @note   The I/O compensation cell can be used only when the device supply
-  *         voltage ranges from 2.4 to 3.6 V
+  *         voltage ranges from 1.62 to 2.0 V and from 2.7 to 3.6 V.
   * @retval None
   */
 __STATIC_INLINE void LL_SYSCFG_EnableCompensationCell(void)
@@ -782,7 +782,7 @@ __STATIC_INLINE void LL_SYSCFG_EnableCompensationCell(void)
   * @brief  Disable the Compensation Cell
   * @rmtoll CCCSR   EN    LL_SYSCFG_DisableCompensationCell
   * @note   The I/O compensation cell can be used only when the device supply
-  *         voltage ranges from 2.4 to 3.6 V
+  *         voltage ranges from 1.62 to 2.0 V and from 2.7 to 3.6 V.
   * @retval None
   */
 __STATIC_INLINE void LL_SYSCFG_DisableCompensationCell(void)
@@ -1917,6 +1917,7 @@ __STATIC_INLINE void LL_DBGMCU_DisableD2DebugInStandbyMode(void)
 #endif /* DUAL_CORE */
 
 
+#if defined(DBGMCU_CR_DBG_STOPD3)
 /**
   * @brief  Enable D3 Domain/SRDomain debug during STOP mode
   * @rmtoll DBGMCU_CR    DBGSTOP_D3/DBGSTOP_SRD    LL_DBGMCU_EnableD3DebugInStopMode
@@ -1936,7 +1937,9 @@ __STATIC_INLINE void LL_DBGMCU_DisableD3DebugInStopMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
 }
+#endif /*DBGMCU_CR_DBG_STOPD3*/
 
+#if defined(DBGMCU_CR_DBG_STANDBYD3)
 /**
   * @brief  Enable D3 Domain/SRDomain debug during STANDBY mode
   * @rmtoll DBGMCU_CR    DBGSTBY_D3/DBGSTBY_SRD     LL_DBGMCU_EnableD3DebugInStandbyMode
@@ -1956,6 +1959,7 @@ __STATIC_INLINE void LL_DBGMCU_DisableD3DebugInStandbyMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD3);
 }
+#endif /*DBGMCU_CR_DBG_STANDBYD3*/
 
 /**
   * @brief  Enable the trace port clock

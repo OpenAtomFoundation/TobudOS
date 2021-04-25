@@ -69,10 +69,10 @@ typedef enum
 /** @defgroup SYSCFG_VREFBUF_VoltageScale VREFBUF Voltage Scale
   * @{
   */
-#define SYSCFG_VREFBUF_VOLTAGE_SCALE0   VREFBUF_CSR_VRS_OUT2   /*!< Voltage reference scale 0 (VREF_OUT2) */
-#define SYSCFG_VREFBUF_VOLTAGE_SCALE1   VREFBUF_CSR_VRS_OUT1   /*!< Voltage reference scale 1 (VREF_OUT1) */
-#define SYSCFG_VREFBUF_VOLTAGE_SCALE2   VREFBUF_CSR_VRS_OUT4   /*!< Voltage reference scale 2 (VREF_OUT4) */
-#define SYSCFG_VREFBUF_VOLTAGE_SCALE3   VREFBUF_CSR_VRS_OUT3   /*!< Voltage reference scale 3 (VREF_OUT3) */
+#define SYSCFG_VREFBUF_VOLTAGE_SCALE0   VREFBUF_CSR_VRS_OUT1   /*!< Voltage reference scale 0 (VREF_OUT1) */
+#define SYSCFG_VREFBUF_VOLTAGE_SCALE1   VREFBUF_CSR_VRS_OUT2   /*!< Voltage reference scale 1 (VREF_OUT2) */
+#define SYSCFG_VREFBUF_VOLTAGE_SCALE2   VREFBUF_CSR_VRS_OUT3   /*!< Voltage reference scale 2 (VREF_OUT3) */
+#define SYSCFG_VREFBUF_VOLTAGE_SCALE3   VREFBUF_CSR_VRS_OUT4   /*!< Voltage reference scale 3 (VREF_OUT4) */
 
 
 #define IS_SYSCFG_VREFBUF_VOLTAGE_SCALE(__SCALE__)  (((__SCALE__) == SYSCFG_VREFBUF_VOLTAGE_SCALE0) || \
@@ -1093,10 +1093,14 @@ void HAL_DisableDomain2DBGStopMode(void);
 void HAL_EnableDomain2DBGStandbyMode(void);
 void HAL_DisableDomain2DBGStandbyMode(void);
 #endif /*DUAL_CORE*/
+#if defined(DBGMCU_CR_DBG_STOPD3)
 void HAL_EnableDomain3DBGStopMode(void);
 void HAL_DisableDomain3DBGStopMode(void);
+#endif /*DBGMCU_CR_DBG_STOPD3*/
+#if defined(DBGMCU_CR_DBG_STANDBYD3)
 void HAL_EnableDomain3DBGStandbyMode(void);
 void HAL_DisableDomain3DBGStandbyMode(void);
+#endif /*DBGMCU_CR_DBG_STANDBYD3*/
 void HAL_EXTI_EdgeConfig(uint32_t EXTI_Line , uint32_t EXTI_Edge );
 void HAL_EXTI_GenerateSWInterrupt(uint32_t EXTI_Line);
 #if defined(DUAL_CORE)

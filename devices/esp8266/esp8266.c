@@ -13,10 +13,10 @@ static int esp8266_restore(void)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_echo_create(&echo, NULL, 0, "ready");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 3000, "AT+RESTORE\r\n");
-        if (echo.status == AT_ECHO_STATUS_OK) {
+        tos_at_cmd_exec_until(&echo, 5000, "AT+RESTORE\r\n");
+        if (echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
     }

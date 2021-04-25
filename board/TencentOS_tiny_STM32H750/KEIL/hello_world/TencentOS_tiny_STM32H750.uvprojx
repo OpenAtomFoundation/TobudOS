@@ -394,14 +394,79 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\dac.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\dcmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>fmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\fmc.c</FilePath>
+            </File>
+            <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\gpio.c</FilePath>
             </File>
             <File>
+              <FileName>hdmi_cec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\hdmi_cec.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\i2s.c</FilePath>
+            </File>
+            <File>
+              <FileName>ltdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\ltdc.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>quadspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\quadspi.c</FilePath>
+            </File>
+            <File>
+              <FileName>sai.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\sai.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdmmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\sdmmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32h7xx_hal_msp.c</FileName>
@@ -419,9 +484,9 @@
               <FilePath>..\..\BSP\Src\usart.c</FilePath>
             </File>
             <File>
-              <FileName>mcu_init.c</FileName>
+              <FileName>usb_otg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\BSP\Src\mcu_init.c</FilePath>
+              <FilePath>..\..\BSP\Src\usb_otg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -429,14 +494,14 @@
           <GroupName>Drivers/STM32H7xx_HAL_Driver</GroupName>
           <Files>
             <File>
-              <FileName>stm32h7xx_hal.c</FileName>
+              <FileName>stm32h7xx_hal_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_adc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32h7xx_hal_cortex.c</FileName>
+              <FileName>stm32h7xx_hal_adc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_cortex.c</FilePath>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_adc_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32h7xx_hal_dma.c</FileName>
@@ -447,11 +512,6 @@
               <FileName>stm32h7xx_hal_dma_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_dma_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32h7xx_hal_exti.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_exti.c</FilePath>
             </File>
             <File>
               <FileName>stm32h7xx_hal_flash.c</FileName>
@@ -472,16 +532,6 @@
               <FileName>stm32h7xx_hal_hsem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_hsem.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32h7xx_hal_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32h7xx_hal_i2c_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_i2c_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32h7xx_hal_mdma.c</FileName>
@@ -509,6 +559,116 @@
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_rcc_ex.c</FilePath>
             </File>
             <File>
+              <FileName>stm32h7xx_hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_cortex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_cortex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_dac.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_dac_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_dac_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_dcmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_dcmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_i2c_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_i2c_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_sdram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_sdram.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_ll_fmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_ll_fmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_cec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_cec.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_i2s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_i2s.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_i2s_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_i2s_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_ltdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_ltdc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_ltdc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_ltdc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_qspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_qspi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_sai.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_sai.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_sai_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_sai_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_sd_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_sd_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_spi_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_spi_ex.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32h7xx_hal_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_tim.c</FilePath>
@@ -519,6 +679,21 @@
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_tim_ex.c</FilePath>
             </File>
             <File>
+              <FileName>stm32h7xx_ll_delayblock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_ll_delayblock.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_ll_sdmmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_ll_sdmmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_hal_hcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_hcd.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32h7xx_hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_uart.c</FilePath>
@@ -527,6 +702,11 @@
               <FileName>stm32h7xx_hal_uart_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_uart_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32h7xx_ll_usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Src\stm32h7xx_ll_usb.c</FilePath>
             </File>
           </Files>
         </Group>

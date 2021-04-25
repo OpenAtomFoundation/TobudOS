@@ -5,9 +5,21 @@
 extern "C" {
 #endif
 
-#include "main.h"
+#include "adc.h"
+#include "dac.h"
+#include "dcmi.h"
+#include "hdmi_cec.h"
+#include "i2c.h"
+#include "i2s.h"
+#include "ltdc.h"
+#include "quadspi.h"
+#include "sai.h"
+#include "sdmmc.h"
+#include "spi.h"
 #include "usart.h"
+#include "usb_otg.h"
 #include "gpio.h"
+#include "fmc.h"
 
 #include "tos_k.h"
 

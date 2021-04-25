@@ -249,11 +249,11 @@ extern "C" {
 #define LL_DMAMUX1_REQ_SPDIF_RX_CS      94U  /*!< DMAMUX1 SPDIF RXCS request      */
 #if defined (HRTIM1)
 #define LL_DMAMUX1_REQ_HRTIM_MASTER     95U  /*!< DMAMUX1 HRTIM1 Master request 1 */
-#define LL_DMAMUX1_REQ_HRTIM_TIMER_A    96U  /*!< DMAMUX1 HRTIM1 TimerA request 2 */
-#define LL_DMAMUX1_REQ_HRTIM_TIMER_B    97U  /*!< DMAMUX1 HRTIM1 TimerB request 3 */
-#define LL_DMAMUX1_REQ_HRTIM_TIMER_C    98U  /*!< DMAMUX1 HRTIM1 TimerC request 4 */
-#define LL_DMAMUX1_REQ_HRTIM_TIMER_D    99U  /*!< DMAMUX1 HRTIM1 TimerD request 5 */
-#define LL_DMAMUX1_REQ_HRTIM_TIMER_E   100U  /*!< DMAMUX1 HRTIM1 TimerE request 6 */
+#define LL_DMAMUX1_REQ_HRTIM_TIMER_A    96U  /*!< DMAMUX1 HRTIM1 Timer A request 2 */
+#define LL_DMAMUX1_REQ_HRTIM_TIMER_B    97U  /*!< DMAMUX1 HRTIM1 Timer B request 3 */
+#define LL_DMAMUX1_REQ_HRTIM_TIMER_C    98U  /*!< DMAMUX1 HRTIM1 Timer C request 4 */
+#define LL_DMAMUX1_REQ_HRTIM_TIMER_D    99U  /*!< DMAMUX1 HRTIM1 Timer D request 5 */
+#define LL_DMAMUX1_REQ_HRTIM_TIMER_E   100U  /*!< DMAMUX1 HRTIM1 Timer E request 6 */
 #endif /* HRTIM1 */
 #define LL_DMAMUX1_REQ_DFSDM1_FLT0     101U  /*!< DMAMUX1 DFSDM1 Filter0 request  */
 #define LL_DMAMUX1_REQ_DFSDM1_FLT1     102U  /*!< DMAMUX1 DFSDM1 Filter1 request  */

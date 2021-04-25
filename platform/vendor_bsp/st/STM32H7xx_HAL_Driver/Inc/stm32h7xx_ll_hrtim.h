@@ -803,7 +803,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @brief Constants defining the registers that can be written during a burst DMA operation.
   */
 #define LL_HRTIM_BURSTDMA_NONE     0x00000000U               /*!< No register is updated by Burst DMA accesses */
-#define LL_HRTIM_BURSTDMA_MCR      (HRTIM_BDMUPR_MCR)        /*!< MCR  register is updated by Burst DMA accesses */
+#define LL_HRTIM_BURSTDMA_MCR      (HRTIM_BDMUPR_MCR)        /*!< MCR register is updated by Burst DMA accesses */
 #define LL_HRTIM_BURSTDMA_MICR     (HRTIM_BDMUPR_MICR)       /*!< MICR register is updated by Burst DMA accesses */
 #define LL_HRTIM_BURSTDMA_MDIER    (HRTIM_BDMUPR_MDIER)      /*!< MDIER register is updated by Burst DMA accesses */
 #define LL_HRTIM_BURSTDMA_MCNT     (HRTIM_BDMUPR_MCNT)       /*!< MCNTR register is updated by Burst DMA accesses */
@@ -997,37 +997,37 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @brief Constants defining the events that can be selected to configure the set/reset crossbar of a timer output.
   */
 #define LL_HRTIM_CROSSBAR_NONE       0x00000000U             /*!< Reset the output set crossbar */
-#define LL_HRTIM_CROSSBAR_RESYNC     (HRTIM_SET1R_RESYNC)    /*!< Timer reset event coming solely from software or SYNC input forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMPER     (HRTIM_SET1R_PER)       /*!< Timer period event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMCMP1    (HRTIM_SET1R_CMP1)      /*!< Timer compare 1 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMCMP2    (HRTIM_SET1R_CMP2)      /*!< Timer compare 2 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMCMP3    (HRTIM_SET1R_CMP3)      /*!< Timer compare 3 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMCMP4    (HRTIM_SET1R_CMP4)      /*!< Timer compare 4 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_MASTERPER  (HRTIM_SET1R_MSTPER)    /*!< The master timer period event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_MASTERCMP1 (HRTIM_SET1R_MSTCMP1)   /*!< Master Timer compare 1 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_MASTERCMP2 (HRTIM_SET1R_MSTCMP2)   /*!< Master Timer compare 2 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_MASTERCMP3 (HRTIM_SET1R_MSTCMP3)   /*!< Master Timer compare 3 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_MASTERCMP4 (HRTIM_SET1R_MSTCMP4)   /*!< Master Timer compare 4 event forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_1    (HRTIM_SET1R_TIMEVNT1)  /*!< Timer event 1 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_2    (HRTIM_SET1R_TIMEVNT2)  /*!< Timer event 2 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_3    (HRTIM_SET1R_TIMEVNT3)  /*!< Timer event 3 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_4    (HRTIM_SET1R_TIMEVNT4)  /*!< Timer event 4 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_5    (HRTIM_SET1R_TIMEVNT5)  /*!< Timer event 5 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_6    (HRTIM_SET1R_TIMEVNT6)  /*!< Timer event 6 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_7    (HRTIM_SET1R_TIMEVNT7)  /*!< Timer event 7 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_8    (HRTIM_SET1R_TIMEVNT8)  /*!< Timer event 8 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_TIMEV_9    (HRTIM_SET1R_TIMEVNT9)  /*!< Timer event 9 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_1      (HRTIM_SET1R_EXTVNT1)   /*!< External event 1 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_2      (HRTIM_SET1R_EXTVNT2)   /*!< External event 2 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_3      (HRTIM_SET1R_EXTVNT3)   /*!< External event 3 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_4      (HRTIM_SET1R_EXTVNT4)   /*!< External event 4 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_5      (HRTIM_SET1R_EXTVNT5)   /*!< External event 5 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_6      (HRTIM_SET1R_EXTVNT6)   /*!< External event 6 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_7      (HRTIM_SET1R_EXTVNT7)   /*!< External event 7 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_8      (HRTIM_SET1R_EXTVNT8)   /*!< External event 8 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_9      (HRTIM_SET1R_EXTVNT9)   /*!< External event 9 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_EEV_10     (HRTIM_SET1R_EXTVNT10)  /*!< External event 10 forces an output level transision */
-#define LL_HRTIM_CROSSBAR_UPDATE     (HRTIM_SET1R_UPDATE)    /*!< Timer register update event forces an output level transision */
+#define LL_HRTIM_CROSSBAR_RESYNC     (HRTIM_SET1R_RESYNC)    /*!< Timer reset event coming solely from software or SYNC input forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMPER     (HRTIM_SET1R_PER)       /*!< Timer period event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMCMP1    (HRTIM_SET1R_CMP1)      /*!< Timer compare 1 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMCMP2    (HRTIM_SET1R_CMP2)      /*!< Timer compare 2 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMCMP3    (HRTIM_SET1R_CMP3)      /*!< Timer compare 3 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMCMP4    (HRTIM_SET1R_CMP4)      /*!< Timer compare 4 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_MASTERPER  (HRTIM_SET1R_MSTPER)    /*!< The master timer period event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_MASTERCMP1 (HRTIM_SET1R_MSTCMP1)   /*!< Master Timer compare 1 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_MASTERCMP2 (HRTIM_SET1R_MSTCMP2)   /*!< Master Timer compare 2 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_MASTERCMP3 (HRTIM_SET1R_MSTCMP3)   /*!< Master Timer compare 3 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_MASTERCMP4 (HRTIM_SET1R_MSTCMP4)   /*!< Master Timer compare 4 event forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_1    (HRTIM_SET1R_TIMEVNT1)  /*!< Timer event 1 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_2    (HRTIM_SET1R_TIMEVNT2)  /*!< Timer event 2 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_3    (HRTIM_SET1R_TIMEVNT3)  /*!< Timer event 3 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_4    (HRTIM_SET1R_TIMEVNT4)  /*!< Timer event 4 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_5    (HRTIM_SET1R_TIMEVNT5)  /*!< Timer event 5 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_6    (HRTIM_SET1R_TIMEVNT6)  /*!< Timer event 6 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_7    (HRTIM_SET1R_TIMEVNT7)  /*!< Timer event 7 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_8    (HRTIM_SET1R_TIMEVNT8)  /*!< Timer event 8 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_TIMEV_9    (HRTIM_SET1R_TIMEVNT9)  /*!< Timer event 9 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_1      (HRTIM_SET1R_EXTVNT1)   /*!< External event 1 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_2      (HRTIM_SET1R_EXTVNT2)   /*!< External event 2 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_3      (HRTIM_SET1R_EXTVNT3)   /*!< External event 3 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_4      (HRTIM_SET1R_EXTVNT4)   /*!< External event 4 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_5      (HRTIM_SET1R_EXTVNT5)   /*!< External event 5 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_6      (HRTIM_SET1R_EXTVNT6)   /*!< External event 6 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_7      (HRTIM_SET1R_EXTVNT7)   /*!< External event 7 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_8      (HRTIM_SET1R_EXTVNT8)   /*!< External event 8 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_9      (HRTIM_SET1R_EXTVNT9)   /*!< External event 9 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_EEV_10     (HRTIM_SET1R_EXTVNT10)  /*!< External event 10 forces an output level transition */
+#define LL_HRTIM_CROSSBAR_UPDATE     (HRTIM_SET1R_UPDATE)    /*!< Timer register update event forces an output level transition */
 /**
   * @}
   */
@@ -1036,7 +1036,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @{
   * @brief Constants defining the polarity of a timer output.
   */
-#define LL_HRTIM_OUT_POSITIVE_POLARITY    0x00000000U             /*!< Output is acitve HIGH */
+#define LL_HRTIM_OUT_POSITIVE_POLARITY    0x00000000U             /*!< Output is active HIGH */
 #define LL_HRTIM_OUT_NEGATIVE_POLARITY    (HRTIM_OUTR_POL1)       /*!< Output is active LOW */
 /**
   * @}
@@ -7286,7 +7286,7 @@ __STATIC_INLINE void LL_HRTIM_BM_DisablePreload(HRTIM_TypeDef *HRTIMx)
   */
 __STATIC_INLINE uint32_t LL_HRTIM_BM_IsEnabledPreload(HRTIM_TypeDef *HRTIMx)
 {
-  uint32_t temp; /* MISRAC-2012 compliancy */
+  uint32_t temp; /* MISRAC-2012 compliance */
   temp = READ_BIT(HRTIMx->sCommonRegs.BMCR, HRTIM_BMCR_BMPREN);
 
   return ((temp == (HRTIM_BMCR_BMPREN)) ? 1UL : 0UL);

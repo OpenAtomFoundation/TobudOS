@@ -134,11 +134,16 @@ FLASH_ProcessTypeDef pFlash;
   */
 
 /**
-  * @brief  Program flash word at a specified address
+  * @brief  Program a flash word at a specified address
   * @param  TypeProgram Indicate the way to program at a specified address.
   *         This parameter can be a value of @ref FLASH_Type_Program
   * @param  FlashAddress specifies the address to be programmed.
-  * @param  DataAddress specifies the address of data to be programmed
+  *         This parameter shall be aligned to the Flash word:
+  *          - 256 bits for STM32H74x/5X devices (8x 32bits words)
+  *          - 128 bits for STM32H7Ax/BX devices (4x 32bits words)
+  *          - 256 bits for STM32H72x/3X devices (8x 32bits words)
+  * @param  DataAddress specifies the address of data to be programmed.
+  *         This parameter shall be 32-bit aligned
   *
   * @retval HAL_StatusTypeDef HAL Status
   */
@@ -292,11 +297,16 @@ HAL_StatusTypeDef HAL_FLASH_Program(uint32_t TypeProgram, uint32_t FlashAddress,
 }
 
 /**
-  * @brief  Program flash words of 256 bits at a specified address with interrupt enabled.
+  * @brief  Program a flash word at a specified address with interrupt enabled.
   * @param  TypeProgram Indicate the way to program at a specified address.
   *                      This parameter can be a value of @ref FLASH_Type_Program
   * @param  FlashAddress specifies the address to be programmed.
-  * @param  DataAddress specifies the address of data (256 bits) to be programmed
+  *         This parameter shall be aligned to the Flash word:
+  *          - 256 bits for STM32H74x/5X devices (8x 32bits words)
+  *          - 128 bits for STM32H7Ax/BX devices (4x 32bits words)
+  *          - 256 bits for STM32H72x/3X devices (8x 32bits words)
+  * @param  DataAddress specifies the address of data to be programmed.
+  *         This parameter shall be 32-bit aligned
   *
   * @retval HAL Status
   */

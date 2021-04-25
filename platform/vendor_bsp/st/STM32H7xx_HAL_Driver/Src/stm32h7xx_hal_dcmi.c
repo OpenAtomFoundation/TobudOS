@@ -571,7 +571,7 @@ HAL_StatusTypeDef HAL_DCMI_Resume(DCMI_HandleTypeDef *hdcmi)
     /* Change DCMI state */
     hdcmi->State = HAL_DCMI_STATE_BUSY;
 
-    /* Disable Capture */
+    /* Enable Capture */
     hdcmi->Instance->CR |= DCMI_CR_CAPTURE;
   }
   /* Process Unlocked */

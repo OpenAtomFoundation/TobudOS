@@ -93,7 +93,7 @@
 
   The compilation define  USE_HAL_SPDIFRX_REGISTER_CALLBACKS when set to 1
   allows the user to configure dynamically the driver callbacks.
-  Use HAL_SPDIFRX_RegisterCallback() funtion to register an interrupt callback.
+  Use HAL_SPDIFRX_RegisterCallback() function to register an interrupt callback.
 
   The HAL_SPDIFRX_RegisterCallback() function allows to register the following callbacks:
     (+) RxHalfCpltCallback  : SPDIFRX Data flow half completed callback.

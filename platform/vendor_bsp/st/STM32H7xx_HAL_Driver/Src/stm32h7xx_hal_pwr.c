@@ -36,7 +36,7 @@
           memory and peripherals. The SmartRun domain contains the system
           control, I/O logic and low-power peripherals.
 
-   (#) Every entity have low power mode as decribed below :
+   (#) Every entity have low power mode as described below :
    (#) The CPU low power modes are :
       (+) CPU CRUN.
       (+) CPU CSLEEP.
@@ -587,7 +587,7 @@ void HAL_PWR_EnterSLEEPMode (uint32_t Regulator, uint8_t SLEEPEntry)
 /**
   * @brief  Enter STOP mode.
   * @note   For single core devices, this API will enter the system in STOP mode
-  *         with all domains in DSTOP, if RUN_D3/RUN_SRD bit in CPUCR regiter is
+  *         with all domains in DSTOP, if RUN_D3/RUN_SRD bit in CPUCR register is
   *         cleared.
   *         For dual core devices, this API will enter the domain (containing
   *         Cortex-Mx that executing this function) in DSTOP mode. If all
@@ -672,7 +672,7 @@ void HAL_PWR_EnterSTOPMode (uint32_t Regulator, uint8_t STOPEntry)
   * @brief  Enter STANDBY mode.
   * @note   For single core devices, this API will enter the system in STANDBY
   *         mode with all domains in DSTANDBY, if RUN_D3/RUN_SRD bit in CPUCR
-  *         regiter is cleared.
+  *         register is cleared.
   *         For dual core devices, this API will enter the domain (containing
   *         Cortex-Mx that executing this function) in DSTANDBY mode. If all
   *         Cortex-Mx domains are in DSTANDBY and RUN_D3 bit in CPUCR register
