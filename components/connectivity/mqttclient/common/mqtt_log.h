@@ -2,13 +2,17 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-27 03:25:58
- * @LastEditTime: 2020-06-17 20:28:18
+ * @LastEditTime: 2020-10-17 14:15:55
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTT_LOG_H_
 #define _MQTT_LOG_H_
 
 #include "mqtt_defconfig.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define MQTT_LOG_BASE_LEVEL      (0)
 #define MQTT_LOG_ERR_LEVEL       (MQTT_LOG_BASE_LEVEL + 1)
@@ -58,6 +62,10 @@
 #endif
 
     #define mqtt_log_init()
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _LOG_H_ */

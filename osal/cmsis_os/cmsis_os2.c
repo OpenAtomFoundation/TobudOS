@@ -174,7 +174,7 @@ osThreadId_t osThreadNew(osThreadFunc_t func,
     } else {
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
       k_task_t* task;
-      err = tos_task_create_dyn(&task, attr->name, (k_task_entry_t)func,
+      err = tos_task_create_dyn(&task, (char*)attr->name, (k_task_entry_t)func,
                                 argument, prio, stack_size, 0);
       taskId = err == K_ERR_NONE ? task : NULL;
 #endif
@@ -623,11 +623,14 @@ osMutexId_t osMutexNew(const osMutexAttr_t* attr) {
   if (attr) {
     if (attr->cb_mem) {
       err = tos_mutex_create((k_mutex_t*)attr->cb_mem);
-      mutexId = err == K_ERR_NONE ? attr->cb_mem : NULL;
+      mutexId = (err == K_ERR_NONE) ? attr->cb_mem : NULL;
     }
+  } else {
+    err = tos_mutex_create_dyn(&mutexId);
+    mutexId = (err == K_ERR_NONE) ? mutexId : NULL;
   }
 
-  return (osEventFlagsId_t)mutexId;
+  return (osMutexId_t)mutexId;
 }
 
 const char* osMutexGetName(osMutexId_t mutex_id) {
@@ -673,11 +676,14 @@ osSemaphoreId_t osSemaphoreNew(uint32_t max_count,
       err =
           tos_sem_create_max((k_sem_t*)attr->cb_mem, (k_sem_cnt_t)initial_count,
                              (k_sem_cnt_t)max_count);
-      semId = err == K_ERR_NONE ? attr->cb_mem : NULL;
+      semId = (err == K_ERR_NONE) ? attr->cb_mem : NULL;
     }
+  } else {
+    err = tos_sem_create_max_dyn(&semId, (k_sem_cnt_t)initial_count, (k_sem_cnt_t)max_count);
+    semId = (err == K_ERR_NONE) ? semId: NULL;
   }
 
-  return (osEventFlagsId_t)semId;
+  return (osSemaphoreId_t)semId;
 }
 
 const char* osSemaphoreGetName(osSemaphoreId_t semaphore_id) {
@@ -722,8 +728,11 @@ osMemoryPoolId_t osMemoryPoolNew(uint32_t block_count,
     if (attr->cb_mem) {
       err = tos_mmblk_pool_create((k_mmblk_pool_t*)attr->cb_mem, attr->mp_mem,
                                   block_count, block_size);
-      mpId = err == K_ERR_NONE ? attr->cb_mem : NULL;
+      mpId = (err == K_ERR_NONE) ? attr->cb_mem : NULL;
     }
+  } else {
+    err = tos_mmblk_pool_create_dyn(&mpId, block_count, block_size);
+    mpId = (err == K_ERR_NONE) ? mpId : NULL;
   }
 
   return (osMemoryPoolId_t)mpId;
@@ -768,8 +777,12 @@ uint32_t osMemoryPoolGetSpace(osMemoryPoolId_t mp_id) {
 }
 osStatus_t osMemoryPoolDelete(osMemoryPoolId_t mp_id) {
   k_mmblk_pool_t* mpId = (k_mmblk_pool_t*)mp_id;
-
-  return errno_knl2cmsis(tos_mmblk_pool_destroy(mpId));
+    
+  if (knl_object_alloc_is_dynamic(&mpId->knl_obj)) {
+    return errno_knl2cmsis(tos_mmblk_pool_destroy_dyn(mpId));
+  } else {
+    return errno_knl2cmsis(tos_mmblk_pool_destroy(mpId));
+  }
 }
 
 /*---------------------------------------------------------------------------*/

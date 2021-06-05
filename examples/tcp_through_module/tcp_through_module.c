@@ -7,6 +7,9 @@
 //#define USE_BC26
 //#define USE_EC20
 //#define USE_EC200S
+//#define USE_AIR724
+//#define USE_L610
+//#define USE_EC600S
 
 #ifdef USE_ESP8266
 #include "esp8266.h"
@@ -26,6 +29,18 @@
 
 #ifdef USE_EC200S
 #include "ec200s.h"
+#endif
+
+#ifdef USE_AIR724
+#include "air724.h"
+#endif
+
+#ifdef USE_L610
+#include "l610.h"
+#endif
+
+#ifdef USE_EC600S
+#include "ec600s.h"
 #endif
 
 #define TCP_TEST_TASK0_STK_SIZE         4096
@@ -90,7 +105,7 @@ void application_entry(void *arg)
 {
 #if defined(USE_ESP8266)
     esp8266_sal_init(HAL_UART_PORT_0);
-    esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
+    esp8266_join_ap("Mculover666", "mculover666");
 #elif defined(USE_SIM800A)
     sim800a_power_on();
     sim800a_sal_init(HAL_UART_PORT_2);
@@ -99,7 +114,13 @@ void application_entry(void *arg)
 #elif defined(USE_EC20)
     ec20_sal_init(HAL_UART_PORT_0);
 #elif defined(USE_EC200S)
-    ec200s_sal_init(HAL_UART_PORT_2);
+    ec200s_sal_init(HAL_UART_PORT_0);
+#elif defined(USE_AIR724)
+    air724_sal_init(HAL_UART_PORT_0);
+#elif defined(USE_L610)
+    l610_sal_init(HAL_UART_PORT_0);
+#elif defined(USE_EC600S)
+    ec600s_sal_init(HAL_UART_PORT_0);
 #endif
     
     socket_id_0 = tos_sal_module_connect("117.50.111.72", "8080", TOS_SAL_PROTO_TCP); 

@@ -37,6 +37,8 @@ typedef struct sal_module_st {
 
     int (*connect)(const char *ip, const char *port, sal_proto_t proto);
 
+    int (*connect_with_size)(const char *ip, const char *port, sal_proto_t proto, size_t socket_buffer_size);
+
     int (*send)(int sock, const void *buf, size_t len);
 
     int (*recv_timeout)(int sock, void *buf, size_t len, uint32_t timeout);
@@ -108,6 +110,20 @@ int tos_sal_module_parse_domain(const char *host_name, char *host_ip, size_t hos
  * @return  socket id if succuss, -1 if failed.
  */
 int tos_sal_module_connect(const char *ip, const char *port, sal_proto_t proto);
+
+/**
+ * @brief Connect to remote host with socket buffer size.
+ *
+ * @attention None
+ *
+ * @param[in]   ip      ip address of the remote host
+ * @param[in]   port    port number of the remote host
+ * @param[in]   proto   protocol of the connection(TCP/UDP)
+ * @param[in]   socket_buffer_size  the buffer size of the socket
+ *
+ * @return  socket id if succuss, -1 if failed.
+ */
+int tos_sal_module_connect_with_size(const char *ip, const char *port, sal_proto_t proto, size_t socket_buffer_size);
 
 /**
  * @brief Send data to the remote host(TCP).

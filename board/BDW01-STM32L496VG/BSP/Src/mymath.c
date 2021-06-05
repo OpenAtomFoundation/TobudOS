@@ -232,12 +232,22 @@ void split(char *src,const char *separator,char **dest,int *num) {
     	*num = count;
 } 	
 
-
-
-
-
-
-
+/**************************************************************************** 
+src 原始经纬度字符串 2231.88560,11356.42075 前面纬度，后面经度
+lon 输出经度
+lat 输出纬度
+*****************************************************************************/
+void Lon_to_f(char *str, float * lon, float * lat)
+{
+	double longtitude,latitude;
+	int lon_inter=0,lat_inter=0;
+	sscanf(str, "%lf,%lf",&latitude,&longtitude);
+	lon_inter =longtitude/100;
+	*lon =(longtitude - lon_inter*100)/60+lon_inter;
+	
+	lat_inter =latitude/100;
+	*lat =(latitude - lat_inter*100)/60+lat_inter;
+}  
 
 
 

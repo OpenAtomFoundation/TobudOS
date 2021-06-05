@@ -1,11 +1,11 @@
 /**
- * @file   freertos_semaphore.h
+ * @file   TencentOS_semaphore.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_SEMAPHORE_H_
-#define _KERNEL_OS_FREERTOS_OS_SEMAPHORE_H_
+#ifndef _KERNEL_OS_TENCENT_OS_SEMAPHORE_H_
+#define _KERNEL_OS_TENCENT_OS_SEMAPHORE_H_
 
 #include "./TencentOS_Adapter/TencentOS_common.h"
 #include "tos_k.h"
@@ -42,4 +42,4 @@ static __always_inline void OS_SemaphoreSetInvalid(OS_Semaphore_t *sem)
 }
 #endif
 
-#endif /* _KERNEL_OS_FREERTOS_OS_SEMAPHORE_H_ */
+#endif /* _KERNEL_OS_TENCENT_OS_SEMAPHORE_H_ */

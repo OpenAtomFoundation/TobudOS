@@ -125,7 +125,7 @@ __API__ k_err_t tos_task_create(k_task_t *task,
     task->prio      = prio;
     task->stk_base  = stk_base;
     task->stk_size  = stk_size;
-    strncpy(task->name, name, K_TASK_NAME_MAX);
+    strncpy(task->name, name, K_TASK_NAME_LEN_MAX);
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
     task->timeslice_reload = timeslice;

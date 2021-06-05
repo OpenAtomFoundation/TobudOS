@@ -39,16 +39,16 @@ void Start_BH1750(void)
 ***************************************************************/
 float Convert_BH1750(void)
 {
-	float result_lx;
-	uint8_t BUF[2];
-	int result;
-	Start_BH1750();
-	HAL_Delay(180);
-	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
-	result=BUF[0];
-	result=(result<<8)+BUF[1];  //Synthetic Digital Illumination Intensity Data
-	result_lx=(float)(result/1.2);
-  return result_lx;
+    float result_lx;
+    uint8_t BUF[2];
+    int result;
+    Start_BH1750();
+    HAL_Delay(180);
+    HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
+    result=BUF[0];
+    result=(result<<8)+BUF[1];  //Synthetic Digital Illumination Intensity Data
+    result_lx=(float)(result/1.2);
+    return result_lx;
 }
 
 /***************************************************************
@@ -59,10 +59,9 @@ float Convert_BH1750(void)
 ***************************************************************/
 void SHT30_reset(void)
 {
-		uint8_t SHT3X_Resetcommand_Buffer[2]={0x30,0xA2}; //soft reset  
+    uint8_t SHT3X_Resetcommand_Buffer[2]={0x30,0xA2}; //soft reset  
     HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Resetcommand_Buffer,2,0x10);
     HAL_Delay(15);
-	
 }
 
 /***************************************************************
@@ -73,18 +72,17 @@ void SHT30_reset(void)
 ***************************************************************/
 void Init_SHT30(void)
 {
-		uint8_t SHT3X_Modecommand_Buffer[2]={0x22,0x36}; //periodic mode commands 
-		HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Modecommand_Buffer,2,0x10); //send periodic mode commands
-	
+    uint8_t SHT3X_Modecommand_Buffer[2]={0x22,0x36}; //periodic mode commands 
+    HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Modecommand_Buffer,2,0x10); //send periodic mode commands
 }
 
 /***************************************************************
 * 函数名称: SHT3x_CheckCrc
 * 说    明: 检查数据正确性
 * 参    数: data：读取到的数据
-						nbrOfBytes：需要校验的数量
-						checksum：读取到的校对比验值
-* 返 回 值: 校验结果，0-成功		1-失败
+            nbrOfBytes：需要校验的数量
+            checksum：读取到的校对比验值
+* 返 回 值: 校验结果，0-成功 1-失败
 ***************************************************************/
 uint8_t SHT3x_CheckCrc(char data[], char nbrOfBytes, char checksum)
 {
@@ -105,10 +103,9 @@ uint8_t SHT3x_CheckCrc(char data[], char nbrOfBytes, char checksum)
     }
 	
     if(crc != checksum)
-		return 1;
+        return 1;
     else
-		return 0;
-	
+        return 0;
 }
 
 /***************************************************************
@@ -120,7 +117,7 @@ uint8_t SHT3x_CheckCrc(char data[], char nbrOfBytes, char checksum)
 float SHT3x_CalcTemperatureC(unsigned short u16sT)
 {
 	
-    float temperatureC = 0;            // variable for result
+    float temperatureC = 0;     // variable for result
 
     u16sT &= ~0x0003;           // clear bits [1..0] (status bits)
     //-- calculate temperature [℃] --
@@ -139,7 +136,7 @@ float SHT3x_CalcTemperatureC(unsigned short u16sT)
 float SHT3x_CalcRH(unsigned short u16sRH)
 {
 	
-    float humidityRH = 0;              // variable for result
+    float humidityRH = 0;       // variable for result
 	
     u16sRH &= ~0x0003;          // clear bits [1..0] (status bits)
     //-- calculate relative humidity [%RH] --
@@ -157,49 +154,47 @@ float SHT3x_CalcRH(unsigned short u16sRH)
 ***************************************************************/
 void Init_Motor(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitTypeDef GPIO_InitStruct;
 
-  /* GPIO Ports Clock Enable */
-  IA1_Motor_GPIO_CLK_ENABLE();
+    /* GPIO Ports Clock Enable */
+    IA1_Motor_GPIO_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
-  E53_IA1_Data.MotorMode=0;
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = IA1_Motor_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(IA1_Motor_GPIO_Port, &GPIO_InitStruct);
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
+    E53_IA1_Data.MotorMode=0;
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = IA1_Motor_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(IA1_Motor_GPIO_Port, &GPIO_InitStruct);
 }
 
 void motor_control(char mode){
-  if(mode==1)
-  {
-     E53_IA1_Data.MotorMode=1;
-     HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_SET);
-  }
-  else if(mode==0)
-  {
-     E53_IA1_Data.MotorMode=0;
-     HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
-  }
-  
+    if(mode==1)
+    {
+        E53_IA1_Data.MotorMode=1;
+        HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_SET);
+    }
+    else if(mode==0)
+    {
+        E53_IA1_Data.MotorMode=0;
+        HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
+    }
 }
 
 
 void light_control(char mode){
-  if(mode==1)
-  {
-     E53_IA1_Data.LightMode=1;
-     HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_SET);
-  }
-  else if(mode==0)
-  {
-     E53_IA1_Data.LightMode=0;
-     HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
-  }
-  
+    if(mode==1)
+    {
+        E53_IA1_Data.LightMode=1;
+        HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_SET);
+    }
+    else if(mode==0)
+    {
+        E53_IA1_Data.LightMode=0;
+        HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
+    }
 }
 
 /***************************************************************
@@ -210,20 +205,20 @@ void light_control(char mode){
 ***************************************************************/
 void Init_Light(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitTypeDef GPIO_InitStruct;
 
-  /* GPIO Ports Clock Enable */
-  IA1_Light_GPIO_CLK_ENABLE();
+    /* GPIO Ports Clock Enable */
+    IA1_Light_GPIO_CLK_ENABLE();
 
-	 /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
-  E53_IA1_Data.LightMode=0;
-	 /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = IA1_Light_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(IA1_Light_GPIO_Port, &GPIO_InitStruct);
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
+    E53_IA1_Data.LightMode=0;
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = IA1_Light_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(IA1_Light_GPIO_Port, &GPIO_InitStruct);
 }
 /***************************************************************
 * 函数名称: Init_E53_IA1
@@ -234,7 +229,7 @@ void Init_Light(void)
 void Init_E53_IA1(void)
 {
     //printf("E53_sensor_board init!\n");
-   	MX_I2C1_Init();
+    MX_I2C1_Init();
     Init_BH1750();
     Init_SHT30();
     Init_Motor();
@@ -254,7 +249,7 @@ void E53_IA1_Read_Data(void)
     char  data[3];    //data array for checksum verification
     unsigned short tmp = 0;
     uint16_t dat;
-    uint8_t SHT3X_Fetchcommand_Bbuffer[2]={0xE0,0x00};								//read the measurement results
+    uint8_t SHT3X_Fetchcommand_Bbuffer[2]={0xE0,0x00};  //read the measurement results
     uint8_t SHT3X_Data_Buffer[6]; 																		//byte 0,1 is temperature byte 4,5 is humidity
 
     E53_IA1_Data.Lux=Convert_BH1750();																								//Read bh1750 sensor data 
@@ -287,6 +282,5 @@ void E53_IA1_Read_Data(void)
     }
     
 }
-
 
 

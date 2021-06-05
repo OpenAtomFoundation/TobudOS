@@ -21,9 +21,7 @@
 __CDECLS_BEGIN
 
 typedef struct k_stopwatch_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t   knl_obj;
-#endif
 
     k_tick_t    until;
 } k_stopwatch_t;

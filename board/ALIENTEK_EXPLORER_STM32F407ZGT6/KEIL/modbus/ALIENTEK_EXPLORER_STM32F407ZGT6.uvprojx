@@ -336,7 +336,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F407xx,USE_HAL_DRIVER,STM32F407xx</Define>
+              <Define>USE_HAL_DRIVER,STM32F407xx,USE_HAL_DRIVER,STM32F407xx,USE_MODBUS</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\components\connectivity\Modbus\3rdparty\freemodbus-v1.6\modbus\ascii;..\..\..\..\components\connectivity\Modbus\3rdparty\freemodbus-v1.6\modbus\functions;..\..\..\..\components\connectivity\Modbus\3rdparty\freemodbus-v1.6\modbus\include;..\..\..\..\components\connectivity\Modbus\3rdparty\freemodbus-v1.6\modbus\rtu;..\..\..\..\components\connectivity\Modbus\3rdparty\freemodbus-v1.6\modbus\tcp;..\..\..\..\components\connectivity\Modbus\porting\TencentOS_Tiny</IncludePath>
             </VariousControls>

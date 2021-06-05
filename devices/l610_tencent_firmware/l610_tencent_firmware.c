@@ -37,6 +37,7 @@ static int l610_echo_close(void)
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
+        tos_sleep_ms(1000);
     }
 
     return -1;
@@ -53,6 +54,7 @@ static int l610_sim_card_check(void)
         if (strstr(echo_buffer, "READY")) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
     
     return -1;
@@ -66,23 +68,21 @@ static int l610_signal_quality_check(void)
     int try = 0;
 	
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10) 
-    {
+    while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CSQ\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CSQ:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
 
     return -1;
@@ -95,22 +95,21 @@ static int l610_gsm_network_check(void)
     int try = 0;
 	
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10)
-    {
+    while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, "AT+CREG?\r\n");
         if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CREG:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CREG:%d,%d", &n, &stat);
         if (stat == 1) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
     return -1;	
 }
@@ -123,28 +122,25 @@ static int l610_gprs_network_check(void)
     int try = 0;
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-    while (try++ < 10)
-    {
+    while (try++ < 10) {
        
         tos_at_cmd_exec(&echo, 1000, "AT+CGREG?\r\n");
-        if (echo.status != AT_ECHO_STATUS_OK)
-        {
+        if (echo.status != AT_ECHO_STATUS_OK) {
             return -1;
         }
 
         str = strstr(echo.buffer, "+CGREG:");
-        if (!str) 
-        {
+        if (!str) {
             return -1;
         }
         sscanf(str, "+CGREG:%d,%d", &n, &stat);
-        if (stat == 1)
-        {
+        if (stat == 1) {
             return 0;
         }
+        tos_sleep_ms(2000);
     }
 		
-    return -1;	
+    return -1;
 }
 
 static int l610_set_data_format(void)
@@ -153,8 +149,7 @@ static int l610_set_data_format(void)
     
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+GTSET=\"IPRFMT\",0\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     
@@ -170,8 +165,7 @@ static int l610_check_apn(void)
     
     tos_at_echo_create(&echo, buffer, 64, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+MIPCALL?\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     
@@ -207,8 +201,7 @@ static int l610_check_close_apn(void)
 
     tos_at_echo_create(&echo, buffer, 64, NULL);
     tos_at_cmd_exec(&echo, 1000, "AT+MIPCALL=0\r\n");
-    if (echo.status != AT_ECHO_STATUS_OK)
-    {
+    if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
     
@@ -231,8 +224,7 @@ static int l610_set_apn(void)
 
     tos_at_echo_create(&echo, NULL, 0, "+MIPCALL");
     tos_at_cmd_exec_until(&echo, 10000, "AT+MIPCALL=1,\"CMNET\"\r\n");
-    if (echo.status != AT_ECHO_STATUS_EXPECT)
-    {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
     
@@ -249,12 +241,16 @@ static int l610_set_apn(void)
 int l610_tencent_firmware_module_info_set(device_info_t *info, tls_mode_t mode)
 {
     at_echo_t echo;
+    
+    if (!info) {
+        return -1;
+    }
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCDEVINFOSET:OK");
+    tos_at_echo_create(&echo, NULL, 0, "+TCDEVINFOSET: OK");
 
-    tos_at_cmd_exec(&echo, 2000, "AT+TCDEVINFOSET=%d,\"%s\",\"%s\",\"%s\"\r\n",
+    tos_at_cmd_exec_until(&echo, 2000, "AT+TCDEVINFOSET=%d,\"%s\",\"%s\",\"%s\"\r\n",
                         mode, info->product_id, info->device_name, info->device_serc);
-    if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
     return -1;
@@ -266,12 +262,12 @@ int l610_tencent_firmware_module_mqtt_conn(mqtt_param_t init_params)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTCONN:OK");
+    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTCONN: OK");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 2000, "AT+TCMQTTCONN=%d,%d,%d,%d,%d\r\n", init_params.tls_mode,
+        tos_at_cmd_exec_until(&echo, 2000, "AT+TCMQTTCONN=%d,%d,%d,%d,%d\r\n", init_params.tls_mode,
             init_params.command_timeout, init_params.keep_alive_interval_ms,
             init_params.clean_session, init_params.auto_connect_enable);
-        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+        if (echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
     }
@@ -295,17 +291,21 @@ int l610_tencent_firmware_module_mqtt_discon(void)
 int l610_tencent_firmware_module_mqtt_publ(const char *topic, qos_t qos, char *payload)
 {
     at_echo_t echo;
-
-    tos_at_echo_create(&echo, NULL, 0, ">");
-
-    tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload)-2);
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+    
+    if (!topic || !payload) {
         return -1;
     }
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB:OK");
-    tos_at_raw_data_send(&echo, 1000, (uint8_t *)payload, strlen(payload));
-    if (echo.status != AT_ECHO_STATUS_OK  && echo.status != AT_ECHO_STATUS_EXPECT) {
+    tos_at_echo_create(&echo, NULL, 0, ">");
+
+    tos_at_cmd_exec_until(&echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload)-2);
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
+        return -1;
+    }
+
+    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB: OK");
+    tos_at_raw_data_send_until(&echo, 1000, (uint8_t *)payload, strlen(payload));
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
 
@@ -316,11 +316,15 @@ int l610_tencent_firmware_module_mqtt_publ(const char *topic, qos_t qos, char *p
 int l610_tencent_firmware_module_mqtt_pub(const char *topic, qos_t qos, char *payload)
 {
     at_echo_t echo;
+    
+    if (!topic || !payload) {
+        return -1;
+    }
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB:OK");
+    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB: OK");
 
-    tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTPUB=\"%s\",%d,\"%s\"\r\n", topic, qos, payload);
-    if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+    tos_at_cmd_exec_until(&echo, 1000, "AT+TCMQTTPUB=\"%s\",%d,\"%s\"\r\n", topic, qos, payload);
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
     return -1;
@@ -329,11 +333,15 @@ int l610_tencent_firmware_module_mqtt_pub(const char *topic, qos_t qos, char *pa
 int l610_tencent_firmware_module_mqtt_sub(char *topic, qos_t qos)
 {
     at_echo_t echo;
+    
+    if (!topic) {
+        return -1;
+    }
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTSUB:OK");
+    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTSUB: OK");
 
-    tos_at_cmd_exec(&echo, 2000, "AT+TCMQTTSUB=\"%s\",%d\r\n", topic, qos);
-    if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+    tos_at_cmd_exec_until(&echo, 2000, "AT+TCMQTTSUB=\"%s\",%d\r\n", topic, qos);
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
     return -1;
@@ -342,11 +350,15 @@ int l610_tencent_firmware_module_mqtt_sub(char *topic, qos_t qos)
 int l610_tencent_firmware_module_mqtt_unsub(const char *topic)
 {
     at_echo_t echo;
+    
+    if (!topic) {
+        return -1;
+    }
 
-    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTUNSUB:OK");
+    tos_at_echo_create(&echo, NULL, 0, "+TCMQTTUNSUB: OK");
 
-    tos_at_cmd_exec(&echo, 2000, "AT+TCMQTTUNSUB=\"%s\"\r\n", topic);
-    if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+    tos_at_cmd_exec_until(&echo, 2000, "AT+TCMQTTUNSUB=\"%s\"\r\n", topic);
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
     return -1;
@@ -360,15 +372,13 @@ int l610_tencent_firmware_module_mqtt_state_get(mqtt_state_t *state)
     char echo_buffer[64];
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
-
     tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTSTATE?\r\n");
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
 
     str = strstr(echo.buffer, "+TCMQTTSTATE:");
-    if (!str) 
-    {
+    if (!str) {
         return -1;
     }
     sscanf(str, "+TCMQTTSTATE:%d", &ret_state);
@@ -402,10 +412,10 @@ static int l610_tencent_firmware_join_net(void)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, "OK");
+    tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 2) {
         tos_at_cmd_exec(&echo, 5000, "AT+TCREGNET?\r\n");
-        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+        if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
     }
@@ -473,8 +483,8 @@ int l610_tencent_firmware_ota_set(ota_mode_t mode, char *version)
 
     tos_at_echo_create(&echo, NULL, 0, "+TCOTASET:OK");
 
-    tos_at_cmd_exec(&echo, 2000, "AT+TCOTASET=%d,\"%s\"\r\n", mode, version);
-    if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+    tos_at_cmd_exec_until(&echo, 2000, "AT+TCOTASET=%d,\"%s\"\r\n", mode, version);
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
     return -1;
@@ -496,14 +506,12 @@ int l610_tencent_firmware_ota_read_fwinfo(ota_fw_info_t *ota_fw_info)
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "+TCFWINFO:");
 
-    tos_at_cmd_exec(&echo, 2000, "AT+TCFWINFO?\r\n");
-    if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+    tos_at_cmd_exec_until(&echo, 2000, "AT+TCFWINFO?\r\n");
+    if (echo.status == AT_ECHO_STATUS_EXPECT) {
         
         sscanf(echo_buffer, "%*[^\"]%*c%[^\"]%*[^,]%*c%[^,]%*[^\"]%*c%[^\"]", ota_fw_info->fw_version, FileSize, ota_fw_info->fw_md5);
-        for(int i = 0; i<10; i++)
-        {
-            if(FileSize[i] == 0)
-            {
+        for(int i = 0; i<10; i++) {
+            if(FileSize[i] == 0) {
                 break;
             }
             updateFileSize = updateFileSize*10 + (FileSize[i] - 0x30);

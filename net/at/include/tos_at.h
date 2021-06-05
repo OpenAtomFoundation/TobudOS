@@ -21,20 +21,16 @@
 #include "tos_k.h"
 #include "tos_hal.h"
 
-#define AT_AGENT_ECHO_OK            "OK"
-#define AT_AGENT_ECHO_FAIL          "FAIL"
-#define AT_AGENT_ECHO_ERROR         "ERROR"
+#define AT_DATA_CHANNEL_NUM                         6
+#define AT_DATA_CHANNEL_FIFO_BUFFER_DEFAULT_SIZE    (2048 + 1024)
 
-#define AT_DATA_CHANNEL_NUM                     6
-#define AT_DATA_CHANNEL_FIFO_BUFFER_SIZE        (2048 + 1024)
+#define AT_UART_RX_FIFO_BUFFER_SIZE                 (2048 + 1024)
+#define AT_RECV_CACHE_SIZE                          2048
 
-#define AT_UART_RX_FIFO_BUFFER_SIZE             (2048 + 1024)
-#define AT_RECV_CACHE_SIZE                      2048
+#define AT_CMD_BUFFER_SIZE                          512
 
-#define AT_CMD_BUFFER_SIZE                      512
-
-#define AT_PARSER_TASK_STACK_SIZE               2048
-#define AT_PARSER_TASK_PRIO                     2
+#define AT_PARSER_TASK_STACK_SIZE                   2048
+#define AT_PARSER_TASK_PRIO                         2
 
 typedef enum at_status_en {
     AT_STATUS_OK,
@@ -54,6 +50,9 @@ typedef enum at_parse_status_en {
     AT_PARSE_STATUS_EVENT,
     AT_PARSE_STATUS_EXPECT,
     AT_PARSE_STATUS_OVERFLOW,
+    AT_PARSE_STATUS_OK,
+    AT_PARSE_STATUS_FAIL,
+    AT_PARSE_STATUS_ERROR
 } at_parse_status_t;
 
 typedef enum at_echo_status_en {
@@ -79,6 +78,8 @@ typedef struct at_data_channel_st {
 
     at_channel_status_t status;
 
+    k_stopwatch_t       timer;
+
     const char         *remote_ip;
     const char         *remote_port;
 } at_data_channel_t;
@@ -92,6 +93,7 @@ typedef struct at_echo_st {
     size_t              __w_idx;
     int                 __is_expecting;
     k_sem_t             __expect_notify;
+    k_sem_t             __status_set_notify;
     int                 __is_fuzzy_match;
 } at_echo_t;
 
@@ -113,8 +115,6 @@ typedef struct at_agent_st {
     k_task_t        parser;
     at_cache_t      recv_cache;
 
-    k_stopwatch_t   timer;
-
     k_mutex_t       global_lock;
 
     char           *cmd_buf;
@@ -122,7 +122,7 @@ typedef struct at_agent_st {
 
     hal_uart_t      uart;
     k_mutex_t       uart_tx_lock;
-    k_mutex_t       uart_rx_lock;
+//    k_mutex_t       uart_rx_lock;
     k_sem_t         uart_rx_sem;
     k_chr_fifo_t    uart_rx_fifo;
     uint8_t        *uart_rx_fifo_buffer;
@@ -209,6 +209,23 @@ __API__ int tos_at_channel_alloc_id(int channel_id, const char *ip, const char *
  * @retval  none -1         the id of the channel.
  */
 __API__ int tos_at_channel_alloc(const char *ip, const char *port);
+
+/**
+ * @brief Allocate a channel.
+ * Allocate a channel with certain socket buffer size.
+ *
+ * @attention None
+ *
+ * @param[in]   channel_id          id of the channel.
+ * @param[in]   ip                  remote ip of the channel.
+ * @param[in]   port                remote port of the channel.
+ * @param[in]   socket_buffer_size  buffer size of the channel.
+ *
+ * @return  errcode
+ * @retval  -1              allocate failed(error).
+ * @retval  none -1         the id of the channel.
+ */
+__API__ int tos_at_channel_alloc_with_size(const char *ip, const char *port, size_t socket_buffer_size);
 
 /**
  * @brief Free a channel.
@@ -458,7 +475,7 @@ __API__ int tos_at_uart_drain(uint8_t *buffer, size_t buffer_len);
  *
  * @return  remote ip of the channel.
  */
-__API__ const char *tos_at_agent_channel_ip_get(int channel_id);
+__API__ const char *tos_at_channel_ip_get(int channel_id);
 
 /**
  * @brief Get the remote port of a channel.
@@ -470,7 +487,7 @@ __API__ const char *tos_at_agent_channel_ip_get(int channel_id);
  *
  * @return  remote port of the channel.
  */
-__API__ const char *tos_at_agent_channel_port_get(int channel_id);
+__API__ const char *tos_at_channel_port_get(int channel_id);
 
 #endif /* _TOS_AT_H_ */
 

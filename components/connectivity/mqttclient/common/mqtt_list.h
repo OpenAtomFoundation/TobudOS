@@ -2,11 +2,15 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-11 22:47:55
- * @LastEditTime: 2020-04-27 23:25:37
+ * @LastEditTime: 2020-10-17 14:18:02
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTT_LIST_H_
 #define _MQTT_LIST_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct mqtt_list_node {
     struct mqtt_list_node *next;
@@ -57,6 +61,10 @@ void mqtt_list_del_init(mqtt_list_t *entry);
 void mqtt_list_move(mqtt_list_t *node, mqtt_list_t *list);
 void mqtt_list_move_tail(mqtt_list_t *node, mqtt_list_t *list);
 int mqtt_list_is_empty(mqtt_list_t *list);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _LIST_H_ */
 

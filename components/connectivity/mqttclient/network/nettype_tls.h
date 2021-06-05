@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-11 19:45:44
- * @LastEditTime: 2020-05-24 17:03:13
+ * @LastEditTime: 2020-10-17 14:14:11
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -15,6 +15,10 @@
 #include "mqtt_log.h"
 
 #ifndef MQTT_NETWORK_TYPE_NO_TLS
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct nettype_tls_params {
     mbedtls_net_context         socket_fd;        /**< mbed TLS network context. */
@@ -35,5 +39,9 @@ int nettype_tls_connect(network_t* n);
 void nettype_tls_disconnect(network_t* n);
 
 #endif /* MQTT_NETWORK_TYPE_NO_TLS */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

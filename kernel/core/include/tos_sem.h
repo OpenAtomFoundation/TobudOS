@@ -23,9 +23,7 @@ __CDECLS_BEGIN
 #if TOS_CFG_SEM_EN > 0u
 
 typedef struct k_sem_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     pend_obj_t      pend_obj;
     k_sem_cnt_t     count;
@@ -60,6 +58,35 @@ __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_c
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count);
+
+/**
+ * @brief Create a dynamic semaphore with a limitation of maximum count.
+ * create a dynamic semaphore with a limitation of maximum count.
+ *
+ * @attention None
+ *
+ * @param[in]   sem         pointer to the pointer of the semaphore.
+ * @param[in]   init_count  initial count of the semaphore.
+ * @param[in]   max_count   maximum count of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_sem_create_max_dyn(k_sem_t **sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count);
+
+/**
+ * @brief Create a dynamic semaphore.
+ * create a dynamic semaphore.
+ *
+ * @attention None
+ *
+ * @param[in]   sem         pointer to the pointer of the semaphore.
+ * @param[in]   init_count  initial count of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_sem_create_dyn(k_sem_t **sem, k_sem_cnt_t init_count);
 
 /**
  * @brief Destroy a semaphore.

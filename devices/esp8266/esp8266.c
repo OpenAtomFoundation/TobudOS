@@ -13,10 +13,10 @@ static int esp8266_restore(void)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_echo_create(&echo, NULL, 0, "ready");
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 3000, "AT+RESTORE\r\n");
-        if (echo.status == AT_ECHO_STATUS_OK) {
+        tos_at_cmd_exec_until(&echo, 5000, "AT+RESTORE\r\n");
+        if (echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
     }
@@ -55,10 +55,10 @@ static int esp8266_net_mode_set(esp8266_net_mode_t mode)
             return -1;
     }
 
-    tos_at_echo_create(&echo, NULL, 0, "no change");
+    tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
         tos_at_cmd_exec(&echo, 1000, cmd);
-        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+        if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
     }
@@ -85,11 +85,13 @@ static int esp8266_multilink_set(esp8266_multilink_state_t state)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, "link is builded");
+    tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
         tos_at_cmd_exec(&echo, 500, "AT+CIPMUX=%d\r\n", state == ESP8266_MULTILINK_STATE_ENABLE ? 1 : 0);
-        if (echo.status == AT_ECHO_STATUS_OK || echo.status == AT_ECHO_STATUS_EXPECT) {
+        if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
+        } else if (echo.status == AT_ECHO_STATUS_ERROR) {
+            return -1;
         }
     }
     return -1;
@@ -100,10 +102,10 @@ int esp8266_join_ap(const char *ssid, const char *pwd)
     int try = 0;
     at_echo_t echo;
 
-    tos_at_echo_create(&echo, NULL, 0, "OK");
+    tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec_until(&echo, 15000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
-        if (echo.status == AT_ECHO_STATUS_EXPECT) {
+        tos_at_cmd_exec(&echo, 15000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
+        if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
     }
@@ -141,24 +143,22 @@ static int esp8266_connect(const char *ip, const char *port, sal_proto_t proto)
     int id;
     at_echo_t echo;
 
-    esp8266_reconnect_init();
-
     id = tos_at_channel_alloc(ip, port);
     if (id == -1) {
         return -1;
     }
 
-    tos_at_echo_create(&echo, NULL, 0, "OK");
+    tos_at_echo_create(&echo, NULL, 0, NULL);
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec_until(&echo, 10000,
+    tos_at_cmd_exec(&echo, 10000,
                         "AT+CIPSTART=\"%s\",\"%s\",%s\r\n",
                         proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, port);
 #else
-    tos_at_cmd_exec_until(&echo, 10000,
+    tos_at_cmd_exec(&echo, 10000,
                         "AT+CIPSTART=%d,\"%s\",\"%s\",%s\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", ip, port);
 #endif
-    if (echo.status == AT_ECHO_STATUS_EXPECT) {
+    if (echo.status == AT_ECHO_STATUS_OK) {
         return id;
     }
 
@@ -174,7 +174,7 @@ static int esp8266_recv_timeout(int id, void *buf, size_t len, uint32_t timeout)
 
 static int esp8266_recv(int id, void *buf, size_t len)
 {
-    return esp8266_recv_timeout(id, buf, len, (uint32_t)4000);
+    return tos_at_channel_read(id, buf, len);
 }
 
 static int esp8266_is_link_broken(const char *echo_buffer)
@@ -202,14 +202,14 @@ static int esp8266_send(int id, const void *buf, size_t len)
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), ">");
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec(&echo, 1000,
+    tos_at_cmd_exec_until(&echo, 5000,
                         "AT+CIPSEND=%d\r\n", len);
 #else
-    tos_at_cmd_exec(&echo, 1000,
+    tos_at_cmd_exec_until(&echo, 5000,
                         "AT+CIPSEND=%d,%d\r\n",
                         id, len);
 #endif
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         if (esp8266_is_link_broken((const char *)echo.buffer)) {
             tos_at_channel_set_broken(id);
         }
@@ -255,23 +255,23 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
 
     if (ip && port) {
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec_until(&echo, 1000,
                             "AT+CIPSEND=%d,\"%s\",%s\r\n", len, ip, port);
 #else
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec_until(&echo, 1000,
                             "AT+CIPSEND=%d,%d,\"%s\",%s\r\n", id, len, ip, port);
 #endif
     } else {
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec_until(&echo, 1000,
                             "AT+CIPSEND=%d\r\n", len);
 #else
-        tos_at_cmd_exec(&echo, 1000,
+        tos_at_cmd_exec_until(&echo, 1000,
                             "AT+CIPSEND=%d,%d\r\n", id, len);
 #endif
     }
 
-    if (echo.status != AT_ECHO_STATUS_OK && echo.status != AT_ECHO_STATUS_EXPECT) {
+    if (echo.status != AT_ECHO_STATUS_EXPECT) {
         if (esp8266_is_link_broken((const char *)echo.buffer)) {
             tos_at_channel_set_broken(id);
         }
@@ -312,10 +312,14 @@ static int esp8266_recvfrom(int id, void *buf, size_t len)
 
 static int esp8266_close(int id)
 {
+    at_echo_t echo;
+    
+    tos_at_echo_create(&echo, NULL, 0, NULL);
+    
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
-    tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE\r\n");
+    tos_at_cmd_exec(&echo, 1000, "AT+CIPCLOSE\r\n");
 #else
-    tos_at_cmd_exec(NULL, 1000, "AT+CIPCLOSE=%d\r\n", id);
+    tos_at_cmd_exec(&echo, 1000, "AT+CIPCLOSE=%d\r\n", id);
 #endif
     tos_at_channel_free(id);
     return 0;
@@ -431,6 +435,9 @@ __STATIC__ void esp8266_incoming_data_process(void)
         if (tos_at_uart_read(buffer, read_len) != read_len) {
             return;
         }
+        
+        //delay has two reason, wait for the data to be cached and untrigger scheduling
+        tos_stopwatch_delay(200);
 
         if (tos_at_channel_write(channel_id, buffer, read_len) <= 0) {
             return;
@@ -442,6 +449,7 @@ __STATIC__ void esp8266_incoming_data_process(void)
 
 at_event_t esp8266_at_event[] = {
     { "+IPD,", esp8266_incoming_data_process },
+    { "PD,", esp8266_incoming_data_process },
 };
 
 sal_module_t sal_module_esp8266 = {

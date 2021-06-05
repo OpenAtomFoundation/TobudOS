@@ -1,11 +1,11 @@
 /**
- * @file   freertos_time.h
+ * @file   TencentOS_time.h
  * @author LightningSemi WLAN Team
  * Copyright (C) 2018 LightningSemi Technology Co., Ltd. All rights reserved.
  */
 
-#ifndef _KERNEL_OS_FREERTOS_OS_TIME_H_
-#define _KERNEL_OS_FREERTOS_OS_TIME_H_
+#ifndef _KERNEL_OS_TENCENT_OS_TIME_H_
+#define _KERNEL_OS_TENCENT_OS_TIME_H_
 
 #include "./TencentOS_Adapter/TencentOS_common.h"
 #include "tos_k.h"
@@ -77,4 +77,4 @@ static __always_inline TickType_t OS_CalcWaitTicks(OS_Time_t msec)
 }
 #endif
 
-#endif /* _KERNEL_OS_FREERTOS_OS_TIME_H_ */
+#endif /* _KERNEL_OS_TENCENT_OS_TIME_H_ */

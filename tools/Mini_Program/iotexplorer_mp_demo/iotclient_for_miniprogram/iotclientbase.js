@@ -56,8 +56,6 @@ class AbstractClient {
 
     console.log(fullurl);
 
-    //test only
-    //fullurl = "https://iotexplorer.tencentcloudapi.com/?MinTime=1565143200000&Version=2019-04-23&Limit=5&Signature=f7XvqSPaZVEvm7wh7QTpJMvZR0k%3D&Action=DescribeDeviceDataHistory&MaxTime=1565172000000&ProductId=NCW38M7KGT&Nonce=11171&DeviceName=dev001&Timestamp=1565235840&SecretId=AKIDzjBSUzl3f18yXpiGaOxGH2WtzWmlLv63&FieldName=color";
 
     wx.request({
       url: fullurl, 

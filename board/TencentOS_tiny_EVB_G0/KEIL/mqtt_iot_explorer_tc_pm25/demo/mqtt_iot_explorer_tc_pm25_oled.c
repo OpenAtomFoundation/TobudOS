@@ -3,13 +3,47 @@
 #include "tencent_firmware_module_wrapper.h"
 #include "pm2d5_parser.h"
 #include "oled.h"
+#include "math.h"
 
+#define WIFI_SSID               "Tencent-GuestWiFi"
+#define WIFI_PASSWD             ""
+#define PRODUCT_ID              "ZLC54JVTAH"
+#define DEVICE_NAME             "node_20DEBC0A0000"
+#define DEVICE_KEY              "QXiswx4I1T+bZyHOrHvaqg=="
 
-#define PRODUCT_ID              "XOEHGW66ZD"
-#define DEVICE_NAME             "pm0001"
-#define DEVICE_KEY              "pVziOcDry+iOwcgP3kWCCw=="
+//#define REPORT_DATA_TEMPLATE1    "{\"method\":\"report\",\"clientToken\":\"%s\"," \
+//    "\"params\":{\"PM1_CF1\":%d,"	\
+//    "\"PM2d5_CF1\":%d," \
+//    "\"PM10_CF1\":%d," \
+//    "\"PM1\":%d," \
+//    "\"PM2d5\":%d," \
+//    "\"PM10\":%d," \
+//    "\"particles_0d3\":%d," \
+//    "\"particles_0d5\":%d,"	\
+//    "\"particles_1\":%d," \
+//    "\"particles_2d5\":%d," \
+//    "\"particles_5\":%d," \
+//    "\"particles_10\":%d," \
+//    "\"version\":%d," \
+//    "\"Error\":%d" \
+//    "}}"
 
-#define REPORT_DATA_TEMPLATE    "{\\\"method\\\":\\\"report\\\"\\,\\\"clientToken\\\":\\\"00000001\\\"\\,\\\"params\\\":{\\\"Pm2d5Value\\\":%d}}"
+#define REPORT_DATA_TEMPLATE    "{\"method\":\"report\",\"clientToken\":\"%s\"," \
+    "\"params\":{\"a\":%d,"	\
+    "\"b\":%d," \
+    "\"c\":%d," \
+    "\"d\":%d," \
+    "\"e\":%d," \
+    "\"f\":%d," \
+    "\"g\":%d," \
+    "\"h\":%d,"	\
+    "\"i\":%d," \
+    "\"j\":%d," \
+    "\"k\":%d," \
+    "\"l\":%d," \
+    "\"v\":%d," \
+    "\"ec\":%d" \
+    "}}"
 
 void default_message_handler(mqtt_message_t* msg)
 {
@@ -20,7 +54,7 @@ void default_message_handler(mqtt_message_t* msg)
     printf("---------------------------------------------------------\r\n");
 }
 
-char payload[256] = {0};
+char payload[1024] = {0};
 static char report_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 static char report_reply_topic_name[TOPIC_NAME_MAX_SIZE] = {0};
 
@@ -28,11 +62,19 @@ k_mail_q_t mail_q;
 pm2d5_data_u pm2d5_value;
 uint8_t pm2d5_value_pool[3 * sizeof(pm2d5_data_u)];
 
+void generate_client_token(char* buffer, size_t size)
+{
+    long client_token_value;
+    
+    memset(buffer, 0, size);
+    client_token_value = ((long)tos_systick_get()) % (long)(pow(10, size));
+    snprintf(buffer, size, "%ld", client_token_value);
+}
+
 void mqtt_demo_task(void)
 {
     int ret = 0;
     int size = 0;
-    mqtt_state_t state;
     int  i = 0;    
     char *product_id = PRODUCT_ID;
     char *device_name = DEVICE_NAME;
@@ -42,11 +84,8 @@ void mqtt_demo_task(void)
     memset(&dev_info, 0, sizeof(device_info_t));
     char str[16];   
     size_t mail_size;
-
-    
-    
-    /* OLED显示日志 */
-    OLED_ShowString(0, 2, (uint8_t*)"connecting...", 16);
+    uint8_t report_error_count = 0;
+    char client_token[10];
 
     /**
      * Please Choose your AT Port first, default is HAL_UART_2(USART2)
@@ -55,24 +94,36 @@ void mqtt_demo_task(void)
     
     if (ret < 0) {
         printf("esp8266 tencent firmware sal init fail, ret is %d\r\n", ret);
+        return;
     }
     
-    esp8266_tencent_firmware_join_ap("Supowang", "13975426138");
-
+    OLED_Clear();
+    sprintf(str, "Connecting WIFI...");
+    OLED_ShowString(0, 0, (uint8_t*)str, 16);
+    while (1) {
+        if ( esp8266_tencent_firmware_join_ap(WIFI_SSID, WIFI_PASSWD) == 0) {
+            printf("module WIFI connect success\n");
+            break;
+        }
+        printf("module WIFI connect fail\n");
+        tos_sleep_ms(2000);
+    }
+    
+    OLED_Clear();
+    sprintf(str, "Connecting IoT Explorer...");
+    OLED_ShowString(0, 0, (uint8_t*)str, 16);
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
     strncpy(dev_info.device_name, device_name, DEVICE_NAME_MAX_SIZE);
     strncpy(dev_info.device_serc, key, DEVICE_SERC_MAX_SIZE);
     tos_tf_module_info_set(&dev_info, TLS_MODE_PSK);
-
     mqtt_param_t init_params = DEFAULT_MQTT_PARAMS;
-    if (tos_tf_module_mqtt_conn(init_params) != 0) {
-        printf("module mqtt conn fail\n");
-    } else {
-        printf("module mqtt conn success\n");
-    }
-
-    if (tos_tf_module_mqtt_state_get(&state) != -1) {
-        printf("MQTT: %s\n", state == MQTT_STATE_CONNECTED ? "CONNECTED" : "DISCONNECTED");
+    while (1) {
+        if (tos_tf_module_mqtt_conn(init_params) == 0) {
+            printf("module mqtt connect success\n");
+            break;
+        }
+        printf("module mqtt connect fail\n");
+        tos_sleep_ms(5000);
     }
     
     /* 开始订阅topic */
@@ -116,33 +167,47 @@ void mqtt_demo_task(void)
             printf("data[%d]:%d ug/m3\r\n", i+1, pm2d5_value.data[i]);
         }
         
-        //显示PM2.5的值
+        /* 显示PM2.5的值 */
         OLED_Clear();
-        sprintf(str, "PM1.0:%4d ug/m3", pm2d5_value.pm2d5_data.data1);
-        OLED_ShowString(0,0,(uint8_t*)str,16);
         sprintf(str, "PM2.5:%4d ug/m3", pm2d5_value.pm2d5_data.data2);
-        OLED_ShowString(0,2,(uint8_t*)str,16);
-				
+        OLED_ShowString(0,0,(uint8_t*)str,16);
         
         /* 上报值 */
-        memset(payload, 0, sizeof(payload));
-        snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, pm2d5_value.pm2d5_data.data2);
+        generate_client_token(client_token, sizeof(client_token));
+        memset(payload, 0, 1024);
+        snprintf(payload, 1024, REPORT_DATA_TEMPLATE, client_token,
+                pm2d5_value.pm2d5_data.data1, pm2d5_value.pm2d5_data.data2,
+                pm2d5_value.pm2d5_data.data3, pm2d5_value.pm2d5_data.data4,
+                pm2d5_value.pm2d5_data.data5, pm2d5_value.pm2d5_data.data6,                
+                pm2d5_value.pm2d5_data.data7, pm2d5_value.pm2d5_data.data8,
+                pm2d5_value.pm2d5_data.data9, pm2d5_value.pm2d5_data.data10,
+                pm2d5_value.pm2d5_data.data11, pm2d5_value.pm2d5_data.data12,
+                2, pm2d5_value.pm2d5_data.err_code);
         
-        
-        if (tos_tf_module_mqtt_pub(report_topic_name, QOS0, payload) != 0) {
-            printf("module mqtt pub fail\n");
-            break;
+        if (tos_tf_module_mqtt_publ(report_topic_name, QOS0, payload) != 0) {
+            report_error_count++;
+            printf("module mqtt publ fail, count: %d\n", report_error_count);
+            sprintf(str, "# report fail");
+            OLED_ShowString(0,2,(uint8_t*)str,16);
         } else {
-            printf("module mqtt pub success\n");
+            report_error_count = 0;
+            printf("module mqtt publ success\n");
+            sprintf(str, "# report ok");
+            OLED_ShowString(0,2,(uint8_t*)str,16);
         }
-        
+
+        if (report_error_count >= 6) {
+            HAL_NVIC_SystemReset();
+        }
+             
         tos_sleep_ms(5000);
+        
     }
 }
 
 void application_entry(void *arg)
 {
-    char *str = "TencentOS-tiny";
+    char *str = "TencentOS-Tiny";
     
     /* 初始化OLED */
     OLED_Init();

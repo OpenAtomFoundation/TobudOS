@@ -22,9 +22,14 @@
 __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count)
 {
     TOS_PTR_SANITY_CHECK(sem);
-
+    
+    if (unlikely(init_count > max_count)) {
+        init_count = max_count;
+    }
+    
     sem->count      = init_count;
     sem->count_max  = max_count;
+    
     pend_object_init(&sem->pend_obj);
     TOS_OBJ_INIT(sem, KNL_OBJ_TYPE_SEMAPHORE);
 
@@ -34,6 +39,40 @@ __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_c
 __API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count)
 {
     return tos_sem_create_max(sem, init_count, (k_sem_cnt_t)-1);
+}
+
+__API__ k_err_t tos_sem_create_max_dyn(k_sem_t **sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count)
+{
+    k_sem_t *the_sem;
+
+    TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(sem);
+
+    if (unlikely(init_count > max_count)) {
+        init_count = max_count;
+    }
+
+    the_sem = tos_mmheap_calloc(1, sizeof(k_sem_t));
+    if (!the_sem) {
+        return K_ERR_SEM_OUT_OF_MEMORY;
+    }
+
+    the_sem->count = init_count;
+    the_sem->count_max = max_count;
+
+    pend_object_init(&the_sem->pend_obj);
+    TOS_OBJ_INIT(the_sem, KNL_OBJ_TYPE_SEMAPHORE);
+    
+    knl_object_alloc_set_dynamic(&the_sem->knl_obj);
+
+    *sem = the_sem;
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_sem_create_dyn(k_sem_t **sem, k_sem_cnt_t init_count)
+{
+    return tos_sem_create_max_dyn(sem, init_count, (k_sem_cnt_t)-1);
 }
 
 __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
@@ -49,7 +88,12 @@ __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
 
     pend_object_deinit(&sem->pend_obj);
 
-    TOS_OBJ_DEINIT(sem);
+    if (knl_object_alloc_is_dynamic(&sem->knl_obj)) {
+        TOS_OBJ_DEINIT(sem);
+        tos_mmheap_free(sem);
+    } else {
+        TOS_OBJ_DEINIT(sem);
+    }
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

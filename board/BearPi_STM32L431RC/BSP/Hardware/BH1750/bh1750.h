@@ -30,7 +30,7 @@ typedef struct
 void BH1750_Init(void);								  //IO初始化，
 void BH1750_Start(void);			//上电，设置清除数据寄存器
 //void BH1750_Read(void);                               //连续的读取内部寄存器数据
-float BH1750_Convert(void);
+__weak float BH1750_Convert(void);
 #endif
 
 

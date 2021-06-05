@@ -93,7 +93,7 @@ typedef struct mqtt_message_handlers_st {
 
 extern k_mail_q_t mqtt_message_mail;
 
-#define DEFAULT_MQTT_PARAMS { TLS_MODE_PSK, MQTT_COMMAND_TIMEOUT, 240, 1, 1 }
+#define DEFAULT_MQTT_PARAMS { TLS_MODE_PSK, MQTT_COMMAND_TIMEOUT, 240, 1, 0 }
 
 typedef struct device_info_st {
     char product_id[PRODUCT_ID_MAX_SIZE + 1];

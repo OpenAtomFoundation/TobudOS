@@ -20,7 +20,8 @@
 
 __CDECLS_BEGIN
 
-#define K_TASK_NAME_MAX                 (16u)
+#define K_TASK_NAME_LEN_MAX             (15u)
+#define K_TASK_NAME_MAX                 (K_TASK_NAME_LEN_MAX + 1)
 #define K_TASK_STK_SIZE_MIN             (sizeof(cpu_context_t))
 
 // task state is just a flag, indicating which manager list we are in.

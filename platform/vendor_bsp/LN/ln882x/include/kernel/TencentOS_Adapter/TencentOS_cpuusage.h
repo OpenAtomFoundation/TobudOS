@@ -1,5 +1,5 @@
-#ifndef _FREERTOS_CPUUSAGE_H__
-#define _FREERTOS_CPUUSAGE_H__
+#ifndef _TENCENTOS_CPUUSAGE_H__
+#define _TENCENTOS_CPUUSAGE_H__
 
 #include "./TencentOS_Adapter/tos_common.h"
 
@@ -21,4 +21,4 @@ uint16_t osGetCPUUsage (void);
 }
 #endif
 
-#endif /* _FREERTOS_CPUUSAGE_H__ */
+#endif /* _TENCENTOS_CPUUSAGE_H__ */

@@ -17,7 +17,7 @@ __weak void application_entry(void *arg)
 int main(void)
 {
     board_init();
-    printf("Welcome to TencentOS tiny\r\n");
+    printf("Welcome to TencentOS tiny(%s)\r\n", TOS_VERSION);
     osKernelInitialize(); // TOS Tiny kernel initialize
     osThreadCreate(osThread(application_entry), NULL); // Create TOS Tiny task
     osKernelStart(); // Start TOS Tiny

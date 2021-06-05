@@ -156,7 +156,7 @@ static int pm2d5_parser_read_raw_data(pm2d5_raw_data_u *pm2d5_raw_data, pm2d5_da
     
     /* ´æ´¢´«¸ĞÆ÷Öµ */
     for (i = 0; i < sizeof(pm2d5_data_t); i++) {
-        pm2d5_data->data[i] = pm2d5_raw_data->data[i];
+        pm2d5_data->data[i] = (pm2d5_raw_data->data[i*2] << 8) | pm2d5_raw_data->data[i*2 + 1];
     }
     
     return 0;

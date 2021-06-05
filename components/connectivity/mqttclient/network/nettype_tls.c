@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-11 19:45:35
- * @LastEditTime: 2020-05-24 17:03:47
+ * @LastEditTime: 2020-09-20 14:29:06
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "nettype_tls.h"
@@ -207,7 +207,6 @@ int nettype_tls_write(network_t *n, unsigned char *buf, int len, int timeout)
     
     nettype_tls_params_t *nettype_tls_params = (nettype_tls_params_t *) n->nettype_tls_params;
 
-    platform_timer_init(&timer);
     platform_timer_cutdown(&timer, timeout);
 
     do {
@@ -235,7 +234,6 @@ int nettype_tls_read(network_t *n, unsigned char *buf, int len, int timeout)
     
     nettype_tls_params_t *nettype_tls_params = (nettype_tls_params_t *) n->nettype_tls_params;
 
-    platform_timer_init(&timer);
     platform_timer_cutdown(&timer, timeout);
     
     do {

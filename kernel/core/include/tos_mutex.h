@@ -23,9 +23,7 @@ __CDECLS_BEGIN
 #if TOS_CFG_MUTEX_EN > 0u
 
 typedef struct k_mutex_st {
-#if TOS_CFG_OBJECT_VERIFY_EN > 0u
     knl_obj_t       knl_obj;
-#endif
 
     pend_obj_t      pend_obj;
     k_nesting_t     pend_nesting;
@@ -46,6 +44,19 @@ typedef struct k_mutex_st {
  * @retval  #K_ERR_NONE                   return successfully.
  */
 __API__ k_err_t tos_mutex_create(k_mutex_t *mutex);
+
+/**
+ * @brief Create a dynamic mutex.
+ * create a dynamic mutex.
+ *
+ * @attention None
+ *
+ * @param[in]   mutex       pointer to the pointer of the mutex.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex);
 
 /**
  * @brief Destroy a mutex.

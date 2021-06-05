@@ -50,6 +50,8 @@ typedef enum k_err_en {
     K_ERR_MMBLK_POOL_EMPTY,
     K_ERR_MMBLK_INVALID_BLK_SIZE,
     K_ERR_MMBLK_INVALID_POOL_ADDR,
+    K_ERR_MMBLK_POOL_OUT_OF_MEMORY,
+    K_ERR_MMBLK_OUT_OF_MEMORY,
 
     K_ERR_MMHEAP_INVALID_POOL_ADDR              = 800u,
     K_ERR_MMHEAP_INVALID_POOL_SIZE,
@@ -124,6 +126,10 @@ typedef enum k_err_en {
     K_ERR_TIMER_INVALID_OPT,
     K_ERR_TIMER_STOPPED,
     K_ERR_TIMER_RUNNING,
+
+    K_ERR_SEM_OUT_OF_MEMORY                     = 2200u,
+
+    K_ERR_MUTEX_OUT_OF_MEMORY                   = 2300u,
 } k_err_t;
 
 #endif /* _TOS_ERR_H_ */

@@ -8,63 +8,62 @@
 
 ![](https://img.shields.io/badge/platform-Linux|Windows|Mac|Embedded-orange.svg)
 
-[English Documents](README.md)
-
+[中文说明](README_CN.md)
 # mqttclient
 
-**一个高性能、高稳定性的跨平台MQTT客户端**
+**A high-performance, high-stability, cross-platform MQTT client**
 
-一个高性能、高稳定性的跨平台MQTT客户端，基于socket API之上开发，可以在嵌入式设备（FreeRTOS/LiteOS/RT-Thread/TencentOS tiny）、Linux、Windows、Mac上使用，拥有非常简洁的API接口，以极少的资源实现QOS2的服务质量，并且无缝衔接了mbedtls加密库。
+A high-performance, high-stability, cross-platform MQTT client, developed based on the socket API, can be used on embedded devices (FreeRTOS/LiteOS/RT-Thread/TencentOS tiny), Linux, Windows, Mac, and has a very concise The API interface realizes the quality of service of QOS2 with very few resources, and seamlessly connects the mbedtls encryption library.
 
-## 优势：
+## Advantage:
 
-- **具有极高的稳定性**：无论是**掉线重连**，**丢包重发**，都是**严格遵循MQTT协议标准**执行，除此之外对**大数据量**的测试无论是收是发，都是非常稳定，**高频**测试也是非常稳定。
+- **Extremely high stability**: Whether it is **drop and reconnect**, **packet loss and retransmission**, it is **strictly abide by the MQTT protocol standard**, in addition to The test of **large data volume** is very stable whether it is receiving or sending, and the **high frequency** test is also very stable.
 
-- **轻量级**：整个代码工程极其简单，不使用mbedtls情况下，占用资源极少，作者曾使用esp8266模组与云端通信，整个工程代码消耗的RAM不足15k。
+- **Lightweight**: The entire code project is extremely simple. Without mbedtls, it takes up very few resources. The author used the esp8266 module to communicate with the cloud. The entire project code consumes less than 15k of RAM.
 
-- **支持mbedtls加密传输**，让网络传输更加安全，而且接口层完全不需要用户理会，无论是否加密，mqttclient对用户提供的API接口是**固定**的，这就很好的兼容了一套代应用层的码可以加密传输也可以不加密传输。
+- **Support mbedtls encrypted transmission**, make the network transmission more secure, and the interface layer does not require users to care, no matter whether it is encrypted or not, mqttclient is **fixed** for the API interface provided by the user, which is very compatible A set of codes on behalf of the application layer can be transmitted with or without encryption.
 
-- **支持多客户端**，同时兼容多个客户端运行工作，一个设备连接多个的服务器。
+- **Supports multiple clients**, compatible with multiple clients running at the same time, one device connected to multiple servers.
 
-- **支持同步异步处理**，应用程序无需阻塞等待浪费CPU资源。
+- **Supports synchronous and asynchronous processing**, applications need not block and wait to waste CPU resources.
 
-- **支持拦截器配置**，在某些平台中，客户端会默认自动订阅系统主题，而且每次来自服务器的主题都是变动的，此时需要使用拦截器进行拦截，分离主题与数据信息，并递交给用户，极大提高灵活性。
+- **Support interceptor configuration**, on some platforms, the client will automatically subscribe to the system theme by default, and the theme from the server changes every time. In this case, you need to use an interceptor to intercept and separate the theme and data Information and deliver it to users, greatly improving flexibility.
 
-- **拥有在线代码生成工具**，极其简单配置就可以生成对应的代码，地址：[https://jiejietop.gitee.io/mqtt/index.html](https://jiejietop.gitee.io/mqtt/index.html)
+- **With online code generation tool**, the code can be generated with extremely simple configuration, address: [https://jiejietop.gitee.io/mqtt/index.html](https://jiejietop.gitee.io/mqtt/index.html)
 
-- **拥有极简的API接口**，总的来说，mqttclient的配置都有默认值，基本无需配置都能使用的，也可以随意配置，对配置都有健壮性检测，这样子设计的API接口也是非常简单。
+- **Has a very simple API interface**, in general, mqttclient configuration has default values, basically can be used without configuration, can also be arbitrarily configured, the configuration has robustness detection, so designed The API interface is also very simple.
 
-- **多功能参数可配置可裁剪**，重连时间间隔、心跳周期、最大订阅数量、命令超时、读写缓冲区大小、拦截器处理等等参数功能可裁剪可配置，满足开发者再复杂、简单等各种开发环境下的使用需求。
+- **Multifunctional parameters can be configured and tailored**, reconnect time interval, heartbeat period, maximum number of subscriptions, command timeout, read and write buffer size, interceptor processing, etc. Parameters can be tailored and configurable to meet the needs of developers Complex and simple to use in various development environments.
 
-- **支持自动重新订阅主题**，在自动重连后保证主题不会丢失。
+- **Support automatic re-subscription of topics**, after automatic reconnection to ensure that the topics will not be lost.
 
-- **支持主题通配符`“#”、“+”`**。
+- **Support theme wildcards ""#", "+"`**.
 
-- **订阅的主题与消息处理完全分离**，让编程逻辑更加简单易用，用户无需理会错综复杂的逻辑关系。
+- **Subscribed topics are completely separated from message processing**, making programming logic easier and easier to use, users don’t have to deal with intricate logical relationships.
 
-- **mqttclient内部已实现保活处理机制**，无需用户过多关心理会，用户只需专心处理应用功能即可。
+- **The keep-alive processing mechanism has been implemented in mqttclient**, without the user having to deal with the psychological experience, the user only needs to concentrate on the application function.
 
-- **拥有非常好的设计**，以极少的资源设计了**记录机制**，当报文在丢失的时候进行重发操作，确保qos1、qos2服务质量等级的报文保证其服务质量。
+- **Has a very good design**, designed the **recording mechanism** with very few resources, and retransmits the message when it is lost to ensure that the qos1 and qos2 service quality levels guarantee its service quality.
 
-- **有非常好的代码风格与思想**：整个代码采用分层式设计，代码实现采用异步处理的思想，降低耦合，提高性能。
+- **There are very good code styles and ideas**: The whole code adopts a layered design, and the code implementation adopts the idea of ​​asynchronous processing to reduce coupling and improve performance.
 
-- **基于标准BSD socket之上开发**，只要是兼容BSD socket的系统均可使用。
+- **Developed on top of standard BSD socket**, as long as it is compatible with BSD socket system.
 
-- **无缝衔接salof**：它是一个同步异步日志输出框架，在空闲时候输出对应的日志信息，也可以将信息写入flash中保存，方便调试。
+- **Seamless connection of salof**: It is a synchronous and asynchronous log output framework. It outputs the corresponding log information when it is idle, and it can also write the information into flash to save it, which is convenient for debugging.
 
-- **使用著名的 paho mqtt 库封包**。
+- **Use the famous paho mqtt library package**.
 
-- **无其他依赖**。
+- **No other dependencies**.
 
-## 在线代码生成工具
+## Online code generation tool
 
-本项目拥有代码生成工具，只需要在线配置即可生成代码，极其简单易用，代码生成工具地址：[https://jiejietop.gitee.io/mqtt/index.html](https://jiejietop.gitee.io/mqtt/index.html)
+This project has a code generation tool that only requires online configuration to generate code, which is extremely simple and easy to use. The code generation tool address is: [https://jiejietop.gitee.io/mqtt/index.html](https://jiejietop.gitee.io/mqtt/index.html)
 
-![在线代码生成工具](png/mqtt-tool.png)
+![Online code generation tool](png/mqtt-tool.png)
 
-## 占用资源大小
+## occupied resource size
 
-总计占 **10857字节** 的ROM，而RAM的开销则几乎只依赖动态内存，在不使用TLS加密传输的情况下，维持QOS0服务质量等级的通信动态内存大约仅需要**3694**字节，这包括1024读缓冲区 + 1024写缓冲区 + 1024内部线程栈大小，相对于其他MQTT客户端来说，mqttclient需要的RAM资源开销极少。
+A total of **10857 bytes** of ROM, and the overhead of RAM is almost only dependent on dynamic memory. Without using TLS encrypted transmission, the communication dynamic memory that maintains the QOS0 quality of service level requires only about **3694** bytes. Including 1024 read buffer + 1024 write buffer + 1024 internal thread stack size, compared with other MQTT clients, mqttclient requires very little RAM resource overhead.
 
 | Code | RO Data | RW Data | ZI Data | Object Name |
 | -- | -- | -- | -- | -- |
@@ -87,125 +86,124 @@
 | - | - | - | - | - |
 | 10066  | 791 | 8 | 0 | total |
 
-## 整体框架
+## Overall framework
 
-拥有非常明确的分层框架。
+Has a very clear layered framework.
 
-![整体框架](png/mqttclient.png)
+![Overall Frame](png/mqttclient.png)
 
-- 在框架的最上方是**API**函数接口，实现了客户端的**申请、释放、设置参数、连接服务器、断开连接、订阅主题、取消订阅主题、发布消息**等函数接口。
+- At the top of the framework is the **API** function interface, which implements the client's **application, release, set parameters, connect to the server, disconnect, subscribe topic, unsubscribe topic, publish message** and other functional interfaces.
 
-- 使用了著名的**paho mqtt**库作为MQTT报文封包库。
+- The famous **paho mqtt** library is used as the MQTT message packet library.
 
-- 采用异步处理的机制去管理所有的ack，它在发送报文的时候不用等待服务器的应答，只是记录下来，在收到服务器的ack后，取消这个记录，**效率极高**；而在发送mqtt报文（QoS1/QoS2）的时候没有收到服务器的应答时，将**重发**该报文。
+- Asynchronous processing mechanism is used to manage all the acks. It does not need to wait for the server's response when sending the message, but only records it. After receiving the server's ack, cancel this record, **very efficient**; and When the mqtt message (QoS1/QoS2) is sent and no response is received from the server, the message will be **retransmitted**.
 
-- 内部实现了一个**mqtt yield**线程，统一处理所有的内容，比如**超时的处理、ack报文的处理、收到来自服务器的publish报文**，此时会去调用回调函数告知用户收到的数据，**发布释放、发布完成报文的处理、心跳报文（保持活性），当与服务器断开连接时需要尝试重连、重新订阅主题，重新发送报文或者应答**等。
+- An **mqtt yield** thread is implemented internally to handle all content in a unified manner, such as **timeout processing, ack message processing, and receiving publish message from the server**, at this time the callback function will be called Inform the user of the data received, **post release, post completion message processing, heartbeat message (keep alive), when disconnected from the server, you need to try to reconnect, resubscribe to the topic, resend the message or reply* *Wait.
 
-- 报文的处理，如**读写报文、解码mqtt报文、设置报文（dup标记）、销毁报文**等操作。
+- Message processing, such as **reading and writing messages, decoding mqtt messages, setting messages (dup flag), destroying messages** and other operations.
 
-- **network**是网络组件，它可以**自动选择数据通道**，如果是加密方式则通过**tls加密**进行数据传输，而tls可以选择mbedtls作为加密后端；也可以是**tcp直连**方式，最终都是通过tcp传输的。
+- **network** is a network component, which can **automatically select a data channel**, if it is an encryption method, **tls encryption** is used for data transmission, and tls can choose mbedtls as the encryption backend; it can also be The **tcp direct connection** method is ultimately transmitted via tcp.
 
-- **platform**是平台抽象层，封装了不同系统的东西，比如**socke或者AT，线程、时间、互斥锁、内存管理**，这些是与系统打交道的，也是跨平台必要的封装。
+- **platform** is a platform abstraction layer that encapsulates things from different systems, such as socke or AT, thread, time, mutex, memory management**, these are dealing with the system and are also necessary for cross-platform Package.
 
-- 最右边的则是通用的内容，**list的处理、日志库、错误处理、软件随机数发生器**等。
+- On the far right is the general content, **list processing, log library, error handling, software random number generator**, etc.
 
-## 支持的平台
+## Supported platforms
 
-**目前已实现了Linux、TencentOS tiny、FreeRTOS、RT-Thread平台（已做成软件包，名字为`kawaii-mqtt`），除此之外TencentOS tiny的AT框架亦可以使用，并且稳定性极好！**
+**At present, Linux, TencentOS tiny, FreeRTOS, RT-Thread platforms have been implemented (software package is named kawaii-mqtt`), in addition to TencentOS tiny AT framework can also be used, and the stability is excellent!**
 
-| 平台           | 代码位置 |
+| Platform | Code Location |
 | -------------- | -------- |
-| Linux          | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient) |
+| Linux | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient) |
 | TencentOS tiny | [https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429](https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429) |
-| TencentOS tiny AT 框架 | [https://github.com/jiejieTop/gokit3-board-mqttclient](https://github.com/jiejieTop/gokit3-board-mqttclient) |
-| RT-Thread      | [https://github.com/jiejieTop/kawaii-mqtt](https://github.com/jiejieTop/kawaii-mqtt) |
-| FreeRTOS       | [https://github.com/jiejieTop/freertos-mqttclient](https://github.com/jiejieTop/freertos-mqttclient) |
+| TencentOS tiny AT framework | [https://github.com/jiejieTop/gokit3-board-mqttclient](https://github.com/jiejieTop/gokit3-board-mqttclient) |
+| RT-Thread | [https://github.com/jiejieTop/kawaii-mqtt](https://github.com/jiejieTop/kawaii-mqtt) |
+| FreeRTOS | [https://github.com/jiejieTop/freertos-mqttclient](https://github.com/jiejieTop/freertos-mqttclient) |
 
 
-## 版本
+## Version
 
-| 发布版本 | 描述 | 
+| Release Version | Description |
 | --- | --- |
-| [v1.0.0] | 初次发布，完成基本框架及其稳定性验证 |
-| [v1.0.1] | 修复主动与服务器断开连接时的逻辑处理 |
-| [v1.0.2] | 添加新特性——拦截器，修复一些小bug |
-| [v1.0.3] | 避免造成全局污染修改了log、list相关函数的命名 |
-| [v1.0.4] | 重新调整了network结构与mbedtls数据通道 |
-| [v1.1.0] | 一个较大版本的更新，重构部分代码，优化MQTT处理的逻辑，提升整体的稳定性，支持多客户端，支持设置遗嘱，优化API接口，增加多个云平台的测试代码与说明文档，增加在线代码生成工具、在线裁剪配置工具 |
+| [v1.0.0] | Initial release, complete basic framework and stability verification |
+| [v1.0.1] | Fix the logical processing when actively disconnecting from the server |
+| [v1.0.2] | Add a new feature-interceptor, fix some small bugs |
+| [v1.0.3] | To avoid global pollution, modify the naming of log and list related functions |
+| [v1.0.4] | Network structure and mbedtls data channel readjusted |
+| [v1.1.0] | A larger version of the update, refactoring part of the code, optimizing the logic of MQTT processing, improving the overall stability, supporting multiple clients, supporting setting the will, optimizing the API interface, and adding multiple cloud platforms Test code and documentation, add online code generation tool, online cutting configuration tool |
+## question
 
-## 问题
+Welcome to submit issues and bug reports in the form of [GitHub Issues](https://github.com/jiejieTop/mqttclient/issues)
 
-欢迎以 [GitHub Issues](https://github.com/jiejieTop/mqttclient/issues) 的形式提交问题和bug报告
+## Copyright and License
 
-## 版权和许可
+mqttclient follows the [Apache License v2.0](https://github.com/jiejieTop/mqttclient/blob/master/LICENSE) open source agreement. Encourage code sharing and respect the copyright of the original author. You can freely use and modify the source code, or you can publish the modified code as open source or closed source software.
 
-mqttclient 遵循 [Apache License v2.0](https://github.com/jiejieTop/mqttclient/blob/master/LICENSE) 开源协议。鼓励代码共享和尊重原作者的著作权，可以自由的使用、修改源代码，也可以将修改后的代码作为开源或闭源软件发布。
+## Test and use under Linux platform
 
-## linux平台下测试使用
-
-### 安装cmake：
+### Install cmake:
 
 ```bash
     sudo apt-get install cmake g++
 ```
 
-### 测试程序
+### test program
 
-| 测试平台 | 位置 |
-| -- | -- |
-| emqx（我私人部署的服务器） | [./test/emqx/test.c](./test/emqx/test.c) |
-| 百度天工 | [./test/baidu/test.c](./test/baidu/test.c) |
+| Test Platform | Location |
+| - | - |
+| emqx (my privately deployed server) | [./test/emqx/test.c](./test/emqx/test.c) |
+| Baidu Tiangong | [./test/baidu/test.c](./test/baidu/test.c) |
 | onenet | [./test/onenet/test.c](./test/onenet/test.c) |
-| 阿里云物联 | [./test/ali/test.c](./test/ali/test.c) |
+| Alibaba Cloud Internet of Things | [./test/ali/test.c](./test/ali/test.c) |
 
-### 编译 & 运行
+### Compile & Run
 
 ```bash
     ./build.sh
 ```
 
-运行**build.sh**脚本后会在 **./build/bin/**目录下生成可执行文件**emqx**、**baidu**、**onenet**等多个平台的可执行程序，直接运行即可。
+After running the **build.sh** script, the executable files **emqx**, **baidu**, **onenet** and other platforms will be generated under the **./build/bin/** directory Executable programs can be run directly.
 
 ```bash
-    ./build/bin/emqx 
+    ./build/bin/emqx
 ```
 
-### 编译成动态库libmqttclient.so
+### Compile into a dynamic library libmqttclient.so
 
 ```bash
     ./make-libmqttclient.sh
 ```
 
-运行`make-libmqttclient.sh`脚本后会在 `./libmqttclient/lib`目录下生成一个动态库文件`libmqttclient.so`，并安装到系统的`/usr/lib `目录下，相关头文件已经拷贝到`./libmqttclient/include`目录下,将其拷贝到你的工程中即可，编译应用程序的时候只需要链接动态库即可`-lmqttclient -lpthread`，动态库的配置文件是根据`./test/mqtt_config.h`配置的。
+After running the `make-libmqttclient.sh` script, a dynamic library file `libmqttclient.so` will be generated in the `./libmqttclient/lib` directory, and installed into the system’s `/usr/lib` directory, the relevant header files have been Copy to the `./libmqttclient/include` directory and copy it to your project. You only need to link the dynamic library when compiling the application. `-lmqttclient -lpthread`, the configuration file of the dynamic library is based on` ./test/mqtt_config.h` configuration.
 
-如果你是用交叉编译器的话，则应该根据你使用的编译器导出对应的环境变量（此处使用的交叉编译器是arm-linux-gnueabihf-gcc），同时你也必须将动态库文件`libmqttclient.so`拷贝到你的嵌入式系统的`/usr/lib `目录下：
+If you are using a cross-compiler, you should export the corresponding environment variables according to the compiler you are using (the cross-compiler used here is arm-linux-gnueabihf-gcc), and you must also set the dynamic library file `libmqttclient .so` is copied to the `/usr/lib` directory of your embedded system:
 
 ```bash
-    export CROSS_COMPILE=arm-linux-gnueabihf- 
+    export CROSS_COMPILE=arm-linux-gnueabihf-
 ```
 
-如若需要卸载**libmqttclient.so**，执行以下命令即可：
+If you need to uninstall **libmqttclient.so**, execute the following command:
 
 ```bash
     ./make-libmqttclient.sh remove
 ```
 
-## 学习更多
+## Learn more
 
-请看文档：
+Please see the documentation:
 
-- [MQTT协议简介](./docs/mqtt-introduction.md)
+- [MQTT Protocol Introduction](./docs/mqtt-introduction.md)
 
-- [MQTT协议通信过程](./docs/mqtt-communication.md)
+- [MQTT protocol communication process](./docs/mqtt-communication.md)
 
-- [mqttclient代码生成工具](./docs/mqtt-tool.md)
+- [mqttclient code generation tool](./docs/mqtt-tool.md)
 
-- [mqttclient配置及裁剪工具](./docs/mqtt-config.md)
+- [mqttclient configuration and cutting tool](./docs/mqtt-config.md)
 
-- [mqttclient设计与实现方式](./docs/mqtt-design.md)
+- [mqttclient design and implementation](./docs/mqtt-design.md)
 
-- [mqttclient连接到百度天工物接入](./docs/mqtt-baidu.md)
+- [mqttclient connects to Baidu Tiangongwu Access](./docs/mqtt-baidu.md)
 
-- [mqttclient连接到OneNET云平台](./docs/mqtt-onenet.md)
+- [mqttclient connects to OneNET cloud platform](./docs/mqtt-onenet.md)
 
-- [mqttclient连接到阿里云物联网平台](./docs/mqtt-aliyun.md)
+- [mqttclient connects to Alibaba Cloud IoT platform](./docs/mqtt-aliyun.md)
