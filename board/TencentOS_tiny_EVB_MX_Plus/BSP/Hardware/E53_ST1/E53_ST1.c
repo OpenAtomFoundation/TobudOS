@@ -360,9 +360,9 @@ void E53_ST1_LED_StatusSet(E53ST1_Status_ENUM status)
 /***************************************************************
 * 函数名称: E53_ST1_Beep
 * 说    明: E53 ST1蜂鸣器报警与否
-* 参    数: status,LED_ENUM枚举的数据
-*           LED_OFF,关灯
-*           LED_ON,开灯
+* 参    数: status,E53_ST1枚举的数据
+*           ST1_OFF,关蜂鸣器
+*           ST1_ON,开蜂鸣器
 * 返 回 值: 无
 ***************************************************************/
 void E53_ST1_Beep(E53ST1_Status_ENUM status)
