@@ -1,4 +1,3 @@
-#include "stm32f1xx_hal.h"
 #include "mcu_init.h"
 #include "tos_k.h"
 #include "mqttclient.h"
@@ -100,7 +99,7 @@ void mqttclient_task(void)
     
 #ifdef USE_ESP8266 
     esp8266_sal_init(esp8266_port);
-    esp8266_join_ap("Supowang", "13975428888");
+    esp8266_join_ap("Mculover666", "mculover666");
 #endif
 
 #ifdef USE_NB_BC35
