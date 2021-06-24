@@ -44,7 +44,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+#if AT_INPUT_TYPE_FRAME_EN
+#define UART_FRAME_BUFFER_MAX 1024
+uint8_t uart_frame_buffer[UART_FRAME_BUFFER_MAX];
+uint16_t uart_frame_buffer_index;
+#endif /* AT_INPUT_TYPE_FRAME_EN */
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -290,6 +294,18 @@ void LPUART1_IRQHandler(void)
     HAL_UART_IRQHandler(&hlpuart1);
     tos_knl_irq_leave();
   /* USER CODE BEGIN LPUART1_IRQn 1 */
+#if AT_INPUT_TYPE_FRAME_EN
+    if (__HAL_UART_GET_FLAG(&hlpuart1, UART_FLAG_IDLE)){
+        __HAL_UART_CLEAR_IDLEFLAG(&hlpuart1);
+
+        if (uart_frame_buffer_index != 0) {
+            tos_at_uart_input_frame(uart_frame_buffer, uart_frame_buffer_index);
+            uart_frame_buffer_index = 0;
+            memset(uart_frame_buffer, 0, sizeof(uart_frame_buffer));
+        }
+    }
+    
+#endif /* AT_INPUT_TYPE_FRAME_EN */
 
   /* USER CODE END LPUART1_IRQn 1 */
 }
@@ -300,7 +316,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t data;
     if (huart->Instance == LPUART1) {
         HAL_UART_Receive_IT(&hlpuart1, &data, 1);
+#if AT_INPUT_TYPE_FRAME_EN
+        uart_frame_buffer[uart_frame_buffer_index++] = data;
+#else
         tos_at_uart_input_byte(data);
+#endif /* AT_INPUT_TYPE_FRAME_EN */
     }
 }
 /* USER CODE END 1 */

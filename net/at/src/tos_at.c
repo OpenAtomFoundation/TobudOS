@@ -46,11 +46,38 @@ __API__ int tos_at_global_lock_post(void)
     return 0;
 }
 
-__STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
+__STATIC__ int at_uart_getchar_from_fifo(uint8_t *data)
 {
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
+    
+    TOS_CPU_INT_DISABLE();
+    err = tos_chr_fifo_pop(&AT_AGENT->uart_rx_fifo, data);
+    TOS_CPU_INT_ENABLE();
+    
+    return err;
+}
 
+__STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
+{
+#if AT_INPUT_TYPE_FRAME_EN
+    at_frame_len_mail_t frame_len_mail;
+    size_t mail_size;
+
+    if (AT_AGENT->fifo_available_len == 0) {
+        if (tos_mail_q_pend(&AT_AGENT->uart_rx_frame_mail, &frame_len_mail, &mail_size, timeout) != K_ERR_NONE) {
+            return -1;
+        }
+        AT_AGENT->fifo_available_len = frame_len_mail.frame_len;
+    }
+
+    if (at_uart_getchar_from_fifo(data) != K_ERR_NONE) {
+        return -1;
+    }
+
+    AT_AGENT->fifo_available_len -= 1;
+    return 0;
+#else
     tos_stopwatch_delay(1);
 
     if (tos_sem_pend(&AT_AGENT->uart_rx_sem, timeout) != K_ERR_NONE) {
@@ -67,15 +94,14 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
 //        return -1;
 //    }
     
-    TOS_CPU_INT_DISABLE();
-
-    err = tos_chr_fifo_pop(&AT_AGENT->uart_rx_fifo, data);
-    
-    TOS_CPU_INT_ENABLE();
+    if (at_uart_getchar_from_fifo(data) != K_ERR_NONE) {
+        return -1;
+    }
 
 //    tos_mutex_post(&AT_AGENT->uart_rx_lock);
 
-    return err == K_ERR_NONE ? 0 : -1;
+    return 0;
+#endif /* AT_INPUT_TYPE_FRAME_EN */
 }
 
 __STATIC__ at_event_t *at_event_do_get(char *buffer, size_t buffer_len)
@@ -228,9 +254,9 @@ __STATIC__ at_parse_status_t at_uart_line_parse(void)
             continue;
         }
 
-        if (data == '\0') {
-            continue;
-        }
+//        if (data == '\0') {
+//            continue;
+//        }
 
         if (curr_len < recv_cache->buffer_size) {
             recv_cache->buffer[curr_len++] = data;
@@ -257,11 +283,11 @@ __STATIC__ at_parse_status_t at_uart_line_parse(void)
         }
 
         if (data == '\n' && last_data == '\r') { // 0xd 0xa
-            curr_len -= 1;
-            recv_cache->buffer[curr_len - 1] = '\n';
-            recv_cache->recv_len = curr_len;
+//            curr_len -= 1;
+//            recv_cache->buffer[curr_len - 1] = '\n';
+//            recv_cache->recv_len = curr_len;
 
-            if (curr_len == 1) { // only a blank newline, ignore
+            if (curr_len == 2) { // only a blank newline, ignore
                 last_data = 0;
                 curr_len = 0;
                 recv_cache->recv_len = 0;
@@ -475,7 +501,7 @@ __STATIC__ int at_cmd_do_exec(const char *format, va_list args)
 
     cmd_len = vsnprintf(AT_AGENT->cmd_buf, AT_CMD_BUFFER_SIZE, format, args);
 
-    printf("AT CMD:\n%s\n", AT_AGENT->cmd_buf);
+    tos_kprintln("AT CMD:\n%s\n", AT_AGENT->cmd_buf);
 
     at_uart_send((uint8_t *)AT_AGENT->cmd_buf, cmd_len, 0xFFFF);
 
@@ -927,48 +953,70 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
         goto errout2;
     }
 
+#if AT_INPUT_TYPE_FRAME_EN
+    buffer = tos_mmheap_alloc(AT_FRAME_LEN_MAIL_MAX * sizeof(at_frame_len_mail_t));
+    if (!buffer) {
+        goto errout3;
+    }
+    
+    AT_AGENT->uart_rx_frame_mail_buffer = (uint8_t *)buffer;
+    
+    if (tos_mail_q_create(&AT_AGENT->uart_rx_frame_mail, buffer, AT_FRAME_LEN_MAIL_MAX, sizeof(at_frame_len_mail_t)) != K_ERR_NONE) {
+        goto errout4;
+    }
+#else
     if (tos_sem_create(&AT_AGENT->uart_rx_sem, (k_sem_cnt_t)0u) != K_ERR_NONE) {
         goto errout3;
     }
+#endif /* AT_INPUT_TYPE_FRAME_EN */
 
 //    if (tos_mutex_create(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
-//        goto errout4;
+//        goto errout5;
 //    }
 
     if (tos_mutex_create(&AT_AGENT->uart_tx_lock) != K_ERR_NONE) {
-        goto errout5;
-    }
-
-    if (tos_task_create(&AT_AGENT->parser, "at_parser", at_parser,
-                        K_NULL, AT_PARSER_TASK_PRIO, at_parser_task_stack,
-                        AT_PARSER_TASK_STACK_SIZE, 0) != K_ERR_NONE) {
         goto errout6;
     }
-
-    if (tos_hal_uart_init(&AT_AGENT->uart, uart_port) != 0) {
+    
+    if (tos_mutex_create(&AT_AGENT->global_lock) != K_ERR_NONE) {
         goto errout7;
     }
 
-    if (tos_mutex_create(&AT_AGENT->global_lock) != K_ERR_NONE) {
+    if (tos_hal_uart_init(&AT_AGENT->uart, uart_port) != 0) {
         goto errout8;
+    }
+    
+    if (tos_task_create(&AT_AGENT->parser, "at_parser", at_parser,
+                        K_NULL, AT_PARSER_TASK_PRIO, at_parser_task_stack,
+                        AT_PARSER_TASK_STACK_SIZE, 0) != K_ERR_NONE) {
+        goto errout9;
     }
 
     return 0;
-
-errout8:
+errout9:
     tos_hal_uart_deinit(&AT_AGENT->uart);
+    
+errout8:
+    tos_mutex_destroy(&AT_AGENT->global_lock);
 
 errout7:
-    tos_task_destroy(&AT_AGENT->parser);
-
-errout6:
     tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
 
-errout5:
+errout6:
 //    tos_mutex_destroy(&AT_AGENT->uart_rx_lock);
 
-//errout4:
+//errout5:
+#if AT_INPUT_TYPE_FRAME_EN
+    tos_mail_q_destroy(&AT_AGENT->uart_rx_frame_mail);
+#else
     tos_sem_destroy(&AT_AGENT->uart_rx_sem);
+#endif /* AT_INPUT_TYPE_FRAME_EN */
+    
+#if AT_INPUT_TYPE_FRAME_EN
+errout4:
+    tos_mmheap_free(AT_AGENT->uart_rx_frame_mail_buffer);
+    AT_AGENT->uart_rx_frame_mail_buffer = K_NULL;
+#endif /* AT_INPUT_TYPE_FRAME_EN */
 
 errout3:
     at_recv_cache_deinit();
@@ -990,16 +1038,24 @@ errout0:
 
 __API__ void tos_at_deinit(void)
 {
-    tos_mutex_destroy(&AT_AGENT->global_lock);
-
-    tos_hal_uart_deinit(&AT_AGENT->uart);
-
     tos_task_destroy(&AT_AGENT->parser);
+    
+    tos_hal_uart_deinit(&AT_AGENT->uart);
+    
+    tos_mutex_destroy(&AT_AGENT->global_lock);
 
     tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
 
-    tos_sem_destroy(&AT_AGENT->uart_rx_sem);
+    //tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
 
+#if AT_INPUT_TYPE_FRAME_EN
+    tos_mail_q_destroy(&AT_AGENT->uart_rx_frame_mail);
+    tos_mmheap_free(AT_AGENT->uart_rx_frame_mail_buffer);
+    AT_AGENT->uart_rx_frame_mail_buffer = K_NULL;
+#else
+    tos_sem_destroy(&AT_AGENT->uart_rx_sem);
+#endif /* AT_INPUT_TYPE_FRAME_EN */
+    
     at_recv_cache_deinit();
 
     tos_mutex_destroy(&AT_AGENT->cmd_buf_lock);
@@ -1017,10 +1073,25 @@ __API__ void tos_at_deinit(void)
 
 /* To completely decouple the uart intterupt and at agent, we need a more powerful
    hal(driver framework), that would be a huge work, we place it in future plans. */
+#if AT_INPUT_TYPE_FRAME_EN
+__API__ void tos_at_uart_input_frame(uint8_t *pdata, uint16_t len)
+{
+    int ret;
+    at_frame_len_mail_t at_frame_len_mail;
+    
+    ret = tos_chr_fifo_push_stream(&AT_AGENT->uart_rx_fifo, pdata, len);
+    if (ret != len) {
+        return;
+    }
+    
+    at_frame_len_mail.frame_len = len;
+    tos_mail_q_post(&AT_AGENT->uart_rx_frame_mail, &at_frame_len_mail, sizeof(at_frame_len_mail_t));
+}
+#else
 __API__ void tos_at_uart_input_byte(uint8_t data)
 {
     if (tos_chr_fifo_push(&AT_AGENT->uart_rx_fifo, data) == K_ERR_NONE) {
         tos_sem_post(&AT_AGENT->uart_rx_sem);
     }
 }
-
+#endif /* AT_INPUT_TYPE_FRAME_EN */

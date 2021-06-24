@@ -32,6 +32,9 @@
 #define AT_PARSER_TASK_STACK_SIZE                   2048
 #define AT_PARSER_TASK_PRIO                         2
 
+#define AT_INPUT_TYPE_FRAME_EN                      0
+#define AT_FRAME_LEN_MAIL_MAX                       5
+
 typedef enum at_status_en {
     AT_STATUS_OK,
     AT_STATUS_ERROR,
@@ -97,6 +100,10 @@ typedef struct at_echo_st {
     int                 __is_fuzzy_match;
 } at_echo_t;
 
+typedef struct at_frame_len_mail_st {
+    uint16_t frame_len;
+} at_frame_len_mail_t;
+
 typedef void (*at_event_callback_t)(void);
 
 typedef struct at_event_st {
@@ -123,7 +130,14 @@ typedef struct at_agent_st {
     hal_uart_t      uart;
     k_mutex_t       uart_tx_lock;
 //    k_mutex_t       uart_rx_lock;
+    
+#if AT_INPUT_TYPE_FRAME_EN
+    k_mail_q_t      uart_rx_frame_mail;
+    uint8_t        *uart_rx_frame_mail_buffer;
+    uint16_t        fifo_available_len;
+#else
     k_sem_t         uart_rx_sem;
+#endif /* AT_INPUT_TYPE_FRAME_EN */
     k_chr_fifo_t    uart_rx_fifo;
     uint8_t        *uart_rx_fifo_buffer;
 } at_agent_t;
@@ -386,6 +400,20 @@ __API__ int tos_at_raw_data_send(at_echo_t *echo, uint32_t timeout, const uint8_
  */
 __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const uint8_t *buf, size_t size);
 
+#if AT_INPUT_TYPE_FRAME_EN
+/**
+ * @brief Write amount bytes to the at uart.
+ * The function called by the uart interrupt, to put the data from the uart to the at framework.
+ *
+ * @attention None
+ *
+ * @param[in]   pdata            pointer of the uart received data.
+ * @param[in]   len              length of the uart received data.
+ *
+ * @return  None
+ */
+__API__ void tos_at_uart_input_frame(uint8_t *pdata, uint16_t len);
+#else
 /**
  * @brief Write byte to the at uart.
  * The function called by the uart interrupt, to put the data from the uart to the at framework.
@@ -397,7 +425,7 @@ __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const 
  * @return  None
  */
 __API__ void tos_at_uart_input_byte(uint8_t data);
-
+#endif
 /**
  * @brief A global lock provided by at framework.
  * The lock usually used to make a atomic function.

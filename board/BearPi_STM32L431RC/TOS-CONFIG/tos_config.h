@@ -41,5 +41,7 @@
 
 #define TOS_CFG_TIMER_AS_PROC           1u
 
+#define TOS_CFG_MAIL_QUEUE_EN           1u
+
 #endif
 
