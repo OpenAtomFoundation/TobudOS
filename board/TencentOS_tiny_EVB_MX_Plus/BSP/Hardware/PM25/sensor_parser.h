@@ -15,8 +15,8 @@
  * within TencentOS.
  *---------------------------------------------------------------------------*/
 
-#ifndef _TOS_SHELL_H_
-#define  _TOS_SHELL_H_
+#ifndef _SENSOR_PARSER_H_
+#define  _SENSOR_PARSER_H_
 
 #include "tos_k.h"
 
@@ -50,5 +50,5 @@ __API__ void tos_shell_printf(const char *format, ...);
 
 __API__ void tos_shell_input_byte(uint8_t data);
 
-#endif /* _TOS_SHELL_H_ */
+#endif /* _SENSOR_PARSER_H_ */
 
