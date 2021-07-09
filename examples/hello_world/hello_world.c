@@ -65,7 +65,7 @@ void task3(void *arg)
 
 void application_entry(void *arg)
 {
-    printf("***This is a demo\r\n");
+    printf("***This is a demos\r\n");
     osThreadCreate(osThread(task1), NULL); // Create task1
     osThreadCreate(osThread(task2), NULL); // Create task2
 }
