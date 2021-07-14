@@ -48,7 +48,7 @@ void task2(void *arg)
         printf("%d  %d\n", rc, depth);
 #endif
 
-        printf("***I am task2\r\n");
+        printf("***This is a demo\r\n");
         osDelay(1000);
     }
 }
@@ -65,7 +65,7 @@ void task3(void *arg)
 
 void application_entry(void *arg)
 {
-    printf("***I am task\r\n");
+    printf("***This is a demo\r\n");
     osThreadCreate(osThread(task1), NULL); // Create task1
     osThreadCreate(osThread(task2), NULL); // Create task2
 }
