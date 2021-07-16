@@ -35,6 +35,23 @@
 #define AT_INPUT_TYPE_FRAME_EN                      0
 #define AT_FRAME_LEN_MAIL_MAX                       5
 
+#define AT_INPUT_SIMULATE_IDLE_EN                   0
+#define SIMULATE_IDLE_DEFAULT_TIME                  5
+
+#define AT_DEBUG_LOG_EN                             0
+
+#if AT_DEBUG_LOG_EN
+#define AT_LOG(...) tos_kprintf(__VA_ARGS__)
+#else
+#define AT_LOG(...)
+#endif
+
+#if (AT_INPUT_SIMULATE_IDLE_EN == 1) && (AT_INPUT_TYPE_FRAME_EN == 1)
+#error  "please choose AT_INPUT_SIMULATE_IDLE or AT_INPUT_TYPE_FRAM!"
+#elif (AT_INPUT_SIMULATE_IDLE_EN == 1) && (TOS_CFG_TIMER_EN == 0)
+#error  "please enable TOS_CFG_TIMER_EN!"
+#endif
+
 typedef enum at_status_en {
     AT_STATUS_OK,
     AT_STATUS_ERROR,
@@ -137,7 +154,12 @@ typedef struct at_agent_st {
     uint16_t        fifo_available_len;
 #else
     k_sem_t         uart_rx_sem;
-#endif /* AT_INPUT_TYPE_FRAME_EN */
+    
+#if AT_INPUT_SIMULATE_IDLE_EN
+    k_timer_t       idle_check_timer;
+#endif  /* AT_INPUT_SIMULATE_IDLE_EN */
+#endif  /* AT_INPUT_TYPE_FRAME_EN */
+
     k_chr_fifo_t    uart_rx_fifo;
     uint8_t        *uart_rx_fifo_buffer;
 } at_agent_t;
@@ -413,6 +435,19 @@ __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const 
  * @return  None
  */
 __API__ void tos_at_uart_input_frame(uint8_t *pdata, uint16_t len);
+
+#elif AT_INPUT_SIMULATE_IDLE_EN
+/**
+ * @brief Write byte to the at uart.
+ * The function called by the uart receive interrupt.
+ *
+ * @attention No notification is given after writing.
+ *
+ * @param[in]   data            uart received data.
+ *
+ * @return  None
+ */
+__API__ void tos_at_uart_input_byte_no_notify(uint8_t data);
 #else
 /**
  * @brief Write byte to the at uart.

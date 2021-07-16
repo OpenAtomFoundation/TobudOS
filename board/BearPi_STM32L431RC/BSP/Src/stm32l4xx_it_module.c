@@ -318,6 +318,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         HAL_UART_Receive_IT(&hlpuart1, &data, 1);
 #if AT_INPUT_TYPE_FRAME_EN
         uart_frame_buffer[uart_frame_buffer_index++] = data;
+#elif AT_INPUT_SIMULATE_IDLE_EN
+        tos_at_uart_input_byte_no_notify(data);
 #else
         tos_at_uart_input_byte(data);
 #endif /* AT_INPUT_TYPE_FRAME_EN */

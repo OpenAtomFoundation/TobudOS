@@ -77,6 +77,19 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
 
     AT_AGENT->fifo_available_len -= 1;
     return 0;
+#elif AT_INPUT_SIMULATE_IDLE_EN
+    if (tos_chr_fifo_is_empty(&AT_AGENT->uart_rx_fifo)) {
+        if (tos_sem_pend(&AT_AGENT->uart_rx_sem, timeout) != K_ERR_NONE) {
+            return -1;
+        }
+    }
+    
+    if (at_uart_getchar_from_fifo(data) != K_ERR_NONE) {
+        return -1;
+    }
+    
+    return 0;
+    
 #else
     tos_stopwatch_delay(1);
 
@@ -274,6 +287,8 @@ __STATIC__ at_parse_status_t at_uart_line_parse(void)
             return AT_PARSE_STATUS_EXPECT;
         }
         
+        AT_LOG("recv_cache:[%s](%d)\r\n", recv_cache->buffer, recv_cache->recv_len);
+        
         if (strstr((char*)recv_cache->buffer, "OK")) {
             return AT_PARSE_STATUS_OK;
         } else if (strstr((char*)recv_cache->buffer, "FAIL")) {
@@ -331,7 +346,10 @@ __STATIC__ void at_parser(void *arg)
     recv_cache = &AT_AGENT->recv_cache;
 
     while (K_TRUE) {
+        
         at_parse_status = at_uart_line_parse();
+        
+        AT_LOG("at line parser end!(%d)\r\n", at_parse_status);
         
         tos_kprintln("--->%s", recv_cache->buffer);
 
@@ -921,6 +939,19 @@ __STATIC__ void at_event_table_set(at_event_t *event_table, size_t event_table_s
     AT_AGENT->event_table_size  = event_table_size;
 }
 
+#if AT_INPUT_SIMULATE_IDLE_EN
+
+__STATIC__ void tos_at_uart_input_notify()
+{
+    tos_sem_post(&AT_AGENT->uart_rx_sem);
+}
+
+__STATIC__ void idle_check_timer_callback(void *args)
+{   
+    tos_at_uart_input_notify();
+}
+#endif  /* #if AT_INPUT_SIMULATE_IDLE_EN */
+
 __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size_t event_table_size)
 {
     void *buffer = K_NULL;
@@ -981,27 +1012,39 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
     if (tos_mutex_create(&AT_AGENT->global_lock) != K_ERR_NONE) {
         goto errout7;
     }
+    
+#if AT_INPUT_SIMULATE_IDLE_EN
+    if (tos_timer_create(&AT_AGENT->idle_check_timer, SIMULATE_IDLE_DEFAULT_TIME,
+        0, idle_check_timer_callback, NULL, TOS_OPT_TIMER_ONESHOT) != K_ERR_NONE) {
+        goto errout8;
+    }
+#endif /* AT_INPUT_SIMULATE_IDLE_EN */  
 
     if (tos_hal_uart_init(&AT_AGENT->uart, uart_port) != 0) {
-        goto errout8;
+        goto errout9;
     }
     
     if (tos_task_create(&AT_AGENT->parser, "at_parser", at_parser,
                         K_NULL, AT_PARSER_TASK_PRIO, at_parser_task_stack,
                         AT_PARSER_TASK_STACK_SIZE, 0) != K_ERR_NONE) {
-        goto errout9;
+        goto errout10;
     }
 
     return 0;
-errout9:
+errout10:
     tos_hal_uart_deinit(&AT_AGENT->uart);
     
+errout9:
+#if AT_INPUT_SIMULATE_IDLE_EN
+    tos_timer_destroy(&AT_AGENT->idle_check_timer);     
 errout8:
+#endif /* AT_INPUT_SIMULATE_IDLE_EN */
+    
     tos_mutex_destroy(&AT_AGENT->global_lock);
 
 errout7:
     tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
-
+    
 errout6:
 //    tos_mutex_destroy(&AT_AGENT->uart_rx_lock);
 
@@ -1047,6 +1090,10 @@ __API__ void tos_at_deinit(void)
     tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
 
     //tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
+    
+#if AT_INPUT_SIMULATE_IDLE_EN
+    tos_timer_destroy(&AT_AGENT->idle_check_timer);
+#endif /* AT_INPUT_SIMULATE_IDLE_EN */
 
 #if AT_INPUT_TYPE_FRAME_EN
     tos_mail_q_destroy(&AT_AGENT->uart_rx_frame_mail);
@@ -1087,6 +1134,15 @@ __API__ void tos_at_uart_input_frame(uint8_t *pdata, uint16_t len)
     at_frame_len_mail.frame_len = len;
     tos_mail_q_post(&AT_AGENT->uart_rx_frame_mail, &at_frame_len_mail, sizeof(at_frame_len_mail_t));
 }
+
+#elif AT_INPUT_SIMULATE_IDLE_EN
+__API__ void tos_at_uart_input_byte_no_notify(uint8_t data)
+{
+    tos_timer_stop(&AT_AGENT->idle_check_timer);
+    tos_chr_fifo_push(&AT_AGENT->uart_rx_fifo, data);
+    tos_timer_start(&AT_AGENT->idle_check_timer);
+}
+
 #else
 __API__ void tos_at_uart_input_byte(uint8_t data)
 {
@@ -1094,4 +1150,5 @@ __API__ void tos_at_uart_input_byte(uint8_t data)
         tos_sem_post(&AT_AGENT->uart_rx_sem);
     }
 }
-#endif /* AT_INPUT_TYPE_FRAME_EN */
+
+#endif /* AT_INPUT_TYPE_FRAME_EN or AT_INPUT_SIMULATE_IDLE_EN */
