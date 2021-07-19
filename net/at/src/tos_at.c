@@ -688,7 +688,7 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
 {
     int read_len = 0;
     size_t total_read_len = 0;
-    k_tick_t tick, remain_tick;
+    k_tick_t remain_tick;
     at_data_channel_t *data_channel = K_NULL;
 
     data_channel = at_channel_get(channel_id, K_FALSE);
@@ -696,9 +696,9 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
         return -1;
     }
 
-    tick = tos_millisec2tick(timeout);
-
-    tos_stopwatch_countdown(&data_channel->timer, tick);
+    remain_tick = tos_millisec2tick(timeout);
+    tos_stopwatch_countdown(&data_channel->timer, remain_tick);
+    
     while (!tos_stopwatch_is_expired(&data_channel->timer)) {
         remain_tick = tos_stopwatch_remain(&data_channel->timer);
         if (remain_tick == (k_tick_t)0u) {
@@ -712,6 +712,10 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
         read_len = tos_chr_fifo_pop_stream(&data_channel->rx_fifo, buffer + read_len, buffer_len - total_read_len);
 
         tos_mutex_post(&data_channel->rx_lock);
+        
+        if (read_len == 0) {
+            tos_sem_pend(&data_channel->rx_sem, remain_tick);
+        }
 
         total_read_len += read_len;
         if (total_read_len < buffer_len) {
@@ -741,6 +745,7 @@ __API__ int tos_at_channel_write(int channel_id, uint8_t *buffer, size_t buffer_
     ret = tos_chr_fifo_push_stream(&data_channel->rx_fifo, buffer, buffer_len);
 
     tos_mutex_post(&data_channel->rx_lock);
+    tos_sem_post(&data_channel->rx_sem);
 
     return ret;
 }
@@ -753,6 +758,10 @@ __STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, cons
     
     if (!fifo_buffer) {
         return -1;
+    }
+    
+    if (tos_sem_create_max(&data_channel->rx_sem, 0, 1) != K_ERR_NONE) {
+        goto errout;
     }
 
     if (tos_mutex_create(&data_channel->rx_lock) != K_ERR_NONE) {
@@ -852,6 +861,8 @@ __API__ int tos_at_channel_free(int channel_id)
     if (!data_channel) {
         return -1;
     }
+    
+    tos_sem_destroy(&data_channel->rx_sem);
 
     tos_mutex_destroy(&data_channel->rx_lock);
 

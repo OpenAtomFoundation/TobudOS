@@ -95,6 +95,7 @@ typedef struct at_data_channel_st {
     k_chr_fifo_t        rx_fifo;
     uint8_t            *rx_fifo_buffer;
     k_mutex_t           rx_lock;
+    k_sem_t             rx_sem;
 
     at_channel_status_t status;
 
