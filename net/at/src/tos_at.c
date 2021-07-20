@@ -709,11 +709,12 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
             return total_read_len;
         }
 
-        read_len = tos_chr_fifo_pop_stream(&data_channel->rx_fifo, buffer + read_len, buffer_len - total_read_len);
+        read_len = tos_chr_fifo_pop_stream(&data_channel->rx_fifo, buffer + total_read_len, buffer_len - total_read_len);
 
         tos_mutex_post(&data_channel->rx_lock);
         
         if (read_len == 0) {
+            remain_tick = tos_stopwatch_remain(&data_channel->timer);
             tos_sem_pend(&data_channel->rx_sem, remain_tick);
         }
 

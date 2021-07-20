@@ -25,8 +25,8 @@
 
 #define TOS_VERSION_MAJOR   0x02
 #define TOS_VERSION_MINOR   0x04
-#define TOS_VERSION_PATCH   0x02
-#define TOS_VERSION "2.4.2"
+#define TOS_VERSION_PATCH   0x03
+#define TOS_VERSION "2.4.3"
 
 #endif /* _TOS_VERSION_H_ */
 
