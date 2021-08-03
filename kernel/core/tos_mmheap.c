@@ -496,7 +496,7 @@ __STATIC__ size_t adjust_request_size(size_t size, size_t align)
     }
 
     adjust_size = align_up(size, align);
-    if ((adjust_size > K_MMHEAP_BLK_SIZE_MAX)||(!adjust_size)) {
+    if (!adjust_size || adjust_size > K_MMHEAP_BLK_SIZE_MAX) {
         return 0;
     }
 
@@ -590,9 +590,10 @@ __API__ void *tos_mmheap_alloc(size_t size)
     size_t          adjust_size;
     mmheap_blk_t   *blk;
 
-    if (size>K_MMHEAP_BLK_SIZE_MAX) {
+    if (size > K_MMHEAP_BLK_SIZE_MAX) {
         return K_NULL;
     }
+
     adjust_size     = adjust_request_size(size, K_MMHEAP_ALIGN_SIZE);
     blk             = blk_locate_free(adjust_size);
     if (!blk) {

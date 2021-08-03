@@ -101,7 +101,21 @@ typedef uint64_t    kv_dword_t; // double word
 #define KV_ITEM_ADDR_OF_BODY(item)                  (item->pos + KV_ITEM_HDR_SIZE)
 
 #define KV_BLK_HDR_MAGIC                            0x1234ABCD4321DCBA
+#define KV_BLK_HDR_GC_SRC                           0x5678DCBA8765ABCD
+#define KV_BLK_HDR_GC_DST                           0x8765ABCD8765DCBA
+#define KV_BLK_HDR_GC_DONE                          0x4321DCBA1234ABCD
+
 #define KV_BLK_IS_LEGAL(blk_hdr)                    ((blk_hdr)->magic == KV_BLK_HDR_MAGIC)
+
+// DO NOT use gc_src == KV_BLK_HDR_GC_SRC here, in case of an incomplete write of src magic due to a power down
+#define KV_BLK_IS_GC_SRC(blk_hdr)                   ((blk_hdr)->gc_src != (kv_dword_t)-1)
+// DO NOT use gc_dst == KV_BLK_HDR_GC_DST here, in case of an incomplete write of dst magic due to a power down
+#define KV_BLK_IS_GC_DST(blk_hdr)                   ((blk_hdr)->gc_dst != (kv_dword_t)-1)
+// DO NOT use gc_done == KV_BLK_HDR_GC_DONE here, in case of an incomplete write of done magic due to a power down
+#define KV_BLK_IS_GC_DONE(blk_hdr)                  ((blk_hdr)->gc_done != (kv_dword_t)-1)
+
+#define KV_BLK_IS_GC_DST_NOT_DONE(blk_hdr)          (KV_BLK_IS_GC_DST(blk_hdr) && !KV_BLK_IS_GC_DONE(blk_hdr))
+
 #define KV_BLK_INVALID                              ((uint32_t)-1)
 #define KV_BLK_HDR_SIZE                             KV_ALIGNED_SIZE(sizeof(kv_blk_hdr_t))
 #define KV_BLK_SIZE                                 (KV_FLASH_SECTOR_SIZE)
@@ -113,7 +127,7 @@ typedef uint64_t    kv_dword_t; // double word
 #define KV_BLK_NEXT(blk_start)                      (blk_start + KV_BLK_SIZE >= KV_FLASH_END ? KV_FLASH_START : blk_start + KV_BLK_SIZE)
 
 #define KV_BLK_FOR_EACH_FROM(cur_blk, start_blk) \
-	for (cur_blk = KV_BLK_NEXT(start_blk); \
+    for (cur_blk = KV_BLK_NEXT(start_blk); \
             cur_blk != start_blk; \
             cur_blk = KV_BLK_NEXT(cur_blk))
 
@@ -159,6 +173,9 @@ typedef struct kv_control_st {
 
 typedef struct kv_block_header_st {
     kv_wunit_t      magic;          /*< is this block formatted? */
+    kv_wunit_t      gc_src;         /*< is this block gc-ing(as a source block)? */
+    kv_wunit_t      gc_dst;         /*< is this block gc-ing(as a destination block)? */
+    kv_wunit_t      gc_done;        /*< is this block gc done(as a destination block)? */
 } __PACKED__ kv_blk_hdr_t;
 
 typedef struct kv_item_header_st {

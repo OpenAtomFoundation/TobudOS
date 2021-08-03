@@ -213,6 +213,36 @@ __STATIC__ uint32_t kv_blk_search_suitable(uint32_t item_size)
     } while (K_TRUE);
 }
 
+__STATIC__ kv_err_t kv_blk_mark_gc_src(uint32_t blk_start)
+{
+    if (kv_flash_wunit_modify(KV_ADDR_OF_FIELD(blk_start, kv_blk_hdr_t, gc_src),
+                                    KV_BLK_HDR_GC_SRC) != KV_ERR_NONE) {
+        return KV_ERR_FLASH_WRITE_FAILED;
+    }
+
+    return KV_ERR_NONE;
+}
+
+__STATIC__ kv_err_t kv_blk_mark_gc_dst(uint32_t blk_start)
+{
+    if (kv_flash_wunit_modify(KV_ADDR_OF_FIELD(blk_start, kv_blk_hdr_t, gc_dst),
+                                    KV_BLK_HDR_GC_DST) != KV_ERR_NONE) {
+        return KV_ERR_FLASH_WRITE_FAILED;
+    }
+
+    return KV_ERR_NONE;
+}
+
+__STATIC__ kv_err_t kv_blk_mark_gc_done(uint32_t blk_start)
+{
+    if (kv_flash_wunit_modify(KV_ADDR_OF_FIELD(blk_start, kv_blk_hdr_t, gc_done),
+                                    KV_BLK_HDR_GC_DONE) != KV_ERR_NONE) {
+        return KV_ERR_FLASH_WRITE_FAILED;
+    }
+
+    return KV_ERR_NONE;
+}
+
 __STATIC__ kv_err_t kv_item_hdr_write(uint32_t item_start, kv_item_hdr_t *item_hdr)
 {
     if (kv_flash_write(KV_ADDR_OF_FIELD(item_start, kv_item_hdr_t, checksum),
@@ -337,10 +367,12 @@ __STATIC__ kv_err_t kv_item_try_delete(kv_item_t *item)
     }
 
     // key changes, means another turn of gc happened, the previous block is filled with new item.
-    if (memcmp(prev_key, (void *)KV_ITEM_ADDR_OF_BODY(item), k_len) != 0) {
+    if (memcmp(prev_key, (void *)item->body, k_len) != 0) {
         tos_mmheap_free(prev_key);
         return KV_ERR_NONE;
     }
+
+    tos_mmheap_free(prev_key);
 
     // the previous item is still there, delete it.
     return kv_item_delete_aux(prev_pos);
@@ -436,23 +468,24 @@ __STATIC__ int kv_item_is_moved(kv_item_t *item)
     return is_moved;
 }
 
-__STATIC__ kv_err_t kv_item_do_gc(kv_item_t *item, const void *dummy)
+__STATIC__ kv_err_t kv_item_do_gc(kv_item_t *item, const void *p_blk_dst)
 {
     kv_err_t err;
+    uint32_t blk_dst = *(uint32_t *)p_blk_dst;
 
     err = kv_item_body_read(item);
     if (err != KV_ERR_NONE) {
         return err;
     }
 
-    if (kv_item_write(KV_BLK_USABLE_ADDR(KV_MGR_WORKSPACE),
+    if (kv_item_write(KV_BLK_USABLE_ADDR(blk_dst),
                         &item->hdr, item->body,
                         KV_ITEM_SIZE_OF_BODY(item)) != KV_ERR_NONE) {
         return KV_ERR_FLASH_WRITE_FAILED;
     }
 
     // reduce the free_size
-    kv_blk_freesz_reduce(KV_MGR_WORKSPACE, KV_ITEM_SIZE_OF_ITEM(item));
+    kv_blk_freesz_reduce(blk_dst, KV_ITEM_SIZE_OF_ITEM(item));
 
     return KV_ERR_NEXT_LOOP;
 }
@@ -550,7 +583,7 @@ __STATIC__ kv_err_t kv_item_do_recovery(kv_item_t *item, const void *dummy)
 */
 __STATIC__ kv_err_t kv_item_walkthru(uint32_t blk_start,
                                                     kv_item_walker_t walker,
-                                                    const void *patten,
+                                                    const void *arg,
                                                     kv_item_t **item_out)
 {
     kv_err_t err;
@@ -616,10 +649,12 @@ __STATIC__ kv_err_t kv_item_walkthru(uint32_t blk_start,
             // tell the item where he is, he does not know yet.
             item->pos = cur_item;
 
-            err = walker(item, patten);
+            err = walker(item, arg);
             if (err == KV_ERR_NONE) {
                 if (item_out) {
                     *item_out = item;
+                } else {
+                    kv_item_free(item);
                 }
                 return KV_ERR_NONE;
             } else if (err != KV_ERR_NEXT_LOOP) {
@@ -937,10 +972,119 @@ __STATIC__ kv_err_t kv_mgr_workspace_locate(void)
     return KV_ERR_NONE;
 }
 
-__STATIC__ void kv_mgr_ctl_build(void)
+/*
+ *          src                              dst
+ * 1. mark gc_src tag
+ *                                      2. mark gc_dst tag
+ * 3. copy data to dst
+ * 4. format src block
+ *                                      5. mark gc_done tag
+ */
+__STATIC__ kv_err_t kv_do_gc(uint32_t blk_src, uint32_t blk_dst, int is_handle_incomplete)
 {
+    kv_err_t err;
+
+    // step 1
+    if (!is_handle_incomplete) {
+        // in handle incomplete case, gc_src already been marked before power down
+        err = kv_blk_mark_gc_src(blk_src);
+        if (err != KV_ERR_NONE) {
+            return err;
+        }
+    }
+
+    // step 2
+    err = kv_blk_mark_gc_dst(blk_dst);
+    if (err != KV_ERR_NONE) {
+        return err;
+    }
+
+    // step 3
+    err = kv_item_walkthru(blk_src, kv_item_do_gc, (const void *)&blk_dst, K_NULL);
+    if (err != KV_ERR_NONE) {
+        return err;
+    }
+
+    // step 4
+    kv_blk_reset_inuse(blk_src);
+
+    if (kv_blk_format(blk_src) != KV_ERR_NONE) {
+        kv_blk_set_bad(blk_src);
+    }
+
+    // step 5
+    err = kv_blk_mark_gc_done(blk_dst);
+    if (err != KV_ERR_NONE) {
+        return err;
+    }
+
+    kv_blk_reset_fresh(blk_dst);
+
+    if (!kv_blk_is_full(blk_dst)) {
+        kv_blk_set_inuse(blk_dst);
+    }
+
+    return KV_ERR_NONE;
+}
+
+struct blk_info {
+    int nr;
+#define NR_ABNORMAL_BLK_MAX     3
+    uint32_t blks[NR_ABNORMAL_BLK_MAX];
+};
+
+/*
+ * a power down may happen during any process of a gc action, we should fix
+ * all incomplete gc when kv bootup.
+ */
+__STATIC__ int kv_handle_incomplete_gc(struct blk_info gc_src_blk, struct blk_info gc_dst_not_done_blk, uint32_t fresh_blk)
+{
+    kv_err_t err;
+    uint32_t src_blk, dst_blk;
+
+    if (gc_src_blk.nr > 1 || gc_dst_not_done_blk.nr > 1) {
+        printf("warning: more than one gc_src[%d] or gc_dst_not_done[%d] block\n", gc_src_blk.nr, gc_dst_not_done_blk.nr);
+        return KV_ERR_BLK_STATUS_ERROR;
+    }
+
+    if (gc_src_blk.nr == 0) {
+        return KV_ERR_NONE;
+    }
+
+    src_blk = gc_src_blk.blks[0];
+
+    if (gc_dst_not_done_blk.nr == 0) {
+        if (fresh_blk == (uint32_t)-1) {
+            printf("warning: no gc_dst_not_done block, neither fresh block\n");
+            return KV_ERR_BLK_STATUS_ERROR;
+        } else {
+            printf("info: no gc_dst_not_done block, choose a fresh block[0x%x]\n", fresh_blk);
+            dst_blk = fresh_blk;
+        }
+    } else {
+        dst_blk = gc_dst_not_done_blk.blks[0];
+
+        /* format dst_blk first(make it fresh), for an in-complete gc happends in a very small
+           probability, for a clean code, we just do a totally retry here. */
+        err = kv_blk_format(dst_blk);
+        if (err != KV_ERR_NONE) {
+            kv_blk_set_bad(dst_blk);
+            return err;
+        }
+    }
+
+    return kv_do_gc(src_blk, dst_blk, K_TRUE);
+}
+
+__STATIC__ int kv_mgr_ctl_build(void)
+{
+    kv_err_t err;
     uint32_t cur_blk;
     kv_blk_hdr_t blk_hdr;
+
+    /* theoretically, should at least only one gc_src/gc_dst_not_done block */
+    uint32_t fresh_blk = (uint32_t)-1;
+    struct blk_info gc_src_blk = { 0 }, gc_dst_not_done_blk = { 0 };
 
     KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_hdr_read(cur_blk, &blk_hdr) != KV_ERR_NONE) {
@@ -953,9 +1097,21 @@ __STATIC__ void kv_mgr_ctl_build(void)
             if (kv_blk_format(cur_blk) != KV_ERR_NONE) {
                 // sth must be wrong seriously with this block
                 kv_blk_set_bad(cur_blk);
+            } else {
+                fresh_blk = cur_blk;
             }
             // we get a fresh block
             continue;
+        }
+
+        if (KV_BLK_IS_GC_SRC(&blk_hdr)) {
+            gc_src_blk.blks[gc_src_blk.nr++] = cur_blk;
+            continue;
+        }
+
+        if (KV_BLK_IS_GC_DST_NOT_DONE(&blk_hdr)) {
+            gc_dst_not_done_blk.blks[gc_dst_not_done_blk.nr++] = cur_blk;
+            continue
         }
 
         // do index building
@@ -964,7 +1120,13 @@ __STATIC__ void kv_mgr_ctl_build(void)
             kv_blk_set_hanging(cur_blk);
             continue;
         }
+
+        if (kv_blk_is_fresh(cur_blk)) {
+            fresh_blk = cur_blk;
+        }
     }
+
+    return kv_handle_incomplete_gc(gc_src_blk, gc_dst_not_done_blk, fresh_blk);
 }
 
 __STATIC__ kv_err_t kv_mgr_ctl_init(void)
@@ -997,11 +1159,6 @@ __STATIC__ void kv_mgr_ctl_deinit(void)
     memset(&kv_ctl, 0, sizeof(kv_ctl));
 }
 
-__STATIC__ kv_err_t kv_do_gc(uint32_t dirty_blk)
-{
-    return kv_item_walkthru(dirty_blk, kv_item_do_gc, K_NULL, K_NULL);
-}
-
 /* on each turn of gc, we free some discarded items in the dirty block.
    so we get more space to save the new item.
    gc should be done only when necessary, if there is no sitiation of an item too big to save,
@@ -1009,7 +1166,7 @@ __STATIC__ kv_err_t kv_do_gc(uint32_t dirty_blk)
  */
 __STATIC__ kv_err_t kv_gc(void)
 {
-    uint32_t cur_blk, workspace_backup;
+    uint32_t cur_blk, blk_dst;
     int is_gc_done = K_FALSE, is_rebuild_done = K_FALSE;
 
     /* we give blocks with KV_BLK_FLAG_HANGING a chance to rebuild index */
@@ -1017,28 +1174,14 @@ __STATIC__ kv_err_t kv_gc(void)
         is_rebuild_done = kv_mgr_blk_index_rebuild();
     }
 
-    workspace_backup = KV_MGR_WORKSPACE;
-
     // there must be at least one fresh block left, make workspace pointer to the fresh one
-    KV_MGR_WORKSPACE = kv_blk_next_fresh();
+    blk_dst = kv_blk_next_fresh();
 
     KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_is_dirty(cur_blk)) {
-            if (kv_do_gc(cur_blk) != KV_ERR_NONE) {
+            if (kv_do_gc(cur_blk, blk_dst, K_FALSE) != KV_ERR_NONE) {
                 // cannot do gc for this block, give others a try
                 continue;
-            }
-
-            kv_blk_reset_inuse(cur_blk);
-
-            if (kv_blk_format(cur_blk) != KV_ERR_NONE) {
-                kv_blk_set_bad(cur_blk);
-            }
-
-            kv_blk_reset_fresh(KV_MGR_WORKSPACE);
-
-            if (!kv_blk_is_full(KV_MGR_WORKSPACE)) {
-                kv_blk_set_inuse(KV_MGR_WORKSPACE);
             }
 
             is_gc_done = K_TRUE;
@@ -1047,9 +1190,9 @@ __STATIC__ kv_err_t kv_gc(void)
         }
     }
 
-    if (!is_gc_done) {
+    if (is_gc_done) {
         // if do nothing, should restore the workspace;
-        KV_MGR_WORKSPACE = workspace_backup;
+        KV_MGR_WORKSPACE = blk_dst;
     }
 
     return (is_gc_done || is_rebuild_done) ? KV_ERR_NONE : KV_ERR_GC_NOTHING;
@@ -1185,6 +1328,22 @@ __DEBUG__ kv_err_t tos_kv_walkthru(void)
             continue;
         }
 
+        if (KV_BLK_IS_GC_SRC(&blk_hdr)) {
+            printf("block is gc-src\n");
+        }
+
+        if (KV_BLK_IS_GC_DST(&blk_hdr)) {
+            printf("block is gc-dst\n");
+        }
+
+        if (KV_BLK_IS_GC_DONE(&blk_hdr)) {
+            printf("block is gc-done\n");
+        }
+
+        if (KV_BLK_IS_GC_DST_NOT_DONE(&blk_hdr)) {
+            printf("block is gc-dst but not done\n");
+        }
+
         if (kv_block_walkthru(cur_blk) != KV_ERR_NONE) {
             printf("block diagnosis failed\n");
             continue;
@@ -1213,7 +1372,10 @@ __API__ kv_err_t tos_kv_init(uint32_t flash_start, uint32_t flash_end, kv_flash_
         return err;
     }
 
-    kv_mgr_ctl_build();
+    err = kv_mgr_ctl_build();
+    if (err != KV_ERR_NONE) {
+        return err;
+    }
 
     return kv_mgr_workspace_locate();
 }
