@@ -37,7 +37,7 @@ uint8_t ch20_value_pool[5 * sizeof(ch20_data_t)];
 
 void rust_mqtt_daemon()
 {
-    char *str = "TencentOS XXXX";
+    char *str = "tos_meets_rust";
 
     OLED_Init();
     OLED_Clear();

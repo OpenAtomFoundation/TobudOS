@@ -32,6 +32,8 @@ __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_c
     
     pend_object_init(&sem->pend_obj);
     TOS_OBJ_INIT(sem, KNL_OBJ_TYPE_SEMAPHORE);
+    
+    knl_object_alloc_set_static(&sem->knl_obj);
 
     return K_ERR_NONE;
 }

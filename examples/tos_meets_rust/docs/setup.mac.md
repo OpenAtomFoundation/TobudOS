@@ -1,8 +1,6 @@
-# 甲醛检测仪 - mac 环境下搭建
+# mac 开发环境搭建
 
-由于之前在 Linux 上对环境进行了配置, 板子基本上已经初始化好了,
-目前在 mac 上配置需要做的工作不是太多, 下面有些步骤可能不太详细,
-可以参考 [Linux](./setup.linux.ubuntu.md).
+这里只列出了 mac 独有的部分, 其他部分参考 [README.md](../README.md) 中指定的文档.
 
 ## 工具准备
 
@@ -12,7 +10,7 @@
 
         - [cmake](https://cmake.org/download/): 下载 tar.gz 的压缩包自行安装并添加到环境变量中
         - [llvm](https://releases.llvm.org/download.html): 参考 cmake 处理
-        - libusb: brew install libusb
+        - libusb: `brew install libusb`
 
     - 安装
 
@@ -82,22 +80,12 @@
 
    然后每次执行 kermit 命令就会自动连上串口, 能够看到调试信息输出, 要退出的话按下 Ctrl-\ 然后按下 C 即可.
 
-##  WiFi 固件安装
+- 工具链
 
-参考 [Linux](./setup.linux.ubuntu.md).
+    编译所需要的工具链安装方法如下
 
-## 腾讯云帐号
+        brew install armmbed/formulae/arm-none-eabi-gcc
 
-参考 [Linux](./setup.linux.ubuntu.md).
+    安装后的路径为
 
-## TencentOS 固件安装
-
-编译所需要的工具链安装方法如下
-
-    brew install armmbed/formulae/arm-none-eabi-gcc
-
-安装后的路径为
-
-    /usr/local/bin/arm-none-eabi-*
-
-其他参考 [Linux](./setup.linux.ubuntu.md).
+        /usr/local/bin/arm-none-eabi-*
