@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.3.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32L4xx_DFP.2.4.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4101</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,WITH_TOS_NET_ADAPTER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\examples\helloworld</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\platform\arch\arm\cortex-m4\keil;..\..\..\..\kernel\pm\include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\BSP\Hardware\DHT11;..\..\BSP\Hardware\OLED;..\..\BSP\Hardware\BH1750;..\..\..\..\examples\helloworld</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -611,7 +611,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>kernel</GroupName>
+          <GroupName>tos/kernel</GroupName>
           <Files>
             <File>
               <FileName>tos_binary_heap.c</FileName>
@@ -741,7 +741,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>cpu</GroupName>
+          <GroupName>tos/arch</GroupName>
           <Files>
             <File>
               <FileName>port_s.S</FileName>
@@ -761,17 +761,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>cmsis</GroupName>
-          <Files>
-            <File>
-              <FileName>cmsis_os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\osal\cmsis_os\cmsis_os.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>config</GroupName>
+          <GroupName>tos/config</GroupName>
           <Files>
             <File>
               <FileName>tos_config.h</FileName>
