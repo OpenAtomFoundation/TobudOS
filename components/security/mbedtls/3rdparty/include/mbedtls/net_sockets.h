@@ -20,7 +20,7 @@
  *
  */
 /*
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+ *  Copyright The Mbed TLS Contributors
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -34,19 +34,14 @@
  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
- *  This file is part of mbed TLS (https://tls.mbed.org)
  */
 #ifndef MBEDTLS_NET_SOCKETS_H
 #define MBEDTLS_NET_SOCKETS_H
+#include "mbedtls/private_access.h"
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
+#include "mbedtls/build_info.h"
 
-#include "ssl.h"
+#include "mbedtls/ssl.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -86,7 +81,7 @@ extern "C" {
  */
 typedef struct mbedtls_net_context
 {
-    int fd;             /**< The underlying file descriptor                 */
+    int MBEDTLS_PRIVATE(fd);             /**< The underlying file descriptor                 */
 }
 mbedtls_net_context;
 
@@ -126,6 +121,7 @@ int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char 
  *
  * \return         0 if successful, or one of:
  *                      MBEDTLS_ERR_NET_SOCKET_FAILED,
+ *                      MBEDTLS_ERR_NET_UNKNOWN_HOST,
  *                      MBEDTLS_ERR_NET_BIND_FAILED,
  *                      MBEDTLS_ERR_NET_LISTEN_FAILED
  *
@@ -145,6 +141,8 @@ int mbedtls_net_bind( mbedtls_net_context *ctx, const char *bind_ip, const char 
  *                  can be NULL if client_ip is null
  *
  * \return          0 if successful, or
+ *                  MBEDTLS_ERR_NET_SOCKET_FAILED,
+ *                  MBEDTLS_ERR_NET_BIND_FAILED,
  *                  MBEDTLS_ERR_NET_ACCEPT_FAILED, or
  *                  MBEDTLS_ERR_NET_BUFFER_TOO_SMALL if buf_size is too small,
  *                  MBEDTLS_ERR_SSL_WANT_READ if bind_fd was set to
@@ -156,6 +154,10 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
 
 /**
  * \brief          Check and wait for the context to be ready for read/write
+ *
+ * \note           The current implementation of this function uses
+ *                 select() and returns an error if the file descriptor
+ *                 is \c FD_SETSIZE or greater.
  *
  * \param ctx      Socket to check
  * \param rw       Bitflag composed of MBEDTLS_NET_POLL_READ and
@@ -238,16 +240,21 @@ int mbedtls_net_send( void *ctx, const unsigned char *buf, size_t len );
  *                 'timeout' seconds. If no error occurs, the actual amount
  *                 read is returned.
  *
+ * \note           The current implementation of this function uses
+ *                 select() and returns an error if the file descriptor
+ *                 is \c FD_SETSIZE or greater.
+ *
  * \param ctx      Socket
  * \param buf      The buffer to write to
  * \param len      Maximum length of the buffer
  * \param timeout  Maximum number of milliseconds to wait for data
  *                 0 means no timeout (wait forever)
  *
- * \return         the number of bytes received,
- *                 or a non-zero error code:
- *                 MBEDTLS_ERR_SSL_TIMEOUT if the operation timed out,
+ * \return         The number of bytes received if successful.
+ *                 MBEDTLS_ERR_SSL_TIMEOUT if the operation timed out.
  *                 MBEDTLS_ERR_SSL_WANT_READ if interrupted by a signal.
+ *                 Another negative error code (MBEDTLS_ERR_NET_xxx)
+ *                 for other failures.
  *
  * \note           This function will block (until data becomes available or
  *                 timeout is reached) even if the socket is set to
@@ -256,6 +263,13 @@ int mbedtls_net_send( void *ctx, const unsigned char *buf, size_t len );
  */
 int mbedtls_net_recv_timeout( void *ctx, unsigned char *buf, size_t len,
                       uint32_t timeout );
+
+/**
+ * \brief          Closes down the connection and free associated data
+ *
+ * \param ctx      The context to close
+ */
+void mbedtls_net_close( mbedtls_net_context *ctx );
 
 /**
  * \brief          Gracefully shutdown the connection and free associated data

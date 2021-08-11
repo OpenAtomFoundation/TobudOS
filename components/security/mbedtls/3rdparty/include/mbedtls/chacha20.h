@@ -12,7 +12,8 @@
  * \author Daniel King <damaki.gh@gmail.com>
  */
 
-/*  Copyright (C) 2006-2018, Arm Limited (or its affiliates), All Rights Reserved.
+/*
+ *  Copyright The Mbed TLS Contributors
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -26,25 +27,18 @@
  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
- *  This file is part of Mbed TLS (https://tls.mbed.org)
  */
 
 #ifndef MBEDTLS_CHACHA20_H
 #define MBEDTLS_CHACHA20_H
+#include "mbedtls/private_access.h"
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
+#include "mbedtls/build_info.h"
 
 #include <stdint.h>
 #include <stddef.h>
 
 #define MBEDTLS_ERR_CHACHA20_BAD_INPUT_DATA         -0x0051 /**< Invalid input parameter(s). */
-#define MBEDTLS_ERR_CHACHA20_FEATURE_UNAVAILABLE    -0x0053 /**< Feature not available. For example, s part of the API is not implemented. */
-#define MBEDTLS_ERR_CHACHA20_HW_ACCEL_FAILED        -0x0055  /**< Chacha20 hardware accelerator failed. */
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,9 +48,9 @@ extern "C" {
 
 typedef struct mbedtls_chacha20_context
 {
-    uint32_t state[16];          /*! The state (before round operations). */
-    uint8_t  keystream8[64];     /*! Leftover keystream bytes. */
-    size_t keystream_bytes_used; /*! Number of keystream bytes already used. */
+    uint32_t MBEDTLS_PRIVATE(state)[16];          /*! The state (before round operations). */
+    uint8_t  MBEDTLS_PRIVATE(keystream8)[64];     /*! Leftover keystream bytes. */
+    size_t MBEDTLS_PRIVATE(keystream_bytes_used); /*! Number of keystream bytes already used. */
 }
 mbedtls_chacha20_context;
 
@@ -77,13 +71,18 @@ mbedtls_chacha20_context;
  *                  \c mbedtls_chacha20_free().
  *
  * \param ctx       The ChaCha20 context to initialize.
+ *                  This must not be \c NULL.
  */
 void mbedtls_chacha20_init( mbedtls_chacha20_context *ctx );
 
 /**
- * \brief           This function releases and clears the specified ChaCha20 context.
+ * \brief           This function releases and clears the specified
+ *                  ChaCha20 context.
  *
- * \param ctx       The ChaCha20 context to clear.
+ * \param ctx       The ChaCha20 context to clear. This may be \c NULL,
+ *                  in which case this function is a no-op. If it is not
+ *                  \c NULL, it must point to an initialized context.
+ *
  */
 void mbedtls_chacha20_free( mbedtls_chacha20_context *ctx );
 
@@ -96,7 +95,9 @@ void mbedtls_chacha20_free( mbedtls_chacha20_context *ctx );
  *                  \c mbedtls_chacha_update().
  *
  * \param ctx       The ChaCha20 context to which the key should be bound.
- * \param key       The encryption/decryption key. Must be 32 bytes in length.
+ *                  It must be initialized.
+ * \param key       The encryption/decryption key. This must be \c 32 Bytes
+ *                  in length.
  *
  * \return          \c 0 on success.
  * \return          #MBEDTLS_ERR_CHACHA20_BAD_INPUT_DATA if ctx or key is NULL.
@@ -115,8 +116,9 @@ int mbedtls_chacha20_setkey( mbedtls_chacha20_context *ctx,
  *                  messages encrypted with the same nonce and key.
  *
  * \param ctx       The ChaCha20 context to which the nonce should be bound.
- * \param nonce     The nonce. Must be 12 bytes in size.
- * \param counter   The initial counter value. This is usually 0.
+ *                  It must be initialized and bound to a key.
+ * \param nonce     The nonce. This must be \c 12 Bytes in size.
+ * \param counter   The initial counter value. This is usually \c 0.
  *
  * \return          \c 0 on success.
  * \return          #MBEDTLS_ERR_CHACHA20_BAD_INPUT_DATA if ctx or nonce is
@@ -144,16 +146,16 @@ int mbedtls_chacha20_starts( mbedtls_chacha20_context* ctx,
  *                  key and nonce.
  *
  * \param ctx       The ChaCha20 context to use for encryption or decryption.
- * \param size      The length of the input data in bytes.
+ *                  It must be initialized and bound to a key and nonce.
+ * \param size      The length of the input data in Bytes.
  * \param input     The buffer holding the input data.
- *                  This pointer can be NULL if size == 0.
+ *                  This pointer can be \c NULL if `size == 0`.
  * \param output    The buffer holding the output data.
- *                  Must be able to hold \p size bytes.
- *                  This pointer can be NULL if size == 0.
+ *                  This must be able to hold \p size Bytes.
+ *                  This pointer can be \c NULL if `size == 0`.
  *
  * \return          \c 0 on success.
- * \return          #MBEDTLS_ERR_CHACHA20_BAD_INPUT_DATA if the ctx, input, or
- *                  output pointers are NULL.
+ * \return          A negative error code on failure.
  */
 int mbedtls_chacha20_update( mbedtls_chacha20_context *ctx,
                              size_t size,
@@ -174,19 +176,19 @@ int mbedtls_chacha20_update( mbedtls_chacha20_context *ctx,
  * \note            The \p input and \p output pointers must either be equal or
  *                  point to non-overlapping buffers.
  *
- * \param key       The encryption/decryption key. Must be 32 bytes in length.
- * \param nonce     The nonce. Must be 12 bytes in size.
- * \param counter   The initial counter value. This is usually 0.
- * \param size      The length of the input data in bytes.
+ * \param key       The encryption/decryption key.
+ *                  This must be \c 32 Bytes in length.
+ * \param nonce     The nonce. This must be \c 12 Bytes in size.
+ * \param counter   The initial counter value. This is usually \c 0.
+ * \param size      The length of the input data in Bytes.
  * \param input     The buffer holding the input data.
- *                  This pointer can be NULL if size == 0.
+ *                  This pointer can be \c NULL if `size == 0`.
  * \param output    The buffer holding the output data.
- *                  Must be able to hold \p size bytes.
- *                  This pointer can be NULL if size == 0.
+ *                  This must be able to hold \p size Bytes.
+ *                  This pointer can be \c NULL if `size == 0`.
  *
  * \return          \c 0 on success.
- * \return          #MBEDTLS_ERR_CHACHA20_BAD_INPUT_DATA if key, nonce, input,
- *                  or output is NULL.
+ * \return          A negative error code on failure.
  */
 int mbedtls_chacha20_crypt( const unsigned char key[32],
                             const unsigned char nonce[12],

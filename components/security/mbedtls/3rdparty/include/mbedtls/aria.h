@@ -9,7 +9,8 @@
  *        Korean, but see http://210.104.33.10/ARIA/index-e.html in English)
  *        and also described by the IETF in <em>RFC 5794</em>.
  */
-/*  Copyright (C) 2006-2018, ARM Limited, All Rights Reserved
+/*
+ *  Copyright The Mbed TLS Contributors
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -23,21 +24,18 @@
  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
- *  This file is part of mbed TLS (https://tls.mbed.org)
  */
 
 #ifndef MBEDTLS_ARIA_H
 #define MBEDTLS_ARIA_H
+#include "mbedtls/private_access.h"
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
+#include "mbedtls/build_info.h"
 
 #include <stddef.h>
 #include <stdint.h>
+
+#include "mbedtls/platform_util.h"
 
 #define MBEDTLS_ARIA_ENCRYPT     1 /**< ARIA encryption. */
 #define MBEDTLS_ARIA_DECRYPT     0 /**< ARIA decryption. */
@@ -46,27 +44,26 @@
 #define MBEDTLS_ARIA_MAX_ROUNDS  16 /**< Maxiumum number of rounds in ARIA. */
 #define MBEDTLS_ARIA_MAX_KEYSIZE 32 /**< Maximum size of an ARIA key in bytes. */
 
-#define MBEDTLS_ERR_ARIA_INVALID_KEY_LENGTH   -0x005C  /**< Invalid key length. */
-#define MBEDTLS_ERR_ARIA_INVALID_INPUT_LENGTH -0x005E  /**< Invalid data input length. */
-#define MBEDTLS_ERR_ARIA_FEATURE_UNAVAILABLE  -0x005A  /**< Feature not available. For example, an unsupported ARIA key size. */
-#define MBEDTLS_ERR_ARIA_HW_ACCEL_FAILED      -0x0058  /**< ARIA hardware accelerator failed. */
+#define MBEDTLS_ERR_ARIA_BAD_INPUT_DATA -0x005C /**< Bad input data. */
 
-#if !defined(MBEDTLS_ARIA_ALT)
-// Regular implementation
-//
+#define MBEDTLS_ERR_ARIA_INVALID_INPUT_LENGTH -0x005E /**< Invalid data input length. */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#if !defined(MBEDTLS_ARIA_ALT)
+// Regular implementation
+//
 
 /**
  * \brief The ARIA context-type definition.
  */
 typedef struct mbedtls_aria_context
 {
-    unsigned char nr;           /*!< The number of rounds (12, 14 or 16) */
+    unsigned char MBEDTLS_PRIVATE(nr);           /*!< The number of rounds (12, 14 or 16) */
     /*! The ARIA round keys. */
-    uint32_t rk[MBEDTLS_ARIA_MAX_ROUNDS + 1][MBEDTLS_ARIA_BLOCKSIZE / 4];
+    uint32_t MBEDTLS_PRIVATE(rk)[MBEDTLS_ARIA_MAX_ROUNDS + 1][MBEDTLS_ARIA_BLOCKSIZE / 4];
 }
 mbedtls_aria_context;
 
@@ -80,14 +77,16 @@ mbedtls_aria_context;
  *                 It must be the first API called before using
  *                 the context.
  *
- * \param ctx      The ARIA context to initialize.
+ * \param ctx      The ARIA context to initialize. This must not be \c NULL.
  */
 void mbedtls_aria_init( mbedtls_aria_context *ctx );
 
 /**
  * \brief          This function releases and clears the specified ARIA context.
  *
- * \param ctx      The ARIA context to clear.
+ * \param ctx      The ARIA context to clear. This may be \c NULL, in which
+ *                 case this function returns immediately. If it is not \c NULL,
+ *                 it must point to an initialized ARIA context.
  */
 void mbedtls_aria_free( mbedtls_aria_context *ctx );
 
@@ -95,14 +94,16 @@ void mbedtls_aria_free( mbedtls_aria_context *ctx );
  * \brief          This function sets the encryption key.
  *
  * \param ctx      The ARIA context to which the key should be bound.
- * \param key      The encryption key.
- * \param keybits  The size of data passed in bits. Valid options are:
+ *                 This must be initialized.
+ * \param key      The encryption key. This must be a readable buffer
+ *                 of size \p keybits Bits.
+ * \param keybits  The size of \p key in Bits. Valid options are:
  *                 <ul><li>128 bits</li>
  *                 <li>192 bits</li>
  *                 <li>256 bits</li></ul>
  *
- * \return         \c 0 on success or #MBEDTLS_ERR_ARIA_INVALID_KEY_LENGTH
- *                 on failure.
+ * \return         \c 0 on success.
+ * \return         A negative error code on failure.
  */
 int mbedtls_aria_setkey_enc( mbedtls_aria_context *ctx,
                              const unsigned char *key,
@@ -112,13 +113,16 @@ int mbedtls_aria_setkey_enc( mbedtls_aria_context *ctx,
  * \brief          This function sets the decryption key.
  *
  * \param ctx      The ARIA context to which the key should be bound.
- * \param key      The decryption key.
+ *                 This must be initialized.
+ * \param key      The decryption key. This must be a readable buffer
+ *                 of size \p keybits Bits.
  * \param keybits  The size of data passed. Valid options are:
  *                 <ul><li>128 bits</li>
  *                 <li>192 bits</li>
  *                 <li>256 bits</li></ul>
  *
- * \return         \c 0 on success, or #MBEDTLS_ERR_ARIA_INVALID_KEY_LENGTH on failure.
+ * \return         \c 0 on success.
+ * \return         A negative error code on failure.
  */
 int mbedtls_aria_setkey_dec( mbedtls_aria_context *ctx,
                              const unsigned char *key,
@@ -137,10 +141,12 @@ int mbedtls_aria_setkey_dec( mbedtls_aria_context *ctx,
  *                 call to this API with the same context.
  *
  * \param ctx      The ARIA context to use for encryption or decryption.
+ *                 This must be initialized and bound to a key.
  * \param input    The 16-Byte buffer holding the input data.
  * \param output   The 16-Byte buffer holding the output data.
 
  * \return         \c 0 on success.
+ * \return         A negative error code on failure.
  */
 int mbedtls_aria_crypt_ecb( mbedtls_aria_context *ctx,
                             const unsigned char input[MBEDTLS_ARIA_BLOCKSIZE],
@@ -172,16 +178,21 @@ int mbedtls_aria_crypt_ecb( mbedtls_aria_context *ctx,
  *
  *
  * \param ctx      The ARIA context to use for encryption or decryption.
- * \param mode     The ARIA operation: #MBEDTLS_ARIA_ENCRYPT or
- *                 #MBEDTLS_ARIA_DECRYPT.
+ *                 This must be initialized and bound to a key.
+ * \param mode     The mode of operation. This must be either
+ *                 #MBEDTLS_ARIA_ENCRYPT for encryption, or
+ *                 #MBEDTLS_ARIA_DECRYPT for decryption.
  * \param length   The length of the input data in Bytes. This must be a
  *                 multiple of the block size (16 Bytes).
  * \param iv       Initialization vector (updated after use).
- * \param input    The buffer holding the input data.
- * \param output   The buffer holding the output data.
+ *                 This must be a readable buffer of size 16 Bytes.
+ * \param input    The buffer holding the input data. This must
+ *                 be a readable buffer of length \p length Bytes.
+ * \param output   The buffer holding the output data. This must
+ *                 be a writable buffer of length \p length Bytes.
  *
- * \return         \c 0 on success, or #MBEDTLS_ERR_ARIA_INVALID_INPUT_LENGTH
- *                 on failure.
+ * \return         \c 0 on success.
+ * \return         A negative error code on failure.
  */
 int mbedtls_aria_crypt_cbc( mbedtls_aria_context *ctx,
                             int mode,
@@ -216,15 +227,22 @@ int mbedtls_aria_crypt_cbc( mbedtls_aria_context *ctx,
  *
  *
  * \param ctx      The ARIA context to use for encryption or decryption.
- * \param mode     The ARIA operation: #MBEDTLS_ARIA_ENCRYPT or
- *                 #MBEDTLS_ARIA_DECRYPT.
- * \param length   The length of the input data.
+ *                 This must be initialized and bound to a key.
+ * \param mode     The mode of operation. This must be either
+ *                 #MBEDTLS_ARIA_ENCRYPT for encryption, or
+ *                 #MBEDTLS_ARIA_DECRYPT for decryption.
+ * \param length   The length of the input data \p input in Bytes.
  * \param iv_off   The offset in IV (updated after use).
+ *                 This must not be larger than 15.
  * \param iv       The initialization vector (updated after use).
- * \param input    The buffer holding the input data.
- * \param output   The buffer holding the output data.
+ *                 This must be a readable buffer of size 16 Bytes.
+ * \param input    The buffer holding the input data. This must
+ *                 be a readable buffer of length \p length Bytes.
+ * \param output   The buffer holding the output data. This must
+ *                 be a writable buffer of length \p length Bytes.
  *
  * \return         \c 0 on success.
+ * \return         A negative error code on failure.
  */
 int mbedtls_aria_crypt_cfb128( mbedtls_aria_context *ctx,
                                int mode,
@@ -294,17 +312,24 @@ int mbedtls_aria_crypt_cfb128( mbedtls_aria_context *ctx,
  *             securely discarded as soon as it's no longer needed.
  *
  * \param ctx              The ARIA context to use for encryption or decryption.
- * \param length           The length of the input data.
- * \param nc_off           The offset in the current \p stream_block, for
- *                         resuming within the current cipher stream. The
- *                         offset pointer should be 0 at the start of a stream.
- * \param nonce_counter    The 128-bit nonce and counter.
- * \param stream_block     The saved stream block for resuming. This is
- *                         overwritten by the function.
- * \param input            The buffer holding the input data.
- * \param output           The buffer holding the output data.
+ *                         This must be initialized and bound to a key.
+ * \param length           The length of the input data \p input in Bytes.
+ * \param nc_off           The offset in Bytes in the current \p stream_block,
+ *                         for resuming within the current cipher stream. The
+ *                         offset pointer should be \c 0 at the start of a
+ *                         stream. This must not be larger than \c 15 Bytes.
+ * \param nonce_counter    The 128-bit nonce and counter. This must point to
+ *                         a read/write buffer of length \c 16 bytes.
+ * \param stream_block     The saved stream block for resuming. This must
+ *                         point to a read/write buffer of length \c 16 bytes.
+ *                         This is overwritten by the function.
+ * \param input            The buffer holding the input data. This must
+ *                         be a readable buffer of length \p length Bytes.
+ * \param output           The buffer holding the output data. This must
+ *                         be a writable buffer of length \p length Bytes.
  *
- * \return     \c 0 on success.
+ * \return                 \c 0 on success.
+ * \return                 A negative error code on failure.
  */
 int mbedtls_aria_crypt_ctr( mbedtls_aria_context *ctx,
                             size_t length,

@@ -76,10 +76,6 @@ void application_entry(void *arg)
     esp8266_join_ap("SheldonDai", "srnr6x9xbhmb0");
 #endif
 
-#ifdef USE_SIM800A
-    sim800a_power_on();
-    sim800a_sal_init(HAL_UART_PORT_2);
-#endif
     
 #ifdef USE_AIR724
     air724_sal_init(HAL_UART_PORT_0);

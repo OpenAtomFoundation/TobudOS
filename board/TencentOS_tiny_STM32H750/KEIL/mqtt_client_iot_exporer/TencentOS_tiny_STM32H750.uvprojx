@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H750xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32H7xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\hal\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\devices\ec20;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny;..\..\..\..\components\utils\JSON\include</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32H7xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\kernel\hal\include;..\..\..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\..\..\devices\ec20_200_600;..\..\..\..\devices\esp8266;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\common\log;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny;..\..\..\..\components\utils\JSON\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -934,14 +934,14 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>ec20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\devices\ec20\ec20.c</FilePath>
-            </File>
-            <File>
               <FileName>esp8266.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec600s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec20_200_600\ec600s.c</FilePath>
             </File>
           </Files>
         </Group>

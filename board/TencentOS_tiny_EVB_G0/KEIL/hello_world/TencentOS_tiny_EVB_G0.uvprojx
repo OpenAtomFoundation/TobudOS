@@ -721,16 +721,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tos/cmsis</GroupName>
-          <Files>
-            <File>
-              <FileName>cmsis_os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\osal\cmsis_os\cmsis_os.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>tos/config</GroupName>
           <Files>
             <File>

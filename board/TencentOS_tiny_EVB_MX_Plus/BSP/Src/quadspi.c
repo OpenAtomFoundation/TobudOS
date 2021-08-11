@@ -67,7 +67,7 @@ void MX_QUADSPI_Init(void)
   }
 
 }
-
+#if 0
 void HAL_QSPI_MspInit(QSPI_HandleTypeDef* qspiHandle)
 {
 
@@ -123,6 +123,7 @@ void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef* qspiHandle)
   /* USER CODE END QUADSPI_MspDeInit 1 */
   }
 }
+#endif 
 
 /* USER CODE BEGIN 1 */
 

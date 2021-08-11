@@ -3,41 +3,20 @@
 #include "cmsis_os.h"
 
 #define USE_ESP8266
-//#define USE_SIM800A
-//#define USE_BC26
-//#define USE_EC20
-//#define USE_EC200S
+
 //#define USE_AIR724
-//#define USE_L610
+
 //#define USE_EC600S
 
 #ifdef USE_ESP8266
 #include "esp8266.h"
 #endif
 
-#ifdef USE_SIM800A
-#include "sim800a.h"
-#endif
-
-#ifdef USE_BC26
-#include "bc26.h"
-#endif
-
-#ifdef USE_EC20
-#include "ec20.h"
-#endif
-
-#ifdef USE_EC200S
-#include "ec200s.h"
-#endif
 
 #ifdef USE_AIR724
 #include "air724.h"
 #endif
 
-#ifdef USE_L610
-#include "l610.h"
-#endif
 
 #ifdef USE_EC600S
 #include "ec600s.h"
@@ -106,19 +85,8 @@ void application_entry(void *arg)
 #if defined(USE_ESP8266)
     esp8266_sal_init(HAL_UART_PORT_0);
     esp8266_join_ap("Mculover666", "mculover666");
-#elif defined(USE_SIM800A)
-    sim800a_power_on();
-    sim800a_sal_init(HAL_UART_PORT_2);
-#elif defined(USE_BC26)
-    bc26_sal_init(HAL_UART_PORT_2);
-#elif defined(USE_EC20)
-    ec20_sal_init(HAL_UART_PORT_0);
-#elif defined(USE_EC200S)
-    ec200s_sal_init(HAL_UART_PORT_0);
 #elif defined(USE_AIR724)
     air724_sal_init(HAL_UART_PORT_0);
-#elif defined(USE_L610)
-    l610_sal_init(HAL_UART_PORT_0);
 #elif defined(USE_EC600S)
     ec600s_sal_init(HAL_UART_PORT_0);
 #endif
