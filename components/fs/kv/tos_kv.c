@@ -1111,7 +1111,7 @@ __STATIC__ int kv_mgr_ctl_build(void)
 
         if (KV_BLK_IS_GC_DST_NOT_DONE(&blk_hdr)) {
             gc_dst_not_done_blk.blks[gc_dst_not_done_blk.nr++] = cur_blk;
-            continue
+            continue;
         }
 
         // do index building
