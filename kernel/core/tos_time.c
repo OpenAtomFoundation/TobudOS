@@ -39,12 +39,12 @@ __API__ void tos_systick_set(k_tick_t tick)
 
 __API__ k_time_t tos_tick2millisec(k_tick_t tick)
 {
-    return (k_time_t)(tick * K_TIME_MILLISEC_PER_SEC / TOS_CFG_CPU_TICK_PER_SECOND);
+    return (k_time_t)(tick * (K_TIME_MILLISEC_PER_SEC / TOS_CFG_CPU_TICK_PER_SECOND));
 }
 
 __API__ k_tick_t tos_millisec2tick(k_time_t ms)
 {
-    return ((k_tick_t)ms * TOS_CFG_CPU_TICK_PER_SECOND / K_TIME_MILLISEC_PER_SEC);
+    return (k_tick_t)(ms * (TOS_CFG_CPU_TICK_PER_SECOND / K_TIME_MILLISEC_PER_SEC));
 }
 
 __API__ k_err_t tos_sleep_ms(k_time_t ms)
