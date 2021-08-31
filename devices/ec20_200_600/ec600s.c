@@ -33,22 +33,21 @@ typedef struct ip_addr_st {
 
 static ip_addr_t domain_parser_addr = {0};
 static k_sem_t domain_parser_sem;
-static k_sem_t module_ready_sem;
 
 static int ec600s_check_ready(void)
 {
     at_echo_t echo;
+    int try = 0;
     
-    tos_sem_create_max(&module_ready_sem, 0, 1);
-    
-    tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 1000, "AT\r\n");
-    if (echo.status == AT_ECHO_STATUS_OK) {
-        return 0;
-    } else {
-        tos_sem_pend(&module_ready_sem, TOS_TIME_FOREVER);
-        return 0;
-    }   
+    while (try++ < 10) {
+        tos_at_echo_create(&echo, NULL, 0, NULL);
+        tos_at_cmd_exec(&echo, 1000, "AT\r\n");
+        if (echo.status == AT_ECHO_STATUS_OK) {
+            return 0;
+        }
+    }
+
+    return -1;
 }
 
 static int ec600s_echo_close(void)
@@ -570,16 +569,9 @@ __STATIC__ void ec600s_domain_data_process(void)
 
 }
 
-__STATIC__ void ec600s_ready_data_process(void)
-{
-    printf("module ready\r\n");
-    tos_sem_post(&module_ready_sem);
-}
-
 at_event_t ec600s_at_event[] = {
 	{ "+QIURC: \"recv\",",   ec600s_incoming_data_process},
     { "+QIURC: \"dnsgip\",", ec600s_domain_data_process},
-    { "RDY", ec600s_ready_data_process},
 };
 
 sal_module_t sal_module_ec600s = {
