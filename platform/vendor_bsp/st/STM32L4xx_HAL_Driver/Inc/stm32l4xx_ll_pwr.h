@@ -6,36 +6,20 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L4xx_LL_PWR_H
-#define __STM32L4xx_LL_PWR_H
+#ifndef STM32L4xx_LL_PWR_H
+#define STM32L4xx_LL_PWR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -188,6 +172,20 @@ extern "C" {
   */
 #define LL_PWR_BATT_CHARG_RESISTOR_5K      (0x00000000U)
 #define LL_PWR_BATT_CHARGRESISTOR_1_5K     (PWR_CR4_VBRS)
+/**
+  * @}
+  */
+
+/** @defgroup PWR_LL_EC_SRAM2_CONTENT_RETENTION SRAM2 CONTENT RETENTION
+  * @{
+  */
+#define LL_PWR_NO_SRAM2_RETENTION        (0x00000000U)
+#if defined(PWR_CR3_RRS_1)
+#define LL_PWR_FULL_SRAM2_RETENTION      PWR_CR3_RRS_0
+#define LL_PWR_4KBYTES_SRAM2_RETENTION   PWR_CR3_RRS_1
+#else
+#define LL_PWR_FULL_SRAM2_RETENTION      PWR_CR3_RRS
+#endif /* PWR_CR3_RRS_1 */
 /**
   * @}
   */
@@ -517,7 +515,7 @@ __STATIC_INLINE uint32_t LL_PWR_IsEnabledDSIPinsPDActivation(void)
 }
 #endif /* PWR_CR3_DSIPDEN */
 
-#if defined(PWR_CR2_PVME1)
+#if defined(PWR_CR2_USV)
 /**
   * @brief  Enable VDDUSB supply
   * @rmtoll CR2          USV           LL_PWR_EnableVddUSB
@@ -800,46 +798,46 @@ __STATIC_INLINE uint32_t LL_PWR_IsEnabledDSIPullDown(void)
 }
 #endif /* PWR_CR3_DSIPDEN */
 
-#if defined(PWR_CR3_EN_ULP)
+#if defined(PWR_CR3_ENULP)
 /**
   * @brief  Enable Ultra Low Power BORL, BORH and PVD for STOP2 and Standby modes
-  * @rmtoll CR3          EN_ULP       LL_PWR_EnableBORPVD_ULP
+  * @rmtoll CR3          ENULP        LL_PWR_EnableBORPVD_ULP
   * @retval None
   */
 __STATIC_INLINE void LL_PWR_EnableBORPVD_ULP(void)
 {
-  SET_BIT(PWR->CR3, PWR_CR3_EN_ULP);
+  SET_BIT(PWR->CR3, PWR_CR3_ENULP);
 }
 
 /**
   * @brief  Disable Ultra Low Power BORL, BORH and PVD for STOP2 and Standby modes
-  * @rmtoll CR3          EN_ULP       LL_PWR_DisableBORPVD_ULP
+  * @rmtoll CR3          ENULP        LL_PWR_DisableBORPVD_ULP
   * @retval None
   */
 __STATIC_INLINE void LL_PWR_DisableBORPVD_ULP(void)
 {
-  CLEAR_BIT(PWR->CR3, PWR_CR3_EN_ULP);
+  CLEAR_BIT(PWR->CR3, PWR_CR3_ENULP);
 }
 
 /**
   * @brief  Check if Ultra Low Power BORL, BORH and PVD for STOP2 and Standby modes is enabled
-  * @rmtoll CR3          EN_ULP       LL_PWR_IsEnabledBORPVD_ULP
+  * @rmtoll CR3          ENULP        LL_PWR_IsEnabledBORPVD_ULP
   * @retval State of bit (1 or 0).
   */
 __STATIC_INLINE uint32_t LL_PWR_IsEnabledBORPVD_ULP(void)
 {
-  return ((READ_BIT(PWR->CR3, PWR_CR3_EN_ULP) == (PWR_CR3_EN_ULP)) ? 1UL : 0UL);
+  return ((READ_BIT(PWR->CR3, PWR_CR3_ENULP) == (PWR_CR3_ENULP)) ? 1UL : 0UL);
 }
-#endif /* PWR_CR3_EN_ULP */
+#endif /* PWR_CR3_ENULP */
 
 /**
-  * @brief  Enable SRAM2 content retention in Standby mode
+  * @brief  Enable SRAM2 full content retention in Standby mode
   * @rmtoll CR3          RRS           LL_PWR_EnableSRAM2Retention
   * @retval None
   */
 __STATIC_INLINE void LL_PWR_EnableSRAM2Retention(void)
 {
-  SET_BIT(PWR->CR3, PWR_CR3_RRS);
+  MODIFY_REG(PWR->CR3, PWR_CR3_RRS, LL_PWR_FULL_SRAM2_RETENTION);
 }
 
 /**
@@ -853,13 +851,44 @@ __STATIC_INLINE void LL_PWR_DisableSRAM2Retention(void)
 }
 
 /**
-  * @brief  Check if SRAM2 content retention in Standby mode is enabled
+  * @brief  Check if SRAM2 full content retention in Standby mode is enabled
   * @rmtoll CR3          RRS           LL_PWR_IsEnabledSRAM2Retention
   * @retval State of bit (1 or 0).
   */
 __STATIC_INLINE uint32_t LL_PWR_IsEnabledSRAM2Retention(void)
 {
-  return ((READ_BIT(PWR->CR3, PWR_CR3_RRS) == (PWR_CR3_RRS)) ? 1UL : 0UL);
+  return ((READ_BIT(PWR->CR3, PWR_CR3_RRS) == (LL_PWR_FULL_SRAM2_RETENTION)) ? 1UL : 0UL);
+}
+
+/**
+  * @brief  Set SRAM2 content retention in Standby mode
+  * @rmtoll CR3          RRS          LL_PWR_SetSRAM2ContentRetention
+  * @param  SRAM2Size This parameter can be one of the following values:
+  *         @arg @ref LL_PWR_NO_SRAM2_RETENTION
+  *         @arg @ref LL_PWR_FULL_SRAM2_RETENTION
+  *         @arg @ref LL_PWR_4KBYTES_SRAM2_RETENTION
+  * @note  LL_PWR_4KBYTES_SRAM2_RETENTION parameter is not available on all devices
+  * @note  Setting LL_PWR_NO_SRAM2_RETENTION is same as calling LL_PWR_DisableSRAM2Retention()
+  * @note  Setting LL_PWR_FULL_SRAM2_RETENTION is same as calling LL_PWR_EnableSRAM2Retention()
+  * @retval None
+  */
+__STATIC_INLINE void LL_PWR_SetSRAM2ContentRetention(uint32_t SRAM2Size)
+{
+  MODIFY_REG(PWR->CR3, PWR_CR3_RRS, SRAM2Size);
+}
+
+/**
+  * @brief  Get SRAM2 content retention in Standby mode
+  * @rmtoll CR3          RRS          LL_PWR_GetSRAM2ContentRetention
+  * @retval Returned value can be one of the following values:
+  *         @arg @ref LL_PWR_NO_SRAM2_RETENTION
+  *         @arg @ref LL_PWR_FULL_SRAM2_RETENTION
+  *         @arg @ref LL_PWR_4KBYTES_SRAM2_RETENTION
+  * @note  LL_PWR_4KBYTES_SRAM2_RETENTION parameter is not available on all devices
+  */
+__STATIC_INLINE uint32_t LL_PWR_GetSRAM2ContentRetention(void)
+{
+  return (uint32_t)(READ_BIT(PWR->CR3, PWR_CR3_RRS));
 }
 
 /**
@@ -1119,7 +1148,7 @@ __STATIC_INLINE uint32_t LL_PWR_IsWakeUpPinPolarityLow(uint32_t WakeUpPin)
   */
 __STATIC_INLINE void LL_PWR_EnableGPIOPullUp(uint32_t GPIO, uint32_t GPIONumber)
 {
-  SET_BIT(*((uint32_t *)GPIO), GPIONumber);
+  SET_BIT(*((__IO uint32_t *)GPIO), GPIONumber);
 }
 
 /**
@@ -1166,7 +1195,7 @@ __STATIC_INLINE void LL_PWR_EnableGPIOPullUp(uint32_t GPIO, uint32_t GPIONumber)
   */
 __STATIC_INLINE void LL_PWR_DisableGPIOPullUp(uint32_t GPIO, uint32_t GPIONumber)
 {
-  CLEAR_BIT(*((uint32_t *)GPIO), GPIONumber);
+  CLEAR_BIT(*((__IO uint32_t *)GPIO), GPIONumber);
 }
 
 /**
@@ -1213,7 +1242,7 @@ __STATIC_INLINE void LL_PWR_DisableGPIOPullUp(uint32_t GPIO, uint32_t GPIONumber
   */
 __STATIC_INLINE uint32_t LL_PWR_IsEnabledGPIOPullUp(uint32_t GPIO, uint32_t GPIONumber)
 {
-  return ((READ_BIT(*((uint32_t *)(GPIO)), GPIONumber) == (GPIONumber)) ? 1UL : 0UL);
+  return ((READ_BIT(*((__IO uint32_t *)GPIO), GPIONumber) == (GPIONumber)) ? 1UL : 0UL);
 }
 
 /**
@@ -1260,8 +1289,7 @@ __STATIC_INLINE uint32_t LL_PWR_IsEnabledGPIOPullUp(uint32_t GPIO, uint32_t GPIO
   */
 __STATIC_INLINE void LL_PWR_EnableGPIOPullDown(uint32_t GPIO, uint32_t GPIONumber)
 {
-  register uint32_t temp = (uint32_t)(GPIO) + 4U;
-  SET_BIT(*((uint32_t *)(temp)), GPIONumber);
+  SET_BIT(*((__IO uint32_t *)(GPIO + 4U)), GPIONumber);
 }
 
 /**
@@ -1308,8 +1336,7 @@ __STATIC_INLINE void LL_PWR_EnableGPIOPullDown(uint32_t GPIO, uint32_t GPIONumbe
   */
 __STATIC_INLINE void LL_PWR_DisableGPIOPullDown(uint32_t GPIO, uint32_t GPIONumber)
 {
-  register uint32_t temp = (uint32_t)(GPIO) + 4U;
-  CLEAR_BIT(*((uint32_t *)(temp)), GPIONumber);
+  CLEAR_BIT(*((__IO uint32_t *)(GPIO + 4U)), GPIONumber);
 }
 
 /**
@@ -1356,8 +1383,7 @@ __STATIC_INLINE void LL_PWR_DisableGPIOPullDown(uint32_t GPIO, uint32_t GPIONumb
   */
 __STATIC_INLINE uint32_t LL_PWR_IsEnabledGPIOPullDown(uint32_t GPIO, uint32_t GPIONumber)
 {
-  register uint32_t temp = (uint32_t)(GPIO) + 4U;
-  return ((READ_BIT(*((uint32_t *)(temp)), GPIONumber) == (GPIONumber)) ? 1UL : 0UL);
+  return ((READ_BIT(*((__IO uint32_t *)(GPIO + 4U)), GPIONumber) == (GPIONumber)) ? 1UL : 0UL);
 }
 
 /**
@@ -1647,6 +1673,6 @@ ErrorStatus LL_PWR_DeInit(void);
 }
 #endif
 
-#endif /* __STM32L4xx_LL_PWR_H */
+#endif /* STM32L4xx_LL_PWR_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

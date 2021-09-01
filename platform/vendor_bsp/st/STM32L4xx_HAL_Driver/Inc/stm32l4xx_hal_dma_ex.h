@@ -6,29 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -139,8 +123,10 @@ typedef struct
 #define HAL_DMAMUX1_SYNC_DMAMUX1_CH3_EVT     19U           /*!<  Synchronization Signal is DMAMUX1 Channel3 Event  */
 #define HAL_DMAMUX1_SYNC_LPTIM1_OUT          20U           /*!<  Synchronization Signal is LPTIM1 OUT */
 #define HAL_DMAMUX1_SYNC_LPTIM2_OUT          21U           /*!<  Synchronization Signal is LPTIM2 OUT */
+#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define HAL_DMAMUX1_SYNC_DSI_TE              22U           /*!<  Synchronization Signal is DSI Tearing Effect      */
 #define HAL_DMAMUX1_SYNC_DSI_EOT             23U           /*!<  Synchronization Signal is DSI End of refresh      */
+#endif /* STM32L4R5xx || STM32L4R7xx || STM32L4R9xx || STM32L4S5xx || STM32L4S7xx || STM32L4S9xx */
 #define HAL_DMAMUX1_SYNC_DMA2D_EOT           24U           /*!<  Synchronization Signal is DMA2D End of Transfer   */
 #define HAL_DMAMUX1_SYNC_LDTC_IT             25U           /*!<  Synchronization Signal is LDTC IT    */
 
@@ -152,9 +138,9 @@ typedef struct
   * @{
   */
 #define HAL_DMAMUX_SYNC_NO_EVENT                               0U    /*!< block synchronization events        */
-#define HAL_DMAMUX_SYNC_RISING     ((uint32_t)DMAMUX_CxCR_SPOL_0)    /*!< synchronize with rising edge events */
-#define HAL_DMAMUX_SYNC_FALLING    ((uint32_t)DMAMUX_CxCR_SPOL_1)    /*!< synchronize with falling edge events */
-#define HAL_DMAMUX_SYNC_RISING_FALLING ((uint32_t)DMAMUX_CxCR_SPOL)  /*!< synchronize with rising and falling edge events */
+#define HAL_DMAMUX_SYNC_RISING                 DMAMUX_CxCR_SPOL_0    /*!< synchronize with rising edge events */
+#define HAL_DMAMUX_SYNC_FALLING                DMAMUX_CxCR_SPOL_1    /*!< synchronize with falling edge events */
+#define HAL_DMAMUX_SYNC_RISING_FALLING         DMAMUX_CxCR_SPOL      /*!< synchronize with rising and falling edge events */
 
 /**
   * @}
@@ -186,8 +172,10 @@ typedef struct
 #define HAL_DMAMUX1_REQ_GEN_DMAMUX1_CH3_EVT     19U        /*!< Request generator Signal is DMAMUX1 Channel3 Event */
 #define HAL_DMAMUX1_REQ_GEN_LPTIM1_OUT          20U        /*!< Request generator Signal is LPTIM1 OUT  */
 #define HAL_DMAMUX1_REQ_GEN_LPTIM2_OUT          21U        /*!< Request generator Signal is LPTIM2 OUT  */
+#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define HAL_DMAMUX1_REQ_GEN_DSI_TE              22U        /*!< Request generator Signal is DSI Tearing Effect      */
 #define HAL_DMAMUX1_REQ_GEN_DSI_EOT             23U        /*!< Request generator Signal is DSI End of refresh      */
+#endif /* STM32L4R5xx || STM32L4R7xx || STM32L4R9xx || STM32L4S5xx || STM32L4S7xx || STM32L4S9xx */
 #define HAL_DMAMUX1_REQ_GEN_DMA2D_EOT           24U        /*!< Request generator Signal is DMA2D End of Transfer   */
 #define HAL_DMAMUX1_REQ_GEN_LTDC_IT             25U        /*!< Request generator Signal is LTDC IT     */
 
@@ -198,7 +186,7 @@ typedef struct
 /** @defgroup DMAEx_DMAMUX_RequestGeneneratorPolarity_selection DMAMUX RequestGeneneratorPolarity selection
   * @{
   */
-#define HAL_DMAMUX_REQ_GEN_NO_EVENT                        0U    /*!< block request generator events        */
+#define HAL_DMAMUX_REQ_GEN_NO_EVENT       0U                     /*!< block request generator events        */
 #define HAL_DMAMUX_REQ_GEN_RISING         DMAMUX_RGxCR_GPOL_0    /*!< generate request on rising edge events */
 #define HAL_DMAMUX_REQ_GEN_FALLING        DMAMUX_RGxCR_GPOL_1    /*!< generate request on falling edge events */
 #define HAL_DMAMUX_REQ_GEN_RISING_FALLING DMAMUX_RGxCR_GPOL      /*!< generate request on rising and falling edge events */
@@ -245,6 +233,7 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
   */
 
 
+/* Private defines -----------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DMAEx_Private_Macros DMAEx Private Macros
   * @brief    DMAEx private macros
@@ -255,7 +244,7 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
 
 #define IS_DMAMUX_SYNC_REQUEST_NUMBER(REQUEST_NUMBER) (((REQUEST_NUMBER) > 0U) && ((REQUEST_NUMBER) <= 32U))
 
-#define IS_DMAMUX_SYNC_POLARITY(POLARITY) (((POLARITY) == HAL_DMAMUX_SYNC_NO_EVENT)    || \
+#define IS_DMAMUX_SYNC_POLARITY(POLARITY) (((POLARITY) == HAL_DMAMUX_SYNC_NO_EVENT) || \
                                            ((POLARITY) == HAL_DMAMUX_SYNC_RISING)   || \
                                            ((POLARITY) == HAL_DMAMUX_SYNC_FALLING)  || \
                                            ((POLARITY) == HAL_DMAMUX_SYNC_RISING_FALLING))

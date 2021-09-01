@@ -75,29 +75,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                       opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -118,7 +102,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_NB_DOUBLE_WORDS_IN_ROW  64
 #else
 #define FLASH_NB_DOUBLE_WORDS_IN_ROW  32
@@ -131,7 +115,6 @@
 /**
   * @brief  Variable used for Program/Erase sectors under interruption
   */
-extern FLASH_ProcessTypeDef pFlash;
 FLASH_ProcessTypeDef pFlash = {.Lock = HAL_UNLOCKED, \
                                .ErrorCode = HAL_FLASH_ERROR_NONE, \
                                .ProcedureOnGoing = FLASH_PROC_NONE, \
@@ -148,9 +131,6 @@ FLASH_ProcessTypeDef pFlash = {.Lock = HAL_UNLOCKED, \
 /** @defgroup FLASH_Private_Functions FLASH Private Functions
  * @{
  */
-HAL_StatusTypeDef    FLASH_WaitForLastOperation(uint32_t Timeout);
-extern void          FLASH_PageErase(uint32_t Page, uint32_t Banks);
-extern void          FLASH_FlushCaches(void);
 static void          FLASH_Program_DoubleWord(uint32_t Address, uint64_t Data);
 static void          FLASH_Program_Fast(uint32_t Address, uint32_t DataAddress);
 /**
@@ -179,10 +159,10 @@ static void          FLASH_Program_Fast(uint32_t Address, uint32_t DataAddress);
 
 /**
   * @brief  Program double word or fast program of a row at a specified address.
-  * @param  TypeProgram:  Indicate the way to program at a specified address.
+  * @param  TypeProgram  Indicate the way to program at a specified address.
   *                           This parameter can be a value of @ref FLASH_Type_Program
-  * @param  Address:  specifies the address to be programmed.
-  * @param  Data: specifies the data to be programmed
+  * @param  Address  specifies the address to be programmed.
+  * @param  Data specifies the data to be programmed
   *                This parameter is the data for the double word program and the address where
   *                are stored the data for the row fast program
   *
@@ -261,10 +241,10 @@ HAL_StatusTypeDef HAL_FLASH_Program(uint32_t TypeProgram, uint32_t Address, uint
 
 /**
   * @brief  Program double word or fast program of a row at a specified address with interrupt enabled.
-  * @param  TypeProgram:  Indicate the way to program at a specified address.
+  * @param  TypeProgram  Indicate the way to program at a specified address.
   *                           This parameter can be a value of @ref FLASH_Type_Program
-  * @param  Address:  specifies the address to be programmed.
-  * @param  Data: specifies the data to be programmed
+  * @param  Address  specifies the address to be programmed.
+  * @param  Data specifies the data to be programmed
   *                This parameter is the data for the double word program and the address where
   *                are stored the data for the row fast program
   *
@@ -340,6 +320,7 @@ void HAL_FLASH_IRQHandler(void)
   CLEAR_BIT(FLASH->CR, (FLASH_CR_PG | FLASH_CR_MER1 | FLASH_CR_PER | FLASH_CR_PNB));
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
     defined (STM32L496xx) || defined (STM32L4A6xx) || \
+    defined (STM32L4P5xx) || defined (STM32L4Q5xx) || \
     defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
   CLEAR_BIT(FLASH->CR, FLASH_CR_MER2);
 #endif
@@ -352,7 +333,6 @@ void HAL_FLASH_IRQHandler(void)
 
   /* Check FLASH operation error flags */
   error = (FLASH->SR & FLASH_FLAG_SR_ERRORS);
-  error |= (FLASH->ECCR & FLASH_FLAG_ECCC);
 
   if (error !=0U)
   {
@@ -466,7 +446,7 @@ void HAL_FLASH_IRQHandler(void)
 
 /**
   * @brief  FLASH end of operation interrupt callback.
-  * @param  ReturnValue: The value saved in this parameter depends on the ongoing procedure
+  * @param  ReturnValue The value saved in this parameter depends on the ongoing procedure
   *                  Mass Erase: Bank number which has been requested to erase
   *                  Page Erase: Page which has been erased
   *                    (if 0xFFFFFFFF, it means that all the selected pages have been erased)
@@ -485,7 +465,7 @@ __weak void HAL_FLASH_EndOfOperationCallback(uint32_t ReturnValue)
 
 /**
   * @brief  FLASH operation error interrupt callback.
-  * @param  ReturnValue: The value saved in this parameter depends on the ongoing procedure
+  * @param  ReturnValue The value saved in this parameter depends on the ongoing procedure
   *                 Mass Erase: Bank number which has been requested to erase
   *                 Page Erase: Page number which returned an error
   *                 Program: Address which was selected for data program
@@ -640,7 +620,6 @@ HAL_StatusTypeDef HAL_FLASH_OB_Launch(void)
   *            @arg HAL_FLASH_ERROR_RD: FLASH PCROP read error
   *            @arg HAL_FLASH_ERROR_OPTV: FLASH Option validity error
   *            @arg FLASH_FLAG_PEMPTY : FLASH Boot from not programmed flash (apply only for STM32L43x/STM32L44x devices)
-  *            @arg HAL_FLASH_ERROR_ECCD: FLASH two ECC errors have been detected
   */
 uint32_t HAL_FLASH_GetError(void)
 {
@@ -663,7 +642,7 @@ uint32_t HAL_FLASH_GetError(void)
 
 /**
   * @brief  Wait for a FLASH operation to complete.
-  * @param  Timeout: maximum flash operation timeout
+  * @param  Timeout maximum flash operation timeout
   * @retval HAL_StatusTypeDef HAL Status
   */
 HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout)
@@ -687,7 +666,6 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout)
   }
 
   error = (FLASH->SR & FLASH_FLAG_SR_ERRORS);
-  error |= (FLASH->ECCR & FLASH_FLAG_ECCD);
 
   if(error != 0u)
   {
@@ -713,8 +691,8 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout)
 
 /**
   * @brief  Program double-word (64-bit) at a specified address.
-  * @param  Address: specifies the address to be programmed.
-  * @param  Data: specifies the data to be programmed.
+  * @param  Address specifies the address to be programmed.
+  * @param  Data specifies the data to be programmed.
   * @retval None
   */
 static void FLASH_Program_DoubleWord(uint32_t Address, uint64_t Data)
@@ -725,19 +703,26 @@ static void FLASH_Program_DoubleWord(uint32_t Address, uint64_t Data)
   /* Set PG bit */
   SET_BIT(FLASH->CR, FLASH_CR_PG);
 
-  /* Program the double word */
+  /* Program first word */
   *(__IO uint32_t*)Address = (uint32_t)Data;
+
+  /* Barrier to ensure programming is performed in 2 steps, in right order
+    (independently of compiler optimization behavior) */
+  __ISB();
+
+  /* Program second word */
   *(__IO uint32_t*)(Address+4U) = (uint32_t)(Data >> 32);
 }
 
 /**
   * @brief  Fast program a row double-word (64-bit) at a specified address.
-  * @param  Address: specifies the address to be programmed.
-  * @param  DataAddress: specifies the address where the data are stored.
+  * @param  Address specifies the address to be programmed.
+  * @param  DataAddress specifies the address where the data are stored.
   * @retval None
   */
 static void FLASH_Program_Fast(uint32_t Address, uint32_t DataAddress)
 {
+  uint32_t primask_bit;
   uint8_t row_index = (2*FLASH_NB_DOUBLE_WORDS_IN_ROW);
   __IO uint32_t *dest_addr = (__IO uint32_t*)Address;
   __IO uint32_t *src_addr = (__IO uint32_t*)DataAddress;
@@ -749,6 +734,7 @@ static void FLASH_Program_Fast(uint32_t Address, uint32_t DataAddress)
   SET_BIT(FLASH->CR, FLASH_CR_FSTPG);
 
   /* Disable interrupts to avoid any interruption during the loop */
+  primask_bit = __get_PRIMASK();
   __disable_irq();
 
   /* Program the double word of the row */
@@ -761,7 +747,7 @@ static void FLASH_Program_Fast(uint32_t Address, uint32_t DataAddress)
   } while (row_index != 0U);
 
   /* Re-enable the interrupts */
-  __enable_irq();
+  __set_PRIMASK(primask_bit);
 }
 
 /**

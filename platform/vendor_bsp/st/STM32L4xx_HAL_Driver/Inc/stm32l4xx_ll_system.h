@@ -19,29 +19,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -79,7 +63,7 @@ extern "C" {
  * @brief Power-down in Run mode Flash key
  */
 #define FLASH_PDKEY1                  0x04152637U /*!< Flash power down key1 */
-#define FLASH_PDKEY2                  0xFAFBFCFDU /*!< Flash power down key2: used with FLASH_PDKEY1 
+#define FLASH_PDKEY2                  0xFAFBFCFDU /*!< Flash power down key2: used with FLASH_PDKEY1
                                                        to unlock the RUN_PD bit in FLASH_ACR */
 
 /**
@@ -112,9 +96,9 @@ extern "C" {
 /** @defgroup SYSTEM_LL_EC_BANKMODE SYSCFG BANK MODE
   * @{
   */
-#define LL_SYSCFG_BANKMODE_BANK1           0x00000000U               /*!< Flash Bank1 mapped at 0x08000000 (and aliased @0x00000000) 
+#define LL_SYSCFG_BANKMODE_BANK1           0x00000000U               /*!< Flash Bank1 mapped at 0x08000000 (and aliased @0x00000000)
                                                                       and Flash Bank2 mapped at 0x08080000 (and aliased at 0x00080000) */
-#define LL_SYSCFG_BANKMODE_BANK2           SYSCFG_MEMRMP_FB_MODE     /*!< Flash Bank2 mapped at 0x08000000 (and aliased @0x00000000) 
+#define LL_SYSCFG_BANKMODE_BANK2           SYSCFG_MEMRMP_FB_MODE     /*!< Flash Bank2 mapped at 0x08000000 (and aliased @0x00000000)
                                                                       and Flash Bank1 mapped at 0x08080000 (and aliased at 0x00080000) */
 /**
   * @}
@@ -192,14 +176,14 @@ extern "C" {
 /** @defgroup SYSTEM_LL_EC_TIMBREAK SYSCFG TIMER BREAK
   * @{
   */
-#define LL_SYSCFG_TIMBREAK_ECC             SYSCFG_CFGR2_ECCL  /*!< Enables and locks the ECC error signal 
+#define LL_SYSCFG_TIMBREAK_ECC             SYSCFG_CFGR2_ECCL  /*!< Enables and locks the ECC error signal
                                                                    with Break Input of TIM1/8/15/16/17                           */
-#define LL_SYSCFG_TIMBREAK_PVD             SYSCFG_CFGR2_PVDL  /*!< Enables and locks the PVD connection 
-                                                                   with TIM1/8/15/16/17 Break Input 
+#define LL_SYSCFG_TIMBREAK_PVD             SYSCFG_CFGR2_PVDL  /*!< Enables and locks the PVD connection
+                                                                   with TIM1/8/15/16/17 Break Input
                                                                    and also the PVDE and PLS bits of the Power Control Interface */
-#define LL_SYSCFG_TIMBREAK_SRAM2_PARITY    SYSCFG_CFGR2_SPL   /*!< Enables and locks the SRAM2_PARITY error signal 
+#define LL_SYSCFG_TIMBREAK_SRAM2_PARITY    SYSCFG_CFGR2_SPL   /*!< Enables and locks the SRAM2_PARITY error signal
                                                                    with Break Input of TIM1/8/15/16/17                           */
-#define LL_SYSCFG_TIMBREAK_LOCKUP          SYSCFG_CFGR2_CLL   /*!< Enables and locks the LOCKUP output of CortexM4 
+#define LL_SYSCFG_TIMBREAK_LOCKUP          SYSCFG_CFGR2_CLL   /*!< Enables and locks the LOCKUP output of CortexM4
                                                                    with Break Input of TIM1/15/16/17                             */
 /**
   * @}
@@ -835,7 +819,7 @@ __STATIC_INLINE uint32_t LL_SYSCFG_GetEXTISource(uint32_t Line)
   * @brief  Enable SRAM2 Erase (starts a hardware SRAM2 erase operation. This bit is
   * automatically cleared at the end of the SRAM2 erase operation.)
   * @note This bit is write-protected: setting this bit is possible only after the
-  *       correct key sequence is written in the SYSCFG_SKR register as described in 
+  *       correct key sequence is written in the SYSCFG_SKR register as described in
   *       the Reference Manual.
   * @rmtoll SYSCFG_SCSR  SRAM2ER       LL_SYSCFG_EnableSRAM2Erase
   * @retval None

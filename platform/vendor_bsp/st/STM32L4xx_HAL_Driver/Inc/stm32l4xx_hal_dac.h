@@ -6,29 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -71,7 +55,7 @@ typedef enum
   HAL_DAC_STATE_TIMEOUT           = 0x03U,  /*!< DAC timeout state                    */
   HAL_DAC_STATE_ERROR             = 0x04U   /*!< DAC error state                      */
 
-}HAL_DAC_StateTypeDef;
+} HAL_DAC_StateTypeDef;
 
 /**
   * @brief  DAC handle Structure definition
@@ -79,7 +63,7 @@ typedef enum
 #if (USE_HAL_DAC_REGISTER_CALLBACKS == 1)
 typedef struct __DAC_HandleTypeDef
 #else
-typedef struct DAC_HandleTypeDef
+typedef struct
 #endif
 {
   DAC_TypeDef                 *Instance;     /*!< Register base address             */
@@ -99,16 +83,16 @@ typedef struct DAC_HandleTypeDef
   void (* ConvHalfCpltCallbackCh1)        (struct __DAC_HandleTypeDef *hdac);
   void (* ErrorCallbackCh1)               (struct __DAC_HandleTypeDef *hdac);
   void (* DMAUnderrunCallbackCh1)         (struct __DAC_HandleTypeDef *hdac);
-  void (* ConvCpltCallbackCh2)            (struct __DAC_HandleTypeDef* hdac);
-  void (* ConvHalfCpltCallbackCh2)        (struct __DAC_HandleTypeDef* hdac);
-  void (* ErrorCallbackCh2)               (struct __DAC_HandleTypeDef* hdac);
-  void (* DMAUnderrunCallbackCh2)         (struct __DAC_HandleTypeDef* hdac);
+  void (* ConvCpltCallbackCh2)            (struct __DAC_HandleTypeDef *hdac);
+  void (* ConvHalfCpltCallbackCh2)        (struct __DAC_HandleTypeDef *hdac);
+  void (* ErrorCallbackCh2)               (struct __DAC_HandleTypeDef *hdac);
+  void (* DMAUnderrunCallbackCh2)         (struct __DAC_HandleTypeDef *hdac);
 
   void (* MspInitCallback)                (struct __DAC_HandleTypeDef *hdac);
   void (* MspDeInitCallback )             (struct __DAC_HandleTypeDef *hdac);
 #endif /* USE_HAL_DAC_REGISTER_CALLBACKS */
 
-}DAC_HandleTypeDef;
+} DAC_HandleTypeDef;
 
 /**
   * @brief   DAC Configuration sample and hold Channel structure definition
@@ -126,18 +110,17 @@ typedef struct
   uint32_t DAC_RefreshTime ;         /*!< Specifies the refresh time for the selected channel
                                           This parameter applies when DAC_SampleAndHold is DAC_SAMPLEANDHOLD_ENABLE.
                                           This parameter must be a number between Min_Data = 0 and Max_Data = 255 */
-}
-DAC_SampleAndHoldConfTypeDef;
+} DAC_SampleAndHoldConfTypeDef;
 
 /**
   * @brief   DAC Configuration regular Channel structure definition
   */
 typedef struct
 {
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
   uint32_t DAC_HighFrequency;            /*!< Specifies the frequency interface mode
                                               This parameter can be a value of @ref DAC_HighFrequency */
-#endif /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx */
+#endif /* STM32L4P5xx STM32L4Q5xx STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx */
 
   uint32_t DAC_SampleAndHold;            /*!< Specifies whether the DAC mode.
                                               This parameter can be a value of @ref DAC_SampleAndHold */
@@ -161,7 +144,7 @@ typedef struct
 
   DAC_SampleAndHoldConfTypeDef  DAC_SampleAndHoldConfig;  /*!< Sample and Hold settings */
 
-}DAC_ChannelConfTypeDef;
+} DAC_ChannelConfTypeDef;
 
 #if (USE_HAL_DAC_REGISTER_CALLBACKS == 1)
 /**
@@ -177,10 +160,10 @@ typedef enum
   HAL_DAC_CH2_HALF_COMPLETE_CB_ID            = 0x05U,  /*!< DAC CH2 half Complete Callback ID */
   HAL_DAC_CH2_ERROR_ID                       = 0x06U,  /*!< DAC CH2 error Callback ID         */
   HAL_DAC_CH2_UNDERRUN_CB_ID                 = 0x07U,  /*!< DAC CH2 underrun Callback ID      */
-  HAL_DAC_MSP_INIT_CB_ID                     = 0x08U,  /*!< DAC MspInit Callback ID           */
-  HAL_DAC_MSP_DEINIT_CB_ID                   = 0x09U,  /*!< DAC MspDeInit Callback ID         */
+  HAL_DAC_MSPINIT_CB_ID                      = 0x08U,  /*!< DAC MspInit Callback ID           */
+  HAL_DAC_MSPDEINIT_CB_ID                    = 0x09U,  /*!< DAC MspDeInit Callback ID         */
   HAL_DAC_ALL_CB_ID                          = 0x0AU   /*!< DAC All ID                        */
-}HAL_DAC_CallbackIDTypeDef;
+} HAL_DAC_CallbackIDTypeDef;
 
 /**
   * @brief  HAL DAC Callback pointer definition
@@ -251,7 +234,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 #endif     /* STM32L471xx STM32L475xx STM32L476xx STM32L485xx STM32L486xx STM32L496xx STM32L4A6xx*/
 
 
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
 #define DAC_TRIGGER_NONE        0x00000000U                                                                       /*!< conversion is automatic once the DAC_DHRxxxx register has been loaded, and not by external trigger */
 #define DAC_TRIGGER_SOFTWARE    (                                                                    DAC_CR_TEN1) /*!< conversion started by software trigger for DAC channel */
 #define DAC_TRIGGER_T1_TRGO     (                                                   DAC_CR_TSEL1_0 | DAC_CR_TEN1) /*!< TIM1 TRGO selected as external conversion trigger for DAC channel. */
@@ -266,7 +249,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 #define DAC_TRIGGER_LPTIM2_OUT  (DAC_CR_TSEL1_3 | DAC_CR_TSEL1_2                                   | DAC_CR_TEN1) /*!< LPTIM2 OUT TRGO selected as external conversion trigger for DAC channel */
 #define DAC_TRIGGER_EXT_IT9     (DAC_CR_TSEL1_3 | DAC_CR_TSEL1_2                  | DAC_CR_TSEL1_0 | DAC_CR_TEN1) /*!< EXTI Line9 event selected as external conversion trigger for DAC channel */
 
-#endif /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx  */
+#endif /* STM32L4P5xx STM32L4Q5xx STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx  */
 
 
 /**
@@ -289,11 +272,13 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 #define DAC_CHANNEL_1                      0x00000000U
 #if defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || defined (STM32L442xx) || defined (STM32L443xx) || \
     defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || defined (STM32L496xx) || defined (STM32L4A6xx) || \
+    defined (STM32L4P5xx) || defined (STM32L4Q5xx) || \
     defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
 #define DAC_CHANNEL_2                      0x00000010U
 #endif  /* STM32L431xx STM32L432xx STM32L433xx STM32L442xx STM32L443xx                         */
         /* STM32L471xx STM32L475xx STM32L476xx STM32L485xx STM32L486xx STM32L496xx STM32L4A6xx */
-        /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx                                     */
+        /* STM32L4P5xx STM32L4Q5xx                                                             */
+        /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx             */
 
 /**
   * @}
@@ -343,7 +328,6 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   /** @defgroup DAC_UserTrimming DAC User Trimming
   * @{
   */
-
 #define DAC_TRIMMING_FACTORY        0x00000000U           /*!< Factory trimming */
 #define DAC_TRIMMING_USER           0x00000001U           /*!< User trimming */
 
@@ -360,18 +344,18 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /**
   * @}
   */
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
 /** @defgroup DAC_HighFrequency DAC high frequency interface mode
   * @{
   */
-#define DAC_HIGH_FREQUENCY_INTERFACE_MODE_DISABLE        ((uint32_t)0x00000000)           /*!< High frequency interface mode disabled */
-#define DAC_HIGH_FREQUENCY_INTERFACE_MODE_ABOVE_80MHZ    ((uint32_t)DAC_CR_HFSEL)         /*!< High frequency interface mode enabled */
-#define DAC_HIGH_FREQUENCY_INTERFACE_MODE_AUTOMATIC      ((uint32_t)0x00000002)           /*!< High frequency interface mode automatic */
+#define DAC_HIGH_FREQUENCY_INTERFACE_MODE_DISABLE        0x00000000U        /*!< High frequency interface mode disabled */
+#define DAC_HIGH_FREQUENCY_INTERFACE_MODE_ABOVE_80MHZ    (DAC_CR_HFSEL)     /*!< High frequency interface mode compatible to AHB>80MHz enabled */
+#define DAC_HIGH_FREQUENCY_INTERFACE_MODE_AUTOMATIC      0x00000002U        /*!< High frequency interface mode automatic */
 
 /**
   * @}
   */
-#endif /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx */
+#endif /* STM32L4P5xx STM32L4Q5xx STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx */
 
 /**
   * @}
@@ -388,10 +372,10 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   * @retval None
   */
 #if (USE_HAL_DAC_REGISTER_CALLBACKS == 1)
-#define __HAL_DAC_RESET_HANDLE_STATE(__HANDLE__)           do {                                              \
-                                                                 (__HANDLE__)->State = HAL_DAC_STATE_RESET; \
-                                                                 (__HANDLE__)->MspInitCallback = NULL;       \
-                                                                 (__HANDLE__)->MspDeInitCallback = NULL;     \
+#define __HAL_DAC_RESET_HANDLE_STATE(__HANDLE__) do {                                                        \
+                                                      (__HANDLE__)->State             = HAL_DAC_STATE_RESET; \
+                                                      (__HANDLE__)->MspInitCallback   = NULL;                \
+                                                      (__HANDLE__)->MspDeInitCallback = NULL;                \
                                                                } while(0)
 #else
 #define __HAL_DAC_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_DAC_STATE_RESET)
@@ -495,12 +479,14 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 
 #if defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || defined (STM32L442xx) || defined (STM32L443xx) || \
     defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || defined (STM32L496xx) || defined (STM32L4A6xx) || \
+    defined (STM32L4P5xx) || defined (STM32L4Q5xx) || \
     defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined(STM32L4S9xx)
 #define IS_DAC_CHANNEL(CHANNEL) (((CHANNEL) == DAC_CHANNEL_1) || \
                                 ((CHANNEL) == DAC_CHANNEL_2))
 #endif  /* STM32L431xx STM32L432xx STM32L433xx STM32L442xx STM32L443xx                         */
         /* STM32L471xx STM32L475xx STM32L476xx STM32L485xx STM32L486xx STM32L496xx STM32L4A6xx */
-        /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx                                     */
+        /* STM32L4P5xx STM32L4Q5xx                                                             */
+        /* STM32L4R5xx STM32L4R7xx STM32L4R9xx STM32L4S5xx STM32L4S7xx STM32L4S9xx             */
 
 #if defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx)
 #define IS_DAC_CHANNEL(CHANNEL) ((CHANNEL) == DAC_CHANNEL_1)
@@ -531,10 +517,10 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   * @{
   */
 /* Initialization and de-initialization functions *****************************/
-HAL_StatusTypeDef HAL_DAC_Init(DAC_HandleTypeDef* hdac);
-HAL_StatusTypeDef HAL_DAC_DeInit(DAC_HandleTypeDef* hdac);
-void HAL_DAC_MspInit(DAC_HandleTypeDef* hdac);
-void HAL_DAC_MspDeInit(DAC_HandleTypeDef* hdac);
+HAL_StatusTypeDef HAL_DAC_Init(DAC_HandleTypeDef *hdac);
+HAL_StatusTypeDef HAL_DAC_DeInit(DAC_HandleTypeDef *hdac);
+void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac);
+void HAL_DAC_MspDeInit(DAC_HandleTypeDef *hdac);
 
 /**
   * @}
@@ -544,24 +530,26 @@ void HAL_DAC_MspDeInit(DAC_HandleTypeDef* hdac);
  * @{
  */
 /* IO operation functions *****************************************************/
-HAL_StatusTypeDef HAL_DAC_Start(DAC_HandleTypeDef* hdac, uint32_t Channel);
-HAL_StatusTypeDef HAL_DAC_Stop(DAC_HandleTypeDef* hdac, uint32_t Channel);
-HAL_StatusTypeDef HAL_DAC_Start_DMA(DAC_HandleTypeDef* hdac, uint32_t Channel, uint32_t* pData, uint32_t Length, uint32_t Alignment);
-HAL_StatusTypeDef HAL_DAC_Stop_DMA(DAC_HandleTypeDef* hdac, uint32_t Channel);
+HAL_StatusTypeDef HAL_DAC_Start(DAC_HandleTypeDef *hdac, uint32_t Channel);
+HAL_StatusTypeDef HAL_DAC_Stop(DAC_HandleTypeDef *hdac, uint32_t Channel);
+HAL_StatusTypeDef HAL_DAC_Start_DMA(DAC_HandleTypeDef *hdac, uint32_t Channel, uint32_t *pData, uint32_t Length,
+                                    uint32_t Alignment);
+HAL_StatusTypeDef HAL_DAC_Stop_DMA(DAC_HandleTypeDef *hdac, uint32_t Channel);
 
-void HAL_DAC_IRQHandler(DAC_HandleTypeDef* hdac);
+void HAL_DAC_IRQHandler(DAC_HandleTypeDef *hdac);
 
-HAL_StatusTypeDef HAL_DAC_SetValue(DAC_HandleTypeDef* hdac, uint32_t Channel, uint32_t Alignment, uint32_t Data);
+HAL_StatusTypeDef HAL_DAC_SetValue(DAC_HandleTypeDef *hdac, uint32_t Channel, uint32_t Alignment, uint32_t Data);
 
-void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef* hdac);
-void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef* hdac);
+void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac);
+void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac);
 void HAL_DAC_ErrorCallbackCh1(DAC_HandleTypeDef *hdac);
 void HAL_DAC_DMAUnderrunCallbackCh1(DAC_HandleTypeDef *hdac);
 
 #if (USE_HAL_DAC_REGISTER_CALLBACKS == 1)
 /* DAC callback registering/unregistering */
-HAL_StatusTypeDef     HAL_DAC_RegisterCallback (DAC_HandleTypeDef *hdac, HAL_DAC_CallbackIDTypeDef CallbackID, pDAC_CallbackTypeDef pCallback);
-HAL_StatusTypeDef     HAL_DAC_UnRegisterCallback (DAC_HandleTypeDef *hdac, HAL_DAC_CallbackIDTypeDef CallbackID);
+HAL_StatusTypeDef     HAL_DAC_RegisterCallback(DAC_HandleTypeDef *hdac, HAL_DAC_CallbackIDTypeDef CallbackID,
+                                               pDAC_CallbackTypeDef pCallback);
+HAL_StatusTypeDef     HAL_DAC_UnRegisterCallback(DAC_HandleTypeDef *hdac, HAL_DAC_CallbackIDTypeDef CallbackID);
 #endif /* USE_HAL_DAC_REGISTER_CALLBACKS */
 
 /**
@@ -572,9 +560,9 @@ HAL_StatusTypeDef     HAL_DAC_UnRegisterCallback (DAC_HandleTypeDef *hdac, HAL_D
   * @{
   */
 /* Peripheral Control functions ***********************************************/
-uint32_t HAL_DAC_GetValue(DAC_HandleTypeDef* hdac, uint32_t Channel);
+uint32_t HAL_DAC_GetValue(DAC_HandleTypeDef *hdac, uint32_t Channel);
 
-HAL_StatusTypeDef HAL_DAC_ConfigChannel(DAC_HandleTypeDef* hdac, DAC_ChannelConfTypeDef* sConfig, uint32_t Channel);
+HAL_StatusTypeDef HAL_DAC_ConfigChannel(DAC_HandleTypeDef *hdac, DAC_ChannelConfTypeDef *sConfig, uint32_t Channel);
 /**
   * @}
   */
@@ -583,13 +571,23 @@ HAL_StatusTypeDef HAL_DAC_ConfigChannel(DAC_HandleTypeDef* hdac, DAC_ChannelConf
   * @{
   */
 /* Peripheral State and Error functions ***************************************/
-HAL_DAC_StateTypeDef HAL_DAC_GetState(DAC_HandleTypeDef* hdac);
+HAL_DAC_StateTypeDef HAL_DAC_GetState(DAC_HandleTypeDef *hdac);
 uint32_t HAL_DAC_GetError(DAC_HandleTypeDef *hdac);
 
 /**
   * @}
   */
 
+/**
+  * @}
+  */
+
+/** @defgroup DAC_Private_Functions DAC Private Functions
+  * @{
+  */
+void DAC_DMAConvCpltCh1(DMA_HandleTypeDef *hdma);
+void DAC_DMAErrorCh1(DMA_HandleTypeDef *hdma);
+void DAC_DMAHalfConvCpltCh1(DMA_HandleTypeDef *hdma);
 /**
   * @}
   */

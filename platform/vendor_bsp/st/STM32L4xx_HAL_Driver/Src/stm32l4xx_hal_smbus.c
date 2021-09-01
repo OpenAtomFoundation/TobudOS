@@ -89,12 +89,12 @@
 
      *** Callback registration ***
      =============================================
-
+    [..]
      The compilation flag USE_HAL_SMBUS_REGISTER_CALLBACKS when set to 1
      allows the user to configure dynamically the driver callbacks.
      Use Functions @ref HAL_SMBUS_RegisterCallback() or @ref HAL_SMBUS_RegisterAddrCallback()
      to register an interrupt callback.
-
+    [..]
      Function @ref HAL_SMBUS_RegisterCallback() allows to register following callbacks:
        (+) MasterTxCpltCallback : callback for Master transmission end of transfer.
        (+) MasterRxCpltCallback : callback for Master reception end of transfer.
@@ -106,9 +106,9 @@
        (+) MspDeInitCallback    : callback for Msp DeInit.
      This function takes as parameters the HAL peripheral handle, the Callback ID
      and a pointer to the user callback function.
-
+    [..]
      For specific callback AddrCallback use dedicated register callbacks : @ref HAL_SMBUS_RegisterAddrCallback.
-
+    [..]
      Use function @ref HAL_SMBUS_UnRegisterCallback to reset a callback to the default
      weak function.
      @ref HAL_SMBUS_UnRegisterCallback takes as parameters the HAL peripheral handle,
@@ -122,9 +122,9 @@
        (+) ErrorCallback        : callback for error detection.
        (+) MspInitCallback      : callback for Msp Init.
        (+) MspDeInitCallback    : callback for Msp DeInit.
-
+    [..]
      For callback AddrCallback use dedicated register callbacks : @ref HAL_SMBUS_UnRegisterAddrCallback.
-
+    [..]
      By default, after the @ref HAL_SMBUS_Init() and when the state is @ref HAL_I2C_STATE_RESET
      all callbacks are set to the corresponding weak functions:
      examples @ref HAL_SMBUS_MasterTxCpltCallback(), @ref HAL_SMBUS_MasterRxCpltCallback().
@@ -133,7 +133,7 @@
      these callbacks are null (not registered beforehand).
      If MspInit or MspDeInit are not null, the @ref HAL_SMBUS_Init()/ @ref HAL_SMBUS_DeInit()
      keep and use the user MspInit/MspDeInit callbacks (registered beforehand) whatever the state.
-
+    [..]
      Callbacks can be registered/unregistered in @ref HAL_I2C_STATE_READY state only.
      Exception done MspInit/MspDeInit functions that can be registered/unregistered
      in @ref HAL_I2C_STATE_READY or @ref HAL_I2C_STATE_RESET state,
@@ -141,7 +141,7 @@
      Then, the user first registers the MspInit/MspDeInit user callbacks
      using @ref HAL_SMBUS_RegisterCallback() before calling @ref HAL_SMBUS_DeInit()
      or @ref HAL_SMBUS_Init() function.
-
+    [..]
      When the compilation flag USE_HAL_SMBUS_REGISTER_CALLBACKS is set to 0 or
      not defined, the callback registration feature is not available and all callbacks
      are set to the corresponding weak functions.
@@ -153,29 +153,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -219,10 +203,11 @@
 /** @addtogroup SMBUS_Private_Functions SMBUS Private Functions
   * @{
   */
-static HAL_StatusTypeDef SMBUS_WaitOnFlagUntilTimeout(SMBUS_HandleTypeDef *hsmbus, uint32_t Flag, FlagStatus Status, uint32_t Timeout);
+static HAL_StatusTypeDef SMBUS_WaitOnFlagUntilTimeout(SMBUS_HandleTypeDef *hsmbus, uint32_t Flag, FlagStatus Status,
+                                                      uint32_t Timeout);
 
-static void SMBUS_Enable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint16_t InterruptRequest);
-static void SMBUS_Disable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint16_t InterruptRequest);
+static void SMBUS_Enable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint32_t InterruptRequest);
+static void SMBUS_Disable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint32_t InterruptRequest);
 static HAL_StatusTypeDef SMBUS_Master_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t StatusFlags);
 static HAL_StatusTypeDef SMBUS_Slave_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t StatusFlags);
 
@@ -230,7 +215,8 @@ static void SMBUS_ConvertOtherXferOptions(SMBUS_HandleTypeDef *hsmbus);
 
 static void SMBUS_ITErrorHandler(SMBUS_HandleTypeDef *hsmbus);
 
-static void SMBUS_TransferConfig(SMBUS_HandleTypeDef *hsmbus,  uint16_t DevAddress, uint8_t Size, uint32_t Mode, uint32_t Request);
+static void SMBUS_TransferConfig(SMBUS_HandleTypeDef *hsmbus,  uint16_t DevAddress, uint8_t Size, uint32_t Mode,
+                                 uint32_t Request);
 /**
   * @}
   */
@@ -242,8 +228,8 @@ static void SMBUS_TransferConfig(SMBUS_HandleTypeDef *hsmbus,  uint16_t DevAddre
   */
 
 /** @defgroup SMBUS_Exported_Functions_Group1 Initialization and de-initialization functions
- *  @brief    Initialization and Configuration functions
- *
+  *  @brief    Initialization and Configuration functions
+  *
 @verbatim
  ===============================================================================
               ##### Initialization and de-initialization functions #####
@@ -595,7 +581,8 @@ HAL_StatusTypeDef HAL_SMBUS_ConfigDigitalFilter(SMBUS_HandleTypeDef *hsmbus, uin
   * @param  pCallback pointer to the Callback function
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMBUS_RegisterCallback(SMBUS_HandleTypeDef *hsmbus, HAL_SMBUS_CallbackIDTypeDef CallbackID, pSMBUS_CallbackTypeDef pCallback)
+HAL_StatusTypeDef HAL_SMBUS_RegisterCallback(SMBUS_HandleTypeDef *hsmbus, HAL_SMBUS_CallbackIDTypeDef CallbackID,
+                                             pSMBUS_CallbackTypeDef pCallback)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -874,8 +861,8 @@ HAL_StatusTypeDef HAL_SMBUS_UnRegisterAddrCallback(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /** @defgroup SMBUS_Exported_Functions_Group2 Input and Output operation functions
- *  @brief   Data transfers functions
- *
+  *  @brief   Data transfers functions
+  *
 @verbatim
  ===============================================================================
                       ##### IO operation functions #####
@@ -927,7 +914,8 @@ HAL_StatusTypeDef HAL_SMBUS_UnRegisterAddrCallback(SMBUS_HandleTypeDef *hsmbus)
   * @param  XferOptions Options of Transfer, value of @ref SMBUS_XferOptions_definition
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMBUS_Master_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t XferOptions)
+HAL_StatusTypeDef HAL_SMBUS_Master_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint16_t DevAddress, uint8_t *pData,
+                                               uint16_t Size, uint32_t XferOptions)
 {
   uint32_t tmp;
 
@@ -966,7 +954,8 @@ HAL_StatusTypeDef HAL_SMBUS_Master_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint
     /* Set NBYTES to write and reload if size > MAX_NBYTE_SIZE and generate RESTART */
     if ((hsmbus->XferSize < hsmbus->XferCount) && (hsmbus->XferSize == MAX_NBYTE_SIZE))
     {
-      SMBUS_TransferConfig(hsmbus, DevAddress, (uint8_t)hsmbus->XferSize, SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE), SMBUS_GENERATE_START_WRITE);
+      SMBUS_TransferConfig(hsmbus, DevAddress, (uint8_t)hsmbus->XferSize,
+                           SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE), SMBUS_GENERATE_START_WRITE);
     }
     else
     {
@@ -1026,7 +1015,8 @@ HAL_StatusTypeDef HAL_SMBUS_Master_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint
   * @param  XferOptions Options of Transfer, value of @ref SMBUS_XferOptions_definition
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMBUS_Master_Receive_IT(SMBUS_HandleTypeDef *hsmbus, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t XferOptions)
+HAL_StatusTypeDef HAL_SMBUS_Master_Receive_IT(SMBUS_HandleTypeDef *hsmbus, uint16_t DevAddress, uint8_t *pData,
+                                              uint16_t Size, uint32_t XferOptions)
 {
   uint32_t tmp;
 
@@ -1066,7 +1056,8 @@ HAL_StatusTypeDef HAL_SMBUS_Master_Receive_IT(SMBUS_HandleTypeDef *hsmbus, uint1
     /* Set NBYTES to write and reload if size > MAX_NBYTE_SIZE and generate RESTART */
     if ((hsmbus->XferSize < hsmbus->XferCount) && (hsmbus->XferSize == MAX_NBYTE_SIZE))
     {
-      SMBUS_TransferConfig(hsmbus, DevAddress, (uint8_t)hsmbus->XferSize, SMBUS_RELOAD_MODE  | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE), SMBUS_GENERATE_START_READ);
+      SMBUS_TransferConfig(hsmbus, DevAddress, (uint8_t)hsmbus->XferSize,
+                           SMBUS_RELOAD_MODE  | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE), SMBUS_GENERATE_START_READ);
     }
     else
     {
@@ -1181,7 +1172,8 @@ HAL_StatusTypeDef HAL_SMBUS_Master_Abort_IT(SMBUS_HandleTypeDef *hsmbus, uint16_
   * @param  XferOptions Options of Transfer, value of @ref SMBUS_XferOptions_definition
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMBUS_Slave_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint8_t *pData, uint16_t Size, uint32_t XferOptions)
+HAL_StatusTypeDef HAL_SMBUS_Slave_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint8_t *pData, uint16_t Size,
+                                              uint32_t XferOptions)
 {
   /* Check the parameters */
   assert_param(IS_SMBUS_TRANSFER_OPTIONS_REQUEST(XferOptions));
@@ -1229,7 +1221,8 @@ HAL_StatusTypeDef HAL_SMBUS_Slave_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint8
     /* Set NBYTES to write and reload if size > MAX_NBYTE_SIZE and generate RESTART */
     if ((hsmbus->XferSize < hsmbus->XferCount) && (hsmbus->XferSize == MAX_NBYTE_SIZE))
     {
-      SMBUS_TransferConfig(hsmbus, 0, (uint8_t)hsmbus->XferSize, SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE), SMBUS_NO_STARTSTOP);
+      SMBUS_TransferConfig(hsmbus, 0, (uint8_t)hsmbus->XferSize,
+                           SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE), SMBUS_NO_STARTSTOP);
     }
     else
     {
@@ -1275,7 +1268,8 @@ HAL_StatusTypeDef HAL_SMBUS_Slave_Transmit_IT(SMBUS_HandleTypeDef *hsmbus, uint8
   * @param  XferOptions Options of Transfer, value of @ref SMBUS_XferOptions_definition
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMBUS_Slave_Receive_IT(SMBUS_HandleTypeDef *hsmbus, uint8_t *pData, uint16_t Size, uint32_t XferOptions)
+HAL_StatusTypeDef HAL_SMBUS_Slave_Receive_IT(SMBUS_HandleTypeDef *hsmbus, uint8_t *pData, uint16_t Size,
+                                             uint32_t XferOptions)
 {
   /* Check the parameters */
   assert_param(IS_SMBUS_TRANSFER_OPTIONS_REQUEST(XferOptions));
@@ -1433,7 +1427,8 @@ HAL_StatusTypeDef HAL_SMBUS_DisableAlert_IT(SMBUS_HandleTypeDef *hsmbus)
   * @param  Timeout Timeout duration
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMBUS_IsDeviceReady(SMBUS_HandleTypeDef *hsmbus, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout)
+HAL_StatusTypeDef HAL_SMBUS_IsDeviceReady(SMBUS_HandleTypeDef *hsmbus, uint16_t DevAddress, uint32_t Trials,
+                                          uint32_t Timeout)
 {
   uint32_t tickstart;
 
@@ -1542,8 +1537,7 @@ HAL_StatusTypeDef HAL_SMBUS_IsDeviceReady(SMBUS_HandleTypeDef *hsmbus, uint16_t 
 
       /* Increment Trials */
       SMBUS_Trials++;
-    }
-    while (SMBUS_Trials < Trials);
+    } while (SMBUS_Trials < Trials);
 
     hsmbus->State = HAL_SMBUS_STATE_READY;
 
@@ -1565,8 +1559,8 @@ HAL_StatusTypeDef HAL_SMBUS_IsDeviceReady(SMBUS_HandleTypeDef *hsmbus, uint16_t 
   */
 
 /** @defgroup SMBUS_IRQ_Handler_and_Callbacks IRQ Handler and Callbacks
- * @{
- */
+  * @{
+  */
 
 /**
   * @brief  Handle SMBUS event interrupt request.
@@ -1582,7 +1576,12 @@ void HAL_SMBUS_EV_IRQHandler(SMBUS_HandleTypeDef *hsmbus)
   uint32_t tmpcr1value = READ_REG(hsmbus->Instance->CR1);
 
   /* SMBUS in mode Transmitter ---------------------------------------------------*/
-  if ((SMBUS_CHECK_IT_SOURCE(tmpcr1value, (SMBUS_IT_TCI | SMBUS_IT_STOPI | SMBUS_IT_NACKI | SMBUS_IT_TXI)) != RESET) && ((SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TXIS) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TCR) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TC) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_STOPF) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_AF) != RESET)))
+  if ((SMBUS_CHECK_IT_SOURCE(tmpcr1value, (SMBUS_IT_TCI | SMBUS_IT_STOPI | SMBUS_IT_NACKI | SMBUS_IT_TXI)) != RESET) &&
+      ((SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TXIS) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TCR) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TC) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_STOPF) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_AF) != RESET)))
   {
     /* Slave mode selected */
     if ((hsmbus->State & HAL_SMBUS_STATE_SLAVE_BUSY_TX) == HAL_SMBUS_STATE_SLAVE_BUSY_TX)
@@ -1601,7 +1600,12 @@ void HAL_SMBUS_EV_IRQHandler(SMBUS_HandleTypeDef *hsmbus)
   }
 
   /* SMBUS in mode Receiver ----------------------------------------------------*/
-  if ((SMBUS_CHECK_IT_SOURCE(tmpcr1value, (SMBUS_IT_TCI | SMBUS_IT_STOPI | SMBUS_IT_NACKI | SMBUS_IT_RXI)) != RESET) && ((SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_RXNE) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TCR) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TC) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_STOPF) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_AF) != RESET)))
+  if ((SMBUS_CHECK_IT_SOURCE(tmpcr1value, (SMBUS_IT_TCI | SMBUS_IT_STOPI | SMBUS_IT_NACKI | SMBUS_IT_RXI)) != RESET) &&
+      ((SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_RXNE) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TCR) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_TC) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_STOPF) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_AF) != RESET)))
   {
     /* Slave mode selected */
     if ((hsmbus->State & HAL_SMBUS_STATE_SLAVE_BUSY_RX) == HAL_SMBUS_STATE_SLAVE_BUSY_RX)
@@ -1620,7 +1624,12 @@ void HAL_SMBUS_EV_IRQHandler(SMBUS_HandleTypeDef *hsmbus)
   }
 
   /* SMBUS in mode Listener Only --------------------------------------------------*/
-  if (((SMBUS_CHECK_IT_SOURCE(tmpcr1value, SMBUS_IT_ADDRI) != RESET) || (SMBUS_CHECK_IT_SOURCE(tmpcr1value, SMBUS_IT_STOPI) != RESET) || (SMBUS_CHECK_IT_SOURCE(tmpcr1value, SMBUS_IT_NACKI) != RESET)) && ((SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_ADDR) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_STOPF) != RESET) || (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_AF) != RESET)))
+  if (((SMBUS_CHECK_IT_SOURCE(tmpcr1value, SMBUS_IT_ADDRI) != RESET) ||
+       (SMBUS_CHECK_IT_SOURCE(tmpcr1value, SMBUS_IT_STOPI) != RESET) ||
+       (SMBUS_CHECK_IT_SOURCE(tmpcr1value, SMBUS_IT_NACKI) != RESET)) &&
+      ((SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_ADDR) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_STOPF) != RESET) ||
+       (SMBUS_CHECK_FLAG(tmpisrvalue, SMBUS_FLAG_AF) != RESET)))
   {
     if ((hsmbus->State & HAL_SMBUS_STATE_LISTEN) == HAL_SMBUS_STATE_LISTEN)
     {
@@ -1760,8 +1769,8 @@ __weak void HAL_SMBUS_ErrorCallback(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /** @defgroup SMBUS_Exported_Functions_Group3 Peripheral State and Errors functions
- *  @brief   Peripheral State and Errors functions
- *
+  *  @brief   Peripheral State and Errors functions
+  *
 @verbatim
  ===============================================================================
             ##### Peripheral State and Errors functions #####
@@ -1787,11 +1796,11 @@ uint32_t HAL_SMBUS_GetState(SMBUS_HandleTypeDef *hsmbus)
 }
 
 /**
-* @brief  Return the SMBUS error code.
+  * @brief  Return the SMBUS error code.
   * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
   *              the configuration information for the specified SMBUS.
-* @retval SMBUS Error Code
-*/
+  * @retval SMBUS Error Code
+  */
 uint32_t HAL_SMBUS_GetError(SMBUS_HandleTypeDef *hsmbus)
 {
   return hsmbus->ErrorCode;
@@ -1806,7 +1815,7 @@ uint32_t HAL_SMBUS_GetError(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /** @addtogroup SMBUS_Private_Functions SMBUS Private Functions
- *  @brief   Data transfers Private functions
+  *  @brief   Data transfers Private functions
   * @{
   */
 
@@ -1870,7 +1879,7 @@ static HAL_StatusTypeDef SMBUS_Master_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t 
       /* Process Unlocked */
       __HAL_UNLOCK(hsmbus);
 
-      /* REenable the selected SMBUS peripheral */
+      /* Re-enable the selected SMBUS peripheral */
       __HAL_SMBUS_ENABLE(hsmbus);
 
       /* Call the corresponding callback to inform upper layer of End of Transfer */
@@ -1886,7 +1895,7 @@ static HAL_StatusTypeDef SMBUS_Master_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t 
       if (SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_RXNE) != RESET)
       {
         /* Read data from RXDR */
-        *hsmbus->pBuffPtr = hsmbus->Instance->RXDR;
+        *hsmbus->pBuffPtr = (uint8_t)(hsmbus->Instance->RXDR);
 
         /* Increment Buffer pointer */
         hsmbus->pBuffPtr++;
@@ -1928,7 +1937,7 @@ static HAL_StatusTypeDef SMBUS_Master_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t 
   else if (SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_RXNE) != RESET)
   {
     /* Read data from RXDR */
-    *hsmbus->pBuffPtr = hsmbus->Instance->RXDR;
+    *hsmbus->pBuffPtr = (uint8_t)(hsmbus->Instance->RXDR);
 
     /* Increment Buffer pointer */
     hsmbus->pBuffPtr++;
@@ -1953,11 +1962,12 @@ static HAL_StatusTypeDef SMBUS_Master_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t 
   {
     if ((hsmbus->XferCount != 0U) && (hsmbus->XferSize == 0U))
     {
-      DevAddress = (hsmbus->Instance->CR2 & I2C_CR2_SADD);
+      DevAddress = (uint16_t)(hsmbus->Instance->CR2 & I2C_CR2_SADD);
 
       if (hsmbus->XferCount > MAX_NBYTE_SIZE)
       {
-        SMBUS_TransferConfig(hsmbus, DevAddress, MAX_NBYTE_SIZE, (SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE)), SMBUS_NO_STARTSTOP);
+        SMBUS_TransferConfig(hsmbus, DevAddress, MAX_NBYTE_SIZE,
+                             (SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE)), SMBUS_NO_STARTSTOP);
         hsmbus->XferSize = MAX_NBYTE_SIZE;
       }
       else
@@ -2154,8 +2164,8 @@ static HAL_StatusTypeDef SMBUS_Slave_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t S
   }
   else if (SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_ADDR) != RESET)
   {
-    TransferDirection = SMBUS_GET_DIR(hsmbus);
-    SlaveAddrCode = SMBUS_GET_ADDR_MATCH(hsmbus);
+    TransferDirection = (uint8_t)(SMBUS_GET_DIR(hsmbus));
+    SlaveAddrCode = (uint16_t)(SMBUS_GET_ADDR_MATCH(hsmbus));
 
     /* Disable ADDR interrupt to prevent multiple ADDRInterrupt*/
     /* Other ADDRInterrupt will be treat in next Listen usecase */
@@ -2171,12 +2181,13 @@ static HAL_StatusTypeDef SMBUS_Slave_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t S
     HAL_SMBUS_AddrCallback(hsmbus, TransferDirection, SlaveAddrCode);
 #endif /* USE_HAL_SMBUS_REGISTER_CALLBACKS */
   }
-  else if ((SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_RXNE) != RESET) || (SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_TCR) != RESET))
+  else if ((SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_RXNE) != RESET) ||
+           (SMBUS_CHECK_FLAG(StatusFlags, SMBUS_FLAG_TCR) != RESET))
   {
     if ((hsmbus->State & HAL_SMBUS_STATE_SLAVE_BUSY_RX) == HAL_SMBUS_STATE_SLAVE_BUSY_RX)
     {
       /* Read data from RXDR */
-      *hsmbus->pBuffPtr = hsmbus->Instance->RXDR;
+      *hsmbus->pBuffPtr = (uint8_t)(hsmbus->Instance->RXDR);
 
       /* Increment Buffer pointer */
       hsmbus->pBuffPtr++;
@@ -2226,7 +2237,8 @@ static HAL_StatusTypeDef SMBUS_Slave_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t S
       {
         if (hsmbus->XferCount > MAX_NBYTE_SIZE)
         {
-          SMBUS_TransferConfig(hsmbus, 0, MAX_NBYTE_SIZE, (SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE)), SMBUS_NO_STARTSTOP);
+          SMBUS_TransferConfig(hsmbus, 0, MAX_NBYTE_SIZE, (SMBUS_RELOAD_MODE | (hsmbus->XferOptions & SMBUS_SENDPEC_MODE)),
+                               SMBUS_NO_STARTSTOP);
           hsmbus->XferSize = MAX_NBYTE_SIZE;
         }
         else
@@ -2299,7 +2311,7 @@ static HAL_StatusTypeDef SMBUS_Slave_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t S
       if (__HAL_SMBUS_GET_FLAG(hsmbus, SMBUS_FLAG_RXNE) != RESET)
       {
         /* Read data from RXDR */
-        *hsmbus->pBuffPtr = hsmbus->Instance->RXDR;
+        *hsmbus->pBuffPtr = (uint8_t)(hsmbus->Instance->RXDR);
 
         /* Increment Buffer pointer */
         hsmbus->pBuffPtr++;
@@ -2357,7 +2369,7 @@ static HAL_StatusTypeDef SMBUS_Slave_ISR(SMBUS_HandleTypeDef *hsmbus, uint32_t S
   * @param  InterruptRequest Value of @ref SMBUS_Interrupt_configuration_definition.
   * @retval HAL status
   */
-static void SMBUS_Enable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint16_t InterruptRequest)
+static void SMBUS_Enable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint32_t InterruptRequest)
 {
   uint32_t tmpisr = 0UL;
 
@@ -2397,7 +2409,7 @@ static void SMBUS_Enable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint16_t InterruptRequ
   * @param  InterruptRequest Value of @ref SMBUS_Interrupt_configuration_definition.
   * @retval HAL status
   */
-static void SMBUS_Disable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint16_t InterruptRequest)
+static void SMBUS_Disable_IRQ(SMBUS_HandleTypeDef *hsmbus, uint32_t InterruptRequest)
 {
   uint32_t tmpisr = 0UL;
   uint32_t tmpstate = hsmbus->State;
@@ -2570,7 +2582,8 @@ static void SMBUS_ITErrorHandler(SMBUS_HandleTypeDef *hsmbus)
   * @param  Timeout Timeout duration
   * @retval HAL status
   */
-static HAL_StatusTypeDef SMBUS_WaitOnFlagUntilTimeout(SMBUS_HandleTypeDef *hsmbus, uint32_t Flag, FlagStatus Status, uint32_t Timeout)
+static HAL_StatusTypeDef SMBUS_WaitOnFlagUntilTimeout(SMBUS_HandleTypeDef *hsmbus, uint32_t Flag, FlagStatus Status,
+                                                      uint32_t Timeout)
 {
   uint32_t tickstart = HAL_GetTick();
 
@@ -2619,7 +2632,8 @@ static HAL_StatusTypeDef SMBUS_WaitOnFlagUntilTimeout(SMBUS_HandleTypeDef *hsmbu
   *     @arg @ref SMBUS_GENERATE_START_WRITE Generate Restart for write request.
   * @retval None
   */
-static void SMBUS_TransferConfig(SMBUS_HandleTypeDef *hsmbus,  uint16_t DevAddress, uint8_t Size, uint32_t Mode, uint32_t Request)
+static void SMBUS_TransferConfig(SMBUS_HandleTypeDef *hsmbus,  uint16_t DevAddress, uint8_t Size, uint32_t Mode,
+                                 uint32_t Request)
 {
   /* Check the parameters */
   assert_param(IS_SMBUS_ALL_INSTANCE(hsmbus->Instance));
@@ -2627,12 +2641,16 @@ static void SMBUS_TransferConfig(SMBUS_HandleTypeDef *hsmbus,  uint16_t DevAddre
   assert_param(IS_SMBUS_TRANSFER_REQUEST(Request));
 
   /* update CR2 register */
-  MODIFY_REG(hsmbus->Instance->CR2, ((I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND | (I2C_CR2_RD_WRN & (uint32_t)(Request >> (31UL - I2C_CR2_RD_WRN_Pos))) | I2C_CR2_START | I2C_CR2_STOP  | I2C_CR2_PECBYTE)), \
-             (uint32_t)(((uint32_t)DevAddress & I2C_CR2_SADD) | (((uint32_t)Size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES) | (uint32_t)Mode | (uint32_t)Request));
+  MODIFY_REG(hsmbus->Instance->CR2,
+             ((I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND | \
+               (I2C_CR2_RD_WRN & (uint32_t)(Request >> (31UL - I2C_CR2_RD_WRN_Pos))) | \
+               I2C_CR2_START | I2C_CR2_STOP  | I2C_CR2_PECBYTE)), \
+             (uint32_t)(((uint32_t)DevAddress & I2C_CR2_SADD) | \
+                        (((uint32_t)Size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES) | (uint32_t)Mode | (uint32_t)Request));
 }
 
 /**
-  * @brief  Convert SMBUSx OTHER_xxx XferOptions to functionnal XferOptions.
+  * @brief  Convert SMBUSx OTHER_xxx XferOptions to functional XferOptions.
   * @param  hsmbus SMBUS handle.
   * @retval None
   */

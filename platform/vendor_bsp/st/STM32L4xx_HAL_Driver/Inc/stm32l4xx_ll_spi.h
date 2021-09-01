@@ -6,29 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -282,8 +266,8 @@ typedef struct
 /** @defgroup SPI_LL_EC_RX_FIFO_TH RX FIFO Threshold
   * @{
   */
-#define LL_SPI_RX_FIFO_TH_HALF             0x00000000U               /*!< RXNE event is generated if FIFO level is greater than or equel to 1/2 (16-bit) */
-#define LL_SPI_RX_FIFO_TH_QUARTER          (SPI_CR2_FRXTH)           /*!< RXNE event is generated if FIFO level is greater than or equel to 1/4 (8-bit)  */
+#define LL_SPI_RX_FIFO_TH_HALF             0x00000000U               /*!< RXNE event is generated if FIFO level is greater than or equal to 1/2 (16-bit) */
+#define LL_SPI_RX_FIFO_TH_QUARTER          (SPI_CR2_FRXTH)           /*!< RXNE event is generated if FIFO level is greater than or equal to 1/4 (8-bit)  */
 /**
   * @}
   */
@@ -864,8 +848,8 @@ __STATIC_INLINE void LL_SPI_SetNSSMode(SPI_TypeDef *SPIx, uint32_t NSS)
   */
 __STATIC_INLINE uint32_t LL_SPI_GetNSSMode(SPI_TypeDef *SPIx)
 {
-  register uint32_t Ssm  = (READ_BIT(SPIx->CR1, SPI_CR1_SSM));
-  register uint32_t Ssoe = (READ_BIT(SPIx->CR2,  SPI_CR2_SSOE) << 16U);
+  uint32_t Ssm  = (READ_BIT(SPIx->CR1, SPI_CR1_SSM));
+  uint32_t Ssoe = (READ_BIT(SPIx->CR2,  SPI_CR2_SSOE) << 16U);
   return (Ssm | Ssoe);
 }
 
@@ -1330,7 +1314,7 @@ __STATIC_INLINE uint32_t LL_SPI_GetDMAParity_TX(SPI_TypeDef *SPIx)
   */
 __STATIC_INLINE uint32_t LL_SPI_DMA_GetRegAddr(SPI_TypeDef *SPIx)
 {
-  return (uint32_t) & (SPIx->DR);
+  return (uint32_t) &(SPIx->DR);
 }
 
 /**
@@ -1377,7 +1361,7 @@ __STATIC_INLINE void LL_SPI_TransmitData8(SPI_TypeDef *SPIx, uint8_t TxData)
   *spidr = TxData;
 #else
   *((__IO uint8_t *)&SPIx->DR) = TxData;
-#endif
+#endif /* __GNUC__ */
 }
 
 /**
@@ -1394,7 +1378,7 @@ __STATIC_INLINE void LL_SPI_TransmitData16(SPI_TypeDef *SPIx, uint16_t TxData)
   *spidr = TxData;
 #else
   SPIx->DR = TxData;
-#endif
+#endif /* __GNUC__ */
 }
 
 /**
