@@ -69,7 +69,7 @@ __STATIC__ void fault_dump_cpu_frame(fault_cpu_frame_t *cpu_frame)
 
 __STATIC__ void fault_dump_stack(fault_info_t *info, size_t depth)
 {
-    cpu_addr_t sp = info->sp_before_fault;;
+    cpu_addr_t sp = info->sp_before_fault;
 
     k_fault_log_writer("\nTASK STACK DUMP:\n");
     while (sp <= info->stack_limit && depth--) {
