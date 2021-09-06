@@ -81,7 +81,7 @@ typedef uint64_t    kv_dword_t; // double word
 
 #define KV_NO_WRITEABLE_BLK()                       (KV_MGR_BLK_NUM_INUSE == 0 && KV_MGR_BLK_NUM_FRESH == 0)
 
-#define KV_ITEM_HDR_MAGIC                           0xABCD1234DCBA4321
+#define KV_ITEM_HDR_MAGIC                           0x69745F6D61676963 /* "it_magic" */
 #define KV_ITEM_DISCARDED                           0x0F0F0F0F0F0F0F0F
 #define KV_ITEM_IS_DISCARDED(item_hdr)              ((item_hdr)->discarded_flag == KV_ITEM_DISCARDED)
 #define KV_ITEM_IS_LEGAL(item_hdr)                  ((item_hdr)->magic == KV_ITEM_HDR_MAGIC)
@@ -100,10 +100,10 @@ typedef uint64_t    kv_dword_t; // double word
 #define KV_ITEM_SIZE_OF_BODY(item)                  KV_ITEM_BODY_SIZE(item->hdr.k_len, item->hdr.v_len)
 #define KV_ITEM_ADDR_OF_BODY(item)                  (item->pos + KV_ITEM_HDR_SIZE)
 
-#define KV_BLK_HDR_MAGIC                            0x1234ABCD4321DCBA
-#define KV_BLK_HDR_GC_SRC                           0x5678DCBA8765ABCD
-#define KV_BLK_HDR_GC_DST                           0x8765ABCD8765DCBA
-#define KV_BLK_HDR_GC_DONE                          0x4321DCBA1234ABCD
+#define KV_BLK_HDR_MAGIC                            0x48445F4D41474943 /* "HD_MAGIC" */
+#define KV_BLK_HDR_GC_SRC                           0x6D61726B5F737263 /* "mark_src" */
+#define KV_BLK_HDR_GC_DST                           0x6D61726B5F647374 /* "mark_dst" */
+#define KV_BLK_HDR_GC_DONE                          0x6B67635F646F6E65 /* "kgc_done" */
 
 #define KV_BLK_IS_LEGAL(blk_hdr)                    ((blk_hdr)->magic == KV_BLK_HDR_MAGIC)
 
@@ -196,7 +196,7 @@ typedef struct kv_item_st {
     uint8_t        *body;       /*< item body: key/value buffer */
 } kv_item_t;
 
-__STATIC__ kv_ctl_t kv_ctl;
+extern kv_ctl_t kv_ctl;
 
 __STATIC_INLINE__ void kv_blk_freesz_set(uint32_t blk_start, uint32_t free_size)
 {

@@ -145,6 +145,20 @@ __STATIC__ uint32_t kv_blk_next_fresh(void)
     return KV_BLK_INVALID;
 }
 
+__STATIC__ uint32_t kv_blk_get_a_fresh(void)
+{
+    uint32_t cur_blk;
+
+    KV_BLK_FOR_EACH(cur_blk) {
+        if (kv_blk_is_fresh(cur_blk)) {
+            return cur_blk;
+        }
+    }
+
+    return KV_BLK_INVALID;
+}
+
+
 __STATIC__ uint32_t kv_blk_search_inuse(uint32_t item_size)
 {
     uint32_t cur_blk;
@@ -940,6 +954,26 @@ __STATIC__ int kv_mgr_blk_index_rebuild(void)
     return is_rebuild_done;
 }
 
+__STATIC__ kv_err_t kv_try_gc(void)
+{
+    uint32_t cur_blk, blk_dst;
+
+    blk_dst = kv_blk_get_a_fresh();
+    if (blk_dst == KV_BLK_INVALID) {
+        return KV_ERR_GC_NOTHING;
+    }
+
+    KV_BLK_FOR_EACH(cur_blk) {
+        if (kv_blk_is_dirty(cur_blk)) {
+            if (kv_do_gc(cur_blk, blk_dst, K_FALSE) == KV_ERR_NONE) {
+                return KV_ERR_NONE;
+            }
+        }
+    }
+
+    return KV_ERR_GC_NOTHING;
+}
+
 __STATIC__ kv_err_t kv_mgr_workspace_locate(void)
 {
     uint32_t cur_blk;
@@ -947,6 +981,12 @@ __STATIC__ kv_err_t kv_mgr_workspace_locate(void)
     /* we give blocks with KV_BLK_FLAG_HANGING a chance to rebuild index */
     if (KV_MGR_BLK_NUM_HANGING > 0) {
         kv_mgr_blk_index_rebuild();
+    }
+
+    if (KV_MGR_BLK_NUM_INUSE == 0 && KV_MGR_BLK_NUM_FRESH == 1) {
+        /* if here, we cannot just give out the last fresh block, otherwise the kv will get into
+            KV_ERR_NO_WRITEABLE_BLK next time, try a gc here to get a "rescue" */
+        kv_try_gc();
     }
 
     if (KV_NO_WRITEABLE_BLK()) {
@@ -1078,7 +1118,6 @@ __STATIC__ int kv_handle_incomplete_gc(struct blk_info gc_src_blk, struct blk_in
 
 __STATIC__ int kv_mgr_ctl_build(void)
 {
-    kv_err_t err;
     uint32_t cur_blk;
     kv_blk_hdr_t blk_hdr;
 
@@ -1176,22 +1215,21 @@ __STATIC__ kv_err_t kv_gc(void)
 
     // there must be at least one fresh block left, make workspace pointer to the fresh one
     blk_dst = kv_blk_next_fresh();
+    if (blk_dst == KV_BLK_INVALID) {
+        /* kinda a bug here, KV_MGR_BLK_NUM_FRESH == 1 */
+        return KV_ERR_GC_NOTHING;
+    }
 
     KV_BLK_FOR_EACH(cur_blk) {
         if (kv_blk_is_dirty(cur_blk)) {
-            if (kv_do_gc(cur_blk, blk_dst, K_FALSE) != KV_ERR_NONE) {
-                // cannot do gc for this block, give others a try
-                continue;
+            if (kv_do_gc(cur_blk, blk_dst, K_FALSE) == KV_ERR_NONE) {
+                is_gc_done = K_TRUE;
+                break;
             }
-
-            is_gc_done = K_TRUE;
-
-            break;
         }
     }
 
     if (is_gc_done) {
-        // if do nothing, should restore the workspace;
         KV_MGR_WORKSPACE = blk_dst;
     }
 
