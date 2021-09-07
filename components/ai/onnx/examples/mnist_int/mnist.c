@@ -1,29 +1,20 @@
-//#include "tos_k.h"
 #include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
-//#include <int.h>
-//#include <math.h>
-
-//#include "mnist.h"
 #include "mnist_int.h"
 #include "onnx.h"
 
 static const char codeLib[] = "@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.   ";
 int data[5]={1.5 , 2.5 , 3.5 , 4.5 , 5.5};
-//static const int img[2][784] = {IMG0, IMG1};
 static const int img[2][784] = {IMG0, IMG1};
-//static const int imgint[2][784] = {IMG0_INT, IMG1_INT};
 
 static const int img1[784] = {1,2,3,4,5};
 
 int hello()
 {
-    printf("hello\r\n");
+    printf("hello pnnx\r\n");
     return 0;
 }
 
-//void print_img(void)
 void print_img(void * buf)
 {
     int index = 0;
@@ -39,27 +30,18 @@ void print_img(void * buf)
         {
             
             index = 0;
-            //if(img[0][y*28+x] > 600)
             if(((int*)buf)[y*28+x] > 600)
-            //if(data[0] > 0.6)
             {
-                index =69;  
-                //ch = ' ';       
+                index =69;       
             }
             if(index < 0)
             {
                 index = 0;
-                //ch = ' ';
             }
             
             
             printf("%c",codeLib[index]);
             printf("%c",codeLib[index]);
-            
-            
-            //printf("%c",ch);
-            //printf("%c",ch);
-            
         }
         printf("\r\n");
     }
@@ -69,14 +51,6 @@ int mnist()
 {
     printf("test1\r\n");
     int img_index = 1;
-    /*
-    if(argc == 2)
-    {
-        img_index = atoi(argv[1]);
-    }
-    */
-   
-   //print_img();
     print_img(img[img_index]);
 
     printf("img ok\r\n");
@@ -185,14 +159,6 @@ int mnist()
     softmax(dense2, 10, output);
 
     printf("Softmax ok\r\n");
-
-    // 10. Result
-    /*
-    printf("\n\rdense2: \n\r");
-    for(int i = 0; i < 10; i++)
-        printf("%d ", dense2[i]);
-    */
-
     
     int max = 0;
     int min = output[0];
@@ -223,4 +189,3 @@ int mnist()
 
     return 0;
 }
-//MSH_CMD_EXPORT(mnist, mnist simple example)
