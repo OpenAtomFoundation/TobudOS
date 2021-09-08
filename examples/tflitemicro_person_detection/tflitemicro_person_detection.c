@@ -54,6 +54,7 @@ void task1(void *arg)
 				printf("*person_detect_task\r\n");
 				if(HAL_DCMI_Stop(&hdcmi))Error_Handler(); //stop DCMI
 				input_convert(camera_buffer,model_buffer);
+				extern void person_detect(uint8_t*);
 				person_detect(model_buffer);
 				LCD_2IN4_Display(camera_buffer,OV2640_PIXEL_WIDTH,OV2640_PIXEL_HEIGHT);
         
@@ -87,7 +88,7 @@ void application_entry(void *arg)
 		{
 			Error_Handler();
 		}
-		
+		extern void person_detect_init(void);
 		person_detect_init();
 		
     printf("***Start person detection task! \r\n");

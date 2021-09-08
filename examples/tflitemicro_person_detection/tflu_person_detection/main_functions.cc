@@ -45,7 +45,7 @@ static uint8_t tensor_arena[kTensorArenaSize];
 }  // namespace
 
 // The name of this function is important for Arduino compatibility.
-void person_detect_init() {
+extern "C" void person_detect_init() {
   // Set up logging. Google style is to avoid globals or statics because of
   // lifetime uncertainty, but since this has a trivial destructor it's okay.
   // NOLINTNEXTLINE(runtime-global-variables)
@@ -96,7 +96,7 @@ void person_detect_init() {
 }
 
 // The name of this function is important for Arduino compatibility.
-int person_detect(uint8_t * hardware_input) {
+extern "C" int person_detect(uint8_t * hardware_input) {
   // Get image from provider.
   if (kTfLiteOk != GetImage(error_reporter, kNumCols, kNumRows, kNumChannels,
                             input->data.int8, hardware_input)) {
