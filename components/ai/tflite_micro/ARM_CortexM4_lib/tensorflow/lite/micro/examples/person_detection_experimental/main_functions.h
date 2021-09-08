@@ -20,11 +20,11 @@ limitations under the License.
 
 // Initializes all data needed for the example. The name is important, and needs
 // to be setup() for Arduino compatibility.
-extern "C" void person_detect_init();
+//extern "C" void person_detect_init();
 
 // Runs one iteration of data gathering and inference. This should be called
 // repeatedly from the application code. The name needs to be loop() for Arduino
 // compatibility.
-extern "C" int person_detect(uint8_t * hardware_input);
+//extern "C" int person_detect(uint8_t * hardware_input);
 
 #endif  // TENSORFLOW_LITE_MICRO_EXAMPLES_PERSON_DETECTION_EXPERIMENTAL_MAIN_FUNCTIONS_H_

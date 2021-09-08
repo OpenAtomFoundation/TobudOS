@@ -1086,8 +1086,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflitemicro_person_detection.c</PathWithFileName>
-      <FilenameWithoutPath>tflitemicro_person_detection.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_speech_detection\tflitemicro_speech_detection.c</PathWithFileName>
+      <FilenameWithoutPath>tflitemicro_speech_detection.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1095,7 +1095,7 @@
 
   <Group>
     <GroupName>tensorflow</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1130,8 +1130,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\detection_responder.cc</PathWithFileName>
-      <FilenameWithoutPath>detection_responder.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_speech_detection\tflu_speech_yes_or_no\micro_features\model.cc</PathWithFileName>
+      <FilenameWithoutPath>model.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1142,8 +1142,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\image_provider.cc</PathWithFileName>
-      <FilenameWithoutPath>image_provider.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_speech_detection\tflu_speech_yes_or_no\micro_features\no_micro_features_data.cc</PathWithFileName>
+      <FilenameWithoutPath>no_micro_features_data.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1151,11 +1151,11 @@
       <GroupNumber>10</GroupNumber>
       <FileNumber>75</FileNumber>
       <FileType>8</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\main_functions.cc</PathWithFileName>
-      <FilenameWithoutPath>main_functions.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_speech_detection\tflu_speech_yes_or_no\micro_features\yes_micro_features_data.cc</PathWithFileName>
+      <FilenameWithoutPath>yes_micro_features_data.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1166,20 +1166,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\model_settings.cc</PathWithFileName>
-      <FilenameWithoutPath>model_settings.cc</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>77</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\examples\tflitemicro_person_detection\tflu_person_detection\person_detect_model_data.cc</PathWithFileName>
-      <FilenameWithoutPath>person_detect_model_data.cc</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\examples\tflitemicro_speech_detection\tflu_speech_yes_or_no\micro_speech.cc</PathWithFileName>
+      <FilenameWithoutPath>micro_speech.cc</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
