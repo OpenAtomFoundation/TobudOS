@@ -10,8 +10,8 @@
       <TargetName>TencentOS_tiny</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6140000::V6.14::ARMCLANG</pCCUsed>
-      <uAC6>1</uAC6>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
+      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32L496ZGTx</Device>
@@ -322,7 +322,7 @@
             <PlainCh>0</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
-            <wLevel>3</wLevel>
+            <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L496xx,NUCLEO_STM32L496ZG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\hello_world;..\..\TOS_CONFIG;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\BSP\Hardware\Inc</IncludePath>
+              <IncludePath>..\..\BSP\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc;..\..\..\..\platform\vendor_bsp\st\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\..\platform\vendor_bsp\st\CMSIS\Device\ST\STM32L4xx\Include;..\..\..\..\platform\vendor_bsp\st\CMSIS\Include;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\..\..\kernel\core\include;..\..\..\..\kernel\pm\include;..\..\..\..\osal\cmsis_os;..\..\..\..\examples\hello_world;..\..\TOS_CONFIG;..\..\..\..\net\at\include;..\..\..\..\kernel\hal\include;..\..\BSP\Hardware\Inc;..\..\..\..\components\ai\nnom\inc;..\..\..\..\components\ai\nnom\inc\layers;..\..\..\..\components\ai\nnom\port;..\..\..\..\examples\nnom_mnist\data</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -769,9 +769,164 @@
           <GroupName>examples</GroupName>
           <Files>
             <File>
-              <FileName>hello_world.c</FileName>
+              <FileName>nnom_mnsit_example.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\hello_world\hello_world.c</FilePath>
+              <FilePath>..\..\..\..\examples\nnom_mnist\nnom_mnsit_example.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>nnom</GroupName>
+          <Files>
+            <File>
+              <FileName>nnom_local.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\backends\nnom_local.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\core\nnom.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_layers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\core\nnom_layers.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_tensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\core\nnom_tensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\core\nnom_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_activation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_activation.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_avgpool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_avgpool.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_baselayer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_baselayer.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_concat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_concat.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_conv2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_conv2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_conv2d_trans.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_conv2d_trans.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_cropping.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_cropping.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_dense.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_dense.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_dw_conv2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_dw_conv2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_flatten.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_flatten.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_global_pool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_global_pool.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_gru_cell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_gru_cell.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_input.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_lambda.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_lambda.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_lstm_cell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_lstm_cell.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_matrix.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_matrix.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_maxpool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_maxpool.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_output.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_output.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_rnn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_rnn.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_simple_cell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_simple_cell.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_softmax.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_softmax.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_sumpool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_sumpool.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_upsample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_upsample.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_zero_padding.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\layers\nnom_zero_padding.c</FilePath>
+            </File>
+            <File>
+              <FileName>nnom_local_q15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\ai\nnom\src\backends\nnom_local_q15.c</FilePath>
             </File>
           </Files>
         </Group>
