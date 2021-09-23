@@ -1,4 +1,4 @@
-![](media/354799faf95c55a28fe89a774163e7c7.png)
+![](media_en/354799faf95c55a28fe89a774163e7c7.png)
 
 TencentOS-Tiny software package based on MDK development
 
@@ -130,7 +130,7 @@ customers, and finally continuous optimisation to end the product cycle.
 
 The following are the main processes faced when creating a software pack.
 
-![](media/2bfa9d20cf0293ff3aaa3a3546d47c72.png)
+![](media_en/2bfa9d20cf0293ff3aaa3a3546d47c72.png)
 
 Figure 1.1 Software pack development process
 
@@ -176,7 +176,7 @@ xs:noNamespaceSchemaLocation="PACK.xsd"\>
 
 \< supportContact\> ...\</supportContact\>
 
-![](media/0809f249e08db80cbdb8062f75c5eb14.png)
+![](media_en/0809f249e08db80cbdb8062f75c5eb14.png)
 
 Figure 1.2 Pack corresponding to the program
 
@@ -210,7 +210,7 @@ description.
 
 \</taxonomy\>
 
-![](media/f82ec656ef23d89a3442d5e6fffaa271.png)
+![](media_en/f82ec656ef23d89a3442d5e6fffaa271.png)
 
 Figure 1.3 \< taxonomy\> tag
 
@@ -283,7 +283,7 @@ according to file categories. In the following code, a \<component\> of Keil::
 TencentOS tiny:: arch::arch is defined and \< description\> is the information
 about the component, as shown in Figure 1.4.
 
-![](media/a1bf197005eb4523d56e8c4448851eb5.jpeg)
+![](media_en/a1bf197005eb4523d56e8c4448851eb5.jpeg)
 
 Figure 1.4 \<component\> definition screen
 
@@ -393,9 +393,9 @@ is used to develop the XML specification to validate the PDSC files we have
 written. In addition, the 7-Zip File Manager software is needed to compress the
 files and create the integrated packs.
 
-![](media/a97f64258ee9adfe32058cba03b8a5c9.png)
+![](media_en/a97f64258ee9adfe32058cba03b8a5c9.png)
 
-![](media/8fe1c149933f2a407138d029d970b07c.jpeg)![](media/5b89d68ca580268b17e6caf410368fc1.png)
+![](media_en/8fe1c149933f2a407138d029d970b07c.jpeg)![](media_en/5b89d68ca580268b17e6caf410368fc1.png)
 
 Figure 1.5 Software configuration required to generate the pack
 
@@ -432,13 +432,13 @@ clicking enter, as shown in Figure 1.6. gen_pack.bat will compress the files in
 order, then read the The PDSC file will then be read, checked for data integrity
 and file dependencies, and the pack will be generated.
 
-![](media/fa41b9badb6fc4157045ae89dfd586ba.png)![](media/6014436850ed9975105f8880fb947015.png)
+![](media_en/fa41b9badb6fc4157045ae89dfd586ba.png)![](media_en/6014436850ed9975105f8880fb947015.png)
 
 Figure 1.6 Pack generation interface
 
 At this point the generated packs can be seen under the Local_Release path.
 
-![](media/ae4a981c690e613facbff0dea555dd02.png)
+![](media_en/ae4a981c690e613facbff0dea555dd02.png)
 
 Figure 1.7 Software pack
 
@@ -496,7 +496,7 @@ The software pack has the following features.
 
 ## 2.2 Software pack installation
 
-![](media/02fdac752513f728aac7ab6bbc5e5ee6.png)![](media/738dcdf7934e28b0d82ff16dd82d09c1.png)The
+![](media_en/02fdac752513f728aac7ab6bbc5e5ee6.png)![](media_en/738dcdf7934e28b0d82ff16dd82d09c1.png)The
 next step is to introduce the installation of Tencent.TencentOS-tiny pack, first
 double-click the pack in Figure 1.5, then enter the installation interface as
 shown in Figure 2.1(a), click I agree to all the terms of the preceding License
@@ -511,7 +511,7 @@ At this point the pack has been installed into Keil 5, open the Keil 5 software
 and click on the Pack Installer icon to install and remove the different pack
 versions.
 
-![](media/9764355a0c2b5a9d527ebf8cc48c5c27.png)
+![](media_en/9764355a0c2b5a9d527ebf8cc48c5c27.png)
 
 Figure 2.2 Pack Installer interface
 
@@ -520,7 +520,7 @@ on the Manage Run-Time Environment icon and tick the files that need to be
 ported from the pack, as shown in Figure 2.3. If there are dependencies you can
 click Resolve to install them with one click.
 
-![](media/9cce1c546ccb22098d2bb6a566c9a9b5.png)
+![](media_en/9cce1c546ccb22098d2bb6a566c9a9b5.png)
 
 Figure 2.3 Manage Run-Time Environment interface
 
@@ -533,7 +533,7 @@ Packs](https://www.keil.com/dd2/pack/#!%23eula-container) [(keil.com)
 in](https://www.keil.com/dd2/pack/#!%23eula-container) order to test this pack
 under different kernels.
 
-![](media/66abeba588010af544fa689a4d5687fc.png)
+![](media_en/66abeba588010af544fa689a4d5687fc.png)
 
 Figure 3.1 ARM CMSIS-5.7.0 pack
 
@@ -544,33 +544,33 @@ corresponding TencentOS-tiny components and Cortex-M3 kernel files were checked
 according to Figure 3.3, and it can be seen that arch and tos_config have both
 been automatically adapted according to the kernel.
 
-![](media/a693eb9d2616ad31fd8177d6a1741e06.png)
+![](media_en/a693eb9d2616ad31fd8177d6a1741e06.png)
 
 Figure 3.2 Checking the kernel
 
-![](media/963c229768948eb09041b6018747dd58.png)
+![](media_en/963c229768948eb09041b6018747dd58.png)
 
 Figure 3.3 Checking components
 
 Next click on Options for target, check Use MicroLIB and the default compile
 version 5, then select C99 mode.
 
-![](media/6ad725144883bc2f9e219d860490cc83.png)
+![](media_en/6ad725144883bc2f9e219d860490cc83.png)
 
-![](media/8263351be38a4d861e601826edf8d639.png)
+![](media_en/8263351be38a4d861e601826edf8d639.png)
 
 Figure 3.4 Options for target
 
 Then add the \#include "ARMCM3.h" and \#include "core_cm3.h" header files to
 mcu_platform.h.
 
-![](media/07c46384195f99f7f857a8ddd86e2c00.png)
+![](media_en/07c46384195f99f7f857a8ddd86e2c00.png)
 
 Figure 3.5 Adding the corresponding kernel header file
 
 Finally click on the Build icon to test, as shown in Figure 3.6.
 
-![](media/2a2660ce16424490296c5d94433c3ded.png)
+![](media_en/2a2660ce16424490296c5d94433c3ded.png)
 
 Figure 3.6 Compilation test
 
@@ -589,7 +589,7 @@ Software](https://www.keil.com/dd2/pack/#!%23eula-container) [Packs
 (keil.com),](https://www.keil.com/dd2/pack/#!%23eula-container) as shown in
 Figure 3.7, and install it.
 
-![](media/9aa3a915c41e1259a35aa9d7ba478f5a.jpeg)
+![](media_en/9aa3a915c41e1259a35aa9d7ba478f5a.jpeg)
 
 Figure 3.7 STM32 software support pack
 
@@ -597,21 +597,21 @@ Create a new project, select the chip as STM32F103C8 as shown in Figure 3.8,
 then click ok and select the components of the TencentOS-tiny pack and the STM32
 boot file as shown in Figure 3.9.
 
-![](media/d8b5e0de17a08a5cf69582a2dee7b048.png)
+![](media_en/d8b5e0de17a08a5cf69582a2dee7b048.png)
 
 Figure 3.8 Selecting the STM32F103C8 chip
 
-![](media/7402739423090b4e98d4bfa04a6df46a.png)
+![](media_en/7402739423090b4e98d4bfa04a6df46a.png)
 
 Figure 3.9 Selecting components
 
 Then tick compile version 5 as shown in Figure 3.10(a), and select C99mode.
 
-![](media/6ad725144883bc2f9e219d860490cc83.png)
+![](media_en/6ad725144883bc2f9e219d860490cc83.png)
 
 (a)
 
-![](media/3354a96f70a5f957bc39d93443926052.png)
+![](media_en/3354a96f70a5f957bc39d93443926052.png)
 
 (b)
 
@@ -625,14 +625,14 @@ Then add the following header file to mcu_platform. h, as shown in Figure 3.11.
 
 \#include "system_stm32f10x.h"
 
-![](media/765b3494099251eae39043b3a6aed54c.png)
+![](media_en/765b3494099251eae39043b3a6aed54c.png)
 
 Figure 3.11 Modifying mcu_platform.h
 
 Finally, click Build to compile and if no errors are reported, the port is
 successful.
 
-![](media/70e063cdefb988c23331ab59b8ebb9f5.png)
+![](media_en/70e063cdefb988c23331ab59b8ebb9f5.png)
 
 Figure 3.12 Compilation interface
 
@@ -644,14 +644,14 @@ an example.
 
 (1) The following diagram shows the contents of the package ticker.
 
-![](media/735ddf1714ee4f651d33d39227190765.png)
+![](media_en/735ddf1714ee4f651d33d39227190765.png)
 
 Figure 3.13 Pack components ticked
 
 The interface after porting the pack in the Positive Point Atomic Explorer
 STM32F407ZGT6 bare-metal project template is shown in Figure 3.14.
 
-![](media/ebb7664cc01009a12d459e155a1064af.png)
+![](media_en/ebb7664cc01009a12d459e155a1064af.png)
 
 Figure 3.14 Migration interface
 
@@ -660,13 +660,13 @@ SysTick_Handler() function in stm32f4xx_it.c as shown below, comment out the
 PendSV_Handler() function in stm32f4xx_it.c, and modify the SysTick\_ Handler()
 function.
 
-![](media/5f4687019217826b1561a9f3a85e2108.png)
+![](media_en/5f4687019217826b1561a9f3a85e2108.png)
 
 Figure 3.15 Function modification
 
 (3) Modify mcu_platform.h by adding \#include "stm32f4xx.h"
 
-![](media/9ab294a1beab98c5f618a2799326ae73.png)
+![](media_en/9ab294a1beab98c5f618a2799326ae73.png)
 
 Figure 3.16 Modifying mcu_platform.h
 
@@ -814,11 +814,11 @@ microcontroller as shown in Figure 3.17. Then connect the serial port of the
 microcontroller to the computer and use XCOM serial communication assistant to
 view the result as shown in Figure 3.18.
 
-![](media/610bcdfe7f8411c8a0f4b2560d65cec1.png)
+![](media_en/610bcdfe7f8411c8a0f4b2560d65cec1.png)
 
 Figure 3.17 Compilation interface
 
-![](media/354a9a182a535b116e80e430b15399b0.png)
+![](media_en/354a9a182a535b116e80e430b15399b0.png)
 
 Figure 3.18 Test interface
 
@@ -826,11 +826,11 @@ In addition, if you encounter the error in Figure 3.19(a) during compilation,
 you need to change \#define TOS_CFG_OBJECT_VERIFY_EN 1u to
 TOS_CFG_OBJECT_VERIFY_EN 0u in Figure 3.19(b)
 
-![](media/4fa1aaf0199ee8bd345183c950581734.png)
+![](media_en/4fa1aaf0199ee8bd345183c950581734.png)
 
 (a)
 
-![](media/2d39003de0ca9960a3ddc62743d4169b.jpeg)
+![](media_en/2d39003de0ca9960a3ddc62743d4169b.jpeg)
 
 (b)
 
@@ -877,7 +877,7 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment is ticked as follows.
 
-![](media/1d4a85b30112a55df7499df263dca80f.png)
+![](media_en/1d4a85b30112a55df7499df263dca80f.png)
 
 （2）In mcu_platform.h, add：
 
@@ -889,7 +889,7 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment is ticked as follows.
 
-![](media/bdc3809b60a39d74c577777b2a40cc5c.png)
+![](media_en/bdc3809b60a39d74c577777b2a40cc5c.png)
 
 （2）In mcu_platform.h, add.
 
@@ -901,7 +901,7 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment is ticked as follows.
 
-![](media/a107ac78cd4dab2322511c7a1a3af877.png)
+![](media_en/a107ac78cd4dab2322511c7a1a3af877.png)
 
 （2）In mcu_platform.h, add.
 
@@ -913,7 +913,7 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment is ticked as follows.
 
-![](media/c0ccaea1bbe9191fa9aa7799b9afef2f.png)
+![](media_en/c0ccaea1bbe9191fa9aa7799b9afef2f.png)
 
 （2）In mcu_platform.h, add.
 
@@ -925,11 +925,11 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment tick the following.
 
-![](media/2dc4e95731d7b61abf294ae356d82029.jpeg)
+![](media_en/2dc4e95731d7b61abf294ae356d82029.jpeg)
 
 （2）Modified to C99 in MDK
 
-![](media/5560501e83b5d5e7ea433da0c21dd1f2.png)
+![](media_en/5560501e83b5d5e7ea433da0c21dd1f2.png)
 
 （3）In mcu_platform.h, add.
 
@@ -943,7 +943,7 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment tick the following.
 
-![](media/b830c6788e9a3cba6e771c550ae37268.jpeg)
+![](media_en/b830c6788e9a3cba6e771c550ae37268.jpeg)
 
 （2）In mcu_platform.h, add.
 
@@ -957,11 +957,11 @@ to improve porting efficiency.
 
 （1）Manage Run-Time Environment tick the following.
 
-![](media/c4562563fb1e04825be194bd33e071ea.jpeg)
+![](media_en/c4562563fb1e04825be194bd33e071ea.jpeg)
 
 （2）Modified to C99 in MDK
 
-![](media/5560501e83b5d5e7ea433da0c21dd1f2.png)
+![](media_en/5560501e83b5d5e7ea433da0c21dd1f2.png)
 
 （3）In mcu_platform.h, add.
 
@@ -978,9 +978,9 @@ When porting TencentOS-tiny Pack to Keil in MDK5.30 and MDK5.35, for Cortex-M0+,
 header files are the same as before, but you need to modify the compiler version
 as follows and then just execute the compilation.
 
-![](media/81bf94c5c9c4421b9809aa88ae3b2130.png)
+![](media_en/81bf94c5c9c4421b9809aa88ae3b2130.png)
 
-![](media/eadcc0ddd0853d3de1ea4bb7d9aa12ec.png)
+![](media_en/eadcc0ddd0853d3de1ea4bb7d9aa12ec.png)
 
 ## 6.4 MDK5.30 and MDK5.35 porting (Cortex-M23, 33)
 
@@ -988,7 +988,7 @@ as follows and then just execute the compilation.
 
 （1）Manage Run-Time Environment is ticked as follows.
 
-![](media/93240598101fa9e9caff2efc2b180b68.jpeg)
+![](media_en/93240598101fa9e9caff2efc2b180b68.jpeg)
 
 （2）In mcu_platform.h, add.
 
@@ -998,17 +998,17 @@ as follows and then just execute the compilation.
 
 （3）Amend to not view error reports.
 
-![](media/df50eacfc6fa6ef74268b56301cd1fe9.png)
+![](media_en/df50eacfc6fa6ef74268b56301cd1fe9.png)
 
 ### 6.4.2 Cortex-M33 core port
 
 （1）Selecting a chip with FPU
 
-![](media/0534a4ad523d2a44be0452bb00709f17.png)
+![](media_en/0534a4ad523d2a44be0452bb00709f17.png)
 
 （2）Manage Run-Time Environment is ticked as follows.
 
-![](media/fa0f8c3ec6bcea24464624c03f2d43e5.png)
+![](media_en/fa0f8c3ec6bcea24464624c03f2d43e5.png)
 
 （3）In mcu_platform.h, add.
 
@@ -1018,4 +1018,4 @@ as follows and then just execute the compilation.
 
 （4）Amend to not view error reports.
 
-![](media/df50eacfc6fa6ef74268b56301cd1fe9.png)
+![](media_en/df50eacfc6fa6ef74268b56301cd1fe9.png)
