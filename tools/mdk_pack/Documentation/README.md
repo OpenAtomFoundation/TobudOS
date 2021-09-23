@@ -4,6 +4,8 @@
 
 TencentOS-Tiny software package based on MDK development
 
+[(English Documents Available)](README_EN.md)
+
 2021/9/3
 
 东南大学
