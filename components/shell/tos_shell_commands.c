@@ -20,23 +20,72 @@
 
 __STATIC__ TOS_SLIST_DEFINE(cmd_set_list);
 
-__STATIC__ int cmd_help(int argc, char *argv[])
+int cmd_help(int argc, char *argv[])
 {
     shell_cmd_set_t *cmd_set;
     const shell_cmd_t *cmd;
 
     TOS_SLIST_FOR_EACH_ENTRY(cmd_set, shell_cmd_set_t, list, &cmd_set_list) {
         for (cmd = cmd_set->commands; cmd->name; ++cmd) {
-            tos_shell_printf("%-8s: %s\n", cmd->name, cmd->help);
+            tos_shell_printf("%-8s: %s\r\n", cmd->name, cmd->help);
         }
     }
 
     return 0;
 }
 
+static void task_shell_walker(k_task_t *task)
+{
+    char *state_str = "ABNORMAL";
+    
+    if (!task) {
+        return;
+    }
+
+    state_str = state_str;
+    tos_shell_printfln("task name: %s", task->name);
+
+    if (tos_task_curr_task_get() == task) {
+        state_str = "RUNNING";
+    } else if (task->state == K_TASK_STATE_PENDTIMEOUT_SUSPENDED) {
+        state_str = "PENDTIMEOUT_SUSPENDED";
+    } else if (task->state == K_TASK_STATE_PEND_SUSPENDED) {
+        state_str = "PEND_SUSPENDED";
+    } else if (task->state == K_TASK_STATE_SLEEP_SUSPENDED) {
+        state_str = "SLEEP_SUSPENDED";
+    } else if (task->state == K_TASK_STATE_PENDTIMEOUT) {
+        state_str = "PENDTIMEOUT";
+    } else if (task->state == K_TASK_STATE_SUSPENDED) {
+        state_str = "SUSPENDED";
+    } else if (task->state == K_TASK_STATE_PEND) {
+        state_str = "PEND";
+    } else if (task->state == K_TASK_STATE_SLEEP) {
+        state_str = "SLEEP";
+    } else if (task->state == K_TASK_STATE_READY) {
+        state_str = "READY";
+    }
+    
+    tos_shell_printfln("task stat: %s", state_str);
+    tos_shell_printfln("stk size : %d", task->stk_size);
+    tos_shell_printfln("stk base : 0x%p", task->stk_base);
+    tos_shell_printfln("stk top  : 0x%p", task->stk_base + task->stk_size);
+    
+#if TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN > 0u
+    int depth;
+    
+    if (tos_task_stack_draught_depth(task, &depth) != K_ERR_NONE) {
+        depth = -1;
+    }
+    
+    tos_shell_printfln("stk depth: %d", depth);
+#endif /* TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN */
+    
+    tos_shell_printf("\r\n");
+}
+
 __STATIC__ int cmd_ps(int argc, char *argv[])
 {
-    tos_task_info_display();
+   tos_task_walkthru(task_shell_walker);
     return 0;
 }
 

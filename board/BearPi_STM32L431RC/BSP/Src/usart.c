@@ -23,6 +23,7 @@
 
 /* USER CODE BEGIN 0 */
 uint8_t data;
+uint8_t shell_data;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef hlpuart1;
@@ -72,7 +73,6 @@ void MX_USART1_UART_Init(void)
   {
     Error_Handler();
   }
-
 }
 /* USART2 init function */
 
@@ -93,7 +93,7 @@ void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }
-
+  HAL_UART_Receive_IT(&huart2, &shell_data, 1);
 }
 /* USART3 init function */
 

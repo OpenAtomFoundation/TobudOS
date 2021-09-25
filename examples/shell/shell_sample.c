@@ -6,9 +6,9 @@ char cmd_buf[CMD_LEN_MAX];
 
 hal_uart_t shell_uart;
 
-void uart_output(const char *str)
+void uart_output(const char ch)
 {
-    tos_hal_uart_write(&shell_uart, (const uint8_t *)str, strlen(str), 0xFF);
+    tos_hal_uart_write(&shell_uart, (const uint8_t *)&ch, 1, 0xFF);
 
 #if 0
     /* if using c lib printf through uart, a simpler one is: */
@@ -19,34 +19,34 @@ void uart_output(const char *str)
 __STATIC__ int cmd_test00(int argc, char *argv[])
 {
     int i = 0;
-    tos_shell_printf("test00:\n");
+    tos_shell_printf("test00:\r\n");
 
     for (i = 0; i < argc; ++i) {
-        tos_shell_printf("argv[%d]: %s\n", i, argv[i]);
+        tos_shell_printf("argv[%d]: %s\r\n", i, argv[i]);
     }
     return 0;
 }
 
 __STATIC__ int cmd_test01(int argc, char *argv[])
 {
-    tos_shell_printf("test01:\n");
+    tos_shell_printf("test01:\r\n");
     return 0;
 }
 
 __STATIC__ int cmd_test10(int argc, char *argv[])
 {
     int i = 0;
-    tos_shell_printf("test10:\n");
+    tos_shell_printf("test10:\r\n");
 
     for (i = 0; i < argc; ++i) {
-        tos_shell_printf("argv[%d]: %s\n", i, argv[i]);
+        tos_shell_printf("argv[%d]: %s\r\n", i, argv[i]);
     }
     return 0;
 }
 
 __STATIC__ int cmd_test11(int argc, char *argv[])
 {
-    tos_shell_printf("test11:\n");
+    tos_shell_printf("test11:\r\n");
     return 0;
 }
 
@@ -74,10 +74,16 @@ __STATIC__ shell_cmd_set_t custom_shell_cmd_set1 = {
 
 void application_entry(void *arg)
 {
+    int ret;
+    
     /* if test on ALIENTEK_STM32F429, switch HAL_UART_PORT_2 to HAL_UART_PORT_1 */
     tos_hal_uart_init(&shell_uart, HAL_UART_PORT_2);
 
-    tos_shell_init(cmd_buf, sizeof(cmd_buf), uart_output, &custom_shell_cmd_set0);
+    ret = tos_shell_init(cmd_buf, sizeof(cmd_buf), uart_output, &custom_shell_cmd_set0);
+    if (ret < 0) {
+        printf("tos shell init fail, ret is %d\r\n", ret);
+    }
+    printf("tos shell init success\r\n");
 
     tos_shell_cmd_set_regiser(&custom_shell_cmd_set1);
 
