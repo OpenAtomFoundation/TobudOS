@@ -85,14 +85,36 @@ static void task_shell_walker(k_task_t *task)
 
 __STATIC__ int cmd_ps(int argc, char *argv[])
 {
-   tos_task_walkthru(task_shell_walker);
+    tos_task_walkthru(task_shell_walker);
     return 0;
 }
 
+__STATIC__ int cmd_free(int argc, char *argv[])
+{
+#if TOS_CFG_MMHEAP_EN > 0u
+    k_mmheap_info_t pool_info;
+    uint32_t total;
+
+    if (tos_mmheap_check(&pool_info) != K_ERR_NONE) {
+        tos_shell_printfln("mmheap check fail!");
+        return -1;
+    }
+
+    total = pool_info.used + pool_info.free;
+    tos_shell_printfln("      %10s    %10s    %10s", "total", "used", "free");
+    tos_shell_printfln("Pool: %10d    %10d    %10d", total, pool_info.used, pool_info.free);
+    
+    return 0;
+#else
+    tos_shell_printfln("TOS_CFG_MMHEAP_EN is disenable!");
+    return -1;
+#endif /* TOS_CFG_MMHEAP_EN */
+}
 
 __STATIC__ const shell_cmd_t builtin_shell_cmds[] = {
     { "help",       cmd_help,       "show help" },
-    { "ps",         cmd_ps,         "show tasks" },
+    { "ps",         cmd_ps,         "show task info" },
+    { "free",       cmd_free,       "show mmheap info" },
     { K_NULL,       K_NULL,         K_NULL  },
 };
 
