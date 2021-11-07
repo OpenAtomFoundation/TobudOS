@@ -607,6 +607,10 @@ __API__ void *tos_mmheap_calloc(size_t num, size_t size)
 {
     void *ptr;
 
+    if (size == 0 || num > K_MMHEAP_BLK_SIZE_MAX / size) {
+        return K_NULL;
+    }
+
     ptr = tos_mmheap_alloc(num * size);
     if (ptr) {
         memset(ptr, 0, num * size);
