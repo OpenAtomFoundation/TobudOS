@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<package schemaVersion="1.6.3" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="PACK.xsd">
+    <vendor>Tencent</vendor>
+    <name>TencentOS-tiny</name>
+    <description>TencentOS tiny for external devices</description>
+    <url>https://github.com/OpenAtomFoundation/TencentOS-tiny/tree/master/tools/mdk_pack/</url>
+    <license>LICENSE.txt</license>
+    <supportContact>1797878653@qq.com</supportContact>
+    <releases>
+        <release date="2020-10-03" version="1.0.0">Updated new pack:
+(1) The package packages the TencentOS tiny operating system for the ARM Cortex-M0+, Cortex-M0, Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23 and Cortex-M33 cores, enabling quick installation of the TencentOS tiny corresponding kernel in a Keil project.
+(2) The package can automatically adapt to the kernel selected for the project, and the arch file can be displayed automatically according to the kernel.
+(3) When the user checks a component, the package will automatically indicate that other modules need to be checked, and can be checked with one click using Resolve in the interface.
+(4) The user can modify the tos_config file of the corresponding kernel to tailor the functions of TencentOS tiny on their own.
+(5) The package has been tested on STM32 CubeIDE 6.2.0, completed with core-based based chips and microcontroller development boards based on ARM Cortex-M0+, Cortex-M0, Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M33 cores were ported.</release>
+    </releases>
+    <keywords>
+        <keyword>TencentOS tiny</keyword>
+        <keyword>ARM</keyword>
+        <keyword>STM32</keyword>
+        <keyword>CUBE_RULES_COMPLIANT</keyword>
+        <keyword>IMPLEMENTED_WITH_STM32CUBEMX</keyword>
+    </keywords>
+    <requirements>
+        <packages>
+            <package name="CMSIS" vendor="ARM" version="5.0.0-0"/>
+        </packages>
+    </requirements>
+    <conditions>
+        <condition id="Cortex_M0">
+            <require Dcore="Cortex-M0"/>
+        </condition>
+        <condition id="Cortex_M0plus">
+            <require Dcore="Cortex-M0+"/>
+        </condition>
+        <condition id="Cortex_M3">
+            <require Dcore="Cortex-M3"/>
+        </condition>
+        <condition id="Cortex_M4">
+            <require Dcore="Cortex-M4"/>
+        </condition>
+        <condition id="Cortex_M7">
+            <require Dcore="Cortex-M7"/>
+        </condition>
+        <condition id="Cortex_M23">
+            <require Dcore="Cortex-M23"/>
+        </condition>
+        <condition id="Cortex_M33">
+            <require Dcore="Cortex-M33"/>
+        </condition>
+        <condition id="tos_config_for_arm">
+            <require condition="example_mcu_platform"/>
+            <require condition="tencent_tiny_kernel_core_hal"/>
+        </condition>
+        <condition id="tencent_tiny_kernel_core_hal">
+            <require Cclass="TencentOS tiny" Cgroup="Kernel" Csub="core"/>
+            <require Cclass="TencentOS tiny" Cgroup="Kernel" Csub="hal"/>
+        </condition>
+        <condition id="tencent_tiny_kernel">
+            <require Cclass="TencentOS tiny" Cgroup="Kernel" Csub="core"/>
+            <require Cclass="TencentOS tiny" Cgroup="Kernel" Csub="hal"/>
+        </condition>
+        <condition id="example_mcu_platform">
+            <require Cclass="TencentOS tiny" Cgroup="Example" Csub="mcu_platform"/>
+            <require Cclass="TencentOS tiny" Cgroup="Example" Csub="mcu_it"/>
+        </condition>
+        <condition id="arch_for_cortex_m0plus">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M0plus"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+        <condition id="arch_for_cortex_m0">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M0"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+        <condition id="arch_for_cortex_m3">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M3"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+        <condition id="arch_for_cortex_m4">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M4"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+        <condition id="arch_for_cortex_m7">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M7"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+        <condition id="arch_for_cortex_m23">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M23"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+        <condition id="arch_for_cortex_m33">
+            <require condition="tencent_tiny_kernel"/>
+            <require condition="Cortex_M33"/>
+            <require condition="example_mcu_platform"/>
+        </condition>
+    </conditions>
+    <components>
+        <bundle Cbundle="ARM_pack" Cclass="TencentOS tiny" Cversion="1.0.0">
+            <description>TencentOS tiny for Cortex-M</description>
+            <doc>OpenAtomFoundation_TencentOS-tiny_ 腾讯物联网终端操作系统.html</doc>
+            <component Cgroup="Arch" Csub="Cortex_M0" Cvariant="armcc" condition="arch_for_cortex_m0" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m0_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/armcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M0" Cvariant="gcc" condition="arch_for_cortex_m0" maxInstances="1">
+                <description>arch for cortex_m0_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/gcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M0" Cvariant="iccarm" condition="arch_for_cortex_m0" maxInstances="1">
+                <description>arch for cortex_m0_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v6m/cortex-m0/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M0plus" Cvariant="armcc" condition="arch_for_cortex_m0plus" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m0plus_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/armcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M0plus" Cvariant="gcc" condition="arch_for_cortex_m0plus" maxInstances="1">
+                <description>arch for cortex_m0plus_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/gcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M0plus" Cvariant="iccarm" condition="arch_for_cortex_m0plus" maxInstances="1">
+                <description>arch for cortex_m0plus_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m0+/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M3" Cvariant="armcc" condition="arch_for_cortex_m3" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m3_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/armcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M3" Cvariant="gcc" condition="arch_for_cortex_m3" maxInstances="1">
+                <description>arch for cortex_m3_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/gcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M3" Cvariant="iccarm" condition="arch_for_cortex_m3" maxInstances="1">
+                <description>arch for cortex_m3_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m3/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M4" Cvariant="armcc" condition="arch_for_cortex_m4" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m4_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/armcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M4" Cvariant="gcc" condition="arch_for_cortex_m4" maxInstances="1">
+                <description>arch for cortex_m4_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/gcc/port_s.S"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M4" Cvariant="iccarm" condition="arch_for_cortex_m4" maxInstances="1">
+                <description>arch for cortex_m4_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m4/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M7" Cvariant="armcc" condition="arch_for_cortex_m7" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m7_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/armcc/port_s.S"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M7" Cvariant="gcc" condition="arch_for_cortex_m7" maxInstances="1">
+                <description>arch for cortex_m7_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/gcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M7" Cvariant="iccarm" condition="arch_for_cortex_m7" maxInstances="1">
+                <description>arch for cortex_m7_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v7m/cortex-m7/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M23" Cvariant="armcc" condition="arch_for_cortex_m23" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m23_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/armcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M23" Cvariant="gcc" condition="arch_for_cortex_m23" maxInstances="1">
+                <description>arch for cortex_m23_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/gcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M23" Cvariant="iccarm" condition="arch_for_cortex_m23" maxInstances="1">
+                <description>arch for cortex_m23_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m23/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M33" Cvariant="armcc" condition="arch_for_cortex_m33" isDefaultVariant="true" maxInstances="1">
+                <description>arch for cortex_m33_armcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/armcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/armcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/armcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/armcc/port_s.S"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_fault.c"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M33" Cvariant="gcc" condition="arch_for_cortex_m33" maxInstances="1">
+                <description>arch for cortex_m33_gcc</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/gcc/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/gcc/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/gcc/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/gcc/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Arch" Csub="Cortex_M33" Cvariant="iccarm" condition="arch_for_cortex_m33" maxInstances="1">
+                <description>arch for cortex_m33_iccarm</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_def.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_cpu_types.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/include/tos_fault.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_cpu.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/common/tos_fault.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/iccarm/port.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/iccarm/port_c.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/iccarm/port_config.h"/>
+                    <file category="sourceAsm" name="Middlewares/Third_Party/Arch/arm/arm-v8m/cortex-m33/iccarm/port_s.S"/>
+                </files>
+            </component>
+            <component Cgroup="Cmsis_os" Csub="cmsis_os" condition="tencent_tiny_kernel" maxInstances="1">
+                <description>cmsis_os</description>
+                <files>
+                    <file category="source" name="Middlewares/Third_Party/Cmsis_os/cmsis_os.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Cmsis_os/cmsis_os.h"/>
+                </files>
+            </component>
+            <component Cgroup="Cmsis_os" Csub="cmsis_os2" condition="tencent_tiny_kernel" maxInstances="1">
+                <description>cmsis_os_2</description>
+                <files>
+                    <file category="source" name="Middlewares/Third_Party/Cmsis_os/cmsis_os2.c"/>
+                    <file category="header" name="Middlewares/Third_Party/Cmsis_os/cmsis_os2.h"/>
+                </files>
+            </component>
+            <component Cgroup="Kernel" Csub="hal" maxInstances="1">
+                <description>kernel_hal</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/hal/include/tos_hal.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/hal/include/tos_hal_sd.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/hal/include/tos_hal_uart.h"/>
+                </files>
+            </component>
+            <component Cgroup="Kernel" Csub="core" maxInstances="1">
+                <description>kernel_core</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_barrier.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_binary_heap.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_bitmap.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_char_fifo.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_compiler.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_completion.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_config_check.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_config_default.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_countdownlatch.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_event.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_global.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_k.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_kerr.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_klib.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_ktypes.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_list.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_mail_queue.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_message_queue.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_mmblk.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_mmheap.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_mutex.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_pend.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_priority_mail_queue.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_priority_message_queue.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_priority_queue.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_ring_queue.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_robin.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_rwlock.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_sched.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_sem.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_slist.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_stopwatch.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_sys.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_task.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_tick.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_time.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_timer.h"/>
+                    <file category="header" name="Middlewares/Third_Party/Kernel/core/include/tos_version.h"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_barrier.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_binary_heap.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_bitmap.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_char_fifo.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_completion.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_countdownlatch.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_event.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_global.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_mail_queue.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_message_queue.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_mmblk.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_mmheap.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_mutex.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_pend.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_priority_mail_queue.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_priority_message_queue.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_priority_queue.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_ring_queue.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_robin.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_rwlock.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_sched.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_sem.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_stopwatch.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_sys.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_task.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_tick.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_time.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Kernel/core/tos_timer.c"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="helloworld_main" maxInstances="1">
+                <description>helloworld.c and main.c</description>
+                <files>
+                    <file category="source" name="Middlewares/Third_Party/Example/hello_world.c"/>
+                    <file category="source" name="Middlewares/Third_Party/Example/main_example.c"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_it" maxInstances="1">
+                <description>Interrupt function modification</description>
+                <files>
+                    <file category="source" name="Middlewares/Third_Party/Example/mcu_it.c"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_platform" Cvariant="Cortex_M0" condition="Cortex_M0" maxInstances="1">
+                <description>mcu_platform.h</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Example/mcu_platform_M0.h"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_platform" Cvariant="Cortex_M0plus" condition="Cortex_M0plus" maxInstances="1">
+                <description>mcu_platform.h</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Example/mcu_platform_M0plus.h"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_platform" Cvariant="Cortex_M3" condition="Cortex_M3" maxInstances="1">
+                <description>mcu_platform.h</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Example/mcu_platform_M3.h"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_platform" Cvariant="Cortex_M4" condition="Cortex_M4" maxInstances="1">
+                <description>mcu_platform.h</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Example/mcu_platform_M4.h"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_platform" Cvariant="Cortex_M7" condition="Cortex_M7" maxInstances="1">
+                <description>mcu_platform.h</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Example/mcu_platform_M7.h"/>
+                </files>
+            </component>
+            <component Cgroup="Example" Csub="mcu_platform" Cvariant="Cortex_M33" condition="Cortex_M33" maxInstances="1">
+                <description>mcu_platform.h</description>
+                <files>
+                    <file category="header" name="Middlewares/Third_Party/Example/mcu_platform_M33.h"/>
+                </files>
+            </component>
+        </bundle>
+    </components>
+</package>
