@@ -75,6 +75,8 @@ TencentOS tiny 自开源发布以来也在努力发展合作伙伴，期待合�
 - [TencentOS tiny 移植指南（KEIL 版本）](./doc/10.Porting_Manual_for_KEIL.md)
 - [TencentOS tiny 移植指南（IAR 版本）](./doc/11.Porting_Manual_for_IAR.md)
 - [TencentOS tiny 移植指南（GCC 版本）](./doc/12.Porting_Manual_for_GCC.md)
+- [TencentOS tiny 移植指南（基于MDK pack)](./tools/mdk_pack/Documentation/README.md)
+- [TencentOS tiny 移植指南（基于STM32 CubeMx)](./tools/STM32CubeMX_pack/Documentation/README.md)
 
 ## 2、TencentOS tiny 开发指南
 - [TencentOS tiny 内核开发指南](./doc/04.Development_Manual.md)
@@ -192,5 +194,4 @@ TencentOS tiny 联合合作伙伴(南京厚德物联网)设计了定制开发板
 
 ## 相关PPT资料：
 - [【TencentOS tiny 学习】视频 PPT](https://github.com/jiejieTop/TencentOS-Demo/tree/master/PPT)
-
 
