@@ -30,6 +30,7 @@ void board_init(void)
     HAL_Init();
     SystemClock_Config();
     MX_USART1_UART_Init();
+    //MX_LPUART1_UART_Init();
 }
 
 /**

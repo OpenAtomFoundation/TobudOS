@@ -25,7 +25,8 @@
 #include "main.h"
 #include "stm32wlxx_it.h"
 #include "tos_k.h"
-#include "sensor_parser.h"
+#include "pm2d5_parser.h"
+#include "tos_at.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -63,6 +64,7 @@
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef hlpuart1;
 extern SUBGHZ_HandleTypeDef hsubghz;
 /* USER CODE BEGIN EV */
 
@@ -209,7 +211,18 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32wlxx.s).                    */
 /******************************************************************************/
+void LPUART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN LPUART1_IRQn 0 */
 
+  /* USER CODE END LPUART1_IRQn 0 */
+    tos_knl_irq_enter();
+    HAL_UART_IRQHandler(&hlpuart1);
+    tos_knl_irq_leave();
+  /* USER CODE BEGIN LPUART1_IRQn 1 */
+
+  /* USER CODE END LPUART1_IRQn 1 */
+}
 void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
@@ -242,13 +255,16 @@ void Radio_IRQHandler(void)
 /* USER CODE BEGIN 1 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    extern uint8_t msg;
-    
+    extern uint8_t pm2d5_byte_data;
+    extern uint8_t data;   
     if(huart ->Instance == USART2)
     {
-        tos_shell_input_byte(msg);
-        HAL_UART_Receive_IT(&huart2, (uint8_t*)&msg, 1);
-        
+        HAL_UART_Receive_IT(&huart2, (uint8_t*)&pm2d5_byte_data, 1);
+        pm2d5_parser_input_byte(pm2d5_byte_data);    
+    }
+    else if (huart->Instance == LPUART1) {
+        HAL_UART_Receive_IT(&hlpuart1, &data, 1);
+        tos_at_uart_input_byte(data);
     }
 }
 /* USER CODE END 1 */
