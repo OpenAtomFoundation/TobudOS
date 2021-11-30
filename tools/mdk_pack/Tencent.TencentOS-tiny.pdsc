@@ -3,7 +3,7 @@
   <vendor>Tencent</vendor>
   <name>TencentOS-tiny</name>
   <description>TencentOS tiny for external devices</description>
-  <url>https://raw.githubusercontent.com/OpenAtomFoundation/TencentOS-tiny/blob/master/tools/mdk_pack/</url>
+  <url>https://raw.githubusercontent.com/OpenAtomFoundation/TencentOS-tiny/master/tools/mdk_pack/</url>
   <license>LICENSE.txt</license>
   <supportContact>1797878653@qq.com</supportContact>
   
