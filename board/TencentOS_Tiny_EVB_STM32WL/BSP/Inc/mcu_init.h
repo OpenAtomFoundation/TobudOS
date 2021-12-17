@@ -7,6 +7,7 @@
 #include "main.h"
 #include "usart.h"
 #include "gpio.h"
+#include "i2c.h"
 #include "tos_k.h"
 #include "stdio.h"
 
