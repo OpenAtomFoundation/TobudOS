@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -38,7 +38,7 @@
  */
 void EWM_Init(EWM_Type *base, const ewm_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     uint8_t value = 0U;
 
@@ -55,7 +55,7 @@ void EWM_Init(EWM_Type *base, const ewm_config_t *config)
 #endif /* FSL_FEATURE_EWM_HAS_PRESCALER */
 
 #if defined(FSL_FEATURE_EWM_HAS_CLOCK_SELECT) && FSL_FEATURE_EWM_HAS_CLOCK_SELECT
-    base->CLKCTRL = config->clockSource;
+    base->CLKCTRL = (uint8_t)config->clockSource;
 #endif /* FSL_FEATURE_EWM_HAS_CLOCK_SELECT*/
 
     base->CMPL = config->compareLowValue;
@@ -102,7 +102,7 @@ void EWM_Deinit(EWM_Type *base)
  */
 void EWM_GetDefaultConfig(ewm_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));

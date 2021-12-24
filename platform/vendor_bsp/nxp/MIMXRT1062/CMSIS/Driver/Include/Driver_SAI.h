@@ -93,7 +93,7 @@ extern "C"
 /*----- SAI Control Codes:Configuration Parameters: Companding -----*/
 #define ARM_SAI_COMPANDING_Pos           20
 #define ARM_SAI_COMPANDING_Msk          (3U << ARM_SAI_COMPANDING_Pos)
-#define ARM_SAI_COMPANDING_NONE         (0U << ARM_SAI_COMPANDING_Pos)          ///< No compading (default)
+#define ARM_SAI_COMPANDING_NONE         (0U << ARM_SAI_COMPANDING_Pos)          ///< No companding (default)
 #define ARM_SAI_COMPANDING_A_LAW        (2U << ARM_SAI_COMPANDING_Pos)          ///< A-Law companding
 #define ARM_SAI_COMPANDING_U_LAW        (3U << ARM_SAI_COMPANDING_Pos)          ///< u-Law companding
 

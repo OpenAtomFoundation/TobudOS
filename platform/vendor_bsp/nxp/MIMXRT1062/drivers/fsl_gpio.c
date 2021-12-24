@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -77,7 +77,7 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *Config
     /* If The clock IP is valid, enable the clock gate. */
     if ((instance < ARRAY_SIZE(s_gpioClock)) && (kCLOCK_IpInvalid != s_gpioClock[instance]))
     {
-        CLOCK_EnableClock(s_gpioClock[instance]);
+        (void)CLOCK_EnableClock(s_gpioClock[instance]);
     }
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
@@ -113,11 +113,19 @@ void GPIO_PinWrite(GPIO_Type *base, uint32_t pin, uint8_t output)
     assert(pin < 32U);
     if (output == 0U)
     {
+#if (defined(FSL_FEATURE_IGPIO_HAS_DR_CLEAR) && FSL_FEATURE_IGPIO_HAS_DR_CLEAR)
+        base->DR_CLEAR = (1UL << pin);
+#else
         base->DR &= ~(1UL << pin); /* Set pin output to low level.*/
+#endif
     }
     else
     {
+#if (defined(FSL_FEATURE_IGPIO_HAS_DR_SET) && FSL_FEATURE_IGPIO_HAS_DR_SET)
+        base->DR_SET = (1UL << pin);
+#else
         base->DR |= (1UL << pin); /* Set pin output to high level.*/
+#endif
     }
 }
 

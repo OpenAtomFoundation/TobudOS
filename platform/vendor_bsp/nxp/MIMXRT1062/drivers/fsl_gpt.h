@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
@@ -148,7 +148,7 @@ void GPT_Deinit(GPT_Type *base);
  *    config->enableRunInWait = true;
  *    config->enableRunInDoze = false;
  *    config->enableRunInDbg = false;
- *    config->enableFreeRun = true;
+ *    config->enableFreeRun = false;
  *    config->enableMode  = true;
  * @endcode
  * @param config Pointer to the user configuration structure.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  *
@@ -18,18 +18,20 @@
 #endif
 
 /* The CSC2 coefficient is ###.####_#### */
-#define PXP_CSC2_COEF_INT_WIDTH 2
+#define PXP_CSC2_COEF_INT_WIDTH  2
 #define PXP_CSC2_COEF_FRAC_WIDTH 8
 
 /* Compatibility map macro. */
 #if defined(PXP_PS_CLRKEYLOW_0_PIXEL_MASK) && (!defined(PXP_PS_CLRKEYLOW_PIXEL_MASK))
-#define PS_CLRKEYLOW PS_CLRKEYLOW_0
+#define PS_CLRKEYLOW  PS_CLRKEYLOW_0
 #define PS_CLRKEYHIGH PS_CLRKEYHIGH_0
 #endif
 #if defined(PXP_AS_CLRKEYLOW_0_PIXEL_MASK) && (!defined(PXP_AS_CLRKEYLOW_PIXEL_MASK))
-#define AS_CLRKEYLOW AS_CLRKEYLOW_0
+#define AS_CLRKEYLOW  AS_CLRKEYLOW_0
 #define AS_CLRKEYHIGH AS_CLRKEYHIGH_0
 #endif
+
+#define PXP_MAX_HEIGHT ((PXP_OUT_LRC_Y_MASK >> PXP_OUT_LRC_Y_SHIFT) + 1U)
 
 typedef union _u32_f32
 {
@@ -86,6 +88,34 @@ static uint32_t PXP_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
  * @param scale The scale value set to register PS_SCALE.
  */
 static void PXP_GetScalerParam(uint16_t inputDimension, uint16_t outputDimension, uint8_t *dec, uint32_t *scale);
+
+/*!
+ * @brief Reset the PXP to initialized state.
+ *
+ * @param base PXP peripheral base address.
+ */
+static void PXP_ResetToInit(PXP_Type *base);
+
+/*!
+ * @brief Copy rectangle.
+ *
+ * @param base PXP peripheral base address.
+ * @param srcAddr Start address of the soruce rectangle.
+ * @param srcPitchBytes Pitch of source buffer.
+ * @param destAddr Start address of the destination rectangle.
+ * @param destPitchBytes Pitch of destination buffer.
+ * @param width How many pixels one line to copy.
+ * @param height How many lines to copy.
+ * @param pixelFormat Pixel format.
+ */
+static void PXP_StartRectCopy(PXP_Type *base,
+                              uint32_t srcAddr,
+                              uint16_t srcPitchBytes,
+                              uint32_t destAddr,
+                              uint16_t destPitchBytes,
+                              uint16_t width,
+                              uint16_t height,
+                              pxp_as_pixel_format_t pixelFormat);
 
 /*******************************************************************************
  * Variables
@@ -198,21 +228,9 @@ static void PXP_GetScalerParam(uint16_t inputDimension, uint16_t outputDimension
     }
 }
 
-/*!
- * brief Initialize the PXP.
- *
- * This function enables the PXP peripheral clock, and resets the PXP registers
- * to default status.
- *
- * param base PXP peripheral base address.
- */
-void PXP_Init(PXP_Type *base)
+static void PXP_ResetToInit(PXP_Type *base)
 {
     uint32_t ctrl = 0U;
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    uint32_t instance = PXP_GetInstance(base);
-    CLOCK_EnableClock(s_pxpClocks[instance]);
-#endif
 
     PXP_Reset(base);
 
@@ -234,6 +252,24 @@ void PXP_Init(PXP_Type *base)
 #endif
 
     base->CTRL = ctrl;
+}
+
+/*!
+ * brief Initialize the PXP.
+ *
+ * This function enables the PXP peripheral clock, and resets the PXP registers
+ * to default status.
+ *
+ * param base PXP peripheral base address.
+ */
+void PXP_Init(PXP_Type *base)
+{
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    uint32_t instance = PXP_GetInstance(base);
+    CLOCK_EnableClock(s_pxpClocks[instance]);
+#endif
+
+    PXP_ResetToInit(base);
 }
 
 /*!
@@ -728,3 +764,266 @@ void PXP_EnableDither(PXP_Type *base, bool enable)
     }
 }
 #endif /* FSL_FEATURE_PXP_HAS_DITHER */
+
+/*!
+ * brief Set the Porter Duff configuration.
+ *
+ * param base PXP peripheral base address.
+ * param config Pointer to the configuration.
+ */
+void PXP_SetPorterDuffConfig(PXP_Type *base, const pxp_porter_duff_config_t *config)
+{
+    assert(NULL != config);
+
+    union
+    {
+        pxp_porter_duff_config_t pdConfigStruct;
+        uint32_t u32;
+    } pdConfig;
+
+    pdConfig.pdConfigStruct = *config;
+
+    base->PORTER_DUFF_CTRL = pdConfig.u32;
+}
+
+/*!
+ * brief Get the Porter Duff configuration by blend mode.
+ *
+ * param mode The blend mode.
+ * param config Pointer to the configuration.
+ * retval kStatus_Success Successfully get the configuratoin.
+ * retval kStatus_InvalidArgument The blend mode not supported.
+ */
+status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_duff_config_t *config)
+{
+    status_t status;
+
+    union
+    {
+        pxp_porter_duff_config_t pdConfigStruct;
+        uint32_t u32;
+    } pdConfig;
+
+    static const uint32_t pdCtrl[] = {
+        /* kPXP_PorterDuffSrc */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK | PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
+
+        /* kPXP_PorterDuffAtop */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorStraight) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
+
+        /* kPXP_PorterDuffOver */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK | PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
+
+        /* kPXP_PorterDuffIn */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorStraight) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
+
+        /* kPXP_PorterDuffOut */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
+
+        /* kPXP_PorterDuffDst */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorOne),
+
+        /* kPXP_PorterDuffDstAtop */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorStraight),
+
+        /* kPXP_PorterDuffDstOver */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorOne),
+
+        /* kPXP_PorterDuffDstIn */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorStraight),
+
+        /* kPXP_PorterDuffDstOut */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
+
+        /* kPXP_PorterDuffXor */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
+
+        /* kPXP_PorterDuffClear */
+        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
+            PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
+    };
+
+    if (mode >= kPXP_PorterDuffMax)
+    {
+        status = kStatus_InvalidArgument;
+    }
+    else
+    {
+        pdConfig.u32 = pdCtrl[(uint32_t)mode] | PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S0_COLOR_MODE(kPXP_PorterDuffColorWithAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S1_COLOR_MODE(kPXP_PorterDuffColorWithAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S0_ALPHA_MODE(kPXP_PorterDuffAlphaStraight) |
+                       PXP_PORTER_DUFF_CTRL_S1_ALPHA_MODE(kPXP_PorterDuffAlphaStraight);
+
+        *config = pdConfig.pdConfigStruct;
+
+        status = kStatus_Success;
+    }
+
+    return status;
+}
+
+static void PXP_StartRectCopy(PXP_Type *base,
+                              uint32_t srcAddr,
+                              uint16_t srcPitchBytes,
+                              uint32_t destAddr,
+                              uint16_t destPitchBytes,
+                              uint16_t width,
+                              uint16_t height,
+                              pxp_as_pixel_format_t pixelFormat)
+{
+    pxp_output_buffer_config_t outputBufferConfig;
+    pxp_as_buffer_config_t asBufferConfig;
+    uint32_t intMask;
+
+#if !(defined(FSL_FEATURE_PXP_HAS_NO_LUT) && FSL_FEATURE_PXP_HAS_NO_LUT)
+    intMask =
+        base->CTRL & (PXP_CTRL_NEXT_IRQ_ENABLE_MASK | PXP_CTRL_IRQ_ENABLE_MASK | PXP_CTRL_LUT_DMA_IRQ_ENABLE_MASK);
+#else
+    intMask = base->CTRL & (PXP_CTRL_NEXT_IRQ_ENABLE_MASK | PXP_CTRL_IRQ_ENABLE_MASK);
+#endif
+
+    PXP_ResetToInit(base);
+
+    /* Restore previous interrupt configuration. */
+    PXP_EnableInterrupts(base, intMask);
+
+    /* Disable PS */
+    PXP_SetProcessSurfacePosition(base, 0xFFFFU, 0xFFFFU, 0U, 0U);
+
+    /* Input buffer. */
+    asBufferConfig.pixelFormat = pixelFormat;
+    asBufferConfig.bufferAddr  = srcAddr;
+    asBufferConfig.pitchBytes  = srcPitchBytes;
+
+    PXP_SetAlphaSurfaceBufferConfig(base, &asBufferConfig);
+    PXP_SetAlphaSurfacePosition(base, 0U, 0U, width - 1U, height - 1U);
+
+    /* Alpha mode set to ROP, AS OR PS*/
+    const pxp_as_blend_config_t asBlendConfig = {
+        .alpha = 0U, .invertAlpha = false, .alphaMode = kPXP_AlphaRop, .ropMode = kPXP_RopMergeAs};
+
+    PXP_SetAlphaSurfaceBlendConfig(base, &asBlendConfig);
+
+    /* Output buffer. */
+    outputBufferConfig.pixelFormat    = (pxp_output_pixel_format_t)pixelFormat;
+    outputBufferConfig.interlacedMode = kPXP_OutputProgressive;
+    outputBufferConfig.buffer0Addr    = destAddr;
+    outputBufferConfig.buffer1Addr    = 0U;
+    outputBufferConfig.pitchBytes     = destPitchBytes;
+    outputBufferConfig.width          = width;
+    outputBufferConfig.height         = height;
+
+    PXP_SetOutputBufferConfig(base, &outputBufferConfig);
+
+    PXP_ClearStatusFlags(base, (uint32_t)kPXP_CompleteFlag);
+
+    PXP_Start(base);
+}
+
+/*!
+ * brief Copy picture from one buffer to another buffer.
+ *
+ * This function copies a rectangle from one buffer to another buffer.
+ *
+ * param base PXP peripheral base address.
+ * retval kStatus_Success Successfully started the copy process.
+ * retval kStatus_InvalidArgument Invalid argument.
+ */
+status_t PXP_StartPictureCopy(PXP_Type *base, const pxp_pic_copy_config_t *config)
+{
+    uint8_t bytePerPixel;
+    uint32_t copyFromAddr;
+    uint32_t copyToAddr;
+
+    if ((0U == config->height) || (0U == config->width))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    if ((config->pixelFormat == kPXP_AsPixelFormatARGB8888) || (config->pixelFormat == kPXP_AsPixelFormatRGB888))
+    {
+        bytePerPixel = 4U;
+    }
+    else
+    {
+        bytePerPixel = 2U;
+    }
+
+    copyFromAddr = config->srcPicBaseAddr + ((uint32_t)config->srcOffsetY * (uint32_t)config->srcPitchBytes) +
+                   bytePerPixel * config->srcOffsetX;
+    copyToAddr = config->destPicBaseAddr + ((uint32_t)config->destOffsetY * (uint32_t)config->destPitchBytes) +
+                 bytePerPixel * config->destOffsetX;
+
+    PXP_StartRectCopy(base, copyFromAddr, config->srcPitchBytes, copyToAddr, config->destPitchBytes, config->width,
+                      config->height, config->pixelFormat);
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Copy continous memory.
+ *
+ * The copy size should be 512 byte aligned.
+ *
+ * param base PXP peripheral base address.
+ * retval kStatus_Success Successfully started the copy process.
+ * retval kStatus_InvalidArgument Invalid argument.
+ */
+status_t PXP_StartMemCopy(PXP_Type *base, uint32_t srcAddr, uint32_t destAddr, uint32_t size)
+{
+    uint16_t pitchBytes;
+    uint32_t height;
+
+    if ((0U == size) || ((size % 512U) != 0U))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    /*
+     * By default, PXP process block is 8x8. For better performance, choose
+     * width and height dividable by block size.
+     */
+    if (size < 8U * 512U)
+    {
+        height     = 8U;
+        pitchBytes = (uint16_t)(size / height);
+    }
+    else
+    {
+        pitchBytes = 512U;
+        height     = size / pitchBytes;
+    }
+
+    if (height > PXP_MAX_HEIGHT)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    PXP_StartRectCopy(base, srcAddr, pitchBytes, destAddr, pitchBytes, pitchBytes / 4U, (uint16_t)height,
+                      kPXP_AsPixelFormatARGB8888);
+
+    return kStatus_Success;
+}

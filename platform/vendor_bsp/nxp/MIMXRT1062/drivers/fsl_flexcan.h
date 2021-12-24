@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexCAN driver version 2.5.0. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief FlexCAN driver version. */
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
@@ -307,6 +307,115 @@ enum
     kFLEXCAN_RxFifoFrameAvlFlag = CAN_IFLAG1_BUF5I_MASK, /*!< Frames available in Rx FIFO flag. */
 };
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+/*!
+ * @brief FlexCAN Memory Error Type.
+ */
+typedef enum _flexcan_memory_error_type
+{
+    kFLEXCAN_CorrectableError = 0U, /*!< The memory error is correctable which means on bit error. */
+    kFLEXCAN_NonCorrectableError    /*!< The memory error is non-correctable which means two bit errors. */
+} flexcan_memory_error_type_t;
+
+/*!
+ * @brief FlexCAN Memory Access Type.
+ */
+typedef enum _flexcan_memory_access_type
+{
+    kFLEXCAN_MoveOutFlexCanAccess = 0U, /*!< The memory error was detected during move-out FlexCAN access. */
+    kFLEXCAN_MoveInAccess,              /*!< The memory error was detected during move-in FlexCAN access. */
+    kFLEXCAN_TxArbitrationAccess,       /*!< The memory error was detected during Tx Arbitration FlexCAN access. */
+    kFLEXCAN_RxMatchingAccess,          /*!< The memory error was detected during Rx Matching FlexCAN access. */
+    kFLEXCAN_MoveOutHostAccess          /*!< The memory error was detected during Rx Matching Host (CPU) access. */
+} flexcan_memory_access_type_t;
+
+/*!
+ * @brief FlexCAN Memory Error Byte Syndrome.
+ */
+typedef enum _flexcan_byte_error_syndrome
+{
+    kFLEXCAN_NoError          = 0U,  /*!< No bit error in this byte. */
+    kFLEXCAN_ParityBits0Error = 1U,  /*!< Parity bit 0 error in this byte. */
+    kFLEXCAN_ParityBits1Error = 2U,  /*!< Parity bit 1 error in this byte. */
+    kFLEXCAN_ParityBits2Error = 4U,  /*!< Parity bit 2 error in this byte. */
+    kFLEXCAN_ParityBits3Error = 8U,  /*!< Parity bit 3 error in this byte. */
+    kFLEXCAN_ParityBits4Error = 16U, /*!< Parity bit 4 error in this byte. */
+    kFLEXCAN_DataBits0Error   = 28U, /*!< Data bit 0 error in this byte. */
+    kFLEXCAN_DataBits1Error   = 22U, /*!< Data bit 1 error in this byte. */
+    kFLEXCAN_DataBits2Error   = 19U, /*!< Data bit 2 error in this byte. */
+    kFLEXCAN_DataBits3Error   = 25U, /*!< Data bit 3 error in this byte. */
+    kFLEXCAN_DataBits4Error   = 26U, /*!< Data bit 4 error in this byte. */
+    kFLEXCAN_DataBits5Error   = 7U,  /*!< Data bit 5 error in this byte. */
+    kFLEXCAN_DataBits6Error   = 21U, /*!< Data bit 6 error in this byte. */
+    kFLEXCAN_DataBits7Error   = 14U, /*!< Data bit 7 error in this byte. */
+    kFLEXCAN_AllZeroError     = 6U,  /*!< All-zeros non-correctable error in this byte. */
+    kFLEXCAN_AllOneError      = 31U, /*!< All-ones non-correctable error in this byte. */
+    kFLEXCAN_NonCorrectableErrors    /*!< Non-correctable error in this byte. */
+} flexcan_byte_error_syndrome_t;
+
+/*!
+ * @brief FlexCAN memory error register status structure
+ *
+ * This structure contains the memory access properties that caused a memory error access.
+ * It is used as the parameter of FLEXCAN_GetMemoryErrorReportStatus() function. And user can
+ * use FLEXCAN_GetMemoryErrorReportStatus to get the status of the last memory error access.
+ */
+typedef struct _flexcan_memory_error_report_status
+{
+    flexcan_memory_error_type_t errorType;   /*!< The type of memory error that giving rise to the report. */
+    flexcan_memory_access_type_t accessType; /*!< The type of memory access that giving rise to the memory error. */
+    uint16_t accessAddress;                  /*!< The address where memory error detected. */
+    uint32_t errorData;                      /*!< The raw data word read from memory with error. */
+    struct
+    {
+        bool byteIsRead; /*!< The byte n (0~3) was read or not. */
+        /*!< The type of error and which bit in byte (n) is affected by the error. */
+        flexcan_byte_error_syndrome_t bitAffected;
+    } byteStatus[4];
+} flexcan_memory_error_report_status_t;
+
+/*!
+ * @brief FlexCAN memory error interrupt enable enumerations.
+ *
+ */
+enum _flexcan_memory_error_interrupt_enable
+{
+    /*!< Host Access With Non-Correctable Errors interrupt. */
+    kFLEXCAN_HostAccessNonCorrectableErrorIntEnable = CAN_MECR_HANCEI_MSK_MASK,
+    /*!< FlexCAN Access With Non-Correctable Errors. */
+    kFLEXCAN_FlexCanAccessNonCorrectableErrorIntEnable = CAN_MECR_FANCEI_MSK_MASK,
+    /*!< Correctable Errors interrupt. */
+    kFLEXCAN_CorrectableErrorIntEnable = CAN_MECR_CEI_MSK_MASK,
+};
+
+/*!
+ * @brief FlexCAN memory error status flags.
+ *
+ * The FlexCAN Memory Error Status enumerations is used to determine the status of current error correction and
+ * detection operations of FlexCAN.
+ */
+enum _flexcan_memory_error_flags
+{
+    /*!< Host Access With Non-Correctable Error Interrupt Flag. */
+    kFLEXCAN_HostAccessNonCorrectableErrorFlag = CAN_ERRSR_HANCEIF_MASK,
+    /*!< FlexCAN Access With Non-Correctable Error Interrupt Flag. */
+    kFLEXCAN_FlexCanAccessNonCorrectableErrorFlag = CAN_ERRSR_FANCEIF_MASK,
+    /*!< Correctable Error Interrupt Flag. */
+    kFLEXCAN_CorrectableErrorFlag = CAN_ERRSR_CEIF_MASK,
+    /*!< Host Access With Non-Correctable Error Interrupt Overrun Flag. */
+    kFLEXCAN_HostAccessNonCorrectableErrorOverrunFlag = CAN_ERRSR_HANCEIOF_MASK,
+    /*!< FlexCAN Access With Non-Correctable Error Interrupt Overrun Flag. */
+    kFLEXCAN_FlexCanAccessNonCorrectableErrorOverrunFlag = CAN_ERRSR_FANCEIOF_MASK,
+    /*!< Correctable Error Interrupt Overrun Flag. */
+    kFLEXCAN_CorrectableErrorOverrunFlag = CAN_ERRSR_CEIOF_MASK,
+    /*!< All Memory Error Flags. */
+    kFLEXCAN_AllMemoryErrorFlag =
+        (kFLEXCAN_HostAccessNonCorrectableErrorFlag | kFLEXCAN_FlexCanAccessNonCorrectableErrorFlag |
+         kFLEXCAN_CorrectableErrorFlag | kFLEXCAN_HostAccessNonCorrectableErrorOverrunFlag |
+         kFLEXCAN_FlexCanAccessNonCorrectableErrorOverrunFlag | kFLEXCAN_CorrectableErrorOverrunFlag)
+};
+#endif
+
 #if defined(__CC_ARM)
 #pragma anon_unions
 #endif
@@ -429,6 +538,11 @@ typedef struct _flexcan_config
     bool enableListenOnlyMode;          /*!< Enable or Disable Listen Only Mode. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT)
     bool enableDoze; /*!< Enable or Disable Doze Mode. */
+#endif
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    bool enableMemoryErrorControl; /*!< Enable or Disable the memory errors detection and correction mechanism. */
+    bool enableNonCorrectableErrorEnterFreeze; /*!< Enable or Disable Non-Correctable Errors In FlexCAN Access Put
+                                         Device In Freeze Mode. */
 #endif
     flexcan_timing_config_t timingConfig; /* Protocol timing . */
 } flexcan_config_t;
@@ -647,17 +761,19 @@ void FLEXCAN_Deinit(CAN_Type *base);
  *
  * This function initializes the FlexCAN configuration structure to default values. The default
  * values are as follows.
- *   flexcanConfig->clkSrc                  = kFLEXCAN_ClkSrc0;
- *   flexcanConfig->baudRate                = 1000000U;
- *   flexcanConfig->baudRateFD              = 2000000U;
- *   flexcanConfig->maxMbNum                = 16;
- *   flexcanConfig->enableLoopBack          = false;
- *   flexcanConfig->enableSelfWakeup        = false;
- *   flexcanConfig->enableIndividMask       = false;
- *   flexcanConfig->disableSelfReception    = false;
- *   flexcanConfig->enableListenOnlyMode    = false;
- *   flexcanConfig->enableDoze              = false;
- *   flexcanConfig.timingConfig             = timingConfig;
+ *   flexcanConfig->clkSrc                               = kFLEXCAN_ClkSrc0;
+ *   flexcanConfig->baudRate                             = 1000000U;
+ *   flexcanConfig->baudRateFD                           = 2000000U;
+ *   flexcanConfig->maxMbNum                             = 16;
+ *   flexcanConfig->enableLoopBack                       = false;
+ *   flexcanConfig->enableSelfWakeup                     = false;
+ *   flexcanConfig->enableIndividMask                    = false;
+ *   flexcanConfig->disableSelfReception                 = false;
+ *   flexcanConfig->enableListenOnlyMode                 = false;
+ *   flexcanConfig->enableDoze                           = false;
+ *   flexcanConfig->enableMemoryErrorControl             = true;
+ *   flexcanConfig->enableNonCorrectableErrorEnterFreeze = true;
+ *   flexcanConfig.timingConfig                          = timingConfig;
  *
  * @param pConfig Pointer to the FlexCAN configuration structure.
  */
@@ -921,6 +1037,48 @@ static inline void FLEXCAN_ClearMbStatusFlags(CAN_Type *base, uint32_t mask)
 #endif
 }
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+/*!
+ * @brief Gets the FlexCAN Memory Error Report registers status.
+ *
+ * This function gets the FlexCAN Memory Error Report registers status.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param errorStatus Pointer to FlexCAN Memory Error Report registers status structure.
+ */
+void FLEXCAN_GetMemoryErrorReportStatus(CAN_Type *base, flexcan_memory_error_report_status_t *errorStatus);
+
+/*!
+ * @brief Gets the FlexCAN memory error status flags.
+ *
+ * This function gets all FlexCAN memory error status flags. The flags are returned as the logical
+ * OR value of the enumerators @ref _flexcan_memory_error_flags. To check the specific status,
+ * compare the return value with enumerators in @ref _flexcan_memory_error_flags.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @return FlexCAN memory error status flags which are ORed by the enumerators in the
+ *         _flexcan_memory_error_flags.
+ */
+static inline uint32_t FLEXCAN_GetMemoryErrorStatusFlags(CAN_Type *base)
+{
+    return base->ERRSR;
+}
+
+/*!
+ * @brief Clears the FlexCAN memory error status flags with the provided mask.
+ *
+ * This function clears the FlexCAN memory error status flags with a provided mask.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param mask The status flags to be cleared, it is logical OR value of @ref _flexcan_memory_error_flags.
+ */
+static inline void FLEXCAN_ClearMemoryErrorStatusFlags(CAN_Type *base, uint32_t mask)
+{
+    /* Write 1 to clear status flag. */
+    base->ERRSR = mask;
+}
+#endif
+
 /* @} */
 
 /*!
@@ -1014,6 +1172,36 @@ static inline void FLEXCAN_DisableMbInterrupts(CAN_Type *base, uint32_t mask)
 #endif
 }
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+
+/*!
+ * @brief Enables FlexCAN memory error interrupts according to the provided mask.
+ *
+ * This function enables the FlexCAN memory error interrupts according to the provided mask. The mask
+ * is a logical OR of enumeration members, see @ref _flexcan_memory_error_interrupt_enable.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param mask The interrupts to enable. Logical OR of @ref _flexcan_memory_error_interrupt_enable.
+ */
+static inline void FLEXCAN_EnableMemoryErrorInterrupts(CAN_Type *base, uint32_t mask)
+{
+    base->CTRL1 |= mask;
+}
+
+/*!
+ * @brief Disables FlexCAN memory error interrupts according to the provided mask.
+ *
+ * This function disables the FlexCAN memory error interrupts according to the provided mask. The mask
+ * is a logical OR of enumeration members, see @ref _flexcan_memory_error_interrupt_enable.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param mask The interrupts to enable. Logical OR of @ref _flexcan_memory_error_interrupt_enable.
+ */
+static inline void FLEXCAN_DisableMemoryErrorInterrupts(CAN_Type *base, uint32_t mask)
+{
+    base->CTRL1 &= ~mask;
+}
+#endif
 /* @} */
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA) && FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA)

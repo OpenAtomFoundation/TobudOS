@@ -80,10 +80,10 @@ void PIT_Init(PIT_Type *base, const pit_config_t *config)
 #endif
 
 #if defined(FSL_FEATURE_PIT_TIMER_COUNT) && (FSL_FEATURE_PIT_TIMER_COUNT)
-    /* Clear the timer enable bit for all channels to make sure the channel's timer is disabled. */
+    /* Clear all status bits for all channels to make sure the status of all TCTRL registers is clean. */
     for (uint8_t i = 0U; i < (uint32_t)FSL_FEATURE_PIT_TIMER_COUNT; i++)
     {
-        base->CHANNEL[i].TCTRL &= ~PIT_TCTRL_TEN_MASK;
+        base->CHANNEL[i].TCTRL &= ~(PIT_TCTRL_TEN_MASK | PIT_TCTRL_TIE_MASK | PIT_TCTRL_CHN_MASK);
     }
 #endif /* FSL_FEATURE_PIT_TIMER_COUNT */
 

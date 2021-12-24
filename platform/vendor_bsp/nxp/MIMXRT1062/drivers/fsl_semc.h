@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,25 +20,26 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SEMC driver version 2.1.0. */
-#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief SEMC driver version 2.3.1. */
+#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
-/*! @brief SEMC status. */
+/*! @brief SEMC status, _semc_status. */
 enum
 {
-    kStatus_SEMC_InvalidDeviceType            = MAKE_STATUS(kStatusGroup_SEMC, 0),
-    kStatus_SEMC_IpCommandExecutionError      = MAKE_STATUS(kStatusGroup_SEMC, 1),
-    kStatus_SEMC_AxiCommandExecutionError     = MAKE_STATUS(kStatusGroup_SEMC, 2),
-    kStatus_SEMC_InvalidMemorySize            = MAKE_STATUS(kStatusGroup_SEMC, 3),
-    kStatus_SEMC_InvalidIpcmdDataSize         = MAKE_STATUS(kStatusGroup_SEMC, 4),
-    kStatus_SEMC_InvalidAddressPortWidth      = MAKE_STATUS(kStatusGroup_SEMC, 5),
-    kStatus_SEMC_InvalidDataPortWidth         = MAKE_STATUS(kStatusGroup_SEMC, 6),
-    kStatus_SEMC_InvalidSwPinmuxSelection     = MAKE_STATUS(kStatusGroup_SEMC, 7),
-    kStatus_SEMC_InvalidBurstLength           = MAKE_STATUS(kStatusGroup_SEMC, 8),
+    kStatus_SEMC_InvalidDeviceType        = MAKE_STATUS(kStatusGroup_SEMC, 0), /*!< Invalid device type. */
+    kStatus_SEMC_IpCommandExecutionError  = MAKE_STATUS(kStatusGroup_SEMC, 1), /*!< IP command execution error. */
+    kStatus_SEMC_AxiCommandExecutionError = MAKE_STATUS(kStatusGroup_SEMC, 2), /*!< AXI command execution error. */
+    kStatus_SEMC_InvalidMemorySize        = MAKE_STATUS(kStatusGroup_SEMC, 3), /*!< Invalid memory sie. */
+    kStatus_SEMC_InvalidIpcmdDataSize     = MAKE_STATUS(kStatusGroup_SEMC, 4), /*!< Invalid IP command data size. */
+    kStatus_SEMC_InvalidAddressPortWidth  = MAKE_STATUS(kStatusGroup_SEMC, 5), /*!< Invalid address port width. */
+    kStatus_SEMC_InvalidDataPortWidth     = MAKE_STATUS(kStatusGroup_SEMC, 6), /*!< Invalid data port width. */
+    kStatus_SEMC_InvalidSwPinmuxSelection = MAKE_STATUS(kStatusGroup_SEMC, 7), /*!< Invalid SW pinmux selection. */
+    kStatus_SEMC_InvalidBurstLength       = MAKE_STATUS(kStatusGroup_SEMC, 8), /*!< Invalid burst length */
+    /*! Invalid column address bit width. */
     kStatus_SEMC_InvalidColumnAddressBitWidth = MAKE_STATUS(kStatusGroup_SEMC, 9),
-    kStatus_SEMC_InvalidBaseAddress           = MAKE_STATUS(kStatusGroup_SEMC, 10),
-    kStatus_SEMC_InvalidTimerSetting          = MAKE_STATUS(kStatusGroup_SEMC, 11),
+    kStatus_SEMC_InvalidBaseAddress           = MAKE_STATUS(kStatusGroup_SEMC, 10), /*!< Invalid base address. */
+    kStatus_SEMC_InvalidTimerSetting          = MAKE_STATUS(kStatusGroup_SEMC, 11), /*!< Invalid timer setting. */
 };
 
 /*! @brief SEMC memory device type. */
@@ -67,11 +68,24 @@ typedef enum _semc_sdram_cs
     kSEMC_SDRAM_CS3      /*!< SEMC SDRAM CS3. */
 } semc_sdram_cs_t;
 
+/*! @brief SEMC SRAM Chip selection . */
+typedef enum _semc_sram_cs
+{
+#if defined(FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT) && (FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT == 0x04U)
+    kSEMC_SRAM_CS0 = 0, /*!< SEMC SRAM CS0. */
+    kSEMC_SRAM_CS1,     /*!< SEMC SRAM CS1. */
+    kSEMC_SRAM_CS2,     /*!< SEMC SRAM CS2. */
+    kSEMC_SRAM_CS3      /*!< SEMC SRAM CS3. */
+#else
+    kSEMC_SRAM_CS0        = 0, /*!< SEMC SRAM CS0. */
+#endif /* FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT */
+} semc_sram_cs_t;
+
 /*! @brief SEMC NAND device type. */
 typedef enum _semc_nand_access_type
 {
-    kSEMC_NAND_ACCESS_BY_AXI = 0,
-    kSEMC_NAND_ACCESS_BY_IPCMD,
+    kSEMC_NAND_ACCESS_BY_AXI = 0, /*!< Access to NAND flash by AXI bus. */
+    kSEMC_NAND_ACCESS_BY_IPCMD,   /*!< Access to NAND flash by IP bus. */
 } semc_nand_access_type_t;
 
 /*! @brief SEMC interrupts . */
@@ -115,15 +129,24 @@ typedef enum _semc_sdram_column_bit_num
     kSEMC_SdramColunm_11bit,        /*!< 11 bit. */
     kSEMC_SdramColunm_10bit,        /*!< 10 bit. */
     kSEMC_SdramColunm_9bit,         /*!< 9 bit. */
+#if defined(FSL_FEATURE_SEMC_SDRAM_SUPPORT_COLUMN_ADDRESS_8BIT) && (FSL_FEATURE_SEMC_SDRAM_SUPPORT_COLUMN_ADDRESS_8BIT)
+    kSEMC_SdramColunm_8bit, /*!< 8 bit. */
+#endif                      /* FSL_FEATURE_SEMC_SDRAM_SUPPORT_COLUMN_ADDRESS_8BIT */
 } semc_sdram_column_bit_num_t;
 
 /*! @brief SEMC sdram burst length. */
 typedef enum _semc_sdram_burst_len
 {
+/*! According to ERR050577, Auto-refresh command may possibly fail to be triggered during
+    long time back-to-back write (or read) when SDRAM controller's burst length is greater than 1. */
+#if defined(FSL_FEATURE_SEMC_ERRATA_050577) && (FSL_FEATURE_SEMC_ERRATA_050577 == 0x01U)
+    kSEMC_Sdram_BurstLen1 = 0, /*!< Burst length 1*/
+#else
     kSEMC_Sdram_BurstLen1 = 0, /*!< Burst length 1*/
     kSEMC_Sdram_BurstLen2,     /*!< Burst length 2*/
     kSEMC_Sdram_BurstLen4,     /*!< Burst length 4*/
     kSEMC_Sdram_BurstLen8      /*!< Burst length 8*/
+#endif /* FSL_FEATURE_SEMC_ERRATA_050577 */
 } sem_sdram_burst_len_t;
 
 /*! @brief SEMC nand column address bit number. */
@@ -230,7 +253,10 @@ typedef enum _semc_iomux_nora27_pin
 typedef enum _semc_port_size
 {
     kSEMC_PortSize8Bit = 0, /*!< 8-Bit port size. */
-    kSEMC_PortSize16Bit     /*!< 16-Bit port size. */
+    kSEMC_PortSize16Bit,    /*!< 16-Bit port size. */
+#if defined(FSL_FEATURE_SEMC_SUPPORT_SDRAM_PS_BITWIDTH) && (FSL_FEATURE_SEMC_SUPPORT_SDRAM_PS_BITWIDTH == 0x02U)
+    kSEMC_PortSize32Bit /*!< 32-Bit port size. */
+#endif                  /* FSL_FEATURE_SEMC_SUPPORT_SDRAM_PS_BITWIDTH */
 } smec_port_size_t;
 
 /*! @brief SEMC address mode. */
@@ -252,8 +278,22 @@ typedef enum _semc_dqs_mode
 typedef enum _semc_adv_polarity
 {
     kSEMC_AdvActiveLow = 0, /*!< Adv active low. */
-    kSEMC_AdvActivehigh,    /*!< Adv active low. */
+    kSEMC_AdvActiveHigh,    /*!< Adv active high. */
 } semc_adv_polarity_t;
+
+/*! @brief SEMC sync mode. */
+typedef enum _semc_sync_mode
+{
+    kSEMC_AsyncMode = 0, /*!< Async mode. */
+    kSEMC_SyncMode,      /*!< Sync mode. */
+} semc_sync_mode_t;
+
+/*! @brief SEMC ADV signal level control. */
+typedef enum _semc_adv_level_control
+{
+    kSEMC_AdvHigh = 0, /*!< Adv is high during address hold state. */
+    kSEMC_AdvLow,      /*!< Adv is low during address hold state. */
+} semc_adv_level_control_t;
 
 /*! @brief SEMC RDY signal active polarity. */
 typedef enum _semc_rdy_polarity
@@ -363,6 +403,10 @@ typedef struct _semc_sdram_config
     uint32_t refreshPeriod_nsPerRow; /*!< Refresh timer period like 64ms * 1000000/8192 . */
     uint32_t refreshUrgThreshold;    /*!< Refresh urgent threshold. */
     uint8_t refreshBurstLen;         /*!< Refresh burst length. */
+#if defined(FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL) && (FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL)
+    uint8_t delayChain; /*!< Delay chain, which adds delays on DQS clock to compensate timings while DQS is faster than
+                           read data. */
+#endif                  /* FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL */
 } semc_sdram_config_t;
 
 /*! @brief SEMC NAND device timing configuration structure. */
@@ -433,6 +477,10 @@ typedef struct _semc_nor_config
 #endif
     uint8_t latencyCount; /*!< Latency count for sync mode. */
     uint8_t readCycle;    /*!< Read cycle time for sync mode. */
+#if defined(FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL) && (FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL)
+    uint8_t delayChain; /*!< Delay chain, which adds delays on DQS clock to compensate timings while DQS is faster than
+                           read data. */
+#endif                  /* FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL */
 } semc_nor_config_t;
 
 /*! @brief SEMC SRAM  configuration structure. */
@@ -447,21 +495,40 @@ typedef struct _semc_sram_config
     semc_addr_mode_t addrMode;             /*!< Address mode. */
     sem_norsram_burst_len_t burstLen;      /*!< Burst length. */
     smec_port_size_t portSize;             /*!< Port size. */
+#if defined(SEMC_SRAMCR4_SYNCEN_MASK) && (SEMC_SRAMCR4_SYNCEN_MASK)
+    semc_sync_mode_t syncMode; /*!< Sync mode. */
+#endif                         /* SEMC_SRAMCR4_SYNCEN_MASK */
+#if defined(SEMC_SRAMCR0_WAITEN_MASK) && (SEMC_SRAMCR0_WAITEN_MASK)
+    bool waitEnable; /*!< Wait enable. */
+#endif               /* SEMC_SRAMCR0_WAITEN_MASK */
+#if defined(SEMC_SRAMCR0_WAITSP_MASK) && (SEMC_SRAMCR0_WAITSP_MASK)
+    uint8_t waitSample; /*!< Wait sample. */
+#endif                  /* SEMC_SRAMCR0_WAITSP_MASK */
+#if defined(SEMC_SRAMCR4_ADVH_MASK) && (SEMC_SRAMCR4_ADVH_MASK)
+    semc_adv_level_control_t advLevelCtrl; /*!< ADV# level control during address hold state, 1: low, 0: high. */
+#endif                                     /* SEMC_SRAMCR4_ADVH_MASK */
     uint8_t tCeSetup_Ns;                   /*!< The CE setup time. */
     uint8_t tCeHold_Ns;                    /*!< The CE hold time. */
     uint8_t tCeInterval_Ns;                /*!< CE interval minimum time. */
-    uint8_t tAddrSetup_Ns;                 /*!< The address setup time. */
-    uint8_t tAddrHold_Ns;                  /*!< The address hold time. */
-    uint8_t tWeLow_Ns;                     /*!< WE low time for async mode. */
-    uint8_t tWeHigh_Ns;                    /*!< WE high time for async mode. */
-    uint8_t tReLow_Ns;                     /*!< RE low time for async mode. */
-    uint8_t tReHigh_Ns;                    /*!< RE high time for async mode. */
-    uint8_t tTurnAround_Ns;                /*!< Turnaround time for async mode. */
-    uint8_t tAddr2WriteHold_Ns;            /*!< Address to write data hold time for async mode. */
-    uint8_t tWriteSetup_Ns;                /*!< Write data setup time for sync mode.*/
-    uint8_t tWriteHold_Ns;                 /*!< Write hold time for sync mode. */
-    uint8_t latencyCount;                  /*!< Latency count for sync mode. */
-    uint8_t readCycle;                     /*!< Read cycle time for sync mode. */
+#if defined(FSL_FEATURE_SEMC_HAS_SRAM_RDH_TIME) && (FSL_FEATURE_SEMC_HAS_SRAM_RDH_TIME)
+    uint8_t readHoldTime_Ns;    /*!< read hold time. */
+#endif                          /* FSL_FEATURE_SEMC_HAS_SRAM_RDH_TIME */
+    uint8_t tAddrSetup_Ns;      /*!< The address setup time. */
+    uint8_t tAddrHold_Ns;       /*!< The address hold time. */
+    uint8_t tWeLow_Ns;          /*!< WE low time for async mode. */
+    uint8_t tWeHigh_Ns;         /*!< WE high time for async mode. */
+    uint8_t tReLow_Ns;          /*!< RE low time for async mode. */
+    uint8_t tReHigh_Ns;         /*!< RE high time for async mode. */
+    uint8_t tTurnAround_Ns;     /*!< Turnaround time for async mode. */
+    uint8_t tAddr2WriteHold_Ns; /*!< Address to write data hold time for async mode. */
+    uint8_t tWriteSetup_Ns;     /*!< Write data setup time for sync mode.*/
+    uint8_t tWriteHold_Ns;      /*!< Write hold time for sync mode. */
+    uint8_t latencyCount;       /*!< Latency count for sync mode. */
+    uint8_t readCycle;          /*!< Read cycle time for sync mode. */
+#if defined(FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL) && (FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL)
+    uint8_t delayChain; /*!< Delay chain, which adds delays on DQS clock to compensate timings while DQS is faster than
+                           read data. */
+#endif                  /* FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL */
 } semc_sram_config_t;
 
 /*! @brief SEMC DBI configuration structure. */
@@ -518,7 +585,9 @@ typedef union _semc_queueb_weight
 /*! @brief SEMC AXI queue weight setting. */
 typedef struct _semc_axi_queueweight
 {
+    bool queueaEnable;                 /*!< Enable queue a. */
     semc_queuea_weight_t queueaWeight; /*!< Weight settings for queue a. */
+    bool queuebEnable;                 /*!< Enable queue b. */
     semc_queueb_weight_t queuebWeight; /*!< Weight settings for queue b. */
 } semc_axi_queueweight_t;
 
@@ -629,6 +698,19 @@ status_t SEMC_ConfigureNOR(SEMC_Type *base, semc_nor_config_t *config, uint32_t 
  * @brief Configures SRAM controller in SEMC.
  *
  * @param base SEMC peripheral base address.
+ * @param cs The chip selection.
+ * @param config The sram configuration.
+ * @param clkSrc_Hz The SEMC clock frequency.
+ */
+status_t SEMC_ConfigureSRAMWithChipSelection(SEMC_Type *base,
+                                             semc_sram_cs_t cs,
+                                             semc_sram_config_t *config,
+                                             uint32_t clkSrc_Hz);
+
+/*!
+ * @brief Configures SRAM controller in SEMC.
+ * @deprecated Do not use this function. It has been superceded by @ref SEMC_ConfigureSRAMWithChipSelection.
+ * @param base SEMC peripheral base address.
  * @param config The sram configuration.
  * @param clkSrc_Hz The SEMC clock frequency.
  */
@@ -700,7 +782,7 @@ static inline void SEMC_DisableInterrupts(SEMC_Type *base, uint32_t mask)
  */
 static inline bool SEMC_GetStatusFlag(SEMC_Type *base)
 {
-    return (base->INTR == 0x00U) ? false : true;
+    return (base->INTR != 0x00U) ? true : false;
 }
 
 /*!

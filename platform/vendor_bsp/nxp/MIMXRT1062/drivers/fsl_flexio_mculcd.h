@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO MCULCD driver version 2.0.3. */
-#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief FlexIO MCULCD driver version. */
+#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*@}*/
 
 #ifndef FLEXIO_MCULCD_WAIT_COMPLETE_TIME
@@ -225,7 +225,7 @@ void FLEXIO_MCULCD_Deinit(FLEXIO_MCULCD_Type *base);
  *  config->enableFastAccess = true;
  *  config->baudRate_Bps = 96000000U;
  * @endcode
- * @param Config Pointer to the flexio_mculcd_config_t structure.
+ * @param config Pointer to the flexio_mculcd_config_t structure.
  */
 void FLEXIO_MCULCD_GetDefaultConfig(flexio_mculcd_config_t *config);
 
@@ -297,7 +297,6 @@ void FLEXIO_MCULCD_DisableInterrupts(FLEXIO_MCULCD_Type *base, uint32_t mask);
  * @brief Enables/disables the FlexIO MCULCD transmit DMA.
  *
  * @param base Pointer to the FLEXIO_MCULCD_Type structure.
- * @param mask MCULCD DMA source.
  * @param enable True means enable DMA, false means disable DMA.
  */
 static inline void FLEXIO_MCULCD_EnableTxDMA(FLEXIO_MCULCD_Type *base, bool enable)
@@ -309,7 +308,6 @@ static inline void FLEXIO_MCULCD_EnableTxDMA(FLEXIO_MCULCD_Type *base, bool enab
  * @brief Enables/disables the FlexIO MCULCD receive DMA.
  *
  * @param base Pointer to the FLEXIO_MCULCD_Type structure.
- * @param mask MCULCD DMA source.
  * @param enable True means enable DMA, false means disable DMA.
  */
 static inline void FLEXIO_MCULCD_EnableRxDMA(FLEXIO_MCULCD_Type *base, bool enable)
@@ -416,7 +414,7 @@ void FLEXIO_MCULCD_ClearSingleBeatReadConfig(FLEXIO_MCULCD_Type *base);
  *
  * At the begining multiple beats write operation, the FLEXIO MCULCD is configured to
  * multiple beats write mode using this function. After write operation, the configuration
- * is cleared by @ref FLEXIO_MCULCD_ClearMultBeatsWriteConfig.
+ * is cleared by FLEXIO_MCULCD_ClearMultBeatsWriteConfig.
  *
  * @param base Pointer to the FLEXIO_MCULCD_Type.
  *
@@ -427,7 +425,7 @@ void FLEXIO_MCULCD_SetMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base);
 /*!
  * @brief Clear the FLEXIO MCULCD multiple beats write mode configuration.
  *
- * Clear the write configuration set by @ref FLEXIO_MCULCD_SetMultBeatsWriteConfig.
+ * Clear the write configuration set by FLEXIO_MCULCD_SetMultBeatsWriteConfig.
  *
  * @param base Pointer to the FLEXIO_MCULCD_Type.
  *
@@ -440,7 +438,7 @@ void FLEXIO_MCULCD_ClearMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base);
  *
  * At the begining or multiple beats read operation, the FLEXIO MCULCD is configured
  * to multiple beats read mode using this function. After read operation, the configuration
- * is cleared by @ref FLEXIO_MCULCD_ClearMultBeatsReadConfig.
+ * is cleared by FLEXIO_MCULCD_ClearMultBeatsReadConfig.
  *
  * @param base Pointer to the FLEXIO_MCULCD_Type.
  *
@@ -451,7 +449,7 @@ void FLEXIO_MCULCD_SetMultiBeatsReadConfig(FLEXIO_MCULCD_Type *base);
 /*!
  * @brief Clear the FLEXIO MCULCD multiple beats read mode configuration.
  *
- * Clear the read configuration set by @ref FLEXIO_MCULCD_SetMultBeatsReadConfig.
+ * Clear the read configuration set by FLEXIO_MCULCD_SetMultBeatsReadConfig.
  *
  * @param base Pointer to the FLEXIO_MCULCD_Type.
  *
@@ -567,7 +565,7 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
  * @param data The data array to send.
  * @param size How many bytes to write.
  */
-void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, size_t size);
+void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, const void *data, size_t size);
 
 /*!
  * @brief Read data into array in blocking way.

@@ -18,7 +18,7 @@ static void LPI2C_RTOS_Callback(LPI2C_Type *base, lpi2c_master_handle_t *drv_han
     lpi2c_rtos_handle_t *handle = (lpi2c_rtos_handle_t *)userData;
     BaseType_t reschedule;
     handle->async_status = status;
-    xSemaphoreGiveFromISR(handle->semaphore, &reschedule);
+    (void)xSemaphoreGiveFromISR(handle->semaphore, &reschedule);
     portYIELD_FROM_ISR(reschedule);
 }
 
@@ -48,7 +48,7 @@ status_t LPI2C_RTOS_Init(lpi2c_rtos_handle_t *handle,
         return kStatus_InvalidArgument;
     }
 
-    memset(handle, 0, sizeof(lpi2c_rtos_handle_t));
+    (void)memset(handle, 0, sizeof(lpi2c_rtos_handle_t));
 
     handle->mutex = xSemaphoreCreateMutex();
     if (handle->mutex == NULL)
@@ -110,7 +110,7 @@ status_t LPI2C_RTOS_Transfer(lpi2c_rtos_handle_t *handle, lpi2c_master_transfer_
     status = LPI2C_MasterTransferNonBlocking(handle->base, &handle->drv_handle, transfer);
     if (status != kStatus_Success)
     {
-        xSemaphoreGive(handle->mutex);
+        (void)xSemaphoreGive(handle->mutex);
         return status;
     }
 
@@ -118,7 +118,7 @@ status_t LPI2C_RTOS_Transfer(lpi2c_rtos_handle_t *handle, lpi2c_master_transfer_
     (void)xSemaphoreTake(handle->semaphore, portMAX_DELAY);
 
     /* Unlock resource mutex */
-    xSemaphoreGive(handle->mutex);
+    (void)xSemaphoreGive(handle->mutex);
 
     /* Return status captured by callback function */
     return handle->async_status;

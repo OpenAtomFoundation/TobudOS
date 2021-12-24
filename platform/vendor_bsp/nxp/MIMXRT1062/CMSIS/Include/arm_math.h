@@ -116,6 +116,18 @@
    *
    * Define macro ARM_MATH_LOOPUNROLL to enable manual loop unrolling in DSP functions
    *
+   * - ARM_MATH_NEON:
+   *
+   * Define macro ARM_MATH_NEON to enable Neon versions of the DSP functions.
+   * It is not enabled by default when Neon is available because performances are 
+   * dependent on the compiler and target architecture.
+   *
+   * - ARM_MATH_NEON_EXPERIMENTAL:
+   *
+   * Define macro ARM_MATH_NEON_EXPERIMENTAL to enable experimental Neon versions of 
+   * of some DSP functions. Experimental Neon versions currently do not have better
+   * performances than the scalar versions.
+   *
    * <hr>
    * CMSIS-DSP in ARM::CMSIS Pack
    * -----------------------------
@@ -286,36 +298,38 @@
 
 #elif defined ( __TASKING__ )
 
+#elif defined ( _MSC_VER )
+
 #else
   #error Unknown compiler
 #endif
 
 
+/* Included for instrinsics definitions */
+#if !defined ( _MSC_VER )
 #include "cmsis_compiler.h"
+#else
+#include <stdint.h>
+#define __STATIC_FORCEINLINE static __forceinline
+#define __ALIGNED(x) __declspec(align(x))
+#define LOW_OPTIMIZATION_ENTER
+#define LOW_OPTIMIZATION_EXIT
+#define IAR_ONLY_LOW_OPTIMIZATION_ENTER 
+#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+#endif
+
 #include "string.h"
 #include "math.h"
-
-/* evaluate ARM architecture */
-#if   defined (__ARM_ARCH_6M__)
-  #define ARM_MATH_CM0_FAMILY            1
-#elif defined (__ARM_ARCH_7M__)
-//#define ARM_MATH_CM0_FAMILY            0
-#elif defined (__ARM_ARCH_7EM__)
-//#define ARM_MATH_CM0_FAMILY            0
-#elif defined (__ARM_ARCH_8M_BASE__)
-  #define ARM_MATH_CM0_FAMILY            1
-#elif defined (__ARM_ARCH_8M_MAIN__)
-//#define ARM_MATH_CM0_FAMILY            0
-#else
-  #error "Unknown Arm Architecture!"
-#endif
+#include "float.h"
 
 /* evaluate ARM DSP feature */
 #if (defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1))
   #define ARM_MATH_DSP                   1
 #endif
 
-
+#if defined(__ARM_NEON)
+#include <arm_neon.h>
+#endif
 
 
 #ifdef   __cplusplus
@@ -417,7 +431,9 @@ extern "C"
 #elif defined ( __CSMC__ )
   #define __SIMD32_TYPE int32_t
 #elif defined ( __TASKING__ )
-  #define __SIMD32_TYPE __unaligned int32_t
+  #define __SIMD32_TYPE __un(aligned) int32_t
+#elif defined(_MSC_VER )
+  #define __SIMD32_TYPE int32_t
 #else
   #error Unknown compiler
 #endif
@@ -428,6 +444,7 @@ extern "C"
 #define __SIMD64(addr)        (*(      int64_t **) & (addr))
 
 /* SIMD replacement */
+
 
 /**
   @brief         Read 2 Q15 from Q15 pointer.
@@ -556,6 +573,70 @@ __STATIC_FORCEINLINE void write_q7x4_ia (
   *pQ7 += 4;
 }
 
+/*
+
+Normally those kind of definitions are in a compiler file
+in Core or Core_A.
+
+But for MSVC compiler it is a bit special. The goal is very specific
+to CMSIS-DSP and only to allow the use of this library from other
+systems like Python or Matlab.
+
+MSVC is not going to be used to cross-compile to ARM. So, having a MSVC
+compiler file in Core or Core_A would not make sense.
+
+*/
+#if defined ( _MSC_VER )
+    __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t data)
+    {
+      if (data == 0U) { return 32U; }
+
+      uint32_t count = 0U;
+      uint32_t mask = 0x80000000U;
+
+      while ((data & mask) == 0U)
+      {
+        count += 1U;
+        mask = mask >> 1U;
+      }
+      return count;
+    }
+
+  __STATIC_FORCEINLINE int32_t __SSAT(int32_t val, uint32_t sat)
+  {
+    if ((sat >= 1U) && (sat <= 32U))
+    {
+      const int32_t max = (int32_t)((1U << (sat - 1U)) - 1U);
+      const int32_t min = -1 - max ;
+      if (val > max)
+      {
+        return max;
+      }
+      else if (val < min)
+      {
+        return min;
+      }
+    }
+    return val;
+  }
+
+  __STATIC_FORCEINLINE uint32_t __USAT(int32_t val, uint32_t sat)
+  {
+    if (sat <= 31U)
+    {
+      const uint32_t max = ((1U << sat) - 1U);
+      if (val > (int32_t)max)
+      {
+        return max;
+      }
+      else if (val < 0)
+      {
+        return 0U;
+      }
+    }
+    return (uint32_t)val;
+  }
+#endif
 
 #ifndef ARM_MATH_DSP
   /**
@@ -735,6 +816,45 @@ __STATIC_FORCEINLINE void write_q7x4_ia (
     return (signBits + 1);
   }
 
+#if defined(ARM_MATH_NEON)
+
+static inline float32x4_t __arm_vec_sqrt_f32_neon(float32x4_t  x)
+{
+    float32x4_t x1 = vmaxq_f32(x, vdupq_n_f32(FLT_MIN));
+    float32x4_t e = vrsqrteq_f32(x1);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(x1, e), e), e);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(x1, e), e), e);
+    return vmulq_f32(x, e);
+}
+
+static inline int16x8_t __arm_vec_sqrt_q15_neon(int16x8_t vec)
+{
+    float32x4_t tempF;
+    int32x4_t tempHI,tempLO;
+
+    tempLO = vmovl_s16(vget_low_s16(vec));
+    tempF = vcvtq_n_f32_s32(tempLO,15);
+    tempF = __arm_vec_sqrt_f32_neon(tempF);
+    tempLO = vcvtq_n_s32_f32(tempF,15);
+
+    tempHI = vmovl_s16(vget_high_s16(vec));
+    tempF = vcvtq_n_f32_s32(tempHI,15);
+    tempF = __arm_vec_sqrt_f32_neon(tempF);
+    tempHI = vcvtq_n_s32_f32(tempF,15);
+
+    return(vcombine_s16(vqmovn_s32(tempLO),vqmovn_s32(tempHI)));
+}
+
+static inline int32x4_t __arm_vec_sqrt_q31_neon(int32x4_t vec)
+{
+  float32x4_t temp;
+
+  temp = vcvtq_n_f32_s32(vec,31);
+  temp = __arm_vec_sqrt_f32_neon(temp);
+  return(vcvtq_n_s32_f32(temp,31));
+}
+
+#endif
 
 /*
  * @brief C custom defined intrinsic functions
@@ -3698,6 +3818,12 @@ arm_status arm_fir_decimate_init_f32(
         uint32_t blockSize);
 
 
+#if defined(ARM_MATH_NEON) 
+void arm_biquad_cascade_df2T_compute_coefs_f32(
+  arm_biquad_cascade_df2T_instance_f32 * S,
+  uint8_t numStages,
+  float32_t * pCoeffs);
+#endif
   /**
    * @brief  Initialization function for the floating-point transposed direct form II Biquad cascade filter.
    * @param[in,out] S          points to an instance of the filter data structure.
@@ -5780,6 +5906,29 @@ arm_status arm_sqrt_q15(
   q15_t * pOut);
 
   /**
+   * @brief  Vector Floating-point square root function.
+   * @param[in]  pIn   input vector.
+   * @param[out] pOut  vector of square roots of input elements.
+   * @param[in]  len   length of input vector.
+   * @return The function returns ARM_MATH_SUCCESS if input value is positive value or ARM_MATH_ARGUMENT_ERROR if
+   * <code>in</code> is negative value and returns zero output for negative values.
+   */
+  void arm_vsqrt_f32(
+  float32_t * pIn,
+  float32_t * pOut,
+  uint16_t len);
+
+  void arm_vsqrt_q31(
+  q31_t * pIn,
+  q31_t * pOut,
+  uint16_t len);
+
+  void arm_vsqrt_q15(
+  q15_t * pIn,
+  q15_t * pOut,
+  uint16_t len);
+
+  /**
    * @} end of SQRT group
    */
 
@@ -7197,6 +7346,8 @@ arm_status arm_sqrt_q15(
 #elif defined ( __CSMC__ )
 
 #elif defined ( __TASKING__ )
+
+#elif defined ( _MSC_VER )
 
 #else
   #error Unknown compiler

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO I2C master driver version 2.2.0. */
-#define FSL_FLEXIO_I2C_MASTER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_FLEXIO_I2C_MASTER_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -31,7 +30,7 @@
 #define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
 #endif
 
-/*! @brief  FlexIO I2C transfer status*/
+/*! @brief FlexIO I2C transfer status*/
 enum
 {
     kStatus_FLEXIO_I2C_Busy    = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 0), /*!< I2C is busy doing transfer. */
@@ -69,7 +68,8 @@ typedef struct _flexio_i2c_type
     uint8_t SDAPinIndex;     /*!< Pin select for I2C SDA. */
     uint8_t SCLPinIndex;     /*!< Pin select for I2C SCL. */
     uint8_t shifterIndex[2]; /*!< Shifter index used in FlexIO I2C. */
-    uint8_t timerIndex[2];   /*!< Timer index used in FlexIO I2C. */
+    uint8_t timerIndex[3];   /*!< Timer index used in FlexIO I2C. */
+    uint32_t baudrate;       /*!< Master transfer baudrate, used to calculate delay time. */
 } FLEXIO_I2C_Type;
 
 /*! @brief Define FlexIO I2C master user configuration structure. */
@@ -136,8 +136,8 @@ extern "C" {
  * Check the FLEXIO pin status to see whether either of SDA and SCL pin is pulled down.
  *
  * @param base Pointer to FLEXIO_I2C_Type structure..
- * @retval #kStatus_Success
- * @retval #kStatus_FLEXIO_I2C_Busy
+ * @retval kStatus_Success
+ * @retval kStatus_FLEXIO_I2C_Busy
  */
 status_t FLEXIO_I2C_CheckForBusyBus(FLEXIO_I2C_Type *base);
 #endif /*FSL_FEATURE_FLEXIO_HAS_PIN_STATUS*/
@@ -333,7 +333,7 @@ void FLEXIO_I2C_MasterEnableAck(FLEXIO_I2C_Type *base, bool enable);
  * @retval kStatus_Success Successfully configured the count.
  * @retval kStatus_InvalidArgument Input argument is invalid.
  */
-status_t FLEXIO_I2C_MasterSetTransferCount(FLEXIO_I2C_Type *base, uint8_t count);
+status_t FLEXIO_I2C_MasterSetTransferCount(FLEXIO_I2C_Type *base, uint16_t count);
 
 /*!
  * @brief Writes one byte of data to the I2C bus.
@@ -430,7 +430,7 @@ status_t FLEXIO_I2C_MasterTransferCreateHandle(FLEXIO_I2C_Type *base,
  * @brief Performs a master interrupt non-blocking transfer on the I2C bus.
  *
  * @note The API returns immediately after the transfer initiates.
- * Call FLEXIO_I2C_MasterGetTransferCount to poll the transfer status to check whether
+ * Call FLEXIO_I2C_MasterTransferGetCount to poll the transfer status to check whether
  * the transfer is finished. If the return status is not kStatus_FLEXIO_I2C_Busy, the transfer
  * is finished.
  *
@@ -451,6 +451,7 @@ status_t FLEXIO_I2C_MasterTransferNonBlocking(FLEXIO_I2C_Type *base,
  * @param handle Pointer to flexio_i2c_master_handle_t structure which stores the transfer state.
  * @param count Number of bytes transferred so far by the non-blocking transaction.
  * @retval kStatus_InvalidArgument count is Invalid.
+ * @retval kStatus_NoTransferInProgress There is not a non-blocking transaction currently in progress.
  * @retval kStatus_Success Successfully return the count.
  */
 status_t FLEXIO_I2C_MasterTransferGetCount(FLEXIO_I2C_Type *base, flexio_i2c_master_handle_t *handle, size_t *count);

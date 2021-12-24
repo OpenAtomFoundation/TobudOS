@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -255,7 +255,7 @@ status_t FLEXIO_SPI_MasterTransferCreateHandleEDMA(FLEXIO_SPI_Type *base,
                                                    edma_handle_t *txHandle,
                                                    edma_handle_t *rxHandle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint8_t index = 0;
 
@@ -318,8 +318,8 @@ status_t FLEXIO_SPI_MasterTransferEDMA(FLEXIO_SPI_Type *base,
                                        flexio_spi_master_edma_handle_t *handle,
                                        flexio_spi_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     uint32_t dataMode = 0;
     uint16_t timerCmp = (uint16_t)base->flexioBase->TIMCMP[base->timerIndex[0]];
@@ -372,7 +372,7 @@ status_t FLEXIO_SPI_MasterTransferGetCountEDMA(FLEXIO_SPI_Type *base,
                                                flexio_spi_master_edma_handle_t *handle,
                                                size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -403,7 +403,7 @@ status_t FLEXIO_SPI_MasterTransferGetCountEDMA(FLEXIO_SPI_Type *base,
  */
 void FLEXIO_SPI_MasterTransferAbortEDMA(FLEXIO_SPI_Type *base, flexio_spi_master_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Disable dma. */
     EDMA_StopTransfer(handle->txHandle);
@@ -435,8 +435,8 @@ status_t FLEXIO_SPI_SlaveTransferEDMA(FLEXIO_SPI_Type *base,
                                       flexio_spi_slave_edma_handle_t *handle,
                                       flexio_spi_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     uint32_t dataMode = 0U;
 

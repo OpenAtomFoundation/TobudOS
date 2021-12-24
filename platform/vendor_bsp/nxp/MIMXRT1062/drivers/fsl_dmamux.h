@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DMAMUX driver version 2.0.4. */
-#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @brief DMAMUX driver version 2.0.5. */
+#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*@}*/
 
 /*******************************************************************************
@@ -92,7 +92,11 @@ static inline void DMAMUX_DisableChannel(DMAMUX_Type *base, uint32_t channel)
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
+#if defined FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH && (FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH == 32U)
+    base->CHCFG[channel] &= ~DMAMUX_CHCFG_ENBL_MASK;
+#else
     base->CHCFG[channel] &= ~(uint8_t)DMAMUX_CHCFG_ENBL_MASK;
+#endif
 }
 
 /*!
@@ -106,7 +110,11 @@ static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
+#if defined FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH && (FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH == 32U)
+    base->CHCFG[channel] = ((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+#else
     base->CHCFG[channel] = (uint8_t)((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+#endif
 }
 
 #if defined(FSL_FEATURE_DMAMUX_HAS_TRIG) && FSL_FEATURE_DMAMUX_HAS_TRIG > 0U
@@ -137,7 +145,11 @@ static inline void DMAMUX_DisablePeriodTrigger(DMAMUX_Type *base, uint32_t chann
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
+#if defined FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH && (FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH == 32U)
+    base->CHCFG[channel] &= ~DMAMUX_CHCFG_TRIG_MASK;
+#else
     base->CHCFG[channel] &= ~(uint8_t)DMAMUX_CHCFG_TRIG_MASK;
+#endif
 }
 #endif /* FSL_FEATURE_DMAMUX_HAS_TRIG */
 

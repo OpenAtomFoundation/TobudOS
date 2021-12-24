@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -556,7 +556,7 @@ static inline uint32_t SRC_GetResetStatusFlags(SRC_Type *base)
  * @brief Clear the status flags of SRC.
  *
  * @param base SRC peripheral base address.
- * @param Mask value of status flags to be cleared, see to #_src_reset_status_flags.
+ * @param flags value of status flags to be cleared, see to #_src_reset_status_flags.
  */
 void SRC_ClearResetStatusFlags(SRC_Type *base, uint32_t flags);
 

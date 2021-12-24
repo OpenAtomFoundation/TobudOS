@@ -13,13 +13,13 @@
 **
 **     Reference manual:    IMXRT1060RM Rev.1, 12/2018 | IMXRT1060SRM Rev.3
 **     Version:             rev. 1.2, 2019-04-29
-**     Build:               b191115
+**     Build:               b201019
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1062
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -9715,6 +9715,160 @@ typedef struct {
 /*!
  * @}
  */ /* end of group CCM_ANALOG_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- CM7_MCM Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup CM7_MCM_Peripheral_Access_Layer CM7_MCM Peripheral Access Layer
+ * @{
+ */
+
+/** CM7_MCM - Register Layout Typedef */
+typedef struct {
+       uint8_t RESERVED_0[16];
+  __IO uint32_t ISCR;                              /**< Interrupt Status and Control Register, offset: 0x10 */
+} CM7_MCM_Type;
+
+/* ----------------------------------------------------------------------------
+   -- CM7_MCM Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup CM7_MCM_Register_Masks CM7_MCM Register Masks
+ * @{
+ */
+
+/*! @name ISCR - Interrupt Status and Control Register */
+/*! @{ */
+#define CM7_MCM_ISCR_WABS_MASK                   (0x20U)
+#define CM7_MCM_ISCR_WABS_SHIFT                  (5U)
+/*! WABS - Write Abort on Slave
+ *  0b0..No abort
+ *  0b1..Abort
+ */
+#define CM7_MCM_ISCR_WABS(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_WABS_SHIFT)) & CM7_MCM_ISCR_WABS_MASK)
+#define CM7_MCM_ISCR_WABSO_MASK                  (0x40U)
+#define CM7_MCM_ISCR_WABSO_SHIFT                 (6U)
+/*! WABSO - Write Abort on Slave Overrun
+ *  0b0..No write abort overrun
+ *  0b1..Write abort overrun occurred
+ */
+#define CM7_MCM_ISCR_WABSO(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_WABSO_SHIFT)) & CM7_MCM_ISCR_WABSO_MASK)
+#define CM7_MCM_ISCR_FIOC_MASK                   (0x100U)
+#define CM7_MCM_ISCR_FIOC_SHIFT                  (8U)
+/*! FIOC - FPU Invalid Operation interrupt Status
+ *  0b0..No interrupt
+ *  0b1..Interrupt occured
+ */
+#define CM7_MCM_ISCR_FIOC(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FIOC_SHIFT)) & CM7_MCM_ISCR_FIOC_MASK)
+#define CM7_MCM_ISCR_FDZC_MASK                   (0x200U)
+#define CM7_MCM_ISCR_FDZC_SHIFT                  (9U)
+/*! FDZC - FPU Divide-by-Zero Interrupt Status
+ *  0b0..No interrupt
+ *  0b1..Interrupt occured
+ */
+#define CM7_MCM_ISCR_FDZC(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FDZC_SHIFT)) & CM7_MCM_ISCR_FDZC_MASK)
+#define CM7_MCM_ISCR_FOFC_MASK                   (0x400U)
+#define CM7_MCM_ISCR_FOFC_SHIFT                  (10U)
+/*! FOFC - FPU Overflow interrupt status
+ *  0b0..No interrupt
+ *  0b1..Interrupt occured
+ */
+#define CM7_MCM_ISCR_FOFC(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FOFC_SHIFT)) & CM7_MCM_ISCR_FOFC_MASK)
+#define CM7_MCM_ISCR_FUFC_MASK                   (0x800U)
+#define CM7_MCM_ISCR_FUFC_SHIFT                  (11U)
+/*! FUFC - FPU Underflow Interrupt Status
+ *  0b0..No interrupt
+ *  0b1..Interrupt occured
+ */
+#define CM7_MCM_ISCR_FUFC(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FUFC_SHIFT)) & CM7_MCM_ISCR_FUFC_MASK)
+#define CM7_MCM_ISCR_FIXC_MASK                   (0x1000U)
+#define CM7_MCM_ISCR_FIXC_SHIFT                  (12U)
+/*! FIXC - FPU Inexact Interrupt Status
+ *  0b0..No interrupt
+ *  0b1..Interrupt occured
+ */
+#define CM7_MCM_ISCR_FIXC(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FIXC_SHIFT)) & CM7_MCM_ISCR_FIXC_MASK)
+#define CM7_MCM_ISCR_FIDC_MASK                   (0x8000U)
+#define CM7_MCM_ISCR_FIDC_SHIFT                  (15U)
+/*! FIDC - FPU Input Denormal Interrupt Status
+ *  0b0..No interrupt
+ *  0b1..Interrupt occured
+ */
+#define CM7_MCM_ISCR_FIDC(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FIDC_SHIFT)) & CM7_MCM_ISCR_FIDC_MASK)
+#define CM7_MCM_ISCR_WABE_MASK                   (0x200000U)
+#define CM7_MCM_ISCR_WABE_SHIFT                  (21U)
+/*! WABE - TCM Write Abort Interrupt enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_WABE(x)                     (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_WABE_SHIFT)) & CM7_MCM_ISCR_WABE_MASK)
+#define CM7_MCM_ISCR_FIOCE_MASK                  (0x1000000U)
+#define CM7_MCM_ISCR_FIOCE_SHIFT                 (24U)
+/*! FIOCE - FPU Invalid Operation Interrupt Enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_FIOCE(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FIOCE_SHIFT)) & CM7_MCM_ISCR_FIOCE_MASK)
+#define CM7_MCM_ISCR_FDZCE_MASK                  (0x2000000U)
+#define CM7_MCM_ISCR_FDZCE_SHIFT                 (25U)
+/*! FDZCE - FPU Divide-by-Zero Interrupt Enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_FDZCE(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FDZCE_SHIFT)) & CM7_MCM_ISCR_FDZCE_MASK)
+#define CM7_MCM_ISCR_FOFCE_MASK                  (0x4000000U)
+#define CM7_MCM_ISCR_FOFCE_SHIFT                 (26U)
+/*! FOFCE - FPU Overflow Interrupt Enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_FOFCE(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FOFCE_SHIFT)) & CM7_MCM_ISCR_FOFCE_MASK)
+#define CM7_MCM_ISCR_FUFCE_MASK                  (0x8000000U)
+#define CM7_MCM_ISCR_FUFCE_SHIFT                 (27U)
+/*! FUFCE - FPU Underflow Interrupt Enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_FUFCE(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FUFCE_SHIFT)) & CM7_MCM_ISCR_FUFCE_MASK)
+#define CM7_MCM_ISCR_FIXCE_MASK                  (0x10000000U)
+#define CM7_MCM_ISCR_FIXCE_SHIFT                 (28U)
+/*! FIXCE - FPU Inexact Interrupt Enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_FIXCE(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FIXCE_SHIFT)) & CM7_MCM_ISCR_FIXCE_MASK)
+#define CM7_MCM_ISCR_FIDCE_MASK                  (0x80000000U)
+#define CM7_MCM_ISCR_FIDCE_SHIFT                 (31U)
+/*! FIDCE - FPU Input Denormal Interrupt Enable
+ *  0b0..Disable interrupt
+ *  0b1..Enable interrupt
+ */
+#define CM7_MCM_ISCR_FIDCE(x)                    (((uint32_t)(((uint32_t)(x)) << CM7_MCM_ISCR_FIDCE_SHIFT)) & CM7_MCM_ISCR_FIDCE_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group CM7_MCM_Register_Masks */
+
+
+/* CM7_MCM - Peripheral instance base addresses */
+/** Peripheral CM7_MCM base address */
+#define CM7_MCM_BASE                             (0xE0080000u)
+/** Peripheral CM7_MCM base pointer */
+#define CM7_MCM                                  ((CM7_MCM_Type *)CM7_MCM_BASE)
+/** Array initializer of CM7_MCM peripheral base addresses */
+#define CM7_MCM_BASE_ADDRS                       { CM7_MCM_BASE }
+/** Array initializer of CM7_MCM peripheral base pointers */
+#define CM7_MCM_BASE_PTRS                        { CM7_MCM }
+
+/*!
+ * @}
+ */ /* end of group CM7_MCM_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------

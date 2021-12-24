@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -189,7 +189,7 @@ void ADC_GetDefaultConfig(adc_config_t *config)
 void ADC_SetChannelConfig(ADC_Type *base, uint32_t channelGroup, const adc_channel_config_t *config)
 {
     assert(NULL != config);
-    assert(channelGroup < FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
+    assert(channelGroup < (uint32_t)FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
 
     uint32_t tmp32;
 

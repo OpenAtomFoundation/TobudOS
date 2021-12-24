@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1. */
 /*@}*/
 
 /*! @brief Compute the offset unit from DCHPRI3 */
@@ -313,6 +313,50 @@ void EDMA_InstallTCD(DMA_Type *base, uint32_t channel, edma_tcd_t *tcd);
  */
 void EDMA_GetDefaultConfig(edma_config_t *config);
 
+/*!
+ * @brief Enable/Disable continuous channel link mode.
+ *
+ * @note Do not use continuous link mode with a channel linking to itself if there is only one minor loop
+ * iteration per service request, for example, if the channel's NBYTES value is the same as either
+ * the source or destination size. The same data transfer profile can be achieved by simply
+ * increasing the NBYTES value, which provides more efficient, faster processing.
+ *
+ * @param base EDMA peripheral base address.
+ * @param enable true is enable, false is disable.
+ */
+static inline void EDMA_EnableContinuousChannelLinkMode(DMA_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CR |= DMA_CR_CLM_MASK;
+    }
+    else
+    {
+        base->CR &= ~DMA_CR_CLM_MASK;
+    }
+}
+
+/*!
+ * @brief Enable/Disable minor loop mapping.
+ *
+ * The TCDn.word2 is redefined to include individual enable fields, an offset field, and the
+ * NBYTES field.
+ *
+ * @param base EDMA peripheral base address.
+ * @param enable true is enable, false is disable.
+ */
+static inline void EDMA_EnableMinorLoopMapping(DMA_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->CR |= DMA_CR_EMLM_MASK;
+    }
+    else
+    {
+        base->CR &= ~DMA_CR_EMLM_MASK;
+    }
+}
+
 /* @} */
 /*!
  * @name eDMA Channel Operation
@@ -487,6 +531,18 @@ void EDMA_EnableChannelInterrupts(DMA_Type *base, uint32_t channel, uint32_t mas
  */
 void EDMA_DisableChannelInterrupts(DMA_Type *base, uint32_t channel, uint32_t mask);
 
+/*!
+ * @brief Configures the eDMA channel TCD major offset feature.
+ *
+ * Adjustment value added to the source address at the completion of the major iteration count
+ *
+ * @param base eDMA peripheral base address.
+ * @param channel edma channel number.
+ * @param sourceOffset source address offset will be applied to source address after major loop done.
+ * @param destOffset destination address offset will be applied to source address after major loop done.
+ */
+void EDMA_SetMajorOffsetConfig(DMA_Type *base, uint32_t channel, int32_t sourceOffset, int32_t destOffset);
+
 /* @} */
 /*!
  * @name eDMA TCD Operation
@@ -626,6 +682,17 @@ void EDMA_TcdEnableInterrupts(edma_tcd_t *tcd, uint32_t mask);
  *             the defined edma_interrupt_enable_t type.
  */
 void EDMA_TcdDisableInterrupts(edma_tcd_t *tcd, uint32_t mask);
+
+/*!
+ * @brief Configures the eDMA TCD major offset feature.
+ *
+ * Adjustment value added to the source address at the completion of the major iteration count
+ *
+ * @param tcd A point to the TCD structure.
+ * @param sourceOffset source address offset wiil be applied to source address after major loop done.
+ * @param destOffset destination address offset will be applied to source address after major loop done.
+ */
+void EDMA_TcdSetMajorOffsetConfig(edma_tcd_t *tcd, int32_t sourceOffset, int32_t destOffset);
 
 /*! @} */
 /*!

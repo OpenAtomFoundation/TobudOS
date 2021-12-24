@@ -18,15 +18,15 @@
 
 #if defined(FSL_FEATURE_SOC_L2CACHEC_COUNT) && FSL_FEATURE_SOC_L2CACHEC_COUNT
 #define L2CACHE_OPERATION_TIMEOUT 0xFFFFFU
-#define L2CACHE_8WAYS_MASK 0xFFU
-#define L2CACHE_16WAYS_MASK 0xFFFFU
-#define L2CACHE_SMALLWAYS_NUM 8U
-#define L2CACHE_1KBCOVERTOB 1024U
-#define L2CACHE_SAMLLWAYS_SIZE 16U
-#define L2CACHE_LOCKDOWN_REGNUM 8 /*!< Lock down register numbers.*/
-                                  /*******************************************************************************
-                                   * Prototypes
-                                   ******************************************************************************/
+#define L2CACHE_8WAYS_MASK        0xFFU
+#define L2CACHE_16WAYS_MASK       0xFFFFU
+#define L2CACHE_SMALLWAYS_NUM     8U
+#define L2CACHE_1KBCOVERTOB       1024U
+#define L2CACHE_SAMLLWAYS_SIZE    16U
+#define L2CACHE_LOCKDOWN_REGNUM   8 /*!< Lock down register numbers.*/
+                                    /*******************************************************************************
+                                     * Prototypes
+                                     ******************************************************************************/
 /*!
  * @brief Set for all ways and waiting for the operation finished.
  *  This is provided for all the background operations.

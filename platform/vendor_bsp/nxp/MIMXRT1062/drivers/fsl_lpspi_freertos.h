@@ -15,7 +15,7 @@
 #include "fsl_lpspi.h"
 
 /*!
- * @addtogroup lpspi_freertos_driver LPSPI FreeRTOS driver
+ * @addtogroup lpspi_freertos_driver LPSPI FreeRTOS Driver
  * @{
  */
 
@@ -25,8 +25,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPSPI FreeRTOS driver version 2.0.4. */
-#define FSL_LPSPI_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @brief LPSPI FreeRTOS driver version 2.0.5. */
+#define FSL_LPSPI_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*@}*/
 
 /*!

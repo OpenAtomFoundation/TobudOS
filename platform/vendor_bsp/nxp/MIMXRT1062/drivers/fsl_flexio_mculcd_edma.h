@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 
 /*@{*/
 /*! @brief FlexIO MCULCD EDMA driver version. */
-#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*! @brief  typedef for flexio_mculcd_edma_handle_t in advance. */
@@ -105,7 +105,7 @@ status_t FLEXIO_MCULCD_TransferCreateHandleEDMA(FLEXIO_MCULCD_Type *base,
  * This function returns immediately after transfer initiates. To check whether
  * the transfer is completed, user could:
  * 1. Use the transfer completed callback;
- * 2. Polling function @ref FLEXIO_MCULCD_GetTransferCountEDMA
+ * 2. Polling function FLEXIO_MCULCD_GetTransferCountEDMA
  *
  * @param base pointer to FLEXIO_MCULCD_Type structure.
  * @param handle pointer to flexio_mculcd_edma_handle_t structure to store the

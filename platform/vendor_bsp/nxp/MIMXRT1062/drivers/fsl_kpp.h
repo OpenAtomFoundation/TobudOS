@@ -25,7 +25,7 @@
 /*@}*/
 
 #define KPP_KEYPAD_COLUMNNUM_MAX (8U)
-#define KPP_KEYPAD_ROWNUM_MAX (8U)
+#define KPP_KEYPAD_ROWNUM_MAX    (8U)
 
 /*! @brief List of interrupts supported by the peripheral. This
  * enumeration uses one-bot encoding to allow a logical OR of multiple
@@ -165,6 +165,7 @@ static inline void KPP_SetSynchronizeChain(KPP_Type *base, uint16_t mask)
  * length at least equal to KPP_KEYPAD_COLUMNNUM_MAX * KPP_KEYPAD_ROWNUM_MAX.
  * the data pointer is recommended to be a array like uint8_t data[KPP_KEYPAD_COLUMNNUM_MAX].
  * for example the data[2] = 4, that means in column 1 row 2 has a key press event.
+ * @param clockSrc_Hz Source clock.
  */
 void KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz);
 

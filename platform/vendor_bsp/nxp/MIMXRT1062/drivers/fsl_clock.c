@@ -72,6 +72,13 @@ volatile uint32_t g_rtcXtalFreq;
  */
 static uint32_t CLOCK_GetPeriphClkFreq(void);
 
+/*!
+ * @brief Get the frequency of PLL USB1 software clock.
+ *
+ * @return The frequency of PLL USB1 software clock.
+ */
+static uint32_t CLOCK_GetPllUsb1SWFreq(void);
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -137,6 +144,30 @@ static uint32_t CLOCK_GetPeriphClkFreq(void)
                 freq = 0U;
                 break;
         }
+    }
+
+    return freq;
+}
+
+static uint32_t CLOCK_GetPllUsb1SWFreq(void)
+{
+    uint32_t freq;
+
+    switch ((CCM->CCSR & CCM_CCSR_PLL3_SW_CLK_SEL_MASK) >> CCM_CCSR_PLL3_SW_CLK_SEL_SHIFT)
+    {
+        case 0:
+        {
+            freq = CLOCK_GetPllFreq(kCLOCK_PllUsb1);
+            break;
+        }
+        case 1:
+        {
+            freq = 24000000UL;
+            break;
+        }
+        default:
+            freq = 0UL;
+            break;
     }
 
     return freq;
@@ -355,6 +386,18 @@ uint32_t CLOCK_GetFreq(clock_name_t name)
         case kCLOCK_Usb1PllPfd3Clk:
             freq = CLOCK_GetUsb1PfdFreq(kCLOCK_Pfd3);
             break;
+        case kCLOCK_Usb1SwClk:
+            freq = CLOCK_GetPllUsb1SWFreq();
+            break;
+        case kCLOCK_Usb1Sw120MClk:
+            freq = CLOCK_GetPllUsb1SWFreq() / 4UL;
+            break;
+        case kCLOCK_Usb1Sw60MClk:
+            freq = CLOCK_GetPllUsb1SWFreq() / 8UL;
+            break;
+        case kCLOCK_Usb1Sw80MClk:
+            freq = CLOCK_GetPllUsb1SWFreq() / 6UL;
+            break;
         case kCLOCK_Usb2PllClk:
             freq = CLOCK_GetPllFreq(kCLOCK_PllUsb2);
             break;
@@ -392,6 +435,45 @@ uint32_t CLOCK_GetFreq(clock_name_t name)
             freq = 0U;
             break;
     }
+
+    return freq;
+}
+
+/*!
+ * brief Gets the frequency of selected clock root.
+ *
+ * param clockRoot The clock root used to get the frequency, please refer to @ref clock_root_t.
+ * return The frequency of selected clock root.
+ */
+uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
+{
+    const clock_name_t clockRootSourceArray[][6]  = CLOCK_ROOT_SOUCE;
+    const clock_mux_t clockRootMuxTupleArray[]    = CLOCK_ROOT_MUX_TUPLE;
+    const clock_div_t clockRootDivTupleArray[][2] = CLOCK_ROOT_DIV_TUPLE;
+    uint32_t freq                                 = 0UL;
+    clock_mux_t clockRootMuxTuple                 = clockRootMuxTupleArray[(uint8_t)clockRoot];
+    clock_div_t clockRootPreDivTuple              = clockRootDivTupleArray[(uint8_t)clockRoot][0];
+    clock_div_t clockRootPostDivTuple             = clockRootDivTupleArray[(uint8_t)clockRoot][1];
+    uint32_t clockRootMuxValue = (CCM_TUPLE_REG(CCM, clockRootMuxTuple) & CCM_TUPLE_MASK(clockRootMuxTuple)) >>
+                                 CCM_TUPLE_SHIFT(clockRootMuxTuple);
+    clock_name_t clockSourceName;
+
+    clockSourceName = clockRootSourceArray[(uint8_t)clockRoot][clockRootMuxValue];
+
+    assert(clockSourceName != kCLOCK_NoneName);
+
+    freq = CLOCK_GetFreq(clockSourceName);
+
+    if (clockRootPreDivTuple != kCLOCK_NonePreDiv)
+    {
+        freq /= ((CCM_TUPLE_REG(CCM, clockRootPreDivTuple) & CCM_TUPLE_MASK(clockRootPreDivTuple)) >>
+                 CCM_TUPLE_SHIFT(clockRootPreDivTuple)) +
+                1UL;
+    }
+
+    freq /= ((CCM_TUPLE_REG(CCM, clockRootPostDivTuple) & CCM_TUPLE_MASK(clockRootPostDivTuple)) >>
+             CCM_TUPLE_SHIFT(clockRootPostDivTuple)) +
+            1UL;
 
     return freq;
 }
@@ -1264,4 +1346,181 @@ void CLOCK_DisableUsbhs1PhyPllClock(void)
 {
     CCM_ANALOG->PLL_USB2 &= ~CCM_ANALOG_PLL_USB2_EN_USB_CLKS_MASK;
     USBPHY2->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
+}
+
+/*!
+ * brief Set the clock source and the divider of the clock output1.
+ *
+ * param selection The clock source to be output, please refer to clock_output1_selection_t.
+ * param divider The divider of the output clock signal, please refer to clock_output_divider_t.
+ */
+void CLOCK_SetClockOutput1(clock_output1_selection_t selection, clock_output_divider_t divider)
+{
+    uint32_t tmp32;
+
+    tmp32 = CCM->CCOSR;
+    if (selection == kCLOCK_DisableClockOutput1)
+    {
+        tmp32 &= ~CCM_CCOSR_CLKO1_EN_MASK;
+    }
+    else
+    {
+        tmp32 |= CCM_CCOSR_CLKO1_EN_MASK;
+        tmp32 &= ~(CCM_CCOSR_CLKO1_SEL_MASK | CCM_CCOSR_CLKO1_DIV_MASK);
+        tmp32 |= CCM_CCOSR_CLKO1_SEL(selection) | CCM_CCOSR_CLKO1_DIV(divider);
+    }
+    CCM->CCOSR = tmp32;
+}
+
+/*!
+ * brief Set the clock source and the divider of the clock output2.
+ *
+ * param selection The clock source to be output, please refer to clock_output2_selection_t.
+ * param divider The divider of the output clock signal, please refer to clock_output_divider_t.
+ */
+void CLOCK_SetClockOutput2(clock_output2_selection_t selection, clock_output_divider_t divider)
+{
+    uint32_t tmp32;
+
+    tmp32 = CCM->CCOSR;
+    if (selection == kCLOCK_DisableClockOutput2)
+    {
+        tmp32 &= CCM_CCOSR_CLKO2_EN_MASK;
+    }
+    else
+    {
+        tmp32 |= CCM_CCOSR_CLKO2_EN_MASK;
+        tmp32 &= ~(CCM_CCOSR_CLKO2_SEL_MASK | CCM_CCOSR_CLKO2_DIV_MASK);
+        tmp32 |= CCM_CCOSR_CLKO2_SEL(selection) | CCM_CCOSR_CLKO2_DIV(divider);
+    }
+
+    CCM->CCOSR = tmp32;
+}
+
+/*!
+ * brief Get the frequency of clock output1 clock signal.
+ *
+ * return The frequency of clock output1 clock signal.
+ */
+uint32_t CLOCK_GetClockOutCLKO1Freq(void)
+{
+    uint32_t freq = 0U;
+    uint32_t tmp32;
+
+    tmp32 = CCM->CCOSR;
+
+    if ((tmp32 & CCM_CCOSR_CLKO1_EN_MASK) != 0UL)
+    {
+        switch ((tmp32 & CCM_CCOSR_CLKO1_SEL_MASK) >> CCM_CCOSR_CLKO1_SEL_SHIFT)
+        {
+            case (uint32_t)kCLOCK_OutputPllUsb1:
+                freq = CLOCK_GetPllFreq(kCLOCK_PllUsb1) / 2U;
+                break;
+            case (uint32_t)kCLOCK_OutputPllSys:
+                freq = CLOCK_GetPllFreq(kCLOCK_PllSys) / 2U;
+                break;
+            case (uint32_t)kCLOCK_OutputPllVideo:
+                freq = CLOCK_GetPllFreq(kCLOCK_PllVideo) / 2U;
+                break;
+            case (uint32_t)kCLOCK_OutputSemcClk:
+                freq = CLOCK_GetSemcFreq();
+                break;
+            case (uint32_t)kCLOCK_OutputLcdifPixClk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_LcdifClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputAhbClk:
+                freq = CLOCK_GetAhbFreq();
+                break;
+            case (uint32_t)kCLOCK_OutputIpgClk:
+                freq = CLOCK_GetIpgFreq();
+                break;
+            case (uint32_t)kCLOCK_OutputPerClk:
+                freq = CLOCK_GetPerClkFreq();
+                break;
+            case (uint32_t)kCLOCK_OutputCkilSyncClk:
+                freq = CLOCK_GetRtcFreq();
+                break;
+            case (uint32_t)kCLOCK_OutputPll4MainClk:
+                freq = CLOCK_GetPllFreq(kCLOCK_PllAudio);
+                break;
+            default:
+                /* This branch should never be hit. */
+                break;
+        }
+
+        freq /= (((tmp32 & CCM_CCOSR_CLKO1_DIV_MASK) >> CCM_CCOSR_CLKO1_DIV_SHIFT) + 1U);
+    }
+    else
+    {
+        freq = 0UL;
+    }
+
+    return freq;
+}
+
+/*!
+ * brief Get the frequency of clock output2 clock signal.
+ *
+ * return The frequency of clock output2 clock signal.
+ */
+uint32_t CLOCK_GetClockOutClkO2Freq(void)
+{
+    uint32_t freq = 0U;
+    uint32_t tmp32;
+
+    tmp32 = CCM->CCOSR;
+
+    if ((tmp32 & CCM_CCOSR_CLKO2_EN_MASK) != 0UL)
+    {
+        switch ((tmp32 & CCM_CCOSR_CLKO2_SEL_MASK) >> CCM_CCOSR_CLKO2_SEL_SHIFT)
+        {
+            case (uint32_t)kCLOCK_OutputUsdhc1Clk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_Usdhc1ClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputLpi2cClk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_Lpi2cClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputCsiClk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_CsiClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputOscClk:
+                freq = CLOCK_GetOscFreq();
+                break;
+            case (uint32_t)kCLOCK_OutputUsdhc2Clk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_Usdhc2ClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputSai1Clk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_Sai1ClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputSai2Clk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_Sai2ClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputSai3Clk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_Sai3ClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputCanClk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_CanClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputFlexspiClk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_FlexspiClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputUartClk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_UartClkRoot);
+                break;
+            case (uint32_t)kCLOCK_OutputSpdif0Clk:
+                freq = CLOCK_GetClockRootFreq(kCLOCK_SpdifClkRoot);
+                break;
+            default:
+                /* This branch should never be hit. */
+                break;
+        }
+
+        freq /= (((tmp32 & CCM_CCOSR_CLKO2_DIV_MASK) >> CCM_CCOSR_CLKO2_DIV_SHIFT) + 1U);
+    }
+    else
+    {
+        freq = 0UL;
+    }
+
+    return freq;
 }

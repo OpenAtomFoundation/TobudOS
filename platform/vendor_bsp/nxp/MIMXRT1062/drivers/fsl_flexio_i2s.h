@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -526,6 +526,7 @@ status_t FLEXIO_I2S_TransferGetSendCount(FLEXIO_I2S_Type *base, flexio_i2s_handl
  *
  * @param base Pointer to FLEXIO_I2S_Type structure.
  * @param handle Pointer to flexio_i2s_handle_t structure which stores the transfer state
+ * @param count Bytes recieved.
  * @return count Bytes received.
  * @retval kStatus_Success Succeed get the transfer count.
  * @retval kStatus_NoTransferInProgress There is not a non-blocking transaction currently in progress.

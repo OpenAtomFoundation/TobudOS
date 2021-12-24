@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -61,7 +61,7 @@ void FLEXIO_CAMERA_GetDefaultConfig(flexio_camera_config_t *config)
  */
 void FLEXIO_CAMERA_Init(FLEXIO_CAMERA_Type *base, const flexio_camera_config_t *config)
 {
-    assert(base && config);
+    assert((base != NULL) && (config != NULL));
     assert(base->shifterCount > 0U);
 
     uint32_t i                   = 0U;

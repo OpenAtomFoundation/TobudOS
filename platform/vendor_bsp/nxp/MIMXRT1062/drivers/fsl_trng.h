@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2018, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,11 +23,24 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TRNG driver version 2.0.6
+/*! @brief TRNG driver version 2.0.12.
  *
- * Current version: 2.0.6
+ * Current version: 2.0.12
  *
+
  * Change log:
+ * - version 2.0.12
+ *   - For KW34A4_SERIES, KW35A4_SERIES, KW36A4_SERIES set TRNG_USER_CONFIG_DEFAULT_OSC_DIV to kTRNG_RingOscDiv8.
+ * - version 2.0.11
+ *   - Add clearing pending errors in TRNG_Init().
+ * - version 2.0.10
+ *   - Fixed doxygen issues.
+ * - version 2.0.9
+ *   - Fix HIS_CCM metrics issues.
+ * - version 2.0.8
+ *   - For K32L2A41A_SERIES set TRNG_USER_CONFIG_DEFAULT_OSC_DIV to kTRNG_RingOscDiv4.
+ * - version 2.0.7
+ *   - Fix MISRA 2004 issue rule 12.5.
  * - version 2.0.6
  *   - For KW35Z4_SERIES set TRNG_USER_CONFIG_DEFAULT_OSC_DIV to kTRNG_RingOscDiv8.
  * - version 2.0.5
@@ -43,7 +56,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 12))
 /*@}*/
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */
@@ -142,36 +155,36 @@ extern "C" {
  * This function initializes the configuration structure to default values. The default
  * values are as follows.
  * @code
- *     user_config->lock = 0;
- *     user_config->clockMode = kTRNG_ClockModeRingOscillator;
- *     user_config->ringOscDiv = kTRNG_RingOscDiv0;  Or  to other kTRNG_RingOscDiv[2|8] depending on the platform.
- *     user_config->sampleMode = kTRNG_SampleModeRaw;
- *     user_config->entropyDelay = 3200;
- *     user_config->sampleSize = 2500;
- *     user_config->sparseBitLimit = TRNG_USER_CONFIG_DEFAULT_SPARSE_BIT_LIMIT;
- *     user_config->retryCount = 63;
- *     user_config->longRunMaxLimit = 34;
- *     user_config->monobitLimit.maximum = 1384;
- *     user_config->monobitLimit.minimum = 1116;
- *     user_config->runBit1Limit.maximum = 405;
- *     user_config->runBit1Limit.minimum = 227;
- *     user_config->runBit2Limit.maximum = 220;
- *     user_config->runBit2Limit.minimum = 98;
- *     user_config->runBit3Limit.maximum = 125;
- *     user_config->runBit3Limit.minimum = 37;
- *     user_config->runBit4Limit.maximum = 75;
- *     user_config->runBit4Limit.minimum = 11;
- *     user_config->runBit5Limit.maximum = 47;
- *     user_config->runBit5Limit.minimum = 1;
- *     user_config->runBit6PlusLimit.maximum = 47;
- *     user_config->runBit6PlusLimit.minimum = 1;
- *     user_config->pokerLimit.maximum = 26912;
- *     user_config->pokerLimit.minimum = 24445;
- *     user_config->frequencyCountLimit.maximum = 25600;
- *     user_config->frequencyCountLimit.minimum = 1600;
+ *     userConfig->lock = 0;
+ *     userConfig->clockMode = kTRNG_ClockModeRingOscillator;
+ *     userConfig->ringOscDiv = kTRNG_RingOscDiv0;  Or  to other kTRNG_RingOscDiv[2|8] depending on the platform.
+ *     userConfig->sampleMode = kTRNG_SampleModeRaw;
+ *     userConfig->entropyDelay = 3200;
+ *     userConfig->sampleSize = 2500;
+ *     userConfig->sparseBitLimit = TRNG_USER_CONFIG_DEFAULT_SPARSE_BIT_LIMIT;
+ *     userConfig->retryCount = 63;
+ *     userConfig->longRunMaxLimit = 34;
+ *     userConfig->monobitLimit.maximum = 1384;
+ *     userConfig->monobitLimit.minimum = 1116;
+ *     userConfig->runBit1Limit.maximum = 405;
+ *     userConfig->runBit1Limit.minimum = 227;
+ *     userConfig->runBit2Limit.maximum = 220;
+ *     userConfig->runBit2Limit.minimum = 98;
+ *     userConfig->runBit3Limit.maximum = 125;
+ *     userConfig->runBit3Limit.minimum = 37;
+ *     userConfig->runBit4Limit.maximum = 75;
+ *     userConfig->runBit4Limit.minimum = 11;
+ *     userConfig->runBit5Limit.maximum = 47;
+ *     userConfig->runBit5Limit.minimum = 1;
+ *     userConfig->runBit6PlusLimit.maximum = 47;
+ *     userConfig->runBit6PlusLimit.minimum = 1;
+ *     userConfig->pokerLimit.maximum = 26912;
+ *     userConfig->pokerLimit.minimum = 24445;
+ *     userConfig->frequencyCountLimit.maximum = 25600;
+ *     userConfig->frequencyCountLimit.minimum = 1600;
  * @endcode
  *
- * @param user_config   User configuration structure.
+ * @param userConfig   User configuration structure.
  * @return If successful, returns the kStatus_TRNG_Success. Otherwise, it returns an error.
  */
 status_t TRNG_GetDefaultConfig(trng_config_t *userConfig);

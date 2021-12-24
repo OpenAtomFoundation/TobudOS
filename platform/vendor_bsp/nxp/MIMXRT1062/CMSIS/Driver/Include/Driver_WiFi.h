@@ -15,15 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Date:        13. March 2019
- * $Revision:    V1.0 (beta)
+ * $Date:        31. May 2019
+ * $Revision:    V1.0
  *
  * Project:      WiFi (Wireless Fidelity Interface) Driver definitions
  */
 
 /* History:
- *  Version 1.0 (beta)
- *    Initial beta version
+ *  Version 1.0
+ *    Initial release
  */
 
 #ifndef DRIVER_WIFI_H_
@@ -66,13 +66,6 @@ extern "C"
 #define ARM_WIFI_IP6_DNS2                   21U         ///< Station/AP Set/Get IPv6 secondary DNS address;             data = &ip6,      len = 16, uint8_t[16]
 #define ARM_WIFI_IP6_DHCP_MODE              22U         ///< Station/AP Set/Get IPv6 DHCPv6 client mode;                data = &mode,     len =  4, uint32_t: ARM_WIFI_IP6_DHCP_xxx (default Off)
 
-/****** WiFi Operating Mode *****/
-#define ARM_WIFI_MODE_NONE                  0U          ///< Inactive (default)
-#define ARM_WIFI_MODE_STATION               1U          ///< Station
-#define ARM_WIFI_MODE_AP                    2U          ///< Access Point
-#define ARM_WIFI_MODE_STATION_AP            3U          ///< Station and Access Point
-#define ARM_WIFI_MODE_AD_HOC                4U          ///< Ad-hoc
-
 /****** WiFi Security Type *****/
 #define ARM_WIFI_SECURITY_OPEN              0U          ///< Open
 #define ARM_WIFI_SECURITY_WEP               1U          ///< Wired Equivalent Privacy (WEP) with Pre-Sheared Key (PSK)
@@ -100,12 +93,13 @@ extern "C"
 \brief WiFi Configuration
 */
 typedef struct {
-  char    ssid[32+1];                                   ///< Service Set Identifier (SSID) null-terminated string
-  char    pass[64+1];                                   ///< Password null-terminated string
-  uint8_t security;                                     ///< Security type (ARM_WIFI_SECURITY_xxx)
-  uint8_t ch;                                           ///< WiFi Channel (0 = auto, otherwise = exact channel)
-  uint8_t wps_method;                                   ///< WiFi Protected Setup (WPS) method (ARM_WIFI_WPS_METHOD_xxx)
-  char    wps_pin[8+1];                                 ///< WiFi Protected Setup (WPS) PIN null-terminated string
+  const char   *ssid;                                   ///< Pointer to Service Set Identifier (SSID) null-terminated string
+  const char   *pass;                                   ///< Pointer to Password null-terminated string
+        uint8_t security;                               ///< Security type (ARM_WIFI_SECURITY_xxx)
+        uint8_t ch;                                     ///< WiFi Channel (0 = auto, otherwise = exact channel)
+        uint8_t reserved;                               ///< Reserved
+        uint8_t wps_method;                             ///< WiFi Protected Setup (WPS) method (ARM_WIFI_WPS_METHOD_xxx)
+  const char   *wps_pin;                                ///< Pointer to WiFi Protected Setup (WPS) PIN null-terminated string
 } ARM_WIFI_CONFIG_t;
 
 /**
@@ -257,37 +251,25 @@ typedef struct {
                    - \ref ARM_DRIVER_ERROR_PARAMETER   : Parameter error (NULL scan_info pointer or max_num equal to 0)
 */
 /**
-  \fn            int32_t ARM_WIFI_Configure (uint32_t interface, ARM_WIFI_CONFIG_t *config)
-  \brief         Configure Network Parameters.
+  \fn            int32_t ARM_WIFI_Activate (uint32_t interface, ARM_WIFI_CONFIG_t *config)
+  \brief         Activate interface (Connect to a wireless network or activate an access point).
   \param[in]     interface Interface (0 = Station, 1 = Access Point)
   \param[in]     config    Pointer to ARM_WIFI_CONFIG_t structure where Configuration parameters are located
   \return        execution status
                    - \ref ARM_DRIVER_OK                : Operation successful
                    - \ref ARM_DRIVER_ERROR             : Operation failed
-                   - \ref ARM_DRIVER_ERROR_UNSUPPORTED : Operation not supported (security type, WPS or channel autodetect not supported)
-                   - \ref ARM_DRIVER_ERROR_PARAMETER   : Parameter error (invalid interface, security type or NULL config pointer)
-*/
-/**
-  \fn            int32_t ARM_WIFI_Activate (uint32_t mode)
-  \brief         Activate selected mode of operation.
-  \param[in]     mode     Mode of operation
-                   - \ref ARM_WIFI_MODE_STATION        : Station only
-                   - \ref ARM_WIFI_MODE_AP             : Access Point only
-                   - \ref ARM_WIFI_MODE_STATION_AP     : Station and Access Point
-                   - \ref ARM_WIFI_MODE_AD_HOC         : Ad-hoc
-  \return        execution status
-                   - \ref ARM_DRIVER_OK                : Operation successful
-                   - \ref ARM_DRIVER_ERROR             : Operation failed
                    - \ref ARM_DRIVER_ERROR_TIMEOUT     : Timeout occurred
-                   - \ref ARM_DRIVER_ERROR_UNSUPPORTED : Operation not supported
-                   - \ref ARM_DRIVER_ERROR_PARAMETER   : Parameter error (invalid mode)
+                   - \ref ARM_DRIVER_ERROR_UNSUPPORTED : Operation not supported (security type, channel autodetect or WPS not supported)
+                   - \ref ARM_DRIVER_ERROR_PARAMETER   : Parameter error (invalid interface, NULL config pointer or invalid configuration)
 */
 /**
-  \fn            int32_t ARM_WIFI_Deactivate (void)
-  \brief         Deactivate current mode of operation.
+  \fn            int32_t ARM_WIFI_Deactivate (uint32_t interface)
+  \brief         Deactivate interface (Disconnect from a wireless network or deactivate an access point).
+  \param[in]     interface Interface (0 = Station, 1 = Access Point)
   \return        execution status
                    - \ref ARM_DRIVER_OK                : Operation successful
                    - \ref ARM_DRIVER_ERROR             : Operation failed
+                   - \ref ARM_DRIVER_ERROR_PARAMETER   : Parameter error (invalid interface)
 */
 /**
   \fn            uint32_t ARM_WIFI_IsConnected (void)
@@ -616,20 +598,19 @@ typedef void (*ARM_WIFI_SignalEvent_t) (uint32_t event, void *arg); ///< Pointer
 \brief WiFi Driver Capabilities.
 */
 typedef struct {
-  uint32_t mode_station          : 1;   ///< Mode: Station
-  uint32_t mode_ap               : 1;   ///< Mode: Access Point
-  uint32_t mode_station_ap       : 1;   ///< Mode: Station and Access Point
-  uint32_t mode_ad_hoc           : 1;   ///< Mode: Ad-hoc
+  uint32_t station               : 1;   ///< Station
+  uint32_t ap                    : 1;   ///< Access Point
+  uint32_t station_ap            : 1;   ///< Concurrent Station and Access Point
   uint32_t wps_station           : 1;   ///< WiFi Protected Setup (WPS) for Station
   uint32_t wps_ap                : 1;   ///< WiFi Protected Setup (WPS) for Access Point
   uint32_t event_ap_connect      : 1;   ///< Access Point: event generated on Station connect
   uint32_t event_ap_disconnect   : 1;   ///< Access Point: event generated on Station disconnect
-  uint32_t bypass_mode           : 1;   ///< Bypass or pass-through mode (Ethernet interface)
   uint32_t event_eth_rx_frame    : 1;   ///< Event generated on Ethernet frame reception in bypass mode
+  uint32_t bypass_mode           : 1;   ///< Bypass or pass-through mode (Ethernet interface)
   uint32_t ip                    : 1;   ///< IP (UDP/TCP) (Socket interface)
   uint32_t ip6                   : 1;   ///< IPv6 (Socket interface)
   uint32_t ping                  : 1;   ///< Ping (ICMP)
-  uint32_t reserved              : 19;  ///< Reserved (must be zero)
+  uint32_t reserved              : 20;  ///< Reserved (must be zero)
 } ARM_WIFI_CAPABILITIES;
 
 /**
@@ -645,9 +626,8 @@ typedef struct {
   int32_t               (*SetOption)                   (uint32_t interface, uint32_t option, const void *data, uint32_t  len);
   int32_t               (*GetOption)                   (uint32_t interface, uint32_t option,       void *data, uint32_t *len);
   int32_t               (*Scan)                        (ARM_WIFI_SCAN_INFO_t scan_info[], uint32_t max_num);
-  int32_t               (*Configure)                   (uint32_t interface, ARM_WIFI_CONFIG_t *config);
-  int32_t               (*Activate)                    (uint32_t mode);
-  int32_t               (*Deactivate)                  (void);
+  int32_t               (*Activate)                    (uint32_t interface, const ARM_WIFI_CONFIG_t *config);
+  int32_t               (*Deactivate)                  (uint32_t interface);
   uint32_t              (*IsConnected)                 (void);
   int32_t               (*GetNetInfo)                  (ARM_WIFI_NET_INFO_t *net_info);
   int32_t               (*BypassControl)               (uint32_t interface, uint32_t mode);
