@@ -10,7 +10,7 @@
       <TargetName>TencentOS-Tiny_debug</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6140000::V6.14::ARMCLANG</pCCUsed>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -339,7 +339,7 @@
               <MiscControls>-fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb</MiscControls>
               <Define>DEBUG, CPU_MIMXRT1062DVL6A, PRINTF_FLOAT_ENABLE=0, SCANF_FLOAT_ENABLE=0, PRINTF_ADVANCED_ENABLE=0, SCANF_ADVANCED_ENABLE=0,SDK_DEBUGCONSOLE_UART</Define>
               <Undefine></Undefine>
-              <IncludePath>..;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\CMSIS\Include;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\drivers;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\utilities\debug_console_lite;..\board;..\board\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\uart;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\lists;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG</IncludePath>
+              <IncludePath>..;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\CMSIS\Include;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\drivers;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\utilities\debug_console_lite;..\board;..\board\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\uart;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\lists;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\kernel\hal\include;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\devices\esp8266;..\..\..\..\devices\ec20_200_600;..\..\..\..\components\utils\JSON\include;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -404,9 +404,9 @@
           <GroupName>example</GroupName>
           <Files>
             <File>
-              <FileName>hello_world.c</FileName>
+              <FileName>mqttclient_iot_explorer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\hello_world\hello_world.c</FilePath>
+              <FilePath>..\mqttclient_iot_explorer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1022,6 +1022,196 @@
               <FileName>tos_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\TOS-CONFIG\tos_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\TOS-CONFIG\mqtt_config.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hal/uart</GroupName>
+          <Files>
+            <File>
+              <FileName>tos_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\hal\nxp\mimxrt10xx\src\tos_hal_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>net/at</GroupName>
+          <Files>
+            <File>
+              <FileName>tos_at.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>net/sal_module_wrapper</GroupName>
+          <Files>
+            <File>
+              <FileName>sal_module_wrapper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\net\sal_module_wrapper\sal_module_wrapper.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>esp8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec600s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec20_200_600\ec600s.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient</GroupName>
+          <Files>
+            <File>
+              <FileName>mqttclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqttclient\mqttclient.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/mqtt</GroupName>
+          <Files>
+            <File>
+              <FileName>MQTTConnectClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTConnectClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTConnectServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTConnectServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTDeserializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTDeserializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTFormat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTFormat.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTPacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTPacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSerializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTSerializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTSubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTSubscribeServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTUnsubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTUnsubscribeServer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/common</GroupName>
+          <Files>
+            <File>
+              <FileName>random.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/network</GroupName>
+          <Files>
+            <File>
+              <FileName>nettype_tcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</FilePath>
+            </File>
+            <File>
+              <FileName>network.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/platform</GroupName>
+          <Files>
+            <File>
+              <FileName>platform_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_memory.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_net_socket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cjson</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\utils\JSON\src\cJSON.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1360,7 +1550,7 @@
               <MiscControls>-fno-common  -fdata-sections  -ffreestanding  -fno-builtin  -mthumb</MiscControls>
               <Define>XIP_EXTERNAL_FLASH=1, XIP_BOOT_HEADER_ENABLE=1, NDEBUG, CPU_MIMXRT1062DVL6A, PRINTF_FLOAT_ENABLE=0, SCANF_FLOAT_ENABLE=0, PRINTF_ADVANCED_ENABLE=0, SCANF_ADVANCED_ENABLE=0,SDK_DEBUGCONSOLE_UART</Define>
               <Undefine></Undefine>
-              <IncludePath>..;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\CMSIS\Include;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\drivers;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\utilities\debug_console_lite;..\board;..\board\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\uart;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\lists;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG</IncludePath>
+              <IncludePath>..;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\CMSIS\Include;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\drivers;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\utilities\debug_console_lite;..\board;..\board\xip;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\uart;..\..\..\..\platform\vendor_bsp\nxp\MIMXRT1062\components\lists;..\..\..\..\arch\arm\arm-v7m\common\include;..\..\..\..\arch\arm\arm-v7m\cortex-m7\armcc;..\..\..\..\kernel\core\include;..\..\TOS-CONFIG;..\..\..\..\kernel\hal\include;..\..\..\..\net\at\include;..\..\..\..\net\sal_module_wrapper;..\..\..\..\devices\esp8266;..\..\..\..\devices\ec20_200_600;..\..\..\..\components\utils\JSON\include;..\..\..\..\components\connectivity\mqttclient\common;..\..\..\..\components\connectivity\mqttclient\mqtt;..\..\..\..\components\connectivity\mqttclient\mqttclient;..\..\..\..\components\connectivity\mqttclient\network;..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1425,9 +1615,9 @@
           <GroupName>example</GroupName>
           <Files>
             <File>
-              <FileName>hello_world.c</FileName>
+              <FileName>mqttclient_iot_explorer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\examples\hello_world\hello_world.c</FilePath>
+              <FilePath>..\mqttclient_iot_explorer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2044,6 +2234,196 @@
               <FileType>5</FileType>
               <FilePath>..\..\TOS-CONFIG\tos_config.h</FilePath>
             </File>
+            <File>
+              <FileName>mqtt_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\TOS-CONFIG\mqtt_config.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hal/uart</GroupName>
+          <Files>
+            <File>
+              <FileName>tos_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\platform\hal\nxp\mimxrt10xx\src\tos_hal_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>net/at</GroupName>
+          <Files>
+            <File>
+              <FileName>tos_at.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>net/sal_module_wrapper</GroupName>
+          <Files>
+            <File>
+              <FileName>sal_module_wrapper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\net\sal_module_wrapper\sal_module_wrapper.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>esp8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\esp8266\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>ec600s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\devices\ec20_200_600\ec600s.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient</GroupName>
+          <Files>
+            <File>
+              <FileName>mqttclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqttclient\mqttclient.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/mqtt</GroupName>
+          <Files>
+            <File>
+              <FileName>MQTTConnectClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTConnectClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTConnectServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTConnectServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTDeserializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTDeserializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTFormat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTFormat.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTPacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTPacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSerializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTSerializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTSubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTSubscribeServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTUnsubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\mqtt\MQTTUnsubscribeServer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/common</GroupName>
+          <Files>
+            <File>
+              <FileName>random.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\random.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\common\mqtt_list.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/network</GroupName>
+          <Files>
+            <File>
+              <FileName>nettype_tcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tcp.c</FilePath>
+            </File>
+            <File>
+              <FileName>nettype_tls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\nettype_tls.c</FilePath>
+            </File>
+            <File>
+              <FileName>network.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\network\network.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqttclient/platform</GroupName>
+          <Files>
+            <File>
+              <FileName>platform_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_memory.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_net_socket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_net_socket.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\connectivity\mqttclient\platform\TencentOS-tiny\platform_timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cjson</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\utils\JSON\src\cJSON.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -2059,7 +2439,7 @@
   <LayerInfo>
     <Layers>
       <Layer>
-        <LayName>&lt;Project Info&gt;</LayName>
+        <LayName>TencentOS-Tiny</LayName>
         <LayTarg>0</LayTarg>
         <LayPrjMark>1</LayPrjMark>
       </Layer>
