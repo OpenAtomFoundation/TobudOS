@@ -1,34 +1,24 @@
 #include "mcu_init.h"
 #include "sal_module_wrapper.h"
-#include "cmsis_os.h"
 
 #define USE_ESP8266
-
-//#define USE_AIR724
-
-//#define USE_EC600S
+//#define USE_EC20_200_600
 
 #ifdef USE_ESP8266
 #include "esp8266.h"
 #endif
 
-
-#ifdef USE_AIR724
-#include "air724.h"
-#endif
-
-
-#ifdef USE_EC600S
+#ifdef USE_EC20_200_600
 #include "ec600s.h"
 #endif
 
-#define TCP_TEST_TASK0_STK_SIZE         4096
-void tcp_test0(void);
-osThreadDef(tcp_test0, osPriorityNormal, 1, TCP_TEST_TASK0_STK_SIZE);
+#define TCP_TEST0_TASK_STK_SIZE         4096
+k_task_t tcp_test0_task;
+uint8_t tcp_test0_task_stk[TCP_TEST0_TASK_STK_SIZE];
 
-#define TCP_TEST_TASK1_STK_SIZE         4096
-void tcp_test1(void);
-osThreadDef(tcp_test1, osPriorityNormal, 1, TCP_TEST_TASK1_STK_SIZE);
+#define TCP_TEST1_TASK_STK_SIZE         4096
+k_task_t tcp_test1_task;
+uint8_t tcp_test1_task_stk[TCP_TEST1_TASK_STK_SIZE];
 
 int socket_id_0 = -1;
 int socket_id_1 = -1;
@@ -37,7 +27,7 @@ int socket_id_1 = -1;
 uint8_t recv_data_0[RECV_LEN];
 uint8_t recv_data_1[RECV_LEN];
 
-void tcp_test0(void)
+void tcp_test0(void *args)
 {
 	int recv_len = -1;
 
@@ -58,7 +48,7 @@ void tcp_test0(void)
 	}
 }
 
-void tcp_test1(void)
+void tcp_test1(void *args)
 {
     int recv_len = -1;
 
@@ -83,12 +73,10 @@ void tcp_test1(void)
 void application_entry(void *arg)
 {
 #if defined(USE_ESP8266)
-    esp8266_sal_init(HAL_UART_PORT_0);
+    esp8266_sal_init(HAL_UART_PORT_2);
     esp8266_join_ap("Mculover666", "mculover666");
-#elif defined(USE_AIR724)
-    air724_sal_init(HAL_UART_PORT_0);
-#elif defined(USE_EC600S)
-    ec600s_sal_init(HAL_UART_PORT_0);
+#elif defined(USE_EC20_200_600)
+    ec600s_sal_init(HAL_UART_PORT_4);
 #endif
     
     socket_id_0 = tos_sal_module_connect("117.50.111.72", "8080", TOS_SAL_PROTO_TCP); 
@@ -105,7 +93,7 @@ void application_entry(void *arg)
         printf("TCP1 connect success! fd: %d\n", socket_id_1);
     }
 
-    osThreadCreate(osThread(tcp_test0), NULL);
-    osThreadCreate(osThread(tcp_test1), NULL);
+    tos_task_create(&tcp_test0_task, "task1", tcp_test0, NULL, 3, tcp_test0_task_stk, TCP_TEST0_TASK_STK_SIZE, 0);
+    tos_task_create(&tcp_test1_task, "task2", tcp_test1, NULL, 3, tcp_test1_task_stk, TCP_TEST1_TASK_STK_SIZE, 0);
 }
 
