@@ -91,29 +91,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -180,8 +164,8 @@
 
 /**
   * @brief  Initialize the GPIOx peripheral according to the specified parameters in the GPIO_Init.
-  * @param  GPIOx: where x can be (A..H) to select the GPIO peripheral for STM32L4 family
-  * @param  GPIO_Init: pointer to a GPIO_InitTypeDef structure that contains
+  * @param  GPIOx where x can be (A..H) to select the GPIO peripheral for STM32L4 family
+  * @param  GPIO_Init pointer to a GPIO_InitTypeDef structure that contains
   *         the configuration information for the specified GPIO peripheral.
   * @retval None
   */
@@ -206,26 +190,6 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
     if (iocurrent != 0x00u)
     {
       /*--------------------- GPIO Mode Configuration ------------------------*/
-      /* In case of Alternate function mode selection */
-      if((GPIO_Init->Mode == GPIO_MODE_AF_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
-      {
-        /* Check the Alternate function parameters */
-        assert_param(IS_GPIO_AF_INSTANCE(GPIOx));
-        assert_param(IS_GPIO_AF(GPIO_Init->Alternate));
-
-        /* Configure Alternate function mapped with the current IO */
-        temp = GPIOx->AFR[position >> 3u];
-        temp &= ~(0xFu << ((position & 0x07u) * 4u));
-        temp |= ((GPIO_Init->Alternate) << ((position & 0x07u) * 4u));
-        GPIOx->AFR[position >> 3u] = temp;
-      }
-
-      /* Configure IO Direction mode (Input, Output, Alternate or Analog) */
-      temp = GPIOx->MODER;
-      temp &= ~(GPIO_MODER_MODE0 << (position * 2u));
-      temp |= ((GPIO_Init->Mode & GPIO_MODE) << (position * 2u));
-      GPIOx->MODER = temp;
-
       /* In case of Output or Alternate function mode selection */
       if((GPIO_Init->Mode == GPIO_MODE_OUTPUT_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_PP) ||
          (GPIO_Init->Mode == GPIO_MODE_OUTPUT_OD) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
@@ -264,6 +228,26 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
       temp &= ~(GPIO_PUPDR_PUPD0 << (position * 2u));
       temp |= ((GPIO_Init->Pull) << (position * 2u));
       GPIOx->PUPDR = temp;
+
+      /* In case of Alternate function mode selection */
+      if((GPIO_Init->Mode == GPIO_MODE_AF_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
+      {
+        /* Check the Alternate function parameters */
+        assert_param(IS_GPIO_AF_INSTANCE(GPIOx));
+        assert_param(IS_GPIO_AF(GPIO_Init->Alternate));
+
+        /* Configure Alternate function mapped with the current IO */
+        temp = GPIOx->AFR[position >> 3u];
+        temp &= ~(0xFu << ((position & 0x07u) * 4u));
+        temp |= ((GPIO_Init->Alternate) << ((position & 0x07u) * 4u));
+        GPIOx->AFR[position >> 3u] = temp;
+      }
+
+      /* Configure IO Direction mode (Input, Output, Alternate or Analog) */
+      temp = GPIOx->MODER;
+      temp &= ~(GPIO_MODER_MODE0 << (position * 2u));
+      temp |= ((GPIO_Init->Mode & GPIO_MODE) << (position * 2u));
+      GPIOx->MODER = temp;
 
       /*--------------------- EXTI Mode Configuration ------------------------*/
       /* Configure the External Interrupt or event for the current IO */
@@ -319,8 +303,8 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
 
 /**
   * @brief  De-initialize the GPIOx peripheral registers to their default reset values.
-  * @param  GPIOx: where x can be (A..H) to select the GPIO peripheral for STM32L4 family
-  * @param  GPIO_Pin: specifies the port bit to be written.
+  * @param  GPIOx where x can be (A..H) to select the GPIO peripheral for STM32L4 family
+  * @param  GPIO_Pin specifies the port bit to be written.
   *         This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
   * @retval None
   */
@@ -342,6 +326,25 @@ void HAL_GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
 
     if (iocurrent != 0x00u)
     {
+      /*------------------------- EXTI Mode Configuration --------------------*/
+      /* Clear the External Interrupt or Event for the current IO */
+
+      tmp = SYSCFG->EXTICR[position >> 2u];
+      tmp &= (0x0FuL << (4u * (position & 0x03u)));
+      if (tmp == (GPIO_GET_INDEX(GPIOx) << (4u * (position & 0x03u))))
+      {
+        /* Clear EXTI line configuration */
+        EXTI->IMR1 &= ~(iocurrent);
+        EXTI->EMR1 &= ~(iocurrent);
+
+        /* Clear Rising Falling edge configuration */
+        EXTI->RTSR1 &= ~(iocurrent);
+        EXTI->FTSR1 &= ~(iocurrent);
+
+        tmp = 0x0FuL << (4u * (position & 0x03u));
+        SYSCFG->EXTICR[position >> 2u] &= ~tmp;
+      }
+
       /*------------------------- GPIO Mode Configuration --------------------*/
       /* Configure IO in Analog Mode */
       GPIOx->MODER |= (GPIO_MODER_MODE0 << (position * 2u));
@@ -362,25 +365,6 @@ void HAL_GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
       /* Deactivate the Control bit of Analog mode for the current IO */
       GPIOx->ASCR &= ~(GPIO_ASCR_ASC0<< position);
 #endif /* STM32L471xx || STM32L475xx || STM32L476xx || STM32L485xx || STM32L486xx */
-
-      /*------------------------- EXTI Mode Configuration --------------------*/
-      /* Clear the External Interrupt or Event for the current IO */
-
-      tmp = SYSCFG->EXTICR[position >> 2u];
-      tmp &= (0x0FuL << (4u * (position & 0x03u)));
-      if (tmp == (GPIO_GET_INDEX(GPIOx) << (4u * (position & 0x03u))))
-      {
-        tmp = 0x0FuL << (4u * (position & 0x03u));
-        SYSCFG->EXTICR[position >> 2u] &= ~tmp;
-
-        /* Clear EXTI line configuration */
-        EXTI->IMR1 &= ~(iocurrent);
-        EXTI->EMR1 &= ~(iocurrent);
-
-        /* Clear Rising Falling edge configuration */
-        EXTI->RTSR1 &= ~(iocurrent);
-        EXTI->FTSR1 &= ~(iocurrent);
-      }
     }
 
     position++;
@@ -405,8 +389,8 @@ void HAL_GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
 
 /**
   * @brief  Read the specified input port pin.
-  * @param  GPIOx: where x can be (A..H) to select the GPIO peripheral for STM32L4 family
-  * @param  GPIO_Pin: specifies the port bit to read.
+  * @param  GPIOx where x can be (A..H) to select the GPIO peripheral for STM32L4 family
+  * @param  GPIO_Pin specifies the port bit to read.
   *         This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
   * @retval The input port pin value.
   */
@@ -468,10 +452,16 @@ void HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState Pin
   */
 void HAL_GPIO_TogglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
+  uint32_t odr;
+
   /* Check the parameters */
   assert_param(IS_GPIO_PIN(GPIO_Pin));
 
-  GPIOx->ODR ^= GPIO_Pin;
+  /* get current Ouput Data Register value */
+  odr = GPIOx->ODR;
+
+  /* Set selected pins that were at low level, and reset ones that were high */
+  GPIOx->BSRR = ((odr & GPIO_Pin) << GPIO_NUMBER) | (~odr & GPIO_Pin);
 }
 
 /**
@@ -501,9 +491,10 @@ HAL_StatusTypeDef HAL_GPIO_LockPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   GPIOx->LCKR = GPIO_Pin;
   /* Set LCKx bit(s): LCKK='1' + LCK[15-0] */
   GPIOx->LCKR = tmp;
-  /* Read LCKK bit*/
+  /* Read LCKK register. This read is mandatory to complete key lock sequence */
   tmp = GPIOx->LCKR;
 
+  /* Read again in order to confirm lock is active */
   if ((GPIOx->LCKR & GPIO_LCKR_LCKK) != 0x00u)
   {
     return HAL_OK;
@@ -531,7 +522,7 @@ void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
 
 /**
   * @brief  EXTI line detection callback.
-  * @param  GPIO_Pin: Specifies the port pin connected to corresponding EXTI line.
+  * @param  GPIO_Pin Specifies the port pin connected to corresponding EXTI line.
   * @retval None
   */
 __weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)

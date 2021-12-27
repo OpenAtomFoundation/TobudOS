@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,36 +18,6 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.lpi2c"
 #endif
-
-/*! @brief Common sets of flags used by the driver. */
-enum
-{
-    /*! All flags which are cleared by the driver upon starting a transfer. */
-    kMasterClearFlags = kLPI2C_MasterEndOfPacketFlag | kLPI2C_MasterStopDetectFlag | kLPI2C_MasterNackDetectFlag |
-                        kLPI2C_MasterArbitrationLostFlag | kLPI2C_MasterFifoErrFlag | kLPI2C_MasterPinLowTimeoutFlag |
-                        kLPI2C_MasterDataMatchFlag,
-
-    /*! IRQ sources enabled by the non-blocking transactional API. */
-    kMasterIrqFlags = kLPI2C_MasterArbitrationLostFlag | kLPI2C_MasterTxReadyFlag | kLPI2C_MasterRxReadyFlag |
-                      kLPI2C_MasterStopDetectFlag | kLPI2C_MasterNackDetectFlag | kLPI2C_MasterPinLowTimeoutFlag |
-                      kLPI2C_MasterFifoErrFlag,
-
-    /*! Errors to check for. */
-    kMasterErrorFlags = kLPI2C_MasterNackDetectFlag | kLPI2C_MasterArbitrationLostFlag | kLPI2C_MasterFifoErrFlag |
-                        kLPI2C_MasterPinLowTimeoutFlag,
-
-    /*! All flags which are cleared by the driver upon starting a transfer. */
-    kSlaveClearFlags = kLPI2C_SlaveRepeatedStartDetectFlag | kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveBitErrFlag |
-                       kLPI2C_SlaveFifoErrFlag,
-
-    /*! IRQ sources enabled by the non-blocking transactional API. */
-    kSlaveIrqFlags = kLPI2C_SlaveTxReadyFlag | kLPI2C_SlaveRxReadyFlag | kLPI2C_SlaveStopDetectFlag |
-                     kLPI2C_SlaveRepeatedStartDetectFlag | kLPI2C_SlaveFifoErrFlag | kLPI2C_SlaveBitErrFlag |
-                     kLPI2C_SlaveTransmitAckFlag | kLPI2C_SlaveAddressValidFlag,
-
-    /*! Errors to check for. */
-    kSlaveErrorFlags = kLPI2C_SlaveFifoErrFlag | kLPI2C_SlaveBitErrFlag,
-};
 
 /* ! @brief LPI2C master fifo commands. */
 enum
@@ -220,7 +190,7 @@ status_t LPI2C_MasterCheckAndClearError(LPI2C_Type *base, uint32_t status)
 
     /* Check for error. These errors cause a stop to automatically be sent. We must */
     /* clear the errors before a new transfer can start. */
-    status &= (uint32_t)kMasterErrorFlags;
+    status &= (uint32_t)kLPI2C_MasterErrorFlags;
     if (0U != status)
     {
         /* Select the correct error code. Ordered by severity, with bus issues first. */
@@ -270,17 +240,16 @@ status_t LPI2C_MasterCheckAndClearError(LPI2C_Type *base, uint32_t status)
  */
 static status_t LPI2C_MasterWaitForTxReady(LPI2C_Type *base)
 {
+    status_t result = kStatus_Success;
     uint32_t status;
     size_t txCount;
     size_t txFifoSize = (size_t)FSL_FEATURE_LPI2C_FIFO_SIZEn(base);
 
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
     uint32_t waitTimes = I2C_RETRY_TIMES;
 #endif
     do
     {
-        status_t result;
-
         /* Get the number of words in the tx fifo and compute empty slots. */
         LPI2C_MasterGetFifoCounts(base, NULL, &txCount);
         txCount = txFifoSize - txCount;
@@ -290,20 +259,21 @@ static status_t LPI2C_MasterWaitForTxReady(LPI2C_Type *base)
         result = LPI2C_MasterCheckAndClearError(base, status);
         if (kStatus_Success != result)
         {
-            return result;
+            break;
         }
-#if I2C_RETRY_TIMES
-    } while ((0U == txCount) && (0U != --waitTimes));
+#if I2C_RETRY_TIMES != 0U
+        waitTimes--;
+    } while ((0U == txCount) && (0U != waitTimes));
 
     if (0U == waitTimes)
     {
-        return kStatus_LPI2C_Timeout;
+        result = kStatus_LPI2C_Timeout;
     }
 #else
     } while (0U == txCount);
 #endif
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -398,7 +368,7 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
     uint32_t instance = LPI2C_GetInstance(base);
 
     /* Ungate the clock. */
-    CLOCK_EnableClock(kLpi2cClocks[instance]);
+    (void)CLOCK_EnableClock(kLpi2cClocks[instance]);
 #if defined(LPI2C_PERIPH_CLOCKS)
     /* Ungate the functional clock in initialize function. */
     CLOCK_EnableClock(kLpi2cPeriphClocks[instance]);
@@ -429,8 +399,6 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
 
     LPI2C_MasterSetWatermarks(base, (size_t)kDefaultTxWatermark, (size_t)kDefaultRxWatermark);
 
-    LPI2C_MasterSetBaudRate(base, sourceClock_Hz, masterConfig->baudRate_Hz);
-
     /* Configure glitch filters and bus idle and pin low timeouts. */
     prescaler = (base->MCFGR1 & LPI2C_MCFGR1_PRESCALE_MASK) >> LPI2C_MCFGR1_PRESCALE_SHIFT;
     cfgr2     = base->MCFGR2;
@@ -456,6 +424,10 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
         cfgr2 |= LPI2C_MCFGR2_FILTSCL(cycles);
     }
     base->MCFGR2 = cfgr2;
+    /* Configure baudrate after the SDA/SCL glitch filter setting,
+       since the baudrate calculation needs them as parameter. */
+    LPI2C_MasterSetBaudRate(base, sourceClock_Hz, masterConfig->baudRate_Hz);
+
     if (0U != masterConfig->pinLowTimeout_ns)
     {
         cycles       = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->pinLowTimeout_ns / 256U,
@@ -484,7 +456,7 @@ void LPI2C_MasterDeinit(LPI2C_Type *base)
     uint32_t instance = LPI2C_GetInstance(base);
 
     /* Gate clock. */
-    CLOCK_DisableClock(kLpi2cClocks[instance]);
+    (void)CLOCK_DisableClock(kLpi2cClocks[instance]);
 #if defined(LPI2C_PERIPH_CLOCKS)
     /* Gate the functional clock. */
     CLOCK_DisableClock(kLpi2cPeriphClocks[instance]);
@@ -497,17 +469,17 @@ void LPI2C_MasterDeinit(LPI2C_Type *base)
  * brief Configures LPI2C master data match feature.
  *
  * param base The LPI2C peripheral base address.
- * param config Settings for the data match feature.
+ * param matchConfig Settings for the data match feature.
  */
-void LPI2C_MasterConfigureDataMatch(LPI2C_Type *base, const lpi2c_data_match_config_t *config)
+void LPI2C_MasterConfigureDataMatch(LPI2C_Type *base, const lpi2c_data_match_config_t *matchConfig)
 {
     /* Disable master mode. */
     bool wasEnabled = (0U != ((base->MCR & LPI2C_MCR_MEN_MASK) >> LPI2C_MCR_MEN_SHIFT));
     LPI2C_MasterEnable(base, false);
 
-    base->MCFGR1 = (base->MCFGR1 & ~LPI2C_MCFGR1_MATCFG_MASK) | LPI2C_MCFGR1_MATCFG(config->matchMode);
-    base->MCFGR0 = (base->MCFGR0 & ~LPI2C_MCFGR0_RDMO_MASK) | LPI2C_MCFGR0_RDMO(config->rxDataMatchOnly);
-    base->MDMR   = LPI2C_MDMR_MATCH0(config->match0) | LPI2C_MDMR_MATCH1(config->match1);
+    base->MCFGR1 = (base->MCFGR1 & ~LPI2C_MCFGR1_MATCFG_MASK) | LPI2C_MCFGR1_MATCFG(matchConfig->matchMode);
+    base->MCFGR0 = (base->MCFGR0 & ~LPI2C_MCFGR0_RDMO_MASK) | LPI2C_MCFGR0_RDMO(matchConfig->rxDataMatchOnly);
+    base->MDMR   = LPI2C_MDMR_MATCH0(matchConfig->match0) | LPI2C_MDMR_MATCH1(matchConfig->match1);
 
     /* Restore master mode. */
     if (wasEnabled)
@@ -532,81 +504,119 @@ void LPI2C_MasterConfigureDataMatch(LPI2C_Type *base, const lpi2c_data_match_con
  */
 void LPI2C_MasterSetBaudRate(LPI2C_Type *base, uint32_t sourceClock_Hz, uint32_t baudRate_Hz)
 {
-    uint32_t prescale  = 0U;
-    uint32_t bestPre   = 0U;
-    uint32_t bestClkHi = 0U;
+    bool wasEnabled;
+    uint8_t filtScl = (uint8_t)((base->MCFGR2 & LPI2C_MCFGR2_FILTSCL_MASK) >> LPI2C_MCFGR2_FILTSCL_SHIFT);
+
+    uint8_t divider     = 1U;
+    uint8_t bestDivider = 1U;
+    uint8_t prescale    = 0U;
+    uint8_t bestPre     = 0U;
+
+    uint8_t clkCycle;
+    uint8_t bestclkCycle = 0U;
+
     uint32_t absError  = 0U;
     uint32_t bestError = 0xffffffffu;
-    uint32_t value;
-    uint32_t clkHiCycle;
     uint32_t computedRate;
-    uint32_t i;
-    bool wasEnabled;
+
+    uint32_t tmpReg = 0U;
 
     /* Disable master mode. */
     wasEnabled = (0U != ((base->MCR & LPI2C_MCR_MEN_MASK) >> LPI2C_MCR_MEN_SHIFT));
     LPI2C_MasterEnable(base, false);
 
-    /* Baud rate = (sourceClock_Hz/2^prescale)/(CLKLO+1+CLKHI+1 + ROUNDDOWN((2+FILTSCL)/2^prescale) */
-    /* Assume CLKLO = 2*CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2. */
-    for (prescale = 1U; prescale <= 128U; prescale = 2U * prescale)
+    /* Baud rate = (sourceClock_Hz / 2 ^ prescale) / (CLKLO + 1 + CLKHI + 1 + SCL_LATENCY)
+     * SCL_LATENCY = ROUNDDOWN((2 + FILTSCL) / (2 ^ prescale))
+     */
+    for (prescale = 0U; prescale <= 7U; prescale++)
     {
-        if (bestError == 0U)
+        /* Calculate the clkCycle, clkCycle = CLKLO + CLKHI, divider = 2 ^ prescale */
+        clkCycle = (uint8_t)((10U * sourceClock_Hz / divider / baudRate_Hz + 5U) / 10U - (2U + filtScl) / divider - 2U);
+        /* According to register description, The max value for CLKLO and CLKHI is 63.
+           however to meet the I2C specification of tBUF, CLKHI should be less than
+           clkCycle - 0.52 x sourceClock_Hz / baudRate_Hz / divider + 1U. Refer to the comment of the tmpHigh's
+           calculation for details. So we have:
+           CLKHI < clkCycle - 0.52 x sourceClock_Hz / baudRate_Hz / divider + 1U,
+           clkCycle = CLKHI + CLKLO and
+           sourceClock_Hz / baudRate_Hz / divider = clkCycle + 2 + ROUNDDOWN((2 + FILTSCL) / divider),
+           we can come up with: CLKHI < 0.92 x CLKLO - ROUNDDOWN(2 + FILTSCL) / divider
+           so the max boundary of CLKHI should be 0.92 x 63 - ROUNDDOWN(2 + FILTSCL) / divider,
+           and the max boundary of clkCycle is 1.92 x 63 - ROUNDDOWN(2 + FILTSCL) / divider. */
+        if (clkCycle > (120U - (2U + filtScl) / divider))
         {
-            break;
+            divider *= 2U;
+            continue;
         }
-
-        for (clkHiCycle = 1U; clkHiCycle < 32U; clkHiCycle++)
+        /* Calculate the computed baudrate and compare it with the desired baudrate */
+        computedRate = (sourceClock_Hz / (uint32_t)divider) /
+                       ((uint32_t)clkCycle + 2U + (2U + (uint32_t)filtScl) / (uint32_t)divider);
+        absError = baudRate_Hz > computedRate ? baudRate_Hz - computedRate : computedRate - baudRate_Hz;
+        if (absError < bestError)
         {
-            if (clkHiCycle == 1U)
-            {
-                computedRate = (sourceClock_Hz / prescale) / (1U + 3U + 2U + 2U / prescale);
-            }
-            else
-            {
-                computedRate = (sourceClock_Hz / prescale) / (3U * clkHiCycle + 2U + 2U / prescale);
-            }
+            bestPre      = prescale;
+            bestDivider  = divider;
+            bestclkCycle = clkCycle;
+            bestError    = absError;
 
-            absError = baudRate_Hz > computedRate ? baudRate_Hz - computedRate : computedRate - baudRate_Hz;
-
-            if (absError < bestError)
+            /* If the error is 0, then we can stop searching because we won't find a better match. */
+            if (absError == 0U)
             {
-                bestPre   = prescale;
-                bestClkHi = clkHiCycle;
-                bestError = absError;
-
-                /* If the error is 0, then we can stop searching because we won't find a better match. */
-                if (absError == 0U)
-                {
-                    break;
-                }
+                break;
             }
         }
+        divider *= 2U;
     }
 
-    /* Standard, fast, fast mode plus and ultra-fast transfers. */
-    value = LPI2C_MCCR0_CLKHI(bestClkHi);
+    /* SCL low time tLO should be larger than or equal to SCL high time tHI:
+       tLO = ((CLKLO + 1) x (2 ^ PRESCALE)) >= tHI = ((CLKHI + 1 + SCL_LATENCY) x (2 ^ PRESCALE)),
+       which is CLKLO >= CLKHI + (2U + filtScl) / bestDivider.
+       Also since bestclkCycle = CLKLO + CLKHI, bestDivider = 2 ^ PRESCALE
+       which makes CLKHI <= (bestclkCycle - (2U + filtScl) / bestDivider) / 2U.
 
-    if (bestClkHi < 2U)
+       The max tBUF should be at least 0.52 times of the SCL clock cycle:
+       tBUF = ((CLKLO + 1) x (2 ^ PRESCALE) / sourceClock_Hz) > (0.52 / baudRate_Hz),
+       plus bestDivider = 2 ^ PRESCALE, bestclkCycle = CLKLO + CLKHI we can come up with
+       CLKHI <= (bestclkCycle - 0.52 x sourceClock_Hz / baudRate_Hz / bestDivider + 1U).
+       In this case to get a safe CLKHI calculation, we can assume:
+    */
+    uint8_t tmpHigh = (bestclkCycle - (2U + filtScl) / bestDivider) / 2U;
+    while (tmpHigh > (bestclkCycle - 52U * sourceClock_Hz / baudRate_Hz / bestDivider / 100U + 1U))
     {
-        value |= (uint32_t)(LPI2C_MCCR0_CLKLO(3UL) | LPI2C_MCCR0_SETHOLD(2UL) | LPI2C_MCCR0_DATAVD(1UL));
+        tmpHigh = tmpHigh - 1U;
     }
-    else
-    {
-        value |=
-            LPI2C_MCCR0_CLKLO(2UL * bestClkHi) | LPI2C_MCCR0_SETHOLD(bestClkHi) | LPI2C_MCCR0_DATAVD(bestClkHi / 2UL);
-    }
 
-    base->MCCR0 = value;
+    /* Calculate DATAVD and SETHOLD.
+       To meet the timing requirement of I2C spec for standard mode, fast mode and fast mode plus: */
+    /* The min tHD:STA/tSU:STA/tSU:STO should be at least 0.4 times of the SCL clock cycle, use 0.5 to be safe:
+       tHD:STA = ((SETHOLD + 1) x (2 ^ PRESCALE) / sourceClock_Hz) > (0.5 / baudRate_Hz), bestDivider = 2 ^ PRESCALE */
+    uint8_t tmpHold = (uint8_t)(sourceClock_Hz / baudRate_Hz / bestDivider / 2U) - 1U;
 
-    for (i = 0U; i < 8U; i++)
+    /* The max tVD:DAT/tVD:ACK/tHD:DAT should be at most 0.345 times of the SCL clock cycle, use 0.25 to be safe:
+       tVD:DAT = ((DATAVD + 1) x (2 ^ PRESCALE) / sourceClock_Hz) < (0.25 / baudRate_Hz), bestDivider = 2 ^ PRESCALE */
+    uint8_t tmpDataVd = (uint8_t)(sourceClock_Hz / baudRate_Hz / bestDivider / 4U) - 1U;
+
+    /* The min tSU:DAT should be at least 0.05 times of the SCL clock cycle:
+       tSU:DAT = ((2 + FILTSDA + 2 ^ PRESCALE) / sourceClock_Hz) >= (0.05 / baud),
+       plus bestDivider = 2 ^ PRESCALE, we can come up with:
+       FILTSDA >= (0.05 x sourceClock_Hz / baudRate_Hz - bestDivider - 2) */
+    if ((sourceClock_Hz / baudRate_Hz / 20U) > (bestDivider + 2U))
     {
-        if (bestPre == (1UL << i))
+        /* Read out the FILTSDA configuration, if it is smaller than expected, change the setting. */
+        uint8_t filtSda = (uint8_t)((base->MCFGR2 & LPI2C_MCFGR2_FILTSDA_MASK) >> LPI2C_MCFGR2_FILTSDA_SHIFT);
+        if (filtSda < (sourceClock_Hz / baudRate_Hz / 20U - bestDivider - 2U))
         {
-            bestPre = i;
-            break;
+            filtSda = (uint8_t)(sourceClock_Hz / baudRate_Hz / 20U) - bestDivider - 2U;
         }
+        base->MCFGR2 = (base->MCFGR2 & ~LPI2C_MCFGR2_FILTSDA_MASK) | LPI2C_MCFGR2_FILTSDA(filtSda);
     }
+
+    /* Set CLKHI, CLKLO, SETHOLD, DATAVD value. */
+    tmpReg = LPI2C_MCCR0_CLKHI((uint32_t)tmpHigh) |
+             LPI2C_MCCR0_CLKLO((uint32_t)((uint32_t)bestclkCycle - (uint32_t)tmpHigh)) |
+             LPI2C_MCCR0_SETHOLD((uint32_t)tmpHold) | LPI2C_MCCR0_DATAVD((uint32_t)tmpDataVd);
+    base->MCCR0 = tmpReg;
+
+    /* Set PRESCALE value. */
     base->MCFGR1 = (base->MCFGR1 & ~LPI2C_MCFGR1_PRESCALE_MASK) | LPI2C_MCFGR1_PRESCALE(bestPre);
 
     /* Restore master mode. */
@@ -635,28 +645,24 @@ status_t LPI2C_MasterStart(LPI2C_Type *base, uint8_t address, lpi2c_direction_t 
 {
     /* Return an error if the bus is already in use not by us. */
     status_t result = LPI2C_CheckForBusyBus(base);
-    if (kStatus_Success != result)
+    if (kStatus_Success == result)
     {
-        return result;
+        /* Clear all flags. */
+        LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterClearFlags);
+
+        /* Turn off auto-stop option. */
+        base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;
+
+        /* Wait until there is room in the fifo. */
+        result = LPI2C_MasterWaitForTxReady(base);
+        if (kStatus_Success == result)
+        {
+            /* Issue start command. */
+            base->MTDR = (uint32_t)kStartCmd | (((uint32_t)address << 1U) | (uint32_t)dir);
+        }
     }
 
-    /* Clear all flags. */
-    LPI2C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
-
-    /* Turn off auto-stop option. */
-    base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;
-
-    /* Wait until there is room in the fifo. */
-    result = LPI2C_MasterWaitForTxReady(base);
-    if (kStatus_Success != result)
-    {
-        return result;
-    }
-
-    /* Issue start command. */
-    base->MTDR = (uint32_t)kStartCmd | (((uint32_t)address << 1U) | (uint32_t)dir);
-
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -676,46 +682,46 @@ status_t LPI2C_MasterStop(LPI2C_Type *base)
 {
     /* Wait until there is room in the fifo. */
     status_t result = LPI2C_MasterWaitForTxReady(base);
-    if (kStatus_Success != result)
+    if (kStatus_Success == result)
     {
-        return result;
-    }
+        /* Send the STOP signal */
+        base->MTDR = (uint32_t)kStopCmd;
 
-    /* Send the STOP signal */
-    base->MTDR = (uint32_t)kStopCmd;
-
-/* Wait for the stop detected flag to set, indicating the transfer has completed on the bus. */
-/* Also check for errors while waiting. */
-#if I2C_RETRY_TIMES
-    uint32_t waitTimes = I2C_RETRY_TIMES;
+        /* Wait for the stop detected flag to set, indicating the transfer has completed on the bus. */
+        /* Also check for errors while waiting. */
+#if I2C_RETRY_TIMES != 0U
+        uint32_t waitTimes = I2C_RETRY_TIMES;
 #endif
 
-#if I2C_RETRY_TIMES
-    while ((result == kStatus_Success) && (0U != --waitTimes))
-#else
-    while (result == kStatus_Success)
-#endif
-    {
-        uint32_t status = LPI2C_MasterGetStatusFlags(base);
-
-        /* Check for error flags. */
-        result = LPI2C_MasterCheckAndClearError(base, status);
-
-        /* Check if the stop was sent successfully. */
-        if ((0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag)) &&
-            (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag)))
+#if I2C_RETRY_TIMES != 0U
+        while ((result == kStatus_Success) && (0U != waitTimes))
         {
-            LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterStopDetectFlag);
-            break;
-        }
-    }
-
-#if I2C_RETRY_TIMES
-    if (0U == waitTimes)
-    {
-        return kStatus_LPI2C_Timeout;
-    }
+            waitTimes--;
+#else
+        while (result == kStatus_Success)
+        {
 #endif
+            uint32_t status = LPI2C_MasterGetStatusFlags(base);
+
+            /* Check for error flags. */
+            result = LPI2C_MasterCheckAndClearError(base, status);
+
+            /* Check if the stop was sent successfully. */
+            if ((0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag)) &&
+                (0U != (status & (uint32_t)kLPI2C_MasterTxReadyFlag)))
+            {
+                LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterStopDetectFlag);
+                break;
+            }
+        }
+
+#if I2C_RETRY_TIMES != 0U
+        if (0U == waitTimes)
+        {
+            result = kStatus_LPI2C_Timeout;
+        }
+#endif
+    }
 
     return result;
 }
@@ -735,65 +741,66 @@ status_t LPI2C_MasterStop(LPI2C_Type *base)
  */
 status_t LPI2C_MasterReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize)
 {
-    status_t result;
+    status_t result = kStatus_Success;
     uint8_t *buf;
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
     uint32_t waitTimes;
 #endif
 
     assert(NULL != rxBuff);
 
     /* Handle empty read. */
-    if (rxSize == 0U)
+    if (rxSize != 0U)
     {
-        return kStatus_Success;
-    }
-
-    /* Wait until there is room in the command fifo. */
-    result = LPI2C_MasterWaitForTxReady(base);
-    if (kStatus_Success != result)
-    {
-        return result;
-    }
-
-    /* Issue command to receive data. */
-    base->MTDR = ((uint32_t)kRxDataCmd) | LPI2C_MTDR_DATA(rxSize - 1U);
-
-    /* Receive data */
-    buf = (uint8_t *)rxBuff;
-    while (0U != (rxSize--))
-    {
-#if I2C_RETRY_TIMES
-        waitTimes = I2C_RETRY_TIMES;
-#endif
-        /* Read LPI2C receive fifo register. The register includes a flag to indicate whether */
-        /* the FIFO is empty, so we can both get the data and check if we need to keep reading */
-        /* using a single register read. */
-        uint32_t value;
-        do
+        /* Wait until there is room in the command fifo. */
+        result = LPI2C_MasterWaitForTxReady(base);
+        if (kStatus_Success == result)
         {
-            /* Check for errors. */
-            result = LPI2C_MasterCheckAndClearError(base, LPI2C_MasterGetStatusFlags(base));
-            if (kStatus_Success != result)
+            /* Issue command to receive data. */
+            base->MTDR = ((uint32_t)kRxDataCmd) | LPI2C_MTDR_DATA(rxSize - 1U);
+
+            /* Receive data */
+            buf = (uint8_t *)rxBuff;
+            while (0U != (rxSize--))
             {
-                return result;
-            }
-
-            value = base->MRDR;
-#if I2C_RETRY_TIMES
-        } while ((0U != (value & LPI2C_MRDR_RXEMPTY_MASK)) && (0U != --waitTimes));
-        if (0U == waitTimes)
-        {
-            return kStatus_LPI2C_Timeout;
-        }
-#else
-        } while (0U != (value & LPI2C_MRDR_RXEMPTY_MASK));
+#if I2C_RETRY_TIMES != 0U
+                waitTimes = I2C_RETRY_TIMES;
 #endif
+                /* Read LPI2C receive fifo register. The register includes a flag to indicate whether */
+                /* the FIFO is empty, so we can both get the data and check if we need to keep reading */
+                /* using a single register read. */
+                uint32_t value;
+                do
+                {
+                    /* Check for errors. */
+                    result = LPI2C_MasterCheckAndClearError(base, LPI2C_MasterGetStatusFlags(base));
+                    if (kStatus_Success != result)
+                    {
+                        break;
+                    }
 
-        *buf++ = (uint8_t)(value & LPI2C_MRDR_DATA_MASK);
+                    value = base->MRDR;
+#if I2C_RETRY_TIMES != 0U
+                    waitTimes--;
+                } while ((0U != (value & LPI2C_MRDR_RXEMPTY_MASK)) && (0U != waitTimes));
+                if (0U == waitTimes)
+                {
+                    result = kStatus_LPI2C_Timeout;
+                }
+#else
+                } while (0U != (value & LPI2C_MRDR_RXEMPTY_MASK));
+#endif
+                if ((status_t)kStatus_Success != result)
+                {
+                    break;
+                }
+
+                *buf++ = (uint8_t)(value & LPI2C_MRDR_DATA_MASK);
+            }
+        }
     }
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -815,7 +822,8 @@ status_t LPI2C_MasterReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize)
  */
 status_t LPI2C_MasterSend(LPI2C_Type *base, void *txBuff, size_t txSize)
 {
-    uint8_t *buf = (uint8_t *)txBuff;
+    status_t result = kStatus_Success;
+    uint8_t *buf    = (uint8_t *)txBuff;
 
     assert(NULL != txBuff);
 
@@ -823,17 +831,17 @@ status_t LPI2C_MasterSend(LPI2C_Type *base, void *txBuff, size_t txSize)
     while (0U != (txSize--))
     {
         /* Wait until there is room in the fifo. This also checks for errors. */
-        status_t result = LPI2C_MasterWaitForTxReady(base);
+        result = LPI2C_MasterWaitForTxReady(base);
         if (kStatus_Success != result)
         {
-            return result;
+            break;
         }
 
         /* Write byte into LPI2C master data register. */
         base->MTDR = *buf++;
     }
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -862,84 +870,84 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
 
     /* Return an error if the bus is already in use not by us. */
     result = LPI2C_CheckForBusyBus(base);
-    if (kStatus_Success != result)
+    if (kStatus_Success == result)
     {
-        return result;
-    }
+        /* Clear all flags. */
+        LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterClearFlags);
 
-    /* Clear all flags. */
-    LPI2C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
+        /* Turn off auto-stop option. */
+        base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;
 
-    /* Turn off auto-stop option. */
-    base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;
-
-    lpi2c_direction_t direction = (0U != transfer->subaddressSize) ? kLPI2C_Write : transfer->direction;
-    if (0U == (transfer->flags & (uint32_t)kLPI2C_TransferNoStartFlag))
-    {
-        commandBuffer[cmdCount++] =
-            (uint16_t)kStartCmd | (uint16_t)((uint16_t)((uint16_t)transfer->slaveAddress << 1U) | (uint16_t)direction);
-    }
-
-    /* Subaddress, MSB first. */
-    if (0U != transfer->subaddressSize)
-    {
-        uint32_t subaddressRemaining = transfer->subaddressSize;
-        while (0U != subaddressRemaining--)
-        {
-            uint8_t subaddressByte    = (uint8_t)((transfer->subaddress >> (8U * subaddressRemaining)) & 0xffU);
-            commandBuffer[cmdCount++] = subaddressByte;
-        }
-    }
-
-    /* Reads need special handling. */
-    if ((0U != transfer->dataSize) && (transfer->direction == kLPI2C_Read))
-    {
-        /* Need to send repeated start if switching directions to read. */
-        if (direction == kLPI2C_Write)
+        lpi2c_direction_t direction = (0U != transfer->subaddressSize) ? kLPI2C_Write : transfer->direction;
+        if (0U == (transfer->flags & (uint32_t)kLPI2C_TransferNoStartFlag))
         {
             commandBuffer[cmdCount++] =
                 (uint16_t)kStartCmd |
-                (uint16_t)((uint16_t)((uint16_t)transfer->slaveAddress << 1U) | (uint16_t)kLPI2C_Read);
+                (uint16_t)((uint16_t)((uint16_t)transfer->slaveAddress << 1U) | (uint16_t)direction);
         }
-    }
 
-    /* Send command buffer */
-    uint32_t index = 0U;
-    while (0U != cmdCount--)
-    {
-        /* Wait until there is room in the fifo. This also checks for errors. */
-        result = LPI2C_MasterWaitForTxReady(base);
-        if (kStatus_Success != result)
+        /* Subaddress, MSB first. */
+        if (0U != transfer->subaddressSize)
         {
-            return result;
+            uint32_t subaddressRemaining = transfer->subaddressSize;
+            while (0U != subaddressRemaining--)
+            {
+                uint8_t subaddressByte    = (uint8_t)((transfer->subaddress >> (8U * subaddressRemaining)) & 0xffU);
+                commandBuffer[cmdCount++] = subaddressByte;
+            }
         }
 
-        /* Write byte into LPI2C master data register. */
-        base->MTDR = commandBuffer[index];
-        index++;
-    }
+        /* Reads need special handling. */
+        if ((0U != transfer->dataSize) && (transfer->direction == kLPI2C_Read))
+        {
+            /* Need to send repeated start if switching directions to read. */
+            if (direction == kLPI2C_Write)
+            {
+                commandBuffer[cmdCount++] =
+                    (uint16_t)kStartCmd |
+                    (uint16_t)((uint16_t)((uint16_t)transfer->slaveAddress << 1U) | (uint16_t)kLPI2C_Read);
+            }
+        }
 
-    /* Transmit data. */
-    if ((transfer->direction == kLPI2C_Write) && (transfer->dataSize > 0U))
-    {
-        /* Send Data. */
-        result = LPI2C_MasterSend(base, transfer->data, transfer->dataSize);
-    }
+        /* Send command buffer */
+        uint32_t index = 0U;
+        while (0U != cmdCount--)
+        {
+            /* Wait until there is room in the fifo. This also checks for errors. */
+            result = LPI2C_MasterWaitForTxReady(base);
+            if (kStatus_Success != result)
+            {
+                break;
+            }
 
-    /* Receive Data. */
-    if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize > 0U))
-    {
-        result = LPI2C_MasterReceive(base, transfer->data, transfer->dataSize);
-    }
+            /* Write byte into LPI2C master data register. */
+            base->MTDR = commandBuffer[index];
+            index++;
+        }
 
-    if (kStatus_Success != result)
-    {
-        return result;
-    }
+        if (kStatus_Success == result)
+        {
+            /* Transmit data. */
+            if ((transfer->direction == kLPI2C_Write) && (transfer->dataSize > 0U))
+            {
+                /* Send Data. */
+                result = LPI2C_MasterSend(base, transfer->data, transfer->dataSize);
+            }
 
-    if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
-    {
-        result = LPI2C_MasterStop(base);
+            /* Receive Data. */
+            if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize > 0U))
+            {
+                result = LPI2C_MasterReceive(base, transfer->data, transfer->dataSize);
+            }
+
+            if (kStatus_Success == result)
+            {
+                if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
+                {
+                    result = LPI2C_MasterStop(base);
+                }
+            }
+        }
     }
 
     return result;
@@ -988,7 +996,7 @@ void LPI2C_MasterTransferCreateHandle(LPI2C_Type *base,
     s_lpi2cMasterIsr = LPI2C_MasterTransferHandleIRQ;
 
     /* Clear internal IRQ enables and enable NVIC IRQ. */
-    LPI2C_MasterDisableInterrupts(base, (uint32_t)kMasterIrqFlags);
+    LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
 
     /* Enable NVIC IRQ, this only enables the IRQ directly connected to the NVIC.
      In some cases the LPI2C IRQ is configured through INTMUX, user needs to enable
@@ -1022,155 +1030,158 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
 
     /* Check for errors. */
     status = LPI2C_MasterGetStatusFlags(base);
-    result = LPI2C_MasterCheckAndClearError(base, status);
-    if (kStatus_Success != result)
+    /* For the last byte, nack flag is expected.
+       Do not check and clear kLPI2C_MasterNackDetectFlag for the last byte,
+       in case FIFO is emptied when stop command has not been sent. */
+    if (handle->remainingBytes == 0U)
     {
-        return result;
+        status &= ~(uint32_t)kLPI2C_MasterNackDetectFlag;
     }
-
-    /* Get pointer to private data. */
-    xfer = &handle->transfer;
-
-    /* Get fifo counts and compute room in tx fifo. */
-    LPI2C_MasterGetFifoCounts(base, &rxCount, &txCount);
-    txCount = txFifoSize - txCount;
-
-    while (!state_complete)
+    result = LPI2C_MasterCheckAndClearError(base, status);
+    if (kStatus_Success == result)
     {
-        /* Execute the state. */
-        switch (handle->state)
+        /* Get pointer to private data. */
+        xfer = &handle->transfer;
+
+        /* Get fifo counts and compute room in tx fifo. */
+        LPI2C_MasterGetFifoCounts(base, &rxCount, &txCount);
+        txCount = txFifoSize - txCount;
+
+        while (!state_complete)
         {
-            case (uint8_t)kSendCommandState:
+            /* Execute the state. */
+            switch (handle->state)
             {
-                /* Make sure there is room in the tx fifo for the next command. */
-                if (0U == txCount--)
-                {
-                    state_complete = true;
-                    break;
-                }
-
-                /* Issue command. buf is a uint8_t* pointing at the uint16 command array. */
-                sendval    = ((uint16_t)(*handle->buf)) | ((uint16_t)(*(handle->buf + 1U)) << 8U);
-                base->MTDR = sendval;
-                handle->buf++;
-                handle->buf++;
-
-                /* Count down until all commands are sent. */
-                if (--handle->remainingBytes == 0U)
-                {
-                    /* Choose next state and set up buffer pointer and count. */
-                    if (0U != xfer->dataSize)
+                case (uint8_t)kSendCommandState:
+                    /* Make sure there is room in the tx fifo for the next command. */
+                    if (0U == txCount--)
                     {
-                        /* Either a send or receive transfer is next. */
-                        handle->state          = (uint8_t)kTransferDataState;
-                        handle->buf            = (uint8_t *)xfer->data;
-                        handle->remainingBytes = (uint16_t)xfer->dataSize;
-                        if (xfer->direction == kLPI2C_Read)
+                        state_complete = true;
+                        break;
+                    }
+
+                    /* Issue command. buf is a uint8_t* pointing at the uint16 command array. */
+                    sendval    = ((uint16_t)handle->buf[0]) | (((uint16_t)handle->buf[1]) << 8U);
+                    base->MTDR = sendval;
+                    handle->buf++;
+                    handle->buf++;
+
+                    /* Count down until all commands are sent. */
+                    if (--handle->remainingBytes == 0U)
+                    {
+                        /* Choose next state and set up buffer pointer and count. */
+                        if (0U != xfer->dataSize)
                         {
-                            /* Disable TX interrupt */
-                            LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterTxReadyFlag);
+                            /* Either a send or receive transfer is next. */
+                            handle->state          = (uint8_t)kTransferDataState;
+                            handle->buf            = (uint8_t *)xfer->data;
+                            handle->remainingBytes = (uint16_t)xfer->dataSize;
+                            if (xfer->direction == kLPI2C_Read)
+                            {
+                                /* Disable TX interrupt */
+                                LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterTxReadyFlag);
+                            }
                         }
+                        else
+                        {
+                            /* No transfer, so move to stop state. */
+                            handle->state = (uint8_t)kStopState;
+                        }
+                    }
+                    break;
+
+                case (uint8_t)kIssueReadCommandState:
+                    /* Make sure there is room in the tx fifo for the read command. */
+                    if (0U == txCount--)
+                    {
+                        state_complete = true;
+                        break;
+                    }
+
+                    base->MTDR = (uint32_t)kRxDataCmd | LPI2C_MTDR_DATA(xfer->dataSize - 1U);
+
+                    /* Move to transfer state. */
+                    handle->state = (uint8_t)kTransferDataState;
+                    if (xfer->direction == kLPI2C_Read)
+                    {
+                        /* Disable TX interrupt */
+                        LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterTxReadyFlag);
+                    }
+                    break;
+
+                case (uint8_t)kTransferDataState:
+                    if (xfer->direction == kLPI2C_Write)
+                    {
+                        /* Make sure there is room in the tx fifo. */
+                        if (0U == txCount--)
+                        {
+                            state_complete = true;
+                            break;
+                        }
+
+                        /* Put byte to send in fifo. */
+                        base->MTDR = *(handle->buf)++;
                     }
                     else
                     {
-                        /* No transfer, so move to stop state. */
+                        /* XXX handle receive sizes > 256, use kIssueReadCommandState */
+                        /* Make sure there is data in the rx fifo. */
+                        if (0U == rxCount--)
+                        {
+                            state_complete = true;
+                            break;
+                        }
+
+                        /* Read byte from fifo. */
+                        *(handle->buf)++ = (uint8_t)(base->MRDR & LPI2C_MRDR_DATA_MASK);
+                    }
+
+                    /* Move to stop when the transfer is done. */
+                    if (--handle->remainingBytes == 0U)
+                    {
+                        if (xfer->direction == kLPI2C_Write)
+                        {
+                            state_complete = true;
+                        }
                         handle->state = (uint8_t)kStopState;
                     }
-                }
-                break;
+                    break;
+
+                case (uint8_t)kStopState:
+                    /* Only issue a stop transition if the caller requested it. */
+                    if ((xfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
+                    {
+                        /* Make sure there is room in the tx fifo for the stop command. */
+                        if (0U == txCount--)
+                        {
+                            state_complete = true;
+                            break;
+                        }
+
+                        base->MTDR = (uint32_t)kStopCmd;
+                    }
+                    else
+                    {
+                        /* Caller doesn't want to send a stop, so we're done now. */
+                        *isDone        = true;
+                        state_complete = true;
+                        break;
+                    }
+                    handle->state = (uint8_t)kWaitForCompletionState;
+                    break;
+
+                case (uint8_t)kWaitForCompletionState:
+                    /* We stay in this state until the stop state is detected. */
+                    if (0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag))
+                    {
+                        *isDone = true;
+                    }
+                    state_complete = true;
+                    break;
+                default:
+                    assert(false);
+                    break;
             }
-
-            case (uint8_t)kIssueReadCommandState:
-                /* Make sure there is room in the tx fifo for the read command. */
-                if (0U == txCount--)
-                {
-                    state_complete = true;
-                    break;
-                }
-
-                base->MTDR = (uint32_t)kRxDataCmd | LPI2C_MTDR_DATA(xfer->dataSize - 1U);
-
-                /* Move to transfer state. */
-                handle->state = (uint8_t)kTransferDataState;
-                if (xfer->direction == kLPI2C_Read)
-                {
-                    /* Disable TX interrupt */
-                    LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterTxReadyFlag);
-                }
-                break;
-
-            case (uint8_t)kTransferDataState:
-                if (xfer->direction == kLPI2C_Write)
-                {
-                    /* Make sure there is room in the tx fifo. */
-                    if (0U == txCount--)
-                    {
-                        state_complete = true;
-                        break;
-                    }
-
-                    /* Put byte to send in fifo. */
-                    base->MTDR = *(handle->buf)++;
-                }
-                else
-                {
-                    /* XXX handle receive sizes > 256, use kIssueReadCommandState */
-                    /* Make sure there is data in the rx fifo. */
-                    if (0U == rxCount--)
-                    {
-                        state_complete = true;
-                        break;
-                    }
-
-                    /* Read byte from fifo. */
-                    *(handle->buf)++ = (uint8_t)(base->MRDR & LPI2C_MRDR_DATA_MASK);
-                }
-
-                /* Move to stop when the transfer is done. */
-                if (--handle->remainingBytes == 0U)
-                {
-                    if (xfer->direction == kLPI2C_Write)
-                    {
-                        state_complete = true;
-                    }
-                    handle->state = (uint8_t)kStopState;
-                }
-                break;
-
-            case (uint8_t)kStopState:
-                /* Only issue a stop transition if the caller requested it. */
-                if ((xfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
-                {
-                    /* Make sure there is room in the tx fifo for the stop command. */
-                    if (0U == txCount--)
-                    {
-                        state_complete = true;
-                        break;
-                    }
-
-                    base->MTDR = (uint32_t)kStopCmd;
-                }
-                else
-                {
-                    /* Caller doesn't want to send a stop, so we're done now. */
-                    *isDone        = true;
-                    state_complete = true;
-                    break;
-                }
-                handle->state = (uint8_t)kWaitForCompletionState;
-                break;
-
-            case (uint8_t)kWaitForCompletionState:
-                /* We stay in this state until the stop state is detected. */
-                if (0U != (status & (uint32_t)kLPI2C_MasterStopDetectFlag))
-                {
-                    *isDone = true;
-                }
-                state_complete = true;
-                break;
-            default:
-                assert(false);
-                break;
         }
     }
     return result;
@@ -1269,33 +1280,36 @@ status_t LPI2C_MasterTransferNonBlocking(LPI2C_Type *base,
     /* Return busy if another transaction is in progress. */
     if (handle->state != (uint8_t)kIdleState)
     {
-        return kStatus_LPI2C_Busy;
+        result = kStatus_LPI2C_Busy;
     }
-
-    /* Return an error if the bus is already in use not by us. */
-    result = LPI2C_CheckForBusyBus(base);
-    if (kStatus_Success != result)
+    else
     {
-        return result;
+        result = LPI2C_CheckForBusyBus(base);
     }
 
-    /* Disable LPI2C IRQ sources while we configure stuff. */
-    LPI2C_MasterDisableInterrupts(base, (uint32_t)kMasterIrqFlags);
+    if ((status_t)kStatus_Success == result)
+    {
+        /* Disable LPI2C IRQ sources while we configure stuff. */
+        LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
 
-    /* Save transfer into handle. */
-    handle->transfer = *transfer;
+        /* Reset FIFO in case there are data. */
+        base->MCR |= LPI2C_MCR_RRF_MASK | LPI2C_MCR_RTF_MASK;
 
-    /* Generate commands to send. */
-    LPI2C_InitTransferStateMachine(handle);
+        /* Save transfer into handle. */
+        handle->transfer = *transfer;
 
-    /* Clear all flags. */
-    LPI2C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
+        /* Generate commands to send. */
+        LPI2C_InitTransferStateMachine(handle);
 
-    /* Turn off auto-stop option. */
-    base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;
+        /* Clear all flags. */
+        LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterClearFlags);
 
-    /* Enable LPI2C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
-    LPI2C_MasterEnableInterrupts(base, (uint32_t)kMasterIrqFlags);
+        /* Turn off auto-stop option. */
+        base->MCFGR1 &= ~LPI2C_MCFGR1_AUTOSTOP_MASK;
+
+        /* Enable LPI2C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
+        LPI2C_MasterEnableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
+    }
 
     return result;
 }
@@ -1310,55 +1324,59 @@ status_t LPI2C_MasterTransferNonBlocking(LPI2C_Type *base,
  */
 status_t LPI2C_MasterTransferGetCount(LPI2C_Type *base, lpi2c_master_handle_t *handle, size_t *count)
 {
+    status_t result = kStatus_Success;
+
     assert(NULL != handle);
 
     if (NULL == count)
     {
-        return kStatus_InvalidArgument;
+        result = kStatus_InvalidArgument;
     }
 
     /* Catch when there is not an active transfer. */
-    if (handle->state == (uint8_t)kIdleState)
+    else if (handle->state == (uint8_t)kIdleState)
     {
         *count = 0;
-        return kStatus_NoTransferInProgress;
+        result = kStatus_NoTransferInProgress;
     }
-
-    uint8_t state;
-    uint16_t remainingBytes;
-    uint32_t dataSize;
-
-    /* Cache some fields with IRQs disabled. This ensures all field values */
-    /* are synchronized with each other during an ongoing transfer. */
-    uint32_t irqs = LPI2C_MasterGetEnabledInterrupts(base);
-    LPI2C_MasterDisableInterrupts(base, irqs);
-    state          = handle->state;
-    remainingBytes = handle->remainingBytes;
-    dataSize       = handle->transfer.dataSize;
-    LPI2C_MasterEnableInterrupts(base, irqs);
-
-    /* Get transfer count based on current transfer state. */
-    switch (state)
+    else
     {
-        case (uint8_t)kIdleState:
-        case (uint8_t)kSendCommandState:
-        case (
-            uint8_t)kIssueReadCommandState: /* XXX return correct value for this state when >256 reads are supported */
-            *count = 0;
-            break;
+        uint8_t state;
+        uint16_t remainingBytes;
+        uint32_t dataSize;
 
-        case (uint8_t)kTransferDataState:
-            *count = dataSize - remainingBytes;
-            break;
+        /* Cache some fields with IRQs disabled. This ensures all field values */
+        /* are synchronized with each other during an ongoing transfer. */
+        uint32_t irqs = LPI2C_MasterGetEnabledInterrupts(base);
+        LPI2C_MasterDisableInterrupts(base, irqs);
+        state          = handle->state;
+        remainingBytes = handle->remainingBytes;
+        dataSize       = handle->transfer.dataSize;
+        LPI2C_MasterEnableInterrupts(base, irqs);
 
-        case (uint8_t)kStopState:
-        case (uint8_t)kWaitForCompletionState:
-        default:
-            *count = dataSize;
-            break;
+        /* Get transfer count based on current transfer state. */
+        switch (state)
+        {
+            case (uint8_t)kIdleState:
+            case (uint8_t)kSendCommandState:
+            case (uint8_t)
+                kIssueReadCommandState: /* XXX return correct value for this state when >256 reads are supported */
+                *count = 0;
+                break;
+
+            case (uint8_t)kTransferDataState:
+                *count = dataSize - remainingBytes;
+                break;
+
+            case (uint8_t)kStopState:
+            case (uint8_t)kWaitForCompletionState:
+            default:
+                *count = dataSize;
+                break;
+        }
     }
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -1377,7 +1395,7 @@ void LPI2C_MasterTransferAbort(LPI2C_Type *base, lpi2c_master_handle_t *handle)
     if (handle->state != (uint8_t)kIdleState)
     {
         /* Disable internal IRQ enables. */
-        LPI2C_MasterDisableInterrupts(base, (uint32_t)kMasterIrqFlags);
+        LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
 
         /* Reset fifos. */
         base->MCR |= LPI2C_MCR_RRF_MASK | LPI2C_MCR_RTF_MASK;
@@ -1401,36 +1419,46 @@ void LPI2C_MasterTransferHandleIRQ(LPI2C_Type *base, lpi2c_master_handle_t *hand
 {
     bool isDone = false;
     status_t result;
+    size_t txCount;
 
     /* Don't do anything if we don't have a valid handle. */
-    if (NULL == handle)
+    if (NULL != handle)
     {
-        return;
-    }
-
-    if (handle->state == (uint8_t)kIdleState)
-    {
-        return;
-    }
-
-    result = LPI2C_RunTransferStateMachine(base, handle, &isDone);
-
-    if ((result != kStatus_Success) || isDone)
-    {
-        /* XXX need to handle data that may be in rx fifo below watermark level? */
-
-        /* XXX handle error, terminate xfer */
-
-        /* Disable internal IRQ enables. */
-        LPI2C_MasterDisableInterrupts(base, (uint32_t)kMasterIrqFlags);
-
-        /* Set handle to idle state. */
-        handle->state = (uint8_t)kIdleState;
-
-        /* Invoke callback. */
-        if (NULL != handle->completionCallback)
+        if (handle->state != (uint8_t)kIdleState)
         {
-            handle->completionCallback(base, handle, result, handle->userData);
+            result = LPI2C_RunTransferStateMachine(base, handle, &isDone);
+
+            if ((result != kStatus_Success) || isDone)
+            {
+                /* Handle error, terminate xfer */
+                if (result != kStatus_Success)
+                {
+                    LPI2C_MasterTransferAbort(base, handle);
+                }
+                /* Check whether there is data in tx FIFO not sent out, is there is then the last transfer was NACKed by
+                 * slave
+                 */
+                LPI2C_MasterGetFifoCounts(base, NULL, &txCount);
+                if (txCount != 0U)
+                {
+                    result = kStatus_LPI2C_Nak;
+                    /* Reset fifos. */
+                    base->MCR |= LPI2C_MCR_RRF_MASK | LPI2C_MCR_RTF_MASK;
+                    /* Send a stop command to finalize the transfer. */
+                    base->MTDR = (uint32_t)kStopCmd;
+                }
+                /* Disable internal IRQ enables. */
+                LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
+
+                /* Set handle to idle state. */
+                handle->state = (uint8_t)kIdleState;
+
+                /* Invoke callback. */
+                if (NULL != handle->completionCallback)
+                {
+                    handle->completionCallback(base, handle, result, handle->userData);
+                }
+            }
         }
     }
 }
@@ -1511,7 +1539,7 @@ void LPI2C_SlaveInit(LPI2C_Type *base, const lpi2c_slave_config_t *slaveConfig, 
     uint32_t instance = LPI2C_GetInstance(base);
 
     /* Ungate the clock. */
-    CLOCK_EnableClock(kLpi2cClocks[instance]);
+    (void)CLOCK_EnableClock(kLpi2cClocks[instance]);
 #if defined(LPI2C_PERIPH_CLOCKS)
     /* Ungate the functional clock in initialize function. */
     CLOCK_EnableClock(kLpi2cPeriphClocks[instance]);
@@ -1567,7 +1595,7 @@ void LPI2C_SlaveDeinit(LPI2C_Type *base)
     uint32_t instance = LPI2C_GetInstance(base);
 
     /* Gate the clock. */
-    CLOCK_DisableClock(kLpi2cClocks[instance]);
+    (void)CLOCK_DisableClock(kLpi2cClocks[instance]);
 
 #if defined(LPI2C_PERIPH_CLOCKS)
     /* Gate the functional clock. */
@@ -1589,7 +1617,7 @@ static status_t LPI2C_SlaveCheckAndClearError(LPI2C_Type *base, uint32_t flags)
 {
     status_t result = kStatus_Success;
 
-    flags &= (uint32_t)kSlaveErrorFlags;
+    flags &= (uint32_t)kLPI2C_SlaveErrorFlags;
     if (0U != flags)
     {
         if (0U != (flags & (uint32_t)kLPI2C_SlaveBitErrFlag))
@@ -1627,12 +1655,13 @@ static status_t LPI2C_SlaveCheckAndClearError(LPI2C_Type *base, uint32_t flags)
  */
 status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *actualTxSize)
 {
+    status_t result  = kStatus_Success;
     uint8_t *buf     = (uint8_t *)txBuff;
     size_t remaining = txSize;
 
     assert(NULL != txBuff);
 
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
     uint32_t waitTimes = I2C_RETRY_TIMES;
 #endif
 
@@ -1643,7 +1672,6 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
     while (0U != remaining)
     {
         uint32_t flags;
-        status_t result;
 
         /* Wait until we can transmit. */
         do
@@ -1657,20 +1685,26 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
                 {
                     *actualTxSize = txSize - remaining;
                 }
-                return result;
+                break;
             }
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
+            waitTimes--;
         } while ((0U == (flags & ((uint32_t)kLPI2C_SlaveTxReadyFlag | (uint32_t)kLPI2C_SlaveStopDetectFlag |
                                   (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag))) &&
-                 (0U != --waitTimes));
+                 (0U != waitTimes));
         if (0U == waitTimes)
         {
-            return kStatus_LPI2C_Timeout;
+            result = kStatus_LPI2C_Timeout;
         }
 #else
         } while (0U == (flags & ((uint32_t)kLPI2C_SlaveTxReadyFlag | (uint32_t)kLPI2C_SlaveStopDetectFlag |
                                  (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag)));
 #endif
+
+        if (kStatus_Success != result)
+        {
+            break;
+        }
 
         /* Send a byte. */
         if (0U != (flags & (uint32_t)kLPI2C_SlaveTxReadyFlag))
@@ -1694,7 +1728,7 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
         *actualTxSize = txSize - remaining;
     }
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -1708,12 +1742,13 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
  */
 status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_t *actualRxSize)
 {
+    status_t result  = kStatus_Success;
     uint8_t *buf     = (uint8_t *)rxBuff;
     size_t remaining = rxSize;
 
     assert(NULL != rxBuff);
 
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
     uint32_t waitTimes = I2C_RETRY_TIMES;
 #endif
 
@@ -1724,7 +1759,6 @@ status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_
     while (0U != remaining)
     {
         uint32_t flags;
-        status_t result;
 
         /* Wait until we can receive. */
         do
@@ -1738,20 +1772,26 @@ status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_
                 {
                     *actualRxSize = rxSize - remaining;
                 }
-                return result;
+                break;
             }
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
+            waitTimes--;
         } while ((0U == (flags & ((uint32_t)kLPI2C_SlaveRxReadyFlag | (uint32_t)kLPI2C_SlaveStopDetectFlag |
                                   (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag))) &&
-                 (0U != --waitTimes));
+                 (0U != waitTimes));
         if (0U == waitTimes)
         {
-            return kStatus_LPI2C_Timeout;
+            result = kStatus_LPI2C_Timeout;
         }
 #else
         } while (0U == (flags & ((uint32_t)kLPI2C_SlaveRxReadyFlag | (uint32_t)kLPI2C_SlaveStopDetectFlag |
                                  (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag)));
 #endif
+
+        if ((status_t)kStatus_Success != result)
+        {
+            break;
+        }
 
         /* Receive a byte. */
         if (0U != (flags & (uint32_t)kLPI2C_SlaveRxReadyFlag))
@@ -1775,7 +1815,7 @@ status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_
         *actualRxSize = rxSize - remaining;
     }
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -1820,7 +1860,7 @@ void LPI2C_SlaveTransferCreateHandle(LPI2C_Type *base,
     s_lpi2cSlaveIsr = LPI2C_SlaveTransferHandleIRQ;
 
     /* Clear internal IRQ enables and enable NVIC IRQ. */
-    LPI2C_SlaveDisableInterrupts(base, (uint32_t)kSlaveIrqFlags);
+    LPI2C_SlaveDisableInterrupts(base, (uint32_t)kLPI2C_SlaveIrqFlags);
     (void)EnableIRQ(kLpi2cIrqs[instance]);
 
     /* Nack by default. */
@@ -1853,45 +1893,50 @@ void LPI2C_SlaveTransferCreateHandle(LPI2C_Type *base,
  */
 status_t LPI2C_SlaveTransferNonBlocking(LPI2C_Type *base, lpi2c_slave_handle_t *handle, uint32_t eventMask)
 {
-    uint32_t status;
+    status_t result = kStatus_Success;
 
     assert(NULL != handle);
 
     /* Return busy if another transaction is in progress. */
     if (handle->isBusy)
     {
-        return kStatus_LPI2C_Busy;
+        result = kStatus_LPI2C_Busy;
     }
-
-    /* Return an error if the bus is already in use not by us. */
-    status = LPI2C_SlaveGetStatusFlags(base);
-    if ((0U != (status & (uint32_t)kLPI2C_SlaveBusBusyFlag)) && (0U == (status & (uint32_t)kLPI2C_SlaveBusyFlag)))
+    else
     {
-        return kStatus_LPI2C_Busy;
+        /* Return an error if the bus is already in use not by us. */
+        uint32_t status = LPI2C_SlaveGetStatusFlags(base);
+        if ((0U != (status & (uint32_t)kLPI2C_SlaveBusBusyFlag)) && (0U == (status & (uint32_t)kLPI2C_SlaveBusyFlag)))
+        {
+            result = kStatus_LPI2C_Busy;
+        }
     }
 
-    /* Disable LPI2C IRQ sources while we configure stuff. */
-    LPI2C_SlaveDisableInterrupts(base, (uint32_t)kSlaveIrqFlags);
+    if ((status_t)kStatus_Success == result)
+    {
+        /* Disable LPI2C IRQ sources while we configure stuff. */
+        LPI2C_SlaveDisableInterrupts(base, (uint32_t)kLPI2C_SlaveIrqFlags);
 
-    /* Clear transfer in handle. */
-    (void)memset(&handle->transfer, 0, sizeof(handle->transfer));
+        /* Clear transfer in handle. */
+        (void)memset(&handle->transfer, 0, sizeof(handle->transfer));
 
-    /* Record that we're busy. */
-    handle->isBusy = true;
+        /* Record that we're busy. */
+        handle->isBusy = true;
 
-    /* Set up event mask. tx and rx are always enabled. */
-    handle->eventMask = eventMask | (uint32_t)kLPI2C_SlaveTransmitEvent | (uint32_t)kLPI2C_SlaveReceiveEvent;
+        /* Set up event mask. tx and rx are always enabled. */
+        handle->eventMask = eventMask | (uint32_t)kLPI2C_SlaveTransmitEvent | (uint32_t)kLPI2C_SlaveReceiveEvent;
 
-    /* Ack by default. */
-    base->STAR = 0U;
+        /* Ack by default. */
+        base->STAR = 0U;
 
-    /* Clear all flags. */
-    LPI2C_SlaveClearStatusFlags(base, (uint32_t)kSlaveClearFlags);
+        /* Clear all flags. */
+        LPI2C_SlaveClearStatusFlags(base, (uint32_t)kLPI2C_SlaveClearFlags);
 
-    /* Enable LPI2C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
-    LPI2C_SlaveEnableInterrupts(base, (uint32_t)kSlaveIrqFlags);
+        /* Enable LPI2C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
+        LPI2C_SlaveEnableInterrupts(base, (uint32_t)kLPI2C_SlaveIrqFlags);
+    }
 
-    return kStatus_Success;
+    return result;
 }
 
 /*!
@@ -1905,24 +1950,29 @@ status_t LPI2C_SlaveTransferNonBlocking(LPI2C_Type *base, lpi2c_slave_handle_t *
  */
 status_t LPI2C_SlaveTransferGetCount(LPI2C_Type *base, lpi2c_slave_handle_t *handle, size_t *count)
 {
+    status_t status = kStatus_Success;
+
     assert(NULL != handle);
 
     if (count == NULL)
     {
-        return kStatus_InvalidArgument;
+        status = kStatus_InvalidArgument;
     }
 
     /* Catch when there is not an active transfer. */
-    if (!handle->isBusy)
+    else if (!handle->isBusy)
     {
         *count = 0;
-        return kStatus_NoTransferInProgress;
+        status = kStatus_NoTransferInProgress;
     }
 
     /* For an active transfer, just return the count from the handle. */
-    *count = handle->transferredCount;
+    else
+    {
+        *count = handle->transferredCount;
+    }
 
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -1941,7 +1991,7 @@ void LPI2C_SlaveTransferAbort(LPI2C_Type *base, lpi2c_slave_handle_t *handle)
     if (handle->isBusy)
     {
         /* Disable LPI2C IRQ sources. */
-        LPI2C_SlaveDisableInterrupts(base, (uint32_t)kSlaveIrqFlags);
+        LPI2C_SlaveDisableInterrupts(base, (uint32_t)kLPI2C_SlaveIrqFlags);
 
         /* Nack by default. */
         base->STAR = LPI2C_STAR_TXNACK_MASK;
@@ -1967,138 +2017,140 @@ void LPI2C_SlaveTransferHandleIRQ(LPI2C_Type *base, lpi2c_slave_handle_t *handle
     lpi2c_slave_transfer_t *xfer;
 
     /* Check for a valid handle in case of a spurious interrupt. */
-    if (NULL == handle)
+    if (NULL != handle)
     {
-        return;
-    }
+        xfer = &handle->transfer;
 
-    xfer = &handle->transfer;
+        /* Get status flags. */
+        flags = LPI2C_SlaveGetStatusFlags(base);
 
-    /* Get status flags. */
-    flags = LPI2C_SlaveGetStatusFlags(base);
-
-    if (0U != (flags & ((uint32_t)kLPI2C_SlaveBitErrFlag | (uint32_t)kLPI2C_SlaveFifoErrFlag)))
-    {
-        xfer->event            = kLPI2C_SlaveCompletionEvent;
-        xfer->completionStatus = LPI2C_SlaveCheckAndClearError(base, flags);
-
-        if ((0U != (handle->eventMask & (uint32_t)kLPI2C_SlaveCompletionEvent)) && (NULL != handle->callback))
+        if (0U != (flags & ((uint32_t)kLPI2C_SlaveBitErrFlag | (uint32_t)kLPI2C_SlaveFifoErrFlag)))
         {
-            handle->callback(base, xfer, handle->userData);
-        }
-        return;
-    }
-    if (0U != (flags & (((uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag) | ((uint32_t)kLPI2C_SlaveStopDetectFlag))))
-    {
-        xfer->event = (0U != (flags & (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag)) ? kLPI2C_SlaveRepeatedStartEvent :
-                                                                                        kLPI2C_SlaveCompletionEvent;
-        xfer->receivedAddress  = 0U;
-        xfer->completionStatus = kStatus_Success;
-        xfer->transferredCount = handle->transferredCount;
+            xfer->event            = kLPI2C_SlaveCompletionEvent;
+            xfer->completionStatus = LPI2C_SlaveCheckAndClearError(base, flags);
 
-        if (xfer->event == kLPI2C_SlaveCompletionEvent)
-        {
-            handle->isBusy = false;
-        }
-
-        if (handle->wasTransmit)
-        {
-            /* Subtract one from the transmit count to offset the fact that LPI2C asserts the */
-            /* tx flag before it sees the nack from the master-receiver, thus causing one more */
-            /* count that the master actually receives. */
-            --xfer->transferredCount;
-            handle->wasTransmit = false;
-        }
-
-        /* Clear the flag. */
-        LPI2C_SlaveClearStatusFlags(
-            base, flags & ((uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag | (uint32_t)kLPI2C_SlaveStopDetectFlag));
-
-        /* Revert to sending an Ack by default, in case we sent a Nack for receive. */
-        base->STAR = 0U;
-
-        if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
-        {
-            handle->callback(base, xfer, handle->userData);
-        }
-
-        /* Clean up transfer info on completion, after the callback has been invoked. */
-        (void)memset(&handle->transfer, 0, sizeof(handle->transfer));
-    }
-    if (0U != (flags & (uint32_t)kLPI2C_SlaveAddressValidFlag))
-    {
-        xfer->event           = kLPI2C_SlaveAddressMatchEvent;
-        xfer->receivedAddress = (uint8_t)(base->SASR & LPI2C_SASR_RADDR_MASK);
-
-        /* Update handle status to busy because slave is addressed. */
-        handle->isBusy = true;
-        if ((0U != (handle->eventMask & (uint32_t)kLPI2C_SlaveAddressMatchEvent)) && (NULL != handle->callback))
-        {
-            handle->callback(base, xfer, handle->userData);
-        }
-    }
-    if (0U != (flags & (uint32_t)kLPI2C_SlaveTransmitAckFlag))
-    {
-        xfer->event = kLPI2C_SlaveTransmitAckEvent;
-
-        if ((0U != (handle->eventMask & (uint32_t)kLPI2C_SlaveTransmitAckEvent)) && (NULL != handle->callback))
-        {
-            handle->callback(base, xfer, handle->userData);
-        }
-    }
-
-    /* Handle transmit and receive. */
-    if (0U != (flags & (uint32_t)kLPI2C_SlaveTxReadyFlag))
-    {
-        handle->wasTransmit = true;
-
-        /* If we're out of data, invoke callback to get more. */
-        if ((NULL == xfer->data) || (0U == xfer->dataSize))
-        {
-            xfer->event = kLPI2C_SlaveTransmitEvent;
-            if (NULL != handle->callback)
+            if ((0U != (handle->eventMask & (uint32_t)kLPI2C_SlaveCompletionEvent)) && (NULL != handle->callback))
             {
                 handle->callback(base, xfer, handle->userData);
             }
-
-            /* Clear the transferred count now that we have a new buffer. */
-            handle->transferredCount = 0U;
-        }
-
-        /* Transmit a byte. */
-        if ((NULL != xfer->data) && (0U != xfer->dataSize))
-        {
-            base->STDR = *xfer->data++;
-            --xfer->dataSize;
-            ++handle->transferredCount;
-        }
-    }
-    if (0U != (flags & (uint32_t)kLPI2C_SlaveRxReadyFlag))
-    {
-        /* If we're out of room in the buffer, invoke callback to get another. */
-        if ((NULL == xfer->data) || (0U == xfer->dataSize))
-        {
-            xfer->event = kLPI2C_SlaveReceiveEvent;
-            if (NULL != handle->callback)
-            {
-                handle->callback(base, xfer, handle->userData);
-            }
-
-            /* Clear the transferred count now that we have a new buffer. */
-            handle->transferredCount = 0U;
-        }
-
-        /* Receive a byte. */
-        if ((NULL != xfer->data) && (0U != xfer->dataSize))
-        {
-            *xfer->data++ = (uint8_t)base->SRDR;
-            --xfer->dataSize;
-            ++handle->transferredCount;
         }
         else
         {
-            /* We don't have any room to receive more data, so send a nack. */
-            base->STAR = LPI2C_STAR_TXNACK_MASK;
+            if (0U !=
+                (flags & (((uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag) | ((uint32_t)kLPI2C_SlaveStopDetectFlag))))
+            {
+                xfer->event = (0U != (flags & (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag)) ?
+                                  kLPI2C_SlaveRepeatedStartEvent :
+                                  kLPI2C_SlaveCompletionEvent;
+                xfer->receivedAddress  = 0U;
+                xfer->completionStatus = kStatus_Success;
+                xfer->transferredCount = handle->transferredCount;
+
+                if (xfer->event == kLPI2C_SlaveCompletionEvent)
+                {
+                    handle->isBusy = false;
+                }
+
+                if (handle->wasTransmit)
+                {
+                    /* Subtract one from the transmit count to offset the fact that LPI2C asserts the */
+                    /* tx flag before it sees the nack from the master-receiver, thus causing one more */
+                    /* count that the master actually receives. */
+                    --xfer->transferredCount;
+                    handle->wasTransmit = false;
+                }
+
+                /* Clear the flag. */
+                LPI2C_SlaveClearStatusFlags(base, flags & ((uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag |
+                                                           (uint32_t)kLPI2C_SlaveStopDetectFlag));
+
+                /* Revert to sending an Ack by default, in case we sent a Nack for receive. */
+                base->STAR = 0U;
+
+                if ((0U != (handle->eventMask & (uint32_t)xfer->event)) && (NULL != handle->callback))
+                {
+                    handle->callback(base, xfer, handle->userData);
+                }
+
+                /* Clean up transfer info on completion, after the callback has been invoked. */
+                (void)memset(&handle->transfer, 0, sizeof(handle->transfer));
+            }
+            if (0U != (flags & (uint32_t)kLPI2C_SlaveAddressValidFlag))
+            {
+                xfer->event           = kLPI2C_SlaveAddressMatchEvent;
+                xfer->receivedAddress = (uint8_t)(base->SASR & LPI2C_SASR_RADDR_MASK);
+
+                /* Update handle status to busy because slave is addressed. */
+                handle->isBusy = true;
+                if ((0U != (handle->eventMask & (uint32_t)kLPI2C_SlaveAddressMatchEvent)) && (NULL != handle->callback))
+                {
+                    handle->callback(base, xfer, handle->userData);
+                }
+            }
+            if (0U != (flags & (uint32_t)kLPI2C_SlaveTransmitAckFlag))
+            {
+                xfer->event = kLPI2C_SlaveTransmitAckEvent;
+
+                if ((0U != (handle->eventMask & (uint32_t)kLPI2C_SlaveTransmitAckEvent)) && (NULL != handle->callback))
+                {
+                    handle->callback(base, xfer, handle->userData);
+                }
+            }
+
+            /* Handle transmit and receive. */
+            if (0U != (flags & (uint32_t)kLPI2C_SlaveTxReadyFlag))
+            {
+                handle->wasTransmit = true;
+
+                /* If we're out of data, invoke callback to get more. */
+                if ((NULL == xfer->data) || (0U == xfer->dataSize))
+                {
+                    xfer->event = kLPI2C_SlaveTransmitEvent;
+                    if (NULL != handle->callback)
+                    {
+                        handle->callback(base, xfer, handle->userData);
+                    }
+
+                    /* Clear the transferred count now that we have a new buffer. */
+                    handle->transferredCount = 0U;
+                }
+
+                /* Transmit a byte. */
+                if ((NULL != xfer->data) && (0U != xfer->dataSize))
+                {
+                    base->STDR = *xfer->data++;
+                    --xfer->dataSize;
+                    ++handle->transferredCount;
+                }
+            }
+            if (0U != (flags & (uint32_t)kLPI2C_SlaveRxReadyFlag))
+            {
+                /* If we're out of room in the buffer, invoke callback to get another. */
+                if ((NULL == xfer->data) || (0U == xfer->dataSize))
+                {
+                    xfer->event = kLPI2C_SlaveReceiveEvent;
+                    if (NULL != handle->callback)
+                    {
+                        handle->callback(base, xfer, handle->userData);
+                    }
+
+                    /* Clear the transferred count now that we have a new buffer. */
+                    handle->transferredCount = 0U;
+                }
+
+                /* Receive a byte. */
+                if ((NULL != xfer->data) && (0U != xfer->dataSize))
+                {
+                    *xfer->data++ = (uint8_t)base->SRDR;
+                    --xfer->dataSize;
+                    ++handle->transferredCount;
+                }
+                else
+                {
+                    /* We don't have any room to receive more data, so send a nack. */
+                    base->STAR = LPI2C_STAR_TXNACK_MASK;
+                }
+            }
         }
     }
 }
@@ -2129,16 +2181,13 @@ static void LPI2C_CommonIRQHandler(LPI2C_Type *base, uint32_t instance)
         /* Slave mode. */
         s_lpi2cSlaveIsr(base, s_lpi2cSlaveHandle[instance]);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(LPI2C0)
 /* Implementation of LPI2C0 handler named in startup code. */
+void LPI2C0_DriverIRQHandler(void);
 void LPI2C0_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C0, 0U);
@@ -2147,6 +2196,7 @@ void LPI2C0_DriverIRQHandler(void)
 
 #if defined(LPI2C1)
 /* Implementation of LPI2C1 handler named in startup code. */
+void LPI2C1_DriverIRQHandler(void);
 void LPI2C1_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C1, 1U);
@@ -2155,6 +2205,7 @@ void LPI2C1_DriverIRQHandler(void)
 
 #if defined(LPI2C2)
 /* Implementation of LPI2C2 handler named in startup code. */
+void LPI2C2_DriverIRQHandler(void);
 void LPI2C2_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C2, 2U);
@@ -2163,6 +2214,7 @@ void LPI2C2_DriverIRQHandler(void)
 
 #if defined(LPI2C3)
 /* Implementation of LPI2C3 handler named in startup code. */
+void LPI2C3_DriverIRQHandler(void);
 void LPI2C3_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C3, 3U);
@@ -2171,6 +2223,7 @@ void LPI2C3_DriverIRQHandler(void)
 
 #if defined(LPI2C4)
 /* Implementation of LPI2C4 handler named in startup code. */
+void LPI2C4_DriverIRQHandler(void);
 void LPI2C4_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C4, 4U);
@@ -2179,6 +2232,7 @@ void LPI2C4_DriverIRQHandler(void)
 
 #if defined(LPI2C5)
 /* Implementation of LPI2C5 handler named in startup code. */
+void LPI2C5_DriverIRQHandler(void);
 void LPI2C5_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C5, 5U);
@@ -2187,6 +2241,7 @@ void LPI2C5_DriverIRQHandler(void)
 
 #if defined(LPI2C6)
 /* Implementation of LPI2C6 handler named in startup code. */
+void LPI2C6_DriverIRQHandler(void);
 void LPI2C6_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C6, 6U);
@@ -2195,6 +2250,7 @@ void LPI2C6_DriverIRQHandler(void)
 
 #if defined(CM4_0__LPI2C)
 /* Implementation of CM4_0__LPI2C handler named in startup code. */
+void M4_0_LPI2C_DriverIRQHandler(void);
 void M4_0_LPI2C_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(CM4_0__LPI2C, LPI2C_GetInstance(CM4_0__LPI2C));
@@ -2203,6 +2259,7 @@ void M4_0_LPI2C_DriverIRQHandler(void)
 
 #if defined(CM4__LPI2C)
 /* Implementation of CM4__LPI2C handler named in startup code. */
+void M4_LPI2C_DriverIRQHandler(void);
 void M4_LPI2C_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(CM4__LPI2C, LPI2C_GetInstance(CM4__LPI2C));
@@ -2211,6 +2268,7 @@ void M4_LPI2C_DriverIRQHandler(void)
 
 #if defined(CM4_1__LPI2C)
 /* Implementation of CM4_1__LPI2C handler named in startup code. */
+void M4_1_LPI2C_DriverIRQHandler(void);
 void M4_1_LPI2C_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(CM4_1__LPI2C, LPI2C_GetInstance(CM4_1__LPI2C));
@@ -2219,6 +2277,7 @@ void M4_1_LPI2C_DriverIRQHandler(void)
 
 #if defined(DMA__LPI2C0)
 /* Implementation of DMA__LPI2C0 handler named in startup code. */
+void DMA_I2C0_INT_DriverIRQHandler(void);
 void DMA_I2C0_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(DMA__LPI2C0, LPI2C_GetInstance(DMA__LPI2C0));
@@ -2227,6 +2286,7 @@ void DMA_I2C0_INT_DriverIRQHandler(void)
 
 #if defined(DMA__LPI2C1)
 /* Implementation of DMA__LPI2C1 handler named in startup code. */
+void DMA_I2C1_INT_DriverIRQHandler(void);
 void DMA_I2C1_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(DMA__LPI2C1, LPI2C_GetInstance(DMA__LPI2C1));
@@ -2235,6 +2295,7 @@ void DMA_I2C1_INT_DriverIRQHandler(void)
 
 #if defined(DMA__LPI2C2)
 /* Implementation of DMA__LPI2C2 handler named in startup code. */
+void DMA_I2C2_INT_DriverIRQHandler(void);
 void DMA_I2C2_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(DMA__LPI2C2, LPI2C_GetInstance(DMA__LPI2C2));
@@ -2243,6 +2304,7 @@ void DMA_I2C2_INT_DriverIRQHandler(void)
 
 #if defined(DMA__LPI2C3)
 /* Implementation of DMA__LPI2C3 handler named in startup code. */
+void DMA_I2C3_INT_DriverIRQHandler(void);
 void DMA_I2C3_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(DMA__LPI2C3, LPI2C_GetInstance(DMA__LPI2C3));
@@ -2251,6 +2313,7 @@ void DMA_I2C3_INT_DriverIRQHandler(void)
 
 #if defined(DMA__LPI2C4)
 /* Implementation of DMA__LPI2C3 handler named in startup code. */
+void DMA_I2C4_INT_DriverIRQHandler(void);
 void DMA_I2C4_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(DMA__LPI2C4, LPI2C_GetInstance(DMA__LPI2C4));
@@ -2259,6 +2322,7 @@ void DMA_I2C4_INT_DriverIRQHandler(void)
 
 #if defined(ADMA__LPI2C0)
 /* Implementation of DMA__LPI2C0 handler named in startup code. */
+void ADMA_I2C0_INT_DriverIRQHandler(void);
 void ADMA_I2C0_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(ADMA__LPI2C0, LPI2C_GetInstance(ADMA__LPI2C0));
@@ -2267,6 +2331,7 @@ void ADMA_I2C0_INT_DriverIRQHandler(void)
 
 #if defined(ADMA__LPI2C1)
 /* Implementation of DMA__LPI2C1 handler named in startup code. */
+void ADMA_I2C1_INT_DriverIRQHandler(void);
 void ADMA_I2C1_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(ADMA__LPI2C1, LPI2C_GetInstance(ADMA__LPI2C1));
@@ -2275,6 +2340,7 @@ void ADMA_I2C1_INT_DriverIRQHandler(void)
 
 #if defined(ADMA__LPI2C2)
 /* Implementation of DMA__LPI2C2 handler named in startup code. */
+void ADMA_I2C2_INT_DriverIRQHandler(void);
 void ADMA_I2C2_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(ADMA__LPI2C2, LPI2C_GetInstance(ADMA__LPI2C2));
@@ -2283,6 +2349,7 @@ void ADMA_I2C2_INT_DriverIRQHandler(void)
 
 #if defined(ADMA__LPI2C3)
 /* Implementation of DMA__LPI2C3 handler named in startup code. */
+void ADMA_I2C3_INT_DriverIRQHandler(void);
 void ADMA_I2C3_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(ADMA__LPI2C3, LPI2C_GetInstance(ADMA__LPI2C3));
@@ -2291,6 +2358,7 @@ void ADMA_I2C3_INT_DriverIRQHandler(void)
 
 #if defined(ADMA__LPI2C4)
 /* Implementation of DMA__LPI2C3 handler named in startup code. */
+void ADMA_I2C4_INT_DriverIRQHandler(void);
 void ADMA_I2C4_INT_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(ADMA__LPI2C4, LPI2C_GetInstance(ADMA__LPI2C4));

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPUART FreeRTOS driver version 2.2.8. */
-#define FSL_LPUART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 2, 8))
+/*! @brief LPUART FreeRTOS driver version 2.4.0. */
+#define FSL_LPUART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @brief LPUART RTOS configuration structure. */
@@ -54,11 +54,11 @@ typedef struct _lpuart_rtos_config
  */
 /*@{*/
 /*! @brief Event flag - transfer complete. */
-#define RTOS_LPUART_COMPLETE 0x1
+#define RTOS_LPUART_COMPLETE 0x1U
 /*! @brief Event flag - ring buffer overrun. */
-#define RTOS_LPUART_RING_BUFFER_OVERRUN 0x2
+#define RTOS_LPUART_RING_BUFFER_OVERRUN 0x2U
 /*! @brief Event flag - hardware buffer overrun. */
-#define RTOS_LPUART_HARDWARE_BUFFER_OVERRUN 0x4
+#define RTOS_LPUART_HARDWARE_BUFFER_OVERRUN 0x4U
 /*@}*/
 
 /*! @brief LPUART FreeRTOS transfer structure. */
@@ -129,7 +129,7 @@ int LPUART_RTOS_Deinit(lpuart_rtos_handle_t *handle);
  * @param buffer The pointer to buffer to send.
  * @param length The number of bytes to send.
  */
-int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, const uint8_t *buffer, uint32_t length);
+int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length);
 
 /*!
  * @brief Receives data.

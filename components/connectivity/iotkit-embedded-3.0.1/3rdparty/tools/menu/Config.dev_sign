@@ -1,4 +1,0 @@
-config DEV_SIGN
-    bool
-    default y
-    select INFRA_SHA256

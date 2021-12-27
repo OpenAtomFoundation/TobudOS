@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief cache driver version 2.0.2. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief cache driver version 2.0.3. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 #if defined(FSL_FEATURE_SOC_L2CACHEC_COUNT) && FSL_FEATURE_SOC_L2CACHEC_COUNT
@@ -220,10 +220,7 @@ static inline void L1CACHE_CleanInvalidateDCache(void)
  */
 static inline void L1CACHE_InvalidateDCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t startAddr = address & ~((uint32_t)FSL_FEATURE_L1DCACHE_LINESIZE_BYTE - 1U);
-    uint32_t size      = size_byte + address - startAddr;
-
-    SCB_InvalidateDCache_by_Addr((uint32_t *)startAddr, (int32_t)size);
+    SCB_InvalidateDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
 }
 
 /*!
@@ -238,10 +235,7 @@ static inline void L1CACHE_InvalidateDCacheByRange(uint32_t address, uint32_t si
  */
 static inline void L1CACHE_CleanDCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t startAddr = address & ~((uint32_t)FSL_FEATURE_L1DCACHE_LINESIZE_BYTE - 1U);
-    uint32_t size      = size_byte + address - startAddr;
-
-    SCB_CleanDCache_by_Addr((uint32_t *)startAddr, (int32_t)size);
+    SCB_CleanDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
 }
 
 /*!
@@ -256,10 +250,7 @@ static inline void L1CACHE_CleanDCacheByRange(uint32_t address, uint32_t size_by
  */
 static inline void L1CACHE_CleanInvalidateDCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t startAddr = address & ~((uint32_t)FSL_FEATURE_L1DCACHE_LINESIZE_BYTE - 1U);
-    uint32_t size      = size_byte + address - startAddr;
-
-    SCB_CleanInvalidateDCache_by_Addr((uint32_t *)startAddr, (int32_t)size);
+    SCB_CleanInvalidateDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
 }
 /*@}*/
 

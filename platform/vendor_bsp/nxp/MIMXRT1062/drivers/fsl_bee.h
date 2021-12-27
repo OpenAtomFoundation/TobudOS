@@ -28,8 +28,9 @@
  *
  * Change log:
  *
- * - Version 2.0.2
- *   - Fix MISRA issue
+ * - 2.0.2
+ *   - Bug Fixes
+ *     - Fixed MISRA issue.
  *
  * - 2.0.1
  *   - Bug Fixes
@@ -43,36 +44,41 @@
  *      Configuration of FAC start and end address using IOMUXC_GPRs was moved to application.
  *    - Default value for region address offset was changed to 0.
  *
- * - Version 2.0.0
+ * - 2.0.0
  *   - Initial version
  */
 #define FSL_BEE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
+/*! @brief BEE aes mode. */
 typedef enum _bee_aes_mode
 {
     kBEE_AesEcbMode = 0U, /*!< AES ECB Mode */
     kBEE_AesCtrMode = 1U  /*!< AES CTR Mode */
 } bee_aes_mode_t;
 
+/*! @brief BEE region. */
 typedef enum _bee_region
 {
     kBEE_Region0 = 0U, /*!< BEE region 0 */
     kBEE_Region1 = 1U  /*!< BEE region 1 */
 } bee_region_t;
 
+/*! @brief BEE ac prot enable. */
 typedef enum _bee_ac_prot_enable
 {
     kBEE_AccessProtDisabled = 0U, /*!< BEE access permission control disabled */
     kBEE_AccessProtEnabled  = 1U  /*!< BEE access permission control enabled */
 } bee_ac_prot_enable;
 
+/*! @brief BEE endian swap enable. */
 typedef enum _bee_endian_swap_enable
 {
     kBEE_EndianSwapDisabled = 1U, /*!< BEE endian swap disabled */
     kBEE_EndianSwapEnabled  = 0U  /*!< BEE endian swap enabled */
 } bee_endian_swap_enable;
 
+/*! @brief BEE security level. */
 typedef enum _bee_security_level
 {
     kBEE_SecurityLevel0 = 0U, /*!< BEE security level 0 */
@@ -81,6 +87,7 @@ typedef enum _bee_security_level
     kBEE_SecurityLevel3 = 3U  /*!< BEE security level 3 */
 } bee_security_level;
 
+/*! @brief BEE status flags. */
 typedef enum _bee_status_flags
 {
     kBEE_DisableAbortFlag     = 1U,                      /*!< Disable abort flag. */
@@ -241,5 +248,7 @@ void BEE_ClearStatusFlags(BEE_Type *base, uint32_t mask);
 #if defined(__cplusplus)
 }
 #endif
+
+/*@}*/
 
 #endif /* _FSL_BEE_H_ */

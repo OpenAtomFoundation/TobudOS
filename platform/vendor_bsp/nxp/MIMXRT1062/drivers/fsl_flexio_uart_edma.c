@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -80,7 +80,7 @@ static void FLEXIO_UART_TransferSendEDMACallback(edma_handle_t *handle, void *pa
 {
     flexio_uart_edma_private_handle_t *uartPrivateHandle = (flexio_uart_edma_private_handle_t *)param;
 
-    assert(uartPrivateHandle->handle);
+    assert(uartPrivateHandle->handle != NULL);
 
     /* Avoid the warning for unused variables. */
     handle = handle;
@@ -105,7 +105,7 @@ static void FLEXIO_UART_TransferReceiveEDMACallback(edma_handle_t *handle,
 {
     flexio_uart_edma_private_handle_t *uartPrivateHandle = (flexio_uart_edma_private_handle_t *)param;
 
-    assert(uartPrivateHandle->handle);
+    assert(uartPrivateHandle->handle != NULL);
 
     /* Avoid the warning for unused variables. */
     handle = handle;
@@ -143,7 +143,7 @@ status_t FLEXIO_UART_TransferCreateHandleEDMA(FLEXIO_UART_Type *base,
                                               edma_handle_t *txEdmaHandle,
                                               edma_handle_t *rxEdmaHandle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint8_t index = 0U;
 
@@ -205,7 +205,7 @@ status_t FLEXIO_UART_TransferSendEDMA(FLEXIO_UART_Type *base,
                                       flexio_uart_edma_handle_t *handle,
                                       flexio_uart_transfer_t *xfer)
 {
-    assert(handle->txEdmaHandle);
+    assert(handle->txEdmaHandle != NULL);
 
     edma_transfer_config_t xferConfig;
     status_t status;
@@ -263,7 +263,7 @@ status_t FLEXIO_UART_TransferReceiveEDMA(FLEXIO_UART_Type *base,
                                          flexio_uart_edma_handle_t *handle,
                                          flexio_uart_transfer_t *xfer)
 {
-    assert(handle->rxEdmaHandle);
+    assert(handle->rxEdmaHandle != NULL);
 
     edma_transfer_config_t xferConfig;
     status_t status;
@@ -314,7 +314,7 @@ status_t FLEXIO_UART_TransferReceiveEDMA(FLEXIO_UART_Type *base,
  */
 void FLEXIO_UART_TransferAbortSendEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle)
 {
-    assert(handle->txEdmaHandle);
+    assert(handle->txEdmaHandle != NULL);
 
     /* Disable UART TX EDMA. */
     FLEXIO_UART_EnableTxDMA(base, false);
@@ -335,7 +335,7 @@ void FLEXIO_UART_TransferAbortSendEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_
  */
 void FLEXIO_UART_TransferAbortReceiveEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle)
 {
-    assert(handle->rxEdmaHandle);
+    assert(handle->rxEdmaHandle != NULL);
 
     /* Disable UART RX EDMA. */
     FLEXIO_UART_EnableRxDMA(base, false);
@@ -361,9 +361,9 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
                                                  flexio_uart_edma_handle_t *handle,
                                                  size_t *count)
 {
-    assert(handle);
-    assert(handle->rxEdmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->rxEdmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kFLEXIO_UART_RxIdle == handle->rxState)
     {
@@ -390,9 +390,9 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
  */
 status_t FLEXIO_UART_TransferGetSendCountEDMA(FLEXIO_UART_Type *base, flexio_uart_edma_handle_t *handle, size_t *count)
 {
-    assert(handle);
-    assert(handle->txEdmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->txEdmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kFLEXIO_UART_TxIdle == handle->txState)
     {

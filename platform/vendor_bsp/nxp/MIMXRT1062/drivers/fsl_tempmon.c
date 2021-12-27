@@ -18,11 +18,11 @@
 #endif
 
 /*! @brief TEMPMON calibration data mask. */
-#define TEMPMON_HOTTEMPMASK 0xFFU
-#define TEMPMON_HOTTEMPSHIFT 0x00U
-#define TEMPMON_HOTCOUNTMASK 0xFFF00U
-#define TEMPMON_HOTCOUNTSHIFT 0X08U
-#define TEMPMON_ROOMCOUNTMASK 0xFFF00000U
+#define TEMPMON_HOTTEMPMASK    0xFFU
+#define TEMPMON_HOTTEMPSHIFT   0x00U
+#define TEMPMON_HOTCOUNTMASK   0xFFF00U
+#define TEMPMON_HOTCOUNTSHIFT  0X08U
+#define TEMPMON_ROOMCOUNTMASK  0xFFF00000U
 #define TEMPMON_ROOMCOUNTSHIFT 0x14U
 
 /*! @brief the room temperature. */
@@ -157,6 +157,7 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, uint32_t tempVal, tempmon_alarm_mo
     assert(NULL != base);
 
     uint32_t tempCodeVal;
+    uint32_t tempRegVal;
 
     /* Calculate alarm temperature code value */
     tempCodeVal = (uint32_t)(s_hotCount + (s_hotTemp - tempVal) * s_roomC_hotC / (uint32_t)s_hotT_ROOM);
@@ -164,18 +165,27 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, uint32_t tempVal, tempmon_alarm_mo
     switch (alarmMode)
     {
         case kTEMPMON_HighAlarmMode:
-            /* Set high alarm temperature code value */
-            base->TEMPSENSE0 |= TEMPMON_TEMPSENSE0_ALARM_VALUE(tempCodeVal);
+            /* Clear alarm value and set a new high alarm temperature code value */
+            tempRegVal = base->TEMPSENSE0;
+            tempRegVal =
+                (tempRegVal & ~TEMPMON_TEMPSENSE0_ALARM_VALUE_MASK) | TEMPMON_TEMPSENSE0_ALARM_VALUE(tempCodeVal);
+            base->TEMPSENSE0 = tempRegVal;
             break;
 
         case kTEMPMON_PanicAlarmMode:
-            /* Set panic alarm temperature code value */
-            base->TEMPSENSE2 |= TEMPMON_TEMPSENSE2_PANIC_ALARM_VALUE(tempCodeVal);
+            /* Clear panic alarm value and set a new panic alarm temperature code value */
+            tempRegVal = base->TEMPSENSE2;
+            tempRegVal = (tempRegVal & ~TEMPMON_TEMPSENSE2_PANIC_ALARM_VALUE_MASK) |
+                         TEMPMON_TEMPSENSE2_PANIC_ALARM_VALUE(tempCodeVal);
+            base->TEMPSENSE2 = tempRegVal;
             break;
 
         case kTEMPMON_LowAlarmMode:
-            /* Set low alarm temperature code value */
-            base->TEMPSENSE2 |= TEMPMON_TEMPSENSE2_LOW_ALARM_VALUE(tempCodeVal);
+            /* Clear low alarm value and set a new low alarm temperature code value */
+            tempRegVal = base->TEMPSENSE2;
+            tempRegVal = (tempRegVal & ~TEMPMON_TEMPSENSE2_LOW_ALARM_VALUE_MASK) |
+                         TEMPMON_TEMPSENSE2_LOW_ALARM_VALUE(tempCodeVal);
+            base->TEMPSENSE2 = tempRegVal;
             break;
 
         default:

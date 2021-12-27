@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -42,10 +42,13 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+#include "fsl_common.h"
 #include "fsl_str.h"
 
-#include "generic_list.h"
-#include "serial_manager.h"
+#include "fsl_component_generic_list.h"
+#include "fsl_component_serial_manager.h"
 
 #include "fsl_shell.h"
 
@@ -60,7 +63,7 @@
 #if defined(OSA_USED)
 
 #if (defined(SHELL_USE_COMMON_TASK) && (SHELL_USE_COMMON_TASK > 0U))
-#include "common_task.h"
+#include "fsl_component_common_task.h"
 #else
 #include "fsl_os_abstraction.h"
 #endif
@@ -74,7 +77,7 @@
 #define KET_DEL (0x7FU)
 
 #define SHELL_EVENT_DATA_ARRIVED (1U << 0)
-#define SHELL_EVENT_DATA_SENT (1U << 1)
+#define SHELL_EVENT_DATA_SENT    (1U << 1)
 
 #define SHELL_SPRINTF_BUFFER_SIZE (64U)
 
@@ -126,8 +129,14 @@ typedef struct _shell_context_handle
     uint8_t printBusy;                                     /*!< Print is busy */
 } shell_context_handle_t;
 
+#if 0
 #define SHELL_STRUCT_OFFSET(type, field) ((size_t) & (((type *)0)->field))
-#define SHEEL_COMMAND_POINTER(node) ((shell_command_t *)(((uint32_t)node) - SHELL_STRUCT_OFFSET(shell_command_t, link)))
+#define SHEEL_COMMAND_POINTER(node) \
+    ((shell_command_t *)(((uint32_t)(node)) - SHELL_STRUCT_OFFSET(shell_command_t, link)))
+#else
+#define SHEEL_COMMAND_POINTER(node) \
+    ((shell_command_t *)(((uint32_t)(node)) - (sizeof(shell_command_t) - sizeof(list_element_t))))
+#endif
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -149,6 +158,8 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle); /*!<
 static shell_status_t SHELL_GetChar(shell_context_handle_t *shellContextHandle,
                                     uint8_t *ch); /*!< get a char from communication interface */
 
+static void SHELL_WriteWithCopy(shell_handle_t shellHandle, const char *buffer, uint32_t length);
+
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
 static void SHELL_Task(void *param); /*!<  Shell task*/
 #endif
@@ -163,21 +174,16 @@ static SHELL_COMMAND_DEFINE(exit, "\r\n\"exit\": Exit program\r\n", SHELL_ExitCo
 static char s_paramBuffer[SHELL_BUFFER_SIZE];
 
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
-
 #if defined(OSA_USED)
-
 #if (defined(SHELL_USE_COMMON_TASK) && (SHELL_USE_COMMON_TASK > 0U))
-
 #else
 /*
  * \brief Defines the serial manager task's stack
  */
-OSA_TASK_DEFINE(SHELL_Task, SHELL_TASK_PRIORITY, 1, SHELL_TASK_STACK_SIZE, false);
+static OSA_TASK_DEFINE(SHELL_Task, SHELL_TASK_PRIORITY, 1, SHELL_TASK_STACK_SIZE, false);
 #endif
-
-#endif
-
-#endif
+#endif /* OSA_USED */
+#endif /* SHELL_NON_BLOCKING_MODE */
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -194,7 +200,7 @@ static void SHELL_SerialManagerRxCallback(void *callbackParam,
 
     shellHandle = (shell_context_handle_t *)callbackParam;
 
-    if (!shellHandle->notificationPost)
+    if (0U == shellHandle->notificationPost)
     {
         shellHandle->notificationPost = 1U;
 #if defined(OSA_USED)
@@ -202,7 +208,7 @@ static void SHELL_SerialManagerRxCallback(void *callbackParam,
 #if (defined(SHELL_USE_COMMON_TASK) && (SHELL_USE_COMMON_TASK > 0U))
         shellHandle->commontaskMsg.callback      = SHELL_Task;
         shellHandle->commontaskMsg.callbackParam = shellHandle;
-        COMMON_TASK_post_message(&shellHandle->commontaskMsg);
+        (void)COMMON_TASK_post_message(&shellHandle->commontaskMsg);
 #else
         (void)OSA_EventSet((osa_event_handle_t)shellHandle->event, SHELL_EVENT_DATA_ARRIVED);
 #endif
@@ -218,14 +224,27 @@ static void SHELL_WriteBuffer(char *buffer, int32_t *indicator, char val, int le
 {
     shell_context_handle_t *shellContextHandle;
     int i              = 0;
-    shellContextHandle = (shell_context_handle_t *)buffer;
+    shellContextHandle = (shell_context_handle_t *)(void *)buffer;
 
     for (i = 0; i < len; i++)
     {
-        if ((uint32_t)(*indicator + 1) >= SHELL_SPRINTF_BUFFER_SIZE)
+        if ((*indicator + 1) >= (int32_t)SHELL_SPRINTF_BUFFER_SIZE)
         {
-            (void)SerialManager_WriteBlocking(shellContextHandle->serialWriteHandle,
-                                              (uint8_t *)shellContextHandle->printBuffer, (uint32_t)*indicator);
+#if (!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
+            if (NULL == shellContextHandle->serialHandle)
+            {
+                for (uint32_t index = 0; index < ((uint32_t)*indicator); index++)
+                {
+                    (void)putchar(shellContextHandle->printBuffer[index]);
+                }
+            }
+            else
+#endif
+            {
+                (void)SerialManager_WriteBlocking(shellContextHandle->serialWriteHandle,
+                                                  (uint8_t *)shellContextHandle->printBuffer, (uint32_t)*indicator);
+            }
+
             shellContextHandle->printLength += (uint32_t)*indicator;
             *indicator = 0;
         }
@@ -272,9 +291,9 @@ void SHELL_Task(shell_handle_t shellHandle)
         do
         {
             if (KOSA_StatusSuccess == OSA_EventWait((osa_event_handle_t)shellContextHandle->event, osaEventFlagsAll_c,
-                                                    false, osaWaitForever_c, &ev))
+                                                    0U, osaWaitForever_c, &ev))
             {
-                if (ev & SHELL_EVENT_DATA_ARRIVED)
+                if (0U != (ev & SHELL_EVENT_DATA_ARRIVED))
 #endif
 
 #endif
@@ -324,7 +343,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                 {
                     shellContextHandle->stat = kSHELL_Normal;
 
-                    switch ((uint8_t)ch)
+                    switch ((char)ch)
                     {
                         /* History operation here */
                         case 'A': /* Up key */
@@ -344,7 +363,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                         case 'D': /* Left key */
                             if ((bool)shellContextHandle->c_pos)
                             {
-                                (void)SHELL_Write(shellContextHandle, "\b", 1);
+                                SHELL_WriteWithCopy(shellContextHandle, "\b", 1);
                                 shellContextHandle->c_pos--;
                             }
                             break;
@@ -357,6 +376,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                             }
                             break;
                         default:
+                            /* MISRA C-2012 Rule 16.4 */
                             break;
                     }
                     continue;
@@ -366,15 +386,16 @@ void SHELL_Task(shell_handle_t shellHandle)
                 {
 #if SHELL_AUTO_COMPLETE
                     /* Move the cursor to the beginning of line */
-                    int i;
-                    for (i = 0; i < shellContextHandle->c_pos; i++)
+                    uint32_t i;
+                    for (i = 0; i < (uint32_t)shellContextHandle->c_pos; i++)
                     {
-                        (void)SHELL_Write(shellContextHandle, "\b", 1);
+                        SHELL_WriteWithCopy(shellContextHandle, "\b", 1);
                     }
                     /* Do auto complete */
                     SHELL_AutoComplete(shellContextHandle);
                     /* Move position to end */
-                    shellContextHandle->c_pos = shellContextHandle->l_pos = (uint8_t)strlen(shellContextHandle->line);
+                    shellContextHandle->l_pos = (uint8_t)strlen(shellContextHandle->line);
+                    shellContextHandle->c_pos = shellContextHandle->l_pos;
 #endif
                     continue;
                 }
@@ -394,41 +415,42 @@ void SHELL_Task(shell_handle_t shellHandle)
                     {
                         (void)memmove(&shellContextHandle->line[shellContextHandle->c_pos],
                                       &shellContextHandle->line[shellContextHandle->c_pos + 1U],
-                                      shellContextHandle->l_pos - shellContextHandle->c_pos);
-                        shellContextHandle->line[shellContextHandle->l_pos] = 0U;
-                        (void)SHELL_Write(shellContextHandle, "\b", 1);
+                                      (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
+                        shellContextHandle->line[shellContextHandle->l_pos] = '\0';
+                        SHELL_WriteWithCopy(shellContextHandle, "\b", 1);
                         (void)SHELL_Write(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
                                           strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
-                        (void)SHELL_Write(shellContextHandle, "  \b", 3);
+                        SHELL_WriteWithCopy(shellContextHandle, "  \b", 3);
 
                         /* Reset position */
-                        int i;
-                        for (i = shellContextHandle->c_pos; i <= shellContextHandle->l_pos; i++)
+                        uint32_t i;
+                        for (i = (uint32_t)shellContextHandle->c_pos; i <= (uint32_t)shellContextHandle->l_pos; i++)
                         {
-                            (void)SHELL_Write(shellContextHandle, "\b", 1);
+                            SHELL_WriteWithCopy(shellContextHandle, "\b", 1);
                         }
                     }
                     else /* Normal backspace operation */
                     {
-                        (void)SHELL_Write(shellContextHandle, "\b \b", 3);
-                        shellContextHandle->line[shellContextHandle->l_pos] = 0U;
+                        SHELL_WriteWithCopy(shellContextHandle, "\b \b", 3);
+                        shellContextHandle->line[shellContextHandle->l_pos] = '\0';
                     }
                     continue;
                 }
                 else
                 {
+                    /* MISRA C-2012 Rule 15.7 */
                 }
 
                 /* Input too long */
                 if (shellContextHandle->l_pos >= (SHELL_BUFFER_SIZE - 1U))
                 {
-                    shellContextHandle->l_pos = 0;
+                    shellContextHandle->l_pos = 0U;
                 }
 
                 /* Handle end of line, break */
                 if (((char)ch == '\r') || ((char)ch == '\n'))
                 {
-                    static char endoflinechar = 0U;
+                    static char endoflinechar = '\0';
 
                     if (((uint8_t)endoflinechar != 0U) && ((uint8_t)endoflinechar != ch))
                     {
@@ -437,24 +459,20 @@ void SHELL_Task(shell_handle_t shellHandle)
                     else
                     {
                         endoflinechar = (char)ch;
-                        (void)SHELL_Write(shellContextHandle, "\r\n", 2);
-                        /* If command line is NULL, will start a new transfer */
-                        if (0U == strlen(shellContextHandle->line))
+                        /* Print new line. */
+                        SHELL_WriteWithCopy(shellContextHandle, "\r\n", 2U); /* MISRA C-2012 Rule 7.4 */
+                        /* If command line is not NULL, will start process it. */
+                        if (0U != strlen(shellContextHandle->line))
                         {
-                            /* Reset all params */
-                            shellContextHandle->c_pos = shellContextHandle->l_pos = 0;
-                            shellContextHandle->hist_current                      = 0;
-                            (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt,
-                                              strlen(shellContextHandle->prompt));
-                            continue;
+                            SHELL_ProcessCommand(shellContextHandle, shellContextHandle->line);
                         }
-                        SHELL_ProcessCommand(shellContextHandle, shellContextHandle->line);
+                        /* Print prompt. */
+                        (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt,
+                                          strlen(shellContextHandle->prompt));
                         /* Reset all params */
                         shellContextHandle->c_pos = shellContextHandle->l_pos = 0;
                         shellContextHandle->hist_current                      = 0;
-                        (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt,
-                                          strlen(shellContextHandle->prompt));
-                        memset(shellContextHandle->line, 0, sizeof(shellContextHandle->line));
+                        (void)memset(shellContextHandle->line, 0, sizeof(shellContextHandle->line));
                         continue;
                     }
                 }
@@ -464,15 +482,15 @@ void SHELL_Task(shell_handle_t shellHandle)
                 {
                     (void)memmove(&shellContextHandle->line[shellContextHandle->c_pos + 1U],
                                   &shellContextHandle->line[shellContextHandle->c_pos],
-                                  shellContextHandle->l_pos - shellContextHandle->c_pos);
+                                  (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
                     shellContextHandle->line[shellContextHandle->c_pos] = (char)ch;
                     (void)SHELL_Write(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
                                       strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
                     /* Move the cursor to new position */
-                    int i;
-                    for (i = shellContextHandle->c_pos; i < shellContextHandle->l_pos; i++)
+                    uint32_t i;
+                    for (i = (uint32_t)shellContextHandle->c_pos; i < (uint32_t)shellContextHandle->l_pos; i++)
                     {
-                        (void)SHELL_Write(shellContextHandle, "\b", 1);
+                        SHELL_WriteWithCopy(shellContextHandle, "\b", 1);
                     }
                 }
                 else
@@ -484,7 +502,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                 ch = 0;
                 shellContextHandle->l_pos++;
                 shellContextHandle->c_pos++;
-            } while (!shellContextHandle->exit);
+            } while (0U == shellContextHandle->exit);
         }
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
 
@@ -493,7 +511,7 @@ void SHELL_Task(shell_handle_t shellHandle)
 #if (defined(SHELL_USE_COMMON_TASK) && (SHELL_USE_COMMON_TASK > 0U))
 #else
             }
-        } while (gUseRtos_c);
+        } while (1U == gUseRtos_c); /* USE_RTOS = 0 for BareMetal and 1 for OS */
 #endif
 
 #endif
@@ -526,7 +544,7 @@ static shell_status_t SHELL_ExitCommand(shell_handle_t shellHandle, int32_t argc
 {
     shell_context_handle_t *shellContextHandle = (shell_context_handle_t *)shellHandle;
     /* Skip warning */
-    (void)SHELL_Write(shellContextHandle, "\r\nSHELL exited\r\n", strlen("\r\nSHELL exited\r\n"));
+    SHELL_WriteWithCopy(shellContextHandle, "\r\nSHELL exited\r\n", strlen("\r\nSHELL exited\r\n"));
     shellContextHandle->exit = (uint8_t) true;
     return kStatus_SHELL_Success;
 }
@@ -536,7 +554,7 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
     shell_command_t *tmpCommand = NULL;
     const char *tmpCommandString;
     int32_t argc;
-    char *argv[SHELL_BUFFER_SIZE];
+    char *argv[SHELL_BUFFER_SIZE] = {0};
     list_element_handle_t p;
     uint8_t flag = 1;
     uint8_t tmpCommandLen;
@@ -557,7 +575,7 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
             /* Compare with space or end of string */
             if ((cmd[tmpCommandLen] == ' ') || (cmd[tmpCommandLen] == (char)0x00))
             {
-                if (SHELL_StringCompare(tmpCommandString, argv[0], (uint32_t)tmpCommandLen) == 0)
+                if (SHELL_StringCompare(tmpCommandString, argv[0], (int32_t)tmpCommandLen) == 0)
                 {
                     /* support commands with optional number of parameters */
                     if (tmpCommand->cExpectedNumberOfParameters == (uint8_t)SHELL_IGNORE_PARAMETER_COUNT)
@@ -570,7 +588,7 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
                     }
                     else if (tmpCommand->cExpectedNumberOfParameters > 0U)
                     {
-                        if ((argc - 1U) == tmpCommand->cExpectedNumberOfParameters)
+                        if ((argc - 1) == (int32_t)tmpCommand->cExpectedNumberOfParameters)
                         {
                             flag = 0;
                         }
@@ -592,12 +610,11 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
 
     if ((tmpCommand != NULL) && (flag == 1U))
     {
-        (void)SHELL_Write(
+        SHELL_WriteWithCopy(
             shellContextHandle,
             "\r\nIncorrect command parameter(s).  Enter \"help\" to view a list of available commands.\r\n\r\n",
             strlen(
                 "\r\nIncorrect command parameter(s).  Enter \"help\" to view a list of available commands.\r\n\r\n"));
-        tmpCommand = NULL;
     }
     else if (tmpCommand != NULL)
     {
@@ -607,11 +624,11 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
         {
             for (i = SHELL_HISTORY_COUNT - 1U; i > 0U; i--)
             {
-                (void)memset(shellContextHandle->hist_buf[i], '\0', SHELL_BUFFER_SIZE);
+                (void)memset(shellContextHandle->hist_buf[i], (int)'\0', SHELL_BUFFER_SIZE);
                 tmpLen = (uint8_t)strlen(shellContextHandle->hist_buf[i - 1U]);
                 (void)memcpy(shellContextHandle->hist_buf[i], shellContextHandle->hist_buf[i - 1U], tmpLen);
             }
-            (void)memset(shellContextHandle->hist_buf[0], '\0', SHELL_BUFFER_SIZE);
+            (void)memset(shellContextHandle->hist_buf[0], (int)'\0', SHELL_BUFFER_SIZE);
             tmpLen = (uint8_t)strlen(cmd);
             (void)memcpy(shellContextHandle->hist_buf[0], cmd, tmpLen);
             if (shellContextHandle->hist_count < SHELL_HISTORY_COUNT)
@@ -619,22 +636,20 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
                 shellContextHandle->hist_count++;
             }
         }
-        tmpCommand->pFuncCallBack(shellContextHandle, argc, argv);
-        tmpCommand = NULL;
+        (void)tmpCommand->pFuncCallBack(shellContextHandle, argc, argv);
     }
     else
     {
-        (void)SHELL_Write(
+        SHELL_WriteWithCopy(
             shellContextHandle,
             "\r\nCommand not recognized.  Enter 'help' to view a list of available commands.\r\n\r\n",
             strlen("\r\nCommand not recognized.  Enter 'help' to view a list of available commands.\r\n\r\n"));
-        tmpCommand = NULL;
     }
 }
 
 static void SHELL_GetHistoryCommand(shell_context_handle_t *shellContextHandle, uint8_t hist_pos)
 {
-    uint8_t i;
+    uint32_t i;
     uint32_t tmp;
 
     if (shellContextHandle->hist_buf[0][0] == '\0')
@@ -655,10 +670,10 @@ static void SHELL_GetHistoryCommand(shell_context_handle_t *shellContextHandle, 
     /* Clear current if have */
     if (tmp > 0U)
     {
-        (void)memset(shellContextHandle->line, '\0', tmp);
-        for (i = 0; i < tmp; i++)
+        (void)memset(shellContextHandle->line, (int)'\0', tmp);
+        for (i = 0U; i < tmp; i++)
         {
-            (void)SHELL_Write(shellContextHandle, "\b \b", 3);
+            SHELL_WriteWithCopy(shellContextHandle, "\b \b", 3);
         }
     }
 
@@ -677,7 +692,7 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
     const char *namePtr;
     const char *cmdName;
 
-    minLen  = SHELL_BUFFER_SIZE;
+    minLen  = (int32_t)SHELL_BUFFER_SIZE;
     namePtr = NULL;
 
     /* Empty tab, list all commands */
@@ -687,7 +702,7 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
         return;
     }
 
-    SHELL_Write(shellContextHandle, "\r\n", 2);
+    SHELL_WriteWithCopy(shellContextHandle, "\r\n", 2);
 
     /* Do auto complete */
     p = LIST_GetHead(&shellContextHandle->commandContextListHead);
@@ -698,7 +713,7 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
         if (SHELL_StringCompare(shellContextHandle->line, cmdName, (int32_t)strlen(shellContextHandle->line)) == 0)
         {
             /* Show possible matches */
-            SHELL_Printf(shellContextHandle, "%s\r\n", (char *)cmdName);
+            (void)SHELL_Printf(shellContextHandle, "%s    ", cmdName);
             if (minLen > ((int32_t)strlen(cmdName)))
             {
                 namePtr = cmdName;
@@ -712,7 +727,7 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
     {
         (void)memcpy(shellContextHandle->line, namePtr, (uint32_t)minLen);
     }
-    (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt, strlen(shellContextHandle->prompt));
+    SHELL_PrintPrompt(shellContextHandle);
     (void)SHELL_Write(shellContextHandle, shellContextHandle->line, strlen(shellContextHandle->line));
     return;
 }
@@ -723,7 +738,7 @@ static int32_t SHELL_StringCompare(const char *str1, const char *str2, int32_t c
     {
         if (*str1++ != *str2++)
         {
-            return (int32_t) * (unsigned char *)(str1 - 1) - *(unsigned char *)(str2 - 1);
+            return (int32_t)(*(str1 - 1) - *(str2 - 1));
         }
     }
     return 0;
@@ -736,7 +751,7 @@ static int32_t SHELL_ParseLine(const char *cmd, uint32_t len, char *argv[])
     uint32_t position;
 
     /* Init params */
-    (void)memset(s_paramBuffer, '\0', len + 1U);
+    (void)memset(s_paramBuffer, (int)'\0', len + 1U);
     (void)memcpy(s_paramBuffer, cmd, len);
 
     p        = s_paramBuffer;
@@ -792,22 +807,45 @@ static int32_t SHELL_ParseLine(const char *cmd, uint32_t len, char *argv[])
 
 static shell_status_t SHELL_GetChar(shell_context_handle_t *shellContextHandle, uint8_t *ch)
 {
-#if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
-    uint32_t length = 0;
+    shell_status_t status;
 
-    SerialManager_TryRead(shellContextHandle->serialReadHandle, ch, 1, &length);
-
-    if (length > 0)
+#if (!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
+    if (NULL == shellContextHandle->serialHandle)
     {
-        return kStatus_SHELL_Success;
+        int ret;
+        ret = getchar();
+        if (ret > 0)
+        {
+            *ch    = (uint8_t)ret;
+            status = kStatus_SHELL_Success;
+        }
+        else
+        {
+            status = kStatus_SHELL_Error;
+        }
     }
     else
-    {
-        return kStatus_SHELL_Error;
-    }
-#else
-    return (shell_status_t)SerialManager_ReadBlocking(shellContextHandle->serialReadHandle, ch, 1);
 #endif
+    {
+#if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
+        uint32_t length = 0;
+
+        (void)SerialManager_TryRead(shellContextHandle->serialReadHandle, ch, 1, &length);
+
+        if (length > 0U)
+        {
+            status = kStatus_SHELL_Success;
+        }
+        else
+        {
+            status = kStatus_SHELL_Error;
+        }
+#else
+        status = (shell_status_t)SerialManager_ReadBlocking(shellContextHandle->serialReadHandle, ch, 1);
+#endif
+    }
+
+    return status;
 }
 
 shell_status_t SHELL_Init(shell_handle_t shellHandle, serial_handle_t serialHandle, char *prompt)
@@ -817,91 +855,107 @@ shell_status_t SHELL_Init(shell_handle_t shellHandle, serial_handle_t serialHand
     (void)status;
 
     assert(shellHandle);
+#if !(!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
     assert(serialHandle);
+#endif
     assert(prompt);
-
-    if (SHELL_HANDLE_SIZE < sizeof(shell_context_handle_t))
-    {
-        return kStatus_SHELL_Error;
-    }
+    assert(SHELL_HANDLE_SIZE >= sizeof(shell_context_handle_t));
 
     shellContextHandle = (shell_context_handle_t *)shellHandle;
 
     /* memory set for shellHandle */
     (void)memset(shellHandle, 0, SHELL_HANDLE_SIZE);
 
+#if (!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
+    if (NULL == serialHandle)
+    {
+    }
+    else
+#endif
+    {
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
 
 #if defined(OSA_USED)
 
 #if (defined(SHELL_USE_COMMON_TASK) && (SHELL_USE_COMMON_TASK > 0U))
-    COMMON_TASK_init();
+        (void)COMMON_TASK_init();
 #else
-    if (KOSA_StatusSuccess != OSA_EventCreate((osa_event_handle_t)shellContextHandle->event, true))
-    {
-        return kStatus_SHELL_Error;
+        if (KOSA_StatusSuccess != OSA_EventCreate((osa_event_handle_t)shellContextHandle->event, 1U))
+        {
+            return kStatus_SHELL_Error;
+        }
+
+        if (KOSA_StatusSuccess !=
+            OSA_TaskCreate((osa_task_handle_t)shellContextHandle->taskId, OSA_TASK(SHELL_Task), shellContextHandle))
+        {
+            return kStatus_SHELL_Error;
+        }
+#endif
+
+#endif
+
+#endif
     }
-
-    if (KOSA_StatusSuccess !=
-        OSA_TaskCreate((osa_task_handle_t)shellContextHandle->taskId, OSA_TASK(SHELL_Task), shellContextHandle))
-    {
-        return kStatus_SHELL_Error;
-    }
-#endif
-
-#endif
-
-#endif
 
     shellContextHandle->prompt       = prompt;
     shellContextHandle->serialHandle = serialHandle;
 
-    shellContextHandle->serialWriteHandle = (serial_write_handle_t)&shellContextHandle->serialWriteHandleBuffer[0];
-    status = SerialManager_OpenWriteHandle(shellContextHandle->serialHandle, shellContextHandle->serialWriteHandle);
-    assert(kStatus_SerialManager_Success == status);
+#if (!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
+    if (NULL == serialHandle)
+    {
+    }
+    else
+#endif
+    {
+        shellContextHandle->serialWriteHandle = (serial_write_handle_t)&shellContextHandle->serialWriteHandleBuffer[0];
+        status = SerialManager_OpenWriteHandle(shellContextHandle->serialHandle, shellContextHandle->serialWriteHandle);
+        assert(kStatus_SerialManager_Success == status);
 
-    shellContextHandle->serialReadHandle = (serial_read_handle_t)&shellContextHandle->serialReadHandleBuffer[0];
-    status = SerialManager_OpenReadHandle(shellContextHandle->serialHandle, shellContextHandle->serialReadHandle);
-    assert(kStatus_SerialManager_Success == status);
+        shellContextHandle->serialReadHandle = (serial_read_handle_t)&shellContextHandle->serialReadHandleBuffer[0];
+        status = SerialManager_OpenReadHandle(shellContextHandle->serialHandle, shellContextHandle->serialReadHandle);
+        assert(kStatus_SerialManager_Success == status);
 
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
-    SerialManager_InstallRxCallback(shellContextHandle->serialReadHandle, SHELL_SerialManagerRxCallback,
-                                    shellContextHandle);
+        status = SerialManager_InstallRxCallback(shellContextHandle->serialReadHandle, SHELL_SerialManagerRxCallback,
+                                                 shellContextHandle);
+        assert(kStatus_SerialManager_Success == status);
 #endif
+        (void)status;
+    }
 
     (void)SHELL_RegisterCommand(shellContextHandle, SHELL_COMMAND(help));
     (void)SHELL_RegisterCommand(shellContextHandle, SHELL_COMMAND(exit));
 
-    (void)SHELL_Write(shellContextHandle, "\r\nSHELL build: ", strlen("\r\nSHELL build: "));
-    (void)SHELL_Write(shellContextHandle, __DATE__, strlen(__DATE__));
-    (void)SHELL_Write(shellContextHandle, "\r\nCopyright  2018  NXP\r\n", strlen("\r\nCopyright  2018  NXP\r\n"));
-    (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt, strlen(shellContextHandle->prompt));
+    SHELL_WriteWithCopy(shellContextHandle, "\r\nSHELL build: ", strlen("\r\nSHELL build: "));
+    SHELL_WriteWithCopy(shellContextHandle, __DATE__, strlen(__DATE__));
+    SHELL_WriteWithCopy(shellContextHandle, "\r\nCopyright  2021  NXP\r\n", strlen("\r\nCopyright  2021  NXP\r\n"));
+    SHELL_PrintPrompt(shellContextHandle);
 
     return kStatus_SHELL_Success;
 }
 
-shell_status_t SHELL_RegisterCommand(shell_handle_t shellHandle, shell_command_t *command)
+shell_status_t SHELL_RegisterCommand(shell_handle_t shellHandle, shell_command_t *shellCommand)
 {
     shell_context_handle_t *shellContextHandle = (shell_context_handle_t *)shellHandle;
     assert(shellHandle);
-    assert(command);
+    assert(shellCommand);
 
     /* memory set for shellHandle */
-    (void)memset(&command->link, 0, sizeof(command->link));
+    (void)memset(&shellCommand->link, 0, sizeof(shellCommand->link));
 
-    (void)LIST_AddTail(&shellContextHandle->commandContextListHead, &command->link);
+    (void)LIST_AddTail(&shellContextHandle->commandContextListHead, &shellCommand->link);
 
     return kStatus_SHELL_Success;
 }
 
-shell_status_t SHELL_UnregisterCommand(shell_command_t *command)
+shell_status_t SHELL_UnregisterCommand(shell_command_t *shellCommand)
 {
-    assert(command);
+    assert(shellCommand);
 
-    (void)LIST_RemoveElement(&command->link);
+    (void)LIST_RemoveElement(&shellCommand->link);
 
     /* memory set for shellHandle */
-    (void)memset(&command->link, 0, sizeof(command->link));
+    (void)memset(&shellCommand->link, 0, sizeof(shellCommand->link));
 
     return kStatus_SHELL_Success;
 }
@@ -910,7 +964,7 @@ shell_status_t SHELL_Write(shell_handle_t shellHandle, char *buffer, uint32_t le
 {
     shell_context_handle_t *shellContextHandle;
     uint32_t primask;
-    shell_status_t status = kStatus_SHELL_Error;
+    shell_status_t status;
 
     assert(shellHandle);
     assert(buffer);
@@ -930,13 +984,36 @@ shell_status_t SHELL_Write(shell_handle_t shellHandle, char *buffer, uint32_t le
     }
     shellContextHandle->printBusy = 1U;
     EnableGlobalIRQ(primask);
-
-    status =
-        (shell_status_t)SerialManager_WriteBlocking(shellContextHandle->serialWriteHandle, (uint8_t *)buffer, length);
+#if (!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
+    if (NULL == shellContextHandle->serialHandle)
+    {
+        status = kStatus_SHELL_Success;
+        for (uint32_t index = 0; index < length; index++)
+        {
+            (void)putchar(buffer[index]);
+        }
+    }
+    else
+#endif
+    {
+        status = (shell_status_t)SerialManager_WriteBlocking(shellContextHandle->serialWriteHandle, (uint8_t *)buffer,
+                                                             length);
+    }
 
     shellContextHandle->printBusy = 0U;
 
     return status;
+}
+
+/* For MISRA to fix const */
+static void SHELL_WriteWithCopy(shell_handle_t shellHandle, const char *buffer, uint32_t length)
+{
+    char s_shellWriteCopyBuffer[128];
+
+    assert(length <= 128UL);
+
+    (void)memcpy(s_shellWriteCopyBuffer, buffer, length);
+    (void)SHELL_Write(shellHandle, s_shellWriteCopyBuffer, length);
 }
 
 int SHELL_Printf(shell_handle_t shellHandle, const char *formatString, ...)
@@ -964,10 +1041,45 @@ int SHELL_Printf(shell_handle_t shellHandle, const char *formatString, ...)
 
     shellContextHandle->printLength = 0U;
     length                          = (uint32_t)SHELL_Sprintf(shellHandle, formatString, ap);
-    (void)SerialManager_WriteBlocking(shellContextHandle->serialWriteHandle, (uint8_t *)shellContextHandle->printBuffer,
-                                      length);
+#if (!defined(SDK_DEBUGCONSOLE_UART) && (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
+    if (NULL == shellContextHandle->serialHandle)
+    {
+        for (uint32_t index = 0; index < length; index++)
+        {
+            (void)putchar(shellContextHandle->printBuffer[index]);
+        }
+    }
+    else
+#endif
+    {
+        (void)SerialManager_WriteBlocking(shellContextHandle->serialWriteHandle,
+                                          (uint8_t *)shellContextHandle->printBuffer, length);
+    }
     va_end(ap);
 
     shellContextHandle->printBusy = 0U;
     return (int32_t)shellContextHandle->printLength;
+}
+
+void SHELL_ChangePrompt(shell_handle_t shellHandle, char *prompt)
+{
+    shell_context_handle_t *shellContextHandle;
+    assert(shellHandle);
+    assert(prompt);
+
+    shellContextHandle = (shell_context_handle_t *)shellHandle;
+
+    shellContextHandle->prompt = prompt;
+    SHELL_PrintPrompt(shellContextHandle);
+}
+
+void SHELL_PrintPrompt(shell_handle_t shellHandle)
+{
+    shell_context_handle_t *shellContextHandle;
+    assert(shellHandle);
+
+    shellContextHandle = (shell_context_handle_t *)shellHandle;
+
+    SHELL_WriteWithCopy(shellContextHandle, "\r\n", 2U); /* MISRA C-2012 Rule 7.4 */
+    (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt, strlen(shellContextHandle->prompt));
 }

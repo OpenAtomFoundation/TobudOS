@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,8 +17,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPI2C EDMA driver version 2.1.10. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 10))
+/*! @brief LPI2C EDMA driver version. */
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!
@@ -37,7 +37,7 @@ typedef struct _lpi2c_master_edma_handle lpi2c_master_edma_handle_t;
  *
  * @param base The LPI2C peripheral base address.
  * @param handle Handle associated with the completed transfer.
- * @param completionStatus Either #kStatus_Success or an error code describing how the transfer completed.
+ * @param completionStatus Either kStatus_Success or an error code describing how the transfer completed.
  * @param userData Arbitrary pointer-sized value passed from the application.
  */
 typedef void (*lpi2c_master_edma_transfer_callback_t)(LPI2C_Type *base,
@@ -114,7 +114,7 @@ void LPI2C_MasterCreateEDMAHandle(LPI2C_Type *base,
  * @param base The LPI2C peripheral base address.
  * @param handle Pointer to the LPI2C master driver handle.
  * @param transfer The pointer to the transfer descriptor.
- * @retval #kStatus_Success The transaction was started successfully.
+ * @retval kStatus_Success The transaction was started successfully.
  * @retval #kStatus_LPI2C_Busy Either another master is currently utilizing the bus, or another DMA
  *      transaction is already in progress.
  */
@@ -128,8 +128,8 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
  * @param base The LPI2C peripheral base address.
  * @param handle Pointer to the LPI2C master driver handle.
  * @param[out] count Number of bytes transferred so far by the non-blocking transaction.
- * @retval #kStatus_Success
- * @retval #kStatus_NoTransferInProgress There is not a DMA transaction currently in progress.
+ * @retval kStatus_Success
+ * @retval kStatus_NoTransferInProgress There is not a DMA transaction currently in progress.
  */
 status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_handle_t *handle, size_t *count);
 
@@ -141,7 +141,7 @@ status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_ha
  *
  * @param base The LPI2C peripheral base address.
  * @param handle Pointer to the LPI2C master driver handle.
- * @retval #kStatus_Success A transaction was successfully aborted.
+ * @retval kStatus_Success A transaction was successfully aborted.
  * @retval #kStatus_LPI2C_Idle There is not a DMA transaction currently in progress.
  */
 status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handle_t *handle);

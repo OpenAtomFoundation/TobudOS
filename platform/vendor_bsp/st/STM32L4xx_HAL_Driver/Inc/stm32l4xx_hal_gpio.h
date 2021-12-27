@@ -6,36 +6,20 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L4xx_HAL_GPIO_H
-#define __STM32L4xx_HAL_GPIO_H
+#ifndef STM32L4xx_HAL_GPIO_H
+#define STM32L4xx_HAL_GPIO_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -181,7 +165,7 @@ typedef enum
 
 /**
   * @brief  Check whether the specified EXTI line flag is set or not.
-  * @param  __EXTI_LINE__: specifies the EXTI line flag to check.
+  * @param  __EXTI_LINE__ specifies the EXTI line flag to check.
   *         This parameter can be GPIO_PIN_x where x can be(0..15)
   * @retval The new state of __EXTI_LINE__ (SET or RESET).
   */
@@ -189,7 +173,7 @@ typedef enum
 
 /**
   * @brief  Clear the EXTI's line pending flags.
-  * @param  __EXTI_LINE__: specifies the EXTI lines flags to clear.
+  * @param  __EXTI_LINE__ specifies the EXTI lines flags to clear.
   *         This parameter can be any combination of GPIO_PIN_x where x can be (0..15)
   * @retval None
   */
@@ -197,7 +181,7 @@ typedef enum
 
 /**
   * @brief  Check whether the specified EXTI line is asserted or not.
-  * @param  __EXTI_LINE__: specifies the EXTI line to check.
+  * @param  __EXTI_LINE__ specifies the EXTI line to check.
   *          This parameter can be GPIO_PIN_x where x can be(0..15)
   * @retval The new state of __EXTI_LINE__ (SET or RESET).
   */
@@ -205,7 +189,7 @@ typedef enum
 
 /**
   * @brief  Clear the EXTI's line pending bits.
-  * @param  __EXTI_LINE__: specifies the EXTI lines to clear.
+  * @param  __EXTI_LINE__ specifies the EXTI lines to clear.
   *          This parameter can be any combination of GPIO_PIN_x where x can be (0..15)
   * @retval None
   */
@@ -213,7 +197,7 @@ typedef enum
 
 /**
   * @brief  Generate a Software interrupt on selected EXTI line.
-  * @param  __EXTI_LINE__: specifies the EXTI line to check.
+  * @param  __EXTI_LINE__ specifies the EXTI line to check.
   *          This parameter can be GPIO_PIN_x where x can be(0..15)
   * @retval None
   */
@@ -229,8 +213,8 @@ typedef enum
   */
 #define IS_GPIO_PIN_ACTION(ACTION)  (((ACTION) == GPIO_PIN_RESET) || ((ACTION) == GPIO_PIN_SET))
 
-#define IS_GPIO_PIN(__PIN__)        ((((__PIN__) & GPIO_PIN_MASK) != 0x00u) &&\
-                                     (((__PIN__) & ~GPIO_PIN_MASK) == 0x00u))
+#define IS_GPIO_PIN(__PIN__)        ((((uint32_t)(__PIN__) & GPIO_PIN_MASK) != 0x00U) &&\
+                                     (((uint32_t)(__PIN__) & ~GPIO_PIN_MASK) == 0x00U))
 
 #define IS_GPIO_MODE(__MODE__)      (((__MODE__) == GPIO_MODE_INPUT)              ||\
                                      ((__MODE__) == GPIO_MODE_OUTPUT_PP)          ||\
@@ -311,6 +295,6 @@ void              HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 }
 #endif
 
-#endif /* __STM32L4xx_HAL_GPIO_H */
+#endif /* STM32L4xx_HAL_GPIO_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

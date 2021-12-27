@@ -39,6 +39,8 @@
 
 #define TOS_CFG_SEM_EN                  1u
 
+#define TOS_CFG_BARRIER_EN              1u
+
 #define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN      1u
 
 #define TOS_CFG_FAULT_BACKTRACE_EN      0u

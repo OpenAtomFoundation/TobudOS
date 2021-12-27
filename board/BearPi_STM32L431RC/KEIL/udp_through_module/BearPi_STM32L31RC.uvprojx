@@ -10,14 +10,14 @@
       <TargetName>TencentOS_tiny</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32L431RCTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L4xx_DFP.2.2.0</PackID>
-          <PackURL>http://www.keil.com/pack</PackURL>
+          <PackID>Keil.STM32L4xx_DFP.2.4.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x803FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -185,6 +185,7 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
+            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -351,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -603,6 +604,56 @@
           <GroupName>kernel</GroupName>
           <Files>
             <File>
+              <FileName>tos_barrier.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_barrier.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_binary_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_binary_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_bitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_bitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_char_fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_char_fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_completion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_completion.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_countdownlatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_countdownlatch.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_global.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_global.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_message_queue.c</FilePath>
+            </File>
+            <File>
               <FileName>tos_mmblk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_mmblk.c</FilePath>
@@ -618,6 +669,41 @@
               <FilePath>..\..\..\..\kernel\core\tos_mutex.c</FilePath>
             </File>
             <File>
+              <FileName>tos_pend.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_pend.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_mail_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_mail_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_priority_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_priority_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_ring_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_ring_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_robin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_robin.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_rwlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_rwlock.c</FilePath>
+            </File>
+            <File>
               <FileName>tos_sched.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_sched.c</FilePath>
@@ -626,6 +712,11 @@
               <FileName>tos_sem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>tos_stopwatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\kernel\core\tos_stopwatch.c</FilePath>
             </File>
             <File>
               <FileName>tos_sys.c</FileName>
@@ -651,76 +742,6 @@
               <FileName>tos_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\kernel\core\tos_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_event.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_global.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_global.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_pend.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_pend.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_robin.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_robin.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_binary_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_binary_heap.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_char_fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_char_fifo.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_completion.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_completion.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_countdownlatch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_countdownlatch.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_mail_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_mail_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_message_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_message_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_priority_mail_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_priority_mail_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_priority_message_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_priority_message_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_priority_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_priority_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tos_ring_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\kernel\core\tos_ring_queue.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -783,11 +804,6 @@
               <FilePath>..\..\..\..\net\at\src\tos_at.c</FilePath>
             </File>
             <File>
-              <FileName>tos_at_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\net\at\src\tos_at_utils.c</FilePath>
-            </File>
-            <File>
               <FileName>sal_module_wrapper.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\net\sal_module_wrapper\sal_module_wrapper.c</FilePath>
@@ -823,5 +839,20 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>&lt;Project Info&gt;</LayName>
+        <LayDesc></LayDesc>
+        <LayUrl></LayUrl>
+        <LayKeys></LayKeys>
+        <LayCat></LayCat>
+        <LayLic></LayLic>
+        <LayTarg>0</LayTarg>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

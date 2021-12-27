@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,36 +21,6 @@
 
 /* @brief Mask to align an address to 32 bytes. */
 #define ALIGN_32_MASK (0x1fU)
-
-/*! @brief Common sets of flags used by the driver. */
-enum _lpi2c_flag_constants
-{
-    /*! All flags which are cleared by the driver upon starting a transfer. */
-    kMasterClearFlags = kLPI2C_MasterEndOfPacketFlag | kLPI2C_MasterStopDetectFlag | kLPI2C_MasterNackDetectFlag |
-                        kLPI2C_MasterArbitrationLostFlag | kLPI2C_MasterFifoErrFlag | kLPI2C_MasterPinLowTimeoutFlag |
-                        kLPI2C_MasterDataMatchFlag,
-
-    /*! IRQ sources enabled by the non-blocking transactional API. */
-    kMasterIrqFlags = kLPI2C_MasterArbitrationLostFlag | kLPI2C_MasterTxReadyFlag | kLPI2C_MasterRxReadyFlag |
-                      kLPI2C_MasterStopDetectFlag | kLPI2C_MasterNackDetectFlag | kLPI2C_MasterPinLowTimeoutFlag |
-                      kLPI2C_MasterFifoErrFlag,
-
-    /*! Errors to check for. */
-    kMasterErrorFlags = kLPI2C_MasterNackDetectFlag | kLPI2C_MasterArbitrationLostFlag | kLPI2C_MasterFifoErrFlag |
-                        kLPI2C_MasterPinLowTimeoutFlag,
-
-    /*! All flags which are cleared by the driver upon starting a transfer. */
-    kSlaveClearFlags = kLPI2C_SlaveRepeatedStartDetectFlag | kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveBitErrFlag |
-                       kLPI2C_SlaveFifoErrFlag,
-
-    /*! IRQ sources enabled by the non-blocking transactional API. */
-    kSlaveIrqFlags = kLPI2C_SlaveTxReadyFlag | kLPI2C_SlaveRxReadyFlag | kLPI2C_SlaveStopDetectFlag |
-                     kLPI2C_SlaveRepeatedStartDetectFlag | kLPI2C_SlaveFifoErrFlag | kLPI2C_SlaveBitErrFlag |
-                     kLPI2C_SlaveTransmitAckFlag | kLPI2C_SlaveAddressValidFlag,
-
-    /*! Errors to check for. */
-    kSlaveErrorFlags = kLPI2C_SlaveFifoErrFlag | kLPI2C_SlaveBitErrFlag,
-};
 
 /* ! @brief LPI2C master fifo commands. */
 enum _lpi2c_master_fifo_cmd
@@ -241,11 +211,11 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     handle->isBusy = true;
 
     /* Disable LPI2C IRQ and DMA sources while we configure stuff. */
-    LPI2C_MasterDisableInterrupts(base, (uint32_t)kMasterIrqFlags);
+    LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
     LPI2C_MasterEnableDMA(base, false, false);
 
     /* Clear all flags. */
-    LPI2C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
+    LPI2C_MasterClearStatusFlags(base, (uint32_t)kLPI2C_MasterClearFlags);
 
     /* Save transfer into handle. */
     handle->transfer = *transfer;

@@ -17,12 +17,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.snvs_hp"
 #endif
 
-#define SECONDS_IN_A_DAY (86400U)
-#define SECONDS_IN_A_HOUR (3600U)
+#define SECONDS_IN_A_DAY    (86400U)
+#define SECONDS_IN_A_HOUR   (3600U)
 #define SECONDS_IN_A_MINUTE (60U)
-#define DAYS_IN_A_YEAR (365U)
-#define YEAR_RANGE_START (1970U)
-#define YEAR_RANGE_END (2099U)
+#define DAYS_IN_A_YEAR      (365U)
+#define YEAR_RANGE_START    (1970U)
+#define YEAR_RANGE_END      (2099U)
 
 #if !(defined(SNVS_HPSR_PI_MASK))
 #define SNVS_HPSR_PI_MASK (0x2U)
@@ -547,3 +547,27 @@ uint32_t SNVS_HP_RTC_GetEnabledInterrupts(SNVS_Type *base)
 
     return val;
 }
+
+#if defined(FSL_FEATURE_SNVS_HAS_SET_LOCK) && (FSL_FEATURE_SNVS_HAS_SET_LOCK > 0)
+/*!
+ * brief Set SNVS HP Set locks.
+ *
+ * param base SNVS peripheral base address
+ *
+ */
+void SNVS_HP_SetLocks(SNVS_Type *base)
+{
+    uint32_t sec_config = ((OCOTP_CTRL->HW_OCOTP_OTFAD_CFG3 & OCOTP_CTRL_HW_OCOTP_SEC_CONFIG1_MASK) >>
+                           OCOTP_CTRL_HW_OCOTP_SEC_CONFIG1_SHIFT);
+
+    if (sec_config == SEC_CONFIG_OPEN)
+    {
+        /* Enable non-secure SW access */
+        base->HPCOMR |= SNVS_HPCOMR_NPSWA_EN(1);
+    }
+
+    /* Set LP Software Reset Disable lock and ZMK Write Soft Lock */
+    base->HPCOMR |= SNVS_HPCOMR_LP_SWR_DIS(1);
+    base->HPLR |= SNVS_HPLR_ZMK_WSL(1);
+}
+#endif /* FSL_FEATURE_SNVS_HAS_SET_LOCK */

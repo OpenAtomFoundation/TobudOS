@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2020 NXP
  * All rights reserved.
  *
  *
@@ -14,7 +14,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.flexram"
+#define FSL_COMPONENT_ID "driver.soc_flexram_allocate"
 #endif
 
 /*******************************************************************************
@@ -69,8 +69,8 @@ static uint8_t FLEXRAM_MapTcmSizeToRegister(uint8_t tcmBankNum)
 
 void FLEXRAM_SetTCMSize(uint8_t itcmBankNum, uint8_t dtcmBankNum)
 {
-    assert(itcmBankNum <= FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
-    assert(dtcmBankNum <= FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
+    assert(itcmBankNum <= (uint8_t)FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
+    assert(dtcmBankNum <= (uint8_t)FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
 
     /* dtcm configuration */
     if (dtcmBankNum != 0U)

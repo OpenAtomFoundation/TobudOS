@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  *
@@ -321,7 +321,7 @@ void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config
     config->bufferAddr = 0U;
     config->pixelFormat = kELCDIF_PixelFormatRGB888;
     config->dataBus = kELCDIF_DataBus24Bit;
-    @code
+   @endcode
  *
  * @param config Pointer to the eLCDIF configuration structure.
  */
@@ -667,7 +667,7 @@ static inline void ELCDIF_EnableAlphaSurface(LCDIF_Type *base, bool enable)
  * @brief Enable or disable the process surface.
  *
  * Process surface is the normal frame buffer. The process surface content
- * is controlled by @ref ELCDIF_SetNextBufferAddr.
+ * is controlled by ::ELCDIF_SetNextBufferAddr.
  *
  * @param base eLCDIF peripheral base address.
  * @param enable True to enable, false to disable.

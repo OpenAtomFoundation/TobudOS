@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -146,7 +146,11 @@ static void FLEXIO_SPI_TransferReceiveTransaction(FLEXIO_SPI_Type *base, flexio_
  * configuration structure can be filled by the user, or be set with default values
  * by the FLEXIO_SPI_MasterGetDefaultConfig().
  *
- * note FlexIO SPI master only support CPOL = 0, which means clock inactive low.
+ * note 1.FlexIO SPI master only support CPOL = 0, which means clock inactive low.
+ *      2.For FlexIO SPI master, the input valid time is 1.5 clock cycles, for slave the output valid time
+ *        is 2.5 clock cycles. So if FlexIO SPI master communicates with other spi IPs, the maximum baud
+ *        rate is FlexIO clock frequency divided by 2*2=4. If FlexIO SPI master communicates with FlexIO
+ *        SPI slave, the maximum baud rate is FlexIO clock frequency divided by (1.5+2.5)*2=8.
  *
  * Example
    code
@@ -178,8 +182,8 @@ static void FLEXIO_SPI_TransferReceiveTransaction(FLEXIO_SPI_Type *base, flexio_
 */
 void FLEXIO_SPI_MasterInit(FLEXIO_SPI_Type *base, flexio_spi_master_config_t *masterConfig, uint32_t srcClock_Hz)
 {
-    assert(base);
-    assert(masterConfig);
+    assert(base != NULL);
+    assert(masterConfig != NULL);
 
     flexio_shifter_config_t shifterConfig;
     flexio_timer_config_t timerConfig;
@@ -329,7 +333,7 @@ void FLEXIO_SPI_MasterDeinit(FLEXIO_SPI_Type *base)
 */
 void FLEXIO_SPI_MasterGetDefaultConfig(flexio_spi_master_config_t *masterConfig)
 {
-    assert(masterConfig);
+    assert(masterConfig != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(masterConfig, 0, sizeof(*masterConfig));
@@ -352,8 +356,12 @@ void FLEXIO_SPI_MasterGetDefaultConfig(flexio_spi_master_config_t *masterConfig)
  * configuration structure can be filled by the user, or be set with default values
  * by the FLEXIO_SPI_SlaveGetDefaultConfig().
  *
- * note Only one timer is needed in the FlexIO SPI slave. As a result, the second timer index is ignored.
- * FlexIO SPI slave only support CPOL = 0, which means clock inactive low.
+ * note 1.Only one timer is needed in the FlexIO SPI slave. As a result, the second timer index is ignored.
+ *      2.FlexIO SPI slave only support CPOL = 0, which means clock inactive low.
+ *      3.For FlexIO SPI master, the input valid time is 1.5 clock cycles, for slave the output valid time
+ *        is 2.5 clock cycles. So if FlexIO SPI slave communicates with other spi IPs, the maximum baud
+ *        rate is FlexIO clock frequency divided by 3*2=6. If FlexIO SPI slave communicates with FlexIO
+ *        SPI master, the maximum baud rate is FlexIO clock frequency divided by (1.5+2.5)*2=8.
  * Example
    code
    FLEXIO_SPI_Type spiDev = {
@@ -381,7 +389,7 @@ void FLEXIO_SPI_MasterGetDefaultConfig(flexio_spi_master_config_t *masterConfig)
 */
 void FLEXIO_SPI_SlaveInit(FLEXIO_SPI_Type *base, flexio_spi_slave_config_t *slaveConfig)
 {
-    assert(base && slaveConfig);
+    assert((base != NULL) && (slaveConfig != NULL));
 
     flexio_shifter_config_t shifterConfig;
     flexio_timer_config_t timerConfig;
@@ -503,7 +511,7 @@ void FLEXIO_SPI_SlaveDeinit(FLEXIO_SPI_Type *base)
 */
 void FLEXIO_SPI_SlaveGetDefaultConfig(flexio_spi_slave_config_t *slaveConfig)
 {
-    assert(slaveConfig);
+    assert(slaveConfig != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(slaveConfig, 0, sizeof(*slaveConfig));
@@ -658,23 +666,43 @@ void FLEXIO_SPI_MasterSetBaudRate(FLEXIO_SPI_Type *base, uint32_t baudRate_Bps, 
  * param direction Shift direction of MSB first or LSB first.
  * param buffer The data bytes to send.
  * param size The number of data bytes to send.
+ * retval kStatus_Success Successfully create the handle.
+ * retval kStatus_FLEXIO_SPI_Timeout The transfer timed out and was aborted.
  */
-void FLEXIO_SPI_WriteBlocking(FLEXIO_SPI_Type *base,
-                              flexio_spi_shift_direction_t direction,
-                              const uint8_t *buffer,
-                              size_t size)
+status_t FLEXIO_SPI_WriteBlocking(FLEXIO_SPI_Type *base,
+                                  flexio_spi_shift_direction_t direction,
+                                  const uint8_t *buffer,
+                                  size_t size)
 {
-    assert(buffer);
-    assert(size);
+    assert(buffer != NULL);
+    assert(size != 0U);
+
+#if SPI_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     while (0U != size--)
     {
         /* Wait until data transfer complete. */
+#if SPI_RETRY_TIMES
+        waitTimes = SPI_RETRY_TIMES;
+        while ((0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_TxBufferEmptyFlag)) &&
+               (0U != --waitTimes))
+#else
         while (0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_TxBufferEmptyFlag))
+#endif
         {
         }
+#if SPI_RETRY_TIMES
+        if (waitTimes == 0U)
+        {
+            return kStatus_FLEXIO_SPI_Timeout;
+        }
+#endif
         FLEXIO_SPI_WriteData(base, direction, *buffer++);
     }
+
+    return kStatus_Success;
 }
 
 /*!
@@ -687,23 +715,43 @@ void FLEXIO_SPI_WriteBlocking(FLEXIO_SPI_Type *base,
  * param buffer The buffer to store the received bytes.
  * param size The number of data bytes to be received.
  * param direction Shift direction of MSB first or LSB first.
+ * retval kStatus_Success Successfully create the handle.
+ * retval kStatus_FLEXIO_SPI_Timeout The transfer timed out and was aborted.
  */
-void FLEXIO_SPI_ReadBlocking(FLEXIO_SPI_Type *base,
-                             flexio_spi_shift_direction_t direction,
-                             uint8_t *buffer,
-                             size_t size)
+status_t FLEXIO_SPI_ReadBlocking(FLEXIO_SPI_Type *base,
+                                 flexio_spi_shift_direction_t direction,
+                                 uint8_t *buffer,
+                                 size_t size)
 {
-    assert(buffer);
-    assert(size);
+    assert(buffer != NULL);
+    assert(size != 0U);
+
+#if SPI_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     while (0U != size--)
     {
         /* Wait until data transfer complete. */
+#if SPI_RETRY_TIMES
+        waitTimes = SPI_RETRY_TIMES;
+        while ((0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag)) &&
+               (0U != --waitTimes))
+#else
         while (0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag))
+#endif
         {
         }
+#if SPI_RETRY_TIMES
+        if (waitTimes == 0U)
+        {
+            return kStatus_FLEXIO_SPI_Timeout;
+        }
+#endif
         *buffer++ = (uint8_t)FLEXIO_SPI_ReadData(base, direction);
     }
+
+    return kStatus_Success;
 }
 
 /*!
@@ -713,14 +761,19 @@ void FLEXIO_SPI_ReadBlocking(FLEXIO_SPI_Type *base,
  *
  * param base pointer to FLEXIO_SPI_Type structure
  * param xfer FlexIO SPI transfer structure, see #flexio_spi_transfer_t.
+ * retval kStatus_Success Successfully create the handle.
+ * retval kStatus_FLEXIO_SPI_Timeout The transfer timed out and was aborted.
  */
-void FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_transfer_t *xfer)
+status_t FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_transfer_t *xfer)
 {
     flexio_spi_shift_direction_t direction;
     uint8_t bytesPerFrame;
     uint32_t dataMode = 0;
     uint16_t timerCmp = (uint16_t)(base->flexioBase->TIMCMP[base->timerIndex[0]]);
     uint16_t tmpData  = FLEXIO_SPI_DUMMYDATA;
+#if SPI_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     timerCmp &= 0x00FFU;
     /* Configure the values in handle. */
@@ -766,9 +819,21 @@ void FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_transfe
     while (xfer->dataSize != 0U)
     {
         /* Wait until data transfer complete. */
+#if SPI_RETRY_TIMES
+        waitTimes = SPI_RETRY_TIMES;
+        while ((0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_TxBufferEmptyFlag)) &&
+               (0U != --waitTimes))
+#else
         while (0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_TxBufferEmptyFlag))
+#endif
         {
         }
+#if SPI_RETRY_TIMES
+        if (waitTimes == 0U)
+        {
+            return kStatus_FLEXIO_SPI_Timeout;
+        }
+#endif
         if (xfer->txData != NULL)
         {
             /* Transmit data and update tx size/buff. */
@@ -801,9 +866,21 @@ void FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_transfe
 
         FLEXIO_SPI_WriteData(base, direction, tmpData);
 
+#if SPI_RETRY_TIMES
+        waitTimes = SPI_RETRY_TIMES;
+        while ((0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag)) &&
+               (0U != --waitTimes))
+#else
         while (0U == (FLEXIO_SPI_GetStatusFlags(base) & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag))
+#endif
         {
         }
+#if SPI_RETRY_TIMES
+        if (waitTimes == 0U)
+        {
+            return kStatus_FLEXIO_SPI_Timeout;
+        }
+#endif
         tmpData = FLEXIO_SPI_ReadData(base, direction);
 
         if (xfer->rxData != NULL)
@@ -831,6 +908,8 @@ void FLEXIO_SPI_MasterTransferBlocking(FLEXIO_SPI_Type *base, flexio_spi_transfe
             }
         }
     }
+
+    return kStatus_Success;
 }
 
 /*!
@@ -848,7 +927,7 @@ status_t FLEXIO_SPI_MasterTransferCreateHandle(FLEXIO_SPI_Type *base,
                                                flexio_spi_master_transfer_callback_t callback,
                                                void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
 
@@ -859,6 +938,8 @@ status_t FLEXIO_SPI_MasterTransferCreateHandle(FLEXIO_SPI_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 
+    /* Clear pending NVIC IRQ before enable NVIC IRQ. */
+    NVIC_ClearPendingIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
     /* Enable interrupt in NVIC. */
     (void)EnableIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
 
@@ -883,8 +964,8 @@ status_t FLEXIO_SPI_MasterTransferNonBlocking(FLEXIO_SPI_Type *base,
                                               flexio_spi_master_handle_t *handle,
                                               flexio_spi_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     uint32_t dataMode = 0;
     uint16_t timerCmp = (uint16_t)base->flexioBase->TIMCMP[base->timerIndex[0]];
@@ -998,7 +1079,7 @@ status_t FLEXIO_SPI_MasterTransferNonBlocking(FLEXIO_SPI_Type *base,
  */
 status_t FLEXIO_SPI_MasterTransferGetCount(FLEXIO_SPI_Type *base, flexio_spi_master_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -1026,7 +1107,7 @@ status_t FLEXIO_SPI_MasterTransferGetCount(FLEXIO_SPI_Type *base, flexio_spi_mas
  */
 void FLEXIO_SPI_MasterTransferAbort(FLEXIO_SPI_Type *base, flexio_spi_master_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     FLEXIO_SPI_DisableInterrupts(base, (uint32_t)kFLEXIO_SPI_RxFullInterruptEnable);
     FLEXIO_SPI_DisableInterrupts(base, (uint32_t)kFLEXIO_SPI_TxEmptyInterruptEnable);
@@ -1047,7 +1128,7 @@ void FLEXIO_SPI_MasterTransferAbort(FLEXIO_SPI_Type *base, flexio_spi_master_han
  */
 void FLEXIO_SPI_MasterTransferHandleIRQ(void *spiType, void *spiHandle)
 {
-    assert(spiHandle);
+    assert(spiHandle != NULL);
 
     flexio_spi_master_handle_t *handle = (flexio_spi_master_handle_t *)spiHandle;
     FLEXIO_SPI_Type *base;
@@ -1099,7 +1180,7 @@ status_t FLEXIO_SPI_SlaveTransferCreateHandle(FLEXIO_SPI_Type *base,
                                               flexio_spi_slave_transfer_callback_t callback,
                                               void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
 
@@ -1110,6 +1191,8 @@ status_t FLEXIO_SPI_SlaveTransferCreateHandle(FLEXIO_SPI_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 
+    /* Clear pending NVIC IRQ before enable NVIC IRQ. */
+    NVIC_ClearPendingIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
     /* Enable interrupt in NVIC. */
     (void)EnableIRQ(flexio_irqs[FLEXIO_SPI_GetInstance(base)]);
 
@@ -1134,8 +1217,8 @@ status_t FLEXIO_SPI_SlaveTransferNonBlocking(FLEXIO_SPI_Type *base,
                                              flexio_spi_slave_handle_t *handle,
                                              flexio_spi_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     uint32_t dataMode = 0;
 
@@ -1209,7 +1292,7 @@ status_t FLEXIO_SPI_SlaveTransferNonBlocking(FLEXIO_SPI_Type *base,
  */
 void FLEXIO_SPI_SlaveTransferHandleIRQ(void *spiType, void *spiHandle)
 {
-    assert(spiHandle);
+    assert(spiHandle != NULL);
 
     flexio_spi_master_handle_t *handle = (flexio_spi_master_handle_t *)spiHandle;
     FLEXIO_SPI_Type *base;

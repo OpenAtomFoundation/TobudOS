@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package schemaVersion="1.4.9" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="PACK.xsd">
+  <vendor>Tencent</vendor>
+  <name>TencentOS-tiny</name>
+  <description>TencentOS tiny for external devices</description>
+  <url>https://raw.githubusercontent.com/OpenAtomFoundation/TencentOS-tiny/master/tools/mdk_pack/</url>
+  <license>LICENSE.txt</license>
+  <supportContact>1797878653@qq.com</supportContact>
+  
+  <releases>
+    <release version="1.0.0" date="2021-09-08">
+		Updated new pack:
+		(1) The package packages the TencentOS tiny operating system for the ARM Cortex-M0+, Cortex-M0, Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23 and Cortex-M33 cores, enabling quick installation of the TencentOS tiny corresponding kernel in a Keil project.
+		(2) The package can automatically adapt to the kernel selected for the project, and the arch file can be displayed automatically according to the kernel.
+		(3) When the user checks a component, the package will automatically indicate that other modules need to be checked, and can be checked with one click using Resolve in the interface.
+		(4) The user can modify the tos_config file of the corresponding kernel to tailor the functions of TencentOS tiny on their own.
+		(5) The package has been tested on ARM MDK Version 5.14, 5.30, 5.35, completed with ARM Cortex-M0+, Cortex-M0, Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23 and Cortex-M33 cores, core-based based chips as well as microcontroller development boards were ported.
+    </release>  
+  </releases>
+  
+  <keywords>
+    <!-- keywords for indexing -->
+    <keyword>TencentOS-tiny</keyword>
+	<keyword>ARM</keyword>
+  </keywords>
+
+  <requirements>
+    <packages>
+      <package vendor="ARM" name="CMSIS" version="5.0.0-0"/>
+    </packages>
+  </requirements>
+
+  <conditions>
+	<!-- Conditions for devices -->
+	<condition id="Cortex_M0">
+      <description>Cortex-M processor based device: Cortex-M0</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM0"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F0*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F030R8*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F072RB*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F091RC*"/>
+    </condition>
+	<condition id="Cortex_M0+">
+      <description>Cortex-M processor based device: Cortex-M0+</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM0P*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32G0*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32L0*"/>
+	  <accept Dname="MKL27Z32VDA4" Dvendor="NXP:11"/>  <!-- NXP-FRDM-KL27Z -->
+	  <accept Dname="MKL27Z32VLH4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z32VFM4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z32VMP4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z32VFT4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z64VDA4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z64VFT4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z64VMP4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z64VFM4" Dvendor="NXP:11"/>
+	  <accept Dname="MKL27Z64VLH4" Dvendor="NXP:11"/>
+    </condition>
+	<condition id="Cortex_M3">
+      <description>Cortex-M processor based device: Cortex-M3</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM3"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F1*"/>
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32F1x0 Series"/>        <!-- GD32F1x0 -->
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32F10x Series"/>        <!-- GD32F10x -->
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32F20x Series"/>        <!-- GD32F20x -->
+    </condition>
+	<condition id="Cortex_M4">
+      <description>Cortex-M processor based device: Cortex-M4</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM4*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F4*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32L4*"/>
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32E10x Series"/>       <!-- GD32E10x -->
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32F30x Series"/>       <!-- GD32F30x -->
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32F3x0 Series"/>       <!-- GD32F3x0 -->
+	  <accept Dvendor="GigaDevice:123" Dfamily="GD32F4xx Series"/>       <!-- GD32F4xx -->
+    </condition>
+	<condition id="Cortex_M7">
+      <description>Cortex-M processor based device: Cortex-M7</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM7*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32F7*"/>
+	  <accept Dname="MIMXRT1011DAE5A" Dvendor="NXP:11"/>              <!-- NXP.EVK-MIMXRT1010 -->
+	  <accept Dname="MIMXRT1011CAE4A" Dvendor="NXP:11"/>
+	  <accept Dfamily="MIMXRT1011" Dvendor="NXP:11"/>                 <!-- NXP_EVKB_IMXRT1011 -->
+	  <accept Dfamily="MIMXRT1052" Dvendor="NXP:11"/>                 <!-- NXP_EVKB_IMXRT1052 -->
+	  <accept Dfamily="MIMXRT1062" Dvendor="NXP:11"/>                 <!-- NXP_EVKB_IMXRT1062 -->
+	  <accept Dname="MIMXRT1062DVL6A" Dvendor="NXP:11"/>              <!-- NXP_EVK_IMXRT1060 -->
+	  <accept Dname="MIMXRT1062CVL5A" Dvendor="NXP:11"/>
+	  <accept Dname="MIMXRT1062CVJ5A" Dvendor="NXP:11"/>
+	  <accept Dname="MIMXRT1062DVJ6A" Dvendor="NXP:11"/>
+	  <accept Dname="MIMXRT1052DVL6B" Dvendor="NXP:11"/>              <!-- NXP_EVKB_IMXRT1050 -->
+	  <accept Dname="MIMXRT1052CVL5B" Dvendor="NXP:11"/>
+	  <accept Dname="MIMXRT1052CVJ5B" Dvendor="NXP:11"/>
+	  <accept Dname="MIMXRT1052DVJ6B" Dvendor="NXP:11"/>
+    </condition>
+	<condition id="Cortex_M23">
+      <description>Cortex-M processor based device: Cortex-M23</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM23*"/>
+	  <accept Dvendor="Nuvoton:18"  Dname="M2351[KSZ]IAAE"/>
+      <accept Dvendor="Nuvoton:18"  Dname="M2351KIAAEES"/>
+    </condition>
+	<condition id="Cortex_M33">
+      <description>Cortex-M processor based device: Cortex-M33</description>
+	  <accept Dvendor="ARM:82" Dname="ARMCM33*"/>
+	  <accept Dvendor="STMicroelectronics:13" Dname="STM32L5*"/>
+    </condition>
+	<condition id="ARMCAx">
+      <description>ARMCA Device</description>
+      <accept Dvendor="ARM:82" Dname="VE_CA*"/>
+    </condition>
+	
+	<!-- Conditions for tos_config -->
+	<condition id="tos_config_for_arm">
+      <description>tos_config_for_cortex_m0+</description>
+	  <require Cclass="TencentOS tiny" Cgroup="arch" Csub="arch"/>
+	  <require condition="example_mcu_platform"/>
+	  <require condition="tencent_tiny_kernel_core_hal"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	
+	
+	<!-- Conditions for arch -->
+	<condition id="arch_for_cortex_m0+">
+      <description>arch_for_cortex_m0+</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M0+"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	<condition id="arch_for_cortex_m0">
+      <description>arch_for_cortex_m0</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M0"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	<condition id="arch_for_cortex_m3">
+      <description>arch_for_cortex_m3</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M3"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	<condition id="arch_for_cortex_m4">
+      <description>arch_for_cortex_m4</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M4"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	<condition id="arch_for_cortex_m7">
+      <description>arch_for_cortex_m7</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M7"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	<condition id="arch_for_cortex_m23">
+      <description>arch_for_cortex_m23</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M23"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	<condition id="arch_for_cortex_m33">
+      <description>arch_for_cortex_m33</description>
+	  <require condition="tencent_tiny_kernel"/>
+	  <require condition="Cortex_M33"/>
+	  <require condition="example_mcu_platform"/>
+	  <accept Tcompiler="ARMCC"/>
+    </condition>
+	
+	<condition id="tencent_tiny_kernel_core_hal">
+      <description>Config - kernel</description>
+	  <require Cclass="TencentOS tiny" Cgroup="kernel" Csub="core"/>
+	  <require Cclass="TencentOS tiny" Cgroup="kernel" Csub="hal"/>
+    </condition>
+	
+	<condition id="tencent_tiny_kernel">
+      <description>Config - kernel</description>
+	  <require Cclass="TencentOS tiny" Cgroup="kernel" Csub="core"/>
+	  <require Cclass="TencentOS tiny" Cgroup="kernel" Csub="hal"/>
+	  <require Cclass="TencentOS tiny" Cgroup="kernel" Csub="tos_config"/>
+    </condition>
+	
+	<condition id="example_mcu_platform">
+      <description>Config - kernel</description>
+	  <require Cclass="TencentOS tiny" Cgroup="example" Csub="mcu_platform.h"/>
+	  <require Cclass="TencentOS tiny" Cgroup="example" Csub="mcu_it.c"/>
+    </condition>
+  </conditions>
+  
+  <components>
+	<bundle Cbundle="MDK-ARM" Cclass="TencentOS tiny" Cversion="1.0.0">
+		<description>TencentOS tiny</description>
+		<doc>examples/OpenAtomFoundation_TencentOS-tiny_ 腾讯物联网终端操作系统.html</doc>
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m0+">
+		  <description>arch for arm_v7m_cortex_m0+_armcc</description>
+		  <files>
+			<file category="include" name="arch/arm/arm-v7m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m0+/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m0+/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m0+/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m0+/armcc/port_s.S"/>
+		  </files>
+		</component>
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m3">
+		  <description>arch for arm_v7m_cortex_m3_armcc</description>
+		  <files>
+			<file category="include" name="arch/arm/arm-v7m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m3/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m3/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m3/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m3/armcc/port_s.S"/>
+		  </files>
+		</component>	
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m4">
+		  <description>arch for arm_v7m_cortex_m4_armcc</description>
+		  <RTE_Components_h>
+			#define RTE_DEVICE_STARTUP_STM32F4xx    /* Device Startup for STM32F4 */
+		  </RTE_Components_h>
+		  <files>
+			<file category="include" name="arch/arm/arm-v7m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m4/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m4/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m4/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m4/armcc/port_s.S"/>
+		  </files>
+		</component>
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m7">
+		  <description>arch for arm arm_v7m_cortex_m7_armcc</description>
+		  <files>
+			<file category="include" name="arch/arm/arm-v7m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m7/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m7/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m7/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v7m/cortex-m7/armcc/port_s.S"/>
+		  </files>
+		</component>
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m0">
+		  <description>arch for arm_v6m_cortex_m0_armcc</description>
+		  <files>
+			<file category="include" name="arch/arm/arm-v6m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v6m/cortex-m0/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v6m/cortex-m0/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v6m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v6m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v6m/cortex-m0/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v6m/cortex-m0/armcc/port_s.S"/>
+		  </files>
+		</component>	
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m23">
+		  <description>arch for arm_v8m_cortex_m23_armcc</description>
+		  <files>
+			<file category="include" name="arch/arm/arm-v8m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v8m/cortex-m23/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v8m/cortex-m23/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v8m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v8m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v8m/cortex-m23/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v8m/cortex-m23/armcc/port_s.S"/>
+		  </files>
+		</component>	
+		<component Cgroup="arch" Csub="arch" Cversion="1.0.0" condition="arch_for_cortex_m33">
+		  <description>arch for arm_v8m_cortex_m33_armcc</description>
+		  <files>
+			<file category="include" name="arch/arm/arm-v8m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v8m/cortex-m33/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v8m/cortex-m33/armcc/port_config.h" attr="config" version="1.0.0"/>
+			<file category="source"  name="arch/arm/arm-v8m/common/tos_cpu.c"/>
+			<file category="source"  name="arch/arm/arm-v8m/common/tos_fault.c"/>
+			<file category="source"  name="arch/arm/arm-v8m/cortex-m33/armcc/port_c.c"/>
+			<file category="source"  name="arch/arm/arm-v8m/cortex-m33/armcc/port_s.S"/>
+		  </files>
+		</component>
+		
+		<component Cgroup="cmsis_os" Csub="cmsis_os" Cversion="1.0.0" condition="tencent_tiny_kernel">
+		  <description>cmsis_os for TencentOS Tiny</description>
+		  <files>
+			<file category="include" name="osal/cmsis_os/"/>
+			<file category="source"  name="osal/cmsis_os/cmsis_os.c"/>
+		  </files>
+		</component>
+		<component Cgroup="cmsis_os" Csub="cmsis_os2" Cversion="1.0.0" condition="tencent_tiny_kernel">
+		  <description>cmsis_os for TencentOS Tiny</description>
+		  <files>
+			<file category="include" name="osal/cmsis_os/"/>
+			<file category="source"  name="osal/cmsis_os/cmsis_os2.c"/>
+		  </files>
+		</component>
+		
+		<component Cgroup="kernel" Csub="tos_config" Cversion="1.0.0" condition="tos_config_for_arm">
+		  <description>tos_config</description>
+		  <files>
+			<file category="header" name="kernel/tos_config/tos_config.h" attr="config" version="1.0.0"/>
+		  </files>
+		</component>
+	
+		<component Cgroup="kernel" Csub="core" Cversion="1.0.0">
+		  <description>kernel for TencentOS Tiny</description>
+		  <files>
+			<file category="include" name="kernel/core/include/"/>
+			<file category="source"  name="kernel/core/tos_barrier.c"/>
+			<file category="source"  name="kernel/core/tos_binary_heap.c"/>
+			<file category="source"  name="kernel/core/tos_bitmap.c"/>
+			<file category="source"  name="kernel/core/tos_char_fifo.c"/>
+			<file category="source"  name="kernel/core/tos_completion.c"/>
+			<file category="source"  name="kernel/core/tos_countdownlatch.c"/>
+			<file category="source"  name="kernel/core/tos_event.c"/>
+			<file category="source"  name="kernel/core/tos_global.c"/>
+			<file category="source"  name="kernel/core/tos_mail_queue.c"/>
+			<file category="source"  name="kernel/core/tos_message_queue.c"/>
+			<file category="source"  name="kernel/core/tos_mmblk.c"/>
+			<file category="source"  name="kernel/core/tos_mmheap.c"/>
+			<file category="source"  name="kernel/core/tos_mutex.c"/>
+			<file category="source"  name="kernel/core/tos_pend.c"/>
+			<file category="source"  name="kernel/core/tos_priority_mail_queue.c"/>
+			<file category="source"  name="kernel/core/tos_priority_message_queue.c"/>
+			<file category="source"  name="kernel/core/tos_priority_queue.c"/>
+			<file category="source"  name="kernel/core/tos_ring_queue.c"/>
+			<file category="source"  name="kernel/core/tos_robin.c"/>
+			<file category="source"  name="kernel/core/tos_rwlock.c"/>
+			<file category="source"  name="kernel/core/tos_sched.c"/>
+			<file category="source"  name="kernel/core/tos_sem.c"/>
+			<file category="source"  name="kernel/core/tos_stopwatch.c"/>
+			<file category="source"  name="kernel/core/tos_sys.c"/>
+			<file category="source"  name="kernel/core/tos_task.c"/>
+			<file category="source"  name="kernel/core/tos_tick.c"/>
+			<file category="source"  name="kernel/core/tos_time.c"/>
+			<file category="source"  name="kernel/core/tos_timer.c"/>
+			<file category="include" name="kernel/pm/include/"/>
+		  </files>
+		</component>
+		<component Cgroup="kernel" Csub="hal" Cversion="1.0.0">
+		  <description>kernel for TencentOS-Tiny</description>
+		  <files>
+			<file category="include" name="kernel/hal/include/"/>
+		  </files>
+		</component>
+		<component Cgroup="example" Csub="helloworld_main" Cversion="1.0.0">
+		  <description>Sample program</description>
+		  <files>
+			<file category="source"  name="examples/hello_world.c" attr="config"  version="1.0.0"/>
+			<file category="source"  name="examples/main.c" attr="config"  version="1.0.0"/>
+		  </files>
+		</component>
+		<component Cgroup="example" Csub="mcu_it.c" Cversion="1.0.0">
+		  <description>Interrupt function modification</description>
+		  <files>
+			<file category="source" name="examples/mcu_it.c" attr="config"  version="1.0.0"/>
+		  </files>
+		</component>
+		<component Cgroup="example" Csub="mcu_platform.h" Cversion="1.0.0">
+		  <description>mcu_platform</description>
+		  <files>
+			<file category="header" name="examples/mcu_platform.h" attr="config"  version="1.0.0"/>
+		  </files>
+		</component>
+	</bundle>  
+  </components>
+</package>

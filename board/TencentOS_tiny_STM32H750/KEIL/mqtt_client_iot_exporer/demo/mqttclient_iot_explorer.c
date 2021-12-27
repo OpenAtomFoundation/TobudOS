@@ -10,8 +10,8 @@
 #if defined(USE_ESP8266)
 #include "esp8266.h"
 
-#elif defined(USE_EC20)
-#include "ec20.h"
+#elif defined(USE_EC600S)
+#include "ec600.h"
 #endif
 
 #ifdef USE_ESP8266 
@@ -100,8 +100,8 @@ void mqttclient_task(void)
 #endif
 
 
-#ifdef USE_EC20
-    ec20_sal_init(HAL_UART_PORT_6);
+#ifdef USE_EC600S
+    ec600s_sal_init(HAL_UART_PORT_0);
 #endif
 
     mqtt_log_init();

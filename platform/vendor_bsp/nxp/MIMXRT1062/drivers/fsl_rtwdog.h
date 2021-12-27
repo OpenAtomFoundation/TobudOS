@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,19 +20,19 @@
  *******************************************************************************/
 /*! @name Unlock sequence */
 /*@{*/
-#define WDOG_FIRST_WORD_OF_UNLOCK (RTWDOG_UPDATE_KEY & 0xFFFFU)           /*!< First word of unlock sequence */
+#define WDOG_FIRST_WORD_OF_UNLOCK  (RTWDOG_UPDATE_KEY & 0xFFFFU)          /*!< First word of unlock sequence */
 #define WDOG_SECOND_WORD_OF_UNLOCK ((RTWDOG_UPDATE_KEY >> 16U) & 0xFFFFU) /*!< Second word of unlock sequence */
 /*@}*/
 
 /*! @name Refresh sequence */
 /*@{*/
-#define WDOG_FIRST_WORD_OF_REFRESH (RTWDOG_REFRESH_KEY & 0xFFFFU)           /*!< First word of refresh sequence */
+#define WDOG_FIRST_WORD_OF_REFRESH  (RTWDOG_REFRESH_KEY & 0xFFFFU)          /*!< First word of refresh sequence */
 #define WDOG_SECOND_WORD_OF_REFRESH ((RTWDOG_REFRESH_KEY >> 16U) & 0xFFFFU) /*!< Second word of refresh sequence */
 /*@}*/
 /*! @name Driver version */
 /*@{*/
-/*! @brief RTWDOG driver version 2.1.1. */
-#define FSL_RTWDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief RTWDOG driver version 2.1.2. */
+#define FSL_RTWDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*! @brief Describes RTWDOG clock source. */
@@ -161,7 +161,12 @@ void RTWDOG_GetDefaultConfig(rtwdog_config_t *config);
  * @param base   RTWDOG peripheral base address.
  * @param config The configuration of the RTWDOG.
  */
+
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
+void RTWDOG_Init(RTWDOG_Type *base, const rtwdog_config_t *config);
+#else
 AT_QUICKACCESS_SECTION_CODE(void RTWDOG_Init(RTWDOG_Type *base, const rtwdog_config_t *config));
+#endif
 
 /*!
  * @brief De-initializes the RTWDOG module.
@@ -288,7 +293,7 @@ static inline void RTWDOG_EnableWindowMode(RTWDOG_Type *base, bool enable)
  *
  * @param base          RTWDOG peripheral base address.
  * @param count         Raw count value.
- # @param clockFreqInHz The frequency of the clock source RTWDOG uses.
+ * @param clockFreqInHz The frequency of the clock source RTWDOG uses.
  */
 static inline uint32_t RTWDOG_CountToMesec(RTWDOG_Type *base, uint32_t count, uint32_t clockFreqInHz)
 {
@@ -356,7 +361,7 @@ static inline void RTWDOG_SetWindowValue(RTWDOG_Type *base, uint16_t windowValue
  *
  * @param base RTWDOG peripheral base address
  */
-static inline void RTWDOG_Unlock(RTWDOG_Type *base)
+__STATIC_FORCEINLINE void RTWDOG_Unlock(RTWDOG_Type *base)
 {
     if (((base->CS) & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {

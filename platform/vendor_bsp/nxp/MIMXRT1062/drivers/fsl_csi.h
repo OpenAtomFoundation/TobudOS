@@ -1,5 +1,5 @@
 /*
- * Copyright  2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,30 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
+
+#if (defined(FSL_FEATURE_CSI_NO_REG_PREFIX) && FSL_FEATURE_CSI_NO_REG_PREFIX)
+#define CSI_REG_CR1(base)       (base)->CR1
+#define CSI_REG_CR2(base)       (base)->CR2
+#define CSI_REG_CR3(base)       (base)->CR3
+#define CSI_REG_CR18(base)      (base)->CR18
+#define CSI_REG_SR(base)        (base)->SR
+#define CSI_REG_DMASA_FB1(base) (base)->DMASA_FB1
+#define CSI_REG_DMASA_FB2(base) (base)->DMASA_FB2
+#define CSI_REG_IMAG_PARA(base) (base)->IMAG_PARA
+#define CSI_REG_FBUF_PARA(base) (base)->FBUF_PARA
+#else
+#define CSI_REG_CR1(base)       (base)->CSICR1
+#define CSI_REG_CR2(base)       (base)->CSICR2
+#define CSI_REG_CR3(base)       (base)->CSICR3
+#define CSI_REG_CR18(base)      (base)->CSICR18
+#define CSI_REG_SR(base)        (base)->CSISR
+#define CSI_REG_DMASA_FB1(base) (base)->CSIDMASA_FB1
+#define CSI_REG_DMASA_FB2(base) (base)->CSIDMASA_FB2
+#define CSI_REG_IMAG_PARA(base) (base)->CSIIMAG_PARA
+#define CSI_REG_FBUF_PARA(base) (base)->CSIFBUF_PARA
+#endif
 
 /*! @brief Size of the frame buffer queue used in CSI transactional function. */
 #ifndef CSI_DRIVER_QUEUE_SIZE
@@ -54,8 +76,8 @@
  * and CSICR18[2:9]. So merge them into an uint32_t value, place CSICR18 control
  * bits to [8:15].
  */
-#define CSI_CSICR1_INT_EN_MASK 0xFFFF0000U
-#define CSI_CSICR3_INT_EN_MASK 0x000000FFU
+#define CSI_CSICR1_INT_EN_MASK  0xFFFF0000U
+#define CSI_CSICR3_INT_EN_MASK  0x000000FFU
 #define CSI_CSICR18_INT_EN_MASK 0x0000FF00U
 
 #if ((~CSI_CSICR1_INT_EN_MASK) &                                                                             \
@@ -450,7 +472,7 @@ void CSI_EnableFifoDmaRequest(CSI_Type *base, csi_fifo_t fifo, bool enable);
 static inline void CSI_Start(CSI_Type *base)
 {
     CSI_EnableFifoDmaRequest(base, kCSI_RxFifo, true);
-    base->CSICR18 |= CSI_CSICR18_CSI_ENABLE_MASK;
+    CSI_REG_CR18(base) |= CSI_CSICR18_CSI_ENABLE_MASK;
 }
 
 /*!
@@ -460,7 +482,7 @@ static inline void CSI_Start(CSI_Type *base)
  */
 static inline void CSI_Stop(CSI_Type *base)
 {
-    base->CSICR18 &= ~CSI_CSICR18_CSI_ENABLE_MASK;
+    CSI_REG_CR18(base) &= ~CSI_CSICR18_CSI_ENABLE_MASK;
     CSI_EnableFifoDmaRequest(base, kCSI_RxFifo, false);
 }
 
@@ -510,7 +532,7 @@ void CSI_DisableInterrupts(CSI_Type *base, uint32_t mask);
  */
 static inline uint32_t CSI_GetStatusFlags(CSI_Type *base)
 {
-    return base->CSISR;
+    return CSI_REG_SR(base);
 }
 
 /*!
@@ -530,7 +552,7 @@ static inline uint32_t CSI_GetStatusFlags(CSI_Type *base)
  */
 static inline void CSI_ClearStatusFlags(CSI_Type *base, uint32_t statusMask)
 {
-    base->CSISR = statusMask;
+    CSI_REG_SR(base) = statusMask;
 }
 /* @} */
 

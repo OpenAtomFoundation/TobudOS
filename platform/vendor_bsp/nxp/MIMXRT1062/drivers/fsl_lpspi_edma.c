@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -217,6 +217,27 @@ status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *
         return kStatus_LPSPI_Busy;
     }
 
+    /*Transfers will stall when transmit FIFO is empty or receive FIFO is full. */
+    LPSPI_Enable(base, false);
+    base->CFGR1 &= (~LPSPI_CFGR1_NOSTALL_MASK);
+    /* Check if using 3-wire mode and the txData is NULL, set the output pin to tristated. */
+    temp = base->CFGR1;
+    temp &= LPSPI_CFGR1_PINCFG_MASK;
+    if ((temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdiInSdiOut)) || (temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdoInSdoOut)))
+    {
+        if (NULL == handle->txData)
+        {
+            base->CFGR1 |= LPSPI_CFGR1_OUTCFG_MASK;
+        }
+        /* The 3-wire mode can't send and receive data at the same time. */
+        if ((handle->txData != NULL) && (handle->rxData != NULL))
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+
+    LPSPI_Enable(base, true);
+
     handle->state = (uint8_t)kLPSPI_Busy;
 
     uint32_t instance = LPSPI_GetInstance(base);
@@ -265,27 +286,6 @@ status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *
     isByteSwap              = handle->isByteSwap;
 
     LPSPI_SetFifoWatermarks(base, txWatermark, rxWatermark);
-
-    /*Transfers will stall when transmit FIFO is empty or receive FIFO is full. */
-    LPSPI_Enable(base, false);
-    base->CFGR1 &= (~LPSPI_CFGR1_NOSTALL_MASK);
-    /* Check if using 3-wire mode and the txData is NULL, set the output pin to tristated. */
-    temp = base->CFGR1;
-    temp &= LPSPI_CFGR1_PINCFG_MASK;
-    if ((temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdiInSdiOut)) || (temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdoInSdoOut)))
-    {
-        if (NULL == handle->txData)
-        {
-            base->CFGR1 |= LPSPI_CFGR1_OUTCFG_MASK;
-        }
-        /* The 3-wire mode can't send and receive data at the same time. */
-        if ((handle->txData != NULL) && (handle->rxData != NULL))
-        {
-            return kStatus_InvalidArgument;
-        }
-    }
-
-    LPSPI_Enable(base, true);
 
     /*Flush FIFO , clear status , disable all the inerrupts.*/
     LPSPI_FlushFifo(base, true, true);
@@ -387,7 +387,7 @@ status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *
     transferConfigRx.srcAddr   = (uint32_t)rxAddr + dif;
     transferConfigRx.srcOffset = 0;
 
-    transferConfigRx.majorLoopCounts = (uint8_t)handle->readRegRemainingTimes;
+    transferConfigRx.majorLoopCounts = handle->readRegRemainingTimes;
 
     /* Store the initially configured eDMA minor byte transfer count into the LPSPI handle */
     handle->nbytes = (uint8_t)transferConfigRx.minorLoopBytes;
@@ -748,10 +748,32 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
         return kStatus_LPSPI_Busy;
     }
 
+    /*Transfers will stall when transmit FIFO is empty or receive FIFO is full. */
+    LPSPI_Enable(base, false);
+    base->CFGR1 &= (~LPSPI_CFGR1_NOSTALL_MASK);
+    /* Check if using 3-wire mode and the txData is NULL, set the output pin to tristated. */
+    temp = base->CFGR1;
+    temp &= LPSPI_CFGR1_PINCFG_MASK;
+    if ((temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdiInSdiOut)) || (temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdoInSdoOut)))
+    {
+        if (NULL == handle->txData)
+        {
+            base->CFGR1 |= LPSPI_CFGR1_OUTCFG_MASK;
+        }
+        /* The 3-wire mode can't send and receive data at the same time. */
+        if ((handle->txData != NULL) && (handle->rxData != NULL))
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+
+    LPSPI_Enable(base, true);
+
     handle->state = (uint8_t)kLPSPI_Busy;
 
     uint32_t rxAddr = LPSPI_GetRxRegisterAddress(base);
     uint32_t txAddr = LPSPI_GetTxRegisterAddress(base);
+    uint32_t mask   = (uint32_t)kLPSPI_RxDmaEnable;
 
     edma_tcd_t *softwareTCD_extraBytes = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[1]) & (~0x1FU));
 
@@ -793,37 +815,16 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
 
     LPSPI_SetFifoWatermarks(base, txWatermark, rxWatermark);
 
-    /*Transfers will stall when transmit FIFO is empty or receive FIFO is full. */
-    LPSPI_Enable(base, false);
-    base->CFGR1 &= (~LPSPI_CFGR1_NOSTALL_MASK);
-    /* Check if using 3-wire mode and the txData is NULL, set the output pin to tristated. */
-    temp = base->CFGR1;
-    temp &= LPSPI_CFGR1_PINCFG_MASK;
-    if ((temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdiInSdiOut)) || (temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdoInSdoOut)))
-    {
-        if (NULL == handle->txData)
-        {
-            base->CFGR1 |= LPSPI_CFGR1_OUTCFG_MASK;
-        }
-        /* The 3-wire mode can't send and receive data at the same time. */
-        if ((handle->txData != NULL) && (handle->rxData != NULL))
-        {
-            return kStatus_InvalidArgument;
-        }
-    }
-
-    LPSPI_Enable(base, true);
-
     /*Flush FIFO , clear status , disable all the inerrupts.*/
     LPSPI_FlushFifo(base, true, true);
     LPSPI_ClearStatusFlags(base, (uint32_t)kLPSPI_AllStatusFlag);
     LPSPI_DisableInterrupts(base, (uint32_t)kLPSPI_AllInterruptEnable);
 
-    /* For DMA transfer , we'd better not masked the transmit data and receive data in TCR since the transfer flow is
-     * hard to controlled by software.
-     */
-    base->TCR = (base->TCR & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_BYSW_MASK)) |
-                LPSPI_TCR_CONTC(0U) | LPSPI_TCR_BYSW(isByteSwap) | LPSPI_TCR_PCS(whichPcs);
+    /* For DMA transfer, mask the transmit data if the tx data is null, for rx the receive data should not be masked at
+       any time since we use rx dma transfer finish cllback to indicate transfer finish. */
+    base->TCR =
+        (base->TCR & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_BYSW_MASK | LPSPI_TCR_TXMSK_MASK)) |
+        LPSPI_TCR_TXMSK(transfer->txData == NULL) | LPSPI_TCR_BYSW(isByteSwap) | LPSPI_TCR_PCS(whichPcs);
 
     isThereExtraTxBytes         = false;
     handle->isThereExtraRxBytes = false;
@@ -923,30 +924,68 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
                                &transferConfigRx, NULL);
         EDMA_EnableChannelInterrupts(handle->edmaRxRegToRxDataHandle->base, handle->edmaRxRegToRxDataHandle->channel,
                                      (uint32_t)kEDMA_MajorInterruptEnable);
+        EDMA_StartTransfer(handle->edmaRxRegToRxDataHandle);
     }
 
     /*Tx*/
-    EDMA_ResetChannel(handle->edmaTxDataToTxRegHandle->base, handle->edmaTxDataToTxRegHandle->channel);
-
-    if (isThereExtraTxBytes)
+    if (handle->txData != NULL)
     {
-        if (handle->txData != NULL)
+        EDMA_ResetChannel(handle->edmaTxDataToTxRegHandle->base, handle->edmaTxDataToTxRegHandle->channel);
+
+        if (isThereExtraTxBytes)
         {
             transferConfigTx.srcAddr   = (uint32_t) & (transfer->txData[transfer->dataSize - bytesLastWrite]);
             transferConfigTx.srcOffset = 1;
+
+            transferConfigTx.destOffset = 0;
+
+            transferConfigTx.srcTransferSize = kEDMA_TransferSize1Bytes;
+
+            dif = 0;
+            switch (bytesLastWrite)
+            {
+                case (1U):
+                    transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
+                    transferConfigTx.minorLoopBytes   = 1;
+                    if (handle->isByteSwap)
+                    {
+                        dif = 3;
+                    }
+                    break;
+
+                case (2U):
+                    transferConfigTx.destTransferSize = kEDMA_TransferSize2Bytes;
+                    transferConfigTx.minorLoopBytes   = 2;
+                    if (handle->isByteSwap)
+                    {
+                        dif = 2;
+                    }
+                    break;
+
+                default:
+                    transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
+                    transferConfigTx.minorLoopBytes   = 1;
+                    assert(false);
+                    break;
+            }
+
+            transferConfigTx.destAddr        = (uint32_t)txAddr + dif;
+            transferConfigTx.majorLoopCounts = 1;
+
+            EDMA_TcdReset(softwareTCD_extraBytes);
+
+            EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, NULL);
         }
-        else
-        {
-            transferConfigTx.srcAddr   = (uint32_t)(&handle->txBuffIfNull);
-            transferConfigTx.srcOffset = 0;
-        }
+
+        transferConfigTx.srcAddr   = (uint32_t)(handle->txData);
+        transferConfigTx.srcOffset = 1;
 
         transferConfigTx.destOffset = 0;
 
         transferConfigTx.srcTransferSize = kEDMA_TransferSize1Bytes;
 
         dif = 0;
-        switch (bytesLastWrite)
+        switch (handle->bytesEachRead)
         {
             case (1U):
                 transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
@@ -960,10 +999,16 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
             case (2U):
                 transferConfigTx.destTransferSize = kEDMA_TransferSize2Bytes;
                 transferConfigTx.minorLoopBytes   = 2;
+
                 if (handle->isByteSwap)
                 {
                     dif = 2;
                 }
+                break;
+
+            case (4U):
+                transferConfigTx.destTransferSize = kEDMA_TransferSize4Bytes;
+                transferConfigTx.minorLoopBytes   = 4;
                 break;
 
             default:
@@ -973,82 +1018,26 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
                 break;
         }
 
-        transferConfigTx.destAddr        = (uint32_t)txAddr + dif;
-        transferConfigTx.majorLoopCounts = 1;
+        transferConfigTx.destAddr = (uint32_t)txAddr + dif;
 
-        EDMA_TcdReset(softwareTCD_extraBytes);
+        transferConfigTx.majorLoopCounts = handle->writeRegRemainingTimes;
 
-        EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, NULL);
+        if (isThereExtraTxBytes)
+        {
+            EDMA_SetTransferConfig(handle->edmaTxDataToTxRegHandle->base, handle->edmaTxDataToTxRegHandle->channel,
+                                   &transferConfigTx, softwareTCD_extraBytes);
+        }
+        else
+        {
+            EDMA_SetTransferConfig(handle->edmaTxDataToTxRegHandle->base, handle->edmaTxDataToTxRegHandle->channel,
+                                   &transferConfigTx, NULL);
+        }
+
+        EDMA_StartTransfer(handle->edmaTxDataToTxRegHandle);
+        mask |= (uint32_t)kLPSPI_TxDmaEnable;
     }
 
-    if (handle->txData != NULL)
-    {
-        transferConfigTx.srcAddr   = (uint32_t)(handle->txData);
-        transferConfigTx.srcOffset = 1;
-    }
-    else
-    {
-        transferConfigTx.srcAddr   = (uint32_t)(&handle->txBuffIfNull);
-        transferConfigTx.srcOffset = 0;
-    }
-
-    transferConfigTx.destOffset = 0;
-
-    transferConfigTx.srcTransferSize = kEDMA_TransferSize1Bytes;
-
-    dif = 0;
-    switch (handle->bytesEachRead)
-    {
-        case (1U):
-            transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
-            transferConfigTx.minorLoopBytes   = 1;
-            if (handle->isByteSwap)
-            {
-                dif = 3;
-            }
-            break;
-
-        case (2U):
-            transferConfigTx.destTransferSize = kEDMA_TransferSize2Bytes;
-            transferConfigTx.minorLoopBytes   = 2;
-
-            if (handle->isByteSwap)
-            {
-                dif = 2;
-            }
-            break;
-
-        case (4U):
-            transferConfigTx.destTransferSize = kEDMA_TransferSize4Bytes;
-            transferConfigTx.minorLoopBytes   = 4;
-            break;
-
-        default:
-            transferConfigTx.destTransferSize = kEDMA_TransferSize1Bytes;
-            transferConfigTx.minorLoopBytes   = 1;
-            assert(false);
-            break;
-    }
-
-    transferConfigTx.destAddr = (uint32_t)txAddr + dif;
-
-    transferConfigTx.majorLoopCounts = handle->writeRegRemainingTimes;
-
-    if (isThereExtraTxBytes)
-    {
-        EDMA_SetTransferConfig(handle->edmaTxDataToTxRegHandle->base, handle->edmaTxDataToTxRegHandle->channel,
-                               &transferConfigTx, softwareTCD_extraBytes);
-    }
-    else
-    {
-        EDMA_SetTransferConfig(handle->edmaTxDataToTxRegHandle->base, handle->edmaTxDataToTxRegHandle->channel,
-                               &transferConfigTx, NULL);
-    }
-
-    EDMA_StartTransfer(handle->edmaTxDataToTxRegHandle);
-    EDMA_StartTransfer(handle->edmaRxRegToRxDataHandle);
-
-    LPSPI_EnableDMA(base, (uint32_t)kLPSPI_RxDmaEnable | (uint32_t)kLPSPI_TxDmaEnable);
+    LPSPI_EnableDMA(base, mask);
 
     return kStatus_Success;
 }

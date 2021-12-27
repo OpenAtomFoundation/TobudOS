@@ -6,36 +6,20 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                       opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L4xx_HAL_FLASH_H
-#define __STM32L4xx_HAL_FLASH_H
+#ifndef STM32L4xx_HAL_FLASH_H
+#define STM32L4xx_HAL_FLASH_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -172,10 +156,12 @@ typedef struct
 #define HAL_FLASH_ERROR_FAST      FLASH_FLAG_FASTERR
 #define HAL_FLASH_ERROR_RD        FLASH_FLAG_RDERR
 #define HAL_FLASH_ERROR_OPTV      FLASH_FLAG_OPTVERR
+#define HAL_FLASH_ERROR_ECCC      FLASH_FLAG_ECCC
 #define HAL_FLASH_ERROR_ECCD      FLASH_FLAG_ECCD
 #if defined (STM32L412xx) || defined (STM32L422xx) || defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || defined (STM32L442xx) || \
     defined (STM32L443xx) || defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx) || defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || \
+    defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define HAL_FLASH_ERROR_PEMPTY    FLASH_FLAG_PEMPTY
 #endif
 /**
@@ -196,8 +182,8 @@ typedef struct
   */
 #define FLASH_BANK_1              ((uint32_t)0x01)                          /*!< Bank 1   */
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_BANK_2              ((uint32_t)0x02)                          /*!< Bank 2   */
 #define FLASH_BANK_BOTH           ((uint32_t)(FLASH_BANK_1 | FLASH_BANK_2)) /*!< Bank1 and Bank2  */
 #else
@@ -237,8 +223,8 @@ typedef struct
 #define OB_WRPAREA_BANK1_AREAA    ((uint32_t)0x00)  /*!< Flash Bank 1 Area A */
 #define OB_WRPAREA_BANK1_AREAB    ((uint32_t)0x01)  /*!< Flash Bank 1 Area B */
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define OB_WRPAREA_BANK2_AREAA    ((uint32_t)0x02)  /*!< Flash Bank 2 Area A */
 #define OB_WRPAREA_BANK2_AREAB    ((uint32_t)0x04)  /*!< Flash Bank 2 Area B */
 #endif
@@ -268,8 +254,8 @@ typedef struct
 #define OB_USER_IWDG_STDBY        ((uint32_t)0x0020)                   /*!< Independent watchdog counter freeze in standby mode */
 #define OB_USER_WWDG_SW           ((uint32_t)0x0040)                   /*!< Window watchdog selection */
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define OB_USER_BFB2              ((uint32_t)0x0080)                   /*!< Dual-bank boot */
 #if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define OB_USER_DUALBANK          ((uint32_t)0x0100)                   /*!< Dual-Bank on 1MB or 512kB Flash memory devices */
@@ -283,12 +269,12 @@ typedef struct
 #define OB_USER_nRST_SHDW         ((uint32_t)0x1000)                   /*!< Reset generated when entering the shutdown mode */
 #if defined (STM32L412xx) || defined (STM32L422xx) || defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || \
     defined (STM32L442xx) || defined (STM32L443xx) || defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define OB_USER_nSWBOOT0          ((uint32_t)0x2000)                   /*!< Software BOOT0 */
 #define OB_USER_nBOOT0            ((uint32_t)0x4000)                   /*!< nBOOT0 option bit */
 #endif
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define OB_USER_DBANK             ((uint32_t)0x8000)                   /*!< Single bank with 128-bits data or two banks with 64-bits data */
 #endif
 /**
@@ -371,8 +357,8 @@ typedef struct
   */
 
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 /** @defgroup FLASH_OB_USER_BFB2 FLASH Option Bytes User BFB2 Mode
   * @{
   */
@@ -381,7 +367,7 @@ typedef struct
 /**
   * @}
   */
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 /** @defgroup FLASH_OB_USER_DUALBANK FLASH Option Bytes User Dual-bank Type
   * @{
   */
@@ -402,7 +388,7 @@ typedef struct
 #endif
 #endif
 
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 /** @defgroup FLASH_OB_USER_DBANK FLASH Option Bytes User DBANK Type
   * @{
   */
@@ -441,8 +427,8 @@ typedef struct
 
 #if defined (STM32L412xx) || defined (STM32L422xx) || defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || \
     defined (STM32L442xx) || defined (STM32L443xx) || defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 /** @defgroup OB_USER_nSWBOOT0 FLASH Option Bytes User Software BOOT0
   * @{
   */
@@ -481,7 +467,7 @@ typedef struct
 #define FLASH_LATENCY_2           FLASH_ACR_LATENCY_2WS                /*!< FLASH Two wait states */
 #define FLASH_LATENCY_3           FLASH_ACR_LATENCY_3WS                /*!< FLASH Three wait states */
 #define FLASH_LATENCY_4           FLASH_ACR_LATENCY_4WS                /*!< FLASH Four wait states */
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_LATENCY_5           FLASH_ACR_LATENCY_5WS                /*!< FLASH Five wait state */
 #define FLASH_LATENCY_6           FLASH_ACR_LATENCY_6WS                /*!< FLASH Six wait state */
 #define FLASH_LATENCY_7           FLASH_ACR_LATENCY_7WS                /*!< FLASH Seven wait states */
@@ -532,8 +518,9 @@ typedef struct
 #define FLASH_FLAG_OPTVERR        FLASH_SR_OPTVERR                     /*!< FLASH Option validity error flag  */
 #define FLASH_FLAG_BSY            FLASH_SR_BSY                         /*!< FLASH Busy flag */
 #if defined (STM32L412xx) || defined (STM32L422xx) || defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || defined (STM32L442xx) || \
-    defined (STM32L443xx) || defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx) || defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L443xx) || defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx) || \
+    defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || \
+    defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_FLAG_PEMPTY         FLASH_SR_PEMPTY                      /*!< FLASH Program empty */
 #define FLASH_FLAG_SR_ERRORS      (FLASH_FLAG_OPERR   | FLASH_FLAG_PROGERR | FLASH_FLAG_WRPERR | \
                                    FLASH_FLAG_PGAERR  | FLASH_FLAG_SIZERR  | FLASH_FLAG_PGSERR | \
@@ -545,13 +532,20 @@ typedef struct
                                    FLASH_FLAG_MISERR  | FLASH_FLAG_FASTERR | FLASH_FLAG_RDERR  | \
                                    FLASH_FLAG_OPTVERR)
 #endif
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || \
+    defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#define FLASH_FLAG_ECCC           (FLASH_ECCR_ECCC | FLASH_ECCR_ECCC2) /*!< FLASH ECC correction */
+#define FLASH_FLAG_ECCD           (FLASH_ECCR_ECCD | FLASH_ECCR_ECCD2) /*!< FLASH ECC detection */
+#else
 #define FLASH_FLAG_ECCC           FLASH_ECCR_ECCC                      /*!< FLASH ECC correction */
 #define FLASH_FLAG_ECCD           FLASH_ECCR_ECCD                      /*!< FLASH ECC detection */
+#endif
+#define FLASH_FLAG_ECCR_ERRORS    (FLASH_FLAG_ECCD | FLASH_FLAG_ECCC)
 
 #define FLASH_FLAG_ALL_ERRORS     (FLASH_FLAG_OPERR   | FLASH_FLAG_PROGERR | FLASH_FLAG_WRPERR | \
                                    FLASH_FLAG_PGAERR  | FLASH_FLAG_SIZERR  | FLASH_FLAG_PGSERR | \
                                    FLASH_FLAG_MISERR  | FLASH_FLAG_FASTERR | FLASH_FLAG_RDERR  | \
-                                   FLASH_FLAG_OPTVERR | FLASH_FLAG_ECCD)
+                                   FLASH_FLAG_OPTVERR | FLASH_FLAG_ECCR_ERRORS)
 /**
   * @}
   */
@@ -576,7 +570,7 @@ typedef struct
 
 /**
   * @brief  Set the FLASH Latency.
-  * @param  __LATENCY__: FLASH Latency
+  * @param  __LATENCY__ FLASH Latency
   *         This parameter can be one of the following values :
   *     @arg FLASH_LATENCY_0: FLASH Zero wait state
   *     @arg FLASH_LATENCY_1: FLASH One wait state
@@ -696,7 +690,7 @@ typedef struct
 
 /**
   * @brief  Enable the specified FLASH interrupt.
-  * @param  __INTERRUPT__: FLASH interrupt
+  * @param  __INTERRUPT__ FLASH interrupt
   *         This parameter can be any combination of the following values:
   *     @arg FLASH_IT_EOP: End of FLASH Operation Interrupt
   *     @arg FLASH_IT_OPERR: Error Interrupt
@@ -710,7 +704,7 @@ typedef struct
 
 /**
   * @brief  Disable the specified FLASH interrupt.
-  * @param  __INTERRUPT__: FLASH interrupt
+  * @param  __INTERRUPT__ FLASH interrupt
   *         This parameter can be any combination of the following values:
   *     @arg FLASH_IT_EOP: End of FLASH Operation Interrupt
   *     @arg FLASH_IT_OPERR: Error Interrupt
@@ -724,7 +718,7 @@ typedef struct
 
 /**
   * @brief  Check whether the specified FLASH flag is set or not.
-  * @param  __FLAG__: specifies the FLASH flag to check.
+  * @param  __FLAG__ specifies the FLASH flag to check.
   *   This parameter can be one of the following values:
   *     @arg FLASH_FLAG_EOP: FLASH End of Operation flag
   *     @arg FLASH_FLAG_OPERR: FLASH Operation error flag
@@ -743,13 +737,13 @@ typedef struct
   *     @arg FLASH_FLAG_ECCD: FLASH two ECC errors have been detected
   * @retval The new state of FLASH_FLAG (SET or RESET).
   */
-#define __HAL_FLASH_GET_FLAG(__FLAG__)          ((((__FLAG__) & (FLASH_FLAG_ECCC | FLASH_FLAG_ECCD)) != 0U) ? \
-                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) == (__FLAG__))          : \
-                                                 (READ_BIT(FLASH->SR,   (__FLAG__)) == (__FLAG__)))
+#define __HAL_FLASH_GET_FLAG(__FLAG__)          ((((__FLAG__) & FLASH_FLAG_ECCR_ERRORS) != 0U)     ? \
+                                                 (READ_BIT(FLASH->ECCR, (__FLAG__)) != 0U) : \
+                                                 (READ_BIT(FLASH->SR,   (__FLAG__)) != 0U))
 
 /**
   * @brief  Clear the FLASH's pending flags.
-  * @param  __FLAG__: specifies the FLASH flags to clear.
+  * @param  __FLAG__ specifies the FLASH flags to clear.
   *   This parameter can be any combination of the following values:
   *     @arg FLASH_FLAG_EOP: FLASH End of Operation flag
   *     @arg FLASH_FLAG_OPERR: FLASH Operation error flag
@@ -767,8 +761,8 @@ typedef struct
   *     @arg FLASH_FLAG_ALL_ERRORS: FLASH All errors flags
   * @retval None
   */
-#define __HAL_FLASH_CLEAR_FLAG(__FLAG__)        do { if(((__FLAG__) & (FLASH_FLAG_ECCC | FLASH_FLAG_ECCD)) != 0U) { SET_BIT(FLASH->ECCR, ((__FLAG__) & (FLASH_FLAG_ECCC | FLASH_FLAG_ECCD))); }\
-                                                     if(((__FLAG__) & ~(FLASH_FLAG_ECCC | FLASH_FLAG_ECCD)) != 0U) { WRITE_REG(FLASH->SR, ((__FLAG__) & ~(FLASH_FLAG_ECCC | FLASH_FLAG_ECCD))); }\
+#define __HAL_FLASH_CLEAR_FLAG(__FLAG__)        do { if(((__FLAG__) & FLASH_FLAG_ECCR_ERRORS) != 0U) { SET_BIT(FLASH->ECCR, ((__FLAG__) & FLASH_FLAG_ECCR_ERRORS)); }\
+                                                     if(((__FLAG__) & ~(FLASH_FLAG_ECCR_ERRORS)) != 0U) { WRITE_REG(FLASH->SR, ((__FLAG__) & ~(FLASH_FLAG_ECCR_ERRORS))); }\
                                                    } while(0)
 /**
   * @}
@@ -825,35 +819,37 @@ uint32_t HAL_FLASH_GetError(void);
   * @}
   */
 
+/* Private variables ---------------------------------------------------------*/
+/** @addtogroup FLASH_Private_Variables FLASH Private Variables
+ * @{
+ */
+extern FLASH_ProcessTypeDef pFlash;
+/**
+  * @}
+  */
+
+/* Private function ----------------------------------------------------------*/
+/** @addtogroup FLASH_Private_Functions FLASH Private Functions
+ * @{
+ */
+HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout);
+/**
+  * @}
+  */
+
 /* Private constants --------------------------------------------------------*/
 /** @defgroup FLASH_Private_Constants FLASH Private Constants
   * @{
   */
-#define FLASH_SIZE_DATA_REGISTER           ((uint32_t)0x1FFF75E0)
-
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
-#define FLASH_SIZE                         ((((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) == 0xFFFFU)) ? (0x800U << 10U) : \
-                                            (((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) << 10U))
-#elif defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx)
-#define FLASH_SIZE                         ((((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) == 0xFFFFU)) ? (0x200U << 10U) : \
-                                            (((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) << 10U))
-#elif defined (STM32L412xx) || defined (STM32L422xx)
-#define FLASH_SIZE                         ((((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) == 0xFFFFU)) ? (0x80U << 10U) :  \
-                                            (((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) << 10U))
-#else
-#define FLASH_SIZE                         ((((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) == 0xFFFFU)) ? (0x400U << 10U) : \
-                                            (((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) << 10U))
-#endif
-
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_BANK_SIZE                    (FLASH_SIZE >> 1U)
 #else
 #define FLASH_BANK_SIZE                    (FLASH_SIZE)
 #endif
 
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_PAGE_SIZE                    ((uint32_t)0x1000)
 #define FLASH_PAGE_SIZE_128_BITS           ((uint32_t)0x2000)
 #else
@@ -874,8 +870,8 @@ uint32_t HAL_FLASH_GetError(void);
                                             ((VALUE) == FLASH_TYPEERASE_MASSERASE))
 
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_FLASH_BANK(BANK)                (((BANK) == FLASH_BANK_1)  || \
                                             ((BANK) == FLASH_BANK_2)  || \
                                             ((BANK) == FLASH_BANK_BOTH))
@@ -908,7 +904,7 @@ uint32_t HAL_FLASH_GetError(void);
 
 #if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_FLASH_PAGE(PAGE)                ((PAGE) < 256U)
-#elif defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || defined(STM32L496xx) || defined(STM32L4A6xx)
+#elif defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || defined(STM32L496xx) || defined(STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx)
 #define IS_FLASH_PAGE(PAGE)                (((((*((uint16_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) == 0x400U) ? ((PAGE) < 256U) : \
                                             ((((*((uint16_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) == 0x200U) ? ((PAGE) < 128U) : \
                                             ((((*((uint16_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0FFFU)) == 0x100U) ? ((PAGE) < 64U)  : \
@@ -926,8 +922,8 @@ uint32_t HAL_FLASH_GetError(void);
 #define IS_OPTIONBYTE(VALUE)               (((VALUE) <= (OPTIONBYTE_WRP | OPTIONBYTE_RDP | OPTIONBYTE_USER | OPTIONBYTE_PCROP)))
 
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_OB_WRPAREA(VALUE)               (((VALUE) == OB_WRPAREA_BANK1_AREAA) || ((VALUE) == OB_WRPAREA_BANK1_AREAB) || \
                                             ((VALUE) == OB_WRPAREA_BANK2_AREAA) || ((VALUE) == OB_WRPAREA_BANK2_AREAB))
 #else
@@ -938,7 +934,7 @@ uint32_t HAL_FLASH_GetError(void);
                                             ((LEVEL) == OB_RDP_LEVEL_1)/* ||\
                                             ((LEVEL) == OB_RDP_LEVEL_2)*/)
 
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_OB_USER_TYPE(TYPE)              (((TYPE) <= (uint32_t)0xFFFFU) && ((TYPE) != 0U))
 #elif defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || defined(STM32L496xx) || defined(STM32L4A6xx)
 #define IS_OB_USER_TYPE(TYPE)              (((TYPE) <= (uint32_t)0x1FFFU) && ((TYPE) != 0U))
@@ -965,8 +961,8 @@ uint32_t HAL_FLASH_GetError(void);
 #define IS_OB_USER_WWDG(VALUE)             (((VALUE) == OB_WWDG_HW) || ((VALUE) == OB_WWDG_SW))
 
 #if defined (STM32L471xx) || defined (STM32L475xx) || defined (STM32L476xx) || defined (STM32L485xx) || defined (STM32L486xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_OB_USER_BFB2(VALUE)             (((VALUE) == OB_BFB2_DISABLE) || ((VALUE) == OB_BFB2_ENABLE))
 
 #define IS_OB_USER_DUALBANK(VALUE)         (((VALUE) == OB_DUALBANK_SINGLE) || ((VALUE) == OB_DUALBANK_DUAL))
@@ -984,8 +980,8 @@ uint32_t HAL_FLASH_GetError(void);
 
 #if defined (STM32L412xx) || defined (STM32L422xx) || defined (STM32L431xx) || defined (STM32L432xx) || defined (STM32L433xx) || \
     defined (STM32L442xx) || defined (STM32L443xx) || defined (STM32L451xx) || defined (STM32L452xx) || defined (STM32L462xx) || \
-    defined (STM32L496xx) || defined (STM32L4A6xx) || \
-    defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+    defined (STM32L496xx) || defined (STM32L4A6xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || \
+    defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_OB_USER_SWBOOT0(VALUE)          (((VALUE) == OB_BOOT0_FROM_OB) || ((VALUE) == OB_BOOT0_FROM_PIN))
 
 #define IS_OB_USER_BOOT0(VALUE)            (((VALUE) == OB_BOOT0_RESET) || ((VALUE) == OB_BOOT0_SET))
@@ -993,7 +989,7 @@ uint32_t HAL_FLASH_GetError(void);
 
 #define IS_OB_PCROP_RDP(VALUE)             (((VALUE) == OB_PCROP_RDP_NOT_ERASE) || ((VALUE) == OB_PCROP_RDP_ERASE))
 
-#if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
+#if defined (STM32L4P5xx) || defined (STM32L4Q5xx) || defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define IS_FLASH_LATENCY(LATENCY)          (((LATENCY) == FLASH_LATENCY_0) || ((LATENCY) == FLASH_LATENCY_1) || \
                                             ((LATENCY) == FLASH_LATENCY_2) || ((LATENCY) == FLASH_LATENCY_3) || \
                                             ((LATENCY) == FLASH_LATENCY_4) || ((LATENCY) == FLASH_LATENCY_5) || \
@@ -1029,6 +1025,6 @@ uint32_t HAL_FLASH_GetError(void);
 }
 #endif
 
-#endif /* __STM32L4xx_HAL_FLASH_H */
+#endif /* STM32L4xx_HAL_FLASH_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

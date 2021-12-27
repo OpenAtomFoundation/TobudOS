@@ -430,7 +430,9 @@ __STATIC__ void esp8266_incoming_data_process(void)
     }
 
     do {
+#if !defined(MIN)
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
+#endif
         read_len = MIN(data_len, sizeof(buffer));
         if (tos_at_uart_read(buffer, read_len) != read_len) {
             return;

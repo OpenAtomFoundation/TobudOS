@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2019 NXP
+ * Copyright 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -110,7 +110,7 @@ extern "C" {
  *
  * @param base    AIPSTZ peripheral base pointer
  * @param master  Masters for AIPSTZ.
- * @param privilegeConfig Configuration is ORed from @aipstz_master_privilege_level_t.
+ * @param privilegeConfig Configuration is ORed from @ref aipstz_master_privilege_level_t.
  */
 void AIPSTZ_SetMasterPriviledgeLevel(AIPSTZ_Type *base, aipstz_master_t master, uint32_t privilegeConfig);
 
@@ -118,8 +118,8 @@ void AIPSTZ_SetMasterPriviledgeLevel(AIPSTZ_Type *base, aipstz_master_t master, 
  * @brief Configure the access for peripheral.
  *
  * @param base    AIPSTZ peripheral base pointer
- * @param master  Peripheral for AIPSTZ.
- * @param accessControl Configuration is ORed from @aipstz_peripheral_access_control_t.
+ * @param peripheral  Peripheral for AIPSTZ.
+ * @param accessControl Configuration is ORed from @ref aipstz_peripheral_access_control_t.
  */
 void AIPSTZ_SetPeripheralAccessControl(AIPSTZ_Type *base, aipstz_peripheral_t peripheral, uint32_t accessControl);
 

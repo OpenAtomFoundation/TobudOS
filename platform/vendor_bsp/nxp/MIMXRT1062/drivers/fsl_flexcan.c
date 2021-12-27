@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,42 +20,44 @@
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ERRATA_6032) && FSL_FEATURE_FLEXCAN_HAS_ERRATA_6032)
 #define RXINTERMISSION (CAN_DBG1_CFSM(0x2f))
 #define TXINTERMISSION (CAN_DBG1_CFSM(0x14))
-#define BUSIDLE (CAN_DBG1_CFSM(0x02))
-#define CBN_VALUE3 (CAN_DBG1_CBN(0x03))
-#define DELAY_BUSIDLE (200)
+#define BUSIDLE        (CAN_DBG1_CFSM(0x02))
+#define CBN_VALUE3     (CAN_DBG1_CBN(0x03))
+#define DELAY_BUSIDLE  (200)
 #endif
 
-#define IDEAL_SP_LOW (750U)
-#define IDEAL_SP_MID (800U)
-#define IDEAL_SP_HIGH (875U)
+#define IDEAL_SP_LOW    (750U)
+#define IDEAL_SP_MID    (800U)
+#define IDEAL_SP_HIGH   (875U)
 #define IDEAL_SP_FACTOR (1000U)
 
-#define MAX_PROPSEG (CAN_CTRL1_PROPSEG_MASK >> CAN_CTRL1_PROPSEG_SHIFT)
-#define MAX_PSEG1 (CAN_CTRL1_PSEG1_MASK >> CAN_CTRL1_PSEG1_SHIFT)
-#define MAX_PSEG2 (CAN_CTRL1_PSEG2_MASK >> CAN_CTRL1_PSEG2_SHIFT)
-#define MAX_RJW (CAN_CTRL1_RJW_MASK >> CAN_CTRL1_RJW_SHIFT)
-#define MAX_PRESDIV (CAN_CTRL1_PRESDIV_MASK >> CAN_CTRL1_PRESDIV_SHIFT)
+#define MAX_PROPSEG           (CAN_CTRL1_PROPSEG_MASK >> CAN_CTRL1_PROPSEG_SHIFT)
+#define MAX_PSEG1             (CAN_CTRL1_PSEG1_MASK >> CAN_CTRL1_PSEG1_SHIFT)
+#define MAX_PSEG2             (CAN_CTRL1_PSEG2_MASK >> CAN_CTRL1_PSEG2_SHIFT)
+#define MAX_RJW               (CAN_CTRL1_RJW_MASK >> CAN_CTRL1_RJW_SHIFT)
+#define MAX_PRESDIV           (CAN_CTRL1_PRESDIV_MASK >> CAN_CTRL1_PRESDIV_SHIFT)
 #define CTRL1_MAX_TIME_QUANTA (1U + MAX_PROPSEG + 1U + MAX_PSEG1 + 1U + MAX_PSEG2 + 1U)
 #define CTRL1_MIN_TIME_QUANTA (8U)
 
-#define MAX_EPROPSEG (CAN_CBT_EPROPSEG_MASK >> CAN_CBT_EPROPSEG_SHIFT)
-#define MAX_EPSEG1 (CAN_CBT_EPSEG1_MASK >> CAN_CBT_EPSEG1_SHIFT)
-#define MAX_EPSEG2 (CAN_CBT_EPSEG2_MASK >> CAN_CBT_EPSEG2_SHIFT)
-#define MAX_ERJW (CAN_CBT_ERJW_MASK >> CAN_CBT_ERJW_SHIFT)
-#define MAX_EPRESDIV (CAN_CBT_EPRESDIV_MASK >> CAN_CBT_EPRESDIV_SHIFT)
+#define MAX_EPROPSEG        (CAN_CBT_EPROPSEG_MASK >> CAN_CBT_EPROPSEG_SHIFT)
+#define MAX_EPSEG1          (CAN_CBT_EPSEG1_MASK >> CAN_CBT_EPSEG1_SHIFT)
+#define MAX_EPSEG2          (CAN_CBT_EPSEG2_MASK >> CAN_CBT_EPSEG2_SHIFT)
+#define MAX_ERJW            (CAN_CBT_ERJW_MASK >> CAN_CBT_ERJW_SHIFT)
+#define MAX_EPRESDIV        (CAN_CBT_EPRESDIV_MASK >> CAN_CBT_EPRESDIV_SHIFT)
 #define CBT_MAX_TIME_QUANTA (1U + MAX_EPROPSEG + 1U + MAX_EPSEG1 + 1U + MAX_EPSEG2 + 1U)
 #define CBT_MIN_TIME_QUANTA (8U)
 
+#define MAX_FPROPSEG          (CAN_FDCBT_FPROPSEG_MASK >> CAN_FDCBT_FPROPSEG_SHIFT)
+#define MAX_FPSEG1            (CAN_FDCBT_FPSEG1_MASK >> CAN_FDCBT_FPSEG1_SHIFT)
+#define MAX_FPSEG2            (CAN_FDCBT_FPSEG2_MASK >> CAN_FDCBT_FPSEG2_SHIFT)
+#define MAX_FRJW              (CAN_FDCBT_FRJW_MASK >> CAN_FDCBT_FRJW_SHIFT)
+#define MAX_FPRESDIV          (CAN_FDCBT_FPRESDIV_MASK >> CAN_FDCBT_FPRESDIV_SHIFT)
 #define FDCBT_MAX_TIME_QUANTA (1U + MAX_FPROPSEG + 0U + MAX_FPSEG1 + 1U + MAX_FPSEG2 + 1U)
 #define FDCBT_MIN_TIME_QUANTA (5U)
-#define MAX_FPROPSEG (CAN_FDCBT_FPROPSEG_MASK >> CAN_FDCBT_FPROPSEG_SHIFT)
-#define MAX_FPSEG1 (CAN_FDCBT_FPSEG1_MASK >> CAN_FDCBT_FPSEG1_SHIFT)
-#define MAX_FPSEG2 (CAN_FDCBT_FPSEG2_MASK >> CAN_FDCBT_FPSEG2_SHIFT)
-#define MAX_FRJW (CAN_FDCBT_FRJW_MASK >> CAN_FDCBT_FRJW_SHIFT)
-#define MAX_FPRESDIV (CAN_FDCBT_FPRESDIV_MASK >> CAN_FDCBT_FPRESDIV_SHIFT)
+
+#define MAX_TDCOFF ((uint32_t)CAN_FDCTRL_TDCOFF_MASK >> CAN_FDCTRL_TDCOFF_SHIFT)
 
 #define MAX_CANFD_BAUDRATE (8000000U)
-#define MAX_CAN_BAUDRATE (1000000U)
+#define MAX_CAN_BAUDRATE   (1000000U)
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595) && FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595)
 #define CAN_ESR1_FLTCONF_BUSOFF CAN_ESR1_FLTCONF(2U)
@@ -181,8 +183,9 @@ static void FLEXCAN_SetBaudRate(CAN_Type *base,
  * @param tqNum Number of time quantas per bit
  * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void FLEXCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig);
+static bool FLEXCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig);
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
 /*!
@@ -222,8 +225,10 @@ static uint32_t FLEXCAN_GetFDMailboxOffset(CAN_Type *base, uint8_t mbIdx);
  * @param tqNum Number of time quanta per bit
  * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig);
+static bool FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig);
+
 /*!
  * @brief Calculates the segment values for a single bit time for CANFD bus data baud Rate
  *
@@ -231,8 +236,22 @@ static void FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_tim
  * @param tqNum Number of time quanta per bit
  * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void FLEXCAN_FDGetSegmentswithBRS(uint32_t baudRatebrs, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig);
+static bool FLEXCAN_FDGetSegmentswithBRS(uint32_t baudRatebrs, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig);
+
+/*!
+ * @brief Calculates the improved timing values by specific baudrates for CAN by CBT register
+ *
+ * @param baudRate  The classical CAN speed in bps defined by user
+ * @param sourceClock_Hz The Source clock data speed in bps. Zero to disable baudrate switching
+ * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
+ *
+ * @return TRUE if timing configuration found, FALSE if failed to find configuration
+ */
+static bool FLEXCAN_CalculateImprovedTimingValuesByCBT(uint32_t baudRate,
+                                                       uint32_t sourceClock_Hz,
+                                                       flexcan_timing_config_t *pTimingConfig);
 #endif
 
 /*!
@@ -290,7 +309,6 @@ static flexcan_isr_t s_flexcanIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
 /*!
  * brief Get the FlexCAN instance from peripheral base address.
  *
@@ -459,10 +477,10 @@ void FLEXCAN_EnterFreezeMode(CAN_Type *base)
 
 void FLEXCAN_ExitFreezeMode(CAN_Type *base)
 {
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_MECR_REGISTER) && FSL_FEATURE_FLEXCAN_HAS_MECR_REGISTER)
-    /* Enable to update in MCER. */
-    base->CTRL2 |= CAN_CTRL2_ECRWRE_MASK;
-    base->MECR &= ~CAN_MECR_ECRWRDIS_MASK;
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    /* Clean FlexCAN Access With Non-Correctable Error Interrupt Flag to avoid be put in freeze mode. */
+    FLEXCAN_ClearMemoryErrorStatusFlags(base, (uint32_t)kFLEXCAN_FlexCanAccessNonCorrectableErrorFlag |
+                                                  (uint32_t)kFLEXCAN_FlexCanAccessNonCorrectableErrorOverrunFlag);
 #endif
 
     /* Clear Freeze, Halt bits. */
@@ -482,7 +500,7 @@ static bool FLEXCAN_IsMbOccupied(CAN_Type *base, uint8_t mbIdx)
     bool fgRet;
 
     /* Is Rx FIFO enabled? */
-    if (base->MCR & CAN_MCR_RFEN_MASK)
+    if (0U != (base->MCR & CAN_MCR_RFEN_MASK))
     {
         /* Get RFFN value. */
         lastOccupiedMb = (uint8_t)((base->CTRL2 & CAN_CTRL2_RFFN_MASK) >> CAN_CTRL2_RFFN_SHIFT);
@@ -626,11 +644,22 @@ static void FLEXCAN_Reset(CAN_Type *base)
     /* Clean Global Mask of Rx FIFO. */
     base->RXFGMASK = 0x3FFFFFFF;
 
-    /* Clean all Message Buffer CS fields. */
-    for (i = 0; i < (uint32_t)FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base); i++)
-    {
-        base->MB[i].CS = 0x0;
-    }
+    /* Clean all Message Buffer memory. */
+    (void)memset((void *)&base->MB[0], 0, sizeof(base->MB));
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    /* Enable unrestricted write access to FlexCAN memory. */
+    base->CTRL2 |= CAN_CTRL2_WRMFRZ_MASK;
+    /* Do memory initialization for all FlexCAN RAM in order to have the parity bits in memory properly
+       updated. */
+    *(volatile uint32_t *)(((uint32_t)base) + offsetof(CAN_Type, RXFIR)) = 0x0U;
+    (void)memset((void *)&base->RESERVED_4[0], 0, sizeof(base->RESERVED_4));
+    /* Disable unrestricted write access to FlexCAN memory. */
+    base->CTRL2 &= ~CAN_CTRL2_WRMFRZ_MASK;
+
+    /* Clean all memory error flags. */
+    FLEXCAN_ClearMemoryErrorStatusFlags(base, (uint32_t)kFLEXCAN_AllMemoryErrorFlag);
+#endif
 }
 
 static void FLEXCAN_SetBaudRate(CAN_Type *base,
@@ -748,7 +777,7 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     instance = FLEXCAN_GetInstance(base);
     /* Enable FlexCAN clock. */
-    CLOCK_EnableClock(s_flexcanClock[instance]);
+    (void)CLOCK_EnableClock(s_flexcanClock[instance]);
     /*
      * Check the CAN clock in this device whether affected by Other clock gate
      * If it affected, we'd better to change other clock source,
@@ -758,7 +787,7 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
     assert(CAN_CLOCK_CHECK_NO_AFFECTS);
 #if defined(FLEXCAN_PERIPH_CLOCKS)
     /* Enable FlexCAN serial clock. */
-    CLOCK_EnableClock(s_flexcanPeriphClock[instance]);
+    (void)CLOCK_EnableClock(s_flexcanPeriphClock[instance]);
 #endif /* FLEXCAN_PERIPH_CLOCKS */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
@@ -783,6 +812,22 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 
     /* Reset to known status. */
     FLEXCAN_Reset(base);
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    /* Enable to update in MCER. */
+    base->CTRL2 |= CAN_CTRL2_ECRWRE_MASK;
+    base->MECR &= ~CAN_MECR_ECRWRDIS_MASK;
+
+    /* Enable/Disable Memory Error Detection and Correction.*/
+    base->MECR = (pConfig->enableMemoryErrorControl) ? (base->MECR & ~CAN_MECR_ECCDIS_MASK) :
+                                                       (base->MECR | CAN_MECR_ECCDIS_MASK);
+
+    /* Enable/Disable Non-Correctable Errors In FlexCAN Access Put Device In Freeze Mode. */
+    base->MECR = (pConfig->enableNonCorrectableErrorEnterFreeze) ? (base->MECR | CAN_MECR_NCEFAFRZ_MASK) :
+                                                                   (base->MECR & ~CAN_MECR_NCEFAFRZ_MASK);
+    /* Lock MCER register. */
+    base->CTRL2 &= ~CAN_CTRL2_ECRWRE_MASK;
+#endif
 
     /* Save current CTRL1 value and enable to enter Freeze mode(enabled by default). */
     ctrl1Temp = base->CTRL1;
@@ -823,12 +868,6 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 
     /* Write back CTRL1 Configuration to register. */
     base->CTRL1 = ctrl1Temp;
-
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_MECR_REGISTER) && FSL_FEATURE_FLEXCAN_HAS_MECR_REGISTER)
-    /* Enable to update in MCER. */
-    base->CTRL2 |= CAN_CTRL2_ECRWRE_MASK;
-    base->MECR &= ~CAN_MECR_ECRWRDIS_MASK;
-#endif
 
     /* Write back MCR Configuration to register. */
     base->MCR = mcrTemp;
@@ -894,8 +933,18 @@ void FLEXCAN_FDInit(
 
     if (brs && !(pConfig->enableLoopBack))
     {
-        /* Before use "|=" operation for multi-bits field, CPU should Clean previous Setting. */
-        fdctrl = (fdctrl & ~CAN_FDCTRL_TDCOFF_MASK) | CAN_FDCTRL_TDCOFF(0x2U);
+        /* The TDC offset should be configured as shown in this equation : offset = PSEG1 + PROPSEG + 2 */
+        if (((uint32_t)pConfig->timingConfig.fphaseSeg1 + pConfig->timingConfig.fpropSeg + 2U) < MAX_TDCOFF)
+        {
+            fdctrl = (fdctrl & ~CAN_FDCTRL_TDCOFF_MASK) | CAN_FDCTRL_TDCOFF((uint32_t)pConfig->timingConfig.fphaseSeg1 +
+                                                                            pConfig->timingConfig.fpropSeg + 2U);
+        }
+        else
+        {
+            fdctrl = (fdctrl & ~CAN_FDCTRL_TDCOFF_MASK) | CAN_FDCTRL_TDCOFF(MAX_TDCOFF);
+        }
+        /* Enable the Transceiver Delay Compensation */
+        fdctrl = (fdctrl & ~CAN_FDCTRL_TDCEN_MASK) | CAN_FDCTRL_TDCEN(1);
     }
 
     /* Before use "|=" operation for multi-bits field, CPU should clean previous Setting. */
@@ -917,6 +966,9 @@ void FLEXCAN_FDInit(
 
     /* update the FDCTL register. */
     base->FDCTRL = fdctrl;
+
+    /* Enable CAN FD ISO mode by default. */
+    base->CTRL2 |= CAN_CTRL2_ISOCANFDEN_MASK;
 
     /* Exit Freeze Mode. */
     FLEXCAN_ExitFreezeMode(base);
@@ -946,10 +998,10 @@ void FLEXCAN_Deinit(CAN_Type *base)
     instance = FLEXCAN_GetInstance(base);
 #if defined(FLEXCAN_PERIPH_CLOCKS)
     /* Disable FlexCAN serial clock. */
-    CLOCK_DisableClock(s_flexcanPeriphClock[instance]);
+    (void)CLOCK_DisableClock(s_flexcanPeriphClock[instance]);
 #endif /* FLEXCAN_PERIPH_CLOCKS */
     /* Disable FlexCAN clock. */
-    CLOCK_DisableClock(s_flexcanClock[instance]);
+    (void)CLOCK_DisableClock(s_flexcanClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -958,17 +1010,19 @@ void FLEXCAN_Deinit(CAN_Type *base)
  *
  * This function initializes the FlexCAN configuration structure to default values. The default
  * values are as follows.
- *   flexcanConfig->clkSrc                  = kFLEXCAN_ClkSrc0;
- *   flexcanConfig->baudRate                = 1000000U;
- *   flexcanConfig->baudRateFD              = 2000000U;
- *   flexcanConfig->maxMbNum                = 16;
- *   flexcanConfig->enableLoopBack          = false;
- *   flexcanConfig->enableSelfWakeup        = false;
- *   flexcanConfig->enableIndividMask       = false;
- *   flexcanConfig->disableSelfReception    = false;
- *   flexcanConfig->enableListenOnlyMode    = false;
- *   flexcanConfig->enableDoze              = false;
- *   flexcanConfig.timingConfig             = timingConfig;
+ *   flexcanConfig->clkSrc                               = kFLEXCAN_ClkSrc0;
+ *   flexcanConfig->baudRate                             = 1000000U;
+ *   flexcanConfig->baudRateFD                           = 2000000U;
+ *   flexcanConfig->maxMbNum                             = 16;
+ *   flexcanConfig->enableLoopBack                       = false;
+ *   flexcanConfig->enableSelfWakeup                     = false;
+ *   flexcanConfig->enableIndividMask                    = false;
+ *   flexcanConfig->disableSelfReception                 = false;
+ *   flexcanConfig->enableListenOnlyMode                 = false;
+ *   flexcanConfig->enableDoze                           = false;
+ *   flexcanConfig->enableMemoryErrorControl             = true;
+ *   flexcanConfig->enableNonCorrectableErrorEnterFreeze = true;
+ *   flexcanConfig.timingConfig                          = timingConfig;
  *
  * param pConfig Pointer to the FlexCAN configuration structure.
  */
@@ -996,6 +1050,10 @@ void FLEXCAN_GetDefaultConfig(flexcan_config_t *pConfig)
     pConfig->enableListenOnlyMode = false;
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT)
     pConfig->enableDoze = false;
+#endif
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    pConfig->enableMemoryErrorControl             = true;
+    pConfig->enableNonCorrectableErrorEnterFreeze = true;
 #endif
     /* Default protocol timing configuration, time quantum is 10. */
     pConfig->timingConfig.phaseSeg1  = 3;
@@ -1069,6 +1127,76 @@ void FLEXCAN_SetTimingConfig(CAN_Type *base, const flexcan_timing_config_t *pCon
     /* Exit Freeze Mode. */
     FLEXCAN_ExitFreezeMode(base);
 }
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+/*!
+ * brief Gets the FlexCAN Memory Error Report registers status.
+ *
+ * This function gets the FlexCAN Memory Error Report registers status.
+ *
+ * param base FlexCAN peripheral base address.
+ * param errorStatus Pointer to FlexCAN Memory Error Report registers status structure.
+ */
+void FLEXCAN_GetMemoryErrorReportStatus(CAN_Type *base, flexcan_memory_error_report_status_t *errorStatus)
+{
+    uint32_t temp;
+    /*  Disable updates of the error report registers. */
+    base->MECR |= CAN_MECR_RERRDIS_MASK;
+
+    errorStatus->accessAddress = (uint16_t)(base->RERRAR & CAN_RERRAR_ERRADDR_MASK);
+    errorStatus->errorData     = base->RERRDR;
+    errorStatus->errorType =
+        (base->RERRAR & CAN_RERRAR_NCE_MASK) == 0U ? kFLEXCAN_CorrectableError : kFLEXCAN_NonCorrectableError;
+
+    temp = (base->RERRAR & CAN_RERRAR_SAID_MASK) >> CAN_RERRAR_SAID_SHIFT;
+    switch (temp)
+    {
+        case (uint32_t)kFLEXCAN_MoveOutFlexCanAccess:
+        case (uint32_t)kFLEXCAN_MoveInAccess:
+        case (uint32_t)kFLEXCAN_TxArbitrationAccess:
+        case (uint32_t)kFLEXCAN_RxMatchingAccess:
+        case (uint32_t)kFLEXCAN_MoveOutHostAccess:
+            errorStatus->accessType = (flexcan_memory_access_type_t)temp;
+            break;
+        default:
+            assert(false);
+            break;
+    }
+
+    for (uint32_t i = 0; i < 4U; i++)
+    {
+        temp = (base->RERRSYNR & ((uint32_t)CAN_RERRSYNR_SYND0_MASK << (i * 8U))) >> (i * 8U);
+        errorStatus->byteStatus[i].byteIsRead = (base->RERRSYNR & ((uint32_t)CAN_RERRSYNR_BE0_MASK << (i * 8U))) != 0U;
+        switch (temp)
+        {
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_NoError):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits0Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits1Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits2Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits3Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits4Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits0Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits1Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits2Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits3Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits4Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits5Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits6Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits7Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_AllZeroError):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_AllOneError):
+                errorStatus->byteStatus[i].bitAffected = (flexcan_byte_error_syndrome_t)temp;
+                break;
+            default:
+                errorStatus->byteStatus[i].bitAffected = kFLEXCAN_NonCorrectableErrors;
+                break;
+        }
+    }
+
+    /*  Re-enable updates of the error report registers. */
+    base->MECR &= CAN_MECR_RERRDIS_MASK;
+}
+#endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
 /*!
@@ -1222,55 +1350,63 @@ void FLEXCAN_SetTxMbConfig(CAN_Type *base, uint8_t mbIdx, bool enable)
  * @param tqNum Number of time quantas per bit
  * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void FLEXCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig)
+static bool FLEXCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig)
 {
     uint32_t ideal_sp;
     uint32_t p1;
+    bool fgRet = false;
 
-    /* get ideal sample point. */
-    if (baudRate >= 1000000U)
-    {
-        ideal_sp = IDEAL_SP_LOW;
-    }
-    else if (baudRate >= 800000U)
-    {
-        ideal_sp = IDEAL_SP_MID;
-    }
-    else
-    {
-        ideal_sp = IDEAL_SP_HIGH;
-    }
+    /* Get ideal sample point. For the Bit field in CTRL1 register can't calculate higher ideal SP, we set it as the
+     * lowest one(75%).*/
+    ideal_sp = IDEAL_SP_LOW;
 
     /* distribute time quanta. */
-    p1                       = tqNum * (uint32_t)ideal_sp;
-    pTimingConfig->phaseSeg1 = (uint8_t)(p1 / IDEAL_SP_FACTOR - 2U);
+    p1                     = tqNum * (uint32_t)ideal_sp;
+    pTimingConfig->propSeg = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 2U);
+    if (pTimingConfig->propSeg <= (MAX_PSEG1 + MAX_PROPSEG))
+    {
+        if (pTimingConfig->propSeg > MAX_PROPSEG)
+        {
+            pTimingConfig->phaseSeg1 = pTimingConfig->propSeg - MAX_PROPSEG;
+            pTimingConfig->propSeg   = MAX_PROPSEG;
+        }
+        else
+        {
+            pTimingConfig->phaseSeg1 = 0;
+        }
 
-    if (pTimingConfig->phaseSeg1 > (MAX_PSEG1 + MAX_PROPSEG))
-    {
-        pTimingConfig->phaseSeg1 = MAX_PSEG1;
-        pTimingConfig->propSeg   = MAX_PROPSEG;
-    }
-    else if (pTimingConfig->phaseSeg1 > MAX_PSEG1)
-    {
-        pTimingConfig->propSeg   = pTimingConfig->phaseSeg1 - MAX_PSEG1;
-        pTimingConfig->phaseSeg1 = MAX_PSEG1;
-    }
-    else
-    {
-        pTimingConfig->propSeg = 0;
+        /* The value of prog Seg should be not larger than tqNum -4U. */
+        if ((pTimingConfig->propSeg + pTimingConfig->phaseSeg1) < ((uint8_t)tqNum - 4U))
+        {
+            pTimingConfig->phaseSeg2 = (uint8_t)tqNum - (pTimingConfig->phaseSeg1 + pTimingConfig->propSeg + 4U);
+
+            if (pTimingConfig->phaseSeg2 <= MAX_PSEG1)
+            {
+                if ((pTimingConfig->phaseSeg1 < pTimingConfig->phaseSeg2) &&
+                    (pTimingConfig->propSeg > (pTimingConfig->phaseSeg2 - pTimingConfig->phaseSeg1)))
+                {
+                    pTimingConfig->propSeg -= (pTimingConfig->phaseSeg2 - pTimingConfig->phaseSeg1);
+                    pTimingConfig->phaseSeg1 = pTimingConfig->phaseSeg2;
+                }
+
+                /* subtract one TQ for sync seg. */
+                /* sjw is 20% of total TQ, rounded to nearest int. */
+                pTimingConfig->rJumpwidth = ((uint8_t)tqNum + 4U) / 5U - 1U;
+                /* The max tqNum for CBT will reach to 129, ERJW would not be larger than 26. */
+                /* Considering that max ERJW is 31, rJumpwidth will always be smaller than MAX_ERJW. */
+                if (pTimingConfig->rJumpwidth > MAX_RJW)
+                {
+                    pTimingConfig->rJumpwidth = MAX_RJW;
+                }
+
+                fgRet = true;
+            }
+        }
     }
 
-    pTimingConfig->phaseSeg2 = (uint8_t)tqNum - (1U + pTimingConfig->phaseSeg1 + 1U + pTimingConfig->propSeg + 1U + 1U);
-    assert(pTimingConfig->phaseSeg2 <= MAX_PSEG2);
-
-    /* subtract one TQ for sync seg. */
-    /* sjw is 20% of total TQ, rounded to nearest int. */
-    pTimingConfig->rJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
-    if (pTimingConfig->rJumpwidth > MAX_RJW)
-    {
-        pTimingConfig->rJumpwidth = MAX_RJW;
-    }
+    return fgRet;
 }
 
 /*!
@@ -1289,12 +1425,11 @@ bool FLEXCAN_CalculateImprovedTimingValues(uint32_t baudRate,
     /* observe baud rate maximums. */
     assert(baudRate <= MAX_CAN_BAUDRATE);
 
-    uint32_t clk;   /* the clock is tqNumb x baudRateFD. */
-    uint32_t clk2;  /* the clock2 is clk2 / Pre-scaler Division Factor. */
+    uint32_t clk;   /* the clock is tqNum x baudRate. */
     uint32_t tqNum; /* Numbers of TQ. */
     bool fgRet = false;
 
-    /*  Auto Improved Protocal timing for CBT. */
+    /*  Auto Improved Protocal timing for CTRL1. */
     tqNum = CTRL1_MAX_TIME_QUANTA;
     do
     {
@@ -1304,27 +1439,23 @@ bool FLEXCAN_CalculateImprovedTimingValues(uint32_t baudRate,
             continue; /* tqNum too large, clk has been exceed sourceClock_Hz. */
         }
 
-        for (pTimingConfig->preDivider = 0x00; pTimingConfig->preDivider <= MAX_PRESDIV; (pTimingConfig->preDivider)++)
+        if ((sourceClock_Hz / clk * clk) != sourceClock_Hz)
         {
-            /* Consider some proessor not contain FPU, the parameter need to be exact division. */
-            if ((clk / ((uint32_t)(pTimingConfig->preDivider) + 1U) * ((uint32_t)(pTimingConfig->preDivider) + 1U)) !=
-                clk)
-            {
-                continue; /* clk need to be exact division by preDivider + 1. */
-            }
-            clk2 = clk / ((uint32_t)(pTimingConfig->preDivider) + 1U);
-            if (((sourceClock_Hz / clk2) * clk2) != sourceClock_Hz)
-            {
-                continue; /* sourceClock_Hz need to be exact division by preDivider. */
-            }
-
-            /* Get the best timing configuration. */
-            FLEXCAN_GetSegments(baudRate, tqNum, pTimingConfig);
-            fgRet = true;
-            break;
+            continue; /* Non-supporting: the frequency of clock source is not divisible by target baud rate, the user
+                      should change a divisible baud rate. */
         }
-        if (fgRet)
+
+        pTimingConfig->preDivider = (uint16_t)(sourceClock_Hz / clk) - 1U;
+        if (pTimingConfig->preDivider > MAX_PRESDIV)
         {
+            break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider could
+                      not handle it. */
+        }
+
+        /* Try to get the best timing configuration. */
+        if (FLEXCAN_GetSegments(baudRate, tqNum, pTimingConfig))
+        {
+            fgRet = true;
             break;
         }
     } while (--tqNum >= CTRL1_MIN_TIME_QUANTA);
@@ -1368,13 +1499,15 @@ static uint32_t FLEXCAN_GetFDMailboxOffset(CAN_Type *base, uint8_t mbIdx)
  * @param tqNum Number of time quanta per bit
  * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig)
+static bool FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig)
 {
     uint32_t ideal_sp;
     uint32_t p1;
+    bool fgRet = false;
 
-    /* get ideal sample point. */
+    /* Get ideal sample point. */
     if (baudRate >= 1000000U)
     {
         ideal_sp = IDEAL_SP_LOW;
@@ -1389,32 +1522,50 @@ static void FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_tim
     }
 
     /* distribute time quanta. */
-    p1                       = tqNum * (uint32_t)ideal_sp;
-    pTimingConfig->phaseSeg1 = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 2U);
-    if (pTimingConfig->phaseSeg1 > (MAX_EPSEG1 + MAX_EPROPSEG))
+    p1                     = tqNum * (uint32_t)ideal_sp;
+    pTimingConfig->propSeg = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 2U);
+    if (pTimingConfig->propSeg <= (MAX_EPSEG1 + MAX_EPROPSEG))
     {
-        pTimingConfig->phaseSeg1 = MAX_EPSEG1;
-        pTimingConfig->propSeg   = MAX_EPROPSEG;
-    }
-    else if (pTimingConfig->phaseSeg1 > MAX_EPSEG1)
-    {
-        pTimingConfig->propSeg   = pTimingConfig->phaseSeg1 - MAX_EPSEG1;
-        pTimingConfig->phaseSeg1 = MAX_EPSEG1;
-    }
-    else
-    {
-        pTimingConfig->propSeg = 0;
+        if (pTimingConfig->propSeg > MAX_EPROPSEG)
+        {
+            pTimingConfig->phaseSeg1 = pTimingConfig->propSeg - MAX_EPROPSEG;
+            pTimingConfig->propSeg   = MAX_EPROPSEG;
+        }
+        else
+        {
+            pTimingConfig->phaseSeg1 = 0;
+        }
+
+        /* The value of prog Seg should be not larger than tqNum -4U. */
+        if ((pTimingConfig->propSeg + pTimingConfig->phaseSeg1) < ((uint8_t)tqNum - 4U))
+        {
+            pTimingConfig->phaseSeg2 = (uint8_t)tqNum - (pTimingConfig->phaseSeg1 + pTimingConfig->propSeg + 4U);
+
+            if (pTimingConfig->phaseSeg2 <= MAX_EPSEG2)
+            {
+                if ((pTimingConfig->phaseSeg1 < pTimingConfig->phaseSeg2) &&
+                    (pTimingConfig->propSeg > (pTimingConfig->phaseSeg2 - pTimingConfig->phaseSeg1)))
+                {
+                    pTimingConfig->propSeg -= (pTimingConfig->phaseSeg2 - pTimingConfig->phaseSeg1);
+                    pTimingConfig->phaseSeg1 = pTimingConfig->phaseSeg2;
+                }
+
+                /* subtract one TQ for sync seg. */
+                /* sjw is 20% of total TQ, rounded to nearest int. */
+                pTimingConfig->rJumpwidth = ((uint8_t)tqNum + 4U) / 5U - 1U;
+                /* The max tqNum for CBT will reach to 129, ERJW would not be larger than 26. */
+                /* Considering that max ERJW is 31, rJumpwidth will always be smaller than MAX_ERJW. */
+                if (pTimingConfig->rJumpwidth > MAX_ERJW)
+                {
+                    pTimingConfig->rJumpwidth = MAX_ERJW;
+                }
+
+                fgRet = true;
+            }
+        }
     }
 
-    pTimingConfig->phaseSeg2 = (uint8_t)tqNum - (1U + pTimingConfig->phaseSeg1 + 1U + pTimingConfig->propSeg + 1U + 1U);
-    assert(pTimingConfig->phaseSeg2 <= MAX_EPSEG2);
-
-    /* subtract one TQ for sync seg. */
-    /* sjw is 20% of total TQ, rounded to nearest int. */
-    pTimingConfig->rJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
-    /* the max tqNum for CBT will reach to 129, ERJW would not larger than 26. */
-    /* Consider and max ERJW is 31, so rJumpwidth will always smaller than MAX_ERJW. */
-    assert(pTimingConfig->rJumpwidth <= MAX_ERJW);
+    return fgRet;
 }
 
 /*!
@@ -1424,11 +1575,13 @@ static void FLEXCAN_FDGetSegments(uint32_t baudRate, uint32_t tqNum, flexcan_tim
  * @param tqNum Number of time quanta per bit
  * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void FLEXCAN_FDGetSegmentswithBRS(uint32_t baudRatebrs, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig)
+static bool FLEXCAN_FDGetSegmentswithBRS(uint32_t baudRatebrs, uint32_t tqNum, flexcan_timing_config_t *pTimingConfig)
 {
     uint32_t ideal_sp;
     uint32_t p1;
+    bool fgRet = false;
 
     /* get ideal sample point. */
     if (baudRatebrs >= 1000000U)
@@ -1445,36 +1598,108 @@ static void FLEXCAN_FDGetSegmentswithBRS(uint32_t baudRatebrs, uint32_t tqNum, f
     }
 
     /* distribute time quanta. */
-    p1                        = tqNum * (uint32_t)ideal_sp;
-    pTimingConfig->fphaseSeg1 = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 1U);
-    if (pTimingConfig->fphaseSeg1 > (MAX_FPSEG1 + MAX_FPROPSEG))
+    p1                      = tqNum * (uint32_t)ideal_sp;
+    pTimingConfig->fpropSeg = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 1U);
+    if (pTimingConfig->fpropSeg <= (MAX_FPSEG1 + MAX_FPROPSEG))
     {
-        pTimingConfig->fphaseSeg1 = MAX_FPSEG1;
-        pTimingConfig->fpropSeg   = MAX_FPROPSEG;
-    }
-    else if (pTimingConfig->fphaseSeg1 > MAX_FPSEG1)
-    {
-        pTimingConfig->fpropSeg   = pTimingConfig->fphaseSeg1 - MAX_FPSEG1;
-        pTimingConfig->fphaseSeg1 = MAX_FPSEG1;
-    }
-    else
-    {
-        pTimingConfig->fpropSeg = 0;
+        if (pTimingConfig->fpropSeg > MAX_FPROPSEG)
+        {
+            pTimingConfig->fphaseSeg1 = pTimingConfig->fpropSeg - MAX_FPROPSEG;
+            pTimingConfig->fpropSeg   = MAX_FPROPSEG;
+        }
+        else
+        {
+            pTimingConfig->fphaseSeg1 = 0;
+        }
+
+        /* The value of prog Seg should be not larger than tqNum -3U. */
+        if ((pTimingConfig->fpropSeg + pTimingConfig->fphaseSeg1) < ((uint8_t)tqNum - 3U))
+        {
+            pTimingConfig->fphaseSeg2 = (uint8_t)tqNum - (pTimingConfig->fphaseSeg1 + pTimingConfig->fpropSeg + 3U);
+
+            if ((pTimingConfig->fphaseSeg1 < pTimingConfig->fphaseSeg2) &&
+                (pTimingConfig->fpropSeg > (pTimingConfig->fphaseSeg2 - pTimingConfig->fphaseSeg1)))
+            {
+                pTimingConfig->fpropSeg -= (pTimingConfig->fphaseSeg2 - pTimingConfig->fphaseSeg1);
+                pTimingConfig->fphaseSeg1 = pTimingConfig->fphaseSeg2;
+            }
+
+            /* subtract one TQ for sync seg. */
+            /* sjw is 20% of total TQ, rounded to nearest int. */
+            pTimingConfig->frJumpwidth = ((uint8_t)tqNum + 4U) / 5U - 1U;
+
+            if (pTimingConfig->frJumpwidth > MAX_FRJW)
+            {
+                pTimingConfig->frJumpwidth = MAX_FRJW;
+            }
+            fgRet = true;
+        }
     }
 
-    pTimingConfig->fphaseSeg2 =
-        (uint8_t)tqNum - (1U + pTimingConfig->fphaseSeg1 + 1U + pTimingConfig->fpropSeg + 0U + 1U);
+    return fgRet;
+}
 
-    assert(pTimingConfig->fphaseSeg2 <= MAX_FPSEG2);
+/*!
+ * @brief Calculates the improved timing values by specific baudrates for CAN by CBT register
+ *
+ * @param baudRate  The classical CAN speed in bps defined by user
+ * @param sourceClock_Hz The Source clock data speed in bps. Zero to disable baudrate switching
+ * @param pTimingConfig Pointer to the FlexCAN timing configuration structure.
+ *
+ * @return TRUE if timing configuration found, FALSE if failed to find configuration
+ */
+static bool FLEXCAN_CalculateImprovedTimingValuesByCBT(uint32_t baudRate,
+                                                       uint32_t sourceClock_Hz,
+                                                       flexcan_timing_config_t *pTimingConfig)
+{
+    /* observe baud rate maximums. */
+    assert(baudRate <= MAX_CAN_BAUDRATE);
 
-    /* subtract one TQ for sync seg. */
-    /* sjw is 20% of total TQ, rounded to nearest int. */
-    pTimingConfig->frJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
+    uint32_t clk;   /* the clock is tqNumb x baudRateFD. */
+    uint32_t tqNum; /* Numbers of TQ. */
+    bool fgRet = false;
 
-    if (pTimingConfig->frJumpwidth > MAX_FRJW)
+    tqNum = CBT_MAX_TIME_QUANTA;
+    /*  Auto Improved Protocal timing. */
+    do
     {
-        pTimingConfig->frJumpwidth = MAX_FRJW;
-    }
+        clk = baudRate * tqNum;
+        if (clk > sourceClock_Hz)
+        {
+            continue; /* tqNum too large, clk has been exceed sourceClock_Hz. */
+        }
+
+        if ((sourceClock_Hz / clk * clk) != sourceClock_Hz)
+        {
+            continue; /* Non-supporting: the frequency of clock source is not divisible by target baud rate, the user
+                      should change a divisible baud rate. */
+        }
+
+        /* Make sure the new calculated divider value is greater than the previous one. */
+        if (pTimingConfig->preDivider > ((uint16_t)(sourceClock_Hz / clk) - 1U))
+        {
+            continue;
+        }
+        else
+        {
+            pTimingConfig->preDivider = (uint16_t)(sourceClock_Hz / clk) - 1U;
+        }
+
+        if (pTimingConfig->preDivider > MAX_EPRESDIV)
+        {
+            break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider could
+                      not handle it. */
+        }
+
+        /* Try to get the best timing configuration. */
+        if (FLEXCAN_FDGetSegments(baudRate, tqNum, pTimingConfig))
+        {
+            fgRet = true;
+            break;
+        }
+    } while (--tqNum >= CBT_MIN_TIME_QUANTA);
+
+    return fgRet;
 }
 
 /*!
@@ -1496,87 +1721,72 @@ bool FLEXCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
     assert(baudRate <= MAX_CAN_BAUDRATE);
     assert(baudRateFD <= MAX_CANFD_BAUDRATE);
 
-    uint32_t clk, clkbrs;
-    uint32_t clk2, clkbrs2;
-    uint32_t tqNum, tqNumbrs;                            /* Numbers of TQ. */
-    bool fgCaculateCBT = false, fgCaculateFDCBT = false; /* default value false means to find solution fail. */
+    uint32_t clk;
+    uint32_t tqNum; /* Numbers of TQ. */
+    bool fgRet = false;
 
-    /*  Auto Improved Protocal timing for CBT. */
-    tqNum = CBT_MAX_TIME_QUANTA;
-    do
+    pTimingConfig->preDivider = 0U;
+
+    /* To minimize errors when processing FD frames, try to calculate the same value for FPRESDIV and
+       PRESDIV (in CBT). */
+    while (FLEXCAN_CalculateImprovedTimingValuesByCBT(baudRate, sourceClock_Hz, pTimingConfig))
     {
-        clk = baudRate * tqNum;
-        if (clk > sourceClock_Hz)
+        if (0U != baudRateFD)
         {
-            continue; /* tqNum too large, clk x tqNum has been exceed sourceClock_Hz. */
-        }
-
-        for (pTimingConfig->preDivider = 0x00; pTimingConfig->preDivider <= MAX_EPRESDIV; (pTimingConfig->preDivider)++)
-        {
-            /* Consider some proessor not contain FPU, the parameter need to be exact division. */
-            if ((clk / ((uint32_t)(pTimingConfig->preDivider) + 1U) * ((uint32_t)(pTimingConfig->preDivider) + 1U)) !=
-                clk)
+            /*  Auto Improved Protocal timing for CBT. */
+            tqNum = FDCBT_MAX_TIME_QUANTA;
+            do
             {
-                continue; /* clk need to be exact division by preDivider + 1. */
-            }
-            clk2 = clk / ((uint32_t)(pTimingConfig->preDivider) + 1U);
+                clk = baudRateFD * tqNum;
+                if (clk > sourceClock_Hz)
+                {
+                    continue; /* tqNum too large, clk x tqNum has been exceed sourceClock_Hz. */
+                }
 
-            if ((sourceClock_Hz / clk2 * clk2) != sourceClock_Hz)
+                if ((sourceClock_Hz / clk * clk) != sourceClock_Hz)
+                {
+                    continue; /*  Non-supporting: the frequency of clock source is not divisible by target baud rate,
+                                 the user should change a divisible baud rate. */
+                }
+
+                pTimingConfig->fpreDivider = (uint16_t)(sourceClock_Hz / clk - 1U);
+
+                if (pTimingConfig->fpreDivider != pTimingConfig->preDivider)
+                {
+                    continue;
+                }
+
+                if (pTimingConfig->fpreDivider > MAX_FPRESDIV)
+                {
+                    break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider
+                              could not handle it. */
+                }
+
+                /* Get the best CANFD data bus timing configuration. */
+                if (FLEXCAN_FDGetSegmentswithBRS(baudRateFD, tqNum, pTimingConfig))
+                {
+                    fgRet = true;
+                    break;
+                }
+            } while (--tqNum >= FDCBT_MIN_TIME_QUANTA);
+
+            if (!fgRet)
             {
-                continue; /* sourceClock_Hz need to be exact division by clk2. */
+                pTimingConfig->preDivider++;
             }
-            /* Get the best CANFD conrol bus timing configuration. */
-            FLEXCAN_FDGetSegments(baudRate, tqNum, pTimingConfig);
-            fgCaculateCBT = true;
-            break;
-        }
-
-        if (fgCaculateCBT)
-        {
-            break;
-        }
-    } while (--tqNum >= CBT_MIN_TIME_QUANTA);
-
-    /* After calculate for CBT, continue to calculate FBCBT field timing configuration. */
-    tqNumbrs = FDCBT_MAX_TIME_QUANTA;
-    do
-    {
-        clkbrs = baudRateFD * tqNumbrs;
-        if (clkbrs > sourceClock_Hz)
-        {
-            continue; /* tqNumbrs too large, clkbrs x tqNumbrs has been exceed sourceClock_Hz. */
-        }
-        for (pTimingConfig->fpreDivider = 0x00; pTimingConfig->fpreDivider <= MAX_FPRESDIV;
-             (pTimingConfig->fpreDivider)++)
-        {
-            /* Considering some proessor not contain FPU, the parameter need exact division. */
-            if ((clkbrs / ((uint32_t)(pTimingConfig->fpreDivider) + 1U) *
-                 ((uint32_t)(pTimingConfig->fpreDivider) + 1U)) != clkbrs)
+            else
             {
-                continue; /* clk need to be exact division by preDivider + 1. */
+                break;
             }
-            clkbrs2 = clkbrs / ((uint32_t)(pTimingConfig->fpreDivider) + 1U);
-            if ((sourceClock_Hz / clkbrs2 * clkbrs2) != sourceClock_Hz)
-            {
-                continue; /* sourceClock_Hz need to be exact division by preDivider. */
-            }
-            /* Get the best CANFD data bus timing configuration. */
-            FLEXCAN_FDGetSegmentswithBRS(baudRateFD, tqNumbrs, pTimingConfig);
-            fgCaculateFDCBT = true;
-            break;
         }
-        if (fgCaculateFDCBT)
+        else
         {
-            break;
+            fgRet = true; /* User don't use Brs feature. */
         }
-
-    } while (--tqNumbrs >= FDCBT_MIN_TIME_QUANTA);
-
-    return (fgCaculateCBT && fgCaculateFDCBT);
+    }
+    return fgRet;
 }
-#endif
 
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
 /*!
  * brief Configures a FlexCAN transmit message buffer.
  *
@@ -1639,7 +1849,7 @@ void FLEXCAN_SetFDTxMbConfig(CAN_Type *base, uint8_t mbIdx, bool enable)
     mbAddr[availoffset] = CAN_CS_CODE(kFLEXCAN_TxMbInactive);
 #endif
 }
-#endif
+#endif /* FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE */
 
 /*!
  * brief Configures a FlexCAN Receive Message Buffer.
@@ -3361,6 +3571,7 @@ void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle)
             /* Clear FlexCAN Error and Status Interrupt. */
             FLEXCAN_ClearStatusFlags(base, (uint32_t)kFLEXCAN_TxWarningIntFlag | (uint32_t)kFLEXCAN_RxWarningIntFlag |
                                                (uint32_t)kFLEXCAN_BusOffIntFlag | (uint32_t)kFLEXCAN_ErrorIntFlag);
+            result = EsrStatus;
         }
         else if (0U != (EsrStatus & (uint32_t)kFLEXCAN_WakeUpIntFlag))
         {
@@ -3382,155 +3593,122 @@ void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle)
 }
 
 #if defined(CAN0)
+void CAN0_DriverIRQHandler(void);
 void CAN0_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[0]);
 
     s_flexcanIsr(CAN0, s_flexcanHandle[0]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(CAN1)
+void CAN1_DriverIRQHandler(void);
 void CAN1_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[1]);
 
     s_flexcanIsr(CAN1, s_flexcanHandle[1]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(CAN2)
+void CAN2_DriverIRQHandler(void);
 void CAN2_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[2]);
 
     s_flexcanIsr(CAN2, s_flexcanHandle[2]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(CAN3)
+void CAN3_DriverIRQHandler(void);
 void CAN3_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[3]);
 
     s_flexcanIsr(CAN3, s_flexcanHandle[3]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(CAN4)
+void CAN4_DriverIRQHandler(void);
 void CAN4_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[4]);
 
     s_flexcanIsr(CAN4, s_flexcanHandle[4]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(DMA__CAN0)
+void DMA_FLEXCAN0_INT_DriverIRQHandler(void);
 void DMA_FLEXCAN0_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN0)]);
 
     s_flexcanIsr(DMA__CAN0, s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN0)]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(DMA__CAN1)
+void DMA_FLEXCAN1_INT_DriverIRQHandler(void);
 void DMA_FLEXCAN1_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN1)]);
 
     s_flexcanIsr(DMA__CAN1, s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN1)]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(DMA__CAN2)
+void DMA_FLEXCAN2_INT_DriverIRQHandler(void);
 void DMA_FLEXCAN2_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN2)]);
 
     s_flexcanIsr(DMA__CAN2, s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN2)]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(ADMA__CAN0)
+void ADMA_FLEXCAN0_INT_DriverIRQHandler(void);
 void ADMA_FLEXCAN0_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN0)]);
 
     s_flexcanIsr(ADMA__CAN0, s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN0)]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(ADMA__CAN1)
+void ADMA_FLEXCAN1_INT_DriverIRQHandler(void);
 void ADMA_FLEXCAN1_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN1)]);
 
     s_flexcanIsr(ADMA__CAN1, s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN1)]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #if defined(ADMA__CAN2)
+void ADMA_FLEXCAN2_INT_DriverIRQHandler(void);
 void ADMA_FLEXCAN2_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN2)]);
 
     s_flexcanIsr(ADMA__CAN2, s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN2)]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

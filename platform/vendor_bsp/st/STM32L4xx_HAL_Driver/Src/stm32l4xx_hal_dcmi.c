@@ -147,29 +147,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -554,6 +538,11 @@ HAL_StatusTypeDef HAL_DCMI_Start_DMA(DCMI_HandleTypeDef* hdcmi, uint32_t DCMI_Mo
     hdcmi->XferCount = 2U * ((Length / circular_copy_length) - 1U);
     /* Store the half-buffer copy length */
     hdcmi->HalfCopyLength = circular_copy_length / 2U;
+
+    /* Save initial values for continuous mode case */
+    hdcmi->XferCount_0 = hdcmi->XferCount;
+    hdcmi->XferSize_0  = hdcmi->XferSize;
+    hdcmi->pBuffPtr_0  = hdcmi->pBuffPtr;
 
     /* DCMI DR samples in circular mode will be copied
        at the end of the final buffer.
@@ -1082,7 +1071,7 @@ uint32_t HAL_DCMI_GetError(DCMI_HandleTypeDef *hdcmi)
   * @brief DCMI Callback registering
   * @param hdcmi        dcmi handle
   * @param CallbackID   dcmi Callback ID
-  * @param hdcmi        pointer to dcmi Callback function
+  * @param pCallback    pointer to dcmi Callback function
   * @retval status
   */
 HAL_StatusTypeDef HAL_DCMI_RegisterCallback(DCMI_HandleTypeDef *hdcmi, HAL_DCMI_CallbackIDTypeDef CallbackID, pDCMI_CallbackTypeDef pCallback)
@@ -1273,47 +1262,62 @@ static void DCMI_DMAXferCplt(DMA_HandleTypeDef *hdma)
 
   if(hdcmi->XferCount != 0U)
   {
-    /* Manage second half buffer copy in case of big transfer */
-
-    /* Decrement half-copies counter */
-    hdcmi->XferCount--;
-
-    /* Point at DCMI final destination */
-    tmpBuffer_Dest = (uint32_t *)hdcmi->pBuffPtr;
-
-    /* Point at DCMI circular buffer mid-location */
-    tmpBuffer_Orig = (uint32_t *)hdcmi->pCircularBuffer;
-    temp = (uint32_t) (tmpBuffer_Orig);
-    temp += hdcmi->HalfCopyLength;
-    tmpBuffer_Orig = (uint32_t *) temp;
-
-    /* copy half the buffer size */
-    loop_length = hdcmi->HalfCopyLength;
-
-    /* Save next entry to write at next half DMA transfer interruption */
-    hdcmi->pBuffPtr += (uint32_t) loop_length*4U;
-    hdcmi->XferSize -= hdcmi->HalfCopyLength;
-
-    /* Data copy from work buffer to final destination buffer */
-    /* Enable the DMA Channel */
-    if (HAL_DMA_Start_IT(hdcmi->DMAM2M_Handle, (uint32_t) tmpBuffer_Orig, (uint32_t) tmpBuffer_Dest, loop_length) != HAL_OK)
+    if (hdcmi->XferCount == 0xBEBE)
     {
-      /* Update error code */
-      hdcmi->ErrorCode |= HAL_DCMI_ERROR_DMA;
+      hdcmi->XferCount = hdcmi->XferCount_0;
+      hdcmi->XferSize  = hdcmi->XferSize_0;
+      hdcmi->pBuffPtr  = hdcmi->pBuffPtr_0;
+    }
+    else
+    {
+      /* Manage second half buffer copy in case of big transfer */
 
-      /* Change DCMI state */
-      hdcmi->State = HAL_DCMI_STATE_READY;
+      /* Decrement half-copies counter */
+      hdcmi->XferCount--;
 
-      /* Process Unlocked */
-      __HAL_UNLOCK(hdcmi);
+      /* Point at DCMI final destination */
+      tmpBuffer_Dest = (uint32_t *)hdcmi->pBuffPtr;
 
-      /* DCMI error Callback */
+      /* Point at DCMI circular buffer mid-location */
+      tmpBuffer_Orig = (uint32_t *)hdcmi->pCircularBuffer;
+      temp = (uint32_t) (tmpBuffer_Orig);
+        temp += hdcmi->HalfCopyLength * 4U;
+      tmpBuffer_Orig = (uint32_t *) temp;
+
+      /* copy half the buffer size */
+      loop_length = hdcmi->HalfCopyLength;
+
+      /* Save next entry to write at next half DMA transfer interruption */
+      hdcmi->pBuffPtr += (uint32_t) loop_length*4U;
+      hdcmi->XferSize -= hdcmi->HalfCopyLength;
+
+        if (hdcmi->XferCount == 0)
+        {
+          hdcmi->XferCount = 0xBEBE;
+        }
+
+
+      /* Data copy from work buffer to final destination buffer */
+      /* Enable the DMA Channel */
+      if (HAL_DMA_Start_IT(hdcmi->DMAM2M_Handle, (uint32_t) tmpBuffer_Orig, (uint32_t) tmpBuffer_Dest, loop_length) != HAL_OK)
+      {
+        /* Update error code */
+        hdcmi->ErrorCode |= HAL_DCMI_ERROR_DMA;
+
+        /* Change DCMI state */
+        hdcmi->State = HAL_DCMI_STATE_READY;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hdcmi);
+
+        /* DCMI error Callback */
 #if (USE_HAL_DCMI_REGISTER_CALLBACKS == 1)
-      /*Call registered DCMI error callback*/
-      hdcmi->ErrorCallback(hdcmi);
+        /*Call registered DCMI error callback*/
+        hdcmi->ErrorCallback(hdcmi);
 #else
-      HAL_DCMI_ErrorCallback(hdcmi);
+        HAL_DCMI_ErrorCallback(hdcmi);
 #endif /* USE_HAL_DCMI_REGISTER_CALLBACKS */
+      }
     }
   }
   else
@@ -1372,44 +1376,47 @@ static void DCMI_DMAHalfXferCplt(DMA_HandleTypeDef *hdma)
 
   if(hdcmi->XferCount != 0U)
   {
-    /* Manage first half buffer copy in case of big transfer */
-
-    /* Decrement half-copies counter */
-    hdcmi->XferCount--;
-
-    /* Point at DCMI final destination */
-    tmpBuffer_Dest = (uint32_t *)hdcmi->pBuffPtr;
-
-    /* Point at DCMI circular buffer start */
-    tmpBuffer_Orig = (uint32_t *)hdcmi->pCircularBuffer;
-
-    /* copy half the buffer size */
-    loop_length = hdcmi->HalfCopyLength;
-
-    /* Save next entry to write at next DMA transfer interruption */
-    hdcmi->pBuffPtr += (uint32_t) loop_length*4U;
-    hdcmi->XferSize -= hdcmi->HalfCopyLength;
-
-    /* Data copy from work buffer to final destination buffer */
-    /* Enable the DMA Channel */
-    if (HAL_DMA_Start_IT(hdcmi->DMAM2M_Handle, (uint32_t) tmpBuffer_Orig, (uint32_t) tmpBuffer_Dest, loop_length) != HAL_OK)
+    if (hdcmi->XferCount != 0xBEBE)
     {
-      /* Update error code */
-      hdcmi->ErrorCode |= HAL_DCMI_ERROR_DMA;
+      /* Manage first half buffer copy in case of big transfer */
 
-      /* Change DCMI state */
-      hdcmi->State = HAL_DCMI_STATE_READY;
+      /* Decrement half-copies counter */
+      hdcmi->XferCount--;
 
-      /* Process Unlocked */
-      __HAL_UNLOCK(hdcmi);
+      /* Point at DCMI final destination */
+      tmpBuffer_Dest = (uint32_t *)hdcmi->pBuffPtr;
 
-      /* DCMI error Callback */
+      /* Point at DCMI circular buffer start */
+      tmpBuffer_Orig = (uint32_t *)hdcmi->pCircularBuffer;
+
+      /* copy half the buffer size */
+      loop_length = hdcmi->HalfCopyLength;
+
+      /* Save next entry to write at next DMA transfer interruption */
+      hdcmi->pBuffPtr += (uint32_t) loop_length*4U;
+      hdcmi->XferSize -= hdcmi->HalfCopyLength;
+
+      /* Data copy from work buffer to final destination buffer */
+      /* Enable the DMA Channel */
+      if (HAL_DMA_Start_IT(hdcmi->DMAM2M_Handle, (uint32_t) tmpBuffer_Orig, (uint32_t) tmpBuffer_Dest, loop_length) != HAL_OK)
+      {
+        /* Update error code */
+        hdcmi->ErrorCode |= HAL_DCMI_ERROR_DMA;
+
+        /* Change DCMI state */
+        hdcmi->State = HAL_DCMI_STATE_READY;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hdcmi);
+
+        /* DCMI error Callback */
 #if (USE_HAL_DCMI_REGISTER_CALLBACKS == 1)
-      /*Call registered DCMI error callback*/
-      hdcmi->ErrorCallback(hdcmi);
+        /*Call registered DCMI error callback*/
+        hdcmi->ErrorCallback(hdcmi);
 #else
-      HAL_DCMI_ErrorCallback(hdcmi);
+        HAL_DCMI_ErrorCallback(hdcmi);
 #endif /* USE_HAL_DCMI_REGISTER_CALLBACKS */
+      }
     }
   }
 }

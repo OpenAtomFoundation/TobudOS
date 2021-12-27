@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5 */
 /*@}*/
 
 /*! @brief SPDIF return status*/
@@ -549,8 +549,7 @@ static inline uint32_t SPDIF_ReadLeftData(SPDIF_Type *base)
 
 /*!
  * @brief Reads data from the SPDIF FIFO.
- *.
-
+ *
  * @param base SPDIF base pointer.
  * @return Data in SPDIF FIFO.
  */
@@ -572,8 +571,7 @@ static inline uint32_t SPDIF_ReadChannelStatusHigh(SPDIF_Type *base)
 
 /*!
  * @brief Reads data from the SPDIF FIFO.
- *.
-
+ *
  * @param base SPDIF base pointer.
  * @return Data in SPDIF FIFO.
  */
@@ -595,8 +593,7 @@ static inline uint32_t SPDIF_ReadQChannel(SPDIF_Type *base)
 
 /*!
  * @brief Reads data from the SPDIF FIFO.
- *.
-
+ *
  * @param base SPDIF base pointer.
  * @return Data in SPDIF FIFO.
  */

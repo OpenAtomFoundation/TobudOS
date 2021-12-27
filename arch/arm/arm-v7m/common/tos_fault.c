@@ -134,7 +134,7 @@ __STATIC__ void fault_call_stack_backtrace(fault_info_t *info, size_t depth)
 
     k_fault_log_writer("\n\n====================== Dump Call Stack =====================\n");
 
-    k_fault_log_writer("  %x\n", info->pc);
+    k_fault_log_writer("%08x", info->pc);
 
     /* walk through the stack, check every content on stack whether is a instruction(code) */
     for (; sp < info->stack_limit && depth; sp += sizeof(cpu_addr_t)) {
@@ -146,10 +146,12 @@ __STATIC__ void fault_call_stack_backtrace(fault_info_t *info, size_t depth)
         }
 
         if (fault_is_code(info, value)) {
-            k_fault_log_writer("  %x\n", value);
+            k_fault_log_writer(" %08x\n", value);
             --depth;
         }
     }
+    
+    k_fault_log_writer("\nusage: addr2line -e <*.axf> -a -f <dump call stack>");
 }
 
 __STATIC__ void fault_dump_task(fault_info_t *info)
@@ -213,7 +215,7 @@ __STATIC__ void fault_gather_information(cpu_data_t lr, fault_exc_frame_t *frame
 
     if (info->is_on_task) {
         info->stack_start = (cpu_addr_t)k_curr_task->stk_base;
-        info->stack_limit = info->stack_start + k_curr_task->stk_size// * sizeof(k_task_t);
+        info->stack_limit = info->stack_start + k_curr_task->stk_size;
     } else {
         info->stack_start = fault_msp_start();
         info->stack_limit = fault_msp_limit();

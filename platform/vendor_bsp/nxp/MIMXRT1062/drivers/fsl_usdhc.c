@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,9 +22,9 @@
 
 /*! @brief Clock setting */
 /* Max SD clock divisor from base clock */
-#define USDHC_MAX_DVS ((USDHC_SYS_CTRL_DVS_MASK >> USDHC_SYS_CTRL_DVS_SHIFT) + 1U)
-#define USDHC_MAX_CLKFS ((USDHC_SYS_CTRL_SDCLKFS_MASK >> USDHC_SYS_CTRL_SDCLKFS_SHIFT) + 1U)
-#define USDHC_PREV_DVS(x) ((x) -= 1U)
+#define USDHC_MAX_DVS          ((USDHC_SYS_CTRL_DVS_MASK >> USDHC_SYS_CTRL_DVS_SHIFT) + 1U)
+#define USDHC_MAX_CLKFS        ((USDHC_SYS_CTRL_SDCLKFS_MASK >> USDHC_SYS_CTRL_SDCLKFS_SHIFT) + 1U)
+#define USDHC_PREV_DVS(x)      ((x) -= 1U)
 #define USDHC_PREV_CLKFS(x, y) ((x) >>= (y))
 /*! @brief USDHC ADMA table address align size */
 #define USDHC_ADMA_TABLE_ADDRESS_ALIGN (4U)
@@ -34,6 +34,17 @@ typedef void (*usdhc_isr_t)(USDHC_Type *base, usdhc_handle_t *handle);
 /*! @brief check flag avalibility */
 #define IS_USDHC_FLAG_SET(reg, flag) (((reg) & ((uint32_t)flag)) != 0UL)
 
+/*! @brief usdhc transfer flags */
+enum _usdhc_transfer_flags
+{
+    kUSDHC_CommandOnly        = 1U,  /*!< transfer command only */
+    kUSDHC_CommandAndTxData   = 2U,  /*!< transfer command and transmit data */
+    kUSDHC_CommandAndRxData   = 4U,  /*!< transfer command and receive data */
+    kUSDHC_DataWithAutoCmd12  = 8U,  /*!< transfer data with auto cmd12 enabled */
+    kUSDHC_DataWithAutoCmd23  = 16U, /*!< transfer data with auto cmd23 enabled */
+    kUSDHC_BootData           = 32U, /*!< transfer boot data */
+    kUSDHC_BootDataContinuous = 64U, /*!< transfer boot data continuous */
+};
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -49,14 +60,14 @@ static uint32_t USDHC_GetInstance(USDHC_Type *base);
  * @brief Start transfer according to current transfer state
  *
  * @param base USDHC peripheral base address.
- * @param data Data to be transferred.
- * @param flag data present flag
- * @param enDMA DMA enable flag
+ * @param transferFlags transfer flags, @ref _usdhc_transfer_flags.
+ * @param blockSize block size.
+ * @param blockCount block count.
  */
-static status_t USDHC_SetDataTransferConfig(USDHC_Type *base,
-                                            usdhc_data_t *data,
-                                            uint32_t *dataPresentFlag,
-                                            bool enDMA);
+static status_t USDHC_SetTransferConfig(USDHC_Type *base,
+                                        uint32_t transferFlags,
+                                        size_t blockSize,
+                                        uint32_t blockCount);
 
 /*!
  * @brief Receive command response
@@ -119,6 +130,15 @@ static status_t USDHC_WriteByDataPortBlocking(USDHC_Type *base, usdhc_data_t *da
 static status_t USDHC_TransferDataBlocking(USDHC_Type *base, usdhc_data_t *data, bool enDMA);
 
 /*!
+ * @brief wait command done
+ *
+ * @param base USDHC peripheral base address.
+ * @param command configuration
+ * @param pollingCmdDone polling command done flag
+ */
+static status_t USDHC_WaitCommandDone(USDHC_Type *base, usdhc_command_t *command, bool pollingCmdDone);
+
+/*!
  * @brief Handle card detect interrupt.
  *
  * @param base USDHC peripheral base address.
@@ -171,16 +191,6 @@ static void USDHC_TransferHandleBlockGap(USDHC_Type *base, usdhc_handle_t *handl
  */
 static void USDHC_TransferHandleReTuning(USDHC_Type *base, usdhc_handle_t *handle, uint32_t interruptFlags);
 #endif
-
-/*!
- * @brief wait command done
- *
- * @param base USDHC peripheral base address.
- * @param command configuration
- * @param pollingCmdDone polling command done flag
- */
-static status_t USDHC_WaitCommandDone(USDHC_Type *base, usdhc_command_t *command, bool pollingCmdDone);
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -210,7 +220,7 @@ static usdhc_isr_t s_usdhcIsr = (usdhc_isr_t)DefaultISR;
 static usdhc_isr_t s_usdhcIsr;
 #endif
 /*! @brief Dummy data buffer for mmc boot mode  */
-AT_NONCACHEABLE_SECTION_ALIGN(uint32_t s_usdhcBootDummy, USDHC_ADMA2_ADDRESS_ALIGN);
+AT_NONCACHEABLE_SECTION_ALIGN(static uint32_t s_usdhcBootDummy, USDHC_ADMA2_ADDRESS_ALIGN);
 
 /*******************************************************************************
  * Code
@@ -229,14 +239,25 @@ static uint32_t USDHC_GetInstance(USDHC_Type *base)
     return instance;
 }
 
-static status_t USDHC_SetDataTransferConfig(USDHC_Type *base, usdhc_data_t *data, uint32_t *dataPresentFlag, bool enDMA)
+static status_t USDHC_SetTransferConfig(USDHC_Type *base, uint32_t transferFlags, size_t blockSize, uint32_t blockCount)
 {
     uint32_t mixCtrl = base->MIX_CTRL;
 
-    if (data != NULL)
+    if (((uint32_t)kUSDHC_CommandOnly & transferFlags) != 0U)
+    {
+        /* clear data flags */
+        mixCtrl &= ~(USDHC_MIX_CTRL_MSBSEL_MASK | USDHC_MIX_CTRL_BCEN_MASK | USDHC_MIX_CTRL_DTDSEL_MASK |
+                     USDHC_MIX_CTRL_AC12EN_MASK | USDHC_MIX_CTRL_AC23EN_MASK);
+
+        if (IS_USDHC_FLAG_SET(base->PRES_STATE, kUSDHC_CommandInhibitFlag))
+        {
+            return kStatus_USDHC_BusyTransferring;
+        }
+    }
+    else
     {
         /* if transfer boot continous, only need set the CREQ bit, leave others as it is */
-        if (data->dataType == (uint32_t)kUSDHC_TransferDataBootcontinous)
+        if ((transferFlags & (uint32_t)kUSDHC_BootDataContinuous) != 0U)
         {
             /* clear stop at block gap request */
             base->PROT_CTRL &= ~USDHC_PROT_CTRL_SABGREQ_MASK;
@@ -251,7 +272,7 @@ static status_t USDHC_SetDataTransferConfig(USDHC_Type *base, usdhc_data_t *data
             return kStatus_USDHC_BusyTransferring;
         }
         /* check transfer block count */
-        if ((data->blockCount > USDHC_MAX_BLOCK_COUNT) || ((data->txData == NULL) && (data->rxData == NULL)))
+        if ((blockCount > USDHC_MAX_BLOCK_COUNT))
         {
             return kStatus_InvalidArgument;
         }
@@ -260,28 +281,28 @@ static status_t USDHC_SetDataTransferConfig(USDHC_Type *base, usdhc_data_t *data
         mixCtrl &= ~(USDHC_MIX_CTRL_MSBSEL_MASK | USDHC_MIX_CTRL_BCEN_MASK | USDHC_MIX_CTRL_DTDSEL_MASK |
                      USDHC_MIX_CTRL_AC12EN_MASK);
 
-        if (data->rxData != NULL)
+        if ((transferFlags & (uint32_t)kUSDHC_CommandAndRxData) != 0U)
         {
             mixCtrl |= USDHC_MIX_CTRL_DTDSEL_MASK;
         }
 
-        if (data->blockCount > 1U)
+        if (blockCount > 1U)
         {
             mixCtrl |= USDHC_MIX_CTRL_MSBSEL_MASK | USDHC_MIX_CTRL_BCEN_MASK;
             /* auto command 12 */
-            if (data->enableAutoCommand12)
+            if ((transferFlags & (uint32_t)kUSDHC_DataWithAutoCmd12) != 0U)
             {
                 mixCtrl |= USDHC_MIX_CTRL_AC12EN_MASK;
             }
         }
 
         /* auto command 23, auto send set block count cmd before multiple read/write */
-        if ((data->enableAutoCommand23))
+        if ((transferFlags & (uint32_t)kUSDHC_DataWithAutoCmd23) != 0U)
         {
             mixCtrl |= USDHC_MIX_CTRL_AC23EN_MASK;
             base->VEND_SPEC2 |= USDHC_VEND_SPEC2_ACMD23_ARGU2_EN_MASK;
             /* config the block count to DS_ADDR */
-            base->DS_ADDR = data->blockCount;
+            base->DS_ADDR = blockCount;
         }
         else
         {
@@ -290,33 +311,18 @@ static status_t USDHC_SetDataTransferConfig(USDHC_Type *base, usdhc_data_t *data
         }
 
         /* if transfer boot data, leave the block count to USDHC_SetMmcBootConfig function */
-        if (data->dataType != (uint32_t)kUSDHC_TransferDataBoot)
+        if ((transferFlags & (uint32_t)kUSDHC_BootData) == 0U)
         {
             /* config data block size/block count */
             base->BLK_ATT = ((base->BLK_ATT & ~(USDHC_BLK_ATT_BLKSIZE_MASK | USDHC_BLK_ATT_BLKCNT_MASK)) |
-                             (USDHC_BLK_ATT_BLKSIZE(data->blockSize) | USDHC_BLK_ATT_BLKCNT(data->blockCount)));
+                             (USDHC_BLK_ATT_BLKSIZE(blockSize) | USDHC_BLK_ATT_BLKCNT(blockCount)));
         }
         else
         {
             mixCtrl |= USDHC_MIX_CTRL_MSBSEL_MASK | USDHC_MIX_CTRL_BCEN_MASK;
             base->PROT_CTRL |= USDHC_PROT_CTRL_RD_DONE_NO_8CLK_MASK;
         }
-
-        /* data present flag */
-        *dataPresentFlag |= (uint32_t)kUSDHC_DataPresentFlag;
     }
-    else
-    {
-        /* clear data flags */
-        mixCtrl &= ~(USDHC_MIX_CTRL_MSBSEL_MASK | USDHC_MIX_CTRL_BCEN_MASK | USDHC_MIX_CTRL_DTDSEL_MASK |
-                     USDHC_MIX_CTRL_AC12EN_MASK | USDHC_MIX_CTRL_AC23EN_MASK);
-
-        if (IS_USDHC_FLAG_SET(base->PRES_STATE, kUSDHC_CommandInhibitFlag))
-        {
-            return kStatus_USDHC_BusyTransferring;
-        }
-    }
-
     /* config the mix parameter */
     base->MIX_CTRL = mixCtrl;
 
@@ -983,8 +989,10 @@ uint32_t USDHC_SetSdClock(USDHC_Type *base, uint32_t srcClock_Hz, uint32_t busCl
         busClock_Hz = srcClock_Hz;
     }
 
+    totalDiv = srcClock_Hz / busClock_Hz;
+
     /* calucate total divisor first */
-    if ((totalDiv = srcClock_Hz / busClock_Hz) > (USDHC_MAX_CLKFS * USDHC_MAX_DVS))
+    if (totalDiv > (USDHC_MAX_CLKFS * USDHC_MAX_DVS))
     {
         return 0UL;
     }
@@ -1014,7 +1022,8 @@ uint32_t USDHC_SetSdClock(USDHC_Type *base, uint32_t srcClock_Hz, uint32_t busCl
                 divisor++;
                 if (divisor > USDHC_MAX_DVS)
                 {
-                    if ((prescaler <<= 1UL) > USDHC_MAX_CLKFS)
+                    prescaler <<= 1UL;
+                    if (prescaler > USDHC_MAX_CLKFS)
                     {
                         return 0UL;
                     }
@@ -1261,8 +1270,9 @@ status_t USDHC_SetADMA1Descriptor(
         adma1EntryAddress[i] = (dmaBufferLen << USDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
         adma1EntryAddress[i] |= (uint32_t)kUSDHC_Adma1DescriptorTypeSetLength;
         adma1EntryAddress[i + 1UL] = (uint32_t)(data);
-        adma1EntryAddress[i + 1UL] |= (uint32_t)kUSDHC_Adma1DescriptorTypeTransfer;
-        data += dmaBufferLen / sizeof(uint32_t);
+        adma1EntryAddress[i + 1UL] |=
+            (uint32_t)kUSDHC_Adma1DescriptorTypeTransfer | (uint32_t)kUSDHC_Adma1DescriptorInterrupFlag;
+        data = (uint32_t *)((uint32_t)data + dmaBufferLen);
         dataBytes -= dmaBufferLen;
     }
     /* the end of the descriptor */
@@ -1359,7 +1369,7 @@ status_t USDHC_SetADMA2Descriptor(
             (dataBytes == 0UL) ?
                 0UL :
                 ((uint32_t)kUSDHC_Adma2DescriptorTypeTransfer | (uint32_t)kUSDHC_Adma2DescriptorInterruptFlag);
-        data += (dmaBufferLen / sizeof(uint32_t));
+        data = (uint32_t *)((uint32_t)data + dmaBufferLen);
 
         if (dataBytes != 0UL)
         {
@@ -1540,6 +1550,9 @@ status_t USDHC_TransferBlocking(USDHC_Type *base, usdhc_adma_config_t *dmaConfig
     usdhc_data_t *data       = transfer->data;
     bool enDMA               = true;
     bool executeTuning       = ((data == NULL) ? false : data->dataType == (uint32_t)kUSDHC_TransferDataTuning);
+    uint32_t transferFlags   = (uint32_t)kUSDHC_CommandOnly;
+    size_t blockSize         = 0U;
+    size_t blockCount        = 0U;
 
 #if defined(FSL_FEATURE_USDHC_HAS_SDR50_MODE) && (FSL_FEATURE_USDHC_HAS_SDR50_MODE)
     /*check re-tuning request*/
@@ -1550,13 +1563,26 @@ status_t USDHC_TransferBlocking(USDHC_Type *base, usdhc_adma_config_t *dmaConfig
     }
 #endif
 
-    /* Update ADMA descriptor table according to different DMA mode(no DMA, ADMA1, ADMA2).*/
-    if ((data != NULL) && (dmaConfig != NULL) && (!executeTuning))
+    if (data != NULL)
     {
-        error = USDHC_SetAdmaTableConfig(
-            base, dmaConfig, data,
-            (uint32_t)(IS_USDHC_FLAG_SET(data->dataType, kUSDHC_TransferDataBoot) ? kUSDHC_AdmaDescriptorMultipleFlag :
-                                                                                    kUSDHC_AdmaDescriptorSingleFlag));
+        /* Update ADMA descriptor table according to different DMA mode(no DMA, ADMA1, ADMA2).*/
+        if ((dmaConfig != NULL) && (!executeTuning))
+        {
+            error = USDHC_SetAdmaTableConfig(base, dmaConfig, data,
+                                             (uint32_t)(IS_USDHC_FLAG_SET(data->dataType, kUSDHC_TransferDataBoot) ?
+                                                            kUSDHC_AdmaDescriptorMultipleFlag :
+                                                            kUSDHC_AdmaDescriptorSingleFlag));
+        }
+        blockSize     = data->blockSize;
+        blockCount    = data->blockCount;
+        transferFlags = data->enableAutoCommand12 ? (uint32_t)kUSDHC_DataWithAutoCmd12 : 0U;
+        transferFlags |= data->enableAutoCommand23 ? (uint32_t)kUSDHC_DataWithAutoCmd23 : 0U;
+        transferFlags |= data->txData != NULL ? (uint32_t)kUSDHC_CommandAndTxData : (uint32_t)kUSDHC_CommandAndRxData;
+        transferFlags |= data->dataType == (uint8_t)kUSDHC_TransferDataBoot ? (uint32_t)kUSDHC_BootData : 0U;
+        transferFlags |=
+            data->dataType == (uint8_t)kUSDHC_TransferDataBootcontinous ? (uint32_t)kUSDHC_BootDataContinuous : 0U;
+
+        command->flags |= (uint32_t)kUSDHC_DataPresentFlag;
     }
 
     /* if the DMA desciptor configure fail or not needed , disable it */
@@ -1583,8 +1609,8 @@ status_t USDHC_TransferBlocking(USDHC_Type *base, usdhc_adma_config_t *dmaConfig
 #endif
 
     /* config the data transfer parameter */
-    error = USDHC_SetDataTransferConfig(base, data, &(command->flags), enDMA);
-    if (kStatus_Success != error)
+    error = USDHC_SetTransferConfig(base, transferFlags, blockSize, blockCount);
+    if (error != kStatus_Success)
     {
         return error;
     }
@@ -1611,6 +1637,200 @@ status_t USDHC_TransferBlocking(USDHC_Type *base, usdhc_adma_config_t *dmaConfig
     return kStatus_Success;
 }
 
+#if (defined FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER) && FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
+static status_t USDHC_SetScatterGatherAdmaTableConfig(USDHC_Type *base,
+                                                      usdhc_adma_config_t *dmaConfig,
+                                                      usdhc_scatter_gather_data_t *dataConfig,
+                                                      uint32_t *totalTransferSize)
+{
+    assert(NULL != dmaConfig);
+    assert((NULL != dmaConfig->admaTable) &&
+           (((USDHC_ADMA_TABLE_ADDRESS_ALIGN - 1U) & (uint32_t)dmaConfig->admaTable) == 0UL));
+    assert(NULL != dataConfig);
+
+    status_t error                               = kStatus_Fail;
+    uint32_t *admaDesBuffer                      = dmaConfig->admaTable;
+    uint32_t admaDesLen                          = dmaConfig->admaTableWords;
+    usdhc_scatter_gather_data_list_t *sgDataList = &dataConfig->sgData;
+    uint32_t oneDescriptorMaxTransferSize        = dmaConfig->dmaMode == kUSDHC_DmaModeAdma1 ?
+                                                USDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY :
+                                                USDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY;
+    uint32_t miniEntries = 0U;
+
+    while (sgDataList != NULL)
+    {
+        if (dmaConfig->dmaMode == kUSDHC_DmaModeAdma1)
+        {
+            error = USDHC_SetADMA1Descriptor(admaDesBuffer, admaDesLen, sgDataList->dataAddr, sgDataList->dataSize, 0U);
+        }
+        /* ADMA2 */
+        else
+        {
+            error = USDHC_SetADMA2Descriptor(admaDesBuffer, admaDesLen, sgDataList->dataAddr, sgDataList->dataSize, 0U);
+        }
+
+        if (error != kStatus_Success)
+        {
+            return kStatus_USDHC_PrepareAdmaDescriptorFailed;
+        }
+
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
+        if (dataConfig->dataDirection == kUSDHC_TransferDirectionSend)
+        {
+            /* clear the DCACHE */
+            DCACHE_CleanByRange((uint32_t)sgDataList->dataAddr, sgDataList->dataSize);
+        }
+        else
+        {
+            /* clear the DCACHE */
+            DCACHE_CleanInvalidateByRange((uint32_t)sgDataList->dataAddr, sgDataList->dataSize);
+        }
+#endif
+
+        *totalTransferSize += sgDataList->dataSize;
+        if (sgDataList->dataList != NULL)
+        {
+            if ((sgDataList->dataSize % oneDescriptorMaxTransferSize) == 0UL)
+            {
+                miniEntries = sgDataList->dataSize / oneDescriptorMaxTransferSize;
+            }
+            else
+            {
+                miniEntries = ((sgDataList->dataSize / oneDescriptorMaxTransferSize) + 1UL);
+            }
+            if (dmaConfig->dmaMode == kUSDHC_DmaModeAdma1)
+            {
+                admaDesBuffer[miniEntries * 2U - 1U] &= ~kUSDHC_Adma1DescriptorEndFlag;
+            }
+            else
+            {
+                admaDesBuffer[miniEntries * 2U - 2U] &= ~kUSDHC_Adma2DescriptorEndFlag;
+            }
+            admaDesBuffer += miniEntries * 2U;
+            admaDesLen -= miniEntries * 2U;
+        }
+
+        sgDataList = sgDataList->dataList;
+    }
+
+    base->DS_ADDR       = 0UL;
+    base->ADMA_SYS_ADDR = (uint32_t)(dmaConfig->admaTable);
+
+    /* select DMA mode and config the burst length */
+    base->PROT_CTRL &= ~(USDHC_PROT_CTRL_DMASEL_MASK);
+    base->PROT_CTRL |= USDHC_PROT_CTRL_DMASEL(dmaConfig->dmaMode);
+
+    /* enable DMA */
+    base->MIX_CTRL |= USDHC_MIX_CTRL_DMAEN_MASK;
+
+    return error;
+}
+
+/*!
+ * brief Transfers the command/scatter gather data using an interrupt and an asynchronous method.
+ *
+ * This function sends a command and data and returns immediately. It doesn't wait for the transfer to complete or
+ * to encounter an error. The application must not call this API in multiple threads at the same time. Because of that
+ * this API doesn't support the re-entry mechanism.
+ * This function is target for the application would like to have scatter gather buffer to be transferred within one
+ * read/write request, non scatter gather buffer is support by this function also.
+ *
+ * note Call API @ref USDHC_TransferCreateHandle when calling this API.
+ *
+ * param base USDHC peripheral base address.
+ * param handle USDHC handle.
+ * param dmaConfig adma configurations, must be not NULL, since the function is target for ADMA only.
+ * param transfer scatter gather transfer content.
+ *
+ * retval #kStatus_InvalidArgument Argument is invalid.
+ * retval #kStatus_USDHC_BusyTransferring Busy transferring.
+ * retval #kStatus_USDHC_PrepareAdmaDescriptorFailed Prepare ADMA descriptor failed.
+ * retval #kStatus_Success Operate successfully.
+ */
+status_t USDHC_TransferScatterGatherADMANonBlocking(USDHC_Type *base,
+                                                    usdhc_handle_t *handle,
+                                                    usdhc_adma_config_t *dmaConfig,
+                                                    usdhc_scatter_gather_transfer_t *transfer)
+{
+    assert(handle != NULL);
+    assert(transfer != NULL);
+    assert(dmaConfig != NULL);
+
+    status_t error                                 = kStatus_Fail;
+    usdhc_command_t *command                       = transfer->command;
+    uint32_t totalTransferSize                     = 0U;
+    uint32_t transferFlags                         = kUSDHC_CommandOnly;
+    size_t blockSize                               = 0U;
+    size_t blockCount                              = 0U;
+    usdhc_scatter_gather_data_t *scatterGatherData = transfer->data;
+    bool enDMA                                     = false;
+
+    /* check data inhibit flag */
+    if (IS_USDHC_FLAG_SET(base->PRES_STATE, kUSDHC_CommandInhibitFlag))
+    {
+        return kStatus_USDHC_BusyTransferring;
+    }
+
+    handle->command = command;
+    handle->data    = scatterGatherData;
+    /* transferredWords will only be updated in ISR when transfer way is DATAPORT. */
+    handle->transferredWords = 0UL;
+
+    /* Update ADMA descriptor table according to different DMA mode(ADMA1, ADMA2).*/
+    if (scatterGatherData != NULL)
+    {
+        if (scatterGatherData->sgData.dataAddr == NULL)
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        if (scatterGatherData->dataType != (uint32_t)kUSDHC_TransferDataTuning)
+        {
+            if (USDHC_SetScatterGatherAdmaTableConfig(base, dmaConfig, transfer->data, &totalTransferSize) !=
+                kStatus_Success)
+            {
+                return kStatus_USDHC_PrepareAdmaDescriptorFailed;
+            }
+
+            enDMA = true;
+        }
+        blockSize     = scatterGatherData->blockSize;
+        blockCount    = totalTransferSize / scatterGatherData->blockSize;
+        transferFlags = scatterGatherData->enableAutoCommand12 ? kUSDHC_DataWithAutoCmd12 : 0U;
+        transferFlags |= scatterGatherData->enableAutoCommand23 ? kUSDHC_DataWithAutoCmd23 : 0U;
+        transferFlags |= scatterGatherData->dataDirection == kUSDHC_TransferDirectionSend ? kUSDHC_CommandAndTxData :
+                                                                                            kUSDHC_CommandAndRxData;
+        command->flags |= kUSDHC_DataPresentFlag;
+    }
+
+    error = USDHC_SetTransferConfig(base, transferFlags, blockSize, blockCount);
+    if (error != kStatus_Success)
+    {
+        return error;
+    }
+
+    /* enable interrupt per transfer request */
+    if (scatterGatherData != NULL)
+    {
+        USDHC_ClearInterruptStatusFlags(
+            base, (uint32_t)(enDMA == false ? kUSDHC_DataFlag : kUSDHC_DataDMAFlag | kUSDHC_DmaCompleteFlag) |
+                      (uint32_t)kUSDHC_CommandFlag);
+        USDHC_EnableInterruptSignal(
+            base, (uint32_t)(enDMA == false ? kUSDHC_DataFlag : kUSDHC_DataDMAFlag | kUSDHC_DmaCompleteFlag) |
+                      (uint32_t)kUSDHC_CommandFlag);
+    }
+    else
+    {
+        USDHC_ClearInterruptStatusFlags(base, kUSDHC_CommandFlag);
+        USDHC_EnableInterruptSignal(base, kUSDHC_CommandFlag);
+    }
+
+    /* send command first */
+    USDHC_SendCommand(base, command);
+
+    return kStatus_Success;
+}
+#else
 /*!
  * brief Transfers the command/data using an interrupt and an asynchronous method.
  *
@@ -1643,6 +1863,9 @@ status_t USDHC_TransferNonBlocking(USDHC_Type *base,
     usdhc_data_t *data       = transfer->data;
     bool executeTuning       = ((data == NULL) ? false : data->dataType == (uint32_t)kUSDHC_TransferDataTuning);
     bool enDMA               = true;
+    uint32_t transferFlags   = (uint32_t)kUSDHC_CommandOnly;
+    size_t blockSize         = 0U;
+    size_t blockCount        = 0U;
 
 #if defined(FSL_FEATURE_USDHC_HAS_SDR50_MODE) && (FSL_FEATURE_USDHC_HAS_SDR50_MODE)
     /*check re-tuning request*/
@@ -1659,14 +1882,28 @@ status_t USDHC_TransferNonBlocking(USDHC_Type *base,
     /* transferredWords will only be updated in ISR when transfer way is DATAPORT. */
     handle->transferredWords = 0UL;
 
-    /* Update ADMA descriptor table according to different DMA mode(no DMA, ADMA1, ADMA2).*/
-    if ((data != NULL) && (dmaConfig != NULL) && (!executeTuning))
+    if (data != NULL)
     {
-        error =
-            USDHC_SetAdmaTableConfig(base, dmaConfig, data,
-                                     (uint32_t)(IS_USDHC_FLAG_SET(data->dataType, (uint32_t)kUSDHC_TransferDataBoot) ?
-                                                    kUSDHC_AdmaDescriptorMultipleFlag :
-                                                    kUSDHC_AdmaDescriptorSingleFlag));
+        /* Update ADMA descriptor table according to different DMA mode(no DMA, ADMA1, ADMA2).*/
+        if ((dmaConfig != NULL) && (!executeTuning))
+        {
+            error = USDHC_SetAdmaTableConfig(
+                base, dmaConfig, data,
+                (uint32_t)(IS_USDHC_FLAG_SET(data->dataType, (uint32_t)kUSDHC_TransferDataBoot) ?
+                               kUSDHC_AdmaDescriptorMultipleFlag :
+                               kUSDHC_AdmaDescriptorSingleFlag));
+        }
+
+        blockSize     = data->blockSize;
+        blockCount    = data->blockCount;
+        transferFlags = data->enableAutoCommand12 ? (uint32_t)kUSDHC_DataWithAutoCmd12 : 0U;
+        transferFlags |= data->enableAutoCommand23 ? (uint32_t)kUSDHC_DataWithAutoCmd23 : 0U;
+        transferFlags |= data->txData != NULL ? (uint32_t)kUSDHC_CommandAndTxData : (uint32_t)kUSDHC_CommandAndRxData;
+        transferFlags |= data->dataType == (uint8_t)kUSDHC_TransferDataBoot ? (uint32_t)kUSDHC_BootData : 0U;
+        transferFlags |=
+            data->dataType == (uint8_t)kUSDHC_TransferDataBootcontinous ? (uint32_t)kUSDHC_BootDataContinuous : 0U;
+
+        command->flags |= (uint32_t)kUSDHC_DataPresentFlag;
     }
 
     /* if the DMA desciptor configure fail or not needed , disable it */
@@ -1692,8 +1929,9 @@ status_t USDHC_TransferNonBlocking(USDHC_Type *base,
     }
 #endif
 
-    error = USDHC_SetDataTransferConfig(base, data, &(command->flags), enDMA);
-    if (kStatus_Success != error)
+    /* config the data transfer parameter */
+    error = USDHC_SetTransferConfig(base, transferFlags, blockSize, blockCount);
+    if (error != kStatus_Success)
     {
         return error;
     }
@@ -1717,6 +1955,7 @@ status_t USDHC_TransferNonBlocking(USDHC_Type *base,
 
     return kStatus_Success;
 }
+#endif
 
 #if defined(FSL_FEATURE_USDHC_HAS_SDR50_MODE) && (FSL_FEATURE_USDHC_HAS_SDR50_MODE)
 /*!
@@ -1814,6 +2053,37 @@ void USDHC_EnableStandardTuning(USDHC_Type *base, uint32_t tuningStartTap, uint3
     }
 }
 
+#if FSL_FEATURE_USDHC_HAS_HS400_MODE
+/*!
+ * brief config the strobe DLL delay target and update interval
+ *
+ * param base USDHC peripheral base address.
+ * param delayTarget delay target
+ * param updateInterval update interval
+ */
+void USDHC_ConfigStrobeDLL(USDHC_Type *base, uint32_t delayTarget, uint32_t updateInterval)
+{
+    assert(delayTarget <= (USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET_MASK >>
+                           USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET_SHIFT));
+
+    /* reset strobe dll firstly */
+    base->STROBE_DLL_CTRL |= USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_RESET_MASK;
+    /* clear reset and other register fields */
+    base->STROBE_DLL_CTRL = 0;
+    /* configure the DELAY target and update interval */
+    base->STROBE_DLL_CTRL |= USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_ENABLE_MASK |
+                             USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_UPDATE_INT(updateInterval) |
+                             USDHC_STROBE_DLL_CTRL_STROBE_DLL_CTRL_SLV_DLY_TARGET(delayTarget);
+
+    while (
+        (USDHC_GetStrobeDLLStatus(base) & (USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK_MASK |
+                                           USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_REF_LOCK_MASK)) !=
+        ((USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_SLV_LOCK_MASK | USDHC_STROBE_DLL_STATUS_STROBE_DLL_STS_REF_LOCK_MASK)))
+    {
+    }
+}
+#endif
+
 /*!
  * brief the auto tuning enbale for CMD/DATA line
  *
@@ -1887,9 +2157,9 @@ static void USDHC_TransferHandleCommand(USDHC_Type *base, usdhc_handle_t *handle
         }
         else
         {
-            if ((handle->data == NULL) && (handle->callback.TransferComplete != NULL))
+            if (handle->callback.TransferComplete != NULL)
             {
-                handle->callback.TransferComplete(base, handle, kStatus_Success, handle->userData);
+                handle->callback.TransferComplete(base, handle, kStatus_USDHC_SendCommandSuccess, handle->userData);
             }
         }
     }
@@ -1898,6 +2168,64 @@ static void USDHC_TransferHandleCommand(USDHC_Type *base, usdhc_handle_t *handle
     handle->command = NULL;
 }
 
+#if (defined FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER) && FSL_USDHC_ENABLE_SCATTER_GATHER_TRANSFER
+static void USDHC_TransferHandleData(USDHC_Type *base, usdhc_handle_t *handle, uint32_t interruptFlags)
+{
+    assert(handle->data != NULL);
+
+    status_t transferStatus = kStatus_USDHC_BusyTransferring;
+
+    if ((!(handle->data->enableIgnoreError)) &&
+        (IS_USDHC_FLAG_SET(interruptFlags, (uint32_t)kUSDHC_DataErrorFlag | (uint32_t)kUSDHC_DmaErrorFlag)))
+    {
+        transferStatus = kStatus_USDHC_TransferDataFailed;
+    }
+    else
+    {
+        if (IS_USDHC_FLAG_SET(interruptFlags, kUSDHC_BufferReadReadyFlag))
+        {
+            /* std tuning process only need to wait BRR */
+            if (handle->data->dataType == (uint32_t)kUSDHC_TransferDataTuning)
+            {
+                transferStatus = kStatus_USDHC_TransferDataComplete;
+            }
+        }
+        else
+        {
+            if (IS_USDHC_FLAG_SET(interruptFlags, kUSDHC_DmaCompleteFlag))
+            {
+                transferStatus = kStatus_USDHC_TransferDMAComplete;
+            }
+
+            if (IS_USDHC_FLAG_SET(interruptFlags, kUSDHC_DataCompleteFlag))
+            {
+                transferStatus = kStatus_USDHC_TransferDataComplete;
+
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
+                if (handle->data->dataDirection == kUSDHC_TransferDirectionReceive)
+                {
+                    usdhc_scatter_gather_data_list_t *sgDataList = &handle->data->sgData;
+                    while (sgDataList != NULL)
+                    {
+                        DCACHE_InvalidateByRange((uint32_t)sgDataList->dataAddr, sgDataList->dataSize);
+                        sgDataList = sgDataList->dataList;
+                    }
+                }
+#endif
+            }
+        }
+    }
+
+    if ((handle->callback.TransferComplete != NULL) && (transferStatus != kStatus_USDHC_BusyTransferring))
+    {
+        handle->callback.TransferComplete(base, handle, transferStatus, handle->userData);
+        USDHC_DisableInterruptSignal(
+            base, (uint32_t)kUSDHC_DataFlag | (uint32_t)kUSDHC_DataDMAFlag | (uint32_t)kUSDHC_DmaCompleteFlag);
+        handle->data = NULL;
+    }
+}
+
+#else
 static void USDHC_TransferHandleData(USDHC_Type *base, usdhc_handle_t *handle, uint32_t interruptFlags)
 {
     assert(handle->data != NULL);
@@ -1917,7 +2245,7 @@ static void USDHC_TransferHandleData(USDHC_Type *base, usdhc_handle_t *handle, u
             /* std tuning process only need to wait BRR */
             if (handle->data->dataType == (uint32_t)kUSDHC_TransferDataTuning)
             {
-                transferStatus = kStatus_Success;
+                transferStatus = kStatus_USDHC_TransferDataComplete;
             }
             else
             {
@@ -1938,7 +2266,15 @@ static void USDHC_TransferHandleData(USDHC_Type *base, usdhc_handle_t *handle, u
 
             if (IS_USDHC_FLAG_SET(interruptFlags, kUSDHC_DataCompleteFlag))
             {
-                transferStatus = kStatus_Success;
+                transferStatus = kStatus_USDHC_TransferDataComplete;
+
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
+                if (handle->data->rxData != NULL)
+                {
+                    DCACHE_InvalidateByRange((uint32_t)(handle->data->rxData),
+                                             (handle->data->blockSize) * (handle->data->blockCount));
+                }
+#endif
             }
         }
     }
@@ -1950,6 +2286,7 @@ static void USDHC_TransferHandleData(USDHC_Type *base, usdhc_handle_t *handle, u
         handle->data = NULL;
     }
 }
+#endif
 
 static void USDHC_TransferHandleSdioInterrupt(USDHC_Type *base, usdhc_handle_t *handle)
 {
@@ -2062,38 +2399,29 @@ void USDHC_TransferHandleIRQ(USDHC_Type *base, usdhc_handle_t *handle)
 }
 
 #ifdef USDHC0
+void USDHC0_DriverIRQHandler(void);
 void USDHC0_DriverIRQHandler(void)
 {
     s_usdhcIsr(s_usdhcBase[0U], s_usdhcHandle[0U]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #ifdef USDHC1
+void USDHC1_DriverIRQHandler(void);
 void USDHC1_DriverIRQHandler(void)
 {
     s_usdhcIsr(s_usdhcBase[1U], s_usdhcHandle[1U]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
 #ifdef USDHC2
+void USDHC2_DriverIRQHandler(void);
 void USDHC2_DriverIRQHandler(void)
 {
     s_usdhcIsr(s_usdhcBase[2U], s_usdhcHandle[2U]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #endif

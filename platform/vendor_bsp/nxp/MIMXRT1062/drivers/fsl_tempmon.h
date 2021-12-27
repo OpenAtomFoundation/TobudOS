@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
 /*@}*/
 
 /*! @brief TEMPMON temperature structure. */

@@ -8,7 +8,6 @@
   *           + Initialization and de-initialization functions
   *           + Peripheral Control functions
   *
-  *
   @verbatim
   =============================================================================
                ##### SMARTCARD peripheral extended features  #####
@@ -30,29 +29,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -72,19 +55,25 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+/** @defgroup SMARTCARDEx_Private_Constants SMARTCARD Extended Private Constants
+  * @{
+  */
 /* UART RX FIFO depth */
 #define RX_FIFO_DEPTH 8U
 
 /* UART TX FIFO depth */
 #define TX_FIFO_DEPTH 8U
+/**
+  * @}
+  */
 
 /* Private macros ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 #if defined(USART_CR1_FIFOEN)
 static void SMARTCARDEx_SetNbDataToProcess(SMARTCARD_HandleTypeDef *hsmartcard);
-#endif
 
+#endif /* USART_CR1_FIFOEN */
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SMARTCARDEx_Exported_Functions  SMARTCARD Extended Exported Functions
   * @{
@@ -108,8 +97,7 @@ static void SMARTCARDEx_SetNbDataToProcess(SMARTCARD_HandleTypeDef *hsmartcard);
   * @{
   */
 
-/**
-  * @brief Update on the fly the SMARTCARD block length in RTOR register.
+/** @brief Update on the fly the SMARTCARD block length in RTOR register.
   * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
   * @param BlockLength SMARTCARD block length (8-bit long at most)
@@ -120,8 +108,7 @@ void HAL_SMARTCARDEx_BlockLength_Config(SMARTCARD_HandleTypeDef *hsmartcard, uin
   MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_BLEN, ((uint32_t)BlockLength << USART_RTOR_BLEN_Pos));
 }
 
-/**
-  * @brief Update on the fly the receiver timeout value in RTOR register.
+/** @brief Update on the fly the receiver timeout value in RTOR register.
   * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
   * @param TimeOutValue receiver timeout value in number of baud blocks. The timeout
@@ -134,15 +121,13 @@ void HAL_SMARTCARDEx_TimeOut_Config(SMARTCARD_HandleTypeDef *hsmartcard, uint32_
   MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_RTO, TimeOutValue);
 }
 
-/**
-  * @brief Enable the SMARTCARD receiver timeout feature.
+/** @brief Enable the SMARTCARD receiver timeout feature.
   * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard)
 {
-
   if (hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
   {
     /* Process Locked */
@@ -166,15 +151,13 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef 
   }
 }
 
-/**
-  * @brief Disable the SMARTCARD receiver timeout feature.
+/** @brief Disable the SMARTCARD receiver timeout feature.
   * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard)
 {
-
   if (hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
   {
     /* Process Locked */
@@ -209,12 +192,12 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
  ===============================================================================
                       ##### IO operation functions #####
  ===============================================================================
+    [..]
     This subsection provides a set of FIFO mode related callback functions.
 
     (#) TX/RX Fifos Callbacks:
-        (+) HAL_SMARTCARDEx_RxFifoFullCallback()
-        (+) HAL_SMARTCARDEx_TxFifoEmptyCallback()
-
+        (++) HAL_SMARTCARDEx_RxFifoFullCallback()
+        (++) HAL_SMARTCARDEx_TxFifoEmptyCallback()
 
 @endverbatim
   * @{
@@ -252,21 +235,22 @@ __weak void HAL_SMARTCARDEx_TxFifoEmptyCallback(SMARTCARD_HandleTypeDef *hsmartc
             the HAL_SMARTCARDEx_TxFifoEmptyCallback can be implemented in the user file.
    */
 }
-#endif
 
+#endif /* USART_CR1_FIFOEN */
 /**
   * @}
   */
 
-/** @defgroup SMARTCARD_Exported_Functions_Group3 Extended Peripheral Peripheral Control functions
+/** @defgroup SMARTCARDEx_Exported_Functions_Group3 Extended Peripheral FIFO Control functions
   *  @brief   SMARTCARD control functions
   *
 @verbatim
  ===============================================================================
-                      ##### Peripheral Control functions #####
+                  ##### Peripheral FIFO Control functions #####
  ===============================================================================
     [..]
-    This subsection provides a set of functions allowing to control the SMARTCARD.
+    This subsection provides a set of functions allowing to control the SMARTCARD
+    FIFO feature.
      (+) HAL_SMARTCARDEx_EnableFifoMode() API enables the FIFO mode
      (+) HAL_SMARTCARDEx_DisableFifoMode() API disables the FIFO mode
      (+) HAL_SMARTCARDEx_SetTxFifoThreshold() API sets the TX FIFO threshold
@@ -452,7 +436,7 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_SetRxFifoThreshold(SMARTCARD_HandleTypeDef *hs
 
   return HAL_OK;
 }
-#endif
+#endif /* USART_CR1_FIFOEN */
 
 /**
   * @}
@@ -462,7 +446,7 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_SetRxFifoThreshold(SMARTCARD_HandleTypeDef *hs
   * @}
   */
 
-/** @defgroup SMARTCARDEx_Private_Functions  SMARTCARD Extended private Functions
+/** @defgroup SMARTCARDEx_Private_Functions  SMARTCARD Extended Private Functions
   * @{
   */
 
@@ -481,8 +465,8 @@ static void SMARTCARDEx_SetNbDataToProcess(SMARTCARD_HandleTypeDef *hsmartcard)
   uint8_t rx_fifo_threshold;
   uint8_t tx_fifo_threshold;
   /* 2 0U/1U added for MISRAC2012-Rule-18.1_b and MISRAC2012-Rule-18.1_d */
-  uint8_t numerator[]   = {1U, 1U, 1U, 3U, 7U, 1U, 0U, 0U};
-  uint8_t denominator[] = {8U, 4U, 2U, 4U, 8U, 1U, 1U, 1U};
+  static const uint8_t numerator[]   = {1U, 1U, 1U, 3U, 7U, 1U, 0U, 0U};
+  static const uint8_t denominator[] = {8U, 4U, 2U, 4U, 8U, 1U, 1U, 1U};
 
   if (hsmartcard->FifoMode == SMARTCARD_FIFOMODE_DISABLE)
   {
@@ -499,8 +483,8 @@ static void SMARTCARDEx_SetNbDataToProcess(SMARTCARD_HandleTypeDef *hsmartcard)
     hsmartcard->NbRxDataToProcess = ((uint16_t)rx_fifo_depth * numerator[rx_fifo_threshold]) / (uint16_t)denominator[rx_fifo_threshold];
   }
 }
-#endif
 
+#endif /* USART_CR1_FIFOEN */
 /**
   * @}
   */

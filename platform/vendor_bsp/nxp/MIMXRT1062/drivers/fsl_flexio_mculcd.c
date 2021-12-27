@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -757,15 +757,15 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
  * param data The data array to send.
  * param size How many bytes to write.
  */
-void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, size_t size)
+void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, const void *data, size_t size)
 {
     assert(size > 0U);
 
     uint32_t i;
 #if (8 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
-    uint8_t *data8Bit;
+    const uint8_t *data8Bit;
 #else
-    uint16_t *data16Bit;
+    const uint16_t *data16Bit;
 #endif
     FLEXIO_Type *flexioBase = base->flexioBase;
 
@@ -782,7 +782,7 @@ void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, 
 
 /* If data bus width is 8. */
 #if (8 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
-    data8Bit = (uint8_t *)data;
+    data8Bit = (const uint8_t *)data;
 
     for (i = 0; i < size; i++)
     {
@@ -797,7 +797,7 @@ void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, 
         flexioBase->TIMSTAT = 1UL << base->timerIndex;
     }
 #else
-    data16Bit = (uint16_t *)data;
+    data16Bit = (const uint16_t *)data;
     size /= 2U;
 
     for (i = 0; i < size; i++)
@@ -1175,7 +1175,7 @@ status_t FLEXIO_MCULCD_TransferGetCount(FLEXIO_MCULCD_Type *base, flexio_mculcd_
     *count = handle->dataCount - handle->remainingCount;
 
 #if (16 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
-    *count *= 2;
+    *count *= 2U;
 #endif
 
     return kStatus_Success;

@@ -90,29 +90,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -337,7 +321,7 @@ void HAL_NVIC_SetPendingIRQ(IRQn_Type IRQn)
 {
   /* Check the parameters */
   assert_param(IS_NVIC_DEVICE_IRQ(IRQn));
-
+  
   /* Set interrupt pending */
   NVIC_SetPendingIRQ(IRQn);
 }
@@ -355,7 +339,7 @@ uint32_t HAL_NVIC_GetPendingIRQ(IRQn_Type IRQn)
 {
   /* Check the parameters */
   assert_param(IS_NVIC_DEVICE_IRQ(IRQn));
-
+  
   /* Return 1 if pending else 0 */
   return NVIC_GetPendingIRQ(IRQn);
 }
@@ -371,7 +355,7 @@ void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn)
 {
   /* Check the parameters */
   assert_param(IS_NVIC_DEVICE_IRQ(IRQn));
-
+  
   /* Clear pending interrupt */
   NVIC_ClearPendingIRQ(IRQn);
 }
@@ -434,22 +418,6 @@ __weak void HAL_SYSTICK_Callback(void)
 
 #if (__MPU_PRESENT == 1)
 /**
-  * @brief  Disable the MPU.
-  * @retval None
-  */
-void HAL_MPU_Disable(void)
-{
-  /* Make sure outstanding transfers are done */
-  __DMB();
-
-  /* Disable fault exceptions */
-  SCB->SHCSR &= ~SCB_SHCSR_MEMFAULTENA_Msk;
-  
-  /* Disable the MPU and clear the control register*/
-  MPU->CTRL = 0U;
-}
-
-/**
   * @brief  Enable the MPU.
   * @param  MPU_Control: Specifies the control mode of the MPU during hard fault, 
   *          NMI, FAULTMASK and privileged accessto the default memory 
@@ -463,15 +431,27 @@ void HAL_MPU_Disable(void)
 void HAL_MPU_Enable(uint32_t MPU_Control)
 {
   /* Enable the MPU */
-  MPU->CTRL = MPU_Control | MPU_CTRL_ENABLE_Msk;
-  
-  /* Enable fault exceptions */
-  SCB->SHCSR |= SCB_SHCSR_MEMFAULTENA_Msk;
-  
-  /* Ensure MPU settings take effects */
+  MPU->CTRL = (MPU_Control | MPU_CTRL_ENABLE_Msk);
+
+  /* Ensure MPU setting take effects */
   __DSB();
   __ISB();
 }
+
+
+/**
+  * @brief  Disable the MPU.
+  * @retval None
+  */
+void HAL_MPU_Disable(void)
+{
+  /* Make sure outstanding transfers are done */
+  __DMB();
+
+  /* Disable the MPU and clear the control register*/
+  MPU->CTRL  = 0;
+}
+
 
 /**
   * @brief  Initialize and configure the Region and the memory to be protected.

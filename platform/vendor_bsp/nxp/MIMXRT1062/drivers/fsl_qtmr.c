@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -169,7 +169,8 @@ status_t QTMR_SetupPwm(TMR_Type *base,
                        bool outputPolarity,
                        uint32_t srcClock_Hz)
 {
-    uint16_t periodCount, highCount, lowCount, reg;
+    uint32_t periodCount, highCount, lowCount;
+    uint16_t reg;
     status_t status;
 
     if (dutyCyclePercent <= 100U)
@@ -178,17 +179,30 @@ status_t QTMR_SetupPwm(TMR_Type *base,
         base->CHANNEL[channel].SCTRL |= (TMR_SCTRL_FORCE_MASK | TMR_SCTRL_OEN_MASK);
 
         /* Counter values to generate a PWM signal */
-        periodCount = (uint16_t)(srcClock_Hz / pwmFreqHz);
-        highCount   = (uint16_t)(periodCount * dutyCyclePercent) / 100U;
+        periodCount = srcClock_Hz / pwmFreqHz;
+        highCount   = periodCount * dutyCyclePercent / 100U;
         lowCount    = periodCount - highCount;
 
+        if (highCount > 0U)
+        {
+            highCount -= 1U;
+        }
+        if (lowCount > 0U)
+        {
+            lowCount -= 1U;
+        }
+
+        /* This should not be a 16-bit overflow value. If it is, change to a larger divider for clock source. */
+        assert(highCount <= 0xFFFFU);
+        assert(lowCount <= 0xFFFFU);
+
         /* Setup the compare registers for PWM output */
-        base->CHANNEL[channel].COMP1 = lowCount - 1U;
-        base->CHANNEL[channel].COMP2 = highCount - 1U;
+        base->CHANNEL[channel].COMP1 = (uint16_t)lowCount;
+        base->CHANNEL[channel].COMP2 = (uint16_t)highCount;
 
         /* Setup the pre-load registers for PWM output */
-        base->CHANNEL[channel].CMPLD1 = lowCount - 1U;
-        base->CHANNEL[channel].CMPLD2 = highCount - 1U;
+        base->CHANNEL[channel].CMPLD1 = (uint16_t)lowCount;
+        base->CHANNEL[channel].CMPLD2 = (uint16_t)highCount;
 
         reg = base->CHANNEL[channel].CSCTRL;
         /* Setup the compare load control for COMP1 and COMP2.

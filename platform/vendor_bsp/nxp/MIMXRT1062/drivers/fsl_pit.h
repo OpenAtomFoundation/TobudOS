@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PIT Driver Version 2.0.2 */
-#define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief PIT Driver Version 2.0.4 */
+#define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*!
@@ -245,7 +245,9 @@ static inline void PIT_ClearStatusFlags(PIT_Type *base, pit_chnl_t channel, uint
  */
 static inline void PIT_SetTimerPeriod(PIT_Type *base, pit_chnl_t channel, uint32_t count)
 {
-    base->CHANNEL[channel].LDVAL = count;
+    assert(count != 0U);
+    /* According to RM, the LDVAL trigger = clock ticks -1 */
+    base->CHANNEL[channel].LDVAL = count - 1U;
 }
 
 /*!

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  *
@@ -745,22 +745,28 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
     if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_QChannelReceiveRegisterFull) != 0x00U) &&
         ((base->SIE & (uint32_t)kSPDIF_QChannelReceiveRegisterFull) != 0x00U))
     {
-        buffer    = handle->spdifQueue[handle->queueDriver].qdata;
-        data      = SPDIF_ReadQChannel(base);
-        buffer[0] = (uint8_t)data & 0xFFU;
-        buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
-        buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
+        buffer = handle->spdifQueue[handle->queueDriver].qdata;
+        if (buffer != NULL)
+        {
+            data      = SPDIF_ReadQChannel(base);
+            buffer[0] = (uint8_t)data & 0xFFU;
+            buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
+            buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
+        }
     }
 
     /* Handle U channel full flag */
     if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_UChannelReceiveRegisterFull) != 0x00U) &&
         ((base->SIE & (uint32_t)kSPDIF_UChannelReceiveRegisterFull) != 0x00U))
     {
-        buffer    = handle->spdifQueue[handle->queueDriver].udata;
-        data      = SPDIF_ReadUChannel(base);
-        buffer[0] = (uint8_t)data & 0xFFU;
-        buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
-        buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
+        buffer = handle->spdifQueue[handle->queueDriver].udata;
+        if (buffer != NULL)
+        {
+            data      = SPDIF_ReadUChannel(base);
+            buffer[0] = (uint8_t)data & 0xFFU;
+            buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
+            buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
+        }
     }
 
     /* Handle audio data transfer */
@@ -812,6 +818,7 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
 }
 
 #if defined(SPDIF)
+void SPDIF_DriverIRQHandler(void);
 void SPDIF_DriverIRQHandler(void)
 {
     if ((s_spdifHandle[0][0] != NULL) && (s_spdifTxIsr != NULL))
@@ -823,10 +830,6 @@ void SPDIF_DriverIRQHandler(void)
     {
         s_spdifRxIsr(SPDIF, s_spdifHandle[0][1]);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

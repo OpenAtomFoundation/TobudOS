@@ -49,20 +49,20 @@ CMSIS_SRC =  \
         C_SOURCES += $(CMSIS_SRC)
 
 HAL_DRIVER_SRC =  \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/main.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/mcu_init.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/main.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/mcu_init.c \
 		$(TOP_DIR)/examples/hello_world/hello_world.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/gpio.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/adc.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/dac.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/i2c.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/usart.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/spi.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/tim.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_it.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_hal_msp.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11/DHT11_BUS.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/OLED/oled.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/gpio.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/adc.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/dac.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/i2c.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/usart.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/spi.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/tim.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_it.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/stm32l4xx_hal_msp.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Hardware/DHT11/DHT11_BUS.c \
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Hardware/OLED/oled.c \
 		$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.c \
 		$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc_ex.c \
 		$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dac.c \
@@ -88,7 +88,7 @@ HAL_DRIVER_SRC =  \
 		$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c \
 		$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c \
 		$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c \
-		$(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Src/system_stm32l4xx.c
+		$(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Src/system_stm32l4xx.c
         C_SOURCES += $(HAL_DRIVER_SRC) 
 
 # ASM sources
@@ -156,21 +156,21 @@ KERNEL_INC = \
         -I $(TOP_DIR)/kernel/hal/include \
         -I $(TOP_DIR)/arch/arm/arm-v7m/common/include \
         -I $(TOP_DIR)/arch/arm/arm-v7m/cortex-m4/gcc \
-        -I $(TOP_DIR)/board/\TencentOS_tiny_EVB_MX_Plus/TOS-CONFIG
+        -I $(TOP_DIR)/board/\TencentOS_Tiny_EVB_MX_Plus/TOS-CONFIG
         C_INCLUDES += $(KERNEL_INC)
 CMSIS_INC = \
         -I $(TOP_DIR)/osal/cmsis_os
         C_INCLUDES += $(CMSIS_INC)
 	
 HAL_DRIVER_INC =  \
-		-I $(TOP_DIR)/board/TencentOS_tiny_EVB_MX_Plus/BSP/Inc \
+		-I $(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Inc \
 		-I$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Inc \
 		-I$(TOP_DIR)/platform/vendor_bsp/st/STM32L4xx_HAL_Driver/Inc/Legacy \
 		-I$(TOP_DIR)/platform/vendor_bsp/st/CMSIS/Device/ST/STM32L4xx/Include \
 		-I$(TOP_DIR)/platform/vendor_bsp/st/CMSIS/Include \
-		-I $(TOP_DIR)/board/\TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/DHT11 \
-		-I $(TOP_DIR)/board/\TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/BH1750 \
-		-I $(TOP_DIR)/board/\TencentOS_tiny_EVB_MX_Plus/BSP/Hardware/OLED
+		-I $(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Hardware/DHT11 \
+		-I $(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Hardware/BH1750 \
+		-I $(TOP_DIR)/board/TencentOS_Tiny_EVB_MX_Plus/BSP/Hardware/OLED
         C_INCLUDES += $(HAL_DRIVER_INC)
 
 # compile gcc flags

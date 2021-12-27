@@ -1,4 +1,5 @@
 
+# 开放原子开源基金会首批孵化项目
 ![](./doc/image/introduction/TencentOS_tiny_log.png)
 
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
@@ -63,7 +64,7 @@ TencentOS tiny 主体架构图，从下到上主要包括：
 
 TencentOS tiny 自开源发布以来也在努力发展合作伙伴，期待合作共赢，共同扩展 IoT 应用生态。目前已经与多家 MCU/IP 核厂家达成了合作，包括意法半导体、恩智浦半导体、兆易半导体、ARM、华大半导体、芯来科技等；也与无线 SOC 和模组厂家达成了广泛的合作关系，包括瑞兴恒方、国民技术、Nordic 蓝牙、亮牛半导体、有人物联网等，
 
-除了MCU和模组外，TencentOS tiny 也积极推进终端产品及项目的落地，目前已经形成了AI智慧农业、智能货柜、智慧会议室等方案，并且在腾讯内部与 AI 平台部、腾讯微瓴、QQ family 达成内部合作，共同扩展行业生态；同时也开始积极发展外部客户，目前与深圳光合显示科技的墨水屏零售标签、鑫悦购充电桩等达成业务合作。TencentOS tiny 将携手合作伙伴为物联网终端厂家提供更优质的 IoT 终端软件解决方案，方便各种物联网设备快速接入腾讯云，共同扩展 IoT 生态，更好地支撑智慧城市、智能水表、智能家居、智能穿戴、车联网等多种行业应用。
+除了MCU和模组外，TencentOS tiny 也积极推进终端产品及项目的落地，目前已经形成了AI智慧农业、智能货柜、智慧会议室等方案，并且在腾讯内部与微信支付、腾讯云智慧行业、 AI 平台部、腾讯微瓴、QQ family 达成内部合作，共同扩展行业生态；同时也开始积极发展外部客户，目前与深圳光合显示科技的墨水屏零售标签、鑫悦购充电桩等达成业务合作。TencentOS tiny 将携手合作伙伴为物联网终端厂家提供更优质的 IoT 终端软件解决方案，方便各种物联网设备快速接入腾讯云，共同扩展 IoT 生态，更好地支撑智慧城市、智能水表、智能家居、智能穿戴、车联网等多种行业应用。
 
 欢迎 IoT 相关项目合作，有合作需求的请邮件联系 TencentOS tiny 官方工作人员，邮箱地址 ： supowang@tencent.com
 
@@ -75,6 +76,8 @@ TencentOS tiny 自开源发布以来也在努力发展合作伙伴，期待合�
 - [TencentOS tiny 移植指南（KEIL 版本）](./doc/10.Porting_Manual_for_KEIL.md)
 - [TencentOS tiny 移植指南（IAR 版本）](./doc/11.Porting_Manual_for_IAR.md)
 - [TencentOS tiny 移植指南（GCC 版本）](./doc/12.Porting_Manual_for_GCC.md)
+- [TencentOS tiny 移植指南（基于MDK pack)](./tools/mdk_pack/Documentation/README.md)
+- [TencentOS tiny 移植指南（基于STM32 CubeMx)](./tools/STM32CubeMX_pack/Documentation/README.md)
 
 ## 2、TencentOS tiny 开发指南
 - [TencentOS tiny 内核开发指南](./doc/04.Development_Manual.md)
@@ -192,5 +195,4 @@ TencentOS tiny 联合合作伙伴(南京厚德物联网)设计了定制开发板
 
 ## 相关PPT资料：
 - [【TencentOS tiny 学习】视频 PPT](https://github.com/jiejieTop/TencentOS-Demo/tree/master/PPT)
-
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexCAN EDMA driver version 2.5.0. */
-#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief FlexCAN EDMA driver version. */
+#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */

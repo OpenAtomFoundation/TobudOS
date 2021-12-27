@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version */
 /*@}*/
 
 /*! @brief Quad Timer primary clock source selection*/

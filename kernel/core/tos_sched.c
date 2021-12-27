@@ -140,6 +140,11 @@ __KNL__ void readyqueue_remove(k_task_t *task)
     k_prio_t task_prio;
     k_list_t *task_list;
 
+    // protect the idle task.
+    if (knl_is_idle(task)) {
+        return;
+    }
+
     task_prio = task->prio;
     task_list = &k_rdyq.task_list_head[task_prio];
 

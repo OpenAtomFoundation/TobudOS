@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI driver version 2.2.1. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief FLEXSPI driver version 2.3.2. */
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -47,8 +47,8 @@ enum
                                                                                     occurred during FLEXSPI transfer. */
 };
 
-/*! @brief CMD definition of FLEXSPI, use to form LUT instruction. */
-enum _flexspi_command
+/*! @brief CMD definition of FLEXSPI, use to form LUT instruction, _flexspi_command. */
+enum
 {
     kFLEXSPI_Command_STOP           = 0x00U, /*!< Stop execution, deassert CS. */
     kFLEXSPI_Command_SDR            = 0x01U, /*!< Transmit Command code to Flash, using SDR mode. */
@@ -204,6 +204,7 @@ typedef enum _flexspi_arb_command_source
     kFLEXSPI_SuspendedCommand = 0x3U,
 } flexspi_arb_command_source_t;
 
+/*! @brief Command type. */
 typedef enum _flexspi_command_type
 {
     kFLEXSPI_Command, /*!< FlexSPI operation: Only command, both TX and Rx buffer are ignored. */
@@ -337,6 +338,22 @@ extern "C" {
  * @name Initialization and deinitialization
  * @{
  */
+
+/*!
+ * @brief Get the instance number for FLEXSPI.
+ *
+ * @param base FLEXSPI base pointer.
+ */
+uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base);
+
+/*!
+ * @brief Check and clear IP command execution errors.
+ *
+ * @param base FLEXSPI base pointer.
+ * @param status interrupt status.
+ */
+status_t FLEXSPI_CheckAndClearError(FLEXSPI_Type *base, uint32_t status);
+
 /*!
  * @brief Initializes the FLEXSPI module and internal state.
  *
@@ -362,6 +379,15 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config);
  * @param base FLEXSPI peripheral base address.
  */
 void FLEXSPI_Deinit(FLEXSPI_Type *base);
+
+/*!
+ * @brief Update FLEXSPI DLL value depending on currently flexspi root clock.
+ *
+ * @param base FLEXSPI peripheral base address.
+ * @param config Flash configuration parameters.
+ * @param port FLEXSPI Operation port.
+ */
+void FLEXSPI_UpdateDllValue(FLEXSPI_Type *base, flexspi_device_config_t *config, flexspi_port_t port);
 
 /*!
  * @brief Configures the connected device parameter.
@@ -566,7 +592,7 @@ static inline uint32_t FLEXSPI_GetInterruptStatusFlags(FLEXSPI_Type *base)
  * @brief Get the FLEXSPI interrupt status flags.
  *
  * @param base FLEXSPI peripheral base address.
- * @param interrupt status flag.
+ * @param mask FLEXSPI interrupt source.
  */
 static inline void FLEXSPI_ClearInterruptStatusFlags(FLEXSPI_Type *base, uint32_t mask)
 {
@@ -582,14 +608,14 @@ static inline void FLEXSPI_ClearInterruptStatusFlags(FLEXSPI_Type *base, uint32_
  */
 static inline void FLEXSPI_GetDataLearningPhase(FLEXSPI_Type *base, uint8_t *portAPhase, uint8_t *portBPhase)
 {
-    if (portAPhase)
+    if (portAPhase != NULL)
     {
-        *portAPhase = (base->STS0 & FLEXSPI_STS0_DATALEARNPHASEA_MASK) >> FLEXSPI_STS0_DATALEARNPHASEA_SHIFT;
+        *portAPhase = (uint8_t)((base->STS0 & FLEXSPI_STS0_DATALEARNPHASEA_MASK) >> FLEXSPI_STS0_DATALEARNPHASEA_SHIFT);
     }
 
-    if (portBPhase)
+    if (portBPhase != NULL)
     {
-        *portBPhase = (base->STS0 & FLEXSPI_STS0_DATALEARNPHASEB_MASK) >> FLEXSPI_STS0_DATALEARNPHASEB_SHIFT;
+        *portBPhase = (uint8_t)((base->STS0 & FLEXSPI_STS0_DATALEARNPHASEB_MASK) >> FLEXSPI_STS0_DATALEARNPHASEB_SHIFT);
     }
 }
 #endif

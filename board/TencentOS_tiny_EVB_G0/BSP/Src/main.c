@@ -1,9 +1,10 @@
 #include "mcu_init.h"
-#include "cmsis_os.h"
 
 #define APPLICATION_TASK_STK_SIZE       1024
+k_task_t application_task;
+uint8_t application_task_stk[APPLICATION_TASK_STK_SIZE];
+
 extern void application_entry(void *arg);
-osThreadDef(application_entry, osPriorityNormal, 1, APPLICATION_TASK_STK_SIZE);
 
 __weak void application_entry(void *arg)
 {
@@ -16,9 +17,9 @@ __weak void application_entry(void *arg)
 int main(void)
 {
     board_init();
-    printf("Welcome to TencentOS tiny\r\n");
-    osKernelInitialize();
-    osThreadCreate(osThread(application_entry), NULL);
-    osKernelStart();
+    printf("Welcome to TencentOS tiny(%s)\r\n", TOS_VERSION);
+    tos_knl_init(); // TencentOS Tiny kernel initialize
+    tos_task_create(&application_task, "application_task", application_entry, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
+    tos_knl_start();
 }
 

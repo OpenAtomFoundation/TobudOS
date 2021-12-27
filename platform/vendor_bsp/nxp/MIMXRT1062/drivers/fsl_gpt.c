@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -61,7 +61,7 @@ void GPT_Init(GPT_Type *base, const gpt_config_t *initConfig)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the GPT clock*/
-    CLOCK_EnableClock(s_gptClocks[GPT_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_gptClocks[GPT_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     base->CR = 0U;
 
@@ -89,7 +89,7 @@ void GPT_Deinit(GPT_Type *base)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the GPT clock*/
-    CLOCK_DisableClock(s_gptClocks[GPT_GetInstance(base)]);
+    (void)CLOCK_DisableClock(s_gptClocks[GPT_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -104,7 +104,7 @@ void GPT_Deinit(GPT_Type *base)
  *    config->enableRunInWait = true;
  *    config->enableRunInDoze = false;
  *    config->enableRunInDbg = false;
- *    config->enableFreeRun = true;
+ *    config->enableFreeRun = false;
  *    config->enableMode  = true;
  * endcode
  * param config Pointer to the user configuration structure.

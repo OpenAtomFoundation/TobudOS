@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC driver version */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4. */
 
 /*!
  * @brief Converter's status flags.
@@ -231,7 +231,6 @@ void ADC_Deinit(ADC_Type *base);
  *  config->clockDriver =                   kADC_ClockDriver1;
  *  config->resolution =                    kADC_Resolution12Bit;
  * @endcode
- * @param base   ADC peripheral base address.
  * @param config Pointer to the configuration structure.
  */
 void ADC_GetDefaultConfig(adc_config_t *config);
@@ -275,7 +274,7 @@ void ADC_SetChannelConfig(ADC_Type *base, uint32_t channelGroup, const adc_chann
  */
 static inline uint32_t ADC_GetChannelConversionValue(ADC_Type *base, uint32_t channelGroup)
 {
-    assert(channelGroup < FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
+    assert(channelGroup < (uint32_t)FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
 
     return base->R[channelGroup];
 }
@@ -299,7 +298,7 @@ static inline uint32_t ADC_GetChannelConversionValue(ADC_Type *base, uint32_t ch
  */
 static inline uint32_t ADC_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup)
 {
-    assert(channelGroup < FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
+    assert(channelGroup < (uint32_t)FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
 
     /* If flag is set,return 1,otherwise, return 0. */
     return (((base->HS) & (1UL << channelGroup)) >> channelGroup);
@@ -376,7 +375,7 @@ static inline void ADC_EnableHardwareTrigger(ADC_Type *base, bool enable)
  * manual for more information.
  *
  * @param base ADC peripheral base address.
- * @param Pointer to "adc_hardware_compare_config_t" structure.
+ * @param config Pointer to "adc_hardware_compare_config_t" structure.
  *
  */
 void ADC_SetHardwareCompareConfig(ADC_Type *base, const adc_hardware_compare_config_t *config);
@@ -413,8 +412,16 @@ static inline uint32_t ADC_GetStatusFlags(ADC_Type *base)
  */
 void ADC_ClearStatusFlags(ADC_Type *base, uint32_t mask);
 
+/*!
+ *@}
+ */
+
 #if defined(__cplusplus)
 }
 #endif
+
+/*!
+ *@}
+ */
 
 #endif /* _FSL_ADC_H_ */

@@ -17,12 +17,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.snvs_lp"
 #endif
 
-#define SECONDS_IN_A_DAY (86400U)
-#define SECONDS_IN_A_HOUR (3600U)
+#define SECONDS_IN_A_DAY    (86400U)
+#define SECONDS_IN_A_HOUR   (3600U)
 #define SECONDS_IN_A_MINUTE (60U)
-#define DAYS_IN_A_YEAR (365U)
-#define YEAR_RANGE_START (1970U)
-#define YEAR_RANGE_END (2099U)
+#define DAYS_IN_A_YEAR      (365U)
+#define YEAR_RANGE_START    (1970U)
+#define YEAR_RANGE_END      (2099U)
 
 #define SNVS_DEFAULT_PGD_VALUE (0x41736166U)
 
@@ -764,3 +764,46 @@ void SNVS_LP_WriteZeroizableMasterKey(SNVS_Type *base, uint32_t ZMKey[SNVS_ZMK_R
         base->LPZMKR[i] = ZMKey[i];
     }
 }
+
+#if defined(FSL_FEATURE_SNVS_HAS_STATE_TRANSITION) && (FSL_FEATURE_SNVS_HAS_STATE_TRANSITION > 0)
+/*!
+ * brief Transition SNVS SSM state to Trusted/Non-secure from Check state
+ *
+ * param base SNVS peripheral base address
+ *
+ * return kStatus_Success: Success in transitioning SSM State
+ *        kStatus_Fail: SSM State transition failed
+ */
+status_t SNVS_LP_SSM_State_Transition(SNVS_Type *base)
+{
+    uint32_t curr_ssm_state = ((base->HPSR & SNVS_HPSR_SSM_STATE_MASK) >> SNVS_HPSR_SSM_STATE_SHIFT);
+    uint32_t sec_config     = ((OCOTP_CTRL->HW_OCOTP_OTFAD_CFG3 & OCOTP_CTRL_HW_OCOTP_SEC_CONFIG1_MASK) >>
+                           OCOTP_CTRL_HW_OCOTP_SEC_CONFIG1_SHIFT);
+
+    /* Check if SSM State is Check state */
+    if (curr_ssm_state == SNVS_SSM_STATE_CHECK)
+    {
+        if (sec_config == SEC_CONFIG_OPEN)
+        {
+            /* Transition to Non-secure state */
+            base->HPCOMR |= SNVS_HPCOMR_SW_SV(1);
+        }
+        else
+        {
+            /* Transition to Trusted state */
+            base->HPCOMR |= SNVS_HPCOMR_SSM_ST(1);
+        }
+    }
+
+    uint32_t new_ssm_state = ((base->HPSR & SNVS_HPSR_SSM_STATE_MASK) >> SNVS_HPSR_SSM_STATE_SHIFT);
+
+    if (new_ssm_state != SNVS_SSM_STATE_CHECK)
+    {
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+#endif /* FSL_FEATURE_SNVS_HAS_STATE_TRANSITION */

@@ -65,16 +65,16 @@
           Use Functions HAL_SPI_RegisterCallback() to register an interrupt callback.
 
           Function HAL_SPI_RegisterCallback() allows to register following callbacks:
-            (+) TxCpltCallback        : SPI Tx Completed callback
-            (+) RxCpltCallback        : SPI Rx Completed callback
-            (+) TxRxCpltCallback      : SPI TxRx Completed callback
-            (+) TxHalfCpltCallback    : SPI Tx Half Completed callback
-            (+) RxHalfCpltCallback    : SPI Rx Half Completed callback
-            (+) TxRxHalfCpltCallback  : SPI TxRx Half Completed callback
-            (+) ErrorCallback         : SPI Error callback
-            (+) AbortCpltCallback     : SPI Abort callback
-            (+) MspInitCallback       : SPI Msp Init callback
-            (+) MspDeInitCallback     : SPI Msp DeInit callback
+            (++) TxCpltCallback        : SPI Tx Completed callback
+            (++) RxCpltCallback        : SPI Rx Completed callback
+            (++) TxRxCpltCallback      : SPI TxRx Completed callback
+            (++) TxHalfCpltCallback    : SPI Tx Half Completed callback
+            (++) RxHalfCpltCallback    : SPI Rx Half Completed callback
+            (++) TxRxHalfCpltCallback  : SPI TxRx Half Completed callback
+            (++) ErrorCallback         : SPI Error callback
+            (++) AbortCpltCallback     : SPI Abort callback
+            (++) MspInitCallback       : SPI Msp Init callback
+            (++) MspDeInitCallback     : SPI Msp DeInit callback
           This function takes as parameters the HAL peripheral handle, the Callback ID
           and a pointer to the user callback function.
 
@@ -84,17 +84,18 @@
           HAL_SPI_UnRegisterCallback takes as parameters the HAL peripheral handle,
           and the Callback ID.
           This function allows to reset following callbacks:
-            (+) TxCpltCallback        : SPI Tx Completed callback
-            (+) RxCpltCallback        : SPI Rx Completed callback
-            (+) TxRxCpltCallback      : SPI TxRx Completed callback
-            (+) TxHalfCpltCallback    : SPI Tx Half Completed callback
-            (+) RxHalfCpltCallback    : SPI Rx Half Completed callback
-            (+) TxRxHalfCpltCallback  : SPI TxRx Half Completed callback
-            (+) ErrorCallback         : SPI Error callback
-            (+) AbortCpltCallback     : SPI Abort callback
-            (+) MspInitCallback       : SPI Msp Init callback
-            (+) MspDeInitCallback     : SPI Msp DeInit callback
+            (++) TxCpltCallback        : SPI Tx Completed callback
+            (++) RxCpltCallback        : SPI Rx Completed callback
+            (++) TxRxCpltCallback      : SPI TxRx Completed callback
+            (++) TxHalfCpltCallback    : SPI Tx Half Completed callback
+            (++) RxHalfCpltCallback    : SPI Rx Half Completed callback
+            (++) TxRxHalfCpltCallback  : SPI TxRx Half Completed callback
+            (++) ErrorCallback         : SPI Error callback
+            (++) AbortCpltCallback     : SPI Abort callback
+            (++) MspInitCallback       : SPI Msp Init callback
+            (++) MspDeInitCallback     : SPI Msp DeInit callback
 
+       [..]
        By default, after the HAL_SPI_Init() and when the state is HAL_SPI_STATE_RESET
        all callbacks are set to the corresponding weak functions:
        examples HAL_SPI_MasterTxCpltCallback(), HAL_SPI_MasterRxCpltCallback().
@@ -104,6 +105,7 @@
        If MspInit or MspDeInit are not null, the HAL_SPI_Init()/ HAL_SPI_DeInit()
        keep and use the user MspInit/MspDeInit callbacks (registered beforehand) whatever the state.
 
+       [..]
        Callbacks can be registered/unregistered in HAL_SPI_STATE_READY state only.
        Exception done MspInit/MspDeInit functions that can be registered/unregistered
        in HAL_SPI_STATE_READY or HAL_SPI_STATE_RESET state,
@@ -112,12 +114,13 @@
        using HAL_SPI_RegisterCallback() before calling HAL_SPI_DeInit()
        or HAL_SPI_Init() function.
 
-       When The compilation define USE_HAL_PPP_REGISTER_CALLBACKS is set to 0 or
+       [..]
+       When the compilation define USE_HAL_PPP_REGISTER_CALLBACKS is set to 0 or
        not defined, the callback registering feature is not available
        and weak (surcharged) callbacks are used.
 
      [..]
-       Using the HAL it is not possible to reach all supported SPI frequency with the differents SPI Modes,
+       Using the HAL it is not possible to reach all supported SPI frequency with the different SPI Modes,
        the following table resume the max SPI frequency reached with data size 8bits/16bits,
          according to frequency of the APBx Peripheral Clock (fPCLK) used by the SPI instance.
 
@@ -128,7 +131,7 @@
        DataSize = SPI_DATASIZE_8BIT:
        +----------------------------------------------------------------------------------------------+
        |         |                | 2Lines Fullduplex   |     2Lines RxOnly    |         1Line        |
-       | Process | Tranfert mode  |---------------------|----------------------|----------------------|
+       | Process | Transfer mode  |---------------------|----------------------|----------------------|
        |         |                |  Master  |  Slave   |  Master   |  Slave   |  Master   |  Slave   |
        |==============================================================================================|
        |    T    |     Polling    | Fpclk/4  | Fpclk/8  |    NA     |    NA    |    NA     |   NA     |
@@ -153,7 +156,7 @@
        DataSize = SPI_DATASIZE_16BIT:
        +----------------------------------------------------------------------------------------------+
        |         |                | 2Lines Fullduplex   |     2Lines RxOnly    |         1Line        |
-       | Process | Tranfert mode  |---------------------|----------------------|----------------------|
+       | Process | Transfer mode  |---------------------|----------------------|----------------------|
        |         |                |  Master  |  Slave   |  Master   |  Slave   |  Master   |  Slave   |
        |==============================================================================================|
        |    T    |     Polling    | Fpclk/4  | Fpclk/8  |    NA     |    NA    |    NA     |   NA     |
@@ -184,29 +187,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -285,8 +272,8 @@ static HAL_StatusTypeDef SPI_EndRxTxTransaction(SPI_HandleTypeDef *hspi, uint32_
   */
 
 /** @defgroup SPI_Exported_Functions_Group1 Initialization and de-initialization functions
- *  @brief    Initialization and Configuration functions
- *
+  *  @brief    Initialization and Configuration functions
+  *
 @verbatim
  ===============================================================================
               ##### Initialization and de-initialization functions #####
@@ -350,6 +337,24 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
   {
     assert_param(IS_SPI_CPOL(hspi->Init.CLKPolarity));
     assert_param(IS_SPI_CPHA(hspi->Init.CLKPhase));
+
+    if (hspi->Init.Mode == SPI_MODE_MASTER)
+    {
+      assert_param(IS_SPI_BAUDRATE_PRESCALER(hspi->Init.BaudRatePrescaler));
+    }
+    else
+    {
+      /* Baudrate prescaler not use in Motoraola Slave mode. force to default value */
+      hspi->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+    }
+  }
+  else
+  {
+    assert_param(IS_SPI_BAUDRATE_PRESCALER(hspi->Init.BaudRatePrescaler));
+
+    /* Force polarity and phase to TI protocaol requirements */
+    hspi->Init.CLKPolarity = SPI_POLARITY_LOW;
+    hspi->Init.CLKPhase    = SPI_PHASE_1EDGE;
   }
 #if (USE_SPI_CRC != 0U)
   assert_param(IS_SPI_CRC_CALCULATION(hspi->Init.CRCCalculation));
@@ -413,44 +418,56 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
     hspi->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   }
 
-  /* Align the CRC Length on the data size */
-  if (hspi->Init.CRCLength == SPI_CRC_LENGTH_DATASIZE)
-  {
-    /* CRC Length aligned on the data size : value set by default */
-    if (hspi->Init.DataSize > SPI_DATASIZE_8BIT)
-    {
-      hspi->Init.CRCLength = SPI_CRC_LENGTH_16BIT;
-    }
-    else
-    {
-      hspi->Init.CRCLength = SPI_CRC_LENGTH_8BIT;
-    }
-  }
-
   /*----------------------- SPIx CR1 & CR2 Configuration ---------------------*/
   /* Configure : SPI Mode, Communication Mode, Clock polarity and phase, NSS management,
   Communication speed, First bit and CRC calculation state */
-  WRITE_REG(hspi->Instance->CR1, (hspi->Init.Mode | hspi->Init.Direction |
-                                  hspi->Init.CLKPolarity | hspi->Init.CLKPhase | (hspi->Init.NSS & SPI_CR1_SSM) |
-                                  hspi->Init.BaudRatePrescaler | hspi->Init.FirstBit  | hspi->Init.CRCCalculation));
+  WRITE_REG(hspi->Instance->CR1, ((hspi->Init.Mode & (SPI_CR1_MSTR | SPI_CR1_SSI)) |
+                                  (hspi->Init.Direction & (SPI_CR1_RXONLY | SPI_CR1_BIDIMODE)) |
+                                  (hspi->Init.CLKPolarity & SPI_CR1_CPOL) |
+                                  (hspi->Init.CLKPhase & SPI_CR1_CPHA) |
+                                  (hspi->Init.NSS & SPI_CR1_SSM) |
+                                  (hspi->Init.BaudRatePrescaler & SPI_CR1_BR_Msk) |
+                                  (hspi->Init.FirstBit  & SPI_CR1_LSBFIRST) |
+                                  (hspi->Init.CRCCalculation & SPI_CR1_CRCEN)));
 #if (USE_SPI_CRC != 0U)
-  /* Configure : CRC Length */
-  if (hspi->Init.CRCLength == SPI_CRC_LENGTH_16BIT)
+  /*---------------------------- SPIx CRCL Configuration -------------------*/
+  if (hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLE)
   {
-    hspi->Instance->CR1 |= SPI_CR1_CRCL;
+    /* Align the CRC Length on the data size */
+    if (hspi->Init.CRCLength == SPI_CRC_LENGTH_DATASIZE)
+    {
+      /* CRC Length aligned on the data size : value set by default */
+      if (hspi->Init.DataSize > SPI_DATASIZE_8BIT)
+      {
+        hspi->Init.CRCLength = SPI_CRC_LENGTH_16BIT;
+      }
+      else
+      {
+        hspi->Init.CRCLength = SPI_CRC_LENGTH_8BIT;
+      }
+    }
+
+    /* Configure : CRC Length */
+    if (hspi->Init.CRCLength == SPI_CRC_LENGTH_16BIT)
+    {
+      SET_BIT(hspi->Instance->CR1, SPI_CR1_CRCL);
+    }
   }
 #endif /* USE_SPI_CRC */
 
   /* Configure : NSS management, TI Mode, NSS Pulse, Data size and Rx Fifo threshold */
-  WRITE_REG(hspi->Instance->CR2, (((hspi->Init.NSS >> 16U) & SPI_CR2_SSOE) | hspi->Init.TIMode |
-                                  hspi->Init.NSSPMode | hspi->Init.DataSize) | frxth);
+  WRITE_REG(hspi->Instance->CR2, (((hspi->Init.NSS >> 16U) & SPI_CR2_SSOE) |
+                                  (hspi->Init.TIMode & SPI_CR2_FRF) |
+                                  (hspi->Init.NSSPMode & SPI_CR2_NSSP) |
+                                  (hspi->Init.DataSize & SPI_CR2_DS_Msk) |
+                                  (frxth & SPI_CR2_FRXTH)));
 
 #if (USE_SPI_CRC != 0U)
   /*---------------------------- SPIx CRCPOLY Configuration ------------------*/
   /* Configure : CRC Polynomial */
   if (hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLE)
   {
-    WRITE_REG(hspi->Instance->CRCPR, hspi->Init.CRCPolynomial);
+    WRITE_REG(hspi->Instance->CRCPR, (hspi->Init.CRCPolynomial & SPI_CRCPR_CRCPOLY_Msk));
   }
 #endif /* USE_SPI_CRC */
 
@@ -551,7 +568,8 @@ __weak void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
   * @param  pCallback pointer to the Callback function
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SPI_RegisterCallback(SPI_HandleTypeDef *hspi, HAL_SPI_CallbackIDTypeDef CallbackID, pSPI_CallbackTypeDef pCallback)
+HAL_StatusTypeDef HAL_SPI_RegisterCallback(SPI_HandleTypeDef *hspi, HAL_SPI_CallbackIDTypeDef CallbackID,
+                                           pSPI_CallbackTypeDef pCallback)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -761,8 +779,8 @@ HAL_StatusTypeDef HAL_SPI_UnRegisterCallback(SPI_HandleTypeDef *hspi, HAL_SPI_Ca
   */
 
 /** @defgroup SPI_Exported_Functions_Group2 IO operation functions
- *  @brief   Data transfers functions
- *
+  *  @brief   Data transfers functions
+  *
 @verbatim
   ==============================================================================
                       ##### IO operation functions #####
@@ -847,6 +865,8 @@ HAL_StatusTypeDef HAL_SPI_Transmit(SPI_HandleTypeDef *hspi, uint8_t *pData, uint
   /* Configure communication direction : 1Line */
   if (hspi->Init.Direction == SPI_DIRECTION_1LINE)
   {
+    /* Disable SPI Peripheral before set 1Line direction (BIDIOE bit) */
+    __HAL_SPI_DISABLE(hspi);
     SPI_1LINE_TX(hspi);
   }
 
@@ -987,6 +1007,9 @@ error:
   */
 HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
+#if (USE_SPI_CRC != 0U)
+  __IO uint32_t tmpreg = 0U;
+#endif /* USE_SPI_CRC */
   uint32_t tickstart;
   HAL_StatusTypeDef errorcode = HAL_OK;
 
@@ -1054,6 +1077,8 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
   /* Configure communication direction: 1Line */
   if (hspi->Init.Direction == SPI_DIRECTION_1LINE)
   {
+    /* Disable SPI Peripheral before set 1Line direction (BIDIOE bit) */
+    __HAL_SPI_DISABLE(hspi);
     SPI_1LINE_RX(hspi);
   }
 
@@ -1151,12 +1176,16 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
     if (hspi->Init.DataSize == SPI_DATASIZE_16BIT)
     {
       /* Read 16bit CRC */
-      READ_REG(hspi->Instance->DR);
+      tmpreg = READ_REG(hspi->Instance->DR);
+      /* To avoid GCC warning */
+      UNUSED(tmpreg);
     }
     else
     {
       /* Read 8bit CRC */
-      READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+      tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+      /* To avoid GCC warning */
+      UNUSED(tmpreg);
 
       if ((hspi->Init.DataSize == SPI_DATASIZE_8BIT) && (hspi->Init.CRCLength == SPI_CRC_LENGTH_16BIT))
       {
@@ -1168,7 +1197,9 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
           goto error;
         }
         /* Read 8bit CRC again in case of 16bit CRC in 8bit Data mode */
-        READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        /* To avoid GCC warning */
+        UNUSED(tmpreg);
       }
     }
   }
@@ -1213,6 +1244,9 @@ error :
 HAL_StatusTypeDef HAL_SPI_TransmitReceive(SPI_HandleTypeDef *hspi, uint8_t *pTxData, uint8_t *pRxData, uint16_t Size,
                                           uint32_t Timeout)
 {
+#if (USE_SPI_CRC != 0U)
+  __IO uint32_t tmpreg = 0U;
+#endif /* USE_SPI_CRC */
   uint16_t             initial_TxXferCount;
   uint16_t             initial_RxXferCount;
   uint32_t             tmp_mode;
@@ -1454,12 +1488,16 @@ HAL_StatusTypeDef HAL_SPI_TransmitReceive(SPI_HandleTypeDef *hspi, uint8_t *pTxD
     if (hspi->Init.DataSize == SPI_DATASIZE_16BIT)
     {
       /* Read 16bit CRC */
-      READ_REG(hspi->Instance->DR);
+      tmpreg = READ_REG(hspi->Instance->DR);
+      /* To avoid GCC warning */
+      UNUSED(tmpreg);
     }
     else
     {
       /* Read 8bit CRC */
-      READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+      tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+      /* To avoid GCC warning */
+      UNUSED(tmpreg);
 
       if (hspi->Init.CRCLength == SPI_CRC_LENGTH_16BIT)
       {
@@ -1471,7 +1509,9 @@ HAL_StatusTypeDef HAL_SPI_TransmitReceive(SPI_HandleTypeDef *hspi, uint8_t *pTxD
           goto error;
         }
         /* Read 8bit CRC again in case of 16bit CRC in 8bit Data mode */
-        READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        /* To avoid GCC warning */
+        UNUSED(tmpreg);
       }
     }
   }
@@ -1556,6 +1596,8 @@ HAL_StatusTypeDef HAL_SPI_Transmit_IT(SPI_HandleTypeDef *hspi, uint8_t *pData, u
   /* Configure communication direction : 1Line */
   if (hspi->Init.Direction == SPI_DIRECTION_1LINE)
   {
+    /* Disable SPI Peripheral before set 1Line direction (BIDIOE bit) */
+    __HAL_SPI_DISABLE(hspi);
     SPI_1LINE_TX(hspi);
   }
 
@@ -1647,6 +1689,8 @@ HAL_StatusTypeDef HAL_SPI_Receive_IT(SPI_HandleTypeDef *hspi, uint8_t *pData, ui
   /* Configure communication direction : 1Line */
   if (hspi->Init.Direction == SPI_DIRECTION_1LINE)
   {
+    /* Disable SPI Peripheral before set 1Line direction (BIDIOE bit) */
+    __HAL_SPI_DISABLE(hspi);
     SPI_1LINE_RX(hspi);
   }
 
@@ -1847,6 +1891,8 @@ HAL_StatusTypeDef HAL_SPI_Transmit_DMA(SPI_HandleTypeDef *hspi, uint8_t *pData, 
   /* Configure communication direction : 1Line */
   if (hspi->Init.Direction == SPI_DIRECTION_1LINE)
   {
+    /* Disable SPI Peripheral before set 1Line direction (BIDIOE bit) */
+    __HAL_SPI_DISABLE(hspi);
     SPI_1LINE_TX(hspi);
   }
 
@@ -1888,7 +1934,8 @@ HAL_StatusTypeDef HAL_SPI_Transmit_DMA(SPI_HandleTypeDef *hspi, uint8_t *pData, 
   }
 
   /* Enable the Tx DMA Stream/Channel */
-  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmatx, (uint32_t)hspi->pTxBuffPtr, (uint32_t)&hspi->Instance->DR, hspi->TxXferCount))
+  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmatx, (uint32_t)hspi->pTxBuffPtr, (uint32_t)&hspi->Instance->DR,
+                                 hspi->TxXferCount))
   {
     /* Update SPI error code */
     SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_DMA);
@@ -1976,6 +2023,8 @@ HAL_StatusTypeDef HAL_SPI_Receive_DMA(SPI_HandleTypeDef *hspi, uint8_t *pData, u
   /* Configure communication direction : 1Line */
   if (hspi->Init.Direction == SPI_DIRECTION_1LINE)
   {
+    /* Disable SPI Peripheral before set 1Line direction (BIDIOE bit) */
+    __HAL_SPI_DISABLE(hspi);
     SPI_1LINE_RX(hspi);
   }
 
@@ -2030,7 +2079,8 @@ HAL_StatusTypeDef HAL_SPI_Receive_DMA(SPI_HandleTypeDef *hspi, uint8_t *pData, u
   hspi->hdmarx->XferAbortCallback = NULL;
 
   /* Enable the Rx DMA Stream/Channel  */
-  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmarx, (uint32_t)&hspi->Instance->DR, (uint32_t)hspi->pRxBuffPtr, hspi->RxXferCount))
+  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmarx, (uint32_t)&hspi->Instance->DR, (uint32_t)hspi->pRxBuffPtr,
+                                 hspi->RxXferCount))
   {
     /* Update SPI error code */
     SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_DMA);
@@ -2197,7 +2247,8 @@ HAL_StatusTypeDef HAL_SPI_TransmitReceive_DMA(SPI_HandleTypeDef *hspi, uint8_t *
   hspi->hdmarx->XferAbortCallback = NULL;
 
   /* Enable the Rx DMA Stream/Channel  */
-  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmarx, (uint32_t)&hspi->Instance->DR, (uint32_t)hspi->pRxBuffPtr, hspi->RxXferCount))
+  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmarx, (uint32_t)&hspi->Instance->DR, (uint32_t)hspi->pRxBuffPtr,
+                                 hspi->RxXferCount))
   {
     /* Update SPI error code */
     SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_DMA);
@@ -2218,7 +2269,8 @@ HAL_StatusTypeDef HAL_SPI_TransmitReceive_DMA(SPI_HandleTypeDef *hspi, uint8_t *
   hspi->hdmatx->XferAbortCallback    = NULL;
 
   /* Enable the Tx DMA Stream/Channel  */
-  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmatx, (uint32_t)hspi->pTxBuffPtr, (uint32_t)&hspi->Instance->DR, hspi->TxXferCount))
+  if (HAL_OK != HAL_DMA_Start_IT(hspi->hdmatx, (uint32_t)hspi->pTxBuffPtr, (uint32_t)&hspi->Instance->DR,
+                                 hspi->TxXferCount))
   {
     /* Update SPI error code */
     SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_DMA);
@@ -2258,16 +2310,20 @@ error :
   *           - Set handle State to READY
   * @note   This procedure is executed in blocking mode : when exiting function, Abort is considered as completed.
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_SPI_Abort(SPI_HandleTypeDef *hspi)
 {
   HAL_StatusTypeDef errorcode;
-  __IO uint32_t count, resetcount;
+  __IO uint32_t count;
+  __IO uint32_t resetcount;
 
   /* Initialized local variable  */
   errorcode = HAL_OK;
   resetcount = SPI_DEFAULT_TIMEOUT * (SystemCoreClock / 24U / 1000U);
   count = resetcount;
+
+  /* Clear ERRIE interrupt to avoid error interrupts generation during Abort procedure */
+  CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_ERRIE);
 
   /* Disable TXEIE, RXNEIE and ERRIE(mode fault event, overrun error, TI frame error) interrupts */
   if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_TXEIE))
@@ -2282,8 +2338,7 @@ HAL_StatusTypeDef HAL_SPI_Abort(SPI_HandleTypeDef *hspi)
         break;
       }
       count--;
-    }
-    while (hspi->State != HAL_SPI_STATE_ABORT);
+    } while (hspi->State != HAL_SPI_STATE_ABORT);
     /* Reset Timeout Counter */
     count = resetcount;
   }
@@ -2300,17 +2355,13 @@ HAL_StatusTypeDef HAL_SPI_Abort(SPI_HandleTypeDef *hspi)
         break;
       }
       count--;
-    }
-    while (hspi->State != HAL_SPI_STATE_ABORT);
+    } while (hspi->State != HAL_SPI_STATE_ABORT);
     /* Reset Timeout Counter */
     count = resetcount;
   }
 
-  /* Clear ERRIE interrupts in case of DMA Mode */
-  CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_ERRIE);
-
-  /* Disable the SPI DMA Tx or SPI DMA Rx request if enabled */
-  if ((READ_BIT(hspi->Instance->CR2, (SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN))) == (SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN))
+  /* Disable the SPI DMA Tx request if enabled */
+  if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_TXDMAEN))
   {
     /* Abort the SPI DMA Tx Stream/Channel : use blocking DMA Abort API (no callback) */
     if (hspi->hdmatx != NULL)
@@ -2342,6 +2393,11 @@ HAL_StatusTypeDef HAL_SPI_Abort(SPI_HandleTypeDef *hspi)
         hspi->ErrorCode = HAL_SPI_ERROR_ABORT;
       }
     }
+  }
+
+  /* Disable the SPI DMA Rx request if enabled */
+  if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_RXDMAEN))
+  {
     /* Abort the SPI DMA Rx Stream/Channel : use blocking DMA Abort API (no callback) */
     if (hspi->hdmarx != NULL)
     {
@@ -2414,18 +2470,22 @@ HAL_StatusTypeDef HAL_SPI_Abort(SPI_HandleTypeDef *hspi)
   * @note   This procedure is executed in Interrupt mode, meaning that abort procedure could be
   *         considered as completed only when user abort complete callback is executed (not when exiting function).
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_SPI_Abort_IT(SPI_HandleTypeDef *hspi)
 {
   HAL_StatusTypeDef errorcode;
   uint32_t abortcplt ;
-  __IO uint32_t count, resetcount;
+  __IO uint32_t count;
+  __IO uint32_t resetcount;
 
   /* Initialized local variable  */
   errorcode = HAL_OK;
   abortcplt = 1U;
   resetcount = SPI_DEFAULT_TIMEOUT * (SystemCoreClock / 24U / 1000U);
   count = resetcount;
+
+  /* Clear ERRIE interrupt to avoid error interrupts generation during Abort procedure */
+  CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_ERRIE);
 
   /* Change Rx and Tx Irq Handler to Disable TXEIE, RXNEIE and ERRIE interrupts */
   if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_TXEIE))
@@ -2440,8 +2500,7 @@ HAL_StatusTypeDef HAL_SPI_Abort_IT(SPI_HandleTypeDef *hspi)
         break;
       }
       count--;
-    }
-    while (hspi->State != HAL_SPI_STATE_ABORT);
+    } while (hspi->State != HAL_SPI_STATE_ABORT);
     /* Reset Timeout Counter */
     count = resetcount;
   }
@@ -2458,14 +2517,10 @@ HAL_StatusTypeDef HAL_SPI_Abort_IT(SPI_HandleTypeDef *hspi)
         break;
       }
       count--;
-    }
-    while (hspi->State != HAL_SPI_STATE_ABORT);
+    } while (hspi->State != HAL_SPI_STATE_ABORT);
     /* Reset Timeout Counter */
     count = resetcount;
   }
-
-  /* Clear ERRIE interrupts in case of DMA Mode */
-  CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_ERRIE);
 
   /* If DMA Tx and/or DMA Rx Handles are associated to SPI Handle, DMA Abort complete callbacks should be initialised
      before any call to DMA Abort functions */
@@ -2498,41 +2553,7 @@ HAL_StatusTypeDef HAL_SPI_Abort_IT(SPI_HandleTypeDef *hspi)
     }
   }
 
-  /* Disable the SPI DMA Tx or the SPI Rx request if enabled */
-  if ((READ_BIT(hspi->Instance->CR2, (SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN))) == (SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN))
-  {
-    /* Abort the SPI DMA Tx Stream/Channel */
-    if (hspi->hdmatx != NULL)
-    {
-      /* Abort DMA Tx Handle linked to SPI Peripheral */
-      if (HAL_DMA_Abort_IT(hspi->hdmatx) != HAL_OK)
-      {
-        hspi->hdmatx->XferAbortCallback = NULL;
-        hspi->ErrorCode = HAL_SPI_ERROR_ABORT;
-      }
-      else
-      {
-        abortcplt = 0U;
-      }
-    }
-    /* Abort the SPI DMA Rx Stream/Channel */
-    if (hspi->hdmarx != NULL)
-    {
-      /* Abort DMA Rx Handle linked to SPI Peripheral */
-      if (HAL_DMA_Abort_IT(hspi->hdmarx) !=  HAL_OK)
-      {
-        hspi->hdmarx->XferAbortCallback = NULL;
-        hspi->ErrorCode = HAL_SPI_ERROR_ABORT;
-        abortcplt = 1U;
-      }
-      else
-      {
-        abortcplt = 0U;
-      }
-    }
-  }
-
-  /* Disable the SPI DMA Tx or the SPI Rx request if enabled */
+  /* Disable the SPI DMA Tx request if enabled */
   if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_TXDMAEN))
   {
     /* Abort the SPI DMA Tx Stream/Channel */
@@ -2550,7 +2571,7 @@ HAL_StatusTypeDef HAL_SPI_Abort_IT(SPI_HandleTypeDef *hspi)
       }
     }
   }
-  /* Disable the SPI DMA Tx or the SPI Rx request if enabled */
+  /* Disable the SPI DMA Rx request if enabled */
   if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_RXDMAEN))
   {
     /* Abort the SPI DMA Rx Stream/Channel */
@@ -2712,7 +2733,8 @@ void HAL_SPI_IRQHandler(SPI_HandleTypeDef *hspi)
   }
 
   /* SPI in Error Treatment --------------------------------------------------*/
-  if (((SPI_CHECK_FLAG(itflag, SPI_FLAG_MODF) != RESET) || (SPI_CHECK_FLAG(itflag, SPI_FLAG_OVR) != RESET) || (SPI_CHECK_FLAG(itflag, SPI_FLAG_FRE) != RESET)) && (SPI_CHECK_IT_SOURCE(itsource, SPI_IT_ERR) != RESET))
+  if (((SPI_CHECK_FLAG(itflag, SPI_FLAG_MODF) != RESET) || (SPI_CHECK_FLAG(itflag, SPI_FLAG_OVR) != RESET)
+       || (SPI_CHECK_FLAG(itflag, SPI_FLAG_FRE) != RESET)) && (SPI_CHECK_IT_SOURCE(itsource, SPI_IT_ERR) != RESET))
   {
     /* SPI Overrun error interrupt occurred ----------------------------------*/
     if (SPI_CHECK_FLAG(itflag, SPI_FLAG_OVR) != RESET)
@@ -2988,7 +3010,7 @@ static void SPI_DMATransmitCplt(DMA_HandleTypeDef *hdma)
   SPI_HandleTypeDef *hspi = (SPI_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent); /* Derogation MISRAC2012-Rule-11.5 */
   uint32_t tickstart;
 
-  /* Init tickstart for timeout managment*/
+  /* Init tickstart for timeout management*/
   tickstart = HAL_GetTick();
 
   /* DMA Normal Mode */
@@ -3044,6 +3066,9 @@ static void SPI_DMAReceiveCplt(DMA_HandleTypeDef *hdma)
 {
   SPI_HandleTypeDef *hspi = (SPI_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent); /* Derogation MISRAC2012-Rule-11.5 */
   uint32_t tickstart;
+#if (USE_SPI_CRC != 0U)
+  __IO uint32_t tmpreg = 0U;
+#endif /* USE_SPI_CRC */
 
   /* Init tickstart for timeout management*/
   tickstart = HAL_GetTick();
@@ -3068,12 +3093,16 @@ static void SPI_DMAReceiveCplt(DMA_HandleTypeDef *hdma)
       if (hspi->Init.DataSize > SPI_DATASIZE_8BIT)
       {
         /* Read 16bit CRC */
-        READ_REG(hspi->Instance->DR);
+        tmpreg = READ_REG(hspi->Instance->DR);
+        /* To avoid GCC warning */
+        UNUSED(tmpreg);
       }
       else
       {
         /* Read 8bit CRC */
-        READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        /* To avoid GCC warning */
+        UNUSED(tmpreg);
 
         if (hspi->Init.CRCLength == SPI_CRC_LENGTH_16BIT)
         {
@@ -3083,14 +3112,25 @@ static void SPI_DMAReceiveCplt(DMA_HandleTypeDef *hdma)
             SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_CRC);
           }
           /* Read 8bit CRC again in case of 16bit CRC in 8bit Data mode */
-          READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+          tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+          /* To avoid GCC warning */
+          UNUSED(tmpreg);
         }
       }
     }
 #endif /* USE_SPI_CRC */
 
-    /* Disable Rx/Tx DMA Request (done by default to handle the case master rx direction 2 lines) */
-    CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN);
+    /* Check if we are in Master RX 2 line mode */
+    if ((hspi->Init.Direction == SPI_DIRECTION_2LINES) && (hspi->Init.Mode == SPI_MODE_MASTER))
+    {
+      /* Disable Rx/Tx DMA Request (done by default to handle the case master rx direction 2 lines) */
+      CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN);
+    }
+    else
+    {
+      /* Normal case */
+      CLEAR_BIT(hspi->Instance->CR2, SPI_CR2_RXDMAEN);
+    }
 
     /* Check the end of the transaction */
     if (SPI_EndRxTransaction(hspi, SPI_DEFAULT_TIMEOUT, tickstart) != HAL_OK)
@@ -3139,6 +3179,9 @@ static void SPI_DMATransmitReceiveCplt(DMA_HandleTypeDef *hdma)
 {
   SPI_HandleTypeDef *hspi = (SPI_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent); /* Derogation MISRAC2012-Rule-11.5 */
   uint32_t tickstart;
+#if (USE_SPI_CRC != 0U)
+  __IO uint32_t tmpreg = 0U;
+#endif /* USE_SPI_CRC */
 
   /* Init tickstart for timeout management*/
   tickstart = HAL_GetTick();
@@ -3162,7 +3205,9 @@ static void SPI_DMATransmitReceiveCplt(DMA_HandleTypeDef *hdma)
           SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_CRC);
         }
         /* Read CRC to Flush DR and RXNE flag */
-        READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+        /* To avoid GCC warning */
+        UNUSED(tmpreg);
       }
       else
       {
@@ -3172,7 +3217,9 @@ static void SPI_DMATransmitReceiveCplt(DMA_HandleTypeDef *hdma)
           SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_CRC);
         }
         /* Read CRC to Flush DR and RXNE flag */
-        READ_REG(hspi->Instance->DR);
+        tmpreg = READ_REG(hspi->Instance->DR);
+        /* To avoid GCC warning */
+        UNUSED(tmpreg);
       }
     }
 #endif /* USE_SPI_CRC */
@@ -3459,7 +3506,7 @@ static void SPI_2linesRxISR_8BIT(struct __SPI_HandleTypeDef *hspi)
   /* Receive data in packing mode */
   if (hspi->RxXferCount > 1U)
   {
-    *((uint16_t *)hspi->pRxBuffPtr) = hspi->Instance->DR;
+    *((uint16_t *)hspi->pRxBuffPtr) = (uint16_t)(hspi->Instance->DR);
     hspi->pRxBuffPtr += sizeof(uint16_t);
     hspi->RxXferCount -= 2U;
     if (hspi->RxXferCount == 1U)
@@ -3507,8 +3554,12 @@ static void SPI_2linesRxISR_8BIT(struct __SPI_HandleTypeDef *hspi)
   */
 static void SPI_2linesRxISR_8BITCRC(struct __SPI_HandleTypeDef *hspi)
 {
-  /* Read 8bit CRC to flush Data Regsiter */
-  READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+  __IO uint32_t tmpreg = 0U;
+
+  /* Read 8bit CRC to flush Data Register */
+  tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+  /* To avoid GCC warning */
+  UNUSED(tmpreg);
 
   hspi->CRCSize--;
 
@@ -3582,7 +3633,7 @@ static void SPI_2linesTxISR_8BIT(struct __SPI_HandleTypeDef *hspi)
 static void SPI_2linesRxISR_16BIT(struct __SPI_HandleTypeDef *hspi)
 {
   /* Receive data in 16 Bit mode */
-  *((uint16_t *)hspi->pRxBuffPtr) = hspi->Instance->DR;
+  *((uint16_t *)hspi->pRxBuffPtr) = (uint16_t)(hspi->Instance->DR);
   hspi->pRxBuffPtr += sizeof(uint16_t);
   hspi->RxXferCount--;
 
@@ -3615,8 +3666,12 @@ static void SPI_2linesRxISR_16BIT(struct __SPI_HandleTypeDef *hspi)
   */
 static void SPI_2linesRxISR_16BITCRC(struct __SPI_HandleTypeDef *hspi)
 {
-  /* Read 16bit CRC to flush Data Regsiter */
-  READ_REG(hspi->Instance->DR);
+  __IO uint32_t tmpreg = 0U;
+
+  /* Read 16bit CRC to flush Data Register */
+  tmpreg = READ_REG(hspi->Instance->DR);
+  /* To avoid GCC warning */
+  UNUSED(tmpreg);  
 
   /* Disable RXNE interrupt */
   __HAL_SPI_DISABLE_IT(hspi, SPI_IT_RXNE);
@@ -3671,8 +3726,12 @@ static void SPI_2linesTxISR_16BIT(struct __SPI_HandleTypeDef *hspi)
   */
 static void SPI_RxISR_8BITCRC(struct __SPI_HandleTypeDef *hspi)
 {
+  __IO uint32_t tmpreg = 0U;
+
   /* Read 8bit CRC to flush Data Register */
-  READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+  tmpreg = READ_REG(*(__IO uint8_t *)&hspi->Instance->DR);
+  /* To avoid GCC warning */
+  UNUSED(tmpreg);
 
   hspi->CRCSize--;
 
@@ -3725,8 +3784,12 @@ static void SPI_RxISR_8BIT(struct __SPI_HandleTypeDef *hspi)
   */
 static void SPI_RxISR_16BITCRC(struct __SPI_HandleTypeDef *hspi)
 {
+  __IO uint32_t tmpreg = 0U;
+
   /* Read 16bit CRC to flush Data Register */
-  READ_REG(hspi->Instance->DR);
+  tmpreg = READ_REG(hspi->Instance->DR);
+  /* To avoid GCC warning */
+  UNUSED(tmpreg);
 
   /* Disable RXNE and ERR interrupt */
   __HAL_SPI_DISABLE_IT(hspi, (SPI_IT_RXNE | SPI_IT_ERR));
@@ -3743,7 +3806,7 @@ static void SPI_RxISR_16BITCRC(struct __SPI_HandleTypeDef *hspi)
   */
 static void SPI_RxISR_16BIT(struct __SPI_HandleTypeDef *hspi)
 {
-  *((uint16_t *)hspi->pRxBuffPtr) = hspi->Instance->DR;
+  *((uint16_t *)hspi->pRxBuffPtr) = (uint16_t)(hspi->Instance->DR);
   hspi->pRxBuffPtr += sizeof(uint16_t);
   hspi->RxXferCount--;
 
@@ -3832,69 +3895,22 @@ static void SPI_TxISR_16BIT(struct __SPI_HandleTypeDef *hspi)
 static HAL_StatusTypeDef SPI_WaitFlagStateUntilTimeout(SPI_HandleTypeDef *hspi, uint32_t Flag, FlagStatus State,
                                                        uint32_t Timeout, uint32_t Tickstart)
 {
+  __IO uint32_t count;
+  uint32_t tmp_timeout;
+  uint32_t tmp_tickstart;
+
+  /* Adjust Timeout value  in case of end of transfer */
+  tmp_timeout   = Timeout - (HAL_GetTick() - Tickstart);
+  tmp_tickstart = HAL_GetTick();
+
+  /* Calculate Timeout based on a software loop to avoid blocking issue if Systick is disabled */
+  count = tmp_timeout * ((SystemCoreClock * 32U) >> 20U);
+
   while ((__HAL_SPI_GET_FLAG(hspi, Flag) ? SET : RESET) != State)
   {
     if (Timeout != HAL_MAX_DELAY)
     {
-      if (((HAL_GetTick() - Tickstart) >= Timeout) || (Timeout == 0U))
-      {
-        /* Disable the SPI and reset the CRC: the CRC value should be cleared
-        on both master and slave sides in order to resynchronize the master
-        and slave for their respective CRC calculation */
-
-        /* Disable TXE, RXNE and ERR interrupts for the interrupt process */
-        __HAL_SPI_DISABLE_IT(hspi, (SPI_IT_TXE | SPI_IT_RXNE | SPI_IT_ERR));
-
-        if ((hspi->Init.Mode == SPI_MODE_MASTER) && ((hspi->Init.Direction == SPI_DIRECTION_1LINE)
-                                                     || (hspi->Init.Direction == SPI_DIRECTION_2LINES_RXONLY)))
-        {
-          /* Disable SPI peripheral */
-          __HAL_SPI_DISABLE(hspi);
-        }
-
-        /* Reset CRC Calculation */
-        if (hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLE)
-        {
-          SPI_RESET_CRC(hspi);
-        }
-
-        hspi->State = HAL_SPI_STATE_READY;
-
-        /* Process Unlocked */
-        __HAL_UNLOCK(hspi);
-
-        return HAL_TIMEOUT;
-      }
-    }
-  }
-
-  return HAL_OK;
-}
-
-/**
-  * @brief  Handle SPI FIFO Communication Timeout.
-  * @param  hspi pointer to a SPI_HandleTypeDef structure that contains
-  *              the configuration information for SPI module.
-  * @param  Fifo Fifo to check
-  * @param  State Fifo state to check
-  * @param  Timeout Timeout duration
-  * @param  Tickstart tick start value
-  * @retval HAL status
-  */
-static HAL_StatusTypeDef SPI_WaitFifoStateUntilTimeout(SPI_HandleTypeDef *hspi, uint32_t Fifo, uint32_t State,
-                                                       uint32_t Timeout, uint32_t Tickstart)
-{
-  while ((hspi->Instance->SR & Fifo) != State)
-  {
-    if ((Fifo == SPI_SR_FRLVL) && (State == SPI_FRLVL_EMPTY))
-    {
-      /* Read 8bit CRC to flush Data Register */
-      READ_REG(*((__IO uint8_t *)&hspi->Instance->DR));
-    }
-
-    if (Timeout != HAL_MAX_DELAY)
-    {
-      if (((HAL_GetTick() - Tickstart) >= Timeout) || (Timeout == 0U))
+      if (((HAL_GetTick() - tmp_tickstart) >= tmp_timeout) || (tmp_timeout == 0U))
       {
         /* Disable the SPI and reset the CRC: the CRC value should be cleared
            on both master and slave sides in order to resynchronize the master
@@ -3923,6 +3939,90 @@ static HAL_StatusTypeDef SPI_WaitFifoStateUntilTimeout(SPI_HandleTypeDef *hspi, 
 
         return HAL_TIMEOUT;
       }
+      /* If Systick is disabled or not incremented, deactivate timeout to go in disable loop procedure */
+      if(count == 0U)
+      {
+        tmp_timeout = 0U;
+      }
+      count--;
+    }
+  }
+
+  return HAL_OK;
+}
+
+/**
+  * @brief  Handle SPI FIFO Communication Timeout.
+  * @param  hspi pointer to a SPI_HandleTypeDef structure that contains
+  *              the configuration information for SPI module.
+  * @param  Fifo Fifo to check
+  * @param  State Fifo state to check
+  * @param  Timeout Timeout duration
+  * @param  Tickstart tick start value
+  * @retval HAL status
+  */
+static HAL_StatusTypeDef SPI_WaitFifoStateUntilTimeout(SPI_HandleTypeDef *hspi, uint32_t Fifo, uint32_t State,
+                                                       uint32_t Timeout, uint32_t Tickstart)
+{
+  __IO uint32_t tmpreg;
+  __IO uint32_t count;
+  uint32_t tmp_timeout;
+  uint32_t tmp_tickstart;
+
+  /* Adjust Timeout value  in case of end of transfer */
+  tmp_timeout = Timeout - (HAL_GetTick() - Tickstart);
+  tmp_tickstart = HAL_GetTick();
+
+  /* Calculate Timeout based on a software loop to avoid blocking issue if Systick is disabled */
+  count = tmp_timeout * ((SystemCoreClock * 35U) >> 20U);
+
+  while ((hspi->Instance->SR & Fifo) != State)
+  {
+    if ((Fifo == SPI_SR_FRLVL) && (State == SPI_FRLVL_EMPTY))
+    {
+      /* Flush Data Register by a blank read */
+      tmpreg = READ_REG(*((__IO uint8_t *)&hspi->Instance->DR));
+      /* To avoid GCC warning */
+      UNUSED(tmpreg);
+    }
+
+    if (Timeout != HAL_MAX_DELAY)
+    {
+      if (((HAL_GetTick() - tmp_tickstart) >= tmp_timeout) || (tmp_timeout == 0U))
+      {
+        /* Disable the SPI and reset the CRC: the CRC value should be cleared
+           on both master and slave sides in order to resynchronize the master
+           and slave for their respective CRC calculation */
+
+        /* Disable TXE, RXNE and ERR interrupts for the interrupt process */
+        __HAL_SPI_DISABLE_IT(hspi, (SPI_IT_TXE | SPI_IT_RXNE | SPI_IT_ERR));
+
+        if ((hspi->Init.Mode == SPI_MODE_MASTER) && ((hspi->Init.Direction == SPI_DIRECTION_1LINE)
+                                                     || (hspi->Init.Direction == SPI_DIRECTION_2LINES_RXONLY)))
+        {
+          /* Disable SPI peripheral */
+          __HAL_SPI_DISABLE(hspi);
+        }
+
+        /* Reset CRC Calculation */
+        if (hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLE)
+        {
+          SPI_RESET_CRC(hspi);
+        }
+
+        hspi->State = HAL_SPI_STATE_READY;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hspi);
+
+        return HAL_TIMEOUT;
+      }
+      /* If Systick is disabled or not incremented, deactivate timeout to go in disable loop procedure */
+      if(count == 0U)
+      {
+        tmp_timeout = 0U;
+      }      
+      count--;
     }
   }
 
@@ -4009,7 +4109,7 @@ static void SPI_CloseRxTx_ISR(SPI_HandleTypeDef *hspi)
 {
   uint32_t tickstart;
 
-  /* Init tickstart for timeout managment*/
+  /* Init tickstart for timeout management */
   tickstart = HAL_GetTick();
 
   /* Disable ERR interrupt */
@@ -4197,8 +4297,8 @@ static void SPI_AbortRx_ISR(SPI_HandleTypeDef *hspi)
 
   count = SPI_DEFAULT_TIMEOUT * (SystemCoreClock / 24U / 1000U);
 
-  /* Disable TXEIE, RXNEIE and ERRIE(mode fault event, overrun error, TI frame error) interrupts */
-  CLEAR_BIT(hspi->Instance->CR2, (SPI_CR2_TXEIE | SPI_CR2_RXNEIE | SPI_CR2_ERRIE));
+  /* Disable RXNEIE interrupt */
+  CLEAR_BIT(hspi->Instance->CR2, (SPI_CR2_RXNEIE));
 
   /* Check RXNEIE is disabled */
   do
@@ -4209,8 +4309,7 @@ static void SPI_AbortRx_ISR(SPI_HandleTypeDef *hspi)
       break;
     }
     count--;
-  }
-  while (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_RXNEIE));
+  } while (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_RXNEIE));
 
   /* Control the BSY flag */
   if (SPI_WaitFlagStateUntilTimeout(hspi, SPI_FLAG_BSY, RESET, SPI_DEFAULT_TIMEOUT, HAL_GetTick()) != HAL_OK)
@@ -4239,8 +4338,8 @@ static void SPI_AbortTx_ISR(SPI_HandleTypeDef *hspi)
 
   count = SPI_DEFAULT_TIMEOUT * (SystemCoreClock / 24U / 1000U);
 
-  /* Disable TXEIE, RXNEIE and ERRIE(mode fault event, overrun error, TI frame error) interrupts */
-  CLEAR_BIT(hspi->Instance->CR2, (SPI_CR2_TXEIE | SPI_CR2_RXNEIE | SPI_CR2_ERRIE));
+  /* Disable TXEIE interrupt */
+  CLEAR_BIT(hspi->Instance->CR2, (SPI_CR2_TXEIE));
 
   /* Check TXEIE is disabled */
   do
@@ -4251,8 +4350,7 @@ static void SPI_AbortTx_ISR(SPI_HandleTypeDef *hspi)
       break;
     }
     count--;
-  }
-  while (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_TXEIE));
+  } while (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_TXEIE));
 
   if (SPI_EndRxTxTransaction(hspi, SPI_DEFAULT_TIMEOUT, HAL_GetTick()) != HAL_OK)
   {
@@ -4268,6 +4366,35 @@ static void SPI_AbortTx_ISR(SPI_HandleTypeDef *hspi)
     hspi->ErrorCode = HAL_SPI_ERROR_ABORT;
   }
 
+  /* Check case of Full-Duplex Mode and disable directly RXNEIE interrupt */
+  if (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_RXNEIE))
+  {
+    /* Disable RXNEIE interrupt */
+    CLEAR_BIT(hspi->Instance->CR2, (SPI_CR2_RXNEIE));
+
+    /* Check RXNEIE is disabled */
+    do
+    {
+      if (count == 0U)
+      {
+        SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_ABORT);
+        break;
+      }
+      count--;
+    } while (HAL_IS_BIT_SET(hspi->Instance->CR2, SPI_CR2_RXNEIE));
+
+    /* Control the BSY flag */
+    if (SPI_WaitFlagStateUntilTimeout(hspi, SPI_FLAG_BSY, RESET, SPI_DEFAULT_TIMEOUT, HAL_GetTick()) != HAL_OK)
+    {
+      hspi->ErrorCode = HAL_SPI_ERROR_ABORT;
+    }
+
+    /* Empty the FRLVL fifo */
+    if (SPI_WaitFifoStateUntilTimeout(hspi, SPI_FLAG_FRLVL, SPI_FRLVL_EMPTY, SPI_DEFAULT_TIMEOUT, HAL_GetTick()) != HAL_OK)
+    {
+      hspi->ErrorCode = HAL_SPI_ERROR_ABORT;
+    }
+  }
   hspi->State = HAL_SPI_STATE_ABORT;
 }
 

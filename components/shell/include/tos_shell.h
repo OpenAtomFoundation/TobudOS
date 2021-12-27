@@ -26,7 +26,7 @@
 #define SHELL_PARSER_TASK_STACK_SIZE            1024
 #define SHELL_PARSER_TASK_PRIO                  3
 
-typedef void (*shell_output_t)(const char *str);
+typedef void (*shell_output_t)(const char ch);
 
 typedef struct shell_control_st {
     k_task_t            parser;
@@ -52,6 +52,8 @@ __API__ int tos_shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set);
 __API__ int tos_shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set);
 
 __API__ void tos_shell_printf(const char *format, ...);
+
+__API__ void tos_shell_printfln(const char *format, ...);
 
 __API__ void tos_shell_input_byte(uint8_t data);
 

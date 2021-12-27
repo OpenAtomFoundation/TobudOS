@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -452,7 +452,7 @@ static inline uint16_t ENC_GetHoldRevolutionValue(ENC_Type *base)
 #if defined(__cplusplus)
 }
 #endif
-/*
- * @}
- */
+
+/* @} */
+
 #endif /* _FSL_ENC_H_ */

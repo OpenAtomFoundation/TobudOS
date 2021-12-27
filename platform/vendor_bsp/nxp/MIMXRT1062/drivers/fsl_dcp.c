@@ -7,6 +7,9 @@
  */
 
 #include "fsl_dcp.h"
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+#include "fsl_cache.h"
+#endif
 
 /*******************************************************************************
  * Definitions
@@ -88,7 +91,7 @@ static uint8_t s_nullSha256[] = {0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-static dcp_context_t s_dcpContextSwitchingBuffer;
+AT_NONCACHEABLE_SECTION_INIT(static dcp_context_t s_dcpContextSwitchingBuffer);
 
 /*******************************************************************************
  * Code
@@ -101,6 +104,17 @@ static void dcp_reverse_and_copy(uint8_t *src, uint8_t *dest, size_t src_len)
         dest[i] = src[src_len - 1U - i];
     }
 }
+
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+static inline uint32_t *DCP_FindCacheLine(uint8_t *dcpWorkExt)
+{
+    while (0U != ((uint32_t)dcpWorkExt & ((uint32_t)FSL_FEATURE_L1DCACHE_LINESIZE_BYTE - 1U)))
+    {
+        dcpWorkExt++;
+    }
+    return (uint32_t *)(uint32_t)dcpWorkExt;
+}
+#endif
 
 static status_t dcp_get_channel_status(DCP_Type *base, dcp_channel_t channel)
 {
@@ -247,6 +261,10 @@ static status_t dcp_schedule_work(DCP_Type *base, dcp_handle_t *handle, dcp_work
                 /* set out packet to DCP CMDPTR */
                 *cmdptr = (uint32_t)dcpPacket;
 
+#if defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+                /* Clean DCACHE before sending DCP packet to engine */
+                DCACHE_CleanByRange((uint32_t)dcpPacket, sizeof(dcp_work_packet_t));
+#endif
                 /* Make sure that all data memory accesses are completed before starting of the job */
                 __DSB();
                 __ISB();
@@ -362,11 +380,20 @@ status_t DCP_AES_EncryptEcb(
     DCP_Type *base, dcp_handle_t *handle, const uint8_t *plaintext, uint8_t *ciphertext, size_t size)
 {
     status_t completionStatus = kStatus_Fail;
-    dcp_work_packet_t dcpWork = {0};
+
+    /* Use extended  DCACHE line size aligned structure */
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    dcp_work_packet_t *dcpWork;
+    uint8_t dcpWorkExt[sizeof(dcp_work_packet_t) + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE] = {0U};
+    dcpWork = (dcp_work_packet_t *)(uint32_t)DCP_FindCacheLine(dcpWorkExt);
+#else
+    dcp_work_packet_t dcpWorkPacket = {0};
+    dcp_work_packet_t *dcpWork      = &dcpWorkPacket;
+#endif
 
     do
     {
-        completionStatus = DCP_AES_EncryptEcbNonBlocking(base, handle, &dcpWork, plaintext, ciphertext, size);
+        completionStatus = DCP_AES_EncryptEcbNonBlocking(base, handle, dcpWork, plaintext, ciphertext, size);
     } while (completionStatus == (int32_t)kStatus_DCP_Again);
 
     if (completionStatus != kStatus_Success)
@@ -451,11 +478,20 @@ status_t DCP_AES_DecryptEcb(
     DCP_Type *base, dcp_handle_t *handle, const uint8_t *ciphertext, uint8_t *plaintext, size_t size)
 {
     status_t completionStatus = kStatus_Fail;
-    dcp_work_packet_t dcpWork = {0};
+
+    /* Use extended  DCACHE line size aligned structure */
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    dcp_work_packet_t *dcpWork;
+    uint8_t dcpWorkExt[sizeof(dcp_work_packet_t) + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE] = {0U};
+    dcpWork = (dcp_work_packet_t *)(uint32_t)DCP_FindCacheLine(dcpWorkExt);
+#else
+    dcp_work_packet_t dcpWorkPacket = {0};
+    dcp_work_packet_t *dcpWork      = &dcpWorkPacket;
+#endif
 
     do
     {
-        completionStatus = DCP_AES_DecryptEcbNonBlocking(base, handle, &dcpWork, ciphertext, plaintext, size);
+        completionStatus = DCP_AES_DecryptEcbNonBlocking(base, handle, dcpWork, ciphertext, plaintext, size);
     } while (completionStatus == (int32_t)(kStatus_DCP_Again));
 
     if (completionStatus != kStatus_Success)
@@ -544,11 +580,20 @@ status_t DCP_AES_EncryptCbc(DCP_Type *base,
                             const uint8_t iv[16])
 {
     status_t completionStatus = kStatus_Fail;
-    dcp_work_packet_t dcpWork = {0};
+
+    /* Use extended  DCACHE line size aligned structure */
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    dcp_work_packet_t *dcpWork;
+    uint8_t dcpWorkExt[sizeof(dcp_work_packet_t) + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE] = {0U};
+    dcpWork = (dcp_work_packet_t *)(uint32_t)DCP_FindCacheLine(dcpWorkExt);
+#else
+    dcp_work_packet_t dcpWorkPacket = {0};
+    dcp_work_packet_t *dcpWork      = &dcpWorkPacket;
+#endif
 
     do
     {
-        completionStatus = DCP_AES_EncryptCbcNonBlocking(base, handle, &dcpWork, plaintext, ciphertext, size, iv);
+        completionStatus = DCP_AES_EncryptCbcNonBlocking(base, handle, dcpWork, plaintext, ciphertext, size, iv);
     } while (completionStatus == (int32_t)kStatus_DCP_Again);
 
     if (completionStatus != kStatus_Success)
@@ -646,11 +691,20 @@ status_t DCP_AES_DecryptCbc(DCP_Type *base,
                             const uint8_t iv[16])
 {
     status_t completionStatus = kStatus_Fail;
-    dcp_work_packet_t dcpWork = {0};
+
+    /* Use extended  DCACHE line size aligned structure */
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    dcp_work_packet_t *dcpWork;
+    uint8_t dcpWorkExt[sizeof(dcp_work_packet_t) + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE] = {0U};
+    dcpWork = (dcp_work_packet_t *)(uint32_t)DCP_FindCacheLine(dcpWorkExt);
+#else
+    dcp_work_packet_t dcpWorkPacket = {0};
+    dcp_work_packet_t *dcpWork      = &dcpWorkPacket;
+#endif
 
     do
     {
-        completionStatus = DCP_AES_DecryptCbcNonBlocking(base, handle, &dcpWork, ciphertext, plaintext, size, iv);
+        completionStatus = DCP_AES_DecryptCbcNonBlocking(base, handle, dcpWork, ciphertext, plaintext, size, iv);
     } while (completionStatus == (int32_t)kStatus_DCP_Again);
 
     if (completionStatus != (int32_t)kStatus_Success)
@@ -892,6 +946,7 @@ static status_t dcp_hash_check_context(dcp_hash_ctx_internal_t *ctxInternal, con
     {
         return kStatus_InvalidArgument;
     }
+
     return kStatus_Success;
 }
 
@@ -933,6 +988,18 @@ static status_t dcp_hash_update_non_blocking(
     }
     else if (ctxInternal->algo == kDCP_Crc32)
     {
+        /* In CRC-32 case if size is zero, do not schedule other computing */
+        if (size == 0U)
+        {
+#if defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+            /* Clear DCACHE memory before starting the engine */
+            DCACHE_CleanByRange((uint32_t)ctxInternal, sizeof(dcp_hash_ctx_internal_t));
+#endif
+            /* Make sure that all data memory accesses are completed before starting of the job */
+            __DSB();
+            __ISB();
+            return kStatus_Success;
+        }
         dcpPacket->control1 = (uint32_t)kDCP_CONTROL1_HASH_SELECT_CRC32;
     }
     else
@@ -944,17 +1011,34 @@ static status_t dcp_hash_update_non_blocking(
     dcpPacket->bufferSize               = size;
     dcpPacket->payloadPointer           = (uint32_t)ctxInternal->runningHash;
 
+#if defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    /* Clear DCACHE memory before starting the engine */
+    DCACHE_CleanByRange((uint32_t)ctxInternal, sizeof(dcp_hash_ctx_internal_t));
+#endif
+    /* Make sure that all data memory accesses are completed before starting of the job */
+    __DSB();
+    __ISB();
+
     return dcp_schedule_work(base, ctxInternal->handle, dcpPacket);
 }
 
 static status_t dcp_hash_update(DCP_Type *base, dcp_hash_ctx_internal_t *ctxInternal, const uint8_t *msg, size_t size)
 {
     status_t completionStatus = kStatus_Fail;
-    dcp_work_packet_t dcpWork = {0};
+
+    /* Use extended  DCACHE line size aligned structure */
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    dcp_work_packet_t *dcpWork;
+    uint8_t dcpWorkExt[sizeof(dcp_work_packet_t) + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE] = {0U};
+    dcpWork = (dcp_work_packet_t *)(uint32_t)DCP_FindCacheLine(dcpWorkExt);
+#else
+    dcp_work_packet_t dcpWorkPacket = {0};
+    dcp_work_packet_t *dcpWork      = &dcpWorkPacket;
+#endif
 
     do
     {
-        completionStatus = dcp_hash_update_non_blocking(base, ctxInternal, &dcpWork, msg, size);
+        completionStatus = dcp_hash_update_non_blocking(base, ctxInternal, dcpWork, msg, size);
     } while (completionStatus == (int32_t)kStatus_DCP_Again);
 
     completionStatus = DCP_WaitForChannelComplete(base, ctxInternal->handle);
@@ -1066,6 +1150,7 @@ static void dcp_hash_save_running_hash(dcp_hash_ctx_internal_t *ctxInternal)
     }
     if (srcAddr != NULL)
     {
+        DCACHE_InvalidateByRange((uint32_t)srcAddr, sizeof(ctxInternal->runningHash));
         (void)dcp_memcpy(ctxInternal->runningHash, srcAddr, sizeof(ctxInternal->runningHash));
     }
 }
@@ -1118,6 +1203,13 @@ status_t DCP_HASH_Init(DCP_Type *base, dcp_handle_t *handle, dcp_hash_ctx_t *ctx
     status_t status;
 
     dcp_hash_ctx_internal_t *ctxInternal;
+    /* Align structure on DCACHE line*/
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    ctxInternal = (dcp_hash_ctx_internal_t *)(uint32_t)((uint8_t *)ctx + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE);
+#else
+    ctxInternal                     = (dcp_hash_ctx_internal_t *)(uint32_t)ctx;
+#endif
+
     /* compile time check for the correct structure size */
     BUILD_ASSURE(sizeof(dcp_hash_ctx_t) >= sizeof(dcp_hash_ctx_internal_t), dcp_hash_ctx_t_size);
     uint32_t i;
@@ -1129,14 +1221,13 @@ status_t DCP_HASH_Init(DCP_Type *base, dcp_handle_t *handle, dcp_hash_ctx_t *ctx
     }
 
     /* set algorithm in context struct for later use */
-    ctxInternal        = (dcp_hash_ctx_internal_t *)(uint32_t)ctx;
     ctxInternal->algo  = algo;
     ctxInternal->blksz = 0u;
 
     const uint32_t j = sizeof(ctxInternal->blk.w) / sizeof(ctxInternal->blk.w[0]);
     for (i = 0; i < j; i++)
     {
-        ctxInternal->blk.w[0] = 0u;
+        ctxInternal->blk.w[i] = 0u;
     }
     ctxInternal->state           = kDCP_StateHashInit;
     ctxInternal->fullMessageSize = 0;
@@ -1166,13 +1257,19 @@ status_t DCP_HASH_Update(DCP_Type *base, dcp_hash_ctx_t *ctx, const uint8_t *inp
     dcp_hash_ctx_internal_t *ctxInternal;
     size_t blockSize;
 
+    /* Align structure on DCACHE line*/
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    ctxInternal = (dcp_hash_ctx_internal_t *)(uint32_t)((uint8_t *)ctx + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE);
+#else
+    ctxInternal                     = (dcp_hash_ctx_internal_t *)(uint32_t)ctx;
+#endif
+
     if (inputSize == 0U)
     {
         return kStatus_Success;
     }
 
-    ctxInternal = (dcp_hash_ctx_internal_t *)(uint32_t)ctx;
-    status      = dcp_hash_check_context(ctxInternal, input);
+    status = dcp_hash_check_context(ctxInternal, input);
     if (kStatus_Success != status)
     {
         return status;
@@ -1229,8 +1326,15 @@ status_t DCP_HASH_Finish(DCP_Type *base, dcp_hash_ctx_t *ctx, uint8_t *output, s
     status_t status;
     dcp_hash_ctx_internal_t *ctxInternal;
 
-    ctxInternal = (dcp_hash_ctx_internal_t *)(uint32_t)ctx;
-    status      = dcp_hash_check_context(ctxInternal, output);
+    /* Align structure on DCACHE line*/
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) && defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    ctxInternal = (dcp_hash_ctx_internal_t *)(uint32_t)((uint8_t *)ctx + FSL_FEATURE_L1DCACHE_LINESIZE_BYTE);
+#else
+    ctxInternal                     = (dcp_hash_ctx_internal_t *)(uint32_t)ctx;
+#endif
+
+    status = dcp_hash_check_context(ctxInternal, output);
+
     if (kStatus_Success != status)
     {
         return status;
@@ -1304,6 +1408,9 @@ status_t DCP_HASH_Finish(DCP_Type *base, dcp_hash_ctx_t *ctx, uint8_t *output, s
         }
     }
 
+#if defined(DCP_USE_DCACHE) && (DCP_USE_DCACHE == 1U)
+    DCACHE_InvalidateByRange((uint32_t)ctxInternal->runningHash, sizeof(ctxInternal->runningHash));
+#endif
     /* Reverse and copy result to output[] */
     dcp_reverse_and_copy((uint8_t *)ctxInternal->runningHash, &output[0], algOutSize);
 
@@ -1333,7 +1440,7 @@ status_t DCP_HASH(DCP_Type *base,
                   uint8_t *output,
                   size_t *outputSize)
 {
-    dcp_hash_ctx_t hashCtx;
+    dcp_hash_ctx_t hashCtx = {0};
     status_t status;
 
     status = DCP_HASH_Init(base, handle, &hashCtx, algo);

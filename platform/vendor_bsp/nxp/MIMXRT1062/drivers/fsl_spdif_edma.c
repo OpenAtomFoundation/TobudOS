@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  *
@@ -125,7 +125,7 @@ static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool don
 
 static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t *config, uint32_t rightChannel)
 {
-    edma_tcd_t *tcdRegs = (edma_tcd_t *)&handle->base->TCD[handle->channel];
+    edma_tcd_t *tcdRegs = (edma_tcd_t *)(uint32_t)&handle->base->TCD[handle->channel];
     uint32_t primask;
     uint16_t csr;
     int8_t currentTcd;

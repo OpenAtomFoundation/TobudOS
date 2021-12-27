@@ -13,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1060RM Rev.1, 12/2018 | IMXRT1060SRM Rev.3
 **     Version:             rev. 1.2, 2019-04-29
-**     Build:               b191113
+**     Build:               b201012
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -70,7 +70,10 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
+  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Secure mode */
+  #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+  SCB_NS->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Non-secure mode */
+  #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
 #if defined(__MCUXPRESSO)
@@ -79,19 +82,19 @@ void SystemInit (void) {
 #endif
 
 /* Disable Watchdog Power Down Counter */
-WDOG1->WMCR &= ~WDOG_WMCR_PDE_MASK;
-WDOG2->WMCR &= ~WDOG_WMCR_PDE_MASK;
+    WDOG1->WMCR &= ~(uint16_t) WDOG_WMCR_PDE_MASK;
+    WDOG2->WMCR &= ~(uint16_t) WDOG_WMCR_PDE_MASK;
 
 /* Watchdog disable */
 
 #if (DISABLE_WDOG)
     if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG1->WCR &= ~WDOG_WCR_WDE_MASK;
+        WDOG1->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
     }
     if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG2->WCR &= ~WDOG_WCR_WDE_MASK;
+        WDOG2->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
     }
     if ((RTWDOG->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {
