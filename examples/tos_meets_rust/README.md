@@ -93,7 +93,7 @@
 
 - 工具链安装
 
-    编译需要的 arm-none-eabi 工具连, eabi 的含义是 Embedded Application Binary Interface, 
+    编译需要的 arm-none-eabi 工具链, eabi 的含义是 Embedded Application Binary Interface, 
     不同发行版安装方式不一样
 
     - ubuntu
