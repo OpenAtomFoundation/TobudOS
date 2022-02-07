@@ -2,7 +2,7 @@
 #include "mcu_init.h"
 #include "tos_k.h"
 #include "mqttclient.h"
-#include "cjson.h"
+#include "cJSON.h"
 #include "sal_module_wrapper.h"
 
 #define USE_ESP8266
