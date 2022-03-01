@@ -32,6 +32,7 @@ typedef enum sal_send_mode {
 } sal_send_mode_t;
 
 int esp8266_tencent_firmware_sal_init(hal_uart_port_t uart_port);
+int esp8266_tencent_firmware_sal_deinit(void);
 int esp8266_tencent_firmware_join_ap(const char *ssid, const char *pwd);
 
 #endif /* __ESP8266_TENCENT_FIRMWARE_H__ */

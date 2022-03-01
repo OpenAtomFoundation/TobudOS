@@ -64,7 +64,8 @@ extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
-
+extern at_agent_t esp8266_agent;
+extern at_agent_t ec600s_agent;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -290,11 +291,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t esp_data;
     if (huart->Instance == USART6) {
         HAL_UART_Receive_IT(&huart6, &data, 1);
-        tos_at_uart_input_byte(data);
+        tos_at_uart_input_byte(&ec600s_agent, data);
     }
     if (huart->Instance == USART2) {
         HAL_UART_Receive_IT(&huart2, &esp_data, 1);
-        tos_at_uart_input_byte(esp_data);
+        tos_at_uart_input_byte(&esp8266_agent, esp_data);
     }
 }
 /* USER CODE END 1 */

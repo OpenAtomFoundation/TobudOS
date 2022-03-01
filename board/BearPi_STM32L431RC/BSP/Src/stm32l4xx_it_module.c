@@ -66,7 +66,7 @@ extern UART_HandleTypeDef hlpuart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
-
+extern at_agent_t esp8266_agent;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -299,7 +299,7 @@ void LPUART1_IRQHandler(void)
         __HAL_UART_CLEAR_IDLEFLAG(&hlpuart1);
 
         if (uart_frame_buffer_index != 0) {
-            tos_at_uart_input_frame(uart_frame_buffer, uart_frame_buffer_index);
+            tos_at_uart_input_frame(&esp8266_agent, uart_frame_buffer, uart_frame_buffer_index);
             uart_frame_buffer_index = 0;
             memset(uart_frame_buffer, 0, sizeof(uart_frame_buffer));
         }
@@ -314,14 +314,15 @@ void LPUART1_IRQHandler(void)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     extern uint8_t data;
+
     if (huart->Instance == LPUART1) {
         HAL_UART_Receive_IT(&hlpuart1, &data, 1);
 #if AT_INPUT_TYPE_FRAME_EN
         uart_frame_buffer[uart_frame_buffer_index++] = data;
 #elif AT_INPUT_SIMULATE_IDLE_EN
-        tos_at_uart_input_byte_no_notify(data);
+        tos_at_uart_input_byte_no_notify(&esp8266_agent, data);
 #else
-        tos_at_uart_input_byte(data);
+        tos_at_uart_input_byte(&esp8266_agent, data);
 #endif /* AT_INPUT_TYPE_FRAME_EN */
     }
 }

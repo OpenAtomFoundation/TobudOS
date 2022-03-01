@@ -29,7 +29,7 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
             return -1;
         }
         
-         /* Enable RX interrupt. */
+        /* Enable RX interrupt. */
         LPUART_EnableInterrupts(LPUART1, kLPUART_RxDataRegFullInterruptEnable);
         EnableIRQ(LPUART1_IRQn);
     } else if (port == HAL_UART_PORT_2) {
@@ -44,7 +44,7 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
             return -1;
         }
         
-         /* Enable RX interrupt. */
+        /* Enable RX interrupt. */
         LPUART_EnableInterrupts(LPUART2, kLPUART_RxDataRegFullInterruptEnable);
         EnableIRQ(LPUART2_IRQn);
     } else if (port == HAL_UART_PORT_3) {
@@ -59,7 +59,7 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
             return -1;
         }
         
-         /* Enable RX interrupt. */
+        /* Enable RX interrupt. */
         LPUART_EnableInterrupts(LPUART3, kLPUART_RxDataRegFullInterruptEnable);
         EnableIRQ(LPUART3_IRQn);
     } else if (port == HAL_UART_PORT_4) {
@@ -74,7 +74,7 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
             return -1;
         }
         
-         /* Enable RX interrupt. */
+        /* Enable RX interrupt. */
         LPUART_EnableInterrupts(LPUART4, kLPUART_RxDataRegFullInterruptEnable);
         EnableIRQ(LPUART4_IRQn);
     }

@@ -62,7 +62,7 @@ extern UART_HandleTypeDef hlpuart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
-extern at_agent_t esp8266_agent;
+extern at_agent_t esp8266_tf_agent;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -300,7 +300,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     extern uint8_t data;
     if (huart->Instance == LPUART1) {
         HAL_UART_Receive_IT(&hlpuart1, &data, 1);
-        tos_at_uart_input_byte(&esp8266_agent, data);
+        tos_at_uart_input_byte(&esp8266_tf_agent, data);
     }
 }
 /* USER CODE END 1 */

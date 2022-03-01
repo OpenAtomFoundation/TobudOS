@@ -5,13 +5,11 @@
 #include "sal_module_wrapper.h"
 
 #define USE_ESP8266
-
 //#define USE_EC600S
 
 #if defined(USE_ESP8266)
 #include "esp8266.h"
-
-#elif defined(USE_EC200S)
+#elif defined(USE_EC600S)
 #include "ec600s.h"
 #endif
 
@@ -101,7 +99,7 @@ void mqttclient_task(void)
 #endif
 
 
-#ifdef USE_EC200S
+#ifdef USE_EC600S
     ec600s_sal_init(HAL_UART_PORT_2);
 #endif
 

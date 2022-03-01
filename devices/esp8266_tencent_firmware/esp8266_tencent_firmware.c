@@ -6,6 +6,11 @@
 #include "tencent_firmware_module_wrapper.h"
 #include "esp8266_tencent_firmware.h"
 
+at_agent_t esp8266_tf_agent;
+static k_stack_t esp8266_tf_at_parse_task_stk[AT_PARSER_TASK_STACK_SIZE];
+
+#define AT_AGENT    ((at_agent_t *)&esp8266_tf_agent)
+
 /*
  * config dev info to module, do this operate only once in factroy is suggested
  */
@@ -15,7 +20,7 @@ int esp8266_tencent_firmware_module_info_set(device_info_t *info, tls_mode_t mod
 
     tos_at_echo_create(&echo, NULL, 0, "+TCDEVINFOSET:OK");
 
-    tos_at_cmd_exec_until(&echo, 2000, "AT+TCDEVINFOSET=%d,\"%s\",\"%s\",\"%s\"\r\n",
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCDEVINFOSET=%d,\"%s\",\"%s\",\"%s\"\r\n",
                         mode, info->product_id, info->device_name, info->device_serc);
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
@@ -31,7 +36,7 @@ int esp8266_tencent_firmware_module_mqtt_conn(mqtt_param_t init_params)
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTCONN:OK");
     while (try++ < 10) {
-        tos_at_cmd_exec_until(&echo, 2000, "AT+TCMQTTCONN=%d,%d,%d,%d,%d\r\n", init_params.tls_mode,
+        tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCMQTTCONN=%d,%d,%d,%d,%d\r\n", init_params.tls_mode,
             init_params.command_timeout, init_params.keep_alive_interval_ms,
             init_params.clean_session, init_params.auto_connect_enable);
         if (echo.status == AT_ECHO_STATUS_EXPECT) {
@@ -48,7 +53,7 @@ int esp8266_tencent_firmware_module_mqtt_discon(void)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
 
-    tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTDISCONN\r\n");
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+TCMQTTDISCONN\r\n");
     if (echo.status == AT_ECHO_STATUS_OK) {
         return 0;
     }
@@ -63,13 +68,13 @@ int esp8266_tencent_firmware_module_mqtt_publ(const char *topic, qos_t qos, char
     
     strcat(payload, "\r\n");
 
-    tos_at_cmd_exec_until(&echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload)-2);
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 1000, "AT+TCMQTTPUBL=\"%s\",%d,%d\r\n", topic, qos, strlen(payload)-2);
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUBL:OK");
-    tos_at_raw_data_send_until(&echo, 1000, (uint8_t *)payload, strlen(payload));
+    tos_at_raw_data_send_until(AT_AGENT, &echo, 1000, (uint8_t *)payload, strlen(payload));
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
@@ -84,7 +89,7 @@ int esp8266_tencent_firmware_module_mqtt_pub(const char *topic, qos_t qos, char 
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB:OK");
 
-    tos_at_cmd_exec_until(&echo, 1000, "AT+TCMQTTPUB=\"%s\",%d,\"%s\"\r\n", topic, qos, payload);
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 1000, "AT+TCMQTTPUB=\"%s\",%d,\"%s\"\r\n", topic, qos, payload);
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
@@ -97,7 +102,7 @@ int esp8266_tencent_firmware_module_mqtt_sub(char *topic, qos_t qos)
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTSUB:OK");
 
-    tos_at_cmd_exec_until(&echo, 2000, "AT+TCMQTTSUB=\"%s\",%d\r\n", topic, qos);
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCMQTTSUB=\"%s\",%d\r\n", topic, qos);
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
@@ -110,7 +115,7 @@ int esp8266_tencent_firmware_module_mqtt_unsub(const char *topic)
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTUNSUB:OK");
 
-    tos_at_cmd_exec_until(&echo, 2000, "AT+TCMQTTUNSUB=\"%s\"\r\n", topic);
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCMQTTUNSUB=\"%s\"\r\n", topic);
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
@@ -126,7 +131,7 @@ int esp8266_tencent_firmware_module_mqtt_state_get(mqtt_state_t *state)
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
 
-    tos_at_cmd_exec(&echo, 1000, "AT+TCMQTTSTATE?\r\n");
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+TCMQTTSTATE?\r\n");
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
@@ -153,7 +158,7 @@ int esp8266_tencent_firmware_module_debug_level_set(int log_level)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
 
-    tos_at_cmd_exec(&echo, 1000, "AT+TCTEMLOG=%d\r\n", log_level);
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+TCTEMLOG=%d\r\n", log_level);
     if (echo.status == AT_ECHO_STATUS_OK) {
         return 0;
     }
@@ -167,7 +172,7 @@ int esp8266_tencent_firmware_join_ap(const char *ssid, const char *pwd)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 30000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
+        tos_at_cmd_exec(AT_AGENT, &echo, 30000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
@@ -183,7 +188,7 @@ static int esp8266_tencent_firmware_restore(void)
 
     tos_at_echo_create(&echo, NULL, 0, "ready");
     while (try++ < 10) {
-        tos_at_cmd_exec_until(&echo, 5000, "AT+RESTORE\r\n");
+        tos_at_cmd_exec_until(AT_AGENT, &echo, 5000, "AT+RESTORE\r\n");
         if (echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
@@ -196,7 +201,7 @@ static int esp8266_tencent_firmware_echo_close(void)
     at_echo_t echo;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 1000, "ATE0\r\n");
+    tos_at_cmd_exec(AT_AGENT, &echo, 1000, "ATE0\r\n");
     if (echo.status == AT_ECHO_STATUS_OK) {
         return 0;
     }
@@ -225,7 +230,7 @@ static int esp8266_tencent_firmware_net_mode_set(sal_net_mode_t mode)
 
      tos_at_echo_create(&echo, NULL, 0, NULL);
      while (try++ < 10) {
-         tos_at_cmd_exec(&echo, 1000, cmd);
+         tos_at_cmd_exec(AT_AGENT, &echo, 1000, cmd);
          if (echo.status == AT_ECHO_STATUS_OK) {
              return 0;
          }
@@ -240,7 +245,7 @@ static int esp8266_tencent_firmware_send_mode_set(sal_send_mode_t mode)
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(&echo, 1000, "AT+CIPMODE=%d\r\n", mode == SAL_SEND_MODE_NORMAL ? 0 : 1);
+        tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+CIPMODE=%d\r\n", mode == SAL_SEND_MODE_NORMAL ? 0 : 1);
         if (echo.status == AT_ECHO_STATUS_OK) {
             return 0;
         }
@@ -283,7 +288,7 @@ int esp8266_tencent_firmware_ota_set(ota_mode_t mode, char *version)
 
     tos_at_echo_create(&echo, NULL, 0, "+TCOTASET:OK");
 
-    tos_at_cmd_exec_until(&echo, 2000, "AT+TCOTASET=%d,\"%s\"\r\n", mode, version);
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCOTASET=%d,\"%s\"\r\n", mode, version);
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }
@@ -306,7 +311,7 @@ int esp8266_tencent_firmware_ota_read_fwinfo(ota_fw_info_t *ota_fw_info)
 
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), "+TCFWINFO:");
 
-    tos_at_cmd_exec_until(&echo, 2000, "AT+TCFWINFO?\r\n");
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCFWINFO?\r\n");
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         
         sscanf(echo_buffer, "%*[^\"]%*c%[^\"]%*[^,]%*c%[^,]%*[^\"]%*c%[^\"]", ota_fw_info->fw_version, FileSize, ota_fw_info->fw_md5);
@@ -341,7 +346,7 @@ static int esp8266_tencent_firmware_ota_read_fwdata(uint8_t *ota_fw_data_buffer,
     
     tos_at_echo_create(&echo, NULL, 0, NULL);
 
-    tos_at_cmd_exec(&echo, 300, "AT+TCREADFWDATA=%d\r\n", read_len);
+    tos_at_cmd_exec(AT_AGENT, &echo, 300, "AT+TCREADFWDATA=%d\r\n", read_len);
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
@@ -365,7 +370,7 @@ void esp8266_tencent_firmware_recvpub(void)
     memset(&mqtt_message, 0, sizeof(mqtt_message));
 
     while (1) {
-        if (tos_at_uart_read(&data, 1) != 1) {
+        if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
             return;
         }
         if (data == '"') {
@@ -384,7 +389,7 @@ void esp8266_tencent_firmware_recvpub(void)
     }
 
     while (1) {
-        if (tos_at_uart_read(&data, 1) != 1) {
+        if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
             return;
         }
         if (data == ',') {
@@ -397,7 +402,7 @@ void esp8266_tencent_firmware_recvpub(void)
         payload_len = sizeof(mqtt_message.payload);
     }
 
-    read_len = tos_at_uart_read((uint8_t*)mqtt_message.payload, payload_len + 2);
+    read_len = tos_at_uart_read(AT_AGENT, (uint8_t*)mqtt_message.payload, payload_len + 2);
     if (read_len != payload_len + 2) {
         return;
     }
@@ -414,7 +419,7 @@ void esp8266_tencent_firmware_recvcmd(void)
     uint8_t buffer[20];
     int read_len = 13;
 
-    if (tos_at_uart_read(buffer, read_len) != read_len) {
+    if (tos_at_uart_read(AT_AGENT, buffer, read_len) != read_len) {
         return;
     }
     
@@ -437,7 +442,7 @@ void esp8266_tencent_firmware_recvfwdata(void)
     static uint8_t buffer[128];
     
     while (1) {
-        if (tos_at_uart_read(&data, 1) != 1) {
+        if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
             return;
         }
         if (data == ',') {
@@ -449,7 +454,7 @@ void esp8266_tencent_firmware_recvfwdata(void)
     do {
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
         read_len = MIN(data_len, sizeof(buffer));
-        if (tos_at_uart_read(buffer, read_len) != read_len) {
+        if (tos_at_uart_read(AT_AGENT, buffer, read_len) != read_len) {
             return;
         }
 
@@ -481,7 +486,7 @@ int esp8266_tencent_firmware_start_smartconfig(void)
     }
     
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    tos_at_cmd_exec(&echo, 2000, "AT+TCSTARTSMART\r\n");
+    tos_at_cmd_exec(AT_AGENT, &echo, 2000, "AT+TCSTARTSMART\r\n");
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
@@ -508,7 +513,7 @@ int esp8266_tencent_firmware_stop_smartconfig(void)
     
     tos_at_echo_create(&echo, NULL, 0, NULL);
 
-    tos_at_cmd_exec(&echo, 2000, "AT+TCSTOPSMART\r\n");
+    tos_at_cmd_exec(AT_AGENT, &echo, 2000, "AT+TCSTOPSMART\r\n");
     if (echo.status != AT_ECHO_STATUS_OK) {
         return -1;
     }
@@ -523,7 +528,7 @@ void esp8266_tencent_firmware_recvscstatus(void)
     */
     static char buffer[40];
     
-    if (tos_at_uart_read((uint8_t*)buffer, sizeof(buffer) - 1) != (sizeof(buffer) - 1)) {
+    if (tos_at_uart_read(AT_AGENT, (uint8_t*)buffer, sizeof(buffer) - 1) != (sizeof(buffer) - 1)) {
         return;
     }
     
@@ -568,7 +573,8 @@ int esp8266_tencent_firmware_sal_init(hal_uart_port_t uart_port)
 {
     int ret = -1;
     
-    if (tos_at_init(uart_port, esp8266_tencent_firmware_at_event,
+    if (tos_at_init(AT_AGENT, "esp8266_tf_at", esp8266_tf_at_parse_task_stk,
+                    uart_port, esp8266_tencent_firmware_at_event,
                         sizeof(esp8266_tencent_firmware_at_event) /
                         sizeof(esp8266_tencent_firmware_at_event[0])) != 0) {
         return -1;
@@ -585,3 +591,9 @@ int esp8266_tencent_firmware_sal_init(hal_uart_port_t uart_port)
     return 0;
 }
 
+int esp8266_tencent_firmware_sal_deinit()
+{
+    tos_at_deinit(AT_AGENT);
+    
+    return 0;
+}

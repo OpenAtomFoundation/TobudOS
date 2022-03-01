@@ -26,65 +26,61 @@ Note:
 
 #include "tos_at.h"
 
-__STATIC__ at_agent_t at_agent;
-
-__STATIC__ k_stack_t at_parser_task_stack[AT_PARSER_TASK_STACK_SIZE];
-
-__API__ int tos_at_global_lock_pend(void)
+__API__ int tos_at_global_lock_pend(at_agent_t *at_agent)
 {
-    if (tos_mutex_pend(&AT_AGENT->global_lock) != K_ERR_NONE) {
+    if (tos_mutex_pend(&at_agent->global_lock) != K_ERR_NONE) {
         return -1;
     }
     return 0;
 }
 
-__API__ int tos_at_global_lock_post(void)
+__API__ int tos_at_global_lock_post(at_agent_t *at_agent)
 {
-    if (tos_mutex_post(&AT_AGENT->global_lock) != K_ERR_NONE) {
+    if (tos_mutex_post(&at_agent->global_lock) != K_ERR_NONE) {
         return -1;
     }
     return 0;
 }
 
-__STATIC__ int at_uart_getchar_from_fifo(uint8_t *data)
+__STATIC__ int at_uart_getchar_from_fifo(at_agent_t *at_agent, uint8_t *data)
 {
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
     
     TOS_CPU_INT_DISABLE();
-    err = tos_chr_fifo_pop(&AT_AGENT->uart_rx_fifo, data);
+    err = tos_chr_fifo_pop(&at_agent->uart_rx_fifo, data);
     TOS_CPU_INT_ENABLE();
     
     return err;
 }
 
-__STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
+__STATIC__ int at_uart_getchar(at_agent_t *at_agent, uint8_t *data, k_tick_t timeout)
 {
 #if AT_INPUT_TYPE_FRAME_EN
     at_frame_len_mail_t frame_len_mail;
     size_t mail_size;
 
-    if (AT_AGENT->fifo_available_len == 0) {
-        if (tos_mail_q_pend(&AT_AGENT->uart_rx_frame_mail, &frame_len_mail, &mail_size, timeout) != K_ERR_NONE) {
+    if (at_agent->fifo_available_len == 0) {
+        if (tos_mail_q_pend(&at_agent->uart_rx_frame_mail, &frame_len_mail, &mail_size, timeout) != K_ERR_NONE) {
             return -1;
         }
-        AT_AGENT->fifo_available_len = frame_len_mail.frame_len;
+        at_agent->fifo_available_len = frame_len_mail.frame_len;
     }
 
-    if (at_uart_getchar_from_fifo(data) != K_ERR_NONE) {
+    if (at_uart_getchar_from_fifo(at_agent, data) != K_ERR_NONE) {
         return -1;
     }
 
-    AT_AGENT->fifo_available_len -= 1;
+    at_agent->fifo_available_len -= 1;
     return 0;
 #elif AT_INPUT_SIMULATE_IDLE_EN
-    if (tos_chr_fifo_is_empty(&AT_AGENT->uart_rx_fifo)) {
-        if (tos_sem_pend(&AT_AGENT->uart_rx_sem, timeout) != K_ERR_NONE) {
+    if (tos_chr_fifo_is_empty(&at_agent->uart_rx_fifo)) {
+        if (tos_sem_pend(&at_agent->uart_rx_sem, timeout) != K_ERR_NONE) {
             return -1;
         }
     }
     
-    if (at_uart_getchar_from_fifo(data) != K_ERR_NONE) {
+    if (at_uart_getchar_from_fifo(at_agent, data) != K_ERR_NONE) {
         return -1;
     }
     
@@ -93,7 +89,7 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
 #else
     tos_stopwatch_delay(1);
 
-    if (tos_sem_pend(&AT_AGENT->uart_rx_sem, timeout) != K_ERR_NONE) {
+    if (tos_sem_pend(&at_agent->uart_rx_sem, timeout) != K_ERR_NONE) {
         return -1;
     }
     
@@ -103,28 +99,28 @@ __STATIC__ int at_uart_getchar(uint8_t *data, k_tick_t timeout)
         so it is more effective to use critical sections.
     */
     
-//    if (tos_mutex_pend(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
+//    if (tos_mutex_pend(&at_agent->uart_rx_lock) != K_ERR_NONE) {
 //        return -1;
 //    }
     
-    if (at_uart_getchar_from_fifo(data) != K_ERR_NONE) {
+    if (at_uart_getchar_from_fifo(at_agent, data) != K_ERR_NONE) {
         return -1;
     }
 
-//    tos_mutex_post(&AT_AGENT->uart_rx_lock);
+//    tos_mutex_post(&at_agent->uart_rx_lock);
 
     return 0;
 #endif /* AT_INPUT_TYPE_FRAME_EN */
 }
 
-__STATIC__ at_event_t *at_event_do_get(char *buffer, size_t buffer_len)
+__STATIC__ at_event_t *at_event_do_get(at_agent_t *at_agent, char *buffer, size_t buffer_len)
 {
     int i = 0;
     at_event_t *event_table = K_NULL, *event = K_NULL;
     size_t event_table_size = 0, event_len;
 
-    event_table         = AT_AGENT->event_table;
-    event_table_size    = AT_AGENT->event_table_size;
+    event_table         = at_agent->event_table;
+    event_table_size    = at_agent->event_table_size;
 
     for (i = 0; i < event_table_size; ++i) {
         event = &event_table[i];
@@ -142,27 +138,27 @@ __STATIC__ at_event_t *at_event_do_get(char *buffer, size_t buffer_len)
     return K_NULL;
 }
 
-__STATIC__ at_event_t *at_get_event(void)
+__STATIC__ at_event_t *at_get_event(at_agent_t *at_agent)
 {
     char *buffer;
     size_t buffer_len;
     at_cache_t *at_cache = K_NULL;
 
-    at_cache = &AT_AGENT->recv_cache;
+    at_cache = &at_agent->recv_cache;
 
     buffer = (char *)at_cache->buffer;
     buffer_len = at_cache->recv_len;
 
-    return at_event_do_get(buffer, buffer_len);
+    return at_event_do_get(at_agent, buffer, buffer_len);
 }
 
-__API__ int tos_at_uart_read(uint8_t *buffer, size_t buffer_len)
+__API__ int tos_at_uart_read(at_agent_t *at_agent, uint8_t *buffer, size_t buffer_len)
 {
     uint8_t data;
     size_t read_len = 0;
 
     while (K_TRUE) {
-        if (at_uart_getchar(&data, TOS_TIME_FOREVER) != 0) {
+        if (at_uart_getchar(at_agent, &data, TOS_TIME_FOREVER) != 0) {
             return read_len;
         }
 
@@ -174,13 +170,13 @@ __API__ int tos_at_uart_read(uint8_t *buffer, size_t buffer_len)
     }
 }
 
-__API__ int tos_at_uart_readline(uint8_t *buffer, size_t buffer_len)
+__API__ int tos_at_uart_readline(at_agent_t *at_agent, uint8_t *buffer, size_t buffer_len)
 {
     uint8_t data;
     size_t read_len = 0;
 
     while (K_TRUE) {
-        if (at_uart_getchar(&data, TOS_TIME_FOREVER) != 0) {
+        if (at_uart_getchar(at_agent, &data, TOS_TIME_FOREVER) != 0) {
             return read_len;
         }
 
@@ -194,13 +190,13 @@ __API__ int tos_at_uart_readline(uint8_t *buffer, size_t buffer_len)
     }
 }
 
-__API__ int tos_at_uart_drain(uint8_t *buffer, size_t buffer_len)
+__API__ int tos_at_uart_drain(at_agent_t *at_agent, uint8_t *buffer, size_t buffer_len)
 {
     uint8_t data;
     size_t read_len = 0;
 
     while (K_TRUE) {
-        if (at_uart_getchar(&data, TOS_TIME_NOWAIT) != 0) {
+        if (at_uart_getchar(at_agent, &data, TOS_TIME_NOWAIT) != 0) {
             return read_len;
         }
 
@@ -212,20 +208,20 @@ __API__ int tos_at_uart_drain(uint8_t *buffer, size_t buffer_len)
     }
 }
 
-__STATIC__ int at_is_echo_expect(void)
+__STATIC__ int at_is_echo_expect(at_agent_t *at_agent)
 {
     char *recv_buffer, *expect;
     size_t recv_buffer_len, expect_len;
     at_echo_t *at_echo = K_NULL;
     at_cache_t *at_cache = K_NULL;
 
-    at_echo = AT_AGENT->echo;
+    at_echo = at_agent->echo;
 
     if (!at_echo || !at_echo->echo_expect) {
         return 0;
     }
 
-    at_cache = &AT_AGENT->recv_cache;
+    at_cache = &at_agent->recv_cache;
 
     recv_buffer = (char *)at_cache->buffer;
     recv_buffer_len = at_cache->recv_len;
@@ -251,19 +247,19 @@ __STATIC__ int at_is_echo_expect(void)
     return 0;
 }
 
-__STATIC__ at_parse_status_t at_uart_line_parse(void)
+__STATIC__ at_parse_status_t at_uart_line_parse(at_agent_t *at_agent)
 {
     size_t curr_len = 0;
     uint8_t data, last_data = 0;
     at_cache_t *recv_cache = K_NULL;
 
-    recv_cache = &AT_AGENT->recv_cache;
+    recv_cache = &at_agent->recv_cache;
 
     recv_cache->recv_len = 0;
     memset(recv_cache->buffer, 0, recv_cache->buffer_size);
 
     while (K_TRUE) {
-        if (at_uart_getchar(&data, TOS_TIME_FOREVER) != 0) {
+        if (at_uart_getchar(at_agent, &data, TOS_TIME_FOREVER) != 0) {
             continue;
         }
 
@@ -279,11 +275,11 @@ __STATIC__ at_parse_status_t at_uart_line_parse(void)
             return AT_PARSE_STATUS_OVERFLOW;
         }
         
-        if (at_get_event() != K_NULL) {
+        if (at_get_event(at_agent) != K_NULL) {
             return AT_PARSE_STATUS_EVENT;
         }
 
-        if (at_is_echo_expect()) {
+        if (at_is_echo_expect(at_agent)) {
             return AT_PARSE_STATUS_EXPECT;
         }
         
@@ -343,11 +339,13 @@ __STATIC__ void at_parser(void *arg)
     at_cache_t *recv_cache = K_NULL;
     at_parse_status_t at_parse_status;
 
-    recv_cache = &AT_AGENT->recv_cache;
+    at_agent_t *at_agent = (at_agent_t *)arg;
+
+    recv_cache = &at_agent->recv_cache;
 
     while (K_TRUE) {
         
-        at_parse_status = at_uart_line_parse();
+        at_parse_status = at_uart_line_parse(at_agent);
         
         AT_LOG("at line parser end!(%d)\r\n", at_parse_status);
         
@@ -359,14 +357,14 @@ __STATIC__ void at_parser(void *arg)
         }
 
         if (at_parse_status == AT_PARSE_STATUS_EVENT) {
-            at_event = at_get_event();
+            at_event = at_get_event(at_agent);
             if (at_event && at_event->event_callback) {
                 at_event->event_callback();
             }
             continue;
         }
 
-        at_echo = AT_AGENT->echo;
+        at_echo = at_agent->echo;
         if (!at_echo) {
             continue;
         }
@@ -399,13 +397,13 @@ __STATIC__ void at_parser(void *arg)
     }
 }
 
-__STATIC__ int at_uart_send(const uint8_t *buf, size_t size, uint32_t timeout)
+__STATIC__ int at_uart_send(at_agent_t *at_agent, const uint8_t *buf, size_t size, uint32_t timeout)
 {
     int ret;
 
-    tos_mutex_pend(&AT_AGENT->uart_tx_lock);
-    ret = tos_hal_uart_write(&AT_AGENT->uart, buf, size, timeout);
-    tos_mutex_post(&AT_AGENT->uart_tx_lock);
+    tos_mutex_pend(&at_agent->uart_tx_lock);
+    ret = tos_hal_uart_write(&at_agent->uart, buf, size, timeout);
+    tos_mutex_post(&at_agent->uart_tx_lock);
 
     return ret;
 }
@@ -459,30 +457,30 @@ __STATIC_INLINE__ void at_echo_flush(at_echo_t *echo)
     echo->__w_idx   = 0;
 }
 
-__STATIC_INLINE__ void at_echo_attach(at_echo_t *echo)
+__STATIC_INLINE__ void at_echo_attach(at_agent_t *at_agent, at_echo_t *echo)
 {
     at_echo_flush(echo);
-    AT_AGENT->echo = echo;
+    at_agent->echo = echo;
 }
 
-__API__ int tos_at_raw_data_send(at_echo_t *echo, uint32_t timeout, const uint8_t *buf, size_t size)
+__API__ int tos_at_raw_data_send(at_agent_t *at_agent, at_echo_t *echo, uint32_t timeout, const uint8_t *buf, size_t size)
 {
     int ret = 0;
 
     if (echo) {
-        at_echo_attach(echo);
+        at_echo_attach(at_agent, echo);
     }
 
-    ret = at_uart_send(buf, size, 0xFFFF);
+    ret = at_uart_send(at_agent, buf, size, 0xFFFF);
 
     tos_task_delay(tos_millisec2tick(timeout));
 
-    AT_AGENT->echo = K_NULL;
+    at_agent->echo = K_NULL;
 
     return ret;
 }
 
-__API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const uint8_t *buf, size_t size)
+__API__ int tos_at_raw_data_send_until(at_agent_t *at_agent, at_echo_t *echo, uint32_t timeout, const uint8_t *buf, size_t size)
 {
     int ret = 0;
 
@@ -494,9 +492,9 @@ __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const 
         return -1;
     }
     echo->__is_expecting = K_TRUE;
-    at_echo_attach(echo);
+    at_echo_attach(at_agent, echo);
 
-    ret = at_uart_send(buf, size, 0xFFFF);
+    ret = at_uart_send(at_agent, buf, size, 0xFFFF);
 
     if (tos_sem_pend(&echo->__expect_notify, tos_millisec2tick(timeout)) != K_ERR_NONE) {
         ret = -1;
@@ -504,31 +502,31 @@ __API__ int tos_at_raw_data_send_until(at_echo_t *echo, uint32_t timeout, const 
 
     tos_sem_destroy(&echo->__expect_notify);
 
-    AT_AGENT->echo = K_NULL;
+    at_agent->echo = K_NULL;
 
     return ret;
 }
 
-__STATIC__ int at_cmd_do_exec(const char *format, va_list args)
+__STATIC__ int at_cmd_do_exec(at_agent_t *at_agent, const char *format, va_list args)
 {
     size_t cmd_len = 0;
 
-    if (tos_mutex_pend(&AT_AGENT->cmd_buf_lock) != K_ERR_NONE) {
+    if (tos_mutex_pend(&at_agent->cmd_buf_lock) != K_ERR_NONE) {
         return -1;
     }
 
-    cmd_len = vsnprintf(AT_AGENT->cmd_buf, AT_CMD_BUFFER_SIZE, format, args);
+    cmd_len = vsnprintf(at_agent->cmd_buf, AT_CMD_BUFFER_SIZE, format, args);
 
-    tos_kprintln("AT CMD:\n%s\n", AT_AGENT->cmd_buf);
+    tos_kprintln("AT CMD:\n%s\n", at_agent->cmd_buf);
 
-    at_uart_send((uint8_t *)AT_AGENT->cmd_buf, cmd_len, 0xFFFF);
+    at_uart_send(at_agent, (uint8_t *)at_agent->cmd_buf, cmd_len, 0xFFFF);
 
-    tos_mutex_post(&AT_AGENT->cmd_buf_lock);
+    tos_mutex_post(&at_agent->cmd_buf_lock);
 
     return 0;
 }
 
-__API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, ...)
+__API__ int tos_at_cmd_exec(at_agent_t *at_agent, at_echo_t *echo, uint32_t timeout, const char *cmd, ...)
 {
     int ret = 0;
     va_list args;
@@ -541,14 +539,14 @@ __API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, 
         return -1;
     }
 
-    at_echo_attach(echo);
+    at_echo_attach(at_agent, echo);
     
     va_start(args, cmd);
-    ret = at_cmd_do_exec(cmd, args);
+    ret = at_cmd_do_exec(at_agent, cmd, args);
     va_end(args);
 
     if (ret != 0) {
-        AT_AGENT->echo = K_NULL;
+        at_agent->echo = K_NULL;
         return -1;
     }
 
@@ -558,12 +556,12 @@ __API__ int tos_at_cmd_exec(at_echo_t *echo, uint32_t timeout, const char *cmd, 
 
     tos_sem_destroy(&echo->__status_set_notify);
 
-    AT_AGENT->echo = K_NULL;
+    at_agent->echo = K_NULL;
 
     return ret;
 }
 
-__API__ int tos_at_cmd_exec_until(at_echo_t *echo, uint32_t timeout, const char *cmd, ...)
+__API__ int tos_at_cmd_exec_until(at_agent_t *at_agent, at_echo_t *echo, uint32_t timeout, const char *cmd, ...)
 {
     int ret = 0;
     va_list args;
@@ -576,14 +574,14 @@ __API__ int tos_at_cmd_exec_until(at_echo_t *echo, uint32_t timeout, const char 
         return -1;
     }
     echo->__is_expecting = K_TRUE;
-    at_echo_attach(echo);
+    at_echo_attach(at_agent, echo);
 
     va_start(args, cmd);
-    ret = at_cmd_do_exec(cmd, args);
+    ret = at_cmd_do_exec(at_agent, cmd, args);
     va_end(args);
 
     if (ret != 0) {
-        AT_AGENT->echo = K_NULL;
+        at_agent->echo = K_NULL;
         return -1;
     }
 
@@ -593,42 +591,42 @@ __API__ int tos_at_cmd_exec_until(at_echo_t *echo, uint32_t timeout, const char 
 
     tos_sem_destroy(&echo->__expect_notify);
 
-    AT_AGENT->echo = K_NULL;
+    at_agent->echo = K_NULL;
 
     return ret;
 }
 
-__STATIC__ int at_recv_cache_init(void)
+__STATIC__ int at_recv_cache_init(at_agent_t *at_agent)
 {
     uint8_t *buffer = K_NULL;
 
     buffer = tos_mmheap_alloc(AT_RECV_CACHE_SIZE);
     if (!buffer) {
-        AT_AGENT->recv_cache.buffer = K_NULL;
+        at_agent->recv_cache.buffer = K_NULL;
         return - 1;
     }
 
-    AT_AGENT->recv_cache.buffer         = buffer;
-    AT_AGENT->recv_cache.buffer_size    = AT_RECV_CACHE_SIZE;
-    AT_AGENT->recv_cache.recv_len       = 0;
+    at_agent->recv_cache.buffer         = buffer;
+    at_agent->recv_cache.buffer_size    = AT_RECV_CACHE_SIZE;
+    at_agent->recv_cache.recv_len       = 0;
     return 0;
 }
 
-__STATIC__ void at_recv_cache_deinit(void)
+__STATIC__ void at_recv_cache_deinit(at_agent_t *at_agent)
 {
     uint8_t *buffer = K_NULL;
 
-    buffer = AT_AGENT->recv_cache.buffer;
+    buffer = at_agent->recv_cache.buffer;
     if (buffer) {
         tos_mmheap_free(buffer);
     }
 
-    AT_AGENT->recv_cache.buffer         = K_NULL;
-    AT_AGENT->recv_cache.buffer_size    = 0;
-    AT_AGENT->recv_cache.recv_len       = 0;
+    at_agent->recv_cache.buffer         = K_NULL;
+    at_agent->recv_cache.buffer_size    = 0;
+    at_agent->recv_cache.recv_len       = 0;
 }
 
-__STATIC__ at_data_channel_t *at_channel_get(int channel_id, int is_alloc)
+__STATIC__ at_data_channel_t *at_channel_get(at_agent_t *at_agent, int channel_id, int is_alloc)
 {
     /*
         if is_alloc is K_TRUE, means we are allocating a channel with certain id,
@@ -642,7 +640,7 @@ __STATIC__ at_data_channel_t *at_channel_get(int channel_id, int is_alloc)
         return K_NULL;
     }
 
-    data_channel = &AT_AGENT->data_channel[channel_id];
+    data_channel = &at_agent->data_channel[channel_id];
 
     if (is_alloc && data_channel->is_free) {
         return data_channel;
@@ -655,13 +653,13 @@ __STATIC__ at_data_channel_t *at_channel_get(int channel_id, int is_alloc)
     return K_NULL;
 }
 
-__API__ int tos_at_channel_read(int channel_id, uint8_t *buffer, size_t buffer_len)
+__API__ int tos_at_channel_read(at_agent_t *at_agent, int channel_id, uint8_t *buffer, size_t buffer_len)
 {
     int read_len;
     size_t total_read_len = 0;
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel || data_channel->status == AT_CHANNEL_STATUS_BROKEN) {
         return -1;
     }
@@ -684,14 +682,14 @@ __API__ int tos_at_channel_read(int channel_id, uint8_t *buffer, size_t buffer_l
     }
 }
 
-__API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t buffer_len, uint32_t timeout)
+__API__ int tos_at_channel_read_timed(at_agent_t *at_agent, int channel_id, uint8_t *buffer, size_t buffer_len, uint32_t timeout)
 {
     int read_len = 0;
     size_t total_read_len = 0;
     k_tick_t remain_tick;
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel || data_channel->status == AT_CHANNEL_STATUS_BROKEN) {
         return -1;
     }
@@ -729,12 +727,12 @@ __API__ int tos_at_channel_read_timed(int channel_id, uint8_t *buffer, size_t bu
     return total_read_len;
 }
 
-__API__ int tos_at_channel_write(int channel_id, uint8_t *buffer, size_t buffer_len)
+__API__ int tos_at_channel_write(at_agent_t *at_agent, int channel_id, uint8_t *buffer, size_t buffer_len)
 {
     int ret;
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel) {
         return -1;
     }
@@ -788,12 +786,12 @@ errout:
     return -1;
 }
 
-__API__ int tos_at_channel_alloc_id(int channel_id, const char *ip, const char *port)
+__API__ int tos_at_channel_alloc_id(at_agent_t *at_agent, int channel_id, const char *ip, const char *port)
 {
     at_data_channel_t *data_channel = K_NULL;
     size_t socket_buffer_size = 0;
 
-    data_channel = at_channel_get(channel_id, K_TRUE);
+    data_channel = at_channel_get(at_agent, channel_id, K_TRUE);
     if (!data_channel) {
         return -1;
     }
@@ -806,14 +804,14 @@ __API__ int tos_at_channel_alloc_id(int channel_id, const char *ip, const char *
     return channel_id;
 }
 
-__API__ int tos_at_channel_alloc(const char *ip, const char *port)
+__API__ int tos_at_channel_alloc(at_agent_t *at_agent, const char *ip, const char *port)
 {
     int id = 0;
     at_data_channel_t *data_channel = K_NULL;
     size_t socket_buffer_size = 0;
 
     for (id = 0; id < AT_DATA_CHANNEL_NUM; ++id) {
-        data_channel = &AT_AGENT->data_channel[id];
+        data_channel = &at_agent->data_channel[id];
         if (data_channel->is_free) {
             break;
         }
@@ -831,13 +829,13 @@ __API__ int tos_at_channel_alloc(const char *ip, const char *port)
     return id;
 }
 
-__API__ int tos_at_channel_alloc_with_size(const char *ip, const char *port, size_t socket_buffer_size)
+__API__ int tos_at_channel_alloc_with_size(at_agent_t *at_agent, const char *ip, const char *port, size_t socket_buffer_size)
 {
     int id = 0;
     at_data_channel_t *data_channel = K_NULL;
 
     for (id = 0; id < AT_DATA_CHANNEL_NUM; ++id) {
-        data_channel = &AT_AGENT->data_channel[id];
+        data_channel = &at_agent->data_channel[id];
         if (data_channel->is_free) {
             break;
         }
@@ -854,11 +852,11 @@ __API__ int tos_at_channel_alloc_with_size(const char *ip, const char *port, siz
     return id;
 }
 
-__API__ int tos_at_channel_free(int channel_id)
+__API__ int tos_at_channel_free(at_agent_t *at_agent, int channel_id)
 {
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel) {
         return -1;
     }
@@ -880,11 +878,11 @@ __API__ int tos_at_channel_free(int channel_id)
     return 0;
 }
 
-__API__ int tos_at_channel_set_broken(int channel_id)
+__API__ int tos_at_channel_set_broken(at_agent_t *at_agent, int channel_id)
 {
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel) {
         return -1;
     }
@@ -893,39 +891,39 @@ __API__ int tos_at_channel_set_broken(int channel_id)
     return 0;
 }
 
-__API__ int tos_at_channel_is_working(int channel_id)
+__API__ int tos_at_channel_is_working(at_agent_t *at_agent, int channel_id)
 {
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     return data_channel && data_channel->status == AT_CHANNEL_STATUS_WORKING;
 }
 
-__STATIC__ void at_channel_init(void)
+__STATIC__ void at_channel_init(at_agent_t *at_agent)
 {
     int i = 0;
 
     for (i = 0; i < AT_DATA_CHANNEL_NUM; ++i) {
-        memset(&AT_AGENT->data_channel[i], 0, sizeof(at_data_channel_t));
-        AT_AGENT->data_channel[i].is_free   = K_TRUE;
-        AT_AGENT->data_channel[i].status    = AT_CHANNEL_STATUS_HANGING;
+        memset(&at_agent->data_channel[i], 0, sizeof(at_data_channel_t));
+        at_agent->data_channel[i].is_free   = K_TRUE;
+        at_agent->data_channel[i].status    = AT_CHANNEL_STATUS_HANGING;
     }
 }
 
-__STATIC__ void at_channel_deinit(void)
+__STATIC__ void at_channel_deinit(at_agent_t *at_agent)
 {
     int i = 0;
 
     for (i = 0; i < AT_DATA_CHANNEL_NUM; ++i) {
-        tos_at_channel_free(i);
+        tos_at_channel_free(at_agent, i);
     }
 }
 
-__API__ const char *tos_at_channel_ip_get(int channel_id)
+__API__ const char *tos_at_channel_ip_get(at_agent_t *at_agent, int channel_id)
 {
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel) {
         return K_NULL;
     }
@@ -933,11 +931,11 @@ __API__ const char *tos_at_channel_ip_get(int channel_id)
     return data_channel->remote_ip;
 }
 
-__API__ const char *tos_at_channel_port_get(int channel_id)
+__API__ const char *tos_at_channel_port_get(at_agent_t *at_agent, int channel_id)
 {
     at_data_channel_t *data_channel = K_NULL;
 
-    data_channel = at_channel_get(channel_id, K_FALSE);
+    data_channel = at_channel_get(at_agent, channel_id, K_FALSE);
     if (!data_channel) {
         return K_NULL;
     }
@@ -945,54 +943,55 @@ __API__ const char *tos_at_channel_port_get(int channel_id)
     return data_channel->remote_port;
 }
 
-__STATIC__ void at_event_table_set(at_event_t *event_table, size_t event_table_size)
+__STATIC__ void at_event_table_set(at_agent_t *at_agent, at_event_t *event_table, size_t event_table_size)
 {
-    AT_AGENT->event_table       = event_table;
-    AT_AGENT->event_table_size  = event_table_size;
+    at_agent->event_table       = event_table;
+    at_agent->event_table_size  = event_table_size;
 }
 
 #if AT_INPUT_SIMULATE_IDLE_EN
 
-__STATIC__ void tos_at_uart_input_notify()
+__STATIC__ void tos_at_uart_input_notify(at_agent_t *at_agent)
 {
-    tos_sem_post(&AT_AGENT->uart_rx_sem);
+    tos_sem_post(&at_agent->uart_rx_sem);
 }
 
 __STATIC__ void idle_check_timer_callback(void *args)
 {   
-    tos_at_uart_input_notify();
+    at_agent_t *at_agent = (at_agent_t *)args;
+    tos_at_uart_input_notify(at_agent);
 }
 #endif  /* #if AT_INPUT_SIMULATE_IDLE_EN */
 
-__API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size_t event_table_size)
+__API__ int tos_at_init(at_agent_t *at_agent, char *task_name, k_stack_t *stk, hal_uart_port_t uart_port, at_event_t *event_table, size_t event_table_size)
 {
     void *buffer = K_NULL;
 
-    memset(AT_AGENT, 0, sizeof(at_agent_t));
+    memset(at_agent, 0, sizeof(at_agent_t));
 
-    at_event_table_set(event_table, event_table_size);
+    at_event_table_set(at_agent, event_table, event_table_size);
 
-    at_channel_init();
+    at_channel_init(at_agent);
 
     buffer = tos_mmheap_alloc(AT_UART_RX_FIFO_BUFFER_SIZE);
     if (!buffer) {
         return -1;
     }
 
-    AT_AGENT->uart_rx_fifo_buffer = (uint8_t *)buffer;
-    tos_chr_fifo_create(&AT_AGENT->uart_rx_fifo, buffer, AT_UART_RX_FIFO_BUFFER_SIZE);
+    at_agent->uart_rx_fifo_buffer = (uint8_t *)buffer;
+    tos_chr_fifo_create(&at_agent->uart_rx_fifo, buffer, AT_UART_RX_FIFO_BUFFER_SIZE);
 
     buffer = tos_mmheap_alloc(AT_CMD_BUFFER_SIZE);
     if (!buffer) {
         goto errout0;
     }
-    AT_AGENT->cmd_buf = (char *)buffer;
+    at_agent->cmd_buf = (char *)buffer;
 
-    if (tos_mutex_create(&AT_AGENT->cmd_buf_lock) != K_ERR_NONE) {
+    if (tos_mutex_create(&at_agent->cmd_buf_lock) != K_ERR_NONE) {
         goto errout1;
     }
 
-    if (at_recv_cache_init() != 0) {
+    if (at_recv_cache_init(at_agent) != 0) {
         goto errout2;
     }
 
@@ -1002,164 +1001,164 @@ __API__ int tos_at_init(hal_uart_port_t uart_port, at_event_t *event_table, size
         goto errout3;
     }
     
-    AT_AGENT->uart_rx_frame_mail_buffer = (uint8_t *)buffer;
+    at_agent->uart_rx_frame_mail_buffer = (uint8_t *)buffer;
     
-    if (tos_mail_q_create(&AT_AGENT->uart_rx_frame_mail, buffer, AT_FRAME_LEN_MAIL_MAX, sizeof(at_frame_len_mail_t)) != K_ERR_NONE) {
+    if (tos_mail_q_create(&at_agent->uart_rx_frame_mail, buffer, AT_FRAME_LEN_MAIL_MAX, sizeof(at_frame_len_mail_t)) != K_ERR_NONE) {
         goto errout4;
     }
 #else
-    if (tos_sem_create(&AT_AGENT->uart_rx_sem, (k_sem_cnt_t)0u) != K_ERR_NONE) {
+    if (tos_sem_create(&at_agent->uart_rx_sem, (k_sem_cnt_t)0u) != K_ERR_NONE) {
         goto errout3;
     }
 #endif /* AT_INPUT_TYPE_FRAME_EN */
 
-//    if (tos_mutex_create(&AT_AGENT->uart_rx_lock) != K_ERR_NONE) {
+//    if (tos_mutex_create(&at_agent->uart_rx_lock) != K_ERR_NONE) {
 //        goto errout5;
 //    }
 
-    if (tos_mutex_create(&AT_AGENT->uart_tx_lock) != K_ERR_NONE) {
+    if (tos_mutex_create(&at_agent->uart_tx_lock) != K_ERR_NONE) {
         goto errout6;
     }
     
-    if (tos_mutex_create(&AT_AGENT->global_lock) != K_ERR_NONE) {
+    if (tos_mutex_create(&at_agent->global_lock) != K_ERR_NONE) {
         goto errout7;
     }
     
 #if AT_INPUT_SIMULATE_IDLE_EN
-    if (tos_timer_create(&AT_AGENT->idle_check_timer, SIMULATE_IDLE_DEFAULT_TIME,
-        0, idle_check_timer_callback, NULL, TOS_OPT_TIMER_ONESHOT) != K_ERR_NONE) {
+    if (tos_timer_create(&at_agent->idle_check_timer, SIMULATE_IDLE_DEFAULT_TIME,
+        0, idle_check_timer_callback, at_agent, TOS_OPT_TIMER_ONESHOT) != K_ERR_NONE) {
         goto errout8;
     }
 #endif /* AT_INPUT_SIMULATE_IDLE_EN */  
 
-    if (tos_hal_uart_init(&AT_AGENT->uart, uart_port) != 0) {
+    if (tos_hal_uart_init(&at_agent->uart, uart_port) != 0) {
         goto errout9;
     }
     
-    if (tos_task_create(&AT_AGENT->parser, "at_parser", at_parser,
-                        K_NULL, AT_PARSER_TASK_PRIO, at_parser_task_stack,
+    if (tos_task_create(&at_agent->parser, task_name, at_parser,
+                        at_agent, AT_PARSER_TASK_PRIO, stk,
                         AT_PARSER_TASK_STACK_SIZE, 0) != K_ERR_NONE) {
         goto errout10;
     }
 
     return 0;
 errout10:
-    tos_hal_uart_deinit(&AT_AGENT->uart);
+    tos_hal_uart_deinit(&at_agent->uart);
     
 errout9:
 #if AT_INPUT_SIMULATE_IDLE_EN
-    tos_timer_destroy(&AT_AGENT->idle_check_timer);     
+    tos_timer_destroy(&at_agent->idle_check_timer);     
 errout8:
 #endif /* AT_INPUT_SIMULATE_IDLE_EN */
     
-    tos_mutex_destroy(&AT_AGENT->global_lock);
+    tos_mutex_destroy(&at_agent->global_lock);
 
 errout7:
-    tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
+    tos_mutex_destroy(&at_agent->uart_tx_lock);
     
 errout6:
-//    tos_mutex_destroy(&AT_AGENT->uart_rx_lock);
+//    tos_mutex_destroy(&at_agent->uart_rx_lock);
 
 //errout5:
 #if AT_INPUT_TYPE_FRAME_EN
-    tos_mail_q_destroy(&AT_AGENT->uart_rx_frame_mail);
+    tos_mail_q_destroy(&at_agent->uart_rx_frame_mail);
 #else
-    tos_sem_destroy(&AT_AGENT->uart_rx_sem);
+    tos_sem_destroy(&at_agent->uart_rx_sem);
 #endif /* AT_INPUT_TYPE_FRAME_EN */
     
 #if AT_INPUT_TYPE_FRAME_EN
 errout4:
-    tos_mmheap_free(AT_AGENT->uart_rx_frame_mail_buffer);
-    AT_AGENT->uart_rx_frame_mail_buffer = K_NULL;
+    tos_mmheap_free(at_agent->uart_rx_frame_mail_buffer);
+    at_agent->uart_rx_frame_mail_buffer = K_NULL;
 #endif /* AT_INPUT_TYPE_FRAME_EN */
 
 errout3:
-    at_recv_cache_deinit();
+    at_recv_cache_deinit(at_agent);
 
 errout2:
-    tos_mutex_destroy(&AT_AGENT->cmd_buf_lock);
+    tos_mutex_destroy(&at_agent->cmd_buf_lock);
 
 errout1:
-    tos_mmheap_free(AT_AGENT->cmd_buf);
-    AT_AGENT->cmd_buf = K_NULL;
+    tos_mmheap_free(at_agent->cmd_buf);
+    at_agent->cmd_buf = K_NULL;
 
 errout0:
-    tos_mmheap_free(AT_AGENT->uart_rx_fifo_buffer);
-    AT_AGENT->uart_rx_fifo_buffer = K_NULL;
-    tos_chr_fifo_destroy(&AT_AGENT->uart_rx_fifo);
+    tos_mmheap_free(at_agent->uart_rx_fifo_buffer);
+    at_agent->uart_rx_fifo_buffer = K_NULL;
+    tos_chr_fifo_destroy(&at_agent->uart_rx_fifo);
 
     return -1;
 }
 
-__API__ void tos_at_deinit(void)
+__API__ void tos_at_deinit(at_agent_t *at_agent)
 {
-    tos_task_destroy(&AT_AGENT->parser);
+    tos_task_destroy(&at_agent->parser);
     
-    tos_hal_uart_deinit(&AT_AGENT->uart);
+    tos_hal_uart_deinit(&at_agent->uart);
     
-    tos_mutex_destroy(&AT_AGENT->global_lock);
+    tos_mutex_destroy(&at_agent->global_lock);
 
-    tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
+    tos_mutex_destroy(&at_agent->uart_tx_lock);
 
-    //tos_mutex_destroy(&AT_AGENT->uart_tx_lock);
+    //tos_mutex_destroy(&at_agent->uart_tx_lock);
     
 #if AT_INPUT_SIMULATE_IDLE_EN
-    tos_timer_destroy(&AT_AGENT->idle_check_timer);
+    tos_timer_destroy(&at_agent->idle_check_timer);
 #endif /* AT_INPUT_SIMULATE_IDLE_EN */
 
 #if AT_INPUT_TYPE_FRAME_EN
-    tos_mail_q_destroy(&AT_AGENT->uart_rx_frame_mail);
-    tos_mmheap_free(AT_AGENT->uart_rx_frame_mail_buffer);
-    AT_AGENT->uart_rx_frame_mail_buffer = K_NULL;
+    tos_mail_q_destroy(&at_agent->uart_rx_frame_mail);
+    tos_mmheap_free(at_agent->uart_rx_frame_mail_buffer);
+    at_agent->uart_rx_frame_mail_buffer = K_NULL;
 #else
-    tos_sem_destroy(&AT_AGENT->uart_rx_sem);
+    tos_sem_destroy(&at_agent->uart_rx_sem);
 #endif /* AT_INPUT_TYPE_FRAME_EN */
     
-    at_recv_cache_deinit();
+    at_recv_cache_deinit(at_agent);
 
-    tos_mutex_destroy(&AT_AGENT->cmd_buf_lock);
+    tos_mutex_destroy(&at_agent->cmd_buf_lock);
 
-    tos_mmheap_free(AT_AGENT->cmd_buf);
-    AT_AGENT->cmd_buf = K_NULL;
+    tos_mmheap_free(at_agent->cmd_buf);
+    at_agent->cmd_buf = K_NULL;
 
-    tos_mmheap_free(AT_AGENT->uart_rx_fifo_buffer);
-    AT_AGENT->uart_rx_fifo_buffer = K_NULL;
+    tos_mmheap_free(at_agent->uart_rx_fifo_buffer);
+    at_agent->uart_rx_fifo_buffer = K_NULL;
 
-    tos_chr_fifo_destroy(&AT_AGENT->uart_rx_fifo);
+    tos_chr_fifo_destroy(&at_agent->uart_rx_fifo);
 
-    at_channel_deinit();
+    at_channel_deinit(at_agent);
 }
 
 /* To completely decouple the uart intterupt and at agent, we need a more powerful
    hal(driver framework), that would be a huge work, we place it in future plans. */
 #if AT_INPUT_TYPE_FRAME_EN
-__API__ void tos_at_uart_input_frame(uint8_t *pdata, uint16_t len)
+__API__ void tos_at_uart_input_frame(at_agent_t *at_agent, uint8_t *pdata, uint16_t len)
 {
     int ret;
     at_frame_len_mail_t at_frame_len_mail;
     
-    ret = tos_chr_fifo_push_stream(&AT_AGENT->uart_rx_fifo, pdata, len);
+    ret = tos_chr_fifo_push_stream(&at_agent->uart_rx_fifo, pdata, len);
     if (ret != len) {
         return;
     }
     
     at_frame_len_mail.frame_len = len;
-    tos_mail_q_post(&AT_AGENT->uart_rx_frame_mail, &at_frame_len_mail, sizeof(at_frame_len_mail_t));
+    tos_mail_q_post(&at_agent->uart_rx_frame_mail, &at_frame_len_mail, sizeof(at_frame_len_mail_t));
 }
 
 #elif AT_INPUT_SIMULATE_IDLE_EN
-__API__ void tos_at_uart_input_byte_no_notify(uint8_t data)
+__API__ void tos_at_uart_input_byte_no_notify(at_agent_t *at_agent, uint8_t data)
 {
-    tos_timer_stop(&AT_AGENT->idle_check_timer);
-    tos_chr_fifo_push(&AT_AGENT->uart_rx_fifo, data);
-    tos_timer_start(&AT_AGENT->idle_check_timer);
+    tos_timer_stop(&at_agent->idle_check_timer);
+    tos_chr_fifo_push(&at_agent->uart_rx_fifo, data);
+    tos_timer_start(&at_agent->idle_check_timer);
 }
 
 #else
-__API__ void tos_at_uart_input_byte(uint8_t data)
+__API__ void tos_at_uart_input_byte(at_agent_t *at_agent, uint8_t data)
 {
-    if (tos_chr_fifo_push(&AT_AGENT->uart_rx_fifo, data) == K_ERR_NONE) {
-        tos_sem_post(&AT_AGENT->uart_rx_sem);
+    if (tos_chr_fifo_push(&at_agent->uart_rx_fifo, data) == K_ERR_NONE) {
+        tos_sem_post(&at_agent->uart_rx_sem);
     }
 }
 
