@@ -32,5 +32,4 @@ board/*/MDK-ARM/*.uvguix.*
 board/*/MDK-ARM/EventRecorderStub.scvd
 board/*/MDK-ARM/*/*.htm
 board/*/MDK-ARM/*/*.build_log.htm
-board/**/Debug/*
 board/**/settings/*
