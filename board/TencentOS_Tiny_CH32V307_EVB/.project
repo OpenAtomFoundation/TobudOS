@@ -22,11 +22,6 @@
   </natures>
   <linkedResources>
     <link>
-      <name>TencentOS-Tiny</name>
-      <type>2</type>
-      <locationURI>PARENT-2-PROJECT_LOC</locationURI>
-    </link>
-    <link>
       <name>arch</name>
       <type>2</type>
       <location>PARENT-2-PROJECT_LOC/arch/risc-v/risc-v3a</location>
