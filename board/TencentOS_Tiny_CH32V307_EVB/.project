@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<projectDescription>
+  <name>TencentOS-Tiny</name>
+  <comment />
+  <projects />
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+      <triggers>clean,full,incremental,</triggers>
+      <arguments />
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+      <triggers>full,incremental,</triggers>
+      <arguments />
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.cdt.core.cnature</nature>
+    <nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+    <nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+  </natures>
+  <linkedResources>
+    <link>
+      <name>TencentOS-Tiny</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC</locationURI>
+    </link>
+    <link>
+      <name>arch</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/arch/risc-v/risc-v3a</location>
+    </link>
+    <link>
+      <name>kernel/core</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/kernel/core</location>
+    </link>
+    <link>
+      <name>net/at</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/net/at</location>
+    </link>
+    <link>
+      <name>net/tencent_firmware_module_wrapper</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/net/tencent_firmware_module_wrapper</location>
+    </link>
+    <link>
+      <name>devices/esp8266_tencent_firmware</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/devices/esp8266_tencent_firmware</location>
+    </link>
+    <link>
+      <name>kernel/hal</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/kernel/hal</location>
+    </link>
+    <link>
+      <name>platform/hal/wch/ch32v30xx</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/platform/hal/wch/ch32v30xx/src</location>
+    </link>
+  </linkedResources>
+  <filteredResources>
+    <filter>
+      <id>1595986042669</id>
+      <name />
+      <type>22</type>
+      <matcher>
+        <id>org.eclipse.ui.ide.multiFilter</id>
+        <arguments>1.0-name-matches-false-false-*.wvproj</arguments>
+      </matcher>
+    </filter>
+  </filteredResources>
+</projectDescription>
