@@ -424,6 +424,12 @@ __API__ k_err_t tos_task_suspend(k_task_t *task)
     if (task_state_is_ready(task)) { // kill the good kid
         readyqueue_remove(task);
     }
+    if (task_state_is_pending(task)) {
+        pend_list_remove(task);
+    }
+    if (task_state_is_sleeping(task)) {
+        tick_list_remove(task);
+    }
     task_state_set_suspended(task);
 
     TOS_CPU_INT_ENABLE();
