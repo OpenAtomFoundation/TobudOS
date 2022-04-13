@@ -253,7 +253,7 @@ __API__ k_err_t tos_timer_period_change(k_timer_t *tmr, k_tick_t period)
     return timer_change(tmr, period, TIMER_CHANGE_TYPE_PERIOD);
 }
 
-__KNL__ k_tick_t timer_next_expires_get(void)
+__KNL__ k_tick_t soft_timer_next_expires_get(void)
 {
     TOS_CPU_CPSR_ALLOC();
     k_tick_t next_expires;
@@ -274,7 +274,7 @@ __KNL__ k_tick_t timer_next_expires_get(void)
 
 #if TOS_CFG_TIMER_AS_PROC > 0u
 
-__KNL__ void timer_update(void)
+__KNL__ void soft_timer_update(void)
 {
     k_timer_t *tmr, *tmp;
 
@@ -314,7 +314,7 @@ __STATIC__ void timer_task_entry(void *arg)
 
     arg = arg; // make compiler happy
     while (K_TRUE) {
-        next_expires = timer_next_expires_get();
+        next_expires = soft_timer_next_expires_get();
         if (next_expires == TOS_TIME_FOREVER) {
             tos_task_suspend(K_NULL);
         } else if (next_expires > (k_tick_t)0u) {
@@ -347,13 +347,13 @@ __STATIC__ void timer_task_entry(void *arg)
 
 #endif
 
-__KNL__ k_err_t timer_init(void)
+__KNL__ k_err_t soft_timer_init(void)
 {
 #if TOS_CFG_TIMER_AS_PROC > 0u
     return K_ERR_NONE;
 #else
     return tos_task_create(&k_timer_task,
-            "timer",
+            "soft_timer",
             timer_task_entry,
             K_NULL,
             k_timer_task_prio,
