@@ -305,9 +305,6 @@ void application_entry(void *arg)
 {
     char *str = "TencentOS-tiny";
 
-    // 初始化tencent-os tiny定时器模块
-    timer_init();
-	
     // 初始化按键检测模块
     stm32g0xx_key_init();
 	

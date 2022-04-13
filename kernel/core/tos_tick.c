@@ -139,7 +139,7 @@ __API__ void tos_tick_handler(void)
     tick_update((k_tick_t)1u);
 
 #if TOS_CFG_TIMER_EN > 0u && TOS_CFG_TIMER_AS_PROC > 0u
-    timer_update();
+    soft_timer_update();
 #endif
 
 #if TOS_CFG_ROUND_ROBIN_EN > 0u
