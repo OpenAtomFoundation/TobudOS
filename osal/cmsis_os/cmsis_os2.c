@@ -156,7 +156,7 @@ osThreadId_t osThreadNew(osThreadFunc_t func,
   k_err_t err;
   uint32_t stack_size = K_TASK_STK_SIZE_MIN;
   k_task_t* taskId = NULL;
-  k_prio_t prio;
+  k_prio_t prio = osPriorityNormal;
 
   if (attr && func) {
     if (attr->priority != osPriorityNone) {
