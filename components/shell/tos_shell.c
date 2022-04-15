@@ -35,10 +35,23 @@ __STATIC__ int shell_getchar(void)
     return err == K_ERR_NONE ? chr : -1;
 }
 
+__STATIC__ void shell_putchar(const char ch)
+{
+    SHELL_CTL->output(ch);
+}
+
+__STATIC__ void shell_puts(const char *s)
+{
+    while (*s) {
+        SHELL_CTL->output(*s++);
+    }
+}
+
 __STATIC__ int shell_readline(void)
 {
-    int chr, last_chr = 0;
+    int chr;
     char *buf = SHELL_CTL->cmd_buffer;
+    uint16_t line_length = 0;
 
     while (K_TRUE) {
         if (buf - SHELL_CTL->cmd_buffer >= (SHELL_CTL->cmd_buffer_size - 1)) {
@@ -50,23 +63,29 @@ __STATIC__ int shell_readline(void)
             return -1;
         }
 
-        if (chr == '\n' && last_chr == '\r') {
-            *--buf = '\0';
-            return 0;
-        } else if (chr == '\n') {
+        if (chr == '\n' || chr == '\r') {
             *buf = '\0';
-            return 0;
+            tos_shell_printf("\r\n");
+            break;
+        } else if (chr == '\t'){
+            *buf = '\0';
+            tos_shell_printf("\r\n");
+            cmd_help(0, NULL);
+            break;
         }
-
-        *buf++      = chr;
-        last_chr    = chr;
+        
+        shell_putchar(chr);
+        
+        *buf++ = chr;
+        line_length++;
     }
+    return line_length;
 }
 
 __STATIC__ void shell_cmd_do_process(int argc, char *argv[])
 {
     const shell_cmd_t *cmd;
-    static const char *cmd_not_found = "command not found\n";
+    static const char *cmd_not_found = "command not found\r\n";
 
     cmd = shell_cmd_find(argv[0]);
     if (!cmd) {
@@ -81,8 +100,6 @@ __STATIC__ void shell_cmd_process(void)
     int argc = 0;
     static char *argv[SHELL_CMD_ARGV_MAX];
     char *pos = SHELL_CTL->cmd_buffer;
-
-    tos_shell_printf("%s\n", SHELL_CTL->cmd_buffer);
 
     // left strip
     while (*pos == ' ' || *pos == '\t') {
@@ -113,7 +130,7 @@ __STATIC__ void shell_cmd_process(void)
 
 __STATIC__ void shell_prompt(void)
 {
-    tos_shell_printf("> ");
+    tos_shell_printf("tshell>");
 }
 
 __STATIC__ void shell_parser(void *arg)
@@ -125,7 +142,7 @@ __STATIC__ void shell_parser(void *arg)
     while (K_TRUE) {
         rc = shell_readline();
 
-        if (!rc) {
+        if (rc > 0) {
             shell_cmd_process();
         }
 
@@ -208,7 +225,20 @@ __API__ void tos_shell_printf(const char *format, ...)
     vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
 
-    (SHELL_CTL->output)(buffer);
+    shell_puts(buffer);
+}
+
+__API__ void tos_shell_printfln(const char *format, ...)
+{
+    va_list args;
+    static char buffer[SHELL_OUTPUT_MAX];
+
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+
+    shell_puts(buffer);
+    shell_puts("\r\n");
 }
 
 __API__ void tos_shell_input_byte(uint8_t data)

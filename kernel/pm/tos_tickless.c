@@ -111,7 +111,7 @@ __STATIC__ void tickless_tick_fix(k_tick_t tick_sleep)
     tick_update(tick_sleep);
 
 #if TOS_CFG_TIMER_EN > 0u && TOS_CFG_TIMER_AS_PROC > 0u
-    timer_update();
+    soft_timer_update();
 #endif
 
     tickless_tick_resume();

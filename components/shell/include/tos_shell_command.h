@@ -33,6 +33,8 @@ typedef struct shell_command_set_st {
     const shell_cmd_t *const    commands;
 } shell_cmd_set_t;
 
+__KNL__ int cmd_help(int argc, char *argv[]);
+
 __KNL__ int shell_cmd_set_regiser(const shell_cmd_set_t *cmd_set);
 
 __KNL__ int shell_cmd_set_unregiser(const shell_cmd_set_t *cmd_set);

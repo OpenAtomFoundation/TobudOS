@@ -177,13 +177,13 @@ __API__ k_err_t tos_timer_period_change(k_timer_t *tmr, k_tick_t period);
  *
  * @return  None
  */
-__KNL__ void timer_update(void);
+__KNL__ void soft_timer_update(void);
 
 #endif
 
-__KNL__ k_err_t timer_init(void);
+__KNL__ k_err_t soft_timer_init(void);
 
-__KNL__ k_tick_t timer_next_expires_get(void);
+__KNL__ k_tick_t soft_timer_next_expires_get(void);
 
 #endif
 
