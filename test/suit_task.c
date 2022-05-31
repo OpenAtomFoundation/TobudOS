@@ -77,6 +77,34 @@ TEST test_tos_task_destroy(void)
     PASS();
 }
 
+TEST test_tos_task_create_destroy_dyn(void)
+{
+    k_err_t err;
+    k_task_t *task;
+    k_mmheap_info_t mm_info_before, mm_info_after;
+    
+    err = tos_mmheap_check(&mm_info_before);
+    ASSERT_EQ(err, K_ERR_NONE);
+    
+    err = tos_task_create_dyn(&task, "test_dyn_task", test_task_entry,
+                            K_NULL, TEST_TASK_PRIO_00, TEST_TASK_STACK_SIZE_00, 0);
+    ASSERT_EQ(err, K_ERR_NONE);
+    
+    err = tos_task_destroy(task);
+    ASSERT_EQ(err, K_ERR_OBJ_INVALID_ALLOC_TYPE);
+    
+    err = tos_mmheap_check(&mm_info_after);
+    ASSERT_EQ(err, K_ERR_NONE);
+     
+    err = tos_task_destroy_dyn(task);
+    ASSERT_EQ(err, K_ERR_NONE);
+    
+    err = tos_mmheap_check(&mm_info_after);
+    ASSERT_EQ(err, K_ERR_NONE);
+    
+    PASS();
+}
+
 TEST test_tos_task_delay(void)
 {
     int try = 0;
@@ -260,6 +288,7 @@ SUITE(suit_task)
 {
     RUN_TEST(test_tos_task_create);
     RUN_TEST(test_tos_task_destroy);
+    RUN_TEST(test_tos_task_create_destroy_dyn);
     RUN_TEST(test_tos_task_delay);
     RUN_TEST(test_tos_task_delay_abort);
     RUN_TEST(test_tos_task_suspend_resume);

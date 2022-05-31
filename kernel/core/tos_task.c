@@ -187,8 +187,20 @@ __STATIC__ k_err_t task_do_destroy(k_task_t *task)
     return K_ERR_NONE;
 }
 
-__STATIC__ k_err_t task_destroy_static(k_task_t *task)
+__API__ k_err_t tos_task_destroy(k_task_t *task)
 {
+    TOS_IN_IRQ_CHECK();
+
+    if (unlikely(!task)) {
+        task = k_curr_task;
+    }
+
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
+
+    if (knl_is_self(task) && knl_is_sched_locked()) {
+        return K_ERR_SCHED_LOCKED;
+    }
+
 #if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
     if (!knl_object_alloc_is_static(&task->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
@@ -275,9 +287,25 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
     return K_ERR_NONE;
 }
 
-__STATIC__ k_err_t task_destroy_dyn(k_task_t *task)
+__API__ k_err_t tos_task_destroy_dyn(k_task_t *task)
 {
     k_err_t err;
+
+    TOS_IN_IRQ_CHECK();
+
+    if (unlikely(!task)) {
+        task = k_curr_task;
+    }
+
+    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
+
+    if (knl_is_self(task) && knl_is_sched_locked()) {
+        return K_ERR_SCHED_LOCKED;
+    }
+
+    if (!knl_object_alloc_is_dynamic(&task->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
 
     tos_knl_sched_lock();
 
@@ -301,29 +329,6 @@ __STATIC__ k_err_t task_destroy_dyn(k_task_t *task)
 }
 
 #endif
-
-__API__ k_err_t tos_task_destroy(k_task_t *task)
-{
-    TOS_IN_IRQ_CHECK();
-
-    if (unlikely(!task)) {
-        task = k_curr_task;
-    }
-
-    TOS_OBJ_VERIFY(task, KNL_OBJ_TYPE_TASK);
-
-    if (knl_is_self(task) && knl_is_sched_locked()) {
-        return K_ERR_SCHED_LOCKED;
-    }
-
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
-    if (knl_object_alloc_is_dynamic(&task->knl_obj)) {
-        return task_destroy_dyn(task);
-    }
-#endif
-
-    return task_destroy_static(task);
-}
 
 __API__ void tos_task_yield(void)
 {
