@@ -154,7 +154,7 @@ struct k_task_st {
  * @retval  #K_ERR_NONE                     return successfully.
  */
 __API__ k_err_t tos_task_create(k_task_t *task,
-                                            char *name,
+                                            const char *name,
                                             k_task_entry_t entry,
                                             void *arg,
                                             k_prio_t prio,
@@ -197,7 +197,7 @@ __API__ k_err_t tos_task_destroy(k_task_t *task);
  * @retval  #K_ERR_NONE                     return successfully.
  */
 __API__ k_err_t tos_task_create_dyn(k_task_t **task,
-                                                    char *name,
+                                                    const char *name,
                                                     k_task_entry_t entry,
                                                     void *arg,
                                                     k_prio_t prio,
@@ -316,6 +316,15 @@ __API__ void    tos_task_yield(void);
  */
 __API__ k_task_t *tos_task_curr_task_get(void);
 
+/**
+ * @brief Find task by task name.
+ * Find task by task name.
+ *
+ * @param   name    the name of the task.
+ *
+ * @return  the matched task handler
+ */
+__API__ k_task_t *tos_task_find(const char *name);
 
 #if TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN > 0u
 

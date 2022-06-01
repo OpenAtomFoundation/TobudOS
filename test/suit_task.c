@@ -30,7 +30,7 @@ static void test_task_entry(void *arg)
     }
 }
 
-TEST test_tos_task_create(void) 
+TEST test_tos_task_create(void)
 {
     k_err_t err;
 
@@ -82,26 +82,24 @@ TEST test_tos_task_create_destroy_dyn(void)
     k_err_t err;
     k_task_t *task;
     k_mmheap_info_t mm_info_before, mm_info_after;
-    
+
     err = tos_mmheap_check(&mm_info_before);
     ASSERT_EQ(err, K_ERR_NONE);
-    
+
     err = tos_task_create_dyn(&task, "test_dyn_task", test_task_entry,
                             K_NULL, TEST_TASK_PRIO_00, TEST_TASK_STACK_SIZE_00, 0);
     ASSERT_EQ(err, K_ERR_NONE);
-    
+
     err = tos_task_destroy(task);
     ASSERT_EQ(err, K_ERR_OBJ_INVALID_ALLOC_TYPE);
-    
-    err = tos_mmheap_check(&mm_info_after);
-    ASSERT_EQ(err, K_ERR_NONE);
-     
+
     err = tos_task_destroy_dyn(task);
     ASSERT_EQ(err, K_ERR_NONE);
-    
+
     err = tos_mmheap_check(&mm_info_after);
     ASSERT_EQ(err, K_ERR_NONE);
-    
+    ASSERT_EQ(mm_info_before.free, mm_info_after.free);
+
     PASS();
 }
 
@@ -284,6 +282,32 @@ TEST test_tos_task_yeild(void)
     PASS();
 }
 
+TEST test_tos_task_find(void)
+{
+    k_err_t err;
+    k_task_t *task;
+
+    err = tos_task_create(&test_task_00, "test_task", test_task_entry,
+                            NULL, TEST_TASK_PRIO_00,
+                            test_task_stack_00, sizeof(test_task_stack_00),
+                            0);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    task = tos_task_find(NULL);
+    ASSERT_EQ(task, NULL);
+
+    task = tos_task_find("not exist");
+    ASSERT_EQ(task, NULL);
+
+    task = tos_task_find("test_task");
+    ASSERT_EQ(task, &test_task_00);
+
+    err = tos_task_destroy(&test_task_00);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
 SUITE(suit_task)
 {
     RUN_TEST(test_tos_task_create);
@@ -294,5 +318,6 @@ SUITE(suit_task)
     RUN_TEST(test_tos_task_suspend_resume);
     RUN_TEST(test_tos_task_prio_change);
     RUN_TEST(test_tos_task_yeild);
+    RUN_TEST(test_tos_task_find);
 }
 

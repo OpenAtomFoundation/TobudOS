@@ -80,7 +80,7 @@ __STATIC__ void task_mutex_release(k_task_t *task)
 #endif
 
 __API__ k_err_t tos_task_create(k_task_t *task,
-                                            char *name,
+                                            const char *name,
                                             k_task_entry_t entry,
                                             void *arg,
                                             k_prio_t prio,
@@ -234,7 +234,7 @@ __KNL__ void task_free_all(void)
 }
 
 __API__ k_err_t tos_task_create_dyn(k_task_t **task,
-                                                    char *name,
+                                                    const char *name,
                                                     k_task_entry_t entry,
                                                     void *arg,
                                                     k_prio_t prio,
@@ -545,6 +545,28 @@ __API__ k_task_t *tos_task_curr_task_get(void)
     TOS_CPU_INT_ENABLE();
 
     return curr_task;
+}
+
+__API__ k_task_t *tos_task_find(const char *name)
+{
+    TOS_CPU_CPSR_ALLOC();
+    k_task_t *task;
+
+    if (!strlen(name)) {
+        return K_NULL;
+    }
+
+    TOS_CPU_INT_DISABLE();
+
+    TOS_LIST_FOR_EACH_ENTRY(task, k_task_t, stat_list, &k_stat_list) {
+        if (strncmp(task->name, name, K_TASK_NAME_LEN_MAX) == 0) {
+            TOS_CPU_INT_ENABLE();
+            return task;
+        }
+    }
+
+    TOS_CPU_INT_ENABLE();
+    return K_NULL;
 }
 
 __API__ void tos_task_walkthru(k_task_walker_t walker)
