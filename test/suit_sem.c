@@ -83,6 +83,8 @@ TEST test_tos_sem_create(void)
     PASS();
 }
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
 TEST test_tos_sem_create_dyn(void)
 {
     k_err_t err;
@@ -96,17 +98,19 @@ TEST test_tos_sem_create_dyn(void)
     err = tos_sem_create_dyn(&test_sem_dyn_02, (k_sem_cnt_t)0xFFFF);
     ASSERT_EQ(err, K_ERR_NONE);
 
-    err = tos_sem_destroy(test_sem_dyn_00);
+    err = tos_sem_destroy_dyn(test_sem_dyn_00);
     ASSERT_EQ(err, K_ERR_NONE);
 
-    err = tos_sem_destroy(test_sem_dyn_01);
+    err = tos_sem_destroy_dyn(test_sem_dyn_01);
     ASSERT_EQ(err, K_ERR_NONE);
 
-    err = tos_sem_destroy(test_sem_dyn_02);
+    err = tos_sem_destroy_dyn(test_sem_dyn_02);
     ASSERT_EQ(err, K_ERR_NONE);
 
     PASS();
 }
+
+#endif
 
 TEST test_tos_sem_destroy(void)
 {
@@ -278,7 +282,9 @@ TEST test_tos_sem_post_all(void)
 SUITE(suit_sem)
 {
     RUN_TEST(test_tos_sem_create);
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     RUN_TEST(test_tos_sem_create_dyn);
+#endif
     RUN_TEST(test_tos_sem_destroy);
     RUN_TEST(test_tos_sem_pend);
     RUN_TEST(test_tos_sem_pend_timed);

@@ -77,6 +77,8 @@ TEST test_tos_task_destroy(void)
     PASS();
 }
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
 TEST test_tos_task_create_destroy_dyn(void)
 {
     k_err_t err;
@@ -102,6 +104,8 @@ TEST test_tos_task_create_destroy_dyn(void)
 
     PASS();
 }
+
+#endif
 
 TEST test_tos_task_delay(void)
 {
@@ -312,7 +316,9 @@ SUITE(suit_task)
 {
     RUN_TEST(test_tos_task_create);
     RUN_TEST(test_tos_task_destroy);
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     RUN_TEST(test_tos_task_create_destroy_dyn);
+#endif
     RUN_TEST(test_tos_task_delay);
     RUN_TEST(test_tos_task_delay_abort);
     RUN_TEST(test_tos_task_suspend_resume);

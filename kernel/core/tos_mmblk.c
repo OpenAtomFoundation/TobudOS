@@ -50,8 +50,10 @@ __API__ k_err_t tos_mmblk_pool_create(k_mmblk_pool_t *mbp, void *pool_start, siz
     mbp->blk_size   = blk_size;
 
     TOS_OBJ_INIT(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
-    
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_set_static(&mbp->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -60,8 +62,8 @@ __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp)
 {
     TOS_PTR_SANITY_CHECK(mbp);
     TOS_OBJ_VERIFY(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
-    
-#if TOS_CFG_MMHEAP_EN > 0u
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     if (!knl_object_alloc_is_static(&mbp->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
@@ -78,7 +80,7 @@ __API__ k_err_t tos_mmblk_pool_destroy(k_mmblk_pool_t *mbp)
     return K_ERR_NONE;
 }
 
-#if TOS_CFG_MMHEAP_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 
 __API__ k_err_t tos_mmblk_pool_create_dyn(k_mmblk_pool_t **mbp, size_t blk_num, size_t blk_size)
 {
@@ -93,26 +95,26 @@ __API__ k_err_t tos_mmblk_pool_create_dyn(k_mmblk_pool_t **mbp, size_t blk_num, 
     if ((blk_size & K_MMBLK_ALIGN_MASK) != 0u) {
         return K_ERR_MMBLK_INVALID_BLK_SIZE;
     }
-    
+
     the_mbp = tos_mmheap_calloc(1, sizeof(k_mmblk_pool_t));
     if (!the_mbp) {
         return K_ERR_MMBLK_OUT_OF_MEMORY;
     }
-    
+
     pool_start = tos_mmheap_alloc(blk_num * blk_size);
     if (!pool_start) {
         return K_ERR_MMBLK_POOL_OUT_OF_MEMORY;
     }
-   
+
     blk_curr = pool_start;
     blk_next = K_MMBLK_NEXT_BLK(blk_curr, blk_size);
 
     for (i = 0; i < blk_num - 1u; ++i) {
         *(void **)blk_curr  = blk_next;
-        blk_curr            = blk_next;  
+        blk_curr            = blk_next;
         blk_next            = K_MMBLK_NEXT_BLK(blk_next, blk_size);
     }
-    
+
     *(void **)blk_curr = K_NULL;
 
     the_mbp->pool_start = pool_start;
@@ -134,11 +136,11 @@ __API__ k_err_t tos_mmblk_pool_destroy_dyn(k_mmblk_pool_t *mbp)
 {
     TOS_PTR_SANITY_CHECK(mbp);
     TOS_OBJ_VERIFY(mbp, KNL_OBJ_TYPE_MMBLK_POOL);
-    
+
     if (!knl_object_alloc_is_dynamic(&mbp->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
-    
+
     tos_mmheap_free(mbp->pool_start);
 
     mbp->pool_start = K_NULL;

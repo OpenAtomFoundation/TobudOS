@@ -22,18 +22,20 @@
 __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count)
 {
     TOS_PTR_SANITY_CHECK(sem);
-    
+
     if (unlikely(init_count > max_count)) {
         init_count = max_count;
     }
-    
+
     sem->count      = init_count;
     sem->count_max  = max_count;
-    
+
     pend_object_init(&sem->pend_obj);
     TOS_OBJ_INIT(sem, KNL_OBJ_TYPE_SEMAPHORE);
-    
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_set_static(&sem->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -42,6 +44,39 @@ __API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count)
 {
     return tos_sem_create_max(sem, init_count, (k_sem_cnt_t)-1);
 }
+
+__API__ k_err_t tos_sem_destroy(k_sem_t *sem)
+{
+    TOS_CPU_CPSR_ALLOC();
+
+    TOS_PTR_SANITY_CHECK(sem);
+    TOS_OBJ_VERIFY(sem, KNL_OBJ_TYPE_SEMAPHORE);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    if (!knl_object_alloc_is_static(&sem->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+#endif
+
+    TOS_CPU_INT_DISABLE();
+
+    pend_wakeup_all(&sem->pend_obj, PEND_STATE_DESTROY);
+
+    pend_object_deinit(&sem->pend_obj);
+
+    TOS_OBJ_DEINIT(sem);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_reset(&sem->knl_obj);
+#endif
+
+    TOS_CPU_INT_ENABLE();
+    knl_sched();
+
+    return K_ERR_NONE;
+}
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 
 __API__ k_err_t tos_sem_create_max_dyn(k_sem_t **sem, k_sem_cnt_t init_count, k_sem_cnt_t max_count)
 {
@@ -56,7 +91,7 @@ __API__ k_err_t tos_sem_create_max_dyn(k_sem_t **sem, k_sem_cnt_t init_count, k_
 
     the_sem = tos_mmheap_calloc(1, sizeof(k_sem_t));
     if (!the_sem) {
-        return K_ERR_SEM_OUT_OF_MEMORY;
+        return K_ERR_OUT_OF_MEMORY;
     }
 
     the_sem->count = init_count;
@@ -64,7 +99,7 @@ __API__ k_err_t tos_sem_create_max_dyn(k_sem_t **sem, k_sem_cnt_t init_count, k_
 
     pend_object_init(&the_sem->pend_obj);
     TOS_OBJ_INIT(the_sem, KNL_OBJ_TYPE_SEMAPHORE);
-    
+
     knl_object_alloc_set_dynamic(&the_sem->knl_obj);
 
     *sem = the_sem;
@@ -77,12 +112,16 @@ __API__ k_err_t tos_sem_create_dyn(k_sem_t **sem, k_sem_cnt_t init_count)
     return tos_sem_create_max_dyn(sem, init_count, (k_sem_cnt_t)-1);
 }
 
-__API__ k_err_t tos_sem_destroy(k_sem_t *sem)
+__API__ k_err_t tos_sem_destroy_dyn(k_sem_t *sem)
 {
     TOS_CPU_CPSR_ALLOC();
 
     TOS_PTR_SANITY_CHECK(sem);
     TOS_OBJ_VERIFY(sem, KNL_OBJ_TYPE_SEMAPHORE);
+
+    if (!knl_object_alloc_is_dynamic(&sem->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
 
     TOS_CPU_INT_DISABLE();
 
@@ -90,18 +129,17 @@ __API__ k_err_t tos_sem_destroy(k_sem_t *sem)
 
     pend_object_deinit(&sem->pend_obj);
 
-    if (knl_object_alloc_is_dynamic(&sem->knl_obj)) {
-        TOS_OBJ_DEINIT(sem);
-        tos_mmheap_free(sem);
-    } else {
-        TOS_OBJ_DEINIT(sem);
-    }
+    TOS_OBJ_DEINIT(sem);
+
+    tos_mmheap_free(sem);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     return K_ERR_NONE;
 }
+
+#endif
 
 __STATIC__ k_err_t sem_do_post(k_sem_t *sem, opt_post_t opt)
 {

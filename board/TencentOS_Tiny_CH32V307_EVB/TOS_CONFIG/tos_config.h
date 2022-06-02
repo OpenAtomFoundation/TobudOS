@@ -13,8 +13,7 @@
 
 #define TOS_CFG_OBJECT_VERIFY 1u
 
-#define TOS_CFG_TASK_DYNAMIC_CREATE_EN  1u
-
+#define TOS_CFG_OBJ_DYNAMIC_CREATE_EN  1u
 
 #define TOS_CFG_EVENT_EN 1u
 
@@ -44,7 +43,7 @@
 
 #define TOS_CFG_TASK_STACK_DRAUGHT_DEPTH_DETACT_EN      0u
 
-#define TOS_CFG_CPU_SYSTICK_PRIO       0xF0     //V307优先级高四位有效
+#define TOS_CFG_CPU_SYSTICK_PRIO       0xF0     //V307锟斤拷锟饺硷拷锟斤拷锟斤拷位锟斤拷效
 
 
 #define TOS_CFG_IDLE_TASK_STK_SIZE 512u

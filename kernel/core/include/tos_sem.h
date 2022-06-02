@@ -60,6 +60,21 @@ __API__ k_err_t tos_sem_create_max(k_sem_t *sem, k_sem_cnt_t init_count, k_sem_c
 __API__ k_err_t tos_sem_create(k_sem_t *sem, k_sem_cnt_t init_count);
 
 /**
+ * @brief Destroy a semaphore.
+ * destroy a semaphore.
+ *
+ * @attention None
+ *
+ * @param[in]   semaphore   pointer to the handler of the semaphore.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_sem_destroy(k_sem_t *sem);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+/**
  * @brief Create a dynamic semaphore with a limitation of maximum count.
  * create a dynamic semaphore with a limitation of maximum count.
  *
@@ -89,8 +104,8 @@ __API__ k_err_t tos_sem_create_max_dyn(k_sem_t **sem, k_sem_cnt_t init_count, k_
 __API__ k_err_t tos_sem_create_dyn(k_sem_t **sem, k_sem_cnt_t init_count);
 
 /**
- * @brief Destroy a semaphore.
- * destroy a semaphore.
+ * @brief Destroy a dynamic semaphore.
+ * destroy a dynamic semaphore.
  *
  * @attention None
  *
@@ -99,7 +114,9 @@ __API__ k_err_t tos_sem_create_dyn(k_sem_t **sem, k_sem_cnt_t init_count);
  * @return  errcode
  * @retval  #K_ERR_NONE                   return successfully.
  */
-__API__ k_err_t tos_sem_destroy(k_sem_t *sem);
+__API__ k_err_t tos_sem_destroy_dyn(k_sem_t *sem);
+
+#endif
 
 /**
  * @brief Pend a semaphore.

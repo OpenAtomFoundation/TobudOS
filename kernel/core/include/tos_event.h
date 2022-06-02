@@ -76,6 +76,37 @@ __API__ k_err_t tos_event_create(k_event_t *event, k_event_flag_t init_flag);
  */
 __API__ k_err_t tos_event_destroy(k_event_t *event);
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+/**
+ * @brief Create an dynamic event.
+ * create an event.
+ *
+ * @attention None
+ *
+ * @param[in]   event       pointer to the handler of the event pointer.
+ * @param[in]   init_flag   initial flag of the event.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_event_create_dyn(k_event_t **event, k_event_flag_t init_flag);
+
+/**
+ * @brief Destroy an dynamic event.
+ * destroy an event.
+ *
+ * @attention None
+ *
+ * @param[in]   event       pointer to the handler of the event.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_event_destroy_dyn(k_event_t *event);
+
+#endif
+
 /**
  * @brief Pend an event.
  * pend an event.

@@ -102,6 +102,45 @@ __API__ k_err_t tos_timer_create(k_timer_t *tmr, k_tick_t delay, k_tick_t period
  */
 __API__ k_err_t tos_timer_destroy(k_timer_t *tmr);
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+/**
+ * @brief Create a dynamic timer.
+ * Create a timer.
+ *
+ * @attention I dont't think a timer need a name. If you do, help yourself.
+ *
+ * @param[in]   tmr         pointer to the handler of the timer pointer.
+ * @param[in]   delay       time interval for a timer to run.
+ * @param[in]   period      period for a timer to restart to run.
+ * @param[in]   callback    callback function called when the timer expires.
+ * @param[in]   cb_arg      argument for the callback.
+ * @param[in]   opt         option for the function call.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TIMER_INVALID_PERIOD   period is invalid.
+ * @retval  #K_ERR_TIMER_INVALID_DELAY    delay is invalid.
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_timer_create_dyn(k_timer_t **tmr, k_tick_t delay, k_tick_t period,
+                                        k_timer_callback_t callback, void *cb_arg, k_opt_t opt);
+
+/**
+ * @brief Delete a dynamic timer.
+ * Delete the timer.
+ *
+ * @attention None
+ *
+ * @param[in]   tmr         pointer to the handler of the timer.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_TIMER_INACTIVE         the timer is not active yet.
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_timer_destroy_dyn(k_timer_t *tmr);
+
+#endif
+
 /**
  * @brief Start a timer.
  * Start the timer to run.

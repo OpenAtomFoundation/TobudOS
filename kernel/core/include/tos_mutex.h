@@ -46,6 +46,21 @@ typedef struct k_mutex_st {
 __API__ k_err_t tos_mutex_create(k_mutex_t *mutex);
 
 /**
+ * @brief Destroy a mutex.
+ * destroy a mutex.
+ *
+ * @attention None
+ *
+ * @param[in]   mutex       pointer to the handler of the mutex.
+ *
+ * @return  errcode
+ * @retval  #K_ERR_NONE                   return successfully.
+ */
+__API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+/**
  * @brief Create a dynamic mutex.
  * create a dynamic mutex.
  *
@@ -59,8 +74,8 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex);
 __API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex);
 
 /**
- * @brief Destroy a mutex.
- * destroy a mutex.
+ * @brief Destroy a dynamic mutex.
+ * destroy a dynamic mutex.
  *
  * @attention None
  *
@@ -69,7 +84,9 @@ __API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex);
  * @return  errcode
  * @retval  #K_ERR_NONE                   return successfully.
  */
-__API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex);
+__API__ k_err_t tos_mutex_destroy_dyn(k_mutex_t *mutex);
+
+#endif
 
 /**
  * @brief Pend a mutex.

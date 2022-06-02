@@ -177,6 +177,27 @@ TEST test_tos_event_destroy(void)
     PASS();
 }
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+TEST test_tos_event_create_dyn(void)
+{
+    k_err_t err;
+    k_event_t *event;
+
+    err = tos_event_create_dyn(&event, (k_event_flag_t)0);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_event_destroy(event);
+    ASSERT_EQ(err, K_ERR_OBJ_INVALID_ALLOC_TYPE);
+
+    err = tos_event_destroy_dyn(event);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
+#endif
+
 TEST test_tos_event_pend_all(void)
 {
     k_err_t err;
@@ -424,6 +445,9 @@ SUITE(suit_event)
 {
     RUN_TEST(test_tos_event_create);
     RUN_TEST(test_tos_event_destroy);
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    RUN_TEST(test_tos_event_create_dyn);
+#endif
     RUN_TEST(test_tos_event_pend_all);
     RUN_TEST(test_tos_event_pend_any);
     RUN_TEST(test_tos_event_pend_timed);

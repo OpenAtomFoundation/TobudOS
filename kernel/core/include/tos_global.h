@@ -44,7 +44,7 @@ extern k_stack_t            k_idle_task_stk[];
 extern k_stack_t           *const k_idle_task_stk_addr;
 extern size_t               const k_idle_task_stk_size;
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 /* list to hold all the destroyed dynamic created tasks */
 extern k_list_t             k_dead_task_list;
 #endif

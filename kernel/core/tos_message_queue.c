@@ -34,7 +34,10 @@ __API__ k_err_t tos_msg_q_create(k_msg_q_t *msg_q, void *pool, size_t msg_cnt)
     pend_object_init(&msg_q->pend_obj);
 
     TOS_OBJ_INIT(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_set_static(&msg_q->knl_obj);
+#endif
 
     return K_ERR_NONE;
 }
@@ -47,9 +50,11 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
     TOS_PTR_SANITY_CHECK(msg_q);
     TOS_OBJ_VERIFY(msg_q, KNL_OBJ_TYPE_MESSAGE_QUEUE);
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     if (!knl_object_alloc_is_static(&msg_q->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
+#endif
 
     TOS_CPU_INT_DISABLE();
 
@@ -64,7 +69,10 @@ __API__ k_err_t tos_msg_q_destroy(k_msg_q_t *msg_q)
     pend_object_deinit(&msg_q->pend_obj);
 
     TOS_OBJ_DEINIT(msg_q);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_reset(&msg_q->knl_obj);
+#endif
 
     TOS_CPU_INT_ENABLE();
     knl_sched();

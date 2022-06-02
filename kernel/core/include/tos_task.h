@@ -86,7 +86,7 @@ struct k_task_st {
     k_stack_t          *stk_base;               /**< task stack base address */
     size_t              stk_size;               /**< stack size of the task */
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     k_list_t            dead_list;              /**< when a dynamic allocated task destroyed, we hook the task's dead_list to the k_dead_task_list */
 #endif
 
@@ -176,7 +176,7 @@ __API__ k_err_t tos_task_create(k_task_t *task,
  */
 __API__ k_err_t tos_task_destroy(k_task_t *task);
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 
 /**
  * @brief Create a task with a dynamic allocated task handler and stack.

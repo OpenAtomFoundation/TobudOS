@@ -36,7 +36,7 @@ k_tick_t            k_cpu_tick_per_second       = TOS_CFG_CPU_TICK_PER_SECOND;
 
 k_cycle_t           k_cpu_cycle_per_tick        = (k_cycle_t)0u;
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 TOS_LIST_DEFINE(k_dead_task_list);
 #endif
 

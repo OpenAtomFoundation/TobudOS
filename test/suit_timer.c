@@ -102,6 +102,29 @@ TEST test_tos_timer_destroy(void)
     PASS();
 }
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+TEST test_tos_timer_create_dyn(void)
+{
+    k_err_t err;
+    k_timer_t *timer;
+
+    err = tos_timer_create_dyn(&timer, (k_tick_t)0u, (k_tick_t)200u,
+                    test_timer_call_back_dummy, K_NULL,
+                    TOS_OPT_TIMER_PERIODIC);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    err = tos_timer_destroy(timer);
+    ASSERT_EQ(err, K_ERR_OBJ_INVALID_ALLOC_TYPE);
+
+    err = tos_timer_destroy_dyn(timer);
+    ASSERT_EQ(err, K_ERR_NONE);
+
+    PASS();
+}
+
+#endif
+
 TEST test_tos_timer_stop(void)
 {
     k_err_t err;
@@ -144,7 +167,7 @@ TEST test_tos_timer_stop(void)
 
     err = tos_timer_destroy(&test_timer_00);
     ASSERT_EQ(err, K_ERR_NONE);
-    
+
     PASS();
 }
 
@@ -172,7 +195,7 @@ TEST test_tos_timer_oneshot_functional(void)
 
     err = tos_timer_destroy(&test_timer_00);
     ASSERT_EQ(err, K_ERR_NONE);
-    
+
     PASS();
 }
 
@@ -186,7 +209,7 @@ TEST test_tos_timer_periodic_functional(void)
                     TOS_OPT_TIMER_PERIODIC);
     ASSERT_EQ(err, K_ERR_NONE);
 
-    
+
     ASSERT_EQ(test_timer_periodic_count, 0);
     err = tos_timer_start(&test_timer_00);
     ASSERT_EQ(err, K_ERR_NONE);
@@ -215,6 +238,9 @@ SUITE(suit_timer)
 {
     RUN_TEST(test_tos_timer_create);
     RUN_TEST(test_tos_timer_destroy);
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    RUN_TEST(test_tos_timer_create_dyn);
+#endif
     RUN_TEST(test_tos_timer_stop);
     RUN_TEST(test_tos_timer_oneshot_functional);
     RUN_TEST(test_tos_timer_periodic_functional);

@@ -80,8 +80,50 @@ __API__ k_err_t tos_mutex_create(k_mutex_t *mutex)
 
     TOS_OBJ_INIT(mutex, KNL_OBJ_TYPE_MUTEX);
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_set_static(&mutex->knl_obj);
+#endif
+
     return K_ERR_NONE;
 }
+
+__API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
+{
+    TOS_CPU_CPSR_ALLOC();
+
+    TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(mutex);
+    TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    if (!knl_object_alloc_is_static(&mutex->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+#endif
+
+    TOS_CPU_INT_DISABLE();
+
+    pend_wakeup_all(&mutex->pend_obj, PEND_STATE_DESTROY);
+
+    if (mutex->owner) {
+        mutex_old_owner_release(mutex);
+    }
+
+    pend_object_deinit(&mutex->pend_obj);
+
+    TOS_OBJ_DEINIT(mutex);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_reset(&mutex->knl_obj);
+#endif
+
+    TOS_CPU_INT_ENABLE();
+    knl_sched();
+
+    return K_ERR_NONE;
+}
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 
 __API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex)
 {
@@ -92,7 +134,7 @@ __API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex)
 
     the_mutex = tos_mmheap_calloc(1, sizeof(k_mutex_t));
     if (!the_mutex) {
-        return K_ERR_MUTEX_OUT_OF_MEMORY;
+        return K_ERR_OUT_OF_MEMORY;
     }
 
     pend_object_init(&the_mutex->pend_obj);
@@ -109,13 +151,17 @@ __API__ k_err_t tos_mutex_create_dyn(k_mutex_t **mutex)
     return K_ERR_NONE;
 }
 
-__API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
+__API__ k_err_t tos_mutex_destroy_dyn(k_mutex_t *mutex)
 {
     TOS_CPU_CPSR_ALLOC();
 
     TOS_IN_IRQ_CHECK();
     TOS_PTR_SANITY_CHECK(mutex);
     TOS_OBJ_VERIFY(mutex, KNL_OBJ_TYPE_MUTEX);
+
+    if (!knl_object_alloc_is_dynamic(&mutex->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
 
     TOS_CPU_INT_DISABLE();
 
@@ -127,18 +173,17 @@ __API__ k_err_t tos_mutex_destroy(k_mutex_t *mutex)
 
     pend_object_deinit(&mutex->pend_obj);
 
-    if (knl_object_alloc_is_dynamic(&mutex->knl_obj)) {
-        TOS_OBJ_DEINIT(mutex);
-        tos_mmheap_free(mutex);
-    } else {
-        TOS_OBJ_DEINIT(mutex);
-    }
+    TOS_OBJ_DEINIT(mutex);
+
+    tos_mmheap_free(mutex);
 
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     return K_ERR_NONE;
 }
+
+#endif
 
 __API__ k_err_t tos_mutex_pend_timed(k_mutex_t *mutex, k_tick_t timeout)
 {

@@ -27,6 +27,10 @@ __API__ k_err_t tos_event_create(k_event_t *event, k_event_flag_t init_flag)
     pend_object_init(&event->pend_obj);
     TOS_OBJ_INIT(event, KNL_OBJ_TYPE_EVENT);
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_set_static(&event->knl_obj);
+#endif
+
     return K_ERR_NONE;
 }
 
@@ -36,6 +40,12 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
 
     TOS_PTR_SANITY_CHECK(event);
     TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    if (!knl_object_alloc_is_static(&event->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+#endif
 
     TOS_CPU_INT_DISABLE();
 
@@ -47,11 +57,71 @@ __API__ k_err_t tos_event_destroy(k_event_t *event)
 
     TOS_OBJ_DEINIT(event);
 
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+    knl_object_alloc_reset(&event->knl_obj);
+#endif
+
     TOS_CPU_INT_ENABLE();
     knl_sched();
 
     return K_ERR_NONE;
 }
+
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
+
+__API__ k_err_t tos_event_create_dyn(k_event_t **event, k_event_flag_t init_flag)
+{
+    k_event_t *the_event;
+
+    TOS_IN_IRQ_CHECK();
+    TOS_PTR_SANITY_CHECK(event);
+
+    the_event = tos_mmheap_calloc(1, sizeof(k_event_t));
+    if (!the_event) {
+        return K_ERR_OUT_OF_MEMORY;
+    }
+
+    the_event->flag = init_flag;
+    pend_object_init(&the_event->pend_obj);
+    TOS_OBJ_INIT(the_event, KNL_OBJ_TYPE_EVENT);
+
+    knl_object_alloc_set_dynamic(&the_event->knl_obj);
+
+    *event = the_event;
+
+    return K_ERR_NONE;
+}
+
+__API__ k_err_t tos_event_destroy_dyn(k_event_t *event)
+{
+    TOS_CPU_CPSR_ALLOC();
+
+    TOS_PTR_SANITY_CHECK(event);
+    TOS_OBJ_VERIFY(event, KNL_OBJ_TYPE_EVENT);
+
+    if (!knl_object_alloc_is_dynamic(&event->knl_obj)) {
+        return K_ERR_OBJ_INVALID_ALLOC_TYPE;
+    }
+
+    TOS_CPU_INT_DISABLE();
+
+    pend_wakeup_all(&event->pend_obj, PEND_STATE_DESTROY);
+
+    event->flag = (k_event_flag_t)0u;
+
+    pend_object_deinit(&event->pend_obj);
+
+    TOS_OBJ_DEINIT(event);
+
+    tos_mmheap_free(event);
+
+    TOS_CPU_INT_ENABLE();
+    knl_sched();
+
+    return K_ERR_NONE;
+}
+
+#endif
 
 __STATIC__ int event_is_match(k_event_flag_t event, k_event_flag_t flag_expect, k_event_flag_t *flag_match, k_opt_t opt_pend)
 {

@@ -19,7 +19,7 @@
 
 __STATIC_INLINE__ void task_reset(k_task_t *task)
 {
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_reset(&task->knl_obj);
 
     tos_list_init(&task->dead_list);
@@ -115,7 +115,7 @@ __API__ k_err_t tos_task_create(k_task_t *task,
     tos_list_add(&task->stat_list, &k_stat_list);
 
     TOS_OBJ_INIT(task, KNL_OBJ_TYPE_TASK);
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     knl_object_alloc_set_static(&task->knl_obj);
 #endif
 
@@ -201,7 +201,7 @@ __API__ k_err_t tos_task_destroy(k_task_t *task)
         return K_ERR_SCHED_LOCKED;
     }
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
     if (!knl_object_alloc_is_static(&task->knl_obj)) {
         return K_ERR_OBJ_INVALID_ALLOC_TYPE;
     }
@@ -210,7 +210,7 @@ __API__ k_err_t tos_task_destroy(k_task_t *task)
     return task_do_destroy(task);
 }
 
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
 
 __STATIC__ void task_free(k_task_t *task)
 {
@@ -250,27 +250,15 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
     TOS_PTR_SANITY_CHECK(task);
     TOS_PTR_SANITY_CHECK(entry);
 
-    if (unlikely(stk_size < sizeof(cpu_context_t))) {
-        return K_ERR_TASK_STK_SIZE_INVALID;
-    }
-
-    if (unlikely(prio == K_TASK_PRIO_IDLE)) {
-        return K_ERR_TASK_PRIO_INVALID;
-    }
-
-    if (unlikely(prio > K_TASK_PRIO_IDLE)) {
-        return K_ERR_TASK_PRIO_INVALID;
-    }
-
     the_task = tos_mmheap_calloc(1, sizeof(k_task_t));
     if (!the_task) {
-        return K_ERR_TASK_OUT_OF_MEMORY;
+        return K_ERR_OUT_OF_MEMORY;
     }
 
     stk_base = tos_mmheap_alloc(stk_size);
     if (!stk_base) {
         tos_mmheap_free(the_task);
-        return K_ERR_TASK_OUT_OF_MEMORY;
+        return K_ERR_OUT_OF_MEMORY;
     }
 
     the_task->stk_base = stk_base;
