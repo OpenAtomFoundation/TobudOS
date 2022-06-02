@@ -8,12 +8,10 @@
 #include "ch32v30x_it.h"
 #include "tos_k.h"
 #include "tos_at.h"
-
 extern at_agent_t esp8266_tf_agent;
 
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
-
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART7_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
