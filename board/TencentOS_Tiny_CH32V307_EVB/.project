@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" ?> 
 <projectDescription>
   <name>TencentOS-Tiny</name>
-  <comment/>
-  <projects/>
+  <comment />
+  <projects />
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
       <triggers>clean,full,incremental,</triggers>
-      <arguments/>
+      <arguments />
     </buildCommand>
     <buildCommand>
       <name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
       <triggers>full,incremental,</triggers>
-      <arguments/>
+      <arguments />
     </buildCommand>
   </buildSpec>
   <natures>
@@ -24,43 +24,58 @@
     <link>
       <name>arch</name>
       <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/arch/risc-v/risc-v3a</location>
-    </link>
-    <link>
-      <name>kernel/core</name>
-      <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/kernel/core</location>
-    </link>
-    <link>
-      <name>net/at</name>
-      <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/net/at</location>
-    </link>
-    <link>
-      <name>net/tencent_firmware_module_wrapper</name>
-      <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/net/tencent_firmware_module_wrapper</location>
+      <locationURI>PARENT-2-PROJECT_LOC/arch/risc-v/risc-v3a</locationURI>
     </link>
     <link>
       <name>devices/esp8266_tencent_firmware</name>
       <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/devices/esp8266_tencent_firmware</location>
+      <locationURI>PARENT-2-PROJECT_LOC/devices/esp8266_tencent_firmware</locationURI>
+    </link>
+    <link>
+      <name>kernel/core</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/kernel/core</locationURI>
     </link>
     <link>
       <name>kernel/hal</name>
       <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/kernel/hal</location>
+      <locationURI>PARENT-2-PROJECT_LOC/kernel/hal</locationURI>
+    </link>
+    <link>
+      <name>net/at</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/net/at</locationURI>
+    </link>
+    <link>
+      <name>net/tencent_firmware_module_wrapper</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/net/tencent_firmware_module_wrapper</locationURI>
     </link>
     <link>
       <name>platform/hal/wch/ch32v30xx</name>
       <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/platform/hal/wch/ch32v30xx/src</location>
+      <locationURI>PARENT-2-PROJECT_LOC/platform/hal/wch/ch32v30xx/src</locationURI>
+    </link>
+    <link>
+      <name>fs/kv</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/components/fs/kv</location>
+    </link>
+    <link>
+      <name>fs/vfs</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/components/fs/vfs</location>
+    </link>
+    <link>
+      <name>fs/fatfs</name>
+      <type>2</type>
+      <location>PARENT-2-PROJECT_LOC/components/fs/fatfs/wrapper</location>
     </link>
   </linkedResources>
   <filteredResources>
     <filter>
       <id>1595986042669</id>
-      <name/>
+      <name />
       <type>22</type>
       <matcher>
         <id>org.eclipse.ui.ide.multiFilter</id>

@@ -178,7 +178,7 @@ __API__ vfs_err_t tos_vfs_fs_mkfs(const char *device_path, const char *fs_name, 
 {
     vfs_fsmap_t *fsmap = K_NULL;
     vfs_inode_t *device_inode = K_NULL;
-    vfs_inode_t *fs_inode = K_NULL;
+    //vfs_inode_t *fs_inode = K_NULL;
 
     fsmap = vfs_fsmap_get(fs_name);
     if (!fsmap) {
@@ -194,7 +194,7 @@ __API__ vfs_err_t tos_vfs_fs_mkfs(const char *device_path, const char *fs_name, 
         return VFS_ERR_INODE_INVALID;
     }
 
-    fs_inode->ops.fs_ops = fsmap->ops;
+    //device_inode->ops.fs_ops = fsmap->ops;
 
     if (!fsmap->ops->mkfs) {
         return VFS_ERR_OPS_NULL;

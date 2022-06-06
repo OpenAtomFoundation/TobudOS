@@ -1312,44 +1312,44 @@ __DEBUG__ kv_err_t tos_kv_walkthru(void)
     uint32_t cur_blk;
     kv_blk_hdr_t blk_hdr;
 
-    printf("workspace: 0x%x [%d block]\n", KV_MGR_WORKSPACE, KV_BLK_ADDR2IDX(KV_MGR_WORKSPACE));
+    printf("workspace: 0x%x [%d block]\r\n", KV_MGR_WORKSPACE, KV_BLK_ADDR2IDX(KV_MGR_WORKSPACE));
 
     KV_BLK_FOR_EACH(cur_blk) {
-        printf("[%d] block\n", i++);
-        printf("addr: 0x%x\n", cur_blk);
+        printf("[%d] block\r\n", i++);
+        printf("addr: 0x%x\r\n", cur_blk);
 
         if (kv_blk_hdr_read(cur_blk, &blk_hdr) != KV_ERR_NONE) {
-            printf("block header read failed\n");
+            printf("block header read failed\r\n");
             continue;
         }
 
         if (!KV_BLK_IS_LEGAL(&blk_hdr)) {
-            printf("block not formatted\n");
+            printf("block not formatted\r\n");
             continue;
         }
 
         if (KV_BLK_IS_GC_SRC(&blk_hdr)) {
-            printf("block is gc-src\n");
+            printf("block is gc-src\r\n");
         }
 
         if (KV_BLK_IS_GC_DST(&blk_hdr)) {
-            printf("block is gc-dst\n");
+            printf("block is gc-dst\r\n");
         }
 
         if (KV_BLK_IS_GC_DONE(&blk_hdr)) {
-            printf("block is gc-done\n");
+            printf("block is gc-done\r\n");
         }
 
         if (KV_BLK_IS_GC_DST_NOT_DONE(&blk_hdr)) {
-            printf("block is gc-dst but not done\n");
+            printf("block is gc-dst but not done\r\n");
         }
 
         if (kv_block_walkthru(cur_blk) != KV_ERR_NONE) {
-            printf("block diagnosis failed\n");
+            printf("block diagnosis failed\r\n");
             continue;
         }
 
-        printf("\n\n");
+        printf("\r\n\n");
     }
 
     return KV_ERR_NONE;
