@@ -1,5 +1,5 @@
 #ifndef __SPI_FLASH_H
-#define __SPI_FLASH_H
+#define __SPI_FLASH_H		
 #include "debug.h"
 #include "string.h"
 
@@ -9,11 +9,6 @@
 #define W25Q32  0XEF15
 #define W25Q64  0XEF16
 #define W25Q128 0XEF17
-
-/* Winbond W25Q64 */
-#define SPI_FLASH_PAGESIZE                         256
-#define SPI_FLASH_SECTOR                           4096
-#define SPI_FLASH_TOTAL_SIZE                       0x7FFFFF
 
 /* Winbond SPIFalsh Instruction List */
 #define W25X_WriteEnable		  0x06
@@ -50,7 +45,6 @@ void SPI_FLASH_Write_Enable(void);
 void SPI_FLASH_Write_Disable(void);
 u16 SPI_Flash_ReadID(void);
 void SPI_Flash_Erase_Sector(u32 Dst_Addr);
-int SPI_Flash_Erase(u32 Addr, int size);
 void SPI_Flash_Read(u8* pBuffer,u32 ReadAddr,u16 size);
 void SPI_Flash_Write_Page(u8* pBuffer,u32 WriteAddr,u16 size);
 void SPI_Flash_Write_NoCheck(u8* pBuffer,u32 WriteAddr,u16 size);

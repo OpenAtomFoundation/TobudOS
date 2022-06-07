@@ -6,7 +6,7 @@
 * Description        : This file contains the headers of the SDIO.
 *******************************************************************************/
 #ifndef __SDIO_H
-#define __SDIO_H
+#define __SDIO_H	
 
 #include"debug.h"
 
@@ -346,3 +346,12 @@ u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt);
 u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);
 
 #endif
+
+
+
+
+
+
+
+
+
