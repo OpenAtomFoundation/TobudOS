@@ -40,7 +40,7 @@ __API__ int tos_hal_uart_write(hal_uart_t *uart, const uint8_t *buf, size_t size
 
     for(size_t i=0; i<size; i++) {
         USART_SendData(base, buf[i]);
-        tos_task_delay(1);
+        while (USART_GetFlagStatus(base, USART_FLAG_TC) != SET);
     }
 
     return 0;

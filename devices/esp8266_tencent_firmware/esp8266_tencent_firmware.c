@@ -36,12 +36,13 @@ int esp8266_tencent_firmware_module_mqtt_conn(mqtt_param_t init_params)
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTCONN:OK");
     while (try++ < 10) {
-        tos_at_cmd_exec_until(AT_AGENT, &echo, 2000, "AT+TCMQTTCONN=%d,%d,%d,%d,%d\r\n", init_params.tls_mode,
+        tos_at_cmd_exec_until(AT_AGENT, &echo, 10000, "AT+TCMQTTCONN=%d,%d,%d,%d,%d\r\n", init_params.tls_mode,
             init_params.command_timeout, init_params.keep_alive_interval_ms,
             init_params.clean_session, init_params.auto_connect_enable);
         if (echo.status == AT_ECHO_STATUS_EXPECT) {
             return 0;
         }
+        tos_task_delay(1000);
     }
     return -1;
 }
@@ -74,7 +75,7 @@ int esp8266_tencent_firmware_module_mqtt_publ(const char *topic, qos_t qos, char
     }
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUBL:OK");
-    tos_at_raw_data_send_until(AT_AGENT, &echo, 1000, (uint8_t *)payload, strlen(payload));
+    tos_at_raw_data_send_until(AT_AGENT, &echo, 3000, (uint8_t *)payload, strlen(payload));
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
         return -1;
     }
@@ -89,7 +90,7 @@ int esp8266_tencent_firmware_module_mqtt_pub(const char *topic, qos_t qos, char 
 
     tos_at_echo_create(&echo, NULL, 0, "+TCMQTTPUB:OK");
 
-    tos_at_cmd_exec_until(AT_AGENT, &echo, 1000, "AT+TCMQTTPUB=\"%s\",%d,\"%s\"\r\n", topic, qos, payload);
+    tos_at_cmd_exec_until(AT_AGENT, &echo, 3000, "AT+TCMQTTPUB=\"%s\",%d,\"%s\"\r\n", topic, qos, payload);
     if (echo.status == AT_ECHO_STATUS_EXPECT) {
         return 0;
     }

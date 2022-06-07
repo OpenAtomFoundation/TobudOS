@@ -44,7 +44,7 @@ void mqtt_demo_task(void)
         printf("esp8266 tencent firmware sal init fail, ret is %d\r\n", ret);
     }
     
-    esp8266_tencent_firmware_join_ap("Mculover666", "mculover666");
+    esp8266_tencent_firmware_join_ap("TencentOS", "tencentos");
 
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
     strncpy(dev_info.device_name, device_name, DEVICE_NAME_MAX_SIZE);

@@ -31,7 +31,7 @@ void mqtt_demo_task(void)
     char *product_id = PRODUCT_ID;
     char *device_name = DEVICE_NAME;
     char *key = DEVICE_KEY;
-    
+
     device_info_t dev_info;
     memset(&dev_info, 0, sizeof(device_info_t));
 
@@ -39,11 +39,11 @@ void mqtt_demo_task(void)
      * Please Choose your AT Port first, default is HAL_UART_2(USART2)
     */
     ret = esp8266_tencent_firmware_sal_init(HAL_UART_PORT_2);
-    
+
     if (ret < 0) {
         printf("esp8266 tencent firmware sal init fail, ret is %d\r\n", ret);
     }
-    
+
     esp8266_tencent_firmware_join_ap("TencentOS", "tencentos");
 
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
@@ -72,25 +72,25 @@ void mqtt_demo_task(void)
     } else {
         printf("module mqtt sub success\n");
     }
-    
+
     memset(report_topic_name, 0, sizeof(report_topic_name));
     size = snprintf(report_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/up/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_topic_name) - 1) {
         printf("pub topic content length not enough! content size:%d  buf size:%d", size, (int)sizeof(report_topic_name));
     }
-  
+
     while (1) {
         tos_sleep_ms(5000);
 
         /* use AT+PUB AT command */
         memset(payload, 0, sizeof(payload));
         snprintf(payload, sizeof(payload), REPORT_DATA_TEMPLATE, lightness++);
-        
+
         if (lightness > 100) {
             lightness = 0;
         }
-        
+
         if (tos_tf_module_mqtt_pub(report_topic_name, QOS0, payload) != 0) {
             printf("module mqtt pub fail\n");
             break;
@@ -100,7 +100,7 @@ void mqtt_demo_task(void)
     }
 }
 
-void application_entry1(void *arg)
+void application_entry(void *arg)
 {
     mqtt_demo_task();
     while (1) {

@@ -212,6 +212,40 @@ void SPI_Flash_Erase_Sector(u32 Dst_Addr)
 }
 
 /*********************************************************************
+ * @fn      SPI_Flash_Erase_Sector
+ *
+ * @brief   Erase amount sector(4Kbyte).
+ *
+ * @param   addr - Initial address(24bit).
+ *          size - Data length.
+ *
+ * @return  errcode
+ */
+int SPI_Flash_Erase(u32 Addr, int size)
+{
+    uint32_t begin;
+    uint32_t end;
+    int i;
+
+    if (size < 0
+        || Addr > SPI_FLASH_TOTAL_SIZE
+        || Addr + size > SPI_FLASH_TOTAL_SIZE)
+    {
+        return -1;
+    }
+
+    begin = Addr / SPI_FLASH_SECTOR * SPI_FLASH_SECTOR;
+    end = (Addr + size - 1) / SPI_FLASH_SECTOR * SPI_FLASH_SECTOR;
+
+    for (i = begin; i <= end; i += SPI_FLASH_SECTOR)
+    {
+        SPI_Flash_Erase_Sector(i);
+    }
+
+    return 0;
+}
+
+/*********************************************************************
  * @fn      SPI_Flash_Read
  *
  * @brief   Read data from flash.

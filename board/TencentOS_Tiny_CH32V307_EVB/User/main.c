@@ -53,6 +53,30 @@ uint8_t get_key(void)
    return 0;
 }
 
+void lcd_test()
+{
+    u8 i,j;
+    float t=0;
+
+    LCD_ShowString(0,0,"Welcome TencentOS",WHITE,BLACK,32,0);
+    LCD_ShowString(0,40,"LCD_W:",WHITE,BLACK,16,0);
+    LCD_ShowIntNum(48,40,LCD_W,3,WHITE,BLACK,16);
+    LCD_ShowString(80,40,"LCD_H:",WHITE,BLACK,16,0);
+    LCD_ShowIntNum(128,40,LCD_H,3,WHITE,BLACK,16);
+    LCD_ShowString(80,40,"LCD_H:",WHITE,BLACK,16,0);
+    LCD_ShowString(0,70,"Increaseing Nun:",WHITE,BLACK,16,0);
+    LCD_ShowFloatNum1(128,70,t,4,WHITE,BLACK,16);
+    t+=0.11;
+    for(j=0;j<3;j++)
+    {
+        for(i=0;i<6;i++)
+        {
+            LCD_ShowPicture(40*i,120+j*40,40,40,gImage_1);
+        }
+    }
+    printf("lcd test finish\r\n");
+}
+
 /*********************************************************************
  * @fn      show_sdcard_info
  *
@@ -109,33 +133,46 @@ void spi_flash_test(void)
        default:
             printf("Fail!\r\n");
             break;
-     }
+    }
+    printf("Start Read W25Qxx before erase....\r\n");
+    SPI_Flash_Read(datap,0x0,SIZE);
+    for(int16_t i=0;i<SIZE;i++)
+    {
+        printf("%x ", datap[i] );
+    }
+    printf("\r\n" );
 
-        printf("Start Erase W25Qxx....\r\n");
-        SPI_Flash_Erase_Sector(0);
-        Delay_Ms(500);
-        printf("Start Read W25Qxx....\r\n");
-        SPI_Flash_Read(datap,0x0,SIZE);
-        for(int16_t i=0;i<SIZE;i++)
-        {
-            printf("%x ", datap[i] );
-        }
-        printf("\r\n" );
-        Delay_Ms(500);
-        printf("Start Write W25Qxx....\r\n");
-        SPI_Flash_Write((u8*)TEXT_Buf,0,SIZE);
-        Delay_Ms(500);
-        SPI_Flash_Read(datap,0x0,SIZE);
-        printf("%s\r\n", datap );
+    printf("Start Erase W25Qxx....\r\n");
+    SPI_Flash_Erase_Sector(0);
 
-        if(memcmp(TEXT_Buf, datap, SIZE))
-        {
-            LCD_ShowString(16,16+16+16,"SPI Flash: Fail",WHITE,BLACK,16,0);
-        }
-        else
-        {
-            LCD_ShowString(16,16+16+16,"SPI Flash: OK",WHITE,BLACK,16,0);
-        }
+    Delay_Ms(500);
+
+    printf("Start Read W25Qxx....\r\n");
+    SPI_Flash_Read(datap,0x0,SIZE);
+    for(int16_t i=0;i<SIZE;i++)
+    {
+        printf("%x ", datap[i] );
+    }
+    printf("\r\n" );
+
+    Delay_Ms(500);
+
+    printf("Start Write W25Qxx....\r\n");
+    SPI_Flash_Write((u8*)TEXT_Buf,0,SIZE);
+
+    Delay_Ms(500);
+
+    SPI_Flash_Read(datap,0x0,SIZE);
+    printf("%s\r\n", datap );
+
+    if(memcmp(TEXT_Buf, datap, SIZE))
+    {
+        LCD_ShowString(16,16+16+16,"SPI Flash: Fail",WHITE,BLACK,16,0);
+    }
+    else
+    {
+        LCD_ShowString(16,16+16+16,"SPI Flash: OK",WHITE,BLACK,16,0);
+    }
 }
 
 u8 buf[512];
@@ -184,7 +221,6 @@ void SD_Card_test(void)
     {
         LCD_ShowString(16,16+16+16+16+16,"SD ALL: FAIL",WHITE,BLACK,16,0);
     }
-
 }
 
 #define TASK1_STK_SIZE       1024
@@ -201,7 +237,7 @@ __aligned(4) uint8_t task2_stk[TASK2_STK_SIZE];
 k_task_t application_task;
 __aligned(4) uint8_t application_task_stk[APPLICATION_TASK_STK_SIZE];
 
-extern void application_entry1(void *arg);
+extern void application_entry(void *arg);
 
 void task1_entry(void *arg)
 {
@@ -230,8 +266,6 @@ volatile uint8_t key=0;
 *******************************************************************************/
 int main(void)
 {
-    u8 i,j;
-    float t=0;
 	Delay_Init();
 	USART_Printf_Init(115200);
 	printf("SystemClk:%d\r\n",SystemCoreClock);
@@ -244,7 +278,7 @@ int main(void)
 
 
     tos_knl_init();
-    tos_task_create(&application_task, "application_task", application_entry1, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
+    tos_task_create(&application_task, "application_task", application_entry, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
     //tos_task_create(&task1, "task1", task1_entry, NULL, 3, task1_stk, TASK1_STK_SIZE, 0); // Create task1
     //tos_task_create(&task2, "task2", task2_entry, NULL, 3, task2_stk, TASK2_STK_SIZE, 0);// Create task2
     tos_knl_start();
@@ -258,7 +292,7 @@ int main(void)
     switch(key)
     {
         case 1:
-            //lcd_test();
+            lcd_test();
             break;
         case 2:
             LCD_Fill(0,0,LCD_W,LCD_H,BLACK);
@@ -271,32 +305,5 @@ int main(void)
         default:
             break;
     }
-	while(1)
-	{
-	    LCD_ShowString(0,0,"Welcome TencentOS",WHITE,BLACK,32,0);
-        LCD_ShowString(0,40,"LCD_W:",WHITE,BLACK,16,0);
-        LCD_ShowIntNum(48,40,LCD_W,3,WHITE,BLACK,16);
-        LCD_ShowString(80,40,"LCD_H:",WHITE,BLACK,16,0);
-        LCD_ShowIntNum(128,40,LCD_H,3,WHITE,BLACK,16);
-        LCD_ShowString(80,40,"LCD_H:",WHITE,BLACK,16,0);
-        LCD_ShowString(0,70,"Increaseing Nun:",WHITE,BLACK,16,0);
-        LCD_ShowFloatNum1(128,70,t,4,WHITE,BLACK,16);
-        t+=0.11;
-        for(j=0;j<3;j++)
-        {
-            for(i=0;i<6;i++)
-            {
-                LCD_ShowPicture(40*i,120+j*40,40,40,gImage_1);
-                printf("pic test\r\n");
-            }
-        }
-        printf("lcd test\r\n");
-	}
+	while(1);
 }
-
-
-
-
-
-
-
