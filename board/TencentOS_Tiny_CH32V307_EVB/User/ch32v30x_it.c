@@ -9,6 +9,7 @@
 #include "tos_k.h"
 #include "tos_at.h"
 extern at_agent_t esp8266_tf_agent;
+extern at_agent_t esp8266_agent;
 
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -76,7 +77,7 @@ void UART6_IRQHandler(void)
   if(USART_GetITStatus(UART6, USART_IT_RXNE) != RESET)
   {
       data= USART_ReceiveData(UART6);
-      tos_at_uart_input_byte(&esp8266_tf_agent,data);
+      tos_at_uart_input_byte(&esp8266_agent,data);
 
   }
 

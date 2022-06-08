@@ -62,7 +62,7 @@ bool HAL_Timer_Expired(Timer *timer)
  * @param[in,out] timer @see Timer
  * @param[in] timeout_ms ms to count down
  */
-void HAL_Timer_CountdownMs(Timer *timer, unsigned int timeout_ms)
+void HAL_Timer_CountdownMs(Timer *timer, uint32_t timeout_ms)
 {
     k_tick_t tick;
     k_tick_t now;
@@ -81,7 +81,7 @@ void HAL_Timer_CountdownMs(Timer *timer, unsigned int timeout_ms)
  * @param[in,out] timer @see Timer
  * @param[in] timeout second to count down
  */
-void HAL_Timer_Countdown(Timer *timer, unsigned int timeout)
+void HAL_Timer_Countdown(Timer *timer, uint32_t timeout)
 {
     k_tick_t now;
     k_tick_t tick;

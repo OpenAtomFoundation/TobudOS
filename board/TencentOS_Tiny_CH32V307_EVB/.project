@@ -27,9 +27,44 @@
       <locationURI>PARENT-2-PROJECT_LOC/arch/risc-v/risc-v3a</locationURI>
     </link>
     <link>
+      <name>c-sdk/common</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/components/connectivity/iot-hub-device-c-sdk/common</locationURI>
+    </link>
+    <link>
+      <name>c-sdk/include</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/components/connectivity/iot-hub-device-c-sdk/include</locationURI>
+    </link>
+    <link>
+      <name>c-sdk/platform</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/components/connectivity/iot-hub-device-c-sdk/platform</locationURI>
+    </link>
+    <link>
+      <name>devices/esp8266</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/devices/esp8266</locationURI>
+    </link>
+    <link>
       <name>devices/esp8266_tencent_firmware</name>
       <type>2</type>
       <locationURI>PARENT-2-PROJECT_LOC/devices/esp8266_tencent_firmware</locationURI>
+    </link>
+    <link>
+      <name>fs/fatfs</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/components/fs/fatfs/wrapper</locationURI>
+    </link>
+    <link>
+      <name>fs/kv</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/components/fs/kv</locationURI>
+    </link>
+    <link>
+      <name>fs/vfs</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/components/fs/vfs</locationURI>
     </link>
     <link>
       <name>kernel/core</name>
@@ -47,6 +82,11 @@
       <locationURI>PARENT-2-PROJECT_LOC/net/at</locationURI>
     </link>
     <link>
+      <name>net/sal_module_wrapper</name>
+      <type>2</type>
+      <locationURI>PARENT-2-PROJECT_LOC/net/sal_module_wrapper</locationURI>
+    </link>
+    <link>
       <name>net/tencent_firmware_module_wrapper</name>
       <type>2</type>
       <locationURI>PARENT-2-PROJECT_LOC/net/tencent_firmware_module_wrapper</locationURI>
@@ -57,19 +97,14 @@
       <locationURI>PARENT-2-PROJECT_LOC/platform/hal/wch/ch32v30xx/src</locationURI>
     </link>
     <link>
-      <name>fs/kv</name>
+      <name>c-sdk/services/common</name>
       <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/components/fs/kv</location>
+      <location>PARENT-2-PROJECT_LOC/components/connectivity/iot-hub-device-c-sdk/services/common</location>
     </link>
     <link>
-      <name>fs/vfs</name>
+      <name>c-sdk/services/explorer</name>
       <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/components/fs/vfs</location>
-    </link>
-    <link>
-      <name>fs/fatfs</name>
-      <type>2</type>
-      <location>PARENT-2-PROJECT_LOC/components/fs/fatfs/wrapper</location>
+      <location>PARENT-2-PROJECT_LOC/components/connectivity/iot-hub-device-c-sdk/services/explorer</location>
     </link>
   </linkedResources>
   <filteredResources>

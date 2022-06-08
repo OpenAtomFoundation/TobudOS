@@ -223,39 +223,11 @@ void SD_Card_test(void)
     }
 }
 
-#define TASK1_STK_SIZE       1024
-k_task_t task1;
-__aligned(4) uint8_t task1_stk[TASK1_STK_SIZE];
-
-
-#define TASK2_STK_SIZE       1024
-k_task_t task2;
-__aligned(4) uint8_t task2_stk[TASK2_STK_SIZE];
-
-
 #define APPLICATION_TASK_STK_SIZE       4096
 k_task_t application_task;
 __aligned(4) uint8_t application_task_stk[APPLICATION_TASK_STK_SIZE];
 
 extern void application_entry(void *arg);
-
-void task1_entry(void *arg)
-{
-    while (1)
-    {
-        printf("###I am task1\r\n");
-        tos_task_delay(2000);
-    }
-}
-
-void task2_entry(void *arg)
-{
-    while (1)
-    {
-        printf("***I am task2\r\n");
-        tos_task_delay(1000);
-    }
-}
 
 volatile uint8_t key=0;
 /*******************************************************************************
@@ -270,17 +242,14 @@ int main(void)
 	USART_Printf_Init(115200);
 	printf("SystemClk:%d\r\n",SystemCoreClock);
 	led_key_init();
-    LCD_Init();//LCD≥ı ºªØ
+    LCD_Init();
     SPI_Flash_Init();
     printf("Welcome to TencentOS tiny(%s)\r\n", TOS_VERSION);
     LCD_Fill(0,0,LCD_W,LCD_H,BLACK);
     LCD_ShowString(0,0,"Welcome to TencentOS",WHITE,BLACK,16,0);
 
-
     tos_knl_init();
     tos_task_create(&application_task, "application_task", application_entry, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
-    //tos_task_create(&task1, "task1", task1_entry, NULL, 3, task1_stk, TASK1_STK_SIZE, 0); // Create task1
-    //tos_task_create(&task2, "task2", task2_entry, NULL, 3, task2_stk, TASK2_STK_SIZE, 0);// Create task2
     tos_knl_start();
 
     printf("should not run at here!\r\n");
