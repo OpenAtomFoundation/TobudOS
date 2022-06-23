@@ -1,0 +1,15 @@
+file(GLOB src_gateway ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
+set(src_services ${src_services} ${src_gateway} PARENT_SCOPE)
+
+if( ${CONFIG_COMPILE_SAMPLE} STREQUAL "ON")
+    file(GLOB src_gateway_sample ${CMAKE_CURRENT_SOURCE_DIR}/sample/*.c)
+    add_executable(gateway_sample ${src_gateway_sample})
+    target_link_libraries(gateway_sample ${libsdk})
+endif()
+
+if( ${CONFIG_IOT_TEST} STREQUAL "ON")
+    file(GLOB src_unit_test ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cc)
+    set(inc_gateway_test ${CMAKE_CURRENT_SOURCE_DIR}/test)
+    set(src_test ${src_test} ${src_unit_test} PARENT_SCOPE)
+    set(inc_test ${inc_test} ${inc_gateway_test} PARENT_SCOPE)
+endif()

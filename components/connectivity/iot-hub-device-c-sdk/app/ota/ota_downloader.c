@@ -27,7 +27,6 @@
  */
 
 #include "ota_downloader.h"
-#include "ota_firmware_save.h"
 #include "utils_log.h"
 #include "utils_md5.h"
 
@@ -88,7 +87,14 @@ static int _ota_break_point_init(void* usr_data)
 
     sg_ota_downloader_handle.cos_download = NULL;
     utils_md5_reset(&handle->download_md5_ctx);
-    return ota_break_point_read((uint8_t*)&handle->break_point, sizeof(handle->break_point)) < 0;
+    memset(&handle->break_point, 0, sizeof(handle->break_point));
+
+    size_t len =
+        HAL_File_Read(OTA_BREAK_POINT_FILE_PATH, (uint8_t*)&handle->break_point, sizeof(handle->break_point), 0);
+    if (len != sizeof(handle->break_point)) {
+        Log_w("open break point file fail!");
+    }
+    return 0;
 }
 
 /**
@@ -139,7 +145,9 @@ static int _ota_break_point_save(void* usr_data)
                            handle->break_point.file_id.version);
 
     // write to local， only write downloaded size is ok
-    return ota_break_point_write((uint8_t*)&handle->break_point, sizeof(OTADownloadInfo));
+    size_t write_size =
+        HAL_File_Write(OTA_BREAK_POINT_FILE_PATH, (uint8_t*)&handle->break_point, sizeof(OTADownloadInfo), 0);
+    return write_size != sizeof(OTADownloadInfo);
 }
 
 /**
@@ -179,7 +187,7 @@ static int _ota_break_point_restore(void* usr_data)
 
     while (size > 0) {
         rlen = (size > OTA_HTTP_BUF_SIZE) ? OTA_HTTP_BUF_SIZE : size;
-        if (ota_firmware_read(handle->download_buff, rlen, total_read) < 0) {
+        if (!HAL_File_Read(OTA_FILE_PATH, handle->download_buff, rlen, total_read)) {
             Log_e("read data failed");
             handle->break_point.downloaded_size = 0;
             break;
@@ -262,9 +270,9 @@ static int _ota_data_download_recv(void* usr_data)
 static int _ota_data_download_save(void* usr_data)
 {
     OTADownloaderHandle* handle = (OTADownloaderHandle*)usr_data;
-    return handle->download_size > 0
-               ? ota_firmware_write(handle->download_buff, handle->download_size, handle->break_point.downloaded_size)
-               : 0;
+    return handle->download_size > 0 ? HAL_File_Write(OTA_FILE_PATH, handle->download_buff, handle->download_size,
+                                                      handle->break_point.downloaded_size) != handle->download_size
+                                     : 0;
 }
 
 /**
@@ -285,13 +293,14 @@ static int _ota_data_download_finish(void* usr_data, UtilsDownloaderStatus statu
     switch (status) {
         case UTILS_DOWNLOADER_STATUS_SUCCESS:
             utils_md5_finish(&handle->download_md5_ctx);
-            ota_firmware_finish(handle->download_now.file_size);
+            // do something when ota finish;
 
             int valid = !utils_md5_compare(&handle->download_md5_ctx, handle->download_now.md5sum);
 
             if (!valid) {
                 memset(&handle->break_point, 0, sizeof(handle->break_point));
-                ota_break_point_write((uint8_t*)&handle->break_point, sizeof(handle->break_point));
+                HAL_File_Write(OTA_BREAK_POINT_FILE_PATH, (uint8_t*)&handle->break_point, sizeof(handle->break_point),
+                               0);
             }
 
             rc = valid ? IOT_OTA_ReportProgress(handle->mqtt_client, buf, buf_len, IOT_OTA_REPORT_TYPE_UPGRADE_SUCCESS,

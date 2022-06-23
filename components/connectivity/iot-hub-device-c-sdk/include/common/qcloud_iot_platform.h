@@ -41,6 +41,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "qcloud_iot_device.h"
 #include "qcloud_iot_common.h"
 
 /**********************************************************************
@@ -138,17 +139,27 @@ void HAL_SleepMs(uint32_t ms);
 typedef void (*ThreadRunFunc)(void *arg);
 
 /**
+ * @brief Thread priority.
+ *
+ */
+typedef enum {
+    THREAD_PRIORITY_HIGH,
+    THREAD_PRIORITY_MIDDLE,
+    THREAD_PRIORITY_LOW,
+} ThreadPriority;
+
+/**
  * @brief Thread params to create.
  *
  */
 typedef struct {
-    char         *thread_name; /**< thread name */
-    void*         thread_id;   /**< thread handle */
-    ThreadRunFunc thread_func; /**< thread entry function */
-    void         *user_arg;    /**< thread entry arg */
-    uint16_t      priority;    /**< thread priority */
-    void         *stack_base;  /**< thread stack base */
-    uint32_t      stack_size;  /**< thread stack size */
+    char          *thread_name; /**< thread name */
+    uint64_t       thread_id;   /**< thread handle */
+    ThreadRunFunc  thread_func; /**< thread entry function */
+    void          *user_arg;    /**< thread entry arg */
+    ThreadPriority priority;    /**< thread priority */
+    void          *stack_base;  /**< thread stack base */
+    uint32_t       stack_size;  /**< thread stack size */
 } ThreadParams;
 
 /**
@@ -220,7 +231,7 @@ void HAL_MailQueueDeinit(void *mail_q);
  * @param[in] size data size
  * @return 0 for success
  */
-int HAL_MailQueueSend(void *mail_q, void *buf, size_t size);
+int HAL_MailQueueSend(void *mail_q, const void *buf, size_t size);
 
 /**
  * @brief platform-dependent mail queue send function.
@@ -231,108 +242,65 @@ int HAL_MailQueueSend(void *mail_q, void *buf, size_t size);
  * @param[in] timeout_ms
  * @return 0 for success
  */
-int HAL_MailQueueRecv(void *mail_q, void *buf, size_t *size, int timeout_ms);
+int HAL_MailQueueRecv(void *mail_q, void *buf, size_t *size, uint32_t timeout_ms);
 
 #endif
 
 /**
- * @brief                   Functions for saving file into NVS(files/FLASH)
- * @param[in] filename      file path name
- * @param[in] write_buffer       source need write buffer
- * @param[in] len           length of file to save
- * @return              length of data save when success, or 0 for failure
+ * @brief Functions for saving file into NVS(files/FLASH)
+ * @param[in] filename file path name
+ * @param[in] buf source need write buffer
+ * @param[in] write_len length of file to write
+ * @return length of data save when success, or 0 for failure
  */
-size_t HAL_File_Save(const char *filename, const char *write_buffer, size_t wLen);
+size_t HAL_File_Write(const char *filename, const void *buf, size_t write_len, size_t offset);
+
 /**
  * @brief Functions for reading file from NVS(files/FLASH)
- * @param[in] filename      file path name
- * @param[in] buf           destination log buffer
- * @param[in] len           length of log to read
- * @return                  length of data read when success, or 0 for failure
+ * @param[in] filename file path name
+ * @param[in] buf destination log buffer
+ * @param[in] read_len length to read
+ * @return length of data read when success, or 0 for failure
  */
-size_t HAL_File_Read(const char *filename, char *buff, size_t read_len);
+size_t HAL_File_Read(const char *filename, void *buf, size_t read_len, size_t offset);
 
 /**
  * @brief Functions for deleting file in NVS(files/FLASH).
- * @param[in] filename      file path name
- * @return                  0 when success
+ * @param[in] filename file path name
+ * @return 0 when success
  */
 int HAL_File_Del(const char *filename);
+
 /**
  * @brief Functions for reading the size of file in NVS(files/FLASH).
- * @param[in] filename      file path name
- * @return                  0 when nothing exist
+ * @param[in] filename file path name
+ * @return 0 when nothing exist
  */
-size_t HAL_File_Get_Size(const char *filename);
+size_t HAL_File_GetSize(const char *filename);
 
 /**************************************************************************************
  * device info
  **************************************************************************************/
 
 /**
- * @brief Save device info.
+ * @brief Save device info
  *
- * @param[in] dev_info device info to be saved
+ * @param[in] device_info @see DeviceInfo
  * @return @see IotReturnCode
  */
-int HAL_SetDevInfo(void *dev_info);
+int HAL_SetDevInfo(DeviceInfo *device_info);
 
 /**
- * @brief Get device info.
+ * @brief Get device info
  *
- * @param[in] dev_info buffer to save device info
+ * @param[in] device_info @see DeviceInfo
  * @return @see IotReturnCode
  */
-int HAL_GetDevInfo(void *dev_info);
+int HAL_GetDevInfo(DeviceInfo *device_info);
 
 /**************************************************************************************
  * timer
  **************************************************************************************/
-
-/**
- * @brief Define timer structure, platform dependant.
- *
- */
-typedef struct {
-#if defined(__linux__) && defined(__GLIBC__)
-    struct timeval end_time;
-#else
-    uintptr_t end_time;
-#endif
-} Timer;
-
-/**
- * @brief Return if timer expired.
- *
- * @param[in] timer @see Timer
- * @return true expired
- * @return false no expired
- */
-bool HAL_Timer_Expired(Timer *timer);
-
-/**
- * @brief Countdown ms.
- *
- * @param[in,out] timer @see Timer
- * @param[in] timeout_ms ms to count down
- */
-void HAL_Timer_CountdownMs(Timer *timer, uint32_t timeout_ms);
-
-/**
- * @brief Countdown second
- *
- * @param[in,out] timer @see Timer
- * @param[in] timeout second to count down
- */
-void HAL_Timer_Countdown(Timer *timer, uint32_t timeout);
-
-/**
- * @brief Timer remain ms.
- *
- * @param[in] timer @see Timer
- * @return ms
- */
-uint32_t HAL_Timer_Remain(Timer *timer);
 
 /**
  * @brief time format string
@@ -342,26 +310,11 @@ uint32_t HAL_Timer_Remain(Timer *timer);
 char *HAL_Timer_Current(void);
 
 /**
- * @brief Get current utf timestamp of second
- *
- * @return timestamp
- */
-uint32_t HAL_Timer_CurrentSec(void);
-
-/**
  * @brief Get utc time ms timestamp.
  *
  * @return timestamp
  */
 uint64_t HAL_Timer_CurrentMs(void);
-
-/**
- * @brief Set system time using ms timestamp
- *
- * @param[in] timestamp_sec timestamp to set
- * @return 0 for success
- */
-int HAL_Timer_SetSystimeSec(uint32_t timestamp_sec);
 
 /**
  * @brief Set system time using second timestamp
@@ -415,6 +368,81 @@ int HAL_TCP_Write(int fd, const uint8_t *data, uint32_t len, uint32_t timeout_ms
  * @return @see IotReturnCode
  */
 int HAL_TCP_Read(int fd, uint8_t *data, uint32_t len, uint32_t timeout_ms, size_t *read_len);
+
+/**************************************************************************************
+ * AT module
+ **************************************************************************************/
+
+#ifdef AT_MODULE_ENABLE
+
+/**
+ * @brief Urc handler.
+ *
+ */
+typedef void (*OnUrcHandler)(const char *data, size_t data_len);
+
+/**
+ * @brief Init at module.
+ *
+ * @return 0 for success
+ */
+int HAL_Module_Init(void);
+
+/**
+ * @brief Deinit at module.
+ *
+ */
+void HAL_Module_Deinit(void);
+
+/**
+ * @brief Send at cmd to at module and wait for resp.
+ *
+ * @param[in] at_cmd at cmd
+ * @param[in] at_expect expect resp
+ * @param[in] timeout_ms wait timeout
+ * @return 0 for success
+ */
+int HAL_Module_SendAtCmdWaitResp(const char *at_cmd, const char *at_expect, uint32_t timeout_ms);
+
+/**
+ * @brief Send at cmd and waif for data.
+ *
+ * @param[in] at_cmd at cmd
+ * @param[in] at_expect expect resp
+ * @param[out] recv_buf recv data buffer
+ * @param[out] recv_len recv data length
+ * @param[in] timeout_ms wait timeout
+ * @return 0 for success
+ */
+int HAL_Module_SendAtCmdWaitRespWithData(const char *at_cmd, const char *at_expect, void *recv_buf, uint32_t *recv_len,
+                                         uint32_t timeout_ms);
+
+/**
+ * @brief Send date to at module.
+ *
+ * @param[in] data data to send
+ * @param[in] data_len data length
+ * @return 0 for success
+ */
+int HAL_Module_SendAtData(const void *data, int data_len);
+
+/**
+ * @brief Set urc.
+ *
+ * @param[in] urc irc string
+ * @param[in] urc_handler urc handler
+ * @return 0 for success
+ */
+int HAL_Module_SetUrc(const char *urc, OnUrcHandler urc_handler);
+
+/**
+ * @brief connect network
+ *
+ * @return int 0 for success
+ */
+int HAL_Module_ConnectNetwork(void);
+
+#endif
 
 #if defined(__cplusplus)
 }

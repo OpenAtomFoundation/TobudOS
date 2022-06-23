@@ -1,7 +1,10 @@
-###################### CONFIG  #####################################
+# ##################### CONFIG  #####################################
 
 # 开启单元测试
 set(CONFIG_IOT_TEST OFF)
+
+# 开启示例编译
+set(CONFIG_COMPILE_SAMPLE ON)
 
 # 打开IOT DEBUG
 set(CONFIG_IOT_DEBUG OFF)
@@ -42,21 +45,20 @@ option(LOG_UPLOAD_AES_ENCRYPT_POST "Log upload with AES encrypt" ${CONFIG_LOG_UP
 option(SYSTEM_COMM "Enable SYSTEM_COMM" ${FEATURE_SYSTEM_COMM_ENABLED})
 option(DEV_DYN_REG_ENABLED "Enable DEV_DYN_REG_ENABLED" ${CONFIG_DEV_DYN_REG_ENABLED})
 
-
-if(${CONFIG_AUTH_MODE} STREQUAL  "KEY")
+if(${CONFIG_AUTH_MODE} STREQUAL "KEY")
 	option(AUTH_MODE_KEY "Enable AUTH_MODE_KEY" ON)
 	option(AUTH_MODE_CERT "Enable AUTH_MODE_CERT" OFF)
-elseif(${CONFIG_AUTH_MODE} STREQUAL  "CERT" AND ${CONFIG_AUTH_WITH_NOTLS} STREQUAL "OFF")
+elseif(${CONFIG_AUTH_MODE} STREQUAL "CERT" AND ${CONFIG_AUTH_WITH_NOTLS} STREQUAL "OFF")
 	option(AUTH_MODE_KEY "Enable AUTH_MODE_KEY" OFF)
 	option(AUTH_MODE_CERT "Enable AUTH_MODE_CERT" ON)
 else()
 	message(FATAL_ERROR "INVAILD AUTH_MODE:${FEATURE_AUTH_MODE} WITH AUTH_WITH_NO_TLS:${FEATURE_AUTH_WITH_NOTLS}!")
 endif()
 
-configure_file (
-  "${IOT_SDK_SOURCE_DIR}/config/settings/qcloud_iot_config.h.in"
-  "${IOT_SDK_SOURCE_DIR}/include/config/qcloud_iot_config.h" 
-  @ONLY
+configure_file(
+	"${IOT_SDK_SOURCE_DIR}/config/settings/qcloud_iot_config.h.in"
+	"${IOT_SDK_SOURCE_DIR}/include/config/qcloud_iot_config.h"
+	@ONLY
 )
 
 # export include
@@ -69,7 +71,7 @@ include_directories(
 )
 
 # set output path
-set(LIBRARY_OUTPUT_PATH    ${IOT_SDK_SOURCE_DIR}/output/libs)
+set(LIBRARY_OUTPUT_PATH ${IOT_SDK_SOURCE_DIR}/output/libs)
 set(EXECUTABLE_OUTPUT_PATH ${IOT_SDK_SOURCE_DIR}/output/bin)
 
 # set link lib dir
@@ -81,14 +83,14 @@ if(${CONFIG_IOT_TEST} STREQUAL "ON")
 	set(inc_test CACHE INTERNAL "")
 endif()
 
-###################### PLATFORM MODULE #######################################
+# ##################### PLATFORM MODULE #######################################
 set(src_platform CACHE INTERNAL "")
 set(inc_platform CACHE INTERNAL "")
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/platform)
 include_directories(${inc_platform})
 add_library(iot_platform STATIC ${src_platform})
 
-###################### COMMON MODULE #######################################
+# ##################### COMMON MODULE #######################################
 set(src_common CACHE INTERNAL "")
 set(inc_common CACHE INTERNAL "")
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/mqtt_packet)
@@ -97,9 +99,9 @@ add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/cryptology)
 include_directories(${inc_common})
 add_library(iot_common STATIC ${src_common})
 
-###################### 3rd MODULE ####################################
+# ##################### 3rd MODULE ####################################
 # mbedtls
-if(${CONFIG_AUTH_MODE} STREQUAL  "KEY" )
+if(${CONFIG_AUTH_MODE} STREQUAL "KEY")
 	include_directories(
 		${IOT_SDK_SOURCE_DIR}/3rd/mbedtls/mbedtls/include
 		${IOT_SDK_SOURCE_DIR}/3rd/mbedtls/port/inc
@@ -112,7 +114,7 @@ if(${CONFIG_AUTH_WITH_NOTLS} STREQUAL "OFF")
 	set(libsdk ${libsdk} mbedtls)
 endif()
 
-###################### SERVICE MODULE ####################################
+# ##################### SERVICE MODULE ####################################
 set(src_services CACHE INTERNAL "")
 set(inc_services CACHE INTERNAL "")
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/mqtt_client)
@@ -123,16 +125,17 @@ add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/system)
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/log_upload)
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/dynreg)
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/ota)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/gateway)
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/explorer/data_template)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/explorer/service_mqtt)
 include_directories(${inc_services})
 add_library(iot_services STATIC ${src_services})
 
-###################### APP ####################################
+# ##################### APP ####################################
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/app/data_template)
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/app/ota)
 
-###################### EXTRACT ####################################
-
+# ##################### EXTRACT ####################################
 if(${CONFIG_EXTRACT_SRC} STREQUAL "ON")
 	file(COPY ${src_platform} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/src)
 	file(COPY ${inc_platform} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/inc/internal)

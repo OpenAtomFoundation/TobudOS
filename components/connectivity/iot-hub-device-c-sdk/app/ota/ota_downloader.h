@@ -38,6 +38,9 @@ extern "C" {
 #include "qcloud_iot_common.h"
 #include "utils_downloader.h"
 
+#define OTA_FILE_PATH             "./app_ota_fw.bin"
+#define OTA_BREAK_POINT_FILE_PATH "./break_point.dat"
+
 /**
  * @brief Firmware version size.
  *

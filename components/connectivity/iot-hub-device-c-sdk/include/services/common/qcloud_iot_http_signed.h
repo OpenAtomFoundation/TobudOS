@@ -52,8 +52,8 @@ typedef struct {
  * @param response_buf_len response buffer length if need recv
  * @return int 0 for success. others @see IotReturnCode
  */
-int IOT_HTTP_Signed_Request(HttpSignedParams *params, const char *request_buf, size_t request_buf_len,
-                            uint8_t *response_buf, int response_buf_len);
+int IOT_HTTP_SignedRequest(HttpSignedParams *params, const char *request_buf, size_t request_buf_len,
+                           uint8_t *response_buf, int response_buf_len);
 
 #ifdef __cplusplus
 }

@@ -3,6 +3,9 @@
 # 开启单元测试
 set(CONFIG_IOT_TEST OFF)
 
+# 开启示例编译
+set(CONFIG_COMPILE_SAMPLE ON)
+
 # 打开IOT DEBUG
 set(CONFIG_IOT_DEBUG OFF)
 
@@ -141,7 +144,7 @@ add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/ota)
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/http_signed)
 
 # 是否使能日志上报云端功能
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/log_upload)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/log_upload)
 
 # set include
 include_directories(${inc_services})

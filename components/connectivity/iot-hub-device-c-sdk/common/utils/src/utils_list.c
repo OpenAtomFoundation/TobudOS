@@ -35,7 +35,7 @@
 typedef struct ListNode {
     struct ListNode *prev;
     struct ListNode *next;
-    void *           val;
+    void            *val;
 } ListNode;
 
 /**
@@ -44,9 +44,9 @@ typedef struct ListNode {
  */
 typedef struct {
     UtilsListFunc func;
-    ListNode *    head;
-    ListNode *    tail;
-    void *        lock;
+    ListNode     *head;
+    ListNode     *tail;
+    void         *lock;
     int           len;
     int           max_len;
 } List;
@@ -56,8 +56,8 @@ typedef struct {
  *
  */
 typedef struct {
-    List *             list;
-    ListNode *         next;
+    List              *list;
+    ListNode          *next;
     UtilsListDirection direction;
 } ListIterator;
 
@@ -93,7 +93,7 @@ static inline void _list_unlock(List *list)
  */
 static void _list_remove(void *list, void *node)
 {
-    List *    self      = (List *)list;
+    List     *self      = (List *)list;
     ListNode *list_node = (ListNode *)node;
 
     list_node->prev ? (list_node->prev->next = list_node->next) : (self->head = list_node->next);
@@ -150,28 +150,40 @@ void *utils_list_create(UtilsListFunc func, int max_len)
  */
 void utils_list_destroy(void *list)
 {
+    utils_list_clear(list);
+    List *self = (List *)list;
+    if (self->lock) {
+        self->func.list_lock_deinit(self->lock);
+    }
+    self->func.list_free(self);
+}
+
+/**
+ * @brief Clear the list.
+ *
+ * @param[in] list pointer to list
+ */
+void utils_list_clear(void *list)
+{
     if (!list) {
         return;
     }
 
     List *self = (List *)list;
 
-    uint32_t len = self->len;
+    _list_lock(self);
 
     ListNode *next;
     ListNode *curr = self->head;
 
-    while (len--) {
+    while (self->len--) {
         next = curr->next;
         self->func.list_free(curr->val);
         self->func.list_free(curr);
         curr = next;
     }
 
-    if (self->lock) {
-        self->func.list_lock_deinit(self->lock);
-    }
-    self->func.list_free(self);
+    _list_unlock(self);
 }
 
 /**
@@ -239,7 +251,7 @@ void *utils_list_push(void *list, void *val)
  */
 void *utils_list_pop(void *list)
 {
-    List *    self = (List *)list;
+    List     *self = (List *)list;
     ListNode *node = NULL;
 
     _list_lock(self);
@@ -288,11 +300,11 @@ void utils_list_remove(void *list, void *node)
  * @param[in] handle process function @see OnNodeProcessHandle
  * @param[in,out] usr_data usr data to pass to OnNodeProcessHandle
  */
-void utils_list_process(void *list, uint8_t direction, OnNodeProcessHandle handle, void *usr_data)
+void utils_list_process(void *list, UtilsListDirection direction, OnNodeProcessHandle handle, void *usr_data)
 {
     int       rc;
     ListNode *node = NULL;
-    List *    self = (List *)list;
+    List     *self = (List *)list;
 
     _list_lock(self);
 
@@ -308,7 +320,7 @@ void utils_list_process(void *list, uint8_t direction, OnNodeProcessHandle handl
     };
 
     // traverse list to process
-    while ((node = iterator.next)) {
+    while ((node = iterator.next) != NULL) {
         iterator.next = iterator.direction == LIST_HEAD ? node->next : node->prev;
         if (!node->val) {
             _list_remove(list, node);

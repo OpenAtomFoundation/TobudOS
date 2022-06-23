@@ -69,6 +69,15 @@ typedef struct {
 } UtilsListFunc;
 
 /**
+ * @brief Default list func
+ *
+ */
+#define DEFAULT_LIST_FUNCS                                                                      \
+    {                                                                                           \
+        HAL_Malloc, HAL_Free, HAL_MutexCreate, HAL_MutexLock, HAL_MutexUnlock, HAL_MutexDestroy \
+    }
+
+/**
  * @brief Node process handle called by utils_list_process.
  *
  */
@@ -89,6 +98,13 @@ void *utils_list_create(UtilsListFunc func, int max_len);
  * @param[in] list pointer to list
  */
 void utils_list_destroy(void *list);
+
+/**
+ * @brief Clear the list
+ *
+ * @param list
+ */
+void utils_list_clear(void *list);
 
 /**
  * @brief Get list len.
@@ -127,11 +143,11 @@ void utils_list_remove(void *list, void *node);
  * @brief Process list using handle function.
  *
  * @param[in] list pointer to list
- * @param[in] direction direction to traverse
+ * @param[in] direction direction to traverse @see UtilsListDirection
  * @param[in] handle process function @see OnNodeProcessHandle
  * @param[in,out] usr_data usr data to pass to OnNodeProcessHandle
  */
-void utils_list_process(void *list, uint8_t direction, OnNodeProcessHandle handle, void *usr_data);
+void utils_list_process(void *list, UtilsListDirection direction, OnNodeProcessHandle handle, void *usr_data);
 
 #ifdef __cplusplus
 }

@@ -1,0 +1,160 @@
+// ----------------------------------------------------------------------------
+// user property
+// ----------------------------------------------------------------------------/
+
+#define TOTAL_USR_PROPERTY_STRUCT_POSITION_COUNT 2
+
+static DataTemplateProperty sg_usr_property_position[TOTAL_USR_PROPERTY_STRUCT_POSITION_COUNT];
+
+static void _init_data_template_property_position(void)
+{
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LONGITUDE].value.value_int = 1;
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LONGITUDE].key             = "longitude";
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LONGITUDE].type            = DATA_TEMPLATE_TYPE_INT;
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LONGITUDE].is_rw           = 0;
+
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LATITUDE].value.value_int = 1;
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LATITUDE].key             = "latitude";
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LATITUDE].type            = DATA_TEMPLATE_TYPE_INT;
+    sg_usr_property_position[USR_PROPERTY_POSITION_INDEX_LATITUDE].is_rw           = 0;
+}
+
+#define TOTAL_USR_PROPERTY_COUNT 6
+
+static DataTemplateProperty sg_usr_data_template_property[TOTAL_USR_PROPERTY_COUNT];
+
+static void _init_data_template_property(void)
+{
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER_SWITCH].value.value_bool = 0;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER_SWITCH].key              = "power_switch";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER_SWITCH].type             = DATA_TEMPLATE_TYPE_BOOL;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER_SWITCH].need_report      = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER_SWITCH].is_rw            = 1;
+
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_COLOR].value.value_enum = 0;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_COLOR].key              = "color";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_COLOR].type             = DATA_TEMPLATE_TYPE_ENUM;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_COLOR].need_report      = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_COLOR].is_rw            = 1;
+
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_BRIGHTNESS].value.value_int = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_BRIGHTNESS].key             = "brightness";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_BRIGHTNESS].type            = DATA_TEMPLATE_TYPE_INT;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_BRIGHTNESS].need_report     = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_BRIGHTNESS].is_rw           = 1;
+
+    static char sg_usr_property_name[64 + 1]                                  = " ";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_NAME].value.value_string = sg_usr_property_name;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_NAME].key                = "name";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_NAME].type               = DATA_TEMPLATE_TYPE_STRING;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_NAME].need_report        = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_NAME].is_rw              = 1;
+
+    _init_data_template_property_position();
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POSITION].value.value_struct.property = sg_usr_property_position;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POSITION].value.value_struct.count =
+        TOTAL_USR_PROPERTY_STRUCT_POSITION_COUNT;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POSITION].key         = "position";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POSITION].type        = DATA_TEMPLATE_TYPE_STRUCT;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POSITION].need_report = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POSITION].is_rw       = 0;
+
+    static char sg_usr_property_power[6 + 1]                                        = "high";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER].value.value_string_enum = sg_usr_property_power;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER].key                     = "power";
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER].type                    = DATA_TEMPLATE_TYPE_STRING_ENUM;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER].need_report             = 1;
+    sg_usr_data_template_property[USR_PROPERTY_INDEX_POWER].is_rw                   = 1;
+}
+
+// ----------------------------------------------------------------------------
+// user event
+// ----------------------------------------------------------------------------
+
+/**
+ * @brief Sample of event status_report post params.
+ *
+ */
+static const char* sg_usr_event_status_report_params = "{\"status\":0,\"message\":\" \"}";
+
+/**
+ * @brief Sample of event low_voltage post params.
+ *
+ */
+static const char* sg_usr_event_low_voltage_params = "{\"voltage\":1}";
+
+/**
+ * @brief Sample of event hardware_fault post params.
+ *
+ */
+static const char* sg_usr_event_hardware_fault_params = "{\"name\":\" \",\"error_code\":1}";
+
+#define TOTAL_USR_EVENT_COUNT 3
+
+static DataTemplateEvent sg_usr_data_template_event[TOTAL_USR_EVENT_COUNT];
+
+static void _init_data_template_event(void)
+{
+    sg_usr_data_template_event[USR_EVENT_INDEX_STATUS_REPORT].event_id = "status_report";
+    sg_usr_data_template_event[USR_EVENT_INDEX_STATUS_REPORT].type     = IOT_DATA_TEMPLATE_EVENT_TYPE_INFO;
+    sg_usr_data_template_event[USR_EVENT_INDEX_STATUS_REPORT].params   = sg_usr_event_status_report_params;
+
+    sg_usr_data_template_event[USR_EVENT_INDEX_LOW_VOLTAGE].event_id = "low_voltage";
+    sg_usr_data_template_event[USR_EVENT_INDEX_LOW_VOLTAGE].type     = IOT_DATA_TEMPLATE_EVENT_TYPE_ALERT;
+    sg_usr_data_template_event[USR_EVENT_INDEX_LOW_VOLTAGE].params   = sg_usr_event_low_voltage_params;
+
+    sg_usr_data_template_event[USR_EVENT_INDEX_HARDWARE_FAULT].event_id = "hardware_fault";
+    sg_usr_data_template_event[USR_EVENT_INDEX_HARDWARE_FAULT].type     = IOT_DATA_TEMPLATE_EVENT_TYPE_FAULT;
+    sg_usr_data_template_event[USR_EVENT_INDEX_HARDWARE_FAULT].params   = sg_usr_event_hardware_fault_params;
+}
+
+// ----------------------------------------------------------------------------
+// user action
+// ----------------------------------------------------------------------------
+
+#define TOTAL_USR_ACTION_LIGHT_BLINK_INPUT_PARAMS_COUNT 3
+
+static DataTemplateProperty sg_usr_action_light_blink_input[TOTAL_USR_ACTION_LIGHT_BLINK_INPUT_PARAMS_COUNT];
+
+static void _init_data_template_action_light_blink_input(void)
+{
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TIME].value.value_int = 0;
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TIME].key             = "time";
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TIME].type            = DATA_TEMPLATE_TYPE_INT;
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TIME].is_rw           = 1;
+
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_COLOR].value.value_bool = 0;
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_COLOR].key              = "color";
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_COLOR].type  = DATA_TEMPLATE_TYPE_BOOL;
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_COLOR].is_rw = 1;
+
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TOTAL_TIME].value.value_int = 0;
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TOTAL_TIME].key             = "total_time";
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TOTAL_TIME].type  = DATA_TEMPLATE_TYPE_INT;
+    sg_usr_action_light_blink_input[USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TOTAL_TIME].is_rw = 1;
+}
+
+/**
+ * @brief Sample of action light_blink reply.
+ *
+ */
+static IotDataTemplateActionReply sg_usr_action_light_blink_reply = {
+    .code         = 0,
+    .client_token = {.value = "test_light_blink", .value_len = sizeof("test_light_blink")},
+    .response     = "{\"err_code\":0}",
+};
+
+#define TOTAL_USR_ACTION_COUNT 1
+
+static DataTemplateAction sg_usr_data_template_action[TOTAL_USR_ACTION_COUNT];
+
+static void _init_data_template_action(void)
+{
+    _init_data_template_action_light_blink_input();
+    sg_usr_data_template_action[USR_ACTION_INDEX_LIGHT_BLINK].action_id = "light_blink";
+    sg_usr_data_template_action[USR_ACTION_INDEX_LIGHT_BLINK].input_struct.value_struct.property =
+        sg_usr_action_light_blink_input;
+    sg_usr_data_template_action[USR_ACTION_INDEX_LIGHT_BLINK].input_struct.value_struct.count =
+        TOTAL_USR_ACTION_LIGHT_BLINK_INPUT_PARAMS_COUNT;
+    sg_usr_data_template_action[USR_ACTION_INDEX_LIGHT_BLINK].reply = sg_usr_action_light_blink_reply;
+}

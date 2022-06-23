@@ -53,7 +53,11 @@ typedef enum {
 static int _data_template_topic_generate(char *buf, int buf_len, DataTemplateDirection direction, DataTemplateType type,
                                          const char *product_id, const char *device_name)
 {
-    const char *topic_method[] = {"property", "event", "action"};
+    const char *topic_method[] = {
+        [DATA_TEMPLATE_TYPE_PROPERTY] = "property",
+        [DATA_TEMPLATE_TYPE_EVENT]    = "event",
+        [DATA_TEMPLATE_TYPE_ACTION]   = "action",
+    };
     // $thing/down/property/C283SMY3W3/test1
     return HAL_Snprintf(buf, buf_len, "$thing/%s/%s/%s/%s", direction ? "down" : "up", topic_method[type],
                         STRING_PTR_PRINT_SANITY_CHECK(product_id), STRING_PTR_PRINT_SANITY_CHECK(device_name));

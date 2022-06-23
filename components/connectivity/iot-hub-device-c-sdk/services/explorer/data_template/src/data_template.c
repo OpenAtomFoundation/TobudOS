@@ -50,17 +50,17 @@ int IOT_DataTemplate_Init(void *client, IotDataTemplateCallback callback, void *
     rc |= data_template_topic_check_and_sub(client, DATA_TEMPLATE_TYPE_PROPERTY, data_template_property_message_handler,
                                             data_tempale_context);
 
-//    if (callback.event_callback.method_event_reply_callback) {
-//        data_tempale_context.event_callback = callback.event_callback;
-//        rc |= data_template_topic_check_and_sub(client, DATA_TEMPLATE_TYPE_EVENT, data_template_event_message_handler,
-//                                                data_tempale_context);
-//    }
+    if (callback.event_callback.method_event_reply_callback) {
+        data_tempale_context.event_callback = callback.event_callback;
+        rc |= data_template_topic_check_and_sub(client, DATA_TEMPLATE_TYPE_EVENT, data_template_event_message_handler,
+                                                data_tempale_context);
+    }
 
-//    if (callback.action_callback.method_action_callback) {
-//        data_tempale_context.action_callback = callback.action_callback;
-//        rc |= data_template_topic_check_and_sub(client, DATA_TEMPLATE_TYPE_ACTION, data_template_action_message_handler,
-//                                                data_tempale_context);
-//    }
+    if (callback.action_callback.method_action_callback) {
+        data_tempale_context.action_callback = callback.action_callback;
+        rc |= data_template_topic_check_and_sub(client, DATA_TEMPLATE_TYPE_ACTION, data_template_action_message_handler,
+                                                data_tempale_context);
+    }
     return rc;
 }
 

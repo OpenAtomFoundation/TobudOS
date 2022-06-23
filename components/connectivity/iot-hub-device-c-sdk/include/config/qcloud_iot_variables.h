@@ -49,10 +49,10 @@ extern "C" {
 #define QCLOUD_IOT_MQTT_WAIT_ACK_TIMEOUT (5 * 1000)
 
 /**
- * @brief default MQTT keep alive interval (unit: ms)
+ * @brief default MQTT keep alive interval (unit: s)
  *
  */
-#define QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL (240 * 1000)
+#define QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL (240)
 
 /**
  * @brief default MQTT Tx buffer size, MAX: 16*1024

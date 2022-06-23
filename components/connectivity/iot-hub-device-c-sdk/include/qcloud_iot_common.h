@@ -45,6 +45,7 @@ extern "C" {
 #include "qcloud_iot_error.h"
 #include "qcloud_iot_params_check.h"
 #include "qcloud_iot_platform.h"
+#include "qcloud_iot_timer.h"
 
 // config header file
 #include "qcloud_iot_config.h"
@@ -60,6 +61,7 @@ extern "C" {
 #include "qcloud_iot_log_upload.h"
 #include "qcloud_iot_http_signed.h"
 #include "qcloud_iot_dynreg.h"
+#include "qcloud_iot_gateway.h"
 
 #ifdef __cplusplus
 }

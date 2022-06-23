@@ -55,10 +55,10 @@ typedef enum {
  *
  */
 static const char *sg_file_manage_method_str[] = {
-    "update_resource",     // FILE_MANAGE_DOWN_MESSAGE_TYPE_UPDATE
-    "del_resource",        // FILE_MANAGE_DOWN_MESSAGE_TYPE_DEL
-    "report_version_rsp",  // FILE_MANAGE_DOWN_MESSAGE_TYPE_REPORT_VERSION_RESPONSE
-    "request_url_resp",    // FILE_MANAGE_DOWN_MESSAGE_TYPE_POST_REQUEST_RESPONSE
+    [FILE_MANAGE_DOWN_MESSAGE_TYPE_UPDATE]                  = "update_resource",
+    [FILE_MANAGE_DOWN_MESSAGE_TYPE_DEL]                     = "del_resource",
+    [FILE_MANAGE_DOWN_MESSAGE_TYPE_REPORT_VERSION_RESPONSE] = "report_version_rsp",
+    [FILE_MANAGE_DOWN_MESSAGE_TYPE_POST_REQUEST_RESPONSE]   = "request_url_resp",
 };
 
 /**
@@ -66,10 +66,10 @@ static const char *sg_file_manage_method_str[] = {
  *
  */
 static const char *sg_file_manage_file_type_str[] = {
-    "FILE",   // IOT_FILE_MANAGE_FILE_TYPE_FILE
-    "AUDIO",  // IOT_FILE_MANAGE_FILE_TYPE_AUDIO
-    "VOICE",  // IOT_FILE_MANAGE_FILE_TYPE_VOICE
-    "VIDEO",  // IOT_FILE_MANAGE_FILE_TYPE_VIDEO
+    [IOT_FILE_MANAGE_FILE_TYPE_FILE]  = "FILE",
+    [IOT_FILE_MANAGE_FILE_TYPE_AUDIO] = "AUDIO",
+    [IOT_FILE_MANAGE_FILE_TYPE_VOICE] = "VOICE",
+    [IOT_FILE_MANAGE_FILE_TYPE_VIDEO] = "VIDEO",
 };
 
 /**
@@ -174,10 +174,10 @@ error:
 static void _file_manage_message_callback(void *client, const MQTTMessage *message, void *usr_data)
 {
     const char *file_manage_method_str[] = {
-        "update_resource",     // FILE_MANAGE_DOWN_MESSAGE_TYPE_UPDATE
-        "del_resource",        // FILE_MANAGE_DOWN_MESSAGE_TYPE_DEL
-        "report_version_rsp",  // FILE_MANAGE_DOWN_MESSAGE_TYPE_REPORT_VERSION_RESPONSE
-        "request_url_resp",    // FILE_MANAGE_DOWN_MESSAGE_TYPE_POST_REQUEST_RESPONSE
+        [FILE_MANAGE_DOWN_MESSAGE_TYPE_UPDATE]                  = "update_resource",
+        [FILE_MANAGE_DOWN_MESSAGE_TYPE_DEL]                     = "del_resource",
+        [FILE_MANAGE_DOWN_MESSAGE_TYPE_REPORT_VERSION_RESPONSE] = "report_version_rsp",
+        [FILE_MANAGE_DOWN_MESSAGE_TYPE_POST_REQUEST_RESPONSE]   = "request_url_resp",
     };
 
     int rc, i = 0;
@@ -281,26 +281,46 @@ int IOT_FileManage_Report(void *client, char *buf, int buf_len, IotFileManageRep
      *
      */
     const char *state_string[] = {
-        "downloading", "burning", "done", "fail", "fail", "fail", "fail",
-        "fail",        "fail",    "done", "fail", "done", "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DOWNLOADING]      = "downloading",
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_BEGIN]    = "burning",
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_SUCCESS]  = "done",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DOWNLOAD_TIMEOUT] = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_FILE_NOT_EXIST]   = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_AUTH_FAIL]        = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_MD5_NOT_MATCH]    = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_FAIL]     = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_SPACE_NOT_ENOUGH] = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DEL_SUCCESS]      = "done",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DEL_FAIL]         = "fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_POST_SUCCESS]     = "done",
+        [IOT_FILE_MANAGE_REPORT_TYPE_POST_FAIL]        = "fail",
+
     };
 
-    int result_code[] = {0, 0, 0, -1, -2, -3, -4, -5, -6, 0, -7, 0, -8};
+    int result_code[] = {
+        [IOT_FILE_MANAGE_REPORT_TYPE_DOWNLOADING] = 0,       [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_BEGIN] = 0,
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_SUCCESS] = 0,   [IOT_FILE_MANAGE_REPORT_TYPE_DOWNLOAD_TIMEOUT] = -1,
+        [IOT_FILE_MANAGE_REPORT_TYPE_FILE_NOT_EXIST] = -2,   [IOT_FILE_MANAGE_REPORT_TYPE_AUTH_FAIL] = -3,
+        [IOT_FILE_MANAGE_REPORT_TYPE_MD5_NOT_MATCH] = -4,    [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_FAIL] = -5,
+        [IOT_FILE_MANAGE_REPORT_TYPE_SPACE_NOT_ENOUGH] = -6, [IOT_FILE_MANAGE_REPORT_TYPE_DEL_SUCCESS] = 0,
+        [IOT_FILE_MANAGE_REPORT_TYPE_DEL_FAIL] = -7,         [IOT_FILE_MANAGE_REPORT_TYPE_POST_SUCCESS] = 0,
+        [IOT_FILE_MANAGE_REPORT_TYPE_POST_FAIL] = -8,
+    };
 
     const char *result_msg[] = {
-        "",
-        "",
-        "",
-        "timeout",
-        "file not exit",
-        "auth fail",
-        "md5 not match",
-        "upgrade fail",
-        "space not enough",
-        "",
-        "del fail",
-        "",
-        "post fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DOWNLOADING]      = "",
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_BEGIN]    = "",
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_SUCCESS]  = "",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DOWNLOAD_TIMEOUT] = "timeout",
+        [IOT_FILE_MANAGE_REPORT_TYPE_FILE_NOT_EXIST]   = "file not exit",
+        [IOT_FILE_MANAGE_REPORT_TYPE_AUTH_FAIL]        = "auth fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_MD5_NOT_MATCH]    = "md5 not match",
+        [IOT_FILE_MANAGE_REPORT_TYPE_UPGRADE_FAIL]     = "upgrade fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_SPACE_NOT_ENOUGH] = "space not enough",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DEL_SUCCESS]      = "",
+        [IOT_FILE_MANAGE_REPORT_TYPE_DEL_FAIL]         = "del fail",
+        [IOT_FILE_MANAGE_REPORT_TYPE_POST_SUCCESS]     = "",
+        [IOT_FILE_MANAGE_REPORT_TYPE_POST_FAIL]        = "post fail",
     };
 
     int len;

@@ -38,6 +38,7 @@
  */
 typedef enum {
     SERVICE_TYPE_FILE_MANAGE = 0,
+    SERVICE_TYPE_GATEWAY_SCENE,
 } ServiceType;
 
 /**
@@ -46,10 +47,10 @@ typedef enum {
  */
 typedef struct {
     ServiceType      type;
-    const char **    method_list;
+    const char     **method_list;
     int              method_num;
     OnMessageHandler message_handle;
-    void *           usr_data;
+    void            *usr_data;
     void (*user_data_free)(void *);
 } ServiceRegisterParams;
 

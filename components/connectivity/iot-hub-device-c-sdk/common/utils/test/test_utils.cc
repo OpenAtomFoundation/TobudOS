@@ -46,14 +46,7 @@ namespace utils_unittest {
 class UtilsListTest : public testing::Test {
  protected:
   void SetUp() override {
-    UtilsListFunc func = {
-        .list_malloc = HAL_Malloc,
-        .list_free = HAL_Free,
-        .list_lock_init = HAL_MutexCreate,
-        .list_lock = HAL_MutexLock,
-        .list_unlock = HAL_MutexUnlock,
-        .list_lock_deinit = HAL_MutexDestroy,
-    };
+    UtilsListFunc func = DEFAULT_LIST_FUNCS;
 
     self_list = utils_list_create(func, 10);
     ASSERT_NE(self_list, nullptr);
@@ -117,12 +110,7 @@ TEST_F(UtilsListTest, list_process) {
  *
  */
 TEST(UtilsLogTest, log) {
-  LogHandleFunc func = {0};
-
-  func.log_malloc = HAL_Malloc;
-  func.log_free = HAL_Free;
-  func.log_get_current_time_str = HAL_Timer_Current;
-  func.log_printf = HAL_Printf;
+  LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
   ASSERT_EQ(utils_log_init(func, LOG_LEVEL_DEBUG, 2048), 0);
   Log_d("Here is a debug level log test!");
   Log_i("Here is a info level log test!");
@@ -176,6 +164,51 @@ TEST(UtilsJsonTest, json) {
       "\\\"bool_false_test\\\":false,\\\"null_test\\\":null}";
   ASSERT_EQ(utils_json_strip_transfer(test_json_before_strip, strlen(test_json_before_strip)), strlen(test_json));
   ASSERT_EQ(strncmp(test_json_before_strip, test_json, strlen(test_json_before_strip)), 0);
+
+  char test_json_break[] = "{\n\"str_test\":\"test\"\n}";
+  ASSERT_EQ(utils_json_value_get("str_test", strlen("str_test"), test_json_break, strlen(test_json_break), &value), 0);
+  ASSERT_EQ(strncmp(value.value, "test", value.value_len), 0);
+}
+
+/**
+ * @brief Test json array.
+ *
+ */
+static const char *sg_dst_value[12];
+
+static UtilsJsonArrayIterResult _array_handle(const char *value, int value_len, void *arg) {
+  static int i = 0;
+  EXPECT_EQ(0, strncmp(sg_dst_value[i++], value, value_len));
+  return UTILS_JSON_ARRAY_ITER_CONTINUE;
+}
+
+TEST(UtilsJsonTest, json_array) {
+  int i = 0;
+  char test_array_string[] = "[\"test0\",\"test1\"]";
+  sg_dst_value[i++] = "test0";
+  sg_dst_value[i++] = "test1";
+  char test_array_int[] = "[1,2]";
+  sg_dst_value[i++] = "1";
+  sg_dst_value[i++] = "2";
+  char test_array_float[] = "[1.20f,1.21f]";
+  sg_dst_value[i++] = "1.20f";
+  sg_dst_value[i++] = "1.21f";
+  char test_array_bool[] = "[false,true]";
+  sg_dst_value[i++] = "false";
+  sg_dst_value[i++] = "true";
+  char test_array_null[] = "[null,null]";
+  sg_dst_value[i++] = "null";
+  sg_dst_value[i++] = "null";
+  char test_array_obj[] = "[{\"test\":0},{\"test\":1}]";
+  sg_dst_value[i++] = "{\"test\":0}";
+  sg_dst_value[i++] = "{\"test\":1}";
+
+  utils_json_array_parse(test_array_string, sizeof(test_array_string) - 1, _array_handle, NULL);
+  utils_json_array_parse(test_array_int, sizeof(test_array_int) - 1, _array_handle, NULL);
+  utils_json_array_parse(test_array_float, sizeof(test_array_float) - 1, _array_handle, NULL);
+  utils_json_array_parse(test_array_bool, sizeof(test_array_bool) - 1, _array_handle, NULL);
+  utils_json_array_parse(test_array_null, sizeof(test_array_null) - 1, _array_handle, NULL);
+  utils_json_array_parse(test_array_obj, sizeof(test_array_obj) - 1, _array_handle, NULL);
 }
 
 }  // namespace utils_unittest

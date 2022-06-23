@@ -41,7 +41,7 @@
 static int _push_pub_info_to_list(QcloudIotClient *client, int packet_len, uint16_t packet_id, void **node)
 {
     IOT_FUNC_ENTRY;
-    void *            list       = client->list_pub_wait_ack;
+    void             *list       = client->list_pub_wait_ack;
     QcloudIotPubInfo *repub_info = NULL;
 
     // construct republish info
@@ -55,7 +55,7 @@ static int _push_pub_info_to_list(QcloudIotClient *client, int packet_len, uint1
     repub_info->len       = packet_len;
     repub_info->packet_id = packet_id;
     memcpy(repub_info->buf, client->write_buf, packet_len);  // save the whole packet
-    HAL_Timer_CountdownMs(&repub_info->pub_start_time, client->command_timeout_ms);
+    IOT_Timer_CountdownMs(&repub_info->pub_start_time, client->command_timeout_ms);
 
     // push republish info to list
     *node = utils_list_push(list, repub_info);
@@ -82,10 +82,10 @@ static UtilsListResult _pub_wait_list_process_check_timeout(void *list, void *no
 
     MQTTEventMsg      msg;
     QcloudIotPubInfo *repub_info = (QcloudIotPubInfo *)val;
-    QcloudIotClient * client     = (QcloudIotClient *)usr_data;
+    QcloudIotClient  *client     = (QcloudIotClient *)usr_data;
 
     // check the request if timeout or not
-    if (HAL_Timer_Remain(&repub_info->pub_start_time) > 0) {
+    if (IOT_Timer_Remain(&repub_info->pub_start_time) > 0) {
         IOT_FUNC_EXIT_RC(LIST_TRAVERSE_CONTINUE);
     }
 
@@ -254,7 +254,7 @@ int qcloud_iot_mqtt_publish(QcloudIotClient *client, const char *topic_name, con
     IOT_FUNC_ENTRY;
     int              rc, packet_len;
     MQTTPublishFlags flags;
-    void *           node      = NULL;
+    void            *node      = NULL;
     uint16_t         packet_id = 0;
 
     if (params->qos > QOS0) {

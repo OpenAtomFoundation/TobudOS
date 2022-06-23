@@ -86,7 +86,7 @@ static int _push_sub_info_to_list(QcloudIotClient *client, int packet_len, uint1
     sub_info->packet_id = packet_id;
     sub_info->handler   = *handler;
     memcpy(sub_info->buf, client->write_buf, packet_len);
-    HAL_Timer_CountdownMs(&sub_info->sub_start_time, client->command_timeout_ms);
+    IOT_Timer_CountdownMs(&sub_info->sub_start_time, client->command_timeout_ms);
 
     *node = utils_list_push(list, sub_info);
     if (!*node) {
@@ -136,7 +136,7 @@ static UtilsListResult _sub_wait_list_process_check_timeout(void *list, void *no
     QcloudIotClient  *client   = (QcloudIotClient *)usr_data;
 
     // check the request if timeout or not
-    if (HAL_Timer_Remain(&sub_info->sub_start_time) > 0) {
+    if (IOT_Timer_Remain(&sub_info->sub_start_time) > 0) {
         return LIST_TRAVERSE_CONTINUE;
     }
 

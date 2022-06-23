@@ -38,22 +38,13 @@ extern "C" {
 #cmakedefine AUTH_MODE_KEY
 #cmakedefine AUTH_WITH_NO_TLS
 #cmakedefine GATEWAY_ENABLED
-#cmakedefine COAP_COMM_ENABLED
-#cmakedefine OTA_MQTT_CHANNEL
 #cmakedefine SYSTEM_COMM
 #cmakedefine DEV_DYN_REG_ENABLED
 #cmakedefine LOG_UPLOAD
 #cmakedefine IOT_DEBUG
 #cmakedefine DEBUG_DEV_INFO_USED
-#cmakedefine AT_TCP_ENABLED
-#cmakedefine AT_UART_RECV_IRQ
-#cmakedefine AT_OS_USED
-#cmakedefine AT_DEBUG
-#cmakedefine OTA_USE_HTTPS
+#cmakedefine AT_MODULE_ENABLE
 #cmakedefine MULTITHREAD_ENABLED
-#cmakedefine BROADCAST_ENABLED
-#cmakedefine RRPC_ENABLED
-#cmakedefine REMOTE_CONFIG_MQTT
 #cmakedefine LOG_UPLOAD_TYPE_JSON
 #cmakedefine LOG_UPLOAD_AES_ENCRYPT_POST
 

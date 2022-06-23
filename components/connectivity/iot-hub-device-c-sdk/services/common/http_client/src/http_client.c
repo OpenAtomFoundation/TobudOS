@@ -194,7 +194,10 @@ static int _http_client_send_request_line(IotHTTPClient *client, const IotHTTPRe
      * @brief order @see IotHTTPMethod
      *
      */
-    const char *method_str[] = {"GET", "POST", "PUT", "DELETE", "HEAD"};
+    const char *method_str[] = {
+        [IOT_HTTP_METHOD_GET] = "GET",       [IOT_HTTP_METHOD_POST] = "POST", [IOT_HTTP_METHOD_PUT] = "PUT",
+        [IOT_HTTP_METHOD_DELETE] = "DELETE", [IOT_HTTP_METHOD_HEAD] = "HEAD",
+    };
 
     rc = _http_client_parse_url(params->url, &host, &path);
     if (rc) {
@@ -319,8 +322,8 @@ static int _http_client_chunked_recv(IotHTTPClient *client, uint32_t timeout_ms)
     int   rc = 0, read_size = 0;
     int   read_size_flag = 1;
 
-    Timer read_timer;
-    HAL_Timer_CountdownMs(&read_timer, timeout_ms);
+    QcloudIotTimer read_timer;
+    IOT_Timer_CountdownMs(&read_timer, timeout_ms);
 
     do {
         while (1) {
@@ -330,7 +333,7 @@ static int _http_client_chunked_recv(IotHTTPClient *client, uint32_t timeout_ms)
                 break;
             }
 
-            if (HAL_Timer_Expired(&read_timer)) {
+            if (IOT_Timer_Expired(&read_timer)) {
                 return 0;
             }
 
@@ -361,7 +364,7 @@ static int _http_client_chunked_recv(IotHTTPClient *client, uint32_t timeout_ms)
         memmove(crlf_pointer, crlf_pointer + 2, buf + response->recv_len - (uint8_t *)crlf_pointer);
         find_from += read_size;
         read_size_flag = true;
-    } while (!HAL_Timer_Expired(&read_timer));
+    } while (!IOT_Timer_Expired(&read_timer));
     return 0;
 }
 
@@ -421,25 +424,28 @@ static int _http_client_recv_content(IotHTTPClient *client, int offset, uint32_t
  */
 static int _http_client_recv_response(IotHTTPClient *client, uint32_t timeout_ms)
 {
-    Timer timer;
-    char *content_length, *body_end;
-    int   rc, len = 0;
-    char *buf     = (char *)client->response.content_buf;
-    int   buf_len = client->response.content_buf_len;
+    QcloudIotTimer timer;
+    char          *content_length, *body_end;
+    int            rc, len = 0;
+    char          *buf     = (char *)client->response.content_buf;
+    int            buf_len = client->response.content_buf_len;
 
     IotHTTPResponseData *response = &client->response;
     memset(buf, 0, buf_len);
-    HAL_Timer_CountdownMs(&timer, timeout_ms);
+    IOT_Timer_CountdownMs(&timer, timeout_ms);
 
     // 1. found body end
     while (NULL == (body_end = strstr(buf, "\r\n\r\n"))) {
         // timeout
-        if (HAL_Timer_Expired(&timer)) {
+        if (IOT_Timer_Expired(&timer)) {
             return QCLOUD_ERR_HTTP_TIMEOUT;
         }
         // timeout 100ms for header less than buff len
         rc = _http_client_recv(client, (uint8_t *)buf + len, buf_len - len - 1, 100);
         if (rc < 0) {
+            if (rc == QCLOUD_ERR_TCP_READ_TIMEOUT || rc == QCLOUD_ERR_SSL_READ_TIMEOUT) {
+                continue;
+            }
             Log_e("read failed, rc %d", rc);
             return rc;
         }
@@ -489,7 +495,7 @@ static int _http_client_recv_response(IotHTTPClient *client, uint32_t timeout_ms
 recv_content:
     memmove(buf, body_end, len);
     response->recv_len = len;
-    return _http_client_recv_content(client, len, HAL_Timer_Remain(&timer));
+    return _http_client_recv_content(client, len, IOT_Timer_Remain(&timer));
 }
 
 /**************************************************************************************

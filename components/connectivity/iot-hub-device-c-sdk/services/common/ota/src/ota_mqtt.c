@@ -34,7 +34,7 @@
  */
 typedef struct {
     IotOTAUpdateCallback callback;
-    void *               usr_data;
+    void                *usr_data;
 } OTAUpdateContext;
 
 /**
@@ -115,8 +115,8 @@ error:
 static void _ota_mqtt_message_callback(void *client, const MQTTMessage *message, void *usr_data)
 {
     const char *ota_update_str[] = {
-        "report_version_rsp",  // OTA_UPDATE_TYPE_REPORT_VERSION_RSP
-        "update_firmware",     // OTA_UPDATE_TYPE_UPDATE_FIRMWARE
+        [OTA_UPDATE_TYPE_REPORT_VERSION_RSP] = "report_version_rsp",
+        [OTA_UPDATE_TYPE_UPDATE_FIRMWARE]    = "update_firmware",
     };
 
     int rc, i = 0;
@@ -263,9 +263,28 @@ int IOT_OTA_ReportProgress(void *client, char *buf, int buf_len, IotOTAReportTyp
      * @brief order @see IotOTAReportType
      *
      */
-    const char *ota_state[]   = {"downloading", "burning", "done", "fail", "fail", "fail", "fail", "fail"};
-    int         result_code[] = {0, 0, 0, -1, -2, -3, -4, -5};
-    const char *result_msg[]  = {"", "", "", "timeout", "file not exit", "auth fail", "md5 not match", "upgrade fail"};
+    const char *ota_state[] = {
+        [IOT_OTA_REPORT_TYPE_DOWNLOADING] = "downloading", [IOT_OTA_REPORT_TYPE_UPGRADE_BEGIN] = "burning",
+        [IOT_OTA_REPORT_TYPE_UPGRADE_SUCCESS] = "done",    [IOT_OTA_REPORT_TYPE_DOWNLOAD_TIMEOUT] = "fail",
+        [IOT_OTA_REPORT_TYPE_FILE_NOT_EXIST] = "fail",     [IOT_OTA_REPORT_TYPE_AUTH_FAIL] = "fail",
+        [IOT_OTA_REPORT_TYPE_MD5_NOT_MATCH] = "fail",      [IOT_OTA_REPORT_TYPE_UPGRADE_FAIL] = "fail",
+    };
+    int result_code[] = {
+        [IOT_OTA_REPORT_TYPE_DOWNLOADING] = 0,     [IOT_OTA_REPORT_TYPE_UPGRADE_BEGIN] = 0,
+        [IOT_OTA_REPORT_TYPE_UPGRADE_SUCCESS] = 0, [IOT_OTA_REPORT_TYPE_DOWNLOAD_TIMEOUT] = -1,
+        [IOT_OTA_REPORT_TYPE_FILE_NOT_EXIST] = -2, [IOT_OTA_REPORT_TYPE_AUTH_FAIL] = -3,
+        [IOT_OTA_REPORT_TYPE_MD5_NOT_MATCH] = -4,  [IOT_OTA_REPORT_TYPE_UPGRADE_FAIL] = -5,
+    };
+    const char *result_msg[] = {
+        [IOT_OTA_REPORT_TYPE_DOWNLOADING]      = "",
+        [IOT_OTA_REPORT_TYPE_UPGRADE_BEGIN]    = "",
+        [IOT_OTA_REPORT_TYPE_UPGRADE_SUCCESS]  = "",
+        [IOT_OTA_REPORT_TYPE_DOWNLOAD_TIMEOUT] = "timeout",
+        [IOT_OTA_REPORT_TYPE_FILE_NOT_EXIST]   = "file not exit",
+        [IOT_OTA_REPORT_TYPE_AUTH_FAIL]        = "auth fail",
+        [IOT_OTA_REPORT_TYPE_MD5_NOT_MATCH]    = "md5 not match",
+        [IOT_OTA_REPORT_TYPE_UPGRADE_FAIL]     = "upgrade fail",
+    };
 
     int len;
     switch (report_type) {

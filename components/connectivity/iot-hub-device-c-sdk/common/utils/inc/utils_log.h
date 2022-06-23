@@ -58,7 +58,7 @@ typedef struct {
     void *(*log_malloc)(size_t len);
     void (*log_free)(void *val);
     void (*log_handle)(const char *message);
-    void (*log_upload)(int log_level, const char *message);
+    void (*log_upload)(LogLevel log_level, const char *message);
     void (*log_printf)(const char *fmt, ...);
     char *(*log_get_current_time_str)(void);
     void *(*log_mutex_create)(void);
@@ -66,6 +66,16 @@ typedef struct {
     void (*log_mutex_unlock)(void *mutex);
     void (*log_mutex_destroy)(void *mutex);
 } LogHandleFunc;
+
+/**
+ * @brief Default log func
+ *
+ */
+#define DEFAULT_LOG_HANDLE_FUNCS                                                                         \
+    {                                                                                                    \
+        HAL_Malloc, HAL_Free, NULL, NULL, HAL_Printf, HAL_Timer_Current, HAL_MutexCreate, HAL_MutexLock, \
+            HAL_MutexUnlock, HAL_MutexDestroy                                                            \
+    }
 
 /**
  * @brief Init log with func, log level, max log size.

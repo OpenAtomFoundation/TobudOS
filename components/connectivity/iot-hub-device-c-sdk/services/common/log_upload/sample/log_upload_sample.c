@@ -114,12 +114,8 @@ static void _mqtt_event_handler(void *client, void *handle_context, MQTTEventMsg
  */
 static void _setup_connect_init_params(MQTTInitParams *init_params, DeviceInfo *device_info)
 {
-    init_params->device_info            = device_info;
-    init_params->command_timeout        = QCLOUD_IOT_MQTT_COMMAND_TIMEOUT;
-    init_params->keep_alive_interval_ms = QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL;
-    init_params->auto_connect_enable    = 1;
-    init_params->event_handle.h_fp      = _mqtt_event_handler;
-    init_params->event_handle.context   = NULL;
+    init_params->device_info       = device_info;
+    init_params->event_handle.h_fp = _mqtt_event_handler;
 }
 
 static void _setup_log_upload_init_params(LogUploadInitParams *init_params, DeviceInfo *device_info)
@@ -131,9 +127,9 @@ static void _setup_log_upload_init_params(LogUploadInitParams *init_params, Devi
     init_params->log_buffer_size   = LOG_UPLOAD_BUFFER_SIZE;
     init_params->save_log_filename = "./tmp/upload-fail-save.log";
     init_params->read_func         = HAL_File_Read;
-    init_params->save_func         = HAL_File_Save;
+    init_params->save_func         = HAL_File_Write;
     init_params->del_func          = HAL_File_Del;
-    init_params->get_size_func     = HAL_File_Get_Size;
+    init_params->get_size_func     = HAL_File_GetSize;
 }
 // ----------------------------------------------------------------------------
 // Main
@@ -162,13 +158,8 @@ int main(int argc, char **argv)
     int rc;
     int loop_cnt = 5;
     // init log level
-    LogHandleFunc func = {0};
-
-    func.log_malloc               = HAL_Malloc;
-    func.log_free                 = HAL_Free;
-    func.log_get_current_time_str = HAL_Timer_Current;
-    func.log_printf               = HAL_Printf;
-    func.log_upload               = IOT_Log_Upload_AppendToUploadBuffer;
+    LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
+    func.log_upload    = IOT_Log_Upload_AppendToUploadBuffer;
 
     utils_log_init(func, LOG_LEVEL_DEBUG, 2048);
 

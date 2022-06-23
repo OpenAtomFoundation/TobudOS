@@ -38,23 +38,15 @@ extern "C" {
 #define AUTH_MODE_KEY
 #define AUTH_WITH_NO_TLS
 /* #undef GATEWAY_ENABLED */
-/* #undef COAP_COMM_ENABLED */
-/* #undef OTA_MQTT_CHANNEL */
 /* #undef SYSTEM_COMM */
 /* #undef DEV_DYN_REG_ENABLED */
 /* #undef LOG_UPLOAD */
 /* #undef IOT_DEBUG */
 #define DEBUG_DEV_INFO_USED
-/* #undef AT_TCP_ENABLED */
-/* #undef AT_UART_RECV_IRQ */
-/* #undef AT_OS_USED */
-/* #undef AT_DEBUG */
-/* #undef OTA_USE_HTTPS */
+#define AT_MODULE_ENABLE
 #define MULTITHREAD_ENABLED
-/* #undef BROADCAST_ENABLED */
-/* #undef RRPC_ENABLED */
-/* #undef REMOTE_CONFIG_MQTT */
 /* #undef LOG_UPLOAD_TYPE_JSON */
+/* #undef LOG_UPLOAD_AES_ENCRYPT_POST */
 
 #ifdef __cplusplus
 }

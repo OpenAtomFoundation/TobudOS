@@ -27,6 +27,7 @@
  */
 
 #include "log_upload.h"
+#include "utils_hmac.h"
 
 typedef struct {
     void       *lock_buf;
@@ -45,7 +46,7 @@ static LogUploadBuffer *sg_log_upload_buffer_handle = NULL;
 // ----------------------------------------------------------------------------
 
 /**
- * @brief reset log upload buffer
+ * @brief Reset log upload buffer.
  *
  * @param[in,out] log_upload_buffer_handle handle of log upload buffer
  */
@@ -56,7 +57,13 @@ static void _reset_log_buffer(LogUploadBuffer *log_upload_buffer_handle)
            log_upload_buffer_handle->log_buffer_size - log_upload_buffer_handle->log_buffer_head_len);
 }
 
-static LogUploadBuffer *_log_upload_buffer_init_pre(LogUploadInitParams *init_params)
+/**
+ * @brief Init log buffer common logic.
+ *
+ * @param[in] init_params @see LogUploadInitParams
+ * @return pointer to log buffer
+ */
+static LogUploadBuffer *_log_upload_buffer_init_pre(const LogUploadInitParams *init_params)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)HAL_Malloc(sizeof(LogUploadBuffer));
     if (!handle) {
@@ -98,9 +105,9 @@ err_exit:
 }
 
 /**
- * @brief deinit log buffer handle
+ * @brief Deinit log buffer handle.
  *
- * @param upload_buffer_handle
+ * @param[in] upload_buffer_handle @see LogUploadBuffer
  */
 void log_upload_buffer_deinit(void *upload_buffer_handle)
 {
@@ -120,12 +127,12 @@ void log_upload_buffer_deinit(void *upload_buffer_handle)
 }
 
 /**
- * @brief Get the log buffer write index object
+ * @brief Get the log buffer write index object.
  *
- * @param log_upload_buffer_handle
- * @return uint32_t
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return write index
  */
-uint32_t get_log_buffer_write_index(void *log_upload_buffer_handle)
+uint32_t log_upload_buffer_get_write_index(void *log_upload_buffer_handle)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)log_upload_buffer_handle;
     HAL_MutexLock(handle->lock_buf);
@@ -135,47 +142,49 @@ uint32_t get_log_buffer_write_index(void *log_upload_buffer_handle)
 }
 
 /**
- * @brief Get the log buffer object
+ * @brief Get the log buffer object.
  *
- * @param log_upload_buffer_handle
- * @return char*
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return log buffer
  */
-char *get_log_buffer(void *log_upload_buffer_handle)
+char *log_upload_buffer_get(void *log_upload_buffer_handle)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)log_upload_buffer_handle;
     return handle->log_buffer;
 }
 
 /**
- * @brief Get the log buffer head len object
+ * @brief Get the log buffer head len object.
  *
- * @param log_upload_buffer_handle
- * @return uint32_t
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return head length
  */
-uint32_t get_log_buffer_head_len(void *log_upload_buffer_handle)
+uint32_t log_upload_buffer_get_head_len(void *log_upload_buffer_handle)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)log_upload_buffer_handle;
     return handle->log_buffer_head_len;
 }
 
 /**
- * @brief check log buffer is empty or not
+ * @brief Check log buffer is empty or not.
  *
- * @param log_upload_buffer_handle
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
  * @return true empty
  * @return false not empty
  */
-bool have_data_need_update(void *log_upload_buffer_handle)
+bool log_upload_buffer_is_empty(void *log_upload_buffer_handle)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)log_upload_buffer_handle;
     return handle->write_index == handle->log_buffer_head_len;
 }
 
 /**
- * @brief When a new log appears during the reporting period, move the log to the specified position in the buffer
+ * @brief When a new log appears during the reporting period, move the log to the specified position in the buffer.
  *
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @param[in] need_remove_size
  */
-void remove_log_from_buffer(void *log_upload_buffer_handle, uint32_t need_remove_size)
+void log_upload_buffer_remove_log(void *log_upload_buffer_handle, uint32_t need_remove_size)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)log_upload_buffer_handle;
     if (need_remove_size > handle->write_index || need_remove_size > handle->log_buffer_size) {
@@ -190,22 +199,22 @@ void remove_log_from_buffer(void *log_upload_buffer_handle, uint32_t need_remove
 }
 
 /**
- * @brief copy log buffer head
+ * @brief Copy log buffer head.
  *
  * @param[out] dst Destination address
- * @param log_upload_buffer_handle
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
  */
-void copy_log_buffer_header(char *dst, void *log_upload_buffer_handle)
+void log_upload_buffer_copy_header(char *dst, void *log_upload_buffer_handle)
 {
     LogUploadBuffer *handle = (LogUploadBuffer *)log_upload_buffer_handle;
     memcpy(dst, handle->log_buffer, handle->log_buffer_head_len);
 }
 
 /**
- * @brief clear log upload buffer
+ * @brief Clear log upload buffer.
  *
  */
-void log_upload_clear_buffer(void)
+void log_upload_buffer_clear(void)
 {
     if (!sg_log_upload_buffer_handle) {
         UPLOAD_ERR("log upload buffer not init.");
@@ -217,11 +226,11 @@ void log_upload_clear_buffer(void)
 }
 
 /**
- * @brief Get the log buffer size object
+ * @brief Get the log buffer size object.
  *
- * @return uint32_t log buffer size
+ * @return log buffer size
  */
-uint32_t get_log_buffer_size(void)
+uint32_t log_upload_buffer_get_size(void)
 {
     if (!sg_log_upload_buffer_handle) {
         UPLOAD_ERR("log upload buffer not init.");
@@ -230,35 +239,17 @@ uint32_t get_log_buffer_size(void)
     return sg_log_upload_buffer_handle->log_buffer_size;
 }
 
-/**
- * @brief
- *
- */
-void log_buffer_lock(void)
-{
-    HAL_MutexLock(sg_log_upload_buffer_handle->lock_buf);
-}
-
-/**
- * @brief
- *
- */
-void log_buffer_unlock(void)
-{
-    HAL_MutexUnlock(sg_log_upload_buffer_handle->lock_buf);
-}
-
 // ----------------------------------------------------------------------------
 // New log fromat by json
 // ----------------------------------------------------------------------------
 #ifdef LOG_UPLOAD_TYPE_JSON
 /**
- * @brief log upload buffer init
+ * @brief Log upload buffer init.
  *
- * @param init_params @see LogUploadInitParams
+ * @param[in] init_params @see LogUploadInitParams
  * @return void* if success return @see LogUploadBuffer
  */
-void *log_upload_buffer_init(LogUploadInitParams *init_params)
+void *log_upload_buffer_init(const LogUploadInitParams *init_params)
 {
     LogUploadBuffer *handle = _log_upload_buffer_init_pre(init_params);
     if (!handle) {
@@ -275,7 +266,7 @@ void *log_upload_buffer_init(LogUploadInitParams *init_params)
 
 #ifdef LOG_CHECK_HTTP_RET_CODE
 /**
- * @brief get http respose result
+ * @brief Get http respose result.
  *
  * @param[in] json http response buffer
  * @param[in] json_len http response buffer length
@@ -296,7 +287,7 @@ static bool _get_json_ret_code(char *json, size_t json_len)
 #endif
 
 /**
- * @brief when upload. append endchar in the upload buffer ending
+ * @brief When upload, append endchar in the upload buffer ending.
  *
  * @param[in,out] log_buf upload buffer
  * @param[in] log_size  upload buffer index
@@ -308,7 +299,7 @@ static void _append_endchar_to_upload_buffer(char *log_buf, size_t log_size)
 }
 
 /**
- * @brief when upload. remove endchar in the upload buffer ending
+ * @brief When upload, remove endchar in the upload buffer ending.
  *
  * @param[in,out] log_buf upload buffer
  * @param[in] log_size  upload buffer index
@@ -320,7 +311,7 @@ static void _remove_endchar_from_upload_buffer(char *log_buf, size_t log_size)
 }
 
 /**
- * @brief post data to tencent cloud over http
+ * @brief Post data to tencent cloud over http.
  *
  * @param[in] post_buf  need post data buffer
  * @param[in] post_size need post data buffer length
@@ -351,9 +342,9 @@ int post_one_http_to_server(void *log_upload_buffer_handle, char *post_buf, size
 
 #ifdef LOG_CHECK_HTTP_RET_CODE
     char buf[HTTP_RET_JSON_LENGTH] = {0};
-    rc = IOT_HTTP_Signed_Request(&params, post_buf, post_size, (uint8_t *)buf, HTTP_RET_JSON_LENGTH);
+    rc = IOT_HTTP_SignedRequest(&params, post_buf, post_size, (uint8_t *)buf, HTTP_RET_JSON_LENGTH);
     if (rc < 0) {
-        UPLOAD_ERR("IOT_HTTP_Signed_Request failed, rc = %d", rc);
+        UPLOAD_ERR("IOT_HTTP_SignedRequest failed, rc = %d", rc);
         goto exit;
     }
 
@@ -373,7 +364,7 @@ int post_one_http_to_server(void *log_upload_buffer_handle, char *post_buf, size
     }
 
 #else
-    rc = IOT_HTTP_Signed_Request(&params, post_buf, post_size, NULL, 0);
+    rc = IOT_HTTP_SignedRequest(&params, post_buf, post_size, NULL, 0);
 #endif
 
 exit:
@@ -383,12 +374,12 @@ exit:
 }
 
 /**
- * @brief push data to log buffer
+ * @brief Push data to log buffer.
  *
  * @param[in] log_content need push data
- * @return int if 0 success else QCLOUD_ERR_FAILURE
+ * @return if 0 success else QCLOUD_ERR_FAILURE
  */
-int append_data_to_log_buffer(const char *log_content)
+int log_upload_buffer_append(const char *log_content)
 {
     uint16_t log_size = strlen(log_content);
     if (HAL_MutexTryLock(sg_log_upload_buffer_handle->lock_buf) != 0) {
@@ -475,18 +466,18 @@ int append_data_to_log_buffer(const char *log_content)
 #include "mbedtls/aes.h"
 
 /**
- * @brief header of encrypt
+ * @brief Header of encrypt.
  *
  */
 static char sg_head_content[128] = {0};
 
 /**
- * @brief log data encrypt by aes cbc
+ * @brief Log data encrypt by aes cbc.
  *
- * @param handle
- * @param buf need encrypt data
- * @param datalen need encrypt data length
- * @return int
+ * @param[in] handle @see LogUploadBuffer
+ * @param[in] buf need encrypt data
+ * @param[in] datalen need encrypt data length
+ * @return @see IotReturnCode
  */
 static int _log_aes_cbc_encrypt(LogUploadBuffer *handle, uint8_t *buf, uint32_t datalen)
 {
@@ -523,12 +514,12 @@ exit:
 #endif
 
 /**
- * @brief log upload buffer init
+ * @brief Log upload buffer init.
  *
- * @param init_params @see LogUploadInitParams
+ * @param[in] init_params @see LogUploadInitParams
  * @return void* if success return @see LogUploadBuffer
  */
-void *log_upload_buffer_init(LogUploadInitParams *init_params)
+void *log_upload_buffer_init(const LogUploadInitParams *init_params)
 {
     LogUploadBuffer *handle = _log_upload_buffer_init_pre(init_params);
     if (!handle) {
@@ -557,7 +548,7 @@ void *log_upload_buffer_init(LogUploadInitParams *init_params)
 
 #ifdef LOG_CHECK_HTTP_RET_CODE
 /**
- * @brief get http respose result
+ * @brief Get http respose result.
  *
  * @param[in] json http response buffer
  * @param[in] json_len http response buffer length
@@ -579,27 +570,30 @@ static bool _get_json_ret_code(char *json, size_t json_len)
 #endif
 
 /**
- * @brief update timestamp add signature post buffer
+ * @brief Update timestamp add signature post buffer.
  *
+ * @param[in] handle @see LogUploadBuffer
+ * @param[in] post_buf  need post data buffer
+ * @param[in] post_size need post data buffer length
  */
 static void _update_time_and_signature(LogUploadBuffer *handle, char *post_buf, size_t post_size)
 {
     char     timestamp[TIMESTAMP_SIZE + 1] = {0};
     char     signature[SIGNATURE_SIZE + 1] = {0};
-    uint32_t now_time                      = HAL_Timer_CurrentSec();
+    uint32_t now_time                      = IOT_Timer_CurrentSec();
 
     /* record the timestamp for this log uploading */
     HAL_Snprintf(timestamp, TIMESTAMP_SIZE + 1, "%010d", now_time);
     memcpy(post_buf + sg_log_upload_buffer_handle->log_buffer_head_len - TIMESTAMP_SIZE, timestamp, strlen(timestamp));
 
     /* signature of this log uploading */
-    utils_hmac_sha1(post_buf + SIGNATURE_SIZE, post_size - SIGNATURE_SIZE, (uint8_t *)handle->sign_key,
-                    strlen(handle->sign_key), signature);
+    utils_hmac_sha1_hex(post_buf + SIGNATURE_SIZE, post_size - SIGNATURE_SIZE, (uint8_t *)handle->sign_key,
+                        strlen(handle->sign_key), signature);
     memcpy(post_buf, signature, SIGNATURE_SIZE);
 }
 
 /**
- * @brief post data to tencent cloud over http
+ * @brief Post data to tencent cloud over http.
  *
  * @param[in] post_buf  need post data buffer
  * @param[in] post_size need post data buffer length
@@ -707,12 +701,12 @@ exit:
 }
 
 /**
- * @brief push data to log buffer
+ * @brief Push data to log buffer.
  *
  * @param[in] log_content need push data
- * @return int if 0 success else QCLOUD_ERR_FAILURE
+ * @return if 0 success else QCLOUD_ERR_FAILURE
  */
-int append_data_to_log_buffer(const char *log_content)
+int log_upload_buffer_append(const char *log_content)
 {
     uint16_t log_size = strlen(log_content);
     if (HAL_MutexTryLock(sg_log_upload_buffer_handle->lock_buf) != 0) {
@@ -722,9 +716,9 @@ int append_data_to_log_buffer(const char *log_content)
 
     if ((sg_log_upload_buffer_handle->write_index + log_size + 1) > sg_log_upload_buffer_handle->log_buffer_size) {
         HAL_MutexUnlock(sg_log_upload_buffer_handle->lock_buf);
-        UPLOAD_ERR("log upload buffer is not enough! remain : %d, need upload length: %d",
+        UPLOAD_DBG("log upload buffer is not enough! remain : %d, need upload length: %d",
                    sg_log_upload_buffer_handle->log_buffer_size - sg_log_upload_buffer_handle->write_index, log_size);
-        return -1;
+        return QCLOUD_ERR_BUF_TOO_SHORT;
     }
 
     memcpy(sg_log_upload_buffer_handle->log_buffer + sg_log_upload_buffer_handle->write_index, log_content, log_size);

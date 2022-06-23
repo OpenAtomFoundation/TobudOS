@@ -32,9 +32,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "utils_base64.h"
-
 #include "qcloud_iot_http_signed.h"
+
+#include "utils_hmac.h"
+#include "utils_base64.h"
 
 /**
  * @brief http signed request header.
@@ -73,7 +74,7 @@ typedef struct {
  */
 static int _get_http_header_nonce(void)
 {
-    srand(HAL_Timer_CurrentSec());
+    srand(IOT_Timer_CurrentSec());
     return rand();
 }
 
@@ -125,7 +126,7 @@ static void _http_signed_upload_header_construct(HTTPSignedHandle *handle, const
     char     request_buf_sha1[QCLOUD_SHA1_RESULT_LEN * 2 + 1] = {0};
     size_t   olen                                             = 0;
     int      nonce                                            = _get_http_header_nonce();
-    uint32_t timestamp                                        = HAL_Timer_CurrentSec();
+    uint32_t timestamp                                        = IOT_Timer_CurrentSec();
 
     memset(handle->sign_string, 0, HTTP_SIGNED_STRING_BUFFER_LEN);
     /* cal hmac sha1 */
@@ -135,8 +136,8 @@ static void _http_signed_upload_header_construct(HTTPSignedHandle *handle, const
                  handle->params.host, handle->params.uri, "", QCLOUD_SUPPORT_HMACSHA1, timestamp, nonce,
                  request_buf_sha1);
 
-    utils_hmac_sha1_hex(handle->sign_string, strlen(handle->sign_string), (uint8_t *)handle->params.secretkey,
-                        strlen(handle->params.secretkey), sign);
+    utils_hmac_sha1(handle->sign_string, strlen(handle->sign_string), (uint8_t *)handle->params.secretkey,
+                    strlen(handle->params.secretkey), sign);
 
     /* base64 encode */
     utils_base64encode((uint8_t *)signout, QCLOUD_SHA1_RESULT_LEN * 2, &olen, (const uint8_t *)sign,
@@ -249,8 +250,8 @@ static void _http_signed_deinit(HTTPSignedHandle *signed_handle)
  * @param response_buf_len response buffer length if need recv
  * @return int if need recv return recv length else return 0 is success
  */
-int IOT_HTTP_Signed_Request(HttpSignedParams *params, const char *request_buf, size_t request_buf_len,
-                            uint8_t *response_buf, int response_buf_len)
+int IOT_HTTP_SignedRequest(HttpSignedParams *params, const char *request_buf, size_t request_buf_len,
+                           uint8_t *response_buf, int response_buf_len)
 {
     int rc = 0;
     POINTER_SANITY_CHECK(params, QCLOUD_ERR_INVAL);

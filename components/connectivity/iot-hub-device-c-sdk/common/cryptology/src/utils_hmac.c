@@ -56,7 +56,7 @@ static char _hb2hex(uint8_t hb)
 static int _utils_hmac_sha1_process(const char *msg, int msg_len, const uint8_t *key, int key_len, unsigned char *out)
 {
     IotSha1Context context;
-    unsigned char  k_ipad[KEY_IO_PAD_SIZE]; /* inner padding - key XORd with ipad  */
+    unsigned char  k_ipad[KEY_IO_PAD_SIZE]; /* inner padding - key XORd with ipad */
     unsigned char  k_opad[KEY_IO_PAD_SIZE]; /* outer padding - key XORd with opad */
 
     int i;
@@ -109,11 +109,9 @@ int utils_hmac_sha1(const char *msg, int msg_len, const uint8_t *key, int key_le
     if (key_len > KEY_IO_PAD_SIZE) {
         return -1;
     }
+
     _utils_hmac_sha1_process(msg, msg_len, key, key_len, out);
-    for (int i = 0; i < SHA1_DIGEST_SIZE; ++i) {
-        digest[i * 2]     = _hb2hex(out[i] >> 4);
-        digest[i * 2 + 1] = _hb2hex(out[i]);
-    }
+    memcpy(digest, out, SHA1_DIGEST_SIZE);
     return 0;
 }
 
@@ -130,16 +128,17 @@ int utils_hmac_sha1(const char *msg, int msg_len, const uint8_t *key, int key_le
 int utils_hmac_sha1_hex(const char *msg, int msg_len, const uint8_t *key, int key_len, char *digest)
 {
     unsigned char out[SHA1_DIGEST_SIZE] = {0};
-    if ((NULL == msg) || (NULL == digest) || (NULL == key)) {
+    if (!msg || !digest || !key) {
         return -1;
     }
 
     if (key_len > KEY_IO_PAD_SIZE) {
         return -1;
     }
-
     _utils_hmac_sha1_process(msg, msg_len, key, key_len, out);
-    memcpy(digest, out, SHA1_DIGEST_SIZE);
-
+    for (int i = 0; i < SHA1_DIGEST_SIZE; ++i) {
+        digest[i * 2]     = _hb2hex(out[i] >> 4);
+        digest[i * 2 + 1] = _hb2hex(out[i]);
+    }
     return 0;
 }

@@ -139,14 +139,14 @@ error:
 void data_template_property_message_handler(void *client, const MQTTMessage *message, void *usr_data)
 {
     const char *property_down_method_str[] = {
-        "control",              // PROPERTY_DOWN_METHOD_TYPE_CONTROL
-        "report_reply",         // PROPERTY_DOWN_METHOD_TYPE_REPORT_REPLY
-        "get_status_reply",     // PROPERTY_DOWN_METHOD_TYPE_GET_STATUS_REPLY
-        "report_info_reply",    // PROPERTY_DOWN_METHOD_TYPE_REPORT_INFO_REPLY
-        "clear_control_reply",  // PROPERTY_DOWN_METHOD_TYPE_CLEAR_CONTROL_REPLY
+        [PROPERTY_DOWN_METHOD_TYPE_CONTROL]             = "control",
+        [PROPERTY_DOWN_METHOD_TYPE_REPORT_REPLY]        = "report_reply",
+        [PROPERTY_DOWN_METHOD_TYPE_GET_STATUS_REPLY]    = "get_status_reply",
+        [PROPERTY_DOWN_METHOD_TYPE_REPORT_INFO_REPLY]   = "report_info_reply",
+        [PROPERTY_DOWN_METHOD_TYPE_CLEAR_CONTROL_REPLY] = "clear_control_reply",
     };
 
-    int rc, i = 0;
+    int rc;
 
     DataTemplateContext *data_template_context = (DataTemplateContext *)usr_data;
     UtilsJsonValue       method;
@@ -158,6 +158,7 @@ void data_template_property_message_handler(void *client, const MQTTMessage *mes
         return;
     }
 
+    PropertyDownMethodType i;
     for (i = PROPERTY_DOWN_METHOD_TYPE_CONTROL; i <= PROPERTY_DOWN_METHOD_TYPE_CLEAR_CONTROL_REPLY; i++) {
         if (!strncmp(method.value, property_down_method_str[i], method.value_len)) {
             _parse_method_payload_and_callback(i, message, &data_template_context->property_callback,

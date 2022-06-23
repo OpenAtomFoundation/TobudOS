@@ -38,6 +38,12 @@ extern "C" {
 #include "utils_sha1.h"
 
 /**
+ * @brief Sha1 digest size.
+ *
+ */
+#define SHA1_DIGEST_SIZE 20
+
+/**
  * @brief Get digest of hmac-sha1.
  *
  * @param[in] msg message to hmac-sha1
@@ -50,7 +56,7 @@ extern "C" {
 int utils_hmac_sha1(const char *msg, int msg_len, const uint8_t *key, int key_len, char *digest);
 
 /**
- * @brief Get digest hex of hmac-sha1.
+ * @brief Get digest hex of hmac-sha1. Output hexstr format.
  *
  * @param[in] msg message to hmac-sha1
  * @param[in] msg_len message len

@@ -86,9 +86,9 @@ error:
 int data_template_event_reply_publish(void *client, char *buf, int buf_len, IotDataTemplateEventData data)
 {
     const char *event_type[] = {
-        "info",   // IOT_DATA_TEMPLATE_EVENT_TYPE_INFO
-        "alert",  // IOT_DATA_TEMPLATE_EVENT_TYPE_ALERT
-        "fault",  // IOT_DATA_TEMPLATE_EVENT_TYPE_FAULT
+        [IOT_DATA_TEMPLATE_EVENT_TYPE_INFO]  = "info",
+        [IOT_DATA_TEMPLATE_EVENT_TYPE_ALERT] = "alert",
+        [IOT_DATA_TEMPLATE_EVENT_TYPE_FAULT] = "fault",
     };
 
     static uint32_t token_num = 0;

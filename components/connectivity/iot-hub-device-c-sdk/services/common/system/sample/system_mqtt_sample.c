@@ -115,14 +115,10 @@ static void _mqtt_event_handler(void *client, void *handle_context, MQTTEventMsg
  */
 static void _setup_connect_init_params(MQTTInitParams *init_params, DeviceInfo *device_info)
 {
-    init_params->device_info            = device_info;
-    init_params->command_timeout        = QCLOUD_IOT_MQTT_COMMAND_TIMEOUT;
-    init_params->keep_alive_interval_ms = QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL;
-    init_params->auto_connect_enable    = 1;
-    init_params->event_handle.h_fp      = _mqtt_event_handler;
-    init_params->event_handle.context   = NULL;
-    init_params->host                   = QCLOUD_IOT_MQTT_DIRECT_DOMAIN;
-    init_params->backup_host            = "your_backup_host_domain.com";
+    init_params->device_info       = device_info;
+    init_params->event_handle.h_fp = _mqtt_event_handler;
+    init_params->host              = QCLOUD_IOT_MQTT_DIRECT_DOMAIN;
+    init_params->backup_host       = "your_backup_host_domain.com";
 }
 
 // ----------------------------------------------------------------------------
@@ -152,12 +148,7 @@ int main(int argc, char **argv)
     int rc;
 
     // init log level
-    LogHandleFunc func = {0};
-
-    func.log_malloc               = HAL_Malloc;
-    func.log_free                 = HAL_Free;
-    func.log_get_current_time_str = HAL_Timer_Current;
-    func.log_printf               = HAL_Printf;
+    LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
     utils_log_init(func, LOG_LEVEL_DEBUG, 2048);
 
     DeviceInfo device_info;

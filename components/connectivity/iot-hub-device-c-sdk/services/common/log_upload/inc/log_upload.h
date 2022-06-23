@@ -41,37 +41,37 @@ extern "C" {
 #include "utils_hmac.h"
 
 /**
- * @brief To check log http server return msg or not
+ * @brief To check log http server return msg or not.
  *
  */
 #define LOG_CHECK_HTTP_RET_CODE
 
 /**
- * @brief enable log upload debug or not
+ * @brief Enable log upload debug or not.
  *
  */
 // #define LOG_UPLOAD_DEBUG
 
 /**
- * @brief http recv length
+ * @brief Http recv length.
  *
  */
 #define HTTP_RET_JSON_LENGTH 256
 
 /**
- * @brief wait http recv time out
+ * @brief Wait http recv time out.
  *
  */
-#define HTTP_WAIT_RET_TIMEOUT_MS 1000
+#define HTTP_WAIT_RET_TIMEOUT_MS 5000
 
 /**
- * @brief do immediate log update if buffer is lower than this threshold (about two max log item)
+ * @brief Do immediate log update if buffer is lower than this threshold
  *
  */
 #define LOG_LOW_BUFFER_THRESHOLD (LOG_UPLOAD_BUFFER_SIZE / 4)
 
 /**
- * @brief sing key length
+ * @brief Sign key length.
  *
  */
 #define SIGN_KEY_SIZE (24)
@@ -84,129 +84,127 @@ extern "C" {
 #define UPLOAD_ERR(fmt, ...) HAL_Printf(">>LOG-ERR>>%s(%d): " fmt "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 /**
- * @brief clear log upload buffer
+ * @brief Log upload buffer init.
  *
+ * @param[in] init_params @see LogUploadInitParams
+ * @return void* if success return @see LogUploadBuffer
  */
-void log_upload_clear_buffer(void);
+void *log_upload_buffer_init(const LogUploadInitParams *init_params);
 
 /**
- * @brief set log upload in comm err state
+ * @brief Deinit log buffer handle.
+ *
+ * @param[in] upload_buffer_handle @see LogUploadBuffer
+ */
+void log_upload_buffer_deinit(void *upload_buffer_handle);
+
+/**
+ * @brief Clear log upload buffer.
+ *
+ */
+void log_upload_buffer_clear(void);
+
+/**
+ * @brief Get the log buffer write index object.
+ *
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return write index
+ */
+uint32_t log_upload_buffer_get_write_index(void *log_upload_buffer_handle);
+
+/**
+ * @brief Get the log buffer head len object.
+ *
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return head length
+ */
+uint32_t log_upload_buffer_get_head_len(void *log_upload_buffer_handle);
+
+/**
+ * @brief Get the log buffer size object.
+ *
+ * @return log buffer size
+ */
+uint32_t log_upload_buffer_get_size(void);
+
+/**
+ * @brief Check log buffer is empty or not.
+ *
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return true empty
+ * @return false not empty
+ */
+bool log_upload_buffer_is_empty(void *log_upload_buffer_handle);
+
+/**
+ * @brief When a new log appears during the reporting period, move the log to the specified position in the buffer.
+ *
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @param[in] need_remove_size
+ */
+void log_upload_buffer_remove_log(void *log_upload_buffer_handle, uint32_t need_remove_size);
+
+/**
+ * @brief Copy log buffer head.
+ *
+ * @param[out] dst Destination address
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ */
+void log_upload_buffer_copy_header(char *dst, void *log_upload_buffer_handle);
+
+/**
+ * @brief Get the log buffer object.
+ *
+ * @param[in] log_upload_buffer_handle @see LogUploadBuffer
+ * @return log buffer
+ */
+char *log_upload_buffer_get(void *log_upload_buffer_handle);
+
+/**
+ * @brief Push data to log buffer.
+ *
+ * @param[in] log_content need push data
+ * @return if 0 success else QCLOUD_ERR_FAILURE
+ */
+int log_upload_buffer_append(const char *log_content);
+
+/**
+ * @brief Post data to tencent cloud over http.
+ *
+ * @param[in] post_buf  need post data buffer
+ * @param[in] post_size need post data buffer length
+ * @return @see IotReturnCode
+ */
+int post_one_http_to_server(void *log_upload_buffer_handle, char *post_buf, size_t post_size);
+
+/**
+ * @brief Set log upload in comm err state.
  *
  * @param state true or false
  */
 void log_upload_set_upload_log_in_comm_err(bool state);
 
 /**
- * @brief change log upload level
+ * @brief Change log upload level.
  *
- * @param level
+ * @param[in] level @see LogLevel
  */
 void log_upload_set_log_upload_level(LogLevel level);
 
 /**
- * @brief get log upload level
+ * @brief Get log upload level.
  *
- * @return LogLevel
+ * @return @see LogLevel
  */
 LogLevel log_upload_get_log_upload_level(void);
 
 /**
- * @brief log upload buffer init
- *
- * @param init_params @see LogUploadInitParams
- * @return void* if success return @see LogUploadBuffer
- */
-void *log_upload_buffer_init(LogUploadInitParams *init_params);
-/**
- * @brief deinit log buffer handle
- *
- * @param upload_buffer_handle
- */
-void log_upload_buffer_deinit(void *upload_buffer_handle);
-/**
- * @brief Get the log buffer write index object
- *
- * @param log_upload_buffer_handle
- * @return uint32_t
- */
-uint32_t get_log_buffer_write_index(void *log_upload_buffer_handle);
-/**
- * @brief Get the log buffer head len object
- *
- * @param log_upload_buffer_handle
- * @return uint32_t
- */
-uint32_t get_log_buffer_head_len(void *log_upload_buffer_handle);
-/**
- * @brief check log buffer is empty or not
- *
- * @param log_upload_buffer_handle
- * @return true empty
- * @return false not empty
- */
-bool have_data_need_update(void *log_upload_buffer_handle);
-/**
- * @brief When a new log appears during the reporting period, move the log to the specified position in the buffer
- *
- */
-void remove_log_from_buffer(void *log_upload_buffer_handle, uint32_t need_remove_size);
-/**
- * @brief copy log buffer head
- *
- * @param[out] dst Destination address
- * @param log_upload_buffer_handle
- */
-void copy_log_buffer_header(char *dst, void *log_upload_buffer_handle);
-
-/**
- * @brief lock log buffer
- *
- */
-void log_buffer_lock(void);
-
-/**
- * @brief unlock log buffer
- *
- */
-void log_buffer_unlock(void);
-
-/**
- * @brief post data to tencent cloud over http
- *
- * @param[in] post_buf  need post data buffer
- * @param[in] post_size need post data buffer length
- * @return @see IotReturnCode
- */
-int post_one_http_to_server(void *handle, char *post_buf, size_t post_size);
-
-/**
- * @brief Get the log buffer object
- *
- * @param log_upload_buffer_handle
- * @return char*
- */
-char *get_log_buffer(void *log_upload_buffer_handle);
-
-/**
- * @brief push data to log buffer
- *
- * @param[in] log_content need push data
- * @return int if 0 success else QCLOUD_ERR_FAILURE
- */
-int append_data_to_log_buffer(const char *log_content);
-/**
- * @brief init log upload module
+ * @brief Init log upload module.
  *
  * @param[in,out] client pointer to mqtt client
  * @return @see IotReturnCode
  */
-int log_upload_init(void *client);
-/**
- * @brief Get the log buffer size object
- *
- * @return uint32_t log buffer size
- */
-uint32_t get_log_buffer_size(void);
+int log_mqtt_init(void *client);
 
 #ifdef __cplusplus
 }

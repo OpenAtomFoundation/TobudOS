@@ -35,14 +35,14 @@
 #endif
 
 /**
- * @brief data structure for log upload
+ * @brief Data structure for log upload.
  *
  */
 typedef struct {
-    bool     upload_only_in_comm_err;
-    LogLevel log_level;
-    Timer    upload_timer;
-    void    *upload_buffer_handle;
+    bool           upload_only_in_comm_err;
+    LogLevel       log_level;
+    QcloudIotTimer upload_timer;
+    void          *upload_buffer_handle;
 
     const char    *save_log_filename;
     LogSaveFunc    save_func;
@@ -61,9 +61,9 @@ static QcloudIoTLogUpload *sg_log_uploader_client;
 // ----------------------------------------------------------------------------
 
 /**
- * @brief
+ * @brief Get log upload client.
  *
- * @return QcloudIoTLogUpload* @see QcloudIoTLogUpload
+ * @return @see QcloudIoTLogUpload
  */
 static QcloudIoTLogUpload *_get_log_uploader_client(void)
 {
@@ -77,9 +77,9 @@ static QcloudIoTLogUpload *_get_log_uploader_client(void)
 }
 
 /**
- * @brief
+ * @brief Set client.
  *
- * @param client @see QcloudIoTLogUpload
+ * @param[in] client @see QcloudIoTLogUpload
  */
 static void _set_log_uploader_client(void *client)
 {
@@ -87,7 +87,7 @@ static void _set_log_uploader_client(void *client)
 }
 
 /**
- * @brief set log upload in comm err state
+ * @brief Set log upload in comm err state.
  *
  * @param state true or false
  */
@@ -99,9 +99,9 @@ void log_upload_set_upload_log_in_comm_err(bool state)
 }
 
 /**
- * @brief change log upload level
+ * @brief Change log upload level.
  *
- * @param level
+ * @param[in] level @see LogLevel
  */
 void log_upload_set_log_upload_level(LogLevel level)
 {
@@ -111,9 +111,9 @@ void log_upload_set_log_upload_level(LogLevel level)
 }
 
 /**
- * @brief get log upload level
+ * @brief Get log upload level.
  *
- * @return LogLevel
+ * @return @see LogLevel
  */
 LogLevel log_upload_get_log_upload_level(void)
 {
@@ -123,7 +123,7 @@ LogLevel log_upload_get_log_upload_level(void)
 }
 
 /**
- * @brief check if need force upload
+ * @brief Check if need force upload.
  *
  * @param[in] force_upload
  * @return true need force upload
@@ -136,20 +136,20 @@ static bool _check_force_upload(bool force_upload)
         return false;
     }
     /* 1: check if have data to upload */
-    if (have_data_need_update(log_uploader_handle->upload_buffer_handle)) {
+    if (log_upload_buffer_is_empty(log_uploader_handle->upload_buffer_handle)) {
         return false;
     }
 
-    uint32_t write_index   = get_log_buffer_write_index(log_uploader_handle->upload_buffer_handle);
-    bool     is_low_buffer = (get_log_buffer_size() - write_index) < LOG_LOW_BUFFER_THRESHOLD ? true : false;
+    uint32_t write_index   = log_upload_buffer_get_write_index(log_uploader_handle->upload_buffer_handle);
+    bool     is_low_buffer = (log_upload_buffer_get_size() - write_index) < LOG_LOW_BUFFER_THRESHOLD ? true : false;
 
-    /* 2. check  if upload only in comm err */
+    /* 2. check if upload only in comm err */
     if (!force_upload && log_uploader_handle->upload_only_in_comm_err) {
         /* buffer is low but we couldn't upload now, reset buffer */
         if (is_low_buffer) {
-            log_upload_clear_buffer();
+            log_upload_buffer_clear();
         }
-        HAL_Timer_CountdownMs(&log_uploader_handle->upload_timer, LOG_UPLOAD_INTERVAL_MS);
+        IOT_Timer_CountdownMs(&log_uploader_handle->upload_timer, LOG_UPLOAD_INTERVAL_MS);
         return false;
     }
 
@@ -163,11 +163,11 @@ static bool _check_force_upload(bool force_upload)
         return true;
     }
     /*5: check if timeout, handle it right now*/
-    return HAL_Timer_Expired(&log_uploader_handle->upload_timer);
+    return IOT_Timer_Expired(&log_uploader_handle->upload_timer);
 }
 
 /**
- * @brief save log to file or flash
+ * @brief Save log to file or flash.
  *
  * @param[in] log_buf need saved buffer
  * @param[in] log_size need saved buffer length
@@ -193,9 +193,11 @@ static int _save_log(char *log_buf, size_t log_size)
         if (rc) {
             Log_e("fail to delete previous log");
         }
+        current_size = 0;
     }
     UPLOAD_DBG("saved data [%ld]", log_size);
-    write_size = log_uploader_handle->save_func(log_uploader_handle->save_log_filename, log_buf, log_size);
+    write_size =
+        log_uploader_handle->save_func(log_uploader_handle->save_log_filename, log_buf, log_size, current_size);
     if (write_size != log_size) {
         Log_e("fail to save log. RC %ld - log size %ld", write_size, log_size);
     }
@@ -203,7 +205,13 @@ static int _save_log(char *log_buf, size_t log_size)
     return write_size != log_size ? -1 : 0;
 }
 
-static uint32_t _buffer_get_at_most_message(char *post_buf)
+/**
+ * @brief Get at most message to upload.
+ *
+ * @param[in] post_buf post buffer
+ * @return size of message to upload
+ */
+static uint32_t _buffer_get_at_most_message(const char *post_buf)
 {
     uint32_t possible_size = 0;
     char    *next_log_buf  = NULL;
@@ -224,18 +232,19 @@ static uint32_t _buffer_get_at_most_message(char *post_buf)
 }
 
 /**
- * @brief report these to the server
+ * @brief Report log buffer to the server.
  *
- * @param post_buf
- * @param post_size
- * @param is_log_buffer
- * @return int
+ * @param[in,out] log_uploader_handle @see QcloudIoTLogUpload
+ * @param[in] post_buf post buffer
+ * @param[in] post_size post size
+ * @param[in] is_log_buffer log buffer or saved log
+ * @return @see IotReturnCode
  */
 static int _post_log_buffer_to_cloud(QcloudIoTLogUpload *log_uploader_handle, char *post_buf, size_t post_size,
                                      bool is_log_buffer)
 {
     int      rc                  = 0;
-    uint32_t log_buffer_head_len = get_log_buffer_head_len(log_uploader_handle->upload_buffer_handle);
+    uint32_t log_buffer_head_len = log_upload_buffer_get_head_len(log_uploader_handle->upload_buffer_handle);
 
     size_t orig_post_size = post_size;
     size_t post_payload, possible_size, actual_post_payload = 0;
@@ -246,13 +255,13 @@ static int _post_log_buffer_to_cloud(QcloudIoTLogUpload *log_uploader_handle, ch
             UPLOAD_ERR("Upload size should not be 0! Total sent: %ld. Left: %ld",
                        actual_post_payload + log_buffer_head_len, post_size);
             if (is_log_buffer) {
-                log_upload_clear_buffer();
+                log_upload_buffer_clear();
             }
             return QCLOUD_RET_SUCCESS;
         }
-        if (is_log_buffer && (possible_size > get_log_buffer_size() || possible_size > orig_post_size ||
+        if (is_log_buffer && (possible_size > log_upload_buffer_get_size() || possible_size > orig_post_size ||
                               possible_size <= log_buffer_head_len)) {
-            log_upload_clear_buffer();
+            log_upload_buffer_clear();
             UPLOAD_ERR("possible size (%ld) is too large.", possible_size);
             return QCLOUD_RET_SUCCESS;
         }
@@ -278,14 +287,14 @@ static int _post_log_buffer_to_cloud(QcloudIoTLogUpload *log_uploader_handle, ch
     } while (post_size > log_buffer_head_len);
 
     if (is_log_buffer) {
-        remove_log_from_buffer(log_uploader_handle->upload_buffer_handle, orig_post_size);
+        log_upload_buffer_remove_log(log_uploader_handle->upload_buffer_handle, orig_post_size);
     }
 
     return rc;
 }
 
 /**
- * @brief handle log to save flash or file
+ * @brief Handle log to save flash or file.
  *
  * @return @see IotReturnCode
  */
@@ -301,7 +310,7 @@ static int _handle_saved_log(void)
     if (!whole_log_size) {
         return rc;
     }
-    uint32_t log_buffer_head_len = get_log_buffer_head_len(log_uploader_handle->upload_buffer_handle);
+    uint32_t log_buffer_head_len = log_upload_buffer_get_head_len(log_uploader_handle->upload_buffer_handle);
     size_t   buf_size            = whole_log_size + log_buffer_head_len + 1;
     char    *log_buf             = HAL_Malloc(buf_size);
     if (!log_buf) {
@@ -311,7 +320,7 @@ static int _handle_saved_log(void)
 
     /* read the whole log to buffer */
     size_t read_len = log_uploader_handle->read_func(log_uploader_handle->save_log_filename,
-                                                     log_buf + log_buffer_head_len, whole_log_size);
+                                                     log_buf + log_buffer_head_len, whole_log_size, 0);
     if (read_len != whole_log_size) {
         Log_e("fail to read whole saved log. Size: %ld - read: %ld", whole_log_size, read_len);
         rc = QCLOUD_ERR_FAILURE;
@@ -320,7 +329,7 @@ static int _handle_saved_log(void)
 
     /* copy header from global log buffer */
     size_t upload_size = whole_log_size + log_buffer_head_len;
-    copy_log_buffer_header(log_buf, log_uploader_handle->upload_buffer_handle);
+    log_upload_buffer_copy_header(log_buf, log_uploader_handle->upload_buffer_handle);
     log_buf[buf_size - 1] = 0;
 
     /* post server */
@@ -335,11 +344,12 @@ exit:
 }
 
 /**
- * @brief append need report log to log upload buffer
+ * @brief Append need report log to log upload buffer.
  *
+ * @param[in] log_level @see LogLevel
  * @param[in] log_content data of need to report
  */
-static void _log_upload_append_to_log_buffer(int log_level, const char *log_content)
+static void _log_upload_append_to_log_buffer(LogLevel log_level, const char *log_content)
 {
     int                 rc                  = 0;
     QcloudIoTLogUpload *log_uploader_handle = _get_log_uploader_client();
@@ -357,17 +367,17 @@ static void _log_upload_append_to_log_buffer(int log_level, const char *log_cont
         UPLOAD_ERR("log_size is not 0!");
         return;
     }
-    rc = append_data_to_log_buffer(log_content);
+    rc = log_upload_buffer_append(log_content);
     if (rc) {
         /* log buffer is full. upload data right now */
-        HAL_Timer_CountdownMs(&log_uploader_handle->upload_timer, 0);
+        IOT_Timer_CountdownMs(&log_uploader_handle->upload_timer, 0);
     }
 }
 
 /**
- * @brief upload data to tencent cloud
+ * @brief Upload data to tencent cloud.
  *
- * @param force_upload if necessary
+ * @param[in] force_upload upload if necessary
  * @return @see IotReturnCode
  */
 static int _do_log_upload(bool force_upload)
@@ -394,26 +404,27 @@ static int _do_log_upload(bool force_upload)
     // log_buffer_lock();
 
     /* step3: post log buffer data to cloud */
-    uint32_t upload_log_size = get_log_buffer_write_index(log_uploader_handle->upload_buffer_handle);
-    rc = _post_log_buffer_to_cloud(log_uploader_handle, get_log_buffer(log_uploader_handle->upload_buffer_handle),
-                                   upload_log_size, true);
+    uint32_t upload_log_size = log_upload_buffer_get_write_index(log_uploader_handle->upload_buffer_handle);
+
+    rc = _post_log_buffer_to_cloud(
+        log_uploader_handle, log_upload_buffer_get(log_uploader_handle->upload_buffer_handle), upload_log_size, true);
     if (rc) {
         sg_need_handle_saved_log = true;
     }
 
-    HAL_Timer_CountdownMs(&log_uploader_handle->upload_timer, LOG_UPLOAD_INTERVAL_MS);
+    IOT_Timer_CountdownMs(&log_uploader_handle->upload_timer, LOG_UPLOAD_INTERVAL_MS);
 
     // log_buffer_unlock();
     return QCLOUD_RET_SUCCESS;
 }
 
 /**
- * @brief init log upload previously
+ * @brief Init log upload previously.
  *
  * @param[in] init_params @see LogUploadInitParams
  * @return @see IotReturnCode
  */
-static int log_upload_init_pre(LogUploadInitParams *init_params)
+static int log_upload_init_pre(const LogUploadInitParams *init_params)
 {
     if (_get_log_uploader_client()) {
         UPLOAD_DBG("log upload initialized.");
@@ -447,7 +458,7 @@ static int log_upload_init_pre(LogUploadInitParams *init_params)
     }
 
     _set_log_uploader_client(log_uploader_handle);
-    log_uploader_handle->log_level            = LOG_LEVEL_DEBUG;
+    log_uploader_handle->log_level            = LOG_LEVEL_ERROR;
     log_uploader_handle->log_client_init_done = true;
     return QCLOUD_RET_SUCCESS;
 
@@ -461,7 +472,7 @@ err_exit:
 }
 
 /**
- * @brief stop log upload add release resources
+ * @brief Stop log upload add release resources.
  *
  * @return @see IotReturnCode
  */
@@ -480,12 +491,12 @@ static int log_upload_deinit(void)
 // ----------------------------------------------------------------------------
 
 /**
- * @brief init log upload previously
+ * @brief Init log upload previously.
  *
  * @param[in] init_params @see LogUploadInitParams
  * @return @see IotReturnCode
  */
-int IOT_Log_Upload_InitPre(LogUploadInitParams *init_params)
+int IOT_Log_Upload_InitPre(const LogUploadInitParams *init_params)
 {
     POINTER_SANITY_CHECK(init_params, QCLOUD_ERR_INVAL);
     STRING_PTR_SANITY_CHECK(init_params->product_id, QCLOUD_ERR_INVAL);
@@ -495,7 +506,7 @@ int IOT_Log_Upload_InitPre(LogUploadInitParams *init_params)
 }
 
 /**
- * @brief init log upload module
+ * @brief Init log upload module.
  *
  * @param[in,out] client pointer to mqtt client
  * @return @see IotReturnCode
@@ -503,11 +514,11 @@ int IOT_Log_Upload_InitPre(LogUploadInitParams *init_params)
 int IOT_Log_Upload_Init(void *client)
 {
     POINTER_SANITY_CHECK(client, QCLOUD_ERR_INVAL);
-    return log_upload_init(client);
+    return log_mqtt_init(client);
 }
 
 /**
- * @brief stop log upload add release resources
+ * @brief Stop log upload add release resources.
  *
  * @return @see IotReturnCode
  */
@@ -517,9 +528,9 @@ int IOT_Log_Upload_Deinit(void)
 }
 
 /**
- * @brief do log upload
+ * @brief Do log upload.
  *
- * @param force_upload if necessary
+ * @param[in] force_upload force upload when error
  * @return @see IotReturnCode
  */
 int IOT_Log_Upload(bool force_upload)
@@ -528,11 +539,12 @@ int IOT_Log_Upload(bool force_upload)
 }
 
 /**
- * @brief append need report log to log upload buffer
+ * @brief Append need report log to log upload buffer.
  *
+ * @param[in] log_level @see LogLevel
  * @param[in] log_content data of need to report
  */
-void IOT_Log_Upload_AppendToUploadBuffer(int log_level, const char *log_content)
+void IOT_Log_Upload_AppendToUploadBuffer(LogLevel log_level, const char *log_content)
 {
     POINTER_SANITY_CHECK_RTN(log_content);
     _log_upload_append_to_log_buffer(log_level, log_content);

@@ -56,7 +56,7 @@ uint16_t get_next_packet_id(QcloudIotClient *client)
 void get_next_conn_id(char *conn_id)
 {
     int i;
-    srand(HAL_Timer_CurrentSec());
+    srand(IOT_Timer_CurrentSec());
     for (i = 0; i < MAX_CONN_ID_LEN - 1; i++) {
         int flag = rand() % 3;
         switch (flag) {

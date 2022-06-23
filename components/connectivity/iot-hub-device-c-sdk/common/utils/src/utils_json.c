@@ -227,17 +227,18 @@ static void _increase_pos(char **pos, int *len)
  * @param[in,out] remain_len remaining length
  * @return NULL for failed
  */
-static char *_find_json_delimiter(JsonDelimiter ch, char spilt_char, char *str, int *remain_len)
+static char *_find_json_delimiter(JsonDelimiter ch, char spilt_char, const char *str, int *remain_len)
 {
     char *pos = NULL;
+    char *src = (char *)str;
 
-    while ((*remain_len) > 0 && str && *str) {
-        if ((!spilt_char && *str != ch) || (spilt_char && *str == spilt_char)) {
-            _increase_pos(&str, remain_len);
+    while ((*remain_len) > 0 && src && *src) {
+        if ((!spilt_char && *src != ch) || (spilt_char && *src == spilt_char) || (*src == '\n')) {
+            _increase_pos(&src, remain_len);
             continue;
         }
 
-        pos = (*str == ch) ? str : 0;
+        pos = (*src == ch) ? src : 0;
         break;
     }
 
@@ -467,7 +468,7 @@ int utils_json_value_get(const char *key, int key_len, const char *src, int src_
     json_value value_tmp;
 
     // key can be separated by '.', such as: outer_key.(.......).inner_key
-    while ((delim = strchr(key_iter, '.'))) {
+    while ((delim = strchr(key_iter, '.')) != NULL) {
         key_next     = key_iter;
         key_next_len = delim - key_iter;
 
@@ -504,7 +505,7 @@ int utils_json_value_data_get(UtilsJsonValue value, UtilsJsonValueType type, voi
 {
     char value_tmp[32] = {0};
 
-    if (value.value_len > sizeof(value_tmp)) {
+    if (value.value_len > sizeof(value_tmp) || !value.value_len) {
         return -1;
     }
 
@@ -535,6 +536,11 @@ int utils_json_value_data_get(UtilsJsonValue value, UtilsJsonValueType type, voi
 /**
  * @brief Return unsigned int value of key in json.
  *
+ * @param[in] key key in json, support nesting with '.'
+ * @param[in] key_len key len
+ * @param[in] src json string
+ * @param[in] src_len src length
+ * @param[out] data data value
  * @return 0 for success
  */
 int utils_json_get_uint32(const char *key, int key_len, const char *src, int src_len, uint32_t *data)
@@ -548,6 +554,33 @@ int utils_json_get_uint32(const char *key, int key_len, const char *src, int src
     }
 
     rc = utils_json_value_data_get(tmp, UTILS_JSON_VALUE_TYPE_UINT32, data);
+    if (rc) {
+        return -1;
+    }
+    return 0;
+}
+
+/**
+ * @brief Return int value of key in json.
+ *
+ * @param[in] key key in json, support nesting with '.'
+ * @param[in] key_len key len
+ * @param[in] src json string
+ * @param[in] src_len src length
+ * @param[out] data data value
+ * @return 0 for success
+ */
+int utils_json_get_int32(const char *key, int key_len, const char *src, int src_len, int32_t *data)
+{
+    int            rc;
+    UtilsJsonValue tmp;
+
+    rc = utils_json_value_get(key, key_len, src, src_len, &tmp);
+    if (rc) {
+        return -1;
+    }
+
+    rc = utils_json_value_data_get(tmp, UTILS_JSON_VALUE_TYPE_INT32, data);
     if (rc) {
         return -1;
     }
@@ -574,4 +607,78 @@ int utils_json_strip_transfer(char *src, int src_len)
         src_tmp++;
     }
     return end - src;
+}
+
+/**
+ * @brief Parse array object, assume array json is legal, src should be like "[12, 456]", this function will split array
+ * according to array_elem_type, obj_cb will be called for each elements.
+ *
+ * @param[in] src array string
+ * @param[in] src_len length of src
+ * @param[in] obj_cb callback to deal with array element
+ * @param[in] arg argument passed to the obj_cb
+ */
+void utils_json_array_parse(const char *src, int src_len, UtilsJsonArrayIterResult (*obj_cb)(const char *, int, void *),
+                            void *arg)
+{
+#define SKIP_SPACE(str) while (*str == ' ' && (str = str + 1))
+
+    if (!obj_cb) {
+        return;
+    }
+
+    const char *start = src + 1, *end = src + 1;
+
+    char left_delimiter, right_delimiter;
+    SKIP_SPACE(start);
+    switch (*start) {
+        case JSON_DELIMITER_ARRAY_BEGIN:
+            left_delimiter  = JSON_DELIMITER_ARRAY_BEGIN;
+            right_delimiter = JSON_DELIMITER_ARRAY_END;
+            break;
+        case JSON_DELIMITER_OBJECT_BEGIN:
+            left_delimiter  = JSON_DELIMITER_OBJECT_BEGIN;
+            right_delimiter = JSON_DELIMITER_OBJECT_END;
+            break;
+        case JSON_DELIMITER_TYPE_STRING:
+            left_delimiter  = JSON_DELIMITER_TYPE_STRING;
+            right_delimiter = JSON_DELIMITER_TYPE_STRING;
+            break;
+        default:
+            left_delimiter  = 0;
+            right_delimiter = JSON_DELIMITER_ELEMENT_END;
+            break;
+    }
+
+    int remain_length = 0;
+    while (end && end <= (src + src_len)) {
+        SKIP_SPACE(start);
+        if (left_delimiter) {
+            remain_length = src + src_len - start;
+            start         = _find_json_delimiter(left_delimiter, JSON_DELIMITER_NONE, start, &remain_length);
+            if (!start) {
+                break;
+            }
+            if (JSON_DELIMITER_TYPE_STRING == left_delimiter) {
+                start++;
+            }
+        }
+
+        remain_length = src + src_len - start;
+        end           = _find_json_delimiter(right_delimiter, JSON_DELIMITER_NONE, start, &remain_length);
+        if (!end) {
+            if (!left_delimiter) {
+                obj_cb(start, src + src_len - start - 1, arg);
+            }
+            break;
+        }
+        if (JSON_DELIMITER_ARRAY_END == right_delimiter || JSON_DELIMITER_OBJECT_END == right_delimiter) {
+            end++;
+        }
+
+        if (UTILS_JSON_ARRAY_ITER_STOP == obj_cb(start, end - start, arg)) {
+            return;
+        }
+        start = end + 1;
+    }
 }

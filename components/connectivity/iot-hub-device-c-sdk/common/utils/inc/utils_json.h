@@ -55,6 +55,15 @@ typedef enum {
 } UtilsJsonValueType;
 
 /**
+ * @brief Json array result
+ *
+ */
+typedef enum {
+    UTILS_JSON_ARRAY_ITER_CONTINUE,
+    UTILS_JSON_ARRAY_ITER_STOP,
+} UtilsJsonArrayIterResult;
+
+/**
  * @brief Json value
  *
  */
@@ -88,9 +97,26 @@ int utils_json_value_data_get(UtilsJsonValue value, UtilsJsonValueType type, voi
 /**
  * @brief Return unsigned int value of key in json.
  *
+ * @param[in] key key in json, support nesting with '.'
+ * @param[in] key_len key len
+ * @param[in] src json string
+ * @param[in] src_len src length
+ * @param[out] data data value
  * @return 0 for success
  */
 int utils_json_get_uint32(const char *key, int key_len, const char *src, int src_len, uint32_t *data);
+
+/**
+ * @brief Return int value of key in json.
+ *
+ * @param[in] key key in json, support nesting with '.'
+ * @param[in] key_len key len
+ * @param[in] src json string
+ * @param[in] src_len src length
+ * @param[out] data data value
+ * @return 0 for success
+ */
+int utils_json_get_int32(const char *key, int key_len, const char *src, int src_len, int32_t *data);
 
 /**
  * @brief Remove '\\' in json string.
@@ -100,6 +126,18 @@ int utils_json_get_uint32(const char *key, int key_len, const char *src, int src
  * @return length after transfer
  */
 int utils_json_strip_transfer(char *src, int src_len);
+
+/**
+ * @brief Parse array object, assume array json is legal, src should be like "[12, 456]", this function will split array
+ * according to array_elem_type, obj_cb will be called for each elements.
+ *
+ * @param[in] src array string
+ * @param[in] src_len length of src
+ * @param[in] obj_cb callback to deal with array element
+ * @param[in] arg argument passed to the obj_cb
+ */
+void utils_json_array_parse(const char *src, int src_len, UtilsJsonArrayIterResult (*obj_cb)(const char *, int, void *),
+                            void *arg);
 
 #ifdef __cplusplus
 }

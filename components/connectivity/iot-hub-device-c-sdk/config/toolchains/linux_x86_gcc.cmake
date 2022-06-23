@@ -19,6 +19,6 @@ else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Os -D_FORTIFY_SOURCE=2") # 编译选项  -Wl,-Map,iot.map
 endif()
 
-set(PLATFORM "Linux")
+set(PLATFORM "linux")
 
 set(libsdk  -Wl,--start-group ${libsdk} iot_common iot_services iot_platform pthread -Wl,--end-group)

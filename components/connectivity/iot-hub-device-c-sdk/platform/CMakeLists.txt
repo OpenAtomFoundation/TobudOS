@@ -1,5 +1,6 @@
 file(GLOB src 
     ${CMAKE_CURRENT_SOURCE_DIR}/network/src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/timer/src/*.c
     ${CMAKE_CURRENT_SOURCE_DIR}/os/${PLATFORM}/*.c
 )
 set(inc ${CMAKE_CURRENT_SOURCE_DIR}/network/inc/)

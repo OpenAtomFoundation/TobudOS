@@ -34,6 +34,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "qcloud_iot_config.h"
 
 /**
  * @brief MAX size of client ID.

@@ -43,8 +43,8 @@ namespace mqtt_client_unittest {
 TEST_F(MqttClientTest, system_mqtt) {
   uint32_t time_stamp = 0;
   char server_ip[256] = {0};
-  ASSERT_EQ(IOT_Sys_GetTime(client, &time_stamp), 0);
-  ASSERT_EQ(IOT_Sys_SyncNTPTime(client), 0);
+  EXPECT_EQ(IOT_Sys_GetTime(client, &time_stamp), 0);
+  EXPECT_EQ(IOT_Sys_SyncNTPTime(client), 0);
   ASSERT_EQ(IOT_Sys_GetServerIp(client, server_ip), 0);
 }
 

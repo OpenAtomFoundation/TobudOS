@@ -38,24 +38,23 @@ extern "C" {
 #include "qcloud_iot_common.h"
 
 #include "utils_json.h"
-#include "utils_hmac.h"
 
 /**
- * @brief user callback for saving/reading logs into/from NVS(files/FLASH) after
- * upload fail/recover
+ * @brief User callback for saving/reading logs into/from NVS(files/FLASH) after upload fail/recover
+ *
  */
 // callback for saving logs into NVS(files/FLASH) after upload fail
-typedef size_t (*LogSaveFunc)(const char *filename, const char *msg, size_t wLen);
+typedef size_t (*LogSaveFunc)(const char *filename, const void *buf, size_t write_len, size_t offset);
 // callback for reading logs from NVS(files/FLASH) when upload ready
-typedef size_t (*LogReadFunc)(const char *filename, char *buff, size_t rLen);
+typedef size_t (*LogReadFunc)(const char *filename, void *buf, size_t read_len, size_t offset);
 // callback for deleting logs in NVS(files/FLASH). return 0 when success
 typedef int (*LogDelFunc)(const char *filename);
-// callback for reading the size of logs in NVS(files/FLASH). return 0 when
-// nothing exist
+// callback for reading the size of logs in NVS(files/FLASH). return 0 when nothing exist
 typedef size_t (*LogGetSizeFunc)(const char *filename);
 
 /**
- * @brief data structure to init feature of log upload
+ * @brief Data structure to init feature of log upload.
+ *
  */
 typedef struct {
     /* device info */
@@ -73,44 +72,54 @@ typedef struct {
     LogDelFunc     del_func;
     LogGetSizeFunc get_size_func;
 } LogUploadInitParams;
+
+/**
+ * @brief Default params.
+ *
+ */
 #define DEFAULT_LOG_UPLOAD_INIT_PARAMS                                               \
     {                                                                                \
         NULL, NULL, NULL, NULL, LOG_UPLOAD_BUFFER_SIZE, NULL, NULL, NULL, NULL, NULL \
     }
 
 /**
- * @brief append need report log to log upload buffer
- *
- * @param[in] log_content data of need to report
- */
-void IOT_Log_Upload_AppendToUploadBuffer(int log_level, const char *log_content);
-/**
- * @brief init log upload module
- *
- * @param[in,out] client pointer to mqtt client
- * @return @see IotReturnCode
- */
-int IOT_Log_Upload(bool force_upload);
-/**
- * @brief init log upload previously
+ * @brief Init log upload previously.
  *
  * @param[in] init_params @see LogUploadInitParams
  * @return @see IotReturnCode
  */
-int IOT_Log_Upload_InitPre(LogUploadInitParams *init_params);
+int IOT_Log_Upload_InitPre(const LogUploadInitParams *init_params);
+
 /**
- * @brief init log upload module
+ * @brief Init log upload module.
  *
  * @param[in,out] client pointer to mqtt client
  * @return @see IotReturnCode
  */
 int IOT_Log_Upload_Init(void *client);
+
 /**
- * @brief stop log upload add release resources
+ * @brief Stop log upload add release resources.
  *
  * @return @see IotReturnCode
  */
 int IOT_Log_Upload_Deinit(void);
+
+/**
+ * @brief Append need report log to log upload buffer.
+ *
+ * @param[in] log_level @see LogLevel
+ * @param[in] log_content data of need to report
+ */
+void IOT_Log_Upload_AppendToUploadBuffer(LogLevel log_level, const char *log_content);
+
+/**
+ * @brief Do log upload.
+ *
+ * @param[in] force_upload force upload when error
+ * @return @see IotReturnCode
+ */
+int IOT_Log_Upload(bool force_upload);
 
 #ifdef __cplusplus
 }

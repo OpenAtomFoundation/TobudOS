@@ -3,6 +3,9 @@
 # 开启单元测试
 set(CONFIG_IOT_TEST OFF)
 
+# 开启示例编译
+set(CONFIG_COMPILE_SAMPLE ON)
+
 # 打开IOT DEBUG
 set(CONFIG_IOT_DEBUG OFF)
 
@@ -49,23 +52,23 @@ else()
 endif()
 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/config/settings/qcloud_iot_config.h.in"
-  "${PROJECT_SOURCE_DIR}/include/config/qcloud_iot_config.h" 
+  "${IOT_SDK_SOURCE_DIR}/config/settings/qcloud_iot_config.h.in"
+  "${IOT_SDK_SOURCE_DIR}/include/config/qcloud_iot_config.h" 
   @ONLY
 )
 
 # export include
 include_directories(
-	${PROJECT_SOURCE_DIR}/include/
-	${PROJECT_SOURCE_DIR}/include/common
-	${PROJECT_SOURCE_DIR}/include/config
-	${PROJECT_SOURCE_DIR}/include/services/common
-	${PROJECT_SOURCE_DIR}/include/services/explorer
+	${IOT_SDK_SOURCE_DIR}/include/
+	${IOT_SDK_SOURCE_DIR}/include/common
+	${IOT_SDK_SOURCE_DIR}/include/config
+	${IOT_SDK_SOURCE_DIR}/include/services/common
+	${IOT_SDK_SOURCE_DIR}/include/services/explorer
 )
 
 # set output path
-set(LIBRARY_OUTPUT_PATH    ${PROJECT_SOURCE_DIR}/output/libs)
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/bin)
+set(LIBRARY_OUTPUT_PATH    ${IOT_SDK_SOURCE_DIR}/output/libs)
+set(EXECUTABLE_OUTPUT_PATH ${IOT_SDK_SOURCE_DIR}/output/bin)
 
 # set link lib dir
 link_directories(${LIBRARY_OUTPUT_PATH})
@@ -80,7 +83,7 @@ endif()
 set(src_platform CACHE INTERNAL "")
 set(inc_platform CACHE INTERNAL "")
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/platform)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/platform)
 
 # set include
 include_directories(${inc_platform})
@@ -93,13 +96,13 @@ set(src_common CACHE INTERNAL "")
 set(inc_common CACHE INTERNAL "")
 
 # mqtt packet
-add_subdirectory(${PROJECT_SOURCE_DIR}/common/mqtt_packet)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/mqtt_packet)
 
 # utils
-add_subdirectory(${PROJECT_SOURCE_DIR}/common/utils)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/utils)
 
 # cryptology
-add_subdirectory(${PROJECT_SOURCE_DIR}/common/cryptology)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/cryptology)
 
 # set include
 include_directories(${inc_common})
@@ -112,15 +115,15 @@ add_library(iot_common STATIC ${src_common})
 # mbedtls
 if(${CONFIG_AUTH_MODE} STREQUAL  "KEY" )
 	include_directories(
-		${PROJECT_SOURCE_DIR}/3rd/mbedtls/mbedtls/include
-		${PROJECT_SOURCE_DIR}/3rd/mbedtls/port/inc
+		${IOT_SDK_SOURCE_DIR}/3rd/mbedtls/mbedtls/include
+		${IOT_SDK_SOURCE_DIR}/3rd/mbedtls/port/inc
 	)
 	add_definitions("-DMBEDTLS_CONFIG_FILE=\"qcloud_iot_tls_psk_config.h\"")
 endif()
 
 if(${CONFIG_AUTH_WITH_NOTLS} STREQUAL "OFF")
 	# libmbedtls.a
-	add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/mbedtls)
+	add_subdirectory(${IOT_SDK_SOURCE_DIR}/3rd/mbedtls)
 	set(libsdk ${libsdk} mbedtls)
 endif()
 
@@ -130,55 +133,43 @@ set(src_services CACHE INTERNAL "")
 set(inc_services CACHE INTERNAL "")
 
 # mqtt client (must include except dynamic register)
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/mqtt_client)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/mqtt_client)
 
 # http client
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/http_client)
-
-# cos
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/cos)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/http_client)
 
 ## MQTT ONLY
 
 # 是否使能获取iot后台时间功能
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/system)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/system)
+
+# 是否使能OTA固件升级功能
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/ota)
+
+# gateway 
+add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/gateway)
 
 # 是否使能数据模板功能
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/explorer/data_template)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/explorer/data_template)
 
 # 是否系统服务
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/explorer/service_mqtt)
-
-# 是否打开RRPC功能
-#add_subdirectory()
-
-# 是否打开远程配置功能
-#add_subdirectory()
-
-# 是否打开设备影子的总开关
-#add_subdirectory()
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/explorer/service_mqtt)
 
 ## HTTP ONLY
 
 # 是否使能设备动态注册
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/dynreg)
 
-## MQTT & HTTP
-
-# 是否使能网关功能
-#add_subdirectory()
-
-# 是否使能OTA固件升级功能
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/ota)
-
-# 是否使能资源管理功能
-#add_subdirectory()
+# 是否使能COS下载功能
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/cos)
 
 # 是否使能HTTP请求腾讯云后台功能 如果开启了日志上报和动态注册 则必须要使能
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/http_signed)
 
+## HTTP & MQTT
+
 # 是否使能日志上报云端功能
-add_subdirectory(${PROJECT_SOURCE_DIR}/services/common/log_upload)
+add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/log_upload)
 
 # set include
 include_directories(${inc_services})
@@ -202,21 +193,21 @@ endif()
 ###################### EXTRACT ####################################
 
 if(${CONFIG_EXTRACT_SRC} STREQUAL "ON")
-	file(COPY ${src_platform} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/src)
-	file(COPY ${inc_platform} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/inc/internal)
+	file(COPY ${src_platform} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/src)
+	file(COPY ${inc_platform} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/inc/internal)
 
-	file(COPY ${src_common} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/src)
-	file(COPY ${inc_common} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/inc/internal)
+	file(COPY ${src_common} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/src)
+	file(COPY ${inc_common} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/inc/internal)
 
-	file(COPY ${src_services} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/src)
-	file(COPY ${inc_services} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/inc/internal)
+	file(COPY ${src_services} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/src)
+	file(COPY ${inc_services} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/inc/internal)
 
 	file(GLOB inc_export
-		${PROJECT_SOURCE_DIR}/include/*.h
-		${PROJECT_SOURCE_DIR}/include/common/*.h
-		${PROJECT_SOURCE_DIR}/include/config/*.h
-		${PROJECT_SOURCE_DIR}/include/services/common/*.h
-		${PROJECT_SOURCE_DIR}/include/services/explorer/*.h
+		${IOT_SDK_SOURCE_DIR}/include/*.h
+		${IOT_SDK_SOURCE_DIR}/include/common/*.h
+		${IOT_SDK_SOURCE_DIR}/include/config/*.h
+		${IOT_SDK_SOURCE_DIR}/include/services/common/*.h
+		${IOT_SDK_SOURCE_DIR}/include/services/explorer/*.h
 	)
-	file(COPY ${inc_export} DESTINATION ${PROJECT_SOURCE_DIR}/output/sdk/inc)
+	file(COPY ${inc_export} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/inc)
 endif()

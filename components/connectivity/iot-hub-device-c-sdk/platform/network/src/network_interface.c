@@ -27,10 +27,6 @@
  * </table>
  */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "network_interface.h"
 
 /**
@@ -261,7 +257,3 @@ int qcloud_iot_network_init(IotNetwork *network)
     }
     return network->init(network);
 }
-
-#ifdef __cplusplus
-}
-#endif

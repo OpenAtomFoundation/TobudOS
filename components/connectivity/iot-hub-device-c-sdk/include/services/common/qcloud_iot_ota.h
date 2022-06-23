@@ -39,6 +39,45 @@ extern "C" {
 
 #include "utils_json.h"
 
+#ifdef AT_MODULE_ENABLE
+
+/**
+ * @brief Init ota && report mcu & at version.
+ *
+ * @param[in] version mcu version.
+ * @return 0 for success
+ */
+int IOT_OTA_Init(const char *version);
+
+/**
+ * @brief Deinit ota.
+ *
+ * @return @see IotReturnCode
+ */
+void IOT_OTA_Deinit(void);
+
+/**
+ * @brief Read fw info from at module.
+ *
+ * @param[out] version mcu fw version
+ * @param[out] fw_size mcu fw size
+ * @param[out] md5  mcu fw md5
+ * @param[in] timeout_ms timeout
+ * @return 0 for success
+ */
+int IOT_OTA_ReadFwInfo(char **version, uint32_t *fw_size, char **md5, uint32_t timeout_ms);
+
+/**
+ * @brief Read fw data from at module.
+ *
+ * @param[out] fw_data fw data
+ * @param[out] fw_data_len fw data length
+ * @param[in] timeout_ms timeout
+ * @return 0 for success
+ */
+int IOT_OTA_ReadFWData(uint8_t *fw_data, uint32_t *fw_data_len, uint32_t timeout_ms);
+
+#else
 /**
  * @brief OTA report type.
  *
@@ -105,6 +144,8 @@ int IOT_OTA_ReportProgress(void *client, char *buf, int buf_len, IotOTAReportTyp
  * @return packet id (>=0) when success, or err code (<0) @see IotReturnCode
  */
 int IOT_OTA_ReportVersion(void *client, char *buf, int buf_len, const char *version);
+
+#endif
 
 #ifdef __cplusplus
 }

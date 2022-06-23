@@ -128,7 +128,7 @@ TEST_F(MqttClientTest, clean_session) {
   SubscribeParams sub_params = DEFAULT_SUB_PARAMS;
 
   char topic_name[MAX_SIZE_OF_CLOUD_TOPIC] = {0};
-  ASSERT_EQ(HAL_GetDevInfo(reinterpret_cast<void *>(&device_info)), 0);
+  ASSERT_EQ(HAL_GetDevInfo(&device_info), 0);
   HAL_Snprintf(topic_name, sizeof(topic_name), "%s/%s/data", device_info.product_id, device_info.device_name);
 
   MQTTInitParams init_params = DEFAULT_MQTT_INIT_PARAMS;

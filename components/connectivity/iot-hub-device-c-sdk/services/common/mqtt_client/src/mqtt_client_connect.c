@@ -67,7 +67,7 @@ static int _mqtt_connect(QcloudIotClient *client)
     if (rc) {
         IOT_FUNC_EXIT_RC(rc);
     }
-    
+
     // recv MQTT CONNACK packet
     rc = qcloud_iot_mqtt_wait_for_read(client, CONNACK);
     if (rc) {
@@ -88,7 +88,7 @@ static int _mqtt_connect(QcloudIotClient *client)
 
     HAL_MutexLock(client->lock_generic);
     client->was_manually_disconnected = client->is_ping_outstanding = 0;
-    HAL_Timer_Countdown(&client->ping_timer, client->options.keep_alive_interval);
+    IOT_Timer_Countdown(&client->ping_timer, client->options.keep_alive_interval);
     HAL_MutexUnlock(client->lock_generic);
     IOT_FUNC_EXIT_RC(rc);
 }
@@ -118,7 +118,7 @@ static void _mqtt_switch_domain(QcloudIotClient *client, DomainMode mode)
  * @param[in] srv_ip server ip string
  * @return @see IotReturnCode
  */
-static int _mqtt_set_srv_ip(QcloudIotClient *client, char *srv_ip)
+static int _mqtt_set_srv_ip(QcloudIotClient *client, const char *srv_ip)
 {
     int size = HAL_Snprintf(client->host_addr, HOST_STR_LENGTH, "%s", srv_ip);
     if (size < 0 || size > HOST_STR_LENGTH - 1) {
@@ -165,7 +165,7 @@ int qcloud_iot_mqtt_connect(QcloudIotClient *client, ConnMode mode)
                 break;
             }
 
-            char *srv_ip = client->get_next_host_ip();
+            const char *srv_ip = client->get_next_host_ip();
             if (!srv_ip) {
                 break;
             }

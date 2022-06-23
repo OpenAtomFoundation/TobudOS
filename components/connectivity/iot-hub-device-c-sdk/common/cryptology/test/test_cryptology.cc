@@ -77,7 +77,7 @@ TEST(CryptologyTest, hmac) {
 
   char buf[128] = {0};
 
-  ASSERT_EQ(utils_hmac_sha1(test_buf, strlen(test_buf), key, sizeof(key), buf), 0);
+  ASSERT_EQ(utils_hmac_sha1_hex(test_buf, strlen(test_buf), key, sizeof(key), buf), 0);
   ASSERT_EQ(memcmp(buf, result, sizeof(result)), 0);
 }
 

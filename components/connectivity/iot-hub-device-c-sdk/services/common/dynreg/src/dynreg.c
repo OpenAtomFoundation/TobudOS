@@ -31,7 +31,6 @@
 #include "utils_base64.h"
 #include "mbedtls/aes.h"
 
-
 #define DYN_RESPONSE_BUFF_LEN (256)
 #define DECODE_BUFF_LEN       (256)
 #define UTILS_AES_BLOCK_LEN   (16)
@@ -152,7 +151,7 @@ int IOT_DynReg_Device(DeviceInfo *device_info)
         .recv_timeout_ms = 2000,
         .secretkey       = device_info->product_secret,
     };
-    rc = IOT_HTTP_Signed_Request(&params, dynreg_buf, request_body_len, (uint8_t *)dynreg_buf, DYN_RESPONSE_BUFF_LEN);
+    rc = IOT_HTTP_SignedRequest(&params, dynreg_buf, request_body_len, (uint8_t *)dynreg_buf, DYN_RESPONSE_BUFF_LEN);
     if (rc < 0) {
         goto exit;
     }

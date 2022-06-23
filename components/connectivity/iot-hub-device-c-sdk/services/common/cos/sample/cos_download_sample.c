@@ -62,12 +62,7 @@ int main(int argc, char **argv)
     int rc = 0;
 
     // init log level
-    LogHandleFunc func = {0};
-
-    func.log_malloc               = HAL_Malloc;
-    func.log_free                 = HAL_Free;
-    func.log_get_current_time_str = HAL_Timer_Current;
-    func.log_printf               = HAL_Printf;
+    LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
     utils_log_init(func, LOG_LEVEL_DEBUG, 2048);
 
     IotCosDownloadParams connect_params = {

@@ -34,10 +34,9 @@ namespace mqtt_client_unittest {
 
 TEST_F(MqttClientTest, dynreg_test) {
   DeviceInfo device_info;
-  ASSERT_EQ(HAL_GetDevInfo(reinterpret_cast<void *>(&device_info)), 0);
+  ASSERT_EQ(HAL_GetDevInfo(&device_info), 0);
   strncpy(device_info.device_name, "dynreg_test", 12);
-  ASSERT_EQ(IOT_DynReg_Device(&device_info), 0);
-  ASSERT_EQ(HAL_SetDevInfo(reinterpret_cast<void *>(&device_info)), 0);
+  EXPECT_EQ(IOT_DynReg_Device(&device_info), 0);
 }
 
 }  // namespace mqtt_client_unittest

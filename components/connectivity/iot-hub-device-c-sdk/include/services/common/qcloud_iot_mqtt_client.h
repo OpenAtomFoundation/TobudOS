@@ -68,7 +68,6 @@ typedef enum {
     MQTT_EVENT_PUBLISH_RECEIVED    = 12, /**< MQTT received msg from server */
     MQTT_EVENT_CLIENT_DESTROY      = 13, /**< MQTT client destroy */
     MQTT_EVENT_UNSUBSCRIBE         = 14, /**< MQTT unsubscribe */
-    MQTT_EVENT_GATEWAY_SEARCH      = 15,
 } MQTTEventType;
 
 /**
@@ -103,7 +102,7 @@ typedef struct {
 /**
  * @brief return next host ip
  */
-typedef char *(*MQTTGetNextHostIp)(void);
+typedef const char *(*MQTTGetNextHostIp)(void);
 
 /**
  * @brief The structure of MQTT init parameters
@@ -114,7 +113,7 @@ typedef struct {
     const char *host;                   /**< host for user, null for default using QCLOUD_IOT_MQTT_DIRECT_DOMAIN */
     const char *backup_host;            /**< backup host for user if host not connect will try use this */
     uint32_t    command_timeout;        /**< timeout value (unit: ms) for MQTT connect/pub/sub/yield */
-    uint32_t    keep_alive_interval_ms; /**< MQTT keep alive time interval in millisecond */
+    uint32_t    keep_alive_interval;    /**< MQTT keep alive time interval in second */
     uint8_t     clean_session;          /**< flag of clean session, 1 clean, 0 not clean */
     uint8_t     auto_connect_enable;    /**< flag of auto reconnection, 1 is enable and recommended */
     uint8_t     connect_when_construct; /**< 1 is enable when no using pre-process before connect */
@@ -126,9 +125,12 @@ typedef struct {
 /**
  * Default MQTT init parameters
  */
-#define DEFAULT_MQTT_INIT_PARAMS                                    \
-    {                                                               \
-        NULL, NULL, NULL, 5000, 240 * 1000, 1, 1, 1, 0, NULL, { 0 } \
+#define DEFAULT_MQTT_INIT_PARAMS                                                                                  \
+    {                                                                                                             \
+        NULL, NULL, NULL, QCLOUD_IOT_MQTT_COMMAND_TIMEOUT, QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL, 1, 1, 1, 0, NULL, \
+        {                                                                                                         \
+            0                                                                                                     \
+        }                                                                                                         \
     }
 
 /**

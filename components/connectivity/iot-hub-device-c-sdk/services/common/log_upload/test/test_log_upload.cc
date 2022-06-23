@@ -40,11 +40,7 @@ namespace mqtt_client_unittest {
  *
  */
 TEST_F(MqttClientTest, log_upload_test) {
-  LogHandleFunc func = {0};
-  func.log_malloc = HAL_Malloc;
-  func.log_free = HAL_Free;
-  func.log_get_current_time_str = HAL_Timer_Current;
-  func.log_printf = HAL_Printf;
+  LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
   func.log_upload = IOT_Log_Upload_AppendToUploadBuffer;
   utils_log_init(func, LOG_LEVEL_DEBUG, 2048);
 
@@ -56,11 +52,12 @@ TEST_F(MqttClientTest, log_upload_test) {
   log_upload_init_params.log_buffer_size = LOG_UPLOAD_BUFFER_SIZE;
   log_upload_init_params.save_log_filename = "./tmp/upload-fail-save.log";
   log_upload_init_params.read_func = HAL_File_Read;
-  log_upload_init_params.save_func = HAL_File_Save;
+  log_upload_init_params.save_func = HAL_File_Write;
   log_upload_init_params.del_func = HAL_File_Del;
-  log_upload_init_params.get_size_func = HAL_File_Get_Size;
+  log_upload_init_params.get_size_func = HAL_File_GetSize;
 
   ASSERT_EQ(IOT_Log_Upload_InitPre(&log_upload_init_params), 0);
+  ASSERT_EQ(IOT_Log_Upload_Init(client), 0);
 
   uint32_t loop_cnt = 10;
   int rc = 0;

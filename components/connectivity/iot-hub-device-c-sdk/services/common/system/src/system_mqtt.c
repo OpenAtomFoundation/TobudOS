@@ -44,7 +44,8 @@ typedef enum {
 } SysResourceType;
 
 /**
- * @brief data structure for system time service
+ * @brief Data structure for system time service.
+ *
  */
 typedef struct {
     bool result_recv_ok;
@@ -64,7 +65,7 @@ typedef struct {
 } SystemResultInfo;
 
 /**
- * @brief
+ * @brief Parse time or server ip.
  *
  * @param[in,out] client pointer to mqtt client
  * @param[in] message message from topic
@@ -77,6 +78,7 @@ static void _system_mqtt_message_callback(void *client, const MQTTMessage *messa
     UtilsJsonValue    value;
 
     Log_d("Receive system result message:%.*s", message->payload_len, message->payload_str);
+    message->payload_str[message->payload_len] = '\0';
     if (strstr(message->payload_str, "\"time\"")) {
         // get time
         rc = utils_json_value_get("time", strlen("time"), message->payload_str, message->payload_len, &value);
@@ -109,6 +111,7 @@ static void _system_mqtt_message_callback(void *client, const MQTTMessage *messa
             result->time.ntptime2 = result->time.time * 1000;
         }
     }
+
     if (strstr(message->payload_str, "\"serverip\"")) {
         // get serverip
         rc = utils_json_value_get("serverip", strlen("serverip"), message->payload_str, message->payload_len, &value);
@@ -207,17 +210,17 @@ static int _system_mqtt_get_resource_publish(void *client, const char *topic, Sy
 static int _system_mqtt_result_wait(void *client, const char *topic, void *user_data)
 {
     int               rc = 0;
-    Timer             wait_result_timer;
+    QcloudIotTimer    wait_result_timer;
     SystemResultInfo *result;
 
-    HAL_Timer_CountdownMs(&wait_result_timer, QCLOUD_IOT_MQTT_WAIT_ACK_TIMEOUT);
+    IOT_Timer_CountdownMs(&wait_result_timer, QCLOUD_IOT_MQTT_WAIT_ACK_TIMEOUT);
 
     result = IOT_MQTT_GetSubUsrData(client, topic);
     if (!result) {
         return QCLOUD_ERR_FAILURE;
     }
     result->result_recv_ok = false;
-    while (!rc && !HAL_Timer_Expired(&wait_result_timer)) {
+    while (!rc && !IOT_Timer_Expired(&wait_result_timer)) {
         rc = IOT_MQTT_Yield(client, QCLOUD_IOT_MQTT_YIELD_TIMEOUT);
         if (result->result_recv_ok) {
             switch (result->wait_type) {
@@ -236,6 +239,14 @@ static int _system_mqtt_result_wait(void *client, const char *topic, void *user_
     return QCLOUD_ERR_MQTT_REQUEST_TIMEOUT;
 }
 
+/**
+ * @brief Publish get resource message and wait for result.
+ *
+ * @param[in,out] client pointer to mqtt client
+ * @param[in] type @see SysResourceType
+ * @param[in] user_data pointer to time or sever ip
+ * @return @see IotReturnCode
+ */
 static int _system_mqtt_get_resource(void *client, SysResourceType type, void *user_data)
 {
     POINTER_SANITY_CHECK(client, QCLOUD_ERR_INVAL);
@@ -260,6 +271,7 @@ static int _system_mqtt_get_resource(void *client, SysResourceType type, void *u
 
     return _system_mqtt_result_wait(client, system_result_topic, user_data);
 }
+
 /**
  * @brief Get time from system result topic
  *
@@ -321,13 +333,6 @@ int IOT_Sys_SyncNTPTime(void *client)
 
     local_ntptime =
         (result->time.ntptime2 + result->time.ntptime1 + result->result_recv_time - local_publish_before) / 2;
-
-    rc = HAL_Timer_SetSystimeSec(time_get);
-    if (rc) {
-        Log_e("set systime sec failed, timestamp %d sec,  please check permission or other ret:%d", time_get, rc);
-    } else {
-        Log_i("set systime sec success, timestamp %d sec", time_get);
-    }
 
     rc = HAL_Timer_SetSystimeMs(local_ntptime);
     if (rc) {

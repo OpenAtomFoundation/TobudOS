@@ -168,8 +168,8 @@ typedef struct {
     char                    conn_id[MAX_CONN_ID_LEN]; /**< connect id */
 
     SubTopicHandle sub_handles[MAX_MESSAGE_HANDLERS]; /**< subscription handle array */
-    Timer          ping_timer;                        /**< MQTT ping timer */
-    Timer          reconnect_delay_timer;             /**< MQTT reconnect delay timer */
+    QcloudIotTimer ping_timer;                        /**< MQTT ping timer */
+    QcloudIotTimer reconnect_delay_timer;             /**< MQTT reconnect delay timer */
     uint8_t        was_manually_disconnected;         /**< was disconnect by server or device */
     uint8_t        is_ping_outstanding;             /**< 1 = ping request is sent while ping response not arrived yet */
     uint32_t       current_reconnect_wait_interval; /**< unit:ms */
@@ -189,10 +189,10 @@ typedef struct {
  *
  */
 typedef struct {
-    uint8_t *buf;            /**< msg buffer */
-    uint32_t len;            /**< msg length */
-    uint16_t packet_id;      /**< packet id */
-    Timer    pub_start_time; /**< timer for puback waiting */
+    uint8_t       *buf;            /**< msg buffer */
+    uint32_t       len;            /**< msg length */
+    uint16_t       packet_id;      /**< packet id */
+    QcloudIotTimer pub_start_time; /**< timer for puback waiting */
 } QcloudIotPubInfo;
 
 /**
@@ -204,7 +204,7 @@ typedef struct {
     uint16_t       len;            /**< msg length */
     MQTTPacketType type;           /**< type: sub or unsub */
     uint16_t       packet_id;      /**< packet id */
-    Timer          sub_start_time; /**< timer for suback waiting */
+    QcloudIotTimer sub_start_time; /**< timer for suback waiting */
     SubTopicHandle handler;        /**< handle of topic subscribed(unsubscribed) */
 } QcloudIotSubInfo;
 

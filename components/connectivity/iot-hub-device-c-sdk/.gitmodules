@@ -1,0 +1,4 @@
+[submodule "3rd/mbedtls/mbedtls"]
+	path = 3rd/mbedtls/mbedtls
+	url = https://github.com/ARMmbed/mbedtls.git
+	branch = mbedtls-2.16

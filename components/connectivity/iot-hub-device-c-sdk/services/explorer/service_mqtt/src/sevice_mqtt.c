@@ -89,14 +89,7 @@ static ServiceMqttContext *_service_mqtt_context_malloc(void)
         return NULL;
     }
 
-    UtilsListFunc func = {
-        .list_malloc      = HAL_Malloc,
-        .list_free        = HAL_Free,
-        .list_lock_init   = HAL_MutexCreate,
-        .list_lock        = HAL_MutexLock,
-        .list_unlock      = HAL_MutexUnlock,
-        .list_lock_deinit = HAL_MutexDestroy,
-    };
+    UtilsListFunc func    = DEFAULT_LIST_FUNCS;
     context->service_list = utils_list_create(func, 10);
     if (!context->service_list) {
         HAL_Free(context);

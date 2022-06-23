@@ -46,7 +46,7 @@
  */
 static uint16_t _get_random_start_packet_id(void)
 {
-    srand(HAL_Timer_CurrentSec());
+    srand(IOT_Timer_CurrentSec());
     return rand() % 65536 + 1;
 }
 
@@ -60,14 +60,7 @@ static int _mqtt_client_list_init(QcloudIotClient *client)
 {
     IOT_FUNC_ENTRY;
 
-    UtilsListFunc func = {
-        .list_malloc      = HAL_Malloc,
-        .list_free        = HAL_Free,
-        .list_lock_init   = HAL_MutexCreate,
-        .list_lock_deinit = HAL_MutexDestroy,
-        .list_lock        = HAL_MutexLock,
-        .list_unlock      = HAL_MutexUnlock,
-    };
+    UtilsListFunc func = DEFAULT_LIST_FUNCS;
 
     client->list_pub_wait_ack = utils_list_create(func, MAX_REPUB_NUM);
     if (!client->list_pub_wait_ack) {
@@ -148,10 +141,9 @@ static int _mqtt_client_connect_option_init(QcloudIotClient *client, const MQTTI
 
     client->options.mqtt_version = MQTT_VERSION_3_1_1;
     // Upper limit of keep alive interval is (11.5 * 60) seconds
-    client->options.client_id = client->device_info->client_id;
-    client->options.keep_alive_interval =
-        params->keep_alive_interval_ms / 1000 > 690 ? 690 : params->keep_alive_interval_ms / 1000;
-    client->options.clean_session = params->clean_session;
+    client->options.client_id           = client->device_info->client_id;
+    client->options.keep_alive_interval = params->keep_alive_interval > 690 ? 690 : params->keep_alive_interval;
+    client->options.clean_session       = params->clean_session;
 
     // calculate user name & password
     client->options.username = (char *)HAL_Malloc(MAX_MQTT_CONNECT_USR_NAME_LEN);
@@ -162,7 +154,7 @@ static int _mqtt_client_connect_option_init(QcloudIotClient *client, const MQTTI
     }
 
     cur_timesec =
-        (MAX_ACCESS_EXPIRE_TIMEOUT <= 0) ? 0x7fffffffL : (HAL_Timer_CurrentSec() + MAX_ACCESS_EXPIRE_TIMEOUT / 1000);
+        (MAX_ACCESS_EXPIRE_TIMEOUT <= 0) ? 0x7fffffffL : (IOT_Timer_CurrentSec() + MAX_ACCESS_EXPIRE_TIMEOUT / 1000);
     get_next_conn_id(client->conn_id);
     HAL_Snprintf(client->options.username, MAX_MQTT_CONNECT_USR_NAME_LEN, "%s;%s;%s;%ld", client->options.client_id,
                  QCLOUD_IOT_DEVICE_SDK_APPID, client->conn_id, cur_timesec);
@@ -175,8 +167,8 @@ static int _mqtt_client_connect_option_init(QcloudIotClient *client, const MQTTI
         rc = QCLOUD_ERR_MALLOC;
         goto error;
     }
-    utils_hmac_sha1(client->options.username, strlen(client->options.username),
-                    client->device_info->device_secret_decode, client->device_info->device_secret_decode_len, sign);
+    utils_hmac_sha1_hex(client->options.username, strlen(client->options.username),
+                        client->device_info->device_secret_decode, client->device_info->device_secret_decode_len, sign);
     HAL_Snprintf(client->options.password, MAX_MQTT_CONNECT_PASSWORD_LEN, "%s;hmacsha1", sign);
 #endif
     IOT_FUNC_EXIT_RC(rc);

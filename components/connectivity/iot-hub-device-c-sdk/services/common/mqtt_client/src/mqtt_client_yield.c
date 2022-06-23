@@ -166,9 +166,9 @@ static int _read_packet_payload(QcloudIotClient *client, uint32_t timeout_ms, ui
 
     if (read_len != rem_len) {
 #ifdef AUTH_WITH_NO_TLS
-        return QCLOUD_ERR_SSL_READ_TIMEOUT;
-#else
         return QCLOUD_ERR_TCP_READ_TIMEOUT;
+#else
+        return QCLOUD_ERR_SSL_READ_TIMEOUT;
 #endif
     }
 
@@ -188,7 +188,7 @@ static int _read_packet_payload(QcloudIotClient *client, uint32_t timeout_ms, ui
  * 2. read the remaining length
  * 3. read payload according to remaining length
  */
-static int _read_mqtt_packet(QcloudIotClient *client, Timer *timer, uint8_t *packet_type)
+static int _read_mqtt_packet(QcloudIotClient *client, QcloudIotTimer *timer, uint8_t *packet_type)
 {
     IOT_FUNC_ENTRY;
     int      rc      = 0;
@@ -196,13 +196,13 @@ static int _read_mqtt_packet(QcloudIotClient *client, Timer *timer, uint8_t *pac
     uint8_t *packet_read_buf = client->read_buf;
 
     // 1. read 1st byte in fixed header and check if valid
-    rc = _read_packet_header(client, HAL_Timer_Remain(timer), packet_type, &packet_read_buf);
+    rc = _read_packet_header(client, IOT_Timer_Remain(timer), packet_type, &packet_read_buf);
     if (rc) {
         IOT_FUNC_EXIT_RC(rc);
     }
 
     // 2. read the remaining length
-    rc = _read_packet_remaining_len(client, HAL_Timer_Remain(timer), &rem_len, &packet_read_buf);
+    rc = _read_packet_remaining_len(client, IOT_Timer_Remain(timer), &rem_len, &packet_read_buf);
     if (rc) {
         IOT_FUNC_EXIT_RC(rc);
     }
@@ -210,16 +210,15 @@ static int _read_mqtt_packet(QcloudIotClient *client, Timer *timer, uint8_t *pac
     // if read buffer is not enough to read the remaining length, discard the packet
     packet_len = packet_read_buf - client->read_buf + rem_len;
     if (packet_len >= client->read_buf_size) {
-        _discard_packet_for_short_buf(client, HAL_Timer_Remain(timer), rem_len);
+        _discard_packet_for_short_buf(client, IOT_Timer_Remain(timer), rem_len);
         Log_e("MQTT Recv buffer not enough: %lu < %d", client->read_buf_size, rem_len);
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_BUF_TOO_SHORT);
     }
 
     // 3. read payload according to remaining length
     if (rem_len > 0) {
-        rc = _read_packet_payload(client, HAL_Timer_Remain(timer), rem_len, packet_read_buf);
+        rc = _read_packet_payload(client, IOT_Timer_Remain(timer), rem_len, packet_read_buf);
     }
-    
     IOT_FUNC_EXIT_RC(rc);
 }
 
@@ -234,7 +233,7 @@ static void _handle_pingresp_packet(QcloudIotClient *client)
 
     HAL_MutexLock(client->lock_generic);
     client->is_ping_outstanding = 0;
-    HAL_Timer_Countdown(&client->ping_timer, client->options.keep_alive_interval);
+    IOT_Timer_Countdown(&client->ping_timer, client->options.keep_alive_interval);
     HAL_MutexUnlock(client->lock_generic);
 
     IOT_FUNC_EXIT;
@@ -248,7 +247,7 @@ static void _handle_pingresp_packet(QcloudIotClient *client)
  * @param[out] packet_type packet type of packet read
  * @return @see IotReturnCode
  */
-static int _cycle_for_read(QcloudIotClient *client, Timer *timer, uint8_t *packet_type)
+static int _cycle_for_read(QcloudIotClient *client, QcloudIotTimer *timer, uint8_t *packet_type)
 {
     IOT_FUNC_ENTRY;
 
@@ -319,10 +318,10 @@ static void _set_reconnect_wait_interval(QcloudIotClient *client)
 {
     client->counter_network_disconnected++;
     if (client->auto_connect_enable) {
-        srand(HAL_Timer_CurrentSec());
+        srand(IOT_Timer_CurrentSec());
         // range: 1000 - 2000 ms, in 10ms unit
         client->current_reconnect_wait_interval = (rand() % 100 + 100) * 10;
-        HAL_Timer_CountdownMs(&(client->reconnect_delay_timer), client->current_reconnect_wait_interval);
+        IOT_Timer_CountdownMs(&(client->reconnect_delay_timer), client->current_reconnect_wait_interval);
     }
 }
 
@@ -377,7 +376,7 @@ static int _handle_reconnect(QcloudIotClient *client)
     MQTTEventMsg msg;
 
     // reconnect control by delay timer (increase interval exponentially )
-    if (!HAL_Timer_Expired(&(client->reconnect_delay_timer))) {
+    if (!IOT_Timer_Expired(&(client->reconnect_delay_timer))) {
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MQTT_ATTEMPTING_RECONNECT);
     }
 
@@ -401,7 +400,7 @@ static int _handle_reconnect(QcloudIotClient *client)
         IOT_FUNC_EXIT_RC(QCLOUD_ERR_MQTT_RECONNECT_TIMEOUT);
     }
 
-    HAL_Timer_CountdownMs(&(client->reconnect_delay_timer), client->current_reconnect_wait_interval);
+    IOT_Timer_CountdownMs(&(client->reconnect_delay_timer), client->current_reconnect_wait_interval);
     IOT_FUNC_EXIT_RC(QCLOUD_ERR_MQTT_ATTEMPTING_RECONNECT);
 }
 
@@ -423,7 +422,7 @@ static int _mqtt_keep_alive(QcloudIotClient *client)
         IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
     }
 
-    if (!HAL_Timer_Expired(&client->ping_timer)) {
+    if (!IOT_Timer_Expired(&client->ping_timer)) {
         IOT_FUNC_EXIT_RC(QCLOUD_RET_SUCCESS);
     }
 
@@ -447,7 +446,7 @@ static int _mqtt_keep_alive(QcloudIotClient *client)
     // start a timer to wait for PINGRESP from server
     HAL_MutexLock(client->lock_generic);
     client->is_ping_outstanding++;
-    HAL_Timer_CountdownMs(&client->ping_timer, client->command_timeout_ms);
+    IOT_Timer_CountdownMs(&client->ping_timer, client->command_timeout_ms);
     HAL_MutexUnlock(client->lock_generic);
     Log_d("PING request %u has been sent...", client->is_ping_outstanding);
 
@@ -467,9 +466,9 @@ int qcloud_iot_mqtt_yield(QcloudIotClient *client, uint32_t timeout_ms)
 {
     IOT_FUNC_ENTRY;
 
-    int     rc = QCLOUD_RET_SUCCESS;
-    uint8_t packet_type;
-    Timer   timer;
+    int            rc = QCLOUD_RET_SUCCESS;
+    uint8_t        packet_type;
+    QcloudIotTimer timer;
 
     // 1. check if manually disconnect
     if (!get_client_conn_state(client) && client->was_manually_disconnected == 1) {
@@ -482,9 +481,9 @@ int qcloud_iot_mqtt_yield(QcloudIotClient *client, uint32_t timeout_ms)
     }
 
     // 3. main loop for packet reading/handling and keep alive maintainance
-    HAL_Timer_CountdownMs(&timer, timeout_ms);
+    IOT_Timer_CountdownMs(&timer, timeout_ms);
 
-    while (!HAL_Timer_Expired(&timer)) {
+    while (!IOT_Timer_Expired(&timer)) {
         // handle reconnect
         if (!get_client_conn_state(client)) {
             if (client->current_reconnect_wait_interval > MAX_RECONNECT_WAIT_INTERVAL) {
@@ -537,13 +536,13 @@ int qcloud_iot_mqtt_wait_for_read(QcloudIotClient *client, uint8_t packet_type)
 {
     IOT_FUNC_ENTRY;
 
-    int     rc;
-    uint8_t read_packet_type = 0;
-    Timer   timer;
-    HAL_Timer_CountdownMs(&timer, client->command_timeout_ms);
-    
+    int            rc;
+    uint8_t        read_packet_type = 0;
+    QcloudIotTimer timer;
+    IOT_Timer_CountdownMs(&timer, client->command_timeout_ms);
+
     do {
-        if (HAL_Timer_Expired(&timer)) {
+        if (IOT_Timer_Expired(&timer)) {
             rc = QCLOUD_ERR_MQTT_REQUEST_TIMEOUT;
             break;
         }

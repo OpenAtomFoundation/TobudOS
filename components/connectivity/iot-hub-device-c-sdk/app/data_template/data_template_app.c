@@ -118,17 +118,42 @@ static void _mqtt_event_handler(void *client, void *handle_context, MQTTEventMsg
  */
 static void _setup_connect_init_params(MQTTInitParams *init_params, DeviceInfo *device_info)
 {
-    init_params->device_info            = device_info;
-    init_params->command_timeout        = QCLOUD_IOT_MQTT_COMMAND_TIMEOUT;
-    init_params->keep_alive_interval_ms = QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL;
-    init_params->auto_connect_enable    = 1;
-    init_params->event_handle.h_fp      = _mqtt_event_handler;
-    init_params->event_handle.context   = NULL;
+    init_params->device_info       = device_info;
+    init_params->event_handle.h_fp = _mqtt_event_handler;
 }
 
 // ----------------------------------------------------------------------------
 // Data template callback
 // ----------------------------------------------------------------------------
+static void _handle_property_callback(void *client, int is_get_status)
+{
+    for (UsrPropertyIndex i = USR_PROPERTY_INDEX_POWER_SWITCH; i <= USR_PROPERTY_INDEX_POWER; i++) {
+        if (usr_data_template_property_status_get(i)) {
+            DataTemplatePropertyValue value;
+            switch (i) {
+                case USR_PROPERTY_INDEX_POWER_SWITCH:
+                case USR_PROPERTY_INDEX_COLOR:
+                case USR_PROPERTY_INDEX_BRIGHTNESS:  // read only, just for example
+                case USR_PROPERTY_INDEX_POWER:       // read only, just for example
+                    value = usr_data_template_property_value_get(i);
+                    Log_d("recv %s:%d", usr_data_template_property_key_get(i), value.value_int);
+                    break;
+                case USR_PROPERTY_INDEX_NAME:  // read only, just for example
+                    value = usr_data_template_property_value_get(i);
+                    Log_d("recv %s:%s", usr_data_template_property_key_get(i), value.value_string);
+                    break;
+                case USR_PROPERTY_INDEX_POSITION:  // read only, just for example
+                    for (UsrPropertyPositionIndex j = USR_PROPERTY_POSITION_INDEX_LONGITUDE;
+                         j <= USR_PROPERTY_POSITION_INDEX_LATITUDE; j++) {
+                        value = usr_data_template_property_struct_value_get(i, j);
+                        Log_d("recv %s:%d", usr_data_template_property_struct_key_get(i, j), value.value_int);
+                    }
+                    break;
+            }
+            usr_data_template_property_status_reset(i);
+        }
+    }
+}
 
 static void _method_control_callback(UtilsJsonValue client_token, UtilsJsonValue params, void *usr_data)
 {
@@ -136,6 +161,7 @@ static void _method_control_callback(UtilsJsonValue client_token, UtilsJsonValue
     Log_i("recv msg[%.*s]: params=%.*s", client_token.value_len, client_token.value, params.value_len, params.value);
     IOT_DataTemplate_PropertyControlReply(usr_data, buf, sizeof(buf), 0, client_token);
     usr_data_template_property_parse(params);
+    _handle_property_callback(usr_data, 0);
 }
 
 static void _method_get_status_reply_callback(UtilsJsonValue client_token, int code, UtilsJsonValue reported,
@@ -147,6 +173,7 @@ static void _method_get_status_reply_callback(UtilsJsonValue client_token, int c
           STRING_PTR_PRINT_SANITY_CHECK(control.value));
     usr_data_template_property_parse(control);
     IOT_DataTemplate_PropertyClearControl(usr_data, buf, sizeof(buf));
+    _handle_property_callback(usr_data, 1);
 }
 
 static void _method_action_callback(UtilsJsonValue client_token, UtilsJsonValue action_id, UtilsJsonValue params,
@@ -194,12 +221,12 @@ static void _method_action_callback(UtilsJsonValue client_token, UtilsJsonValue 
  */
 static void _cycle_report(void *client)
 {
-    char         buf[256];
-    static Timer sg_cycle_report_timer;
-    if (HAL_Timer_Expired(&sg_cycle_report_timer)) {
+    char                  buf[256];
+    static QcloudIotTimer sg_cycle_report_timer;
+    if (IOT_Timer_Expired(&sg_cycle_report_timer)) {
         usr_data_template_event_post(client, buf, sizeof(buf), USR_EVENT_INDEX_STATUS_REPORT,
                                      "{\"status\":0,\"message\":\"ok\"}");
-        HAL_Timer_Countdown(&sg_cycle_report_timer, 60);
+        IOT_Timer_Countdown(&sg_cycle_report_timer, 60);
     }
 }
 
@@ -259,12 +286,7 @@ int main(int argc, char **argv)
     char buf[1024];
 
     // init log level
-    LogHandleFunc func = {0};
-
-    func.log_malloc               = HAL_Malloc;
-    func.log_free                 = HAL_Free;
-    func.log_get_current_time_str = HAL_Timer_Current;
-    func.log_printf               = HAL_Printf;
+    LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
     utils_log_init(func, LOG_LEVEL_DEBUG, 2048);
 
     DeviceInfo device_info;
