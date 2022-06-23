@@ -66,11 +66,11 @@ typedef union DataTemplatePropertyValue DataTemplatePropertyValue;
  *
  */
 union DataTemplatePropertyValue {
-    int32_t  value_int;
-    int32_t  value_enum;
+    int      value_int;
+    int      value_enum;
     char*    value_string_enum;
     float    value_float;
-    int32_t  value_bool;
+    int      value_bool;
     char*    value_string;
     uint32_t value_time;
     struct {
@@ -89,6 +89,8 @@ struct DataTemplateProperty {
     const char*               key;
     DataTemplatePropertyValue value;
     int                       need_report;
+    int                       is_change;
+    int                       is_rw;
 };
 
 /**
@@ -107,39 +109,7 @@ typedef struct {
     IotDataTemplateActionReply reply;
 } DataTemplateAction;
 
-/**************************************************************************************
- * usr data template definition
- **************************************************************************************/
-
-typedef enum {
-    USR_PROPERTY_INDEX_POWER_SWITCH = 0,
-    USR_PROPERTY_INDEX_COLOR,
-    USR_PROPERTY_INDEX_BRIGHTNESS,
-    USR_PROPERTY_INDEX_NAME,
-    USR_PROPERTY_INDEX_POSITION,
-    USR_PROPERTY_INDEX_POWER,
-} UsrPropertyIndex;
-
-typedef enum {
-    USR_PROPERTY_POSITION_INDEX_LONGITUDE = 0,
-    USR_PROPERTY_POSITION_INDEX_LATITUDE,
-} UsrPropertyPositionIndex;
-
-typedef enum {
-    USR_EVENT_INDEX_STATUS_REPORT = 0,
-    USR_EVENT_INDEX_LOW_VOLTAGE,
-    USR_EVENT_INDEX_HARDWARE_FAULT,
-} UsrEventIndex;
-
-typedef enum {
-    USR_ACTION_INDEX_LIGHT_BLINK = 0,
-} UsrActionIndex;
-
-typedef enum {
-    USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TIME = 0,
-    USR_ACTION_LIGHT_BLINK_INPUT_INDEX_COLOR,
-    USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TOTAL_TIME,
-} UsrActionLightBlinkInputIndex;
+#include "data_template_config_header.include"
 
 /**************************************************************************************
  * api for user data template
@@ -201,6 +171,38 @@ void usr_data_template_property_parse(UtilsJsonValue params);
  * @return need_report
  */
 int usr_data_template_property_status_get(UsrPropertyIndex index);
+
+/**
+ * @brief Reset property status.
+ *
+ * @param[in] index @see UsrPropertyIndex
+ */
+void usr_data_template_property_status_reset(UsrPropertyIndex index);
+
+/**
+ * @brief Get property type.
+ *
+ * @param[in] index @see UsrPropertyIndex
+ * @return @see DataTemplatePropertyType
+ */
+DataTemplatePropertyType usr_data_template_property_type_get(UsrPropertyIndex index);
+
+/**
+ * @brief Get property key.
+ *
+ * @param[in] index @see UsrPropertyIndex
+ * @return key string
+ */
+const char* usr_data_template_property_key_get(UsrPropertyIndex index);
+
+/**
+ * @brief Get property(struct) key.
+ *
+ * @param[in] struct_index @see UsrPropertyIndex, @note DATA_TEMPLATE_TYPE_STRUCT is required here.
+ * @param[in] property_index depends on which struct
+ * @return key string
+ */
+const char* usr_data_template_property_struct_key_get(UsrPropertyIndex struct_index, int property_index);
 
 /**
  * @brief Report all the properties needed report.

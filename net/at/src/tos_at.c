@@ -152,6 +152,46 @@ __STATIC__ at_event_t *at_get_event(at_agent_t *at_agent)
     return at_event_do_get(at_agent, buffer, buffer_len);
 }
 
+__STATIC__ int at_urc_do_check(at_agent_t *at_agent,char *buffer, size_t buffer_len)
+{
+    int i = 0;
+    at_urc_t *urc_table = K_NULL, *urc = K_NULL;
+    size_t urc_table_size = 0, urc_len;
+
+    urc_table         = at_agent->urc_table;
+    urc_table_size    = at_agent->urc_table_size;
+
+    for (i = 0; i < urc_table_size; ++i) {
+        urc = &urc_table[i];
+        urc_len = strlen(urc->urc);
+
+        if (buffer_len < urc_len) {
+            continue;
+        }
+
+        if (!strncmp(urc->urc, buffer, urc_len)) {
+            urc->urc_callback(buffer, buffer_len);
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
+__STATIC__ int at_check_urc(at_agent_t *at_agent)
+{
+    char *buffer;
+    size_t buffer_len;
+    at_cache_t *at_cache = K_NULL;
+
+    at_cache = &at_agent->recv_cache;
+
+    buffer = (char *)at_cache->buffer;
+    buffer_len = at_cache->recv_len;
+
+    return at_urc_do_check(at_agent, buffer, buffer_len);
+}
+
 __API__ int tos_at_uart_read(at_agent_t *at_agent, uint8_t *buffer, size_t buffer_len)
 {
     uint8_t data;
@@ -362,6 +402,12 @@ __STATIC__ void at_parser(void *arg)
                 at_event->event_callback();
             }
             continue;
+        }
+
+        if (at_parse_status == AT_PARSE_STATUS_NEWLINE) {
+            if(!at_check_urc(at_agent)) {
+                continue;
+            }
         }
 
         at_echo = at_agent->echo;
@@ -947,6 +993,12 @@ __STATIC__ void at_event_table_set(at_agent_t *at_agent, at_event_t *event_table
 {
     at_agent->event_table       = event_table;
     at_agent->event_table_size  = event_table_size;
+}
+
+__API__ void at_urc_table_set(at_agent_t *at_agent,at_urc_t *urc_table, size_t urc_table_size)
+{
+    at_agent->urc_table       = urc_table;
+    at_agent->urc_table_size  = urc_table_size;
 }
 
 #if AT_INPUT_SIMULATE_IDLE_EN

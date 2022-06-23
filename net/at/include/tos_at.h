@@ -29,7 +29,7 @@
 
 #define AT_CMD_BUFFER_SIZE                          512
 
-#define AT_PARSER_TASK_STACK_SIZE                   2048
+#define AT_PARSER_TASK_STACK_SIZE                   4096
 #define AT_PARSER_TASK_PRIO                         2
 
 #define AT_INPUT_TYPE_FRAME_EN                      0
@@ -129,11 +129,21 @@ typedef struct at_event_st {
     at_event_callback_t event_callback;
 } at_event_t;
 
+typedef void (*at_urc_callback_t)(const char *data , size_t data_len);
+
+typedef struct at_urc_st {
+    const char         *urc;
+    at_urc_callback_t urc_callback;
+} at_urc_t;
+
 typedef struct at_agent_st {
     at_data_channel_t   data_channel[AT_DATA_CHANNEL_NUM];
 
     at_event_t     *event_table;
     size_t          event_table_size;
+
+    at_urc_t       *urc_table;
+    size_t          urc_table_size;
 
     at_echo_t      *echo;
 
@@ -308,6 +318,8 @@ __API__ int tos_at_channel_set_broken(at_agent_t *at_agent, int channel_id);
  * @return  at channel status(type of at_channel_status_t)
  */
 __API__ int tos_at_channel_is_working(at_agent_t *at_agent, int channel_id);
+
+__API__ void at_urc_table_set(at_agent_t *at_agent,at_urc_t *urc_table, size_t urc_table_size);
 
 /**
  * @brief Initialize the at framework.

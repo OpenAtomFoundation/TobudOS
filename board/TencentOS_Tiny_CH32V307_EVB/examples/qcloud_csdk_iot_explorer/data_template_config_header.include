@@ -1,0 +1,49 @@
+/*----------------- property index enum start  -------------------*/
+
+typedef enum {
+    USR_PROPERTY_INDEX_POWER_SWITCH = 0,
+    USR_PROPERTY_INDEX_COLOR,
+    USR_PROPERTY_INDEX_BRIGHTNESS,
+    USR_PROPERTY_INDEX_NAME,
+    USR_PROPERTY_INDEX_POSITION,
+    USR_PROPERTY_INDEX_POWER,
+} UsrPropertyIndex;
+
+/*----------------- property index enum end  -------------------*/
+
+/*----------------- position property index enum start  -------------------*/
+
+typedef enum {
+    USR_PROPERTY_POSITION_INDEX_LONGITUDE = 0,
+    USR_PROPERTY_POSITION_INDEX_LATITUDE,
+} UsrPropertyPositionIndex;
+
+/*----------------- position property index enum end  -------------------*/
+
+/*----------------- event index enum start  -------------------*/
+
+typedef enum {
+    USR_EVENT_INDEX_STATUS_REPORT = 0,
+    USR_EVENT_INDEX_LOW_VOLTAGE,
+    USR_EVENT_INDEX_HARDWARE_FAULT,
+} UsrEventIndex;
+
+/*----------------- event index enum end  -------------------*/
+
+/*----------------- action index enum start  -------------------*/
+
+typedef enum {
+    USR_ACTION_INDEX_LIGHT_BLINK = 0,
+} UsrActionIndex;
+
+/*----------------- action index enum end  -------------------*/
+
+/*----------------- action light_blink input index enum start  -------------------*/
+
+typedef enum {
+    USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TIME = 0,
+    USR_ACTION_LIGHT_BLINK_INPUT_INDEX_COLOR,
+    USR_ACTION_LIGHT_BLINK_INPUT_INDEX_TOTAL_TIME,
+} UsrActionLightblinkInputIndex;
+
+/*----------------- action light_blink input index enum end  -------------------*/

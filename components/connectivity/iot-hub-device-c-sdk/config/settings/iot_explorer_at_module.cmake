@@ -1,4 +1,4 @@
-###################### CONFIG  #####################################
+# ##################### CONFIG  #####################################
 
 # 开启单元测试
 set(CONFIG_IOT_TEST OFF)
@@ -33,20 +33,20 @@ option(AUTH_WITH_NO_TLS "Enable AUTH_WITH_NO_TLS" ${CONFIG_AUTH_WITH_NOTLS})
 option(MULTITHREAD_ENABLED "Enable AUTH_WITH_NO_TLS" ${CONFIG_MULTITHREAD_ENABLED})
 option(AT_MODULE_ENABLE "Enable AUTH_WITH_NO_TLS" ${CONFIG_AT_MODULE_ENABLED})
 
-if(${CONFIG_AUTH_MODE} STREQUAL  "KEY")
+if(${CONFIG_AUTH_MODE} STREQUAL "KEY")
 	option(AUTH_MODE_KEY "Enable AUTH_MODE_KEY" ON)
 	option(AUTH_MODE_CERT "Enable AUTH_MODE_CERT" OFF)
-elseif(${CONFIG_AUTH_MODE} STREQUAL  "CERT" AND ${CONFIG_AUTH_WITH_NOTLS} STREQUAL "OFF")
+elseif(${CONFIG_AUTH_MODE} STREQUAL "CERT" AND ${CONFIG_AUTH_WITH_NOTLS} STREQUAL "OFF")
 	option(AUTH_MODE_KEY "Enable AUTH_MODE_KEY" OFF)
 	option(AUTH_MODE_CERT "Enable AUTH_MODE_CERT" ON)
 else()
 	message(FATAL_ERROR "INVAILD AUTH_MODE:${FEATURE_AUTH_MODE} WITH AUTH_WITH_NO_TLS:${FEATURE_AUTH_WITH_NOTLS}!")
 endif()
 
-configure_file (
-  "${IOT_SDK_SOURCE_DIR}/config/settings/qcloud_iot_config.h.in"
-  "${IOT_SDK_SOURCE_DIR}/include/config/qcloud_iot_config.h" 
-  @ONLY
+configure_file(
+	"${IOT_SDK_SOURCE_DIR}/config/settings/qcloud_iot_config.h.in"
+	"${IOT_SDK_SOURCE_DIR}/include/config/qcloud_iot_config.h"
+	@ONLY
 )
 
 # export include
@@ -59,7 +59,7 @@ include_directories(
 )
 
 # set output path
-set(LIBRARY_OUTPUT_PATH    ${IOT_SDK_SOURCE_DIR}/output/libs)
+set(LIBRARY_OUTPUT_PATH ${IOT_SDK_SOURCE_DIR}/output/libs)
 set(EXECUTABLE_OUTPUT_PATH ${IOT_SDK_SOURCE_DIR}/output/bin)
 
 # set link lib dir
@@ -71,14 +71,15 @@ if(${CONFIG_IOT_TEST} STREQUAL "ON")
 	set(inc_test CACHE INTERNAL "")
 endif()
 
-###################### PLATFORM MODULE #######################################
+# ##################### PLATFORM MODULE #######################################
 set(src_platform CACHE INTERNAL "")
 set(inc_platform CACHE INTERNAL "")
 
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/platform)
-add_subdirectory(${IOT_SDK_SOURCE_DIR}/platform/at_client)
 
-###################### COMMON MODULE #######################################
+# add_subdirectory(${IOT_SDK_SOURCE_DIR}/platform/at_client)
+
+# ##################### COMMON MODULE #######################################
 set(src_common CACHE INTERNAL "")
 set(inc_common CACHE INTERNAL "")
 
@@ -88,7 +89,7 @@ add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/utils)
 # cryptology
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/common/cryptology)
 
-###################### SERVICE MODULE ####################################
+# ##################### SERVICE MODULE ####################################
 set(src_services CACHE INTERNAL "")
 set(inc_services CACHE INTERNAL "")
 
@@ -104,7 +105,7 @@ add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/explorer/data_template)
 # 是否使能网关功能
 add_subdirectory(${IOT_SDK_SOURCE_DIR}/services/common/gateway)
 
-###################### EXTRACT ####################################
+# ##################### EXTRACT ####################################
 if(${CONFIG_EXTRACT_SRC} STREQUAL "ON")
 	file(COPY ${src_platform} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/src)
 	file(COPY ${inc_platform} DESTINATION ${IOT_SDK_SOURCE_DIR}/output/sdk/inc/internal)

@@ -26,13 +26,17 @@
  * </table>
  */
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "qcloud_iot_common.h"
 #include "qcloud_iot_explorer.h"
 #include "data_template_config.h"
 
 #include "utils_log.h"
-
-#include "esp8266.h"
+#include "utils_md5.h"
 
 /**
  * @brief MQTT event callback, @see MQTTEventHandleFun
@@ -115,17 +119,42 @@ static void _mqtt_event_handler(void *client, void *handle_context, MQTTEventMsg
  */
 static void _setup_connect_init_params(MQTTInitParams *init_params, DeviceInfo *device_info)
 {
-    init_params->device_info            = device_info;
-    init_params->command_timeout        = QCLOUD_IOT_MQTT_COMMAND_TIMEOUT;
-    init_params->keep_alive_interval_ms = QCLOUD_IOT_MQTT_KEEP_ALIVE_INTERNAL;
-    init_params->auto_connect_enable    = 1;
-    init_params->event_handle.h_fp      = _mqtt_event_handler;
-    init_params->event_handle.context   = NULL;
+    init_params->device_info       = device_info;
+    init_params->event_handle.h_fp = _mqtt_event_handler;
 }
 
 // ----------------------------------------------------------------------------
 // Data template callback
 // ----------------------------------------------------------------------------
+static void _handle_property_callback(void *client, int is_get_status)
+{
+    for (UsrPropertyIndex i = USR_PROPERTY_INDEX_POWER_SWITCH; i <= USR_PROPERTY_INDEX_POWER; i++) {
+        if (usr_data_template_property_status_get(i)) {
+            DataTemplatePropertyValue value;
+            switch (i) {
+                case USR_PROPERTY_INDEX_POWER_SWITCH:
+                case USR_PROPERTY_INDEX_COLOR:
+                case USR_PROPERTY_INDEX_BRIGHTNESS:  // read only, just for example
+                case USR_PROPERTY_INDEX_POWER:       // read only, just for example
+                    value = usr_data_template_property_value_get(i);
+                    Log_d("recv %s:%d", usr_data_template_property_key_get(i), value.value_int);
+                    break;
+                case USR_PROPERTY_INDEX_NAME:  // read only, just for example
+                    value = usr_data_template_property_value_get(i);
+                    Log_d("recv %s:%s", usr_data_template_property_key_get(i), value.value_string);
+                    break;
+                case USR_PROPERTY_INDEX_POSITION:  // read only, just for example
+                    for (UsrPropertyPositionIndex j = USR_PROPERTY_POSITION_INDEX_LONGITUDE;
+                         j <= USR_PROPERTY_POSITION_INDEX_LATITUDE; j++) {
+                        value = usr_data_template_property_struct_value_get(i, j);
+                        Log_d("recv %s:%d", usr_data_template_property_struct_key_get(i, j), value.value_int);
+                    }
+                    break;
+            }
+            usr_data_template_property_status_reset(i);
+        }
+    }
+}
 
 static void _method_control_callback(UtilsJsonValue client_token, UtilsJsonValue params, void *usr_data)
 {
@@ -133,6 +162,7 @@ static void _method_control_callback(UtilsJsonValue client_token, UtilsJsonValue
     Log_i("recv msg[%.*s]: params=%.*s", client_token.value_len, client_token.value, params.value_len, params.value);
     IOT_DataTemplate_PropertyControlReply(usr_data, buf, sizeof(buf), 0, client_token);
     usr_data_template_property_parse(params);
+    _handle_property_callback(usr_data, 0);
 }
 
 static void _method_get_status_reply_callback(UtilsJsonValue client_token, int code, UtilsJsonValue reported,
@@ -144,6 +174,7 @@ static void _method_get_status_reply_callback(UtilsJsonValue client_token, int c
           STRING_PTR_PRINT_SANITY_CHECK(control.value));
     usr_data_template_property_parse(control);
     IOT_DataTemplate_PropertyClearControl(usr_data, buf, sizeof(buf));
+    _handle_property_callback(usr_data, 1);
 }
 
 static void _method_action_callback(UtilsJsonValue client_token, UtilsJsonValue action_id, UtilsJsonValue params,
@@ -191,21 +222,12 @@ static void _method_action_callback(UtilsJsonValue client_token, UtilsJsonValue 
  */
 static void _cycle_report(void *client)
 {
-    static int lightness = 0;
-    char         buf[256];
-    static Timer sg_cycle_report_timer;
-    DataTemplatePropertyValue property_value;
-    
-    if (HAL_Timer_Expired(&sg_cycle_report_timer)) {
+    char                  buf[256];
+    static QcloudIotTimer sg_cycle_report_timer;
+    if (IOT_Timer_Expired(&sg_cycle_report_timer)) {
         usr_data_template_event_post(client, buf, sizeof(buf), USR_EVENT_INDEX_STATUS_REPORT,
                                      "{\"status\":0,\"message\":\"ok\"}");
-        
-        property_value.value_int = lightness;
-        if (++lightness > 100) {
-            lightness = 0;
-        }
-        usr_data_template_property_value_set(USR_PROPERTY_INDEX_BRIGHTNESS, property_value);
-        HAL_Timer_Countdown(&sg_cycle_report_timer, 10);
+        IOT_Timer_Countdown(&sg_cycle_report_timer, 60);
     }
 }
 
@@ -237,22 +259,88 @@ static void _usr_init(void)
 }
 
 // ----------------------------------------------------------------------------
-// Main
+// OTA
 // ----------------------------------------------------------------------------
 
-int data_template_app()
+#define SIGNAL_DOWNLOAD_OTA_SIZE (1024)
+
+static int _qcloud_iot_check_ota(void)
+{
+    char    *remote_ver = NULL, *local_ver = "1.0.0";
+    uint32_t fw_size;
+    char    *md5 = NULL;
+    int      rc  = 0;
+
+    rc = IOT_OTA_Init(local_ver);
+    if (rc) {
+        Log_e("OTA Init Failed: %d", rc);
+        return rc;
+    }
+
+    // 1. get remote fw info
+    rc = IOT_OTA_ReadFwInfo(&remote_ver, &fw_size, &md5, 5000);
+    if (rc) {
+        Log_e("read ota fwinfo fail:%d", rc);
+        return rc;
+    }
+    Log_w("fw version : %s, size : %u, md5:%s", remote_ver, fw_size, md5);
+
+    // 2. check if need ota
+    if (!strcmp(local_ver, remote_ver)) {
+        Log_w("local version(%s) == remote version(%s)", local_ver, remote_ver);
+        return QCLOUD_RET_SUCCESS;
+    }
+    // 3. do ota
+    char         *fw_data = HAL_Malloc(SIGNAL_DOWNLOAD_OTA_SIZE);
+    uint32_t      read_len = SIGNAL_DOWNLOAD_OTA_SIZE;
+    IotMd5Context md5ctx;
+    uint32_t      download_size = 0;
+
+    utils_md5_reset(&md5ctx);
+    do {
+        rc = IOT_OTA_ReadFWData(fw_data, &read_len, 5000);
+        if (rc) {
+            break;
+        }
+        download_size += read_len;
+        Log_i("read len : %d(%d%%)", read_len, download_size*100 / fw_size);
+        if (read_len > 0) {
+            utils_md5_update(&md5ctx, fw_data, read_len);
+            // todo: save to flash
+        }
+
+    } while (read_len == SIGNAL_DOWNLOAD_OTA_SIZE);
+    HAL_Free(fw_data);
+
+    if (download_size != fw_size) {
+        Log_e("download fail downloaded(%u) != fw size(%u)", download_size, fw_size);
+        return QCLOUD_ERR_FAILURE;
+    }
+    // 4. check md5
+    utils_md5_finish(&md5ctx);
+    if (utils_md5_compare(&md5ctx, md5)) {
+        Log_e("md5 check fail cal(%s) != fw(%s)", md5ctx.md5sum, md5);
+        return QCLOUD_ERR_FAILURE;
+    }
+    // todo: reboot or not
+    Log_d("ota success.");
+    return QCLOUD_RET_SUCCESS;
+}
+
+// ----------------------------------------------------------------------------
+// Main
+// ----------------------------------------------------------------------------
+static int sg_main_exit = 0;
+
+int data_template_app(void)
 {
     int rc;
+
     char buf[1024];
 
     // init log level
-    LogHandleFunc func = {0};
-
-    func.log_malloc               = HAL_Malloc;
-    func.log_free                 = HAL_Free;
-    func.log_get_current_time_str = HAL_Timer_Current;
-    func.log_printf               = HAL_Printf;
-    utils_log_init(func, LOG_LEVEL_INFO, 2048);
+    LogHandleFunc func = DEFAULT_LOG_HANDLE_FUNCS;
+    utils_log_init(func, LOG_LEVEL_DEBUG, 2048);
 
     DeviceInfo device_info;
 
@@ -277,6 +365,12 @@ int data_template_app()
         return QCLOUD_ERR_FAILURE;
     }
 
+    rc = _qcloud_iot_check_ota();
+    if (rc) {
+        Log_e("OTA Check failed!");
+        return rc;
+    }
+
     // subscribe normal topics and wait result
     IotDataTemplateCallback callback                            = DEFAULT_DATA_TEMPLATE_CALLBACK;
     callback.property_callback.method_control_callback          = _method_control_callback;
@@ -291,7 +385,7 @@ int data_template_app()
 
     IOT_DataTemplate_PropertyGetStatus(client, buf, sizeof(buf));
 
-    while (1) {
+    do {
         rc = IOT_MQTT_Yield(client, QCLOUD_IOT_MQTT_YIELD_TIMEOUT);
         switch (rc) {
             case QCLOUD_RET_SUCCESS:
@@ -307,7 +401,7 @@ int data_template_app()
         }
         _cycle_report(client);
         usr_data_template_property_report(client, buf, sizeof(buf));
-    }
+    } while (!sg_main_exit);
 
 exit:
     IOT_DataTemplate_Deinit(client);
@@ -317,10 +411,6 @@ exit:
 }
 
 void application_entry(void *arg)
-{ 
-    esp8266_sal_init(HAL_UART_PORT_6);
-    
-    esp8266_join_ap("Mculover666", "mculover666");
-    
+{   
     data_template_app();
 }

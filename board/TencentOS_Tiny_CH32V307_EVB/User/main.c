@@ -223,7 +223,7 @@ void SD_Card_test(void)
     }
 }
 
-#define APPLICATION_TASK_STK_SIZE       4096
+#define APPLICATION_TASK_STK_SIZE       8192
 k_task_t application_task;
 __aligned(4) uint8_t application_task_stk[APPLICATION_TASK_STK_SIZE];
 
