@@ -12,7 +12,7 @@ uint8_t task2_stk[TASK2_STK_SIZE];
 void task1_entry(void *arg)
 {
     while (1) {
-        printf("###I am task1\r\n");
+        printf("###this is demo1\r\n");
         tos_task_delay(2000);
     }
 }
@@ -20,7 +20,7 @@ void task1_entry(void *arg)
 void task2_entry(void *arg)
 {
     while (1) {
-        printf("***I am task2\r\n");
+        printf("***this is demo2\r\n");
         tos_task_delay(1000);
     }
 }
