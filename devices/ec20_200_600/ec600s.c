@@ -42,7 +42,7 @@ static int ec600s_check_ready(void)
 {
     at_echo_t echo;
     int try = 0;
-    
+
     while (try++ < 10) {
         tos_at_echo_create(&echo, NULL, 0, NULL);
         tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT\r\n");
@@ -60,7 +60,7 @@ static int ec600s_echo_close(void)
     int try = 0;
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    
+
     while (try++ < 10) {
         tos_at_cmd_exec(AT_AGENT, &echo, 1000, "ATE0\r\n");
         if (echo.status == AT_ECHO_STATUS_OK) {
@@ -75,7 +75,7 @@ static int ec600s_sim_card_check(void)
     at_echo_t echo;
     int try = 0;
     char echo_buffer[32];
-	
+
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) {
         tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+CPIN?\r\n");
@@ -84,7 +84,7 @@ static int ec600s_sim_card_check(void)
         }
         tos_sleep_ms(2000);
     }
-    
+
     return -1;
 }
 
@@ -94,7 +94,7 @@ static int ec600s_signal_quality_check(void)
     at_echo_t echo;
     char echo_buffer[32], *str;
     int try = 0;
-	
+
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) {
         tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+CSQ\r\n");
@@ -106,7 +106,7 @@ static int ec600s_signal_quality_check(void)
         if (!str) {
             return -1;
         }
-        
+
         sscanf(str, "+CSQ:%d,%d", &rssi, &ber);
         if (rssi != 99) {
             return 0;
@@ -122,7 +122,7 @@ static int ec600s_gsm_network_check(void)
     at_echo_t echo;
     char echo_buffer[32], *str;
     int try = 0;
-	
+
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) {
         tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+CREG?\r\n");
@@ -140,8 +140,8 @@ static int ec600s_gsm_network_check(void)
         }
         tos_sleep_ms(2000);
     }
-    
-    return -1;	
+
+    return -1;
 }
 
 static int ec600s_gprs_network_check(void)
@@ -168,7 +168,7 @@ static int ec600s_gprs_network_check(void)
         }
         tos_sleep_ms(2000);
     }
-		
+
     return -1;
 }
 
@@ -181,7 +181,7 @@ static int ec600s_close_apn(void)
     if (echo.status == AT_ECHO_STATUS_OK) {
         return 0;
     }
-   
+
     return -1;
 }
 
@@ -206,17 +206,17 @@ static int ec600s_set_apn(void)
 static int ec600s_init(void)
 {
     printf("Init ec600s ...\n" );
-    
+
     if (ec600s_check_ready() != 0) {
         printf("wait module ready timeout, please check your module\n");
         return -1;
     }
-    
+
     if (ec600s_echo_close() != 0) {
         printf("echo close failed,please check your module\n");
         return -1;
     }
-		
+
     if(ec600s_sim_card_check() != 0) {
         printf("sim card check failed,please insert your card\n");
         return -1;
@@ -226,22 +226,22 @@ static int ec600s_init(void)
         printf("signal quality check status failed\n");
         return -1;
     }
-		
+
     if(ec600s_gsm_network_check() != 0) {
         printf("GSM network register status check fail\n");
         return -1;
     }
-    
+
     if(ec600s_gprs_network_check() != 0) {
         printf("GPRS network register status check fail\n");
         return -1;
     }
-    
+
     if(ec600s_close_apn() != 0) {
         printf("close apn failed\n");
         return -1;
     }
-		
+
     if (ec600s_set_apn() != 0) {
         printf("apn set FAILED\n");
         return -1;
@@ -259,14 +259,14 @@ static int ec600s_connect_establish(int id, sal_proto_t proto)
     char *query_result_str = NULL;
     char *remote_ip = NULL;
     char *remote_port = NULL;
-    
+
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+QISTATE=1,%d\r\n", id);
     if (echo.status != AT_ECHO_STATUS_OK) {
         printf("query socket %d state fail\r\n", id);
         return -1;
     }
-    
+
     sprintf(except_str, "+QISTATE: %d", id);
     query_result_str = strstr(echo_buffer, except_str);
     if (query_result_str) {
@@ -277,13 +277,13 @@ static int ec600s_connect_establish(int id, sal_proto_t proto)
 
     memset(except_str, 0, sizeof(except_str));
     sprintf(except_str, "+QIOPEN: %d,0", id);
-    
+
     remote_ip = (char*)tos_at_channel_ip_get(AT_AGENT, id);
     remote_port = (char*)tos_at_channel_port_get(AT_AGENT, id);
     if (!remote_ip || !remote_port) {
         return -2;
     }
-    
+
     tos_at_echo_create(&echo, NULL, 0, except_str);
     tos_at_cmd_exec_until(AT_AGENT, &echo, 4000, "AT+QIOPEN=1,%d,\"%s\",\"%s\",%d,0,1\r\n",
                         id, proto == TOS_SAL_PROTO_UDP ? "UDP" : "TCP", remote_ip, atoi(remote_port));
@@ -291,32 +291,32 @@ static int ec600s_connect_establish(int id, sal_proto_t proto)
         printf("establish socket %d on module fail\r\n", id);
         return -3;
     }
-    
+
     return 0;
 }
 
 static int ec600s_connect(const char *ip, const char *port, sal_proto_t proto)
 {
     int id;
-    
+
     id = tos_at_channel_alloc(AT_AGENT, ip, port);
     if (id == -1) {
         printf("at channel alloc fail\r\n");
         return -1;
     }
-    
+
     if (ec600s_connect_establish(id, proto) < 0) {
         tos_at_channel_free(AT_AGENT, id);
         return -2;
     }
-    
+
     return id;
 }
 
 static int ec600s_connect_with_size(const char *ip, const char *port, sal_proto_t proto, size_t socket_buffer_size)
 {
     int id;
-    
+
     id = tos_at_channel_alloc_with_size(AT_AGENT, ip, port, socket_buffer_size);
     if (id == -1) {
         printf("at channel alloc fail\r\n");
@@ -327,7 +327,7 @@ static int ec600s_connect_with_size(const char *ip, const char *port, sal_proto_
         tos_at_channel_free(AT_AGENT, id);
         return -2;
     }
-    
+
     return id;
 }
 
@@ -348,28 +348,20 @@ int ec600s_send(int id, const void *buf, size_t len)
     if (!tos_at_channel_is_working(AT_AGENT, id)) {
         return -1;
     }
-	
-    if (tos_at_global_lock_pend(AT_AGENT) != 0) {
-        return -1;
-    }
 
     tos_at_echo_create(&echo, NULL, 0, ">");
 
     tos_at_cmd_exec_until(AT_AGENT, &echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send_until(AT_AGENT, &echo, 10000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
-
-    tos_at_global_lock_post(AT_AGENT);
 
     return len;
 }
@@ -388,26 +380,18 @@ int ec600s_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 {
     at_echo_t echo;
 
-    if (tos_at_global_lock_pend(AT_AGENT) != 0) {
-        return -1;
-    }
-
     tos_at_echo_create(&echo, NULL, 0, ">");
     tos_at_cmd_exec_until(AT_AGENT, &echo, 1000, "AT+QISEND=%d,%d\r\n", id, len);
 
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
     tos_at_echo_create(&echo, NULL, 0, "SEND OK");
     tos_at_raw_data_send(AT_AGENT, &echo, 1000, (uint8_t *)buf, len);
     if (echo.status != AT_ECHO_STATUS_EXPECT) {
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
-
-    tos_at_global_lock_post(AT_AGENT);
 
     return len;
 }
@@ -415,7 +399,7 @@ int ec600s_sendto(int id, char *ip, char *port, const void *buf, size_t len)
 static void ec600s_transparent_mode_exit(void)
 {
     at_echo_t echo;
-    
+
     tos_at_echo_create(&echo, NULL, 0, NULL);
     tos_at_cmd_exec(AT_AGENT, &echo, 500, "+++");
 }
@@ -423,7 +407,7 @@ static void ec600s_transparent_mode_exit(void)
 static int ec600s_close(int id)
 {
     at_echo_t echo;
-    
+
     ec600s_transparent_mode_exit();
 
     tos_at_echo_create(&echo, NULL, 0, NULL);
@@ -467,7 +451,7 @@ __STATIC__ void ec600s_incoming_data_process(void)
 		+QIURC: "recv",<sockid>,<datalen>
 		<data content>
     */
-	
+
     while (1) {
         if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
             return;
@@ -492,7 +476,7 @@ __STATIC__ void ec600s_incoming_data_process(void)
     if (tos_at_uart_read(AT_AGENT, &data, 1) != 1) {
         return;
     }
-		
+
     do {
 #if !defined(MIN)
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
@@ -529,7 +513,7 @@ __STATIC__ void ec600s_domain_data_process(void)
     if (data == '0') {
         return;
     }
-    
+
     if (data == '\"') {
         /* start parser domain */
         while (1) {
@@ -595,7 +579,7 @@ sal_module_t sal_module_ec600s = {
 
 int ec600s_sal_init(hal_uart_port_t uart_port)
 {
-    
+
     if (tos_at_init(AT_AGENT, "ec600s_at", ec600s_at_parse_task_stk,
                     uart_port, ec600s_at_event,
                         sizeof(ec600s_at_event) / sizeof(ec600s_at_event[0])) != 0) {
@@ -608,7 +592,7 @@ int ec600s_sal_init(hal_uart_port_t uart_port)
     if (tos_sal_module_init() != 0) {
         return -1;
     }
-		
+
     return 0;
 }
 
@@ -623,7 +607,7 @@ int ec600s_sal_deinit()
     tos_sal_module_register_default();
 
     tos_at_deinit(AT_AGENT);
-    
+
     return 0;
 }
 

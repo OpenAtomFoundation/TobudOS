@@ -140,22 +140,26 @@ typedef struct at_agent_st {
     k_task_t        parser;
     at_cache_t      recv_cache;
 
+    /* protected the AT agent, so only one AT instruction is executing any one time. */
     k_mutex_t       global_lock;
 
     char           *cmd_buf;
-    k_mutex_t       cmd_buf_lock;
+
+    /* global_lock has protected the at agent, so cmd buf lock is unnecessary,
+        the code will be removed in next version. */
+    // k_mutex_t       cmd_buf_lock;
 
     hal_uart_t      uart;
     k_mutex_t       uart_tx_lock;
 //    k_mutex_t       uart_rx_lock;
-    
+
 #if AT_INPUT_TYPE_FRAME_EN
     k_mail_q_t      uart_rx_frame_mail;
     uint8_t        *uart_rx_frame_mail_buffer;
     uint16_t        fifo_available_len;
 #else
     k_sem_t         uart_rx_sem;
-    
+
 #if AT_INPUT_SIMULATE_IDLE_EN
     k_timer_t       idle_check_timer;
 #endif  /* AT_INPUT_SIMULATE_IDLE_EN */
@@ -329,7 +333,7 @@ __API__ int tos_at_init(at_agent_t *at_agent, char *task_name, k_stack_t *stk, h
  * @brief De-initialize the at framework.
  *
  * @param[in]   at_agent    pointer to the at agent struct.
- * 
+ *
  * @attention None
  *
  * @return

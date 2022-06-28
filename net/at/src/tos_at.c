@@ -14,7 +14,7 @@
  * as the other licenses applicable to the third-party components included
  * within TencentOS.
  *---------------------------------------------------------------------------*/
- 
+
 /*
 Note:
     If you find that the AT framework occasionally loses characters,
@@ -46,11 +46,11 @@ __STATIC__ int at_uart_getchar_from_fifo(at_agent_t *at_agent, uint8_t *data)
 {
     TOS_CPU_CPSR_ALLOC();
     k_err_t err;
-    
+
     TOS_CPU_INT_DISABLE();
     err = tos_chr_fifo_pop(&at_agent->uart_rx_fifo, data);
     TOS_CPU_INT_ENABLE();
-    
+
     return err;
 }
 
@@ -79,30 +79,30 @@ __STATIC__ int at_uart_getchar(at_agent_t *at_agent, uint8_t *data, k_tick_t tim
             return -1;
         }
     }
-    
+
     if (at_uart_getchar_from_fifo(at_agent, data) != K_ERR_NONE) {
         return -1;
     }
-    
+
     return 0;
-    
+
 #else
     tos_stopwatch_delay(1);
 
     if (tos_sem_pend(&at_agent->uart_rx_sem, timeout) != K_ERR_NONE) {
         return -1;
     }
-    
+
     /*
         the uart_rx_fifo is only read by at_parser task,
         and it will be written in usart interrupt handler,
         so it is more effective to use critical sections.
     */
-    
+
 //    if (tos_mutex_pend(&at_agent->uart_rx_lock) != K_ERR_NONE) {
 //        return -1;
 //    }
-    
+
     if (at_uart_getchar_from_fifo(at_agent, data) != K_ERR_NONE) {
         return -1;
     }
@@ -274,7 +274,7 @@ __STATIC__ at_parse_status_t at_uart_line_parse(at_agent_t *at_agent)
             recv_cache->buffer[recv_cache->buffer_size - 1] = '\0';
             return AT_PARSE_STATUS_OVERFLOW;
         }
-        
+
         if (at_get_event(at_agent) != K_NULL) {
             return AT_PARSE_STATUS_EVENT;
         }
@@ -282,9 +282,9 @@ __STATIC__ at_parse_status_t at_uart_line_parse(at_agent_t *at_agent)
         if (at_is_echo_expect(at_agent)) {
             return AT_PARSE_STATUS_EXPECT;
         }
-        
+
         AT_LOG("recv_cache:[%s](%d)\r\n", recv_cache->buffer, recv_cache->recv_len);
-        
+
         if (strstr((char*)recv_cache->buffer, "OK")) {
             return AT_PARSE_STATUS_OK;
         } else if (strstr((char*)recv_cache->buffer, "FAIL")) {
@@ -344,11 +344,11 @@ __STATIC__ void at_parser(void *arg)
     recv_cache = &at_agent->recv_cache;
 
     while (K_TRUE) {
-        
+
         at_parse_status = at_uart_line_parse(at_agent);
-        
+
         AT_LOG("at line parser end!(%d)\r\n", at_parse_status);
-        
+
         tos_kprintln("--->%s", recv_cache->buffer);
 
         if (at_parse_status == AT_PARSE_STATUS_OVERFLOW) {
@@ -368,7 +368,7 @@ __STATIC__ void at_parser(void *arg)
         if (!at_echo) {
             continue;
         }
-        
+
         if (at_echo->buffer) {
             at_echo_buffer_copy(recv_cache, at_echo);
         }
@@ -467,15 +467,23 @@ __API__ int tos_at_raw_data_send(at_agent_t *at_agent, at_echo_t *echo, uint32_t
 {
     int ret = 0;
 
-    if (echo) {
-        at_echo_attach(at_agent, echo);
+    if (!echo) {
+        return -1;
     }
+
+    if (tos_at_global_lock_pend(at_agent) != 0) {
+        return -1;
+    }
+
+    at_echo_attach(at_agent, echo);
 
     ret = at_uart_send(at_agent, buf, size, 0xFFFF);
 
     tos_task_delay(tos_millisec2tick(timeout));
 
     at_agent->echo = K_NULL;
+
+    tos_at_global_lock_post(at_agent);
 
     return ret;
 }
@@ -488,7 +496,12 @@ __API__ int tos_at_raw_data_send_until(at_agent_t *at_agent, at_echo_t *echo, ui
         return -1;
     }
 
+    if (tos_at_global_lock_pend(at_agent) != 0) {
+        return -1;
+    }
+
     if (tos_sem_create(&echo->__expect_notify, 0) != K_ERR_NONE) {
+        tos_at_global_lock_post(at_agent);
         return -1;
     }
     echo->__is_expecting = K_TRUE;
@@ -504,6 +517,8 @@ __API__ int tos_at_raw_data_send_until(at_agent_t *at_agent, at_echo_t *echo, ui
 
     at_agent->echo = K_NULL;
 
+    tos_at_global_lock_post(at_agent);
+
     return ret;
 }
 
@@ -511,9 +526,9 @@ __STATIC__ int at_cmd_do_exec(at_agent_t *at_agent, const char *format, va_list 
 {
     size_t cmd_len = 0;
 
-    if (tos_mutex_pend(&at_agent->cmd_buf_lock) != K_ERR_NONE) {
-        return -1;
-    }
+    // if (tos_mutex_pend(&at_agent->cmd_buf_lock) != K_ERR_NONE) {
+    //     return -1;
+    // }
 
     cmd_len = vsnprintf(at_agent->cmd_buf, AT_CMD_BUFFER_SIZE, format, args);
 
@@ -521,7 +536,7 @@ __STATIC__ int at_cmd_do_exec(at_agent_t *at_agent, const char *format, va_list 
 
     at_uart_send(at_agent, (uint8_t *)at_agent->cmd_buf, cmd_len, 0xFFFF);
 
-    tos_mutex_post(&at_agent->cmd_buf_lock);
+    // tos_mutex_post(&at_agent->cmd_buf_lock);
 
     return 0;
 }
@@ -530,23 +545,29 @@ __API__ int tos_at_cmd_exec(at_agent_t *at_agent, at_echo_t *echo, uint32_t time
 {
     int ret = 0;
     va_list args;
-    
+
     if (!echo) {
         return -1;
     }
-    
+
+    if (tos_at_global_lock_pend(at_agent) != 0) {
+        return -1;
+    }
+
     if (tos_sem_create(&echo->__status_set_notify, 0) != K_ERR_NONE) {
+        tos_at_global_lock_post(at_agent);
         return -1;
     }
 
     at_echo_attach(at_agent, echo);
-    
+
     va_start(args, cmd);
     ret = at_cmd_do_exec(at_agent, cmd, args);
     va_end(args);
 
     if (ret != 0) {
         at_agent->echo = K_NULL;
+        tos_at_global_lock_post(at_agent);
         return -1;
     }
 
@@ -557,6 +578,8 @@ __API__ int tos_at_cmd_exec(at_agent_t *at_agent, at_echo_t *echo, uint32_t time
     tos_sem_destroy(&echo->__status_set_notify);
 
     at_agent->echo = K_NULL;
+
+    tos_at_global_lock_post(at_agent);
 
     return ret;
 }
@@ -570,7 +593,12 @@ __API__ int tos_at_cmd_exec_until(at_agent_t *at_agent, at_echo_t *echo, uint32_
         return -1;
     }
 
+    if (tos_at_global_lock_pend(at_agent) != 0) {
+        return -1;
+    }
+
     if (tos_sem_create(&echo->__expect_notify, 0) != K_ERR_NONE) {
+        tos_at_global_lock_post(at_agent);
         return -1;
     }
     echo->__is_expecting = K_TRUE;
@@ -582,6 +610,7 @@ __API__ int tos_at_cmd_exec_until(at_agent_t *at_agent, at_echo_t *echo, uint32_
 
     if (ret != 0) {
         at_agent->echo = K_NULL;
+        tos_at_global_lock_post(at_agent);
         return -1;
     }
 
@@ -592,6 +621,8 @@ __API__ int tos_at_cmd_exec_until(at_agent_t *at_agent, at_echo_t *echo, uint32_
     tos_sem_destroy(&echo->__expect_notify);
 
     at_agent->echo = K_NULL;
+
+    tos_at_global_lock_post(at_agent);
 
     return ret;
 }
@@ -696,7 +727,7 @@ __API__ int tos_at_channel_read_timed(at_agent_t *at_agent, int channel_id, uint
 
     remain_tick = tos_millisec2tick(timeout);
     tos_stopwatch_countdown(&data_channel->timer, remain_tick);
-    
+
     while (!tos_stopwatch_is_expired(&data_channel->timer)) {
         remain_tick = tos_stopwatch_remain(&data_channel->timer);
         if (remain_tick == (k_tick_t)0u) {
@@ -710,7 +741,7 @@ __API__ int tos_at_channel_read_timed(at_agent_t *at_agent, int channel_id, uint
         read_len = tos_chr_fifo_pop_stream(&data_channel->rx_fifo, buffer + total_read_len, buffer_len - total_read_len);
 
         tos_mutex_post(&data_channel->rx_lock);
-        
+
         if (read_len == 0) {
             remain_tick = tos_stopwatch_remain(&data_channel->timer);
             tos_sem_pend(&data_channel->rx_sem, remain_tick);
@@ -752,13 +783,13 @@ __API__ int tos_at_channel_write(at_agent_t *at_agent, int channel_id, uint8_t *
 __STATIC_INLINE__ int at_channel_construct(at_data_channel_t *data_channel, const char *ip, const char *port, size_t socket_buffer_size)
 {
     uint8_t *fifo_buffer = K_NULL;
-    
+
     fifo_buffer = tos_mmheap_alloc(socket_buffer_size);
-    
+
     if (!fifo_buffer) {
         return -1;
     }
-    
+
     if (tos_sem_create_max(&data_channel->rx_sem, 0, 1) != K_ERR_NONE) {
         goto errout;
     }
@@ -860,7 +891,7 @@ __API__ int tos_at_channel_free(at_agent_t *at_agent, int channel_id)
     if (!data_channel) {
         return -1;
     }
-    
+
     tos_sem_destroy(&data_channel->rx_sem);
 
     tos_mutex_destroy(&data_channel->rx_lock);
@@ -957,7 +988,7 @@ __STATIC__ void tos_at_uart_input_notify(at_agent_t *at_agent)
 }
 
 __STATIC__ void idle_check_timer_callback(void *args)
-{   
+{
     at_agent_t *at_agent = (at_agent_t *)args;
     tos_at_uart_input_notify(at_agent);
 }
@@ -987,9 +1018,9 @@ __API__ int tos_at_init(at_agent_t *at_agent, char *task_name, k_stack_t *stk, h
     }
     at_agent->cmd_buf = (char *)buffer;
 
-    if (tos_mutex_create(&at_agent->cmd_buf_lock) != K_ERR_NONE) {
-        goto errout1;
-    }
+    // if (tos_mutex_create(&at_agent->cmd_buf_lock) != K_ERR_NONE) {
+    //     goto errout1;
+    // }
 
     if (at_recv_cache_init(at_agent) != 0) {
         goto errout2;
@@ -1000,9 +1031,9 @@ __API__ int tos_at_init(at_agent_t *at_agent, char *task_name, k_stack_t *stk, h
     if (!buffer) {
         goto errout3;
     }
-    
+
     at_agent->uart_rx_frame_mail_buffer = (uint8_t *)buffer;
-    
+
     if (tos_mail_q_create(&at_agent->uart_rx_frame_mail, buffer, AT_FRAME_LEN_MAIL_MAX, sizeof(at_frame_len_mail_t)) != K_ERR_NONE) {
         goto errout4;
     }
@@ -1019,22 +1050,22 @@ __API__ int tos_at_init(at_agent_t *at_agent, char *task_name, k_stack_t *stk, h
     if (tos_mutex_create(&at_agent->uart_tx_lock) != K_ERR_NONE) {
         goto errout6;
     }
-    
+
     if (tos_mutex_create(&at_agent->global_lock) != K_ERR_NONE) {
         goto errout7;
     }
-    
+
 #if AT_INPUT_SIMULATE_IDLE_EN
     if (tos_timer_create(&at_agent->idle_check_timer, SIMULATE_IDLE_DEFAULT_TIME,
         0, idle_check_timer_callback, at_agent, TOS_OPT_TIMER_ONESHOT) != K_ERR_NONE) {
         goto errout8;
     }
-#endif /* AT_INPUT_SIMULATE_IDLE_EN */  
+#endif /* AT_INPUT_SIMULATE_IDLE_EN */
 
     if (tos_hal_uart_init(&at_agent->uart, uart_port) != 0) {
         goto errout9;
     }
-    
+
     if (tos_task_create(&at_agent->parser, task_name, at_parser,
                         at_agent, AT_PARSER_TASK_PRIO, stk,
                         AT_PARSER_TASK_STACK_SIZE, 0) != K_ERR_NONE) {
@@ -1044,18 +1075,18 @@ __API__ int tos_at_init(at_agent_t *at_agent, char *task_name, k_stack_t *stk, h
     return 0;
 errout10:
     tos_hal_uart_deinit(&at_agent->uart);
-    
+
 errout9:
 #if AT_INPUT_SIMULATE_IDLE_EN
-    tos_timer_destroy(&at_agent->idle_check_timer);     
+    tos_timer_destroy(&at_agent->idle_check_timer);
 errout8:
 #endif /* AT_INPUT_SIMULATE_IDLE_EN */
-    
+
     tos_mutex_destroy(&at_agent->global_lock);
 
 errout7:
     tos_mutex_destroy(&at_agent->uart_tx_lock);
-    
+
 errout6:
 //    tos_mutex_destroy(&at_agent->uart_rx_lock);
 
@@ -1065,7 +1096,7 @@ errout6:
 #else
     tos_sem_destroy(&at_agent->uart_rx_sem);
 #endif /* AT_INPUT_TYPE_FRAME_EN */
-    
+
 #if AT_INPUT_TYPE_FRAME_EN
 errout4:
     tos_mmheap_free(at_agent->uart_rx_frame_mail_buffer);
@@ -1076,9 +1107,9 @@ errout3:
     at_recv_cache_deinit(at_agent);
 
 errout2:
-    tos_mutex_destroy(&at_agent->cmd_buf_lock);
+    // tos_mutex_destroy(&at_agent->cmd_buf_lock);
 
-errout1:
+//errout1:
     tos_mmheap_free(at_agent->cmd_buf);
     at_agent->cmd_buf = K_NULL;
 
@@ -1093,15 +1124,15 @@ errout0:
 __API__ void tos_at_deinit(at_agent_t *at_agent)
 {
     tos_task_destroy(&at_agent->parser);
-    
+
     tos_hal_uart_deinit(&at_agent->uart);
-    
+
     tos_mutex_destroy(&at_agent->global_lock);
 
     tos_mutex_destroy(&at_agent->uart_tx_lock);
 
     //tos_mutex_destroy(&at_agent->uart_tx_lock);
-    
+
 #if AT_INPUT_SIMULATE_IDLE_EN
     tos_timer_destroy(&at_agent->idle_check_timer);
 #endif /* AT_INPUT_SIMULATE_IDLE_EN */
@@ -1113,10 +1144,10 @@ __API__ void tos_at_deinit(at_agent_t *at_agent)
 #else
     tos_sem_destroy(&at_agent->uart_rx_sem);
 #endif /* AT_INPUT_TYPE_FRAME_EN */
-    
+
     at_recv_cache_deinit(at_agent);
 
-    tos_mutex_destroy(&at_agent->cmd_buf_lock);
+    // tos_mutex_destroy(&at_agent->cmd_buf_lock);
 
     tos_mmheap_free(at_agent->cmd_buf);
     at_agent->cmd_buf = K_NULL;
@@ -1136,12 +1167,12 @@ __API__ void tos_at_uart_input_frame(at_agent_t *at_agent, uint8_t *pdata, uint1
 {
     int ret;
     at_frame_len_mail_t at_frame_len_mail;
-    
+
     ret = tos_chr_fifo_push_stream(&at_agent->uart_rx_fifo, pdata, len);
     if (ret != len) {
         return;
     }
-    
+
     at_frame_len_mail.frame_len = len;
     tos_mail_q_post(&at_agent->uart_rx_frame_mail, &at_frame_len_mail, sizeof(at_frame_len_mail_t));
 }

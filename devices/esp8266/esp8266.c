@@ -105,12 +105,15 @@ int esp8266_join_ap(const char *ssid, const char *pwd)
 {
     int try = 0;
     at_echo_t echo;
+    char echo_buffer[128];
 
-    tos_at_echo_create(&echo, NULL, 0, NULL);
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
     while (try++ < 10) {
-        tos_at_cmd_exec(AT_AGENT, &echo, 15000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
+        tos_at_cmd_exec(AT_AGENT, &echo, 20000, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid, pwd);
         if (echo.status == AT_ECHO_STATUS_OK) {
-            return 0;
+            if (strstr(echo_buffer, "WIFI GOT IP")) {
+                return 0;
+            }
         }
     }
     return -1;
@@ -200,10 +203,6 @@ static int esp8266_send(int id, const void *buf, size_t len)
         return -1;
     }
 
-    if (tos_at_global_lock_pend(AT_AGENT) != 0) {
-        return -1;
-    }
-
     tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), ">");
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
     tos_at_cmd_exec_until(&echo, 5000,
@@ -218,7 +217,6 @@ static int esp8266_send(int id, const void *buf, size_t len)
             tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
@@ -234,11 +232,9 @@ static int esp8266_send(int id, const void *buf, size_t len)
             tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
-    tos_at_global_lock_post(AT_AGENT);
     return len;
 }
 
@@ -248,10 +244,6 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
     char echo_buffer[64];
 
     if (!tos_at_channel_is_working(AT_AGENT, id)) {
-        return -1;
-    }
-
-    if (tos_at_global_lock_pend(AT_AGENT) != 0) {
         return -1;
     }
 
@@ -280,7 +272,6 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
             tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
@@ -296,11 +287,9 @@ static int esp8266_sendto(int id, char *ip, char *port, const void *buf, size_t 
             tos_at_channel_set_broken(AT_AGENT, id);
         }
 
-        tos_at_global_lock_post(AT_AGENT);
         return -1;
     }
 
-    tos_at_global_lock_post(AT_AGENT);
     return len;
 }
 
@@ -317,9 +306,9 @@ static int esp8266_recvfrom(int id, void *buf, size_t len)
 static int esp8266_close(int id)
 {
     at_echo_t echo;
-    
+
     tos_at_echo_create(&echo, NULL, 0, NULL);
-    
+
 #if TOS_CFG_MODULE_SINGLE_LINK_EN > 0u
     tos_at_cmd_exec(AT_AGENT, &echo, 1000, "AT+CIPCLOSE\r\n");
 #else
@@ -441,7 +430,7 @@ __STATIC__ void esp8266_incoming_data_process(void)
         if (tos_at_uart_read(AT_AGENT, buffer, read_len) != read_len) {
             return;
         }
-        
+
         //delay has two reason, wait for the data to be cached and untrigger scheduling
         tos_stopwatch_delay(200);
 
@@ -501,7 +490,7 @@ int esp8266_sal_deinit()
     tos_sal_module_register_default();
 
     tos_at_deinit(AT_AGENT);
-    
+
     return 0;
 }
 

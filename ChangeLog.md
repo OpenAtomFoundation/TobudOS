@@ -1,3 +1,7 @@
+## [2.5.2] - 2022-06-28
+### Changed
+- modify the global lock to protect the at agent.
+
 ## [2.5.1] - 2022-06-02
 ### Added
 - add dynamic create and destroy api for task, sem, mutex, event, timer and corresponding unit test case.
