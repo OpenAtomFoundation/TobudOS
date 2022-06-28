@@ -1,8 +1,0 @@
-Language: Cpp
-BasedOnStyle: Google
-ColumnLimit: 120
-DerivePointerAlignment: true
-PointerAlignment: Left
-SortIncludes: true
-IncludeBlocks: Preserve
-IndentPPDirectives: AfterHash
