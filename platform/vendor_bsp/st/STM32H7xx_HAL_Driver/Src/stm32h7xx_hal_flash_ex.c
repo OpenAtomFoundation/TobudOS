@@ -62,14 +62,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
-  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
   */
 
@@ -408,7 +406,7 @@ HAL_StatusTypeDef HAL_FLASHEx_Erase_IT(FLASH_EraseInitTypeDef *pEraseInit)
 
 /**
   * @brief  Program option bytes
-  * @param  pOBInit pointer to an FLASH_OBInitStruct structure that
+  * @param  pOBInit pointer to an FLASH_OBProgramInitTypeDef structure that
   *         contains the configuration information for the programming.
   *
   * @retval HAL Status
@@ -549,7 +547,7 @@ HAL_StatusTypeDef HAL_FLASHEx_OBProgram(FLASH_OBProgramInitTypeDef *pOBInit)
 
 /**
   * @brief Get the Option byte configuration
-  * @param  pOBInit pointer to an FLASH_OBInitStruct structure that
+  * @param  pOBInit pointer to an FLASH_OBProgramInitTypeDef structure that
   *         contains the configuration information for the programming.
   * @note   The parameter Banks of the pOBInit structure must be set exclusively to FLASH_BANK_1 or FLASH_BANK_2,
   *         as this parameter is use to get the given Bank WRP, PCROP and secured area configuration.
@@ -971,7 +969,7 @@ void FLASH_Erase_Sector(uint32_t Sector, uint32_t Banks, uint32_t VoltageRange)
   * @brief  Enable the write protection of the desired bank1 or bank 2 sectors
   * @param  WRPSector specifies the sector(s) to be write protected.
   *          This parameter can be one of the following values:
-  *            @arg WRPSector:  A combination of OB_WRP_SECTOR_0 to OB_WRP_SECTOR_7 or OB_WRP_SECTOR_All
+  *            @arg WRPSector:  A combination of OB_WRP_SECTOR_0 to OB_WRP_SECTOR_7 or OB_WRP_SECTOR_ALL
   *
   * @param  Banks the specific bank to apply WRP sectors
   *          This parameter can be one of the following values:
@@ -1006,7 +1004,7 @@ static void FLASH_OB_EnableWRP(uint32_t WRPSector, uint32_t Banks)
   * @brief  Disable the write protection of the desired bank1 or bank 2 sectors
   * @param  WRPSector specifies the sector(s) to disable write protection.
   *          This parameter can be one of the following values:
-  *            @arg WRPSector:  A combination of FLASH_OB_WRP_SECTOR_0 to FLASH_OB_WRP_SECTOR_7 or FLASH_OB_WRP_SECTOR_All
+  *            @arg WRPSector:  A combination of FLASH_OB_WRP_SECTOR_0 to FLASH_OB_WRP_SECTOR_7 or FLASH_OB_WRP_SECTOR_ALL
   *
   * @param  Banks the specific bank to apply WRP sectors
   *          This parameter can be one of the following values:
@@ -1045,7 +1043,7 @@ static void FLASH_OB_DisableWRP(uint32_t WRPSector, uint32_t Banks)
 
   * @param  WRPSector gives the write protected sector(s) on the given bank .
   *          This parameter can be one of the following values:
-  *          @arg WRPSector: A combination of FLASH_OB_WRP_SECTOR_0 to FLASH_OB_WRP_SECTOR_7 or FLASH_OB_WRP_SECTOR_All
+  *          @arg WRPSector: A combination of FLASH_OB_WRP_SECTOR_0 to FLASH_OB_WRP_SECTOR_7 or FLASH_OB_WRP_SECTOR_ALL
   *
   * @param  Bank the specific bank to apply WRP sectors
   *          This parameter can be exclusively one of the following values:
@@ -1819,7 +1817,7 @@ static void FLASH_OB_SharedRAM_Config(uint32_t SharedRamConfig)
   */
 static uint32_t FLASH_OB_SharedRAM_GetConfig(void)
 {
-  return (FLASH->OPTSR2_CUR & FLASH_OPTSR2_TCM_AXI_SHARED);;
+  return (FLASH->OPTSR2_CUR & FLASH_OPTSR2_TCM_AXI_SHARED);
 }
 #endif /* FLASH_OPTSR2_TCM_AXI_SHARED */
 
@@ -1846,7 +1844,7 @@ static void FLASH_OB_CPUFreq_BoostConfig(uint32_t FreqBoost)
   */
 static uint32_t FLASH_OB_CPUFreq_GetBoost(void)
 {
-  return (FLASH->OPTSR2_CUR & FLASH_OPTSR2_CPUFREQ_BOOST);;
+  return (FLASH->OPTSR2_CUR & FLASH_OPTSR2_CPUFREQ_BOOST);
 }
 #endif /* FLASH_OPTSR2_CPUFREQ_BOOST */
 
@@ -1860,4 +1858,3 @@ static uint32_t FLASH_OB_CPUFreq_GetBoost(void)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

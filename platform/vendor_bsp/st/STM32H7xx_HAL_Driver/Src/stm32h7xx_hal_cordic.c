@@ -11,7 +11,18 @@
   *           + IRQ handler management
   *           + Peripheral State functions
   *
-  *  @verbatim
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  @verbatim
   ================================================================================
             ##### How to use this driver #####
   ================================================================================
@@ -79,9 +90,9 @@
 
   The compilation define  USE_HAL_CORDIC_REGISTER_CALLBACKS when set to 1
   allows the user to configure dynamically the driver callbacks.
-  Use Function @ref HAL_CORDIC_RegisterCallback() to register an interrupt callback.
+  Use Function HAL_CORDIC_RegisterCallback() to register an interrupt callback.
 
-  Function @ref HAL_CORDIC_RegisterCallback() allows to register following callbacks:
+  Function HAL_CORDIC_RegisterCallback() allows to register following callbacks:
     (+) ErrorCallback             : Error Callback.
     (+) CalculateCpltCallback     : Calculate complete Callback.
     (+) MspInitCallback           : CORDIC MspInit.
@@ -89,9 +100,9 @@
   This function takes as parameters the HAL peripheral handle, the Callback ID
   and a pointer to the user callback function.
 
-  Use function @ref HAL_CORDIC_UnRegisterCallback() to reset a callback to the default
+  Use function HAL_CORDIC_UnRegisterCallback() to reset a callback to the default
   weak function.
-  @ref HAL_CORDIC_UnRegisterCallback takes as parameters the HAL peripheral handle,
+  HAL_CORDIC_UnRegisterCallback takes as parameters the HAL peripheral handle,
   and the Callback ID.
   This function allows to reset following callbacks:
     (+) ErrorCallback             : Error Callback.
@@ -101,11 +112,11 @@
 
   By default, after the HAL_CORDIC_Init() and when the state is HAL_CORDIC_STATE_RESET,
   all callbacks are set to the corresponding weak functions:
-  examples @ref HAL_CORDIC_ErrorCallback(), @ref HAL_CORDIC_CalculateCpltCallback().
+  examples HAL_CORDIC_ErrorCallback(), HAL_CORDIC_CalculateCpltCallback().
   Exception done for MspInit and MspDeInit functions that are
-  reset to the legacy weak function in the HAL_CORDIC_Init()/ @ref HAL_CORDIC_DeInit() only when
+  reset to the legacy weak function in the HAL_CORDIC_Init()/ HAL_CORDIC_DeInit() only when
   these callbacks are null (not registered beforehand).
-  if not, MspInit or MspDeInit are not null, the HAL_CORDIC_Init()/ @ref HAL_CORDIC_DeInit()
+  if not, MspInit or MspDeInit are not null, the HAL_CORDIC_Init()/ HAL_CORDIC_DeInit()
   keep and use the user MspInit/MspDeInit callbacks (registered beforehand)
 
   Callbacks can be registered/unregistered in HAL_CORDIC_STATE_READY state only.
@@ -113,7 +124,7 @@
   in HAL_CORDIC_STATE_READY or HAL_CORDIC_STATE_RESET state,
   thus registered (user) MspInit/DeInit callbacks can be used during the Init/DeInit.
   In that case first register the MspInit/MspDeInit user callbacks
-  using @ref HAL_CORDIC_RegisterCallback() before calling @ref HAL_CORDIC_DeInit()
+  using HAL_CORDIC_RegisterCallback() before calling HAL_CORDIC_DeInit()
   or HAL_CORDIC_Init() function.
 
   When The compilation define USE_HAL_CORDIC_REGISTER_CALLBACKS is set to 0 or
@@ -121,18 +132,6 @@
   are set to the corresponding weak functions.
 
   @endverbatim
-  *
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -1352,5 +1351,3 @@ static void CORDIC_DMAError(DMA_HandleTypeDef *hdma)
 
 #endif /* HAL_CORDIC_MODULE_ENABLED */
 #endif /* CORDIC */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

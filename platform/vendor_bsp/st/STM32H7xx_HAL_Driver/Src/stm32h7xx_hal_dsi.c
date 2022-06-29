@@ -9,6 +9,17 @@
   *           + IO operation functions
   *           + Peripheral Control functions
   *           + Peripheral State and Errors functions
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -140,17 +151,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -200,12 +200,14 @@ static void DSI_ConfigPacketHeader(DSI_TypeDef *DSIx, uint32_t ChannelID, uint32
                                    uint32_t Data1);
 
 static HAL_StatusTypeDef DSI_ShortWrite(DSI_HandleTypeDef *hdsi,
-                                     uint32_t ChannelID,
-                                     uint32_t Mode,
-                                     uint32_t Param1,
-                                     uint32_t Param2);
-
+                                        uint32_t ChannelID,
+                                        uint32_t Mode,
+                                        uint32_t Param1,
+                                        uint32_t Param2);
 /* Private functions ---------------------------------------------------------*/
+/** @defgroup DSI_Private_Functions DSI Private Functions
+  * @{
+  */
 /**
   * @brief  Generic DSI packet header configuration
   * @param  DSIx  Pointer to DSI register base
@@ -255,10 +257,10 @@ static HAL_StatusTypeDef DSI_ShortWrite(DSI_HandleTypeDef *hdsi,
   tickstart = HAL_GetTick();
 
   /* Wait for Command FIFO Empty */
-  while((hdsi->Instance->GPSR & DSI_GPSR_CMDFE) == 0U)
+  while ((hdsi->Instance->GPSR & DSI_GPSR_CMDFE) == 0U)
   {
     /* Check for the Timeout */
-    if((HAL_GetTick() - tickstart ) > DSI_TIMEOUT_VALUE)
+    if ((HAL_GetTick() - tickstart) > DSI_TIMEOUT_VALUE)
     {
       return HAL_TIMEOUT;
     }
@@ -270,6 +272,10 @@ static HAL_StatusTypeDef DSI_ShortWrite(DSI_HandleTypeDef *hdsi,
 
   return HAL_OK;
 }
+
+/**
+  * @}
+  */
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup DSI_Exported_Functions
@@ -365,10 +371,16 @@ HAL_StatusTypeDef HAL_DSI_Init(DSI_HandleTypeDef *hdsi, DSI_PLLInitTypeDef *PLLI
 
   /* Set the PLL division factors */
   hdsi->Instance->WRPCR &= ~(DSI_WRPCR_PLL_NDIV | DSI_WRPCR_PLL_IDF | DSI_WRPCR_PLL_ODF);
-  hdsi->Instance->WRPCR |= (((PLLInit->PLLNDIV) << 2U) | ((PLLInit->PLLIDF) << 11U) | ((PLLInit->PLLODF) << 16U));
+  hdsi->Instance->WRPCR |= (((PLLInit->PLLNDIV) << DSI_WRPCR_PLL_NDIV_Pos) | \
+                            ((PLLInit->PLLIDF) << DSI_WRPCR_PLL_IDF_Pos) | \
+                            ((PLLInit->PLLODF) << DSI_WRPCR_PLL_ODF_Pos));
 
   /* Enable the DSI PLL */
   __HAL_DSI_PLL_ENABLE(hdsi);
+
+  /* Requires min of 400us delay before reading the PLLLS flag */
+  /* 1ms delay is inserted that is the minimum HAL delay granularity */
+  HAL_Delay(1);
 
   /* Get tick */
   tickstart = HAL_GetTick();
@@ -419,7 +431,7 @@ HAL_StatusTypeDef HAL_DSI_Init(DSI_HandleTypeDef *hdsi, DSI_PLLInitTypeDef *PLLI
   hdsi->Instance->IER[1U] = 0U;
   hdsi->ErrorMsk = 0U;
 
-  /* Initialise the error code */
+  /* Initialize the error code */
   hdsi->ErrorCode = HAL_DSI_ERROR_NONE;
 
   /* Initialize the DSI state*/
@@ -473,7 +485,7 @@ HAL_StatusTypeDef HAL_DSI_DeInit(DSI_HandleTypeDef *hdsi)
   HAL_DSI_MspDeInit(hdsi);
 #endif /* USE_HAL_DSI_REGISTER_CALLBACKS */
 
-  /* Initialise the error code */
+  /* Initialize the error code */
   hdsi->ErrorCode = HAL_DSI_ERROR_NONE;
 
   /* Initialize the DSI state*/
@@ -698,7 +710,7 @@ HAL_StatusTypeDef HAL_DSI_RegisterCallback(DSI_HandleTypeDef *hdsi, HAL_DSI_Call
 
 /**
   * @brief  Unregister a DSI Callback
-  *         DSI callabck is redirected to the weak predefined callback
+  *         DSI callback is redirected to the weak predefined callback
   * @param hdsi dsi handle
   * @param CallbackID ID of the callback to be unregistered
   *        This parameter can be one of the following values:
@@ -733,11 +745,11 @@ HAL_StatusTypeDef HAL_DSI_UnRegisterCallback(DSI_HandleTypeDef *hdsi, HAL_DSI_Ca
         break;
 
       case HAL_DSI_MSPINIT_CB_ID :
-        hdsi->MspInitCallback = HAL_DSI_MspInit;                     /* Legcay weak MspInit Callback     */
+        hdsi->MspInitCallback = HAL_DSI_MspInit;                     /* Legacy weak MspInit Callback     */
         break;
 
       case HAL_DSI_MSPDEINIT_CB_ID :
-        hdsi->MspDeInitCallback = HAL_DSI_MspDeInit;                 /* Legcay weak MspDeInit Callback   */
+        hdsi->MspDeInitCallback = HAL_DSI_MspDeInit;                 /* Legacy weak MspDeInit Callback   */
         break;
 
       default :
@@ -753,11 +765,11 @@ HAL_StatusTypeDef HAL_DSI_UnRegisterCallback(DSI_HandleTypeDef *hdsi, HAL_DSI_Ca
     switch (CallbackID)
     {
       case HAL_DSI_MSPINIT_CB_ID :
-        hdsi->MspInitCallback = HAL_DSI_MspInit;                  /* Legcay weak MspInit Callback   */
+        hdsi->MspInitCallback = HAL_DSI_MspInit;                  /* Legacy weak MspInit Callback   */
         break;
 
       case HAL_DSI_MSPDEINIT_CB_ID :
-        hdsi->MspDeInitCallback = HAL_DSI_MspDeInit;              /* Legcay weak MspDeInit Callback */
+        hdsi->MspDeInitCallback = HAL_DSI_MspDeInit;              /* Legacy weak MspDeInit Callback */
         break;
 
       default :
@@ -808,7 +820,8 @@ HAL_StatusTypeDef HAL_DSI_UnRegisterCallback(DSI_HandleTypeDef *hdsi, HAL_DSI_Ca
   */
 void HAL_DSI_IRQHandler(DSI_HandleTypeDef *hdsi)
 {
-  uint32_t ErrorStatus0, ErrorStatus1;
+  uint32_t ErrorStatus0;
+  uint32_t ErrorStatus1;
 
   /* Tearing Effect Interrupt management ***************************************/
   if (__HAL_DSI_GET_FLAG(hdsi, DSI_FLAG_TE) != 0U)
@@ -1365,7 +1378,8 @@ HAL_StatusTypeDef HAL_DSI_ConfigPhyTimer(DSI_HandleTypeDef *hdsi, DSI_PHY_TimerT
      High-Speed transmission.
      To do so, the DSI Host calculates the time required for the clock lane to change from HighSpeed
      to Low-Power and from Low-Power to High-Speed.
-     This timings are configured by the HS2LP_TIME and LP2HS_TIME in the DSI Host Clock Lane Timer Configuration Register (DSI_CLTCR).
+     This timings are configured by the HS2LP_TIME and LP2HS_TIME in the DSI Host Clock Lane Timer Configuration
+     Register (DSI_CLTCR).
      But the DSI Host is not calculating LP2HS_TIME + HS2LP_TIME but 2 x HS2LP_TIME.
 
      Workaround : Configure HS2LP_TIME and LP2HS_TIME with the same value being the max of HS2LP_TIME or LP2HS_TIME.
@@ -1587,7 +1601,7 @@ HAL_StatusTypeDef HAL_DSI_ShortWrite(DSI_HandleTypeDef *hdsi,
   /* Process locked */
   __HAL_LOCK(hdsi);
 
-   status = DSI_ShortWrite(hdsi, ChannelID, Mode, Param1, Param2);
+  status = DSI_ShortWrite(hdsi, ChannelID, Mode, Param1, Param2);
 
   /* Process unlocked */
   __HAL_UNLOCK(hdsi);
@@ -1616,7 +1630,9 @@ HAL_StatusTypeDef HAL_DSI_LongWrite(DSI_HandleTypeDef *hdsi,
                                     uint32_t Param1,
                                     uint8_t *ParametersTable)
 {
-  uint32_t uicounter, nbBytes, count;
+  uint32_t uicounter;
+  uint32_t nbBytes;
+  uint32_t count;
   uint32_t tickstart;
   uint32_t fifoword;
   uint8_t *pparams = ParametersTable;
@@ -1721,7 +1737,7 @@ HAL_StatusTypeDef HAL_DSI_Read(DSI_HandleTypeDef *hdsi,
   {
     /* set max return packet size */
     if (DSI_ShortWrite(hdsi, ChannelNbr, DSI_MAX_RETURN_PKT_SIZE, ((datasize) & 0xFFU),
-                           (((datasize) >> 8U) & 0xFFU)) != HAL_OK)
+                       (((datasize) >> 8U) & 0xFFU)) != HAL_OK)
     {
       /* Process Unlocked */
       __HAL_UNLOCK(hdsi);
@@ -1781,6 +1797,21 @@ HAL_StatusTypeDef HAL_DSI_Read(DSI_HandleTypeDef *hdsi,
       __HAL_UNLOCK(hdsi);
 
       return HAL_TIMEOUT;
+    }
+
+    /* Software workaround to avoid HAL_TIMEOUT when a DSI read command is   */
+    /* issued to the panel and the read data is not captured by the DSI Host */
+    /* which returns Packet Size Error.                                      */
+    /* Need to ensure that the Read command has finished before checking PSE */
+    if ((hdsi->Instance->GPSR & DSI_GPSR_RCB) == 0U)
+    {
+      if ((hdsi->Instance->ISR[1U] & DSI_ISR1_PSE) == DSI_ISR1_PSE)
+      {
+        /* Process Unlocked */
+        __HAL_UNLOCK(hdsi);
+
+        return HAL_ERROR;
+      }
     }
   }
 
@@ -2077,7 +2108,7 @@ HAL_StatusTypeDef HAL_DSI_ExitULPM(DSI_HandleTypeDef *hdsi)
   /* De-assert the ULPM requests and the ULPM exit bits */
   hdsi->Instance->PUCR = 0U;
 
-  /* Switch the lanbyteclock source in the RCC from system PLL to D-PHY */
+  /* Switch the lane byte clock source in the RCC from system PLL to D-PHY */
   __HAL_RCC_DSI_CONFIG(RCC_DSICLKSOURCE_PHY);
 
   /* Restore clock lane configuration to HS */
@@ -2727,5 +2758,3 @@ uint32_t HAL_DSI_GetError(DSI_HandleTypeDef *hdsi)
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

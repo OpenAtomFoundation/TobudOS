@@ -10,6 +10,17 @@
   *           + Peripheral Control functions
   *           + Peripheral State and Error functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -166,17 +177,6 @@
 
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -809,11 +809,11 @@ HAL_StatusTypeDef HAL_SMARTCARD_UnRegisterCallback(SMARTCARD_HandleTypeDef *hsma
   * @param  Timeout  Timeout duration.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMARTCARD_Transmit(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size,
+HAL_StatusTypeDef HAL_SMARTCARD_Transmit(SMARTCARD_HandleTypeDef *hsmartcard, const uint8_t *pData, uint16_t Size,
                                          uint32_t Timeout)
 {
   uint32_t tickstart;
-  uint8_t  *ptmpdata = pData;
+  const uint8_t  *ptmpdata = pData;
 
   /* Check that a Tx process is not already ongoing */
   if (hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
@@ -983,7 +983,7 @@ HAL_StatusTypeDef HAL_SMARTCARD_Receive(SMARTCARD_HandleTypeDef *hsmartcard, uin
   * @param  Size amount of data to be sent.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMARTCARD_Transmit_IT(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size)
+HAL_StatusTypeDef HAL_SMARTCARD_Transmit_IT(SMARTCARD_HandleTypeDef *hsmartcard, const uint8_t *pData, uint16_t Size)
 {
   /* Check that a Tx process is not already ongoing */
   if (hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
@@ -1141,7 +1141,7 @@ HAL_StatusTypeDef HAL_SMARTCARD_Receive_IT(SMARTCARD_HandleTypeDef *hsmartcard, 
   * @param  Size amount of data to be sent.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SMARTCARD_Transmit_DMA(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size)
+HAL_StatusTypeDef HAL_SMARTCARD_Transmit_DMA(SMARTCARD_HandleTypeDef *hsmartcard, const uint8_t *pData, uint16_t Size)
 {
   /* Check that a Tx process is not already ongoing */
   if (hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
@@ -2422,43 +2422,43 @@ static HAL_StatusTypeDef SMARTCARD_SetConfig(SMARTCARD_HandleTypeDef *hsmartcard
   {
     case SMARTCARD_CLOCKSOURCE_D2PCLK1:
       pclk = HAL_RCC_GetPCLK1Freq();
-      tmpreg = (uint16_t)(((pclk / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+      tmpreg = (uint32_t)(((pclk / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                            (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       break;
     case SMARTCARD_CLOCKSOURCE_D2PCLK2:
       pclk = HAL_RCC_GetPCLK2Freq();
-      tmpreg = (uint16_t)(((pclk / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+      tmpreg = (uint32_t)(((pclk / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                            (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       break;
     case SMARTCARD_CLOCKSOURCE_PLL2Q:
       HAL_RCCEx_GetPLL2ClockFreq(&pll2_clocks);
-      tmpreg = (uint16_t)(((pll2_clocks.PLL2_Q_Frequency / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+      tmpreg = (uint32_t)(((pll2_clocks.PLL2_Q_Frequency / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                            (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       break;
     case SMARTCARD_CLOCKSOURCE_PLL3Q:
       HAL_RCCEx_GetPLL3ClockFreq(&pll3_clocks);
-      tmpreg = (uint16_t)(((pll3_clocks.PLL3_Q_Frequency / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+      tmpreg = (uint32_t)(((pll3_clocks.PLL3_Q_Frequency / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                            (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       break;
     case SMARTCARD_CLOCKSOURCE_HSI:
       if (__HAL_RCC_GET_FLAG(RCC_FLAG_HSIDIV) != 0U)
       {
-        tmpreg = (uint16_t)((((HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER() >> 3U)) /
+        tmpreg = (uint32_t)((((HSI_VALUE >> (__HAL_RCC_GET_HSI_DIVIDER() >> 3U)) /
                               SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                              (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       }
       else
       {
-        tmpreg = (uint16_t)(((HSI_VALUE / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+        tmpreg = (uint32_t)(((HSI_VALUE / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                              (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       }
       break;
     case SMARTCARD_CLOCKSOURCE_CSI:
-      tmpreg = (uint16_t)(((CSI_VALUE / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+      tmpreg = (uint32_t)(((CSI_VALUE / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                            (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       break;
     case SMARTCARD_CLOCKSOURCE_LSE:
-      tmpreg = (uint16_t)(((uint16_t)(LSE_VALUE / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
+      tmpreg = (uint32_t)(((uint16_t)(LSE_VALUE / SMARTCARDPrescTable[hsmartcard->Init.ClockPrescaler]) +
                            (hsmartcard->Init.BaudRate / 2U)) / hsmartcard->Init.BaudRate);
       break;
     default:
@@ -2469,7 +2469,7 @@ static HAL_StatusTypeDef SMARTCARD_SetConfig(SMARTCARD_HandleTypeDef *hsmartcard
   /* USARTDIV must be greater than or equal to 0d16 */
   if ((tmpreg >= USART_BRR_MIN) && (tmpreg <= USART_BRR_MAX))
   {
-    hsmartcard->Instance->BRR = tmpreg;
+    hsmartcard->Instance->BRR = (uint16_t)tmpreg;
   }
   else
   {
@@ -2600,11 +2600,12 @@ static HAL_StatusTypeDef SMARTCARD_CheckIdleState(SMARTCARD_HandleTypeDef *hsmar
 }
 
 /**
-  * @brief  Handle SMARTCARD Communication Timeout.
+  * @brief  Handle SMARTCARD Communication Timeout. It waits
+  *         until a flag is no longer in the specified status.
   * @param  hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                   the configuration information for the specified SMARTCARD module.
   * @param  Flag Specifies the SMARTCARD flag to check.
-  * @param  Status The new Flag status (SET or RESET).
+  * @param  Status The actual Flag status (SET or RESET).
   * @param  Tickstart Tick start value
   * @param  Timeout Timeout duration.
   * @retval HAL status
@@ -3204,4 +3205,3 @@ static void SMARTCARD_RxISR_FIFOEN(SMARTCARD_HandleTypeDef *hsmartcard)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

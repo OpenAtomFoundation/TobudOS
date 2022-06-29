@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -3776,7 +3775,7 @@ __STATIC_INLINE uint32_t LL_RTC_BAK_GetRegister(RTC_TypeDef *RTCx, uint32_t Back
 }
 #endif /* RTC_BKP0R */
 
-#if defined(TAMP_BKP0R_BKP)
+#if defined(TAMP_BKP0R)
 /**
   * @brief  Writes a data in a specified Backup data register.
   * @rmtoll TAMP_BKPxR        BKP           LL_RTC_BKP_SetRegister
@@ -3877,7 +3876,7 @@ __STATIC_INLINE uint32_t LL_RTC_BKP_GetRegister(TAMP_TypeDef *TAMPx, uint32_t Ba
   /* Read the specified register */
   return (*(__IO uint32_t *)tmp);
 }
-#endif /* TAMP_BKP0R_BKP */
+#endif /* TAMP_BKP0R */
 
 /**
   * @}
@@ -5375,4 +5374,3 @@ ErrorStatus LL_RTC_WaitForSynchro(RTC_TypeDef *RTCx);
 
 #endif /* STM32H7xx_LL_RTC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

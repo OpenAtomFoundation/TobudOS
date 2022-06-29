@@ -74,14 +74,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
-  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
   */
 
@@ -1001,7 +999,7 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout, uint32_t Bank)
      flag will be set */
 
   uint32_t bsyflag = FLASH_FLAG_QW_BANK1;
-  uint32_t errorflag = FLASH->SR1 & FLASH_FLAG_ALL_ERRORS_BANK1;
+  uint32_t errorflag = 0;
   uint32_t tickstart = HAL_GetTick();
 
   assert_param(IS_FLASH_BANK_EXCLUSIVE(Bank));
@@ -1010,8 +1008,6 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout, uint32_t Bank)
 
   if (Bank == FLASH_BANK_2)
   {
-    /* Get Error Flags */
-    errorflag = (FLASH->SR2 & FLASH_FLAG_ALL_ERRORS_BANK2) | 0x80000000U;
     /* Select bsyflag depending on Bank */
     bsyflag = FLASH_FLAG_QW_BANK2;
   }
@@ -1027,6 +1023,18 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout, uint32_t Bank)
       }
     }
   }
+
+  /* Get Error Flags */
+  if (Bank == FLASH_BANK_1)
+  {
+    errorflag = FLASH->SR1 & FLASH_FLAG_ALL_ERRORS_BANK1;
+  }
+#if defined (DUAL_BANK)
+  else
+  {
+    errorflag = (FLASH->SR2 & FLASH_FLAG_ALL_ERRORS_BANK2) | 0x80000000U;
+  }
+#endif /* DUAL_BANK */
 
   /* In case of error reported in Flash SR1 or SR2 register */
   if((errorflag & 0x7FFFFFFFU) != 0U)
@@ -1184,4 +1192,4 @@ HAL_StatusTypeDef FLASH_CRC_WaitForLastOperation(uint32_t Timeout, uint32_t Bank
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

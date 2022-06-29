@@ -5,6 +5,17 @@
   * @brief   HAL module driver.
   *          This is the common part of the HAL initialization
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                      ##### How to use this driver #####
@@ -18,17 +29,6 @@
          (+) Services HAL APIs
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -47,10 +47,10 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /**
- * @brief STM32H7xx HAL Driver version number V1.10.0
+ * @brief STM32H7xx HAL Driver version number V1.11.0
    */
 #define __STM32H7xx_HAL_VERSION_MAIN   (0x01UL) /*!< [31:24] main version */
-#define __STM32H7xx_HAL_VERSION_SUB1   (0x0AUL) /*!< [23:16] sub1 version */
+#define __STM32H7xx_HAL_VERSION_SUB1   (0x0BUL) /*!< [23:16] sub1 version */
 #define __STM32H7xx_HAL_VERSION_SUB2   (0x00UL) /*!< [15:8]  sub2 version */
 #define __STM32H7xx_HAL_VERSION_RC     (0x00UL) /*!< [7:0]  release candidate */
 #define __STM32H7xx_HAL_VERSION         ((__STM32H7xx_HAL_VERSION_MAIN << 24)\
@@ -914,7 +914,7 @@ void HAL_SYSCFG_ADC2ALT_Rout1Config(uint32_t Adc2AltRout1)
   * @brief  Enable the Debug Module during Domain1/CDomain SLEEP mode
   * @retval None
   */
-void HAL_EnableDBGSleepMode(void)
+void HAL_DBGMCU_EnableDBGSleepMode(void)
 {
   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD1);
 }
@@ -923,7 +923,7 @@ void HAL_EnableDBGSleepMode(void)
   * @brief  Disable the Debug Module during Domain1/CDomain SLEEP mode
   * @retval None
   */
-void HAL_DisableDBGSleepMode(void)
+void HAL_DBGMCU_DisableDBGSleepMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD1);
 }
@@ -933,7 +933,7 @@ void HAL_DisableDBGSleepMode(void)
   * @brief  Enable the Debug Module during Domain1/CDomain STOP mode
   * @retval None
   */
-void HAL_EnableDBGStopMode(void)
+void HAL_DBGMCU_EnableDBGStopMode(void)
 {
   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD1);
 }
@@ -942,7 +942,7 @@ void HAL_EnableDBGStopMode(void)
   * @brief  Disable the Debug Module during Domain1/CDomain STOP mode
   * @retval None
   */
-void HAL_DisableDBGStopMode(void)
+void HAL_DBGMCU_DisableDBGStopMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD1);
 }
@@ -951,7 +951,7 @@ void HAL_DisableDBGStopMode(void)
   * @brief  Enable the Debug Module during Domain1/CDomain STANDBY mode
   * @retval None
   */
-void HAL_EnableDBGStandbyMode(void)
+void HAL_DBGMCU_EnableDBGStandbyMode(void)
 {
   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD1);
 }
@@ -960,7 +960,7 @@ void HAL_EnableDBGStandbyMode(void)
   * @brief  Disable the Debug Module during Domain1/CDomain STANDBY mode
   * @retval None
   */
-void HAL_DisableDBGStandbyMode(void)
+void HAL_DBGMCU_DisableDBGStandbyMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD1);
 }
@@ -1314,4 +1314,4 @@ void HAL_EXTI_D3_EventInputConfig(uint32_t EXTI_Line, uint32_t EXTI_LineCmd , ui
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

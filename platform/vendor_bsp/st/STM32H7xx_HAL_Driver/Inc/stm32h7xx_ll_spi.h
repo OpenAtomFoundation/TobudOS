@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -43,8 +42,16 @@ extern "C" {
 /* Private constants ---------------------------------------------------------*/
 
 /* Private macros ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
 /** @defgroup SPI_LL_Private_Macros SPI Private Macros
+  * @{
+  */
+/**
+  * @}
+  */
+
+/* Exported types ------------------------------------------------------------*/
+#if defined(USE_FULL_LL_DRIVER)
+/** @defgroup SPI_LL_Exported_Types SPI Exported Types
   * @{
   */
 
@@ -56,53 +63,68 @@ typedef struct
   uint32_t TransferDirection;       /*!< Specifies the SPI unidirectional or bidirectional data mode.
                                          This parameter can be a value of @ref SPI_LL_EC_TRANSFER_MODE.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetTransferDirection().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetTransferDirection().*/
 
   uint32_t Mode;                    /*!< Specifies the SPI mode (Master/Slave).
                                          This parameter can be a value of @ref SPI_LL_EC_MODE.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetMode().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetMode().*/
 
   uint32_t DataWidth;               /*!< Specifies the SPI data width.
                                          This parameter can be a value of @ref SPI_LL_EC_DATAWIDTH.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetDataWidth().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetDataWidth().*/
 
   uint32_t ClockPolarity;           /*!< Specifies the serial clock steady state.
                                          This parameter can be a value of @ref SPI_LL_EC_POLARITY.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetClockPolarity().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetClockPolarity().*/
 
   uint32_t ClockPhase;              /*!< Specifies the clock active edge for the bit capture.
                                          This parameter can be a value of @ref SPI_LL_EC_PHASE.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetClockPhase().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetClockPhase().*/
 
-  uint32_t NSS;                     /*!< Specifies whether the NSS signal is managed by hardware (NSS pin) or by software using the SSI bit.
+  uint32_t NSS;                     /*!< Specifies whether the NSS signal is managed by hardware (NSS pin)
+                                         or by software using the SSI bit.
+
                                          This parameter can be a value of @ref SPI_LL_EC_NSS_MODE.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetNSSMode().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetNSSMode().*/
 
-  uint32_t BaudRate;                /*!< Specifies the BaudRate prescaler value which will be used to configure the transmit and receive SCK clock.
+  uint32_t BaudRate;                /*!< Specifies the BaudRate prescaler value which will be used to configure
+                                         the transmit and receive SCK clock.
                                          This parameter can be a value of @ref SPI_LL_EC_BAUDRATEPRESCALER.
-                                         @note The communication clock is derived from the master clock. The slave clock does not need to be set.
+                                         @note The communication clock is derived from the master clock.
+                                         The slave clock does not need to be set.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetBaudRatePrescaler().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetBaudRatePrescaler().*/
 
   uint32_t BitOrder;                /*!< Specifies whether data transfers start from MSB or LSB bit.
                                          This parameter can be a value of @ref SPI_LL_EC_BIT_ORDER.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetTransferBitOrder().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetTransferBitOrder().*/
 
   uint32_t CRCCalculation;          /*!< Specifies if the CRC calculation is enabled or not.
                                          This parameter can be a value of @ref SPI_LL_EC_CRC_CALCULATION.
 
-                                         This feature can be modified afterwards using unitary functions @ref LL_SPI_EnableCRC() and @ref LL_SPI_DisableCRC().*/
+                                         This feature can be modified afterwards using unitary functions
+                                         @ref LL_SPI_EnableCRC() and @ref LL_SPI_DisableCRC().*/
 
   uint32_t CRCPoly;                 /*!< Specifies the polynomial used for the CRC calculation.
-                                         This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFFFFFFFF.
+                                         This parameter must be a number between Min_Data = 0x00
+                                         and Max_Data = 0xFFFFFFFF.
 
-                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetCRCPolynomial().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_SPI_SetCRCPolynomial().*/
 
 } LL_SPI_InitTypeDef;
 
@@ -195,7 +217,8 @@ typedef struct
 #define LL_SPI_SS_IDLENESS_12CYCLE                 (SPI_CFG2_MSSI_3 | SPI_CFG2_MSSI_2)
 #define LL_SPI_SS_IDLENESS_13CYCLE                 (SPI_CFG2_MSSI_3 | SPI_CFG2_MSSI_2 | SPI_CFG2_MSSI_0)
 #define LL_SPI_SS_IDLENESS_14CYCLE                 (SPI_CFG2_MSSI_3 | SPI_CFG2_MSSI_2 | SPI_CFG2_MSSI_1)
-#define LL_SPI_SS_IDLENESS_15CYCLE                 (SPI_CFG2_MSSI_3 | SPI_CFG2_MSSI_2 | SPI_CFG2_MSSI_1 | SPI_CFG2_MSSI_0)
+#define LL_SPI_SS_IDLENESS_15CYCLE                 (SPI_CFG2_MSSI_3\
+                                                    | SPI_CFG2_MSSI_2 | SPI_CFG2_MSSI_1 | SPI_CFG2_MSSI_0)
 /**
   * @}
   */
@@ -218,7 +241,8 @@ typedef struct
 #define LL_SPI_ID_IDLENESS_12CYCLE                 (SPI_CFG2_MIDI_3 | SPI_CFG2_MIDI_2)
 #define LL_SPI_ID_IDLENESS_13CYCLE                 (SPI_CFG2_MIDI_3 | SPI_CFG2_MIDI_2 | SPI_CFG2_MIDI_0)
 #define LL_SPI_ID_IDLENESS_14CYCLE                 (SPI_CFG2_MIDI_3 | SPI_CFG2_MIDI_2 | SPI_CFG2_MIDI_1)
-#define LL_SPI_ID_IDLENESS_15CYCLE                 (SPI_CFG2_MIDI_3 | SPI_CFG2_MIDI_2 | SPI_CFG2_MIDI_1 | SPI_CFG2_MIDI_0)
+#define LL_SPI_ID_IDLENESS_15CYCLE                 (SPI_CFG2_MIDI_3\
+                                                    | SPI_CFG2_MIDI_2 | SPI_CFG2_MIDI_1 | SPI_CFG2_MIDI_0)
 /**
   * @}
   */
@@ -348,7 +372,8 @@ typedef struct
 #define LL_SPI_DATAWIDTH_13BIT                     (SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2)
 #define LL_SPI_DATAWIDTH_14BIT                     (SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_15BIT                     (SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1)
-#define LL_SPI_DATAWIDTH_16BIT                     (SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
+#define LL_SPI_DATAWIDTH_16BIT                     (SPI_CFG1_DSIZE_3\
+                                                    | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_17BIT                     (SPI_CFG1_DSIZE_4)
 #define LL_SPI_DATAWIDTH_18BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_19BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_1)
@@ -356,15 +381,20 @@ typedef struct
 #define LL_SPI_DATAWIDTH_21BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_2)
 #define LL_SPI_DATAWIDTH_22BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_23BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1)
-#define LL_SPI_DATAWIDTH_24BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
+#define LL_SPI_DATAWIDTH_24BIT                     (SPI_CFG1_DSIZE_4\
+                                                    | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_25BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3)
 #define LL_SPI_DATAWIDTH_26BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_27BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_1)
-#define LL_SPI_DATAWIDTH_28BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
+#define LL_SPI_DATAWIDTH_28BIT                     (SPI_CFG1_DSIZE_4\
+                                                    | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
 #define LL_SPI_DATAWIDTH_29BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2)
-#define LL_SPI_DATAWIDTH_30BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_0)
-#define LL_SPI_DATAWIDTH_31BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1)
-#define LL_SPI_DATAWIDTH_32BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
+#define LL_SPI_DATAWIDTH_30BIT                     (SPI_CFG1_DSIZE_4\
+                                                    | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_0)
+#define LL_SPI_DATAWIDTH_31BIT                     (SPI_CFG1_DSIZE_4\
+                                                    | SPI_CFG1_DSIZE_3 | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1)
+#define LL_SPI_DATAWIDTH_32BIT                     (SPI_CFG1_DSIZE_4 | SPI_CFG1_DSIZE_3\
+                                                    | SPI_CFG1_DSIZE_2 | SPI_CFG1_DSIZE_1 | SPI_CFG1_DSIZE_0)
 /**
   * @}
   */
@@ -387,7 +417,8 @@ typedef struct
 #define LL_SPI_FIFO_TH_13DATA                      (SPI_CFG1_FTHLV_3 | SPI_CFG1_FTHLV_2)
 #define LL_SPI_FIFO_TH_14DATA                      (SPI_CFG1_FTHLV_3 | SPI_CFG1_FTHLV_2 | SPI_CFG1_FTHLV_0)
 #define LL_SPI_FIFO_TH_15DATA                      (SPI_CFG1_FTHLV_3 | SPI_CFG1_FTHLV_2 | SPI_CFG1_FTHLV_1)
-#define LL_SPI_FIFO_TH_16DATA                      (SPI_CFG1_FTHLV_3 | SPI_CFG1_FTHLV_2 | SPI_CFG1_FTHLV_1 | SPI_CFG1_FTHLV_0)
+#define LL_SPI_FIFO_TH_16DATA                      (SPI_CFG1_FTHLV_3\
+                                                    | SPI_CFG1_FTHLV_2 | SPI_CFG1_FTHLV_1 | SPI_CFG1_FTHLV_0)
 /**
   * @}
   */
@@ -419,7 +450,8 @@ typedef struct
 #define LL_SPI_CRC_13BIT                           (SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2)
 #define LL_SPI_CRC_14BIT                           (SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_15BIT                           (SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1)
-#define LL_SPI_CRC_16BIT                           (SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
+#define LL_SPI_CRC_16BIT                           (SPI_CFG1_CRCSIZE_3\
+                                                    | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_17BIT                           (SPI_CFG1_CRCSIZE_4)
 #define LL_SPI_CRC_18BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_19BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_1)
@@ -427,15 +459,20 @@ typedef struct
 #define LL_SPI_CRC_21BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_2)
 #define LL_SPI_CRC_22BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_23BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1)
-#define LL_SPI_CRC_24BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
+#define LL_SPI_CRC_24BIT                           (SPI_CFG1_CRCSIZE_4\
+                                                    | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_25BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3)
 #define LL_SPI_CRC_26BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_27BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_1)
-#define LL_SPI_CRC_28BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
+#define LL_SPI_CRC_28BIT                           (SPI_CFG1_CRCSIZE_4\
+                                                    | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
 #define LL_SPI_CRC_29BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2)
-#define LL_SPI_CRC_30BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_0)
-#define LL_SPI_CRC_31BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1)
-#define LL_SPI_CRC_32BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
+#define LL_SPI_CRC_30BIT                           (SPI_CFG1_CRCSIZE_4\
+                                                    | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_0)
+#define LL_SPI_CRC_31BIT                           (SPI_CFG1_CRCSIZE_4\
+                                                    | SPI_CFG1_CRCSIZE_3 | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1)
+#define LL_SPI_CRC_32BIT                           (SPI_CFG1_CRCSIZE_4 | SPI_CFG1_CRCSIZE_3\
+                                                    | SPI_CFG1_CRCSIZE_2 | SPI_CFG1_CRCSIZE_1 | SPI_CFG1_CRCSIZE_0)
 /**
   * @}
   */
@@ -453,10 +490,10 @@ typedef struct
 /** @defgroup SPI_LL_EC_RX_FIFO RxFIFO Packing LeVel
   * @{
   */
-#define LL_SPI_RX_FIFO_0PACKET                     (0x00000000UL)                      /* 0 or multiple of 4 packet available is the RxFIFO */
-#define LL_SPI_RX_FIFO_1PACKET                     (SPI_SR_RXPLVL_0)
-#define LL_SPI_RX_FIFO_2PACKET                     (SPI_SR_RXPLVL_1)
-#define LL_SPI_RX_FIFO_3PACKET                     (SPI_SR_RXPLVL_1 | SPI_SR_RXPLVL_0)
+#define LL_SPI_RX_FIFO_0PACKET               (0x00000000UL)    /* 0 or multiple of 4 packet available is the RxFIFO */
+#define LL_SPI_RX_FIFO_1PACKET               (SPI_SR_RXPLVL_0)
+#define LL_SPI_RX_FIFO_2PACKET               (SPI_SR_RXPLVL_1)
+#define LL_SPI_RX_FIFO_3PACKET               (SPI_SR_RXPLVL_1 | SPI_SR_RXPLVL_0)
 /**
   * @}
   */
@@ -1253,7 +1290,8 @@ __STATIC_INLINE uint32_t LL_SPI_GetTransferBitOrder(SPI_TypeDef *SPIx)
 
 /**
   * @brief  Set Transfer Mode
-  * @note   This configuration can not be changed when SPI is enabled except for half duplex direction using LL_SPI_SetHalfDuplexDirection.
+  * @note   This configuration can not be changed when SPI is enabled except for half duplex direction
+  *         using LL_SPI_SetHalfDuplexDirection.
   * @rmtoll CR1          HDDIR         LL_SPI_SetTransferDirection\n
   *         CFG2         COMM          LL_SPI_SetTransferDirection
   * @param  SPIx SPI Instance
@@ -2402,7 +2440,7 @@ __STATIC_INLINE uint8_t LL_SPI_ReceiveData8(SPI_TypeDef *SPIx)
   */
 __STATIC_INLINE uint16_t LL_SPI_ReceiveData16(SPI_TypeDef *SPIx)
 {
-  return (uint16_t)(READ_REG(SPIx->RXDR));
+  return (*((__IO uint16_t *)&SPIx->RXDR));
 }
 
 /**
@@ -2442,7 +2480,7 @@ __STATIC_INLINE void LL_SPI_TransmitData16(SPI_TypeDef *SPIx, uint16_t TxData)
   *spitxdr = TxData;
 #else
   SPIx->TXDR = TxData;
-#endif
+#endif /* __GNUC__ */
 }
 
 /**
@@ -2569,37 +2607,44 @@ typedef struct
   uint32_t Mode;                    /*!< Specifies the I2S operating mode.
                                          This parameter can be a value of @ref I2S_LL_EC_MODE
 
-                                         This feature can be modified afterwards using unitary function @ref LL_I2S_SetTransferMode().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_I2S_SetTransferMode().*/
 
   uint32_t Standard;                /*!< Specifies the standard used for the I2S communication.
                                          This parameter can be a value of @ref I2S_LL_EC_STANDARD
 
-                                         This feature can be modified afterwards using unitary function @ref LL_I2S_SetStandard().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_I2S_SetStandard().*/
 
 
   uint32_t DataFormat;              /*!< Specifies the data format for the I2S communication.
                                          This parameter can be a value of @ref I2S_LL_EC_DATA_FORMAT
 
-                                         This feature can be modified afterwards using unitary function @ref LL_I2S_SetDataFormat().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_I2S_SetDataFormat().*/
 
 
   uint32_t MCLKOutput;              /*!< Specifies whether the I2S MCLK output is enabled or not.
                                          This parameter can be a value of @ref I2S_LL_EC_MCLK_OUTPUT
 
-                                         This feature can be modified afterwards using unitary functions @ref LL_I2S_EnableMasterClock() or @ref LL_I2S_DisableMasterClock.*/
+                                         This feature can be modified afterwards using unitary functions
+                                         @ref LL_I2S_EnableMasterClock() or @ref LL_I2S_DisableMasterClock.*/
 
 
   uint32_t AudioFreq;               /*!< Specifies the frequency selected for the I2S communication.
                                          This parameter can be a value of @ref I2S_LL_EC_AUDIO_FREQ
 
-                                         Audio Frequency can be modified afterwards using Reference manual formulas to calculate Prescaler Linear, Parity
-                                         and unitary functions @ref LL_I2S_SetPrescalerLinear() and @ref LL_I2S_SetPrescalerParity() to set it.*/
+                                         Audio Frequency can be modified afterwards using Reference manual formulas
+                                         to calculate Prescaler Linear, Parity and unitary functions
+                                         @ref LL_I2S_SetPrescalerLinear() and @ref LL_I2S_SetPrescalerParity()
+                                         to set it.*/
 
 
   uint32_t ClockPolarity;           /*!< Specifies the idle state of the I2S clock.
                                          This parameter can be a value of @ref I2S_LL_EC_POLARITY
 
-                                         This feature can be modified afterwards using unitary function @ref LL_I2S_SetClockPolarity().*/
+                                         This feature can be modified afterwards using unitary function
+                                         @ref LL_I2S_SetClockPolarity().*/
 
 } LL_I2S_InitTypeDef;
 
@@ -2671,8 +2716,8 @@ typedef struct
 /** @defgroup I2S_LL_EC_PRESCALER_PARITY Prescaler Factor
   * @{
   */
-#define LL_I2S_PRESCALER_PARITY_EVEN        (0x00000000UL)           /*!< Odd factor: Real divider value is =  I2SDIV * 2    */
-#define LL_I2S_PRESCALER_PARITY_ODD         (0x00000001UL)           /*!< Odd factor: Real divider value is = (I2SDIV * 2)+1 */
+#define LL_I2S_PRESCALER_PARITY_EVEN        (0x00000000UL)   /*!< Odd factor: Real divider value is =  I2SDIV * 2    */
+#define LL_I2S_PRESCALER_PARITY_ODD         (0x00000001UL)   /*!< Odd factor: Real divider value is = (I2SDIV * 2)+1 */
 /**
   * @}
   */
@@ -3708,5 +3753,3 @@ void        LL_I2S_ConfigPrescaler(SPI_TypeDef *SPIx, uint32_t PrescalerLinear, 
 #endif
 
 #endif /* STM32H7xx_LL_SPI_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

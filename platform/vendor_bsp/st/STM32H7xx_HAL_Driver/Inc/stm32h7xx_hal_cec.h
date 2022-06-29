@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -105,7 +104,7 @@ typedef struct
   uint16_t  OwnAddress;                 /*!< Own addresses configuration
                                              This parameter can be a value of @ref CEC_OWN_ADDRESS */
 
-  uint8_t  *RxBuffer;                    /*!< CEC Rx buffer pointeur */
+  uint8_t  *RxBuffer;                    /*!< CEC Rx buffer pointer */
 
 
 } CEC_InitTypeDef;
@@ -121,14 +120,14 @@ typedef struct
   *          b6  Error information
   *             0  : No Error
   *             1  : Error
-  *          b5     IP initialization status
-  *             0  : Reset (IP not initialized)
-  *             1  : Init done (IP initialized. HAL CEC Init function already called)
+  *          b5     CEC peripheral initialization status
+  *             0  : Reset (peripheral not initialized)
+  *             1  : Init done (peripheral initialized. HAL CEC Init function already called)
   *          b4-b3  (not used)
   *             xx : Should be set to 00
   *          b2     Intrinsic process state
   *             0  : Ready
-  *             1  : Busy (IP busy with some configuration or internal operations)
+  *             1  : Busy (peripheral busy with some configuration or internal operations)
   *          b1     (not used)
   *             x  : Should be set to 0
   *          b0     Tx state
@@ -138,9 +137,9 @@ typedef struct
   *          RxState value coding follow below described bitmap :
   *          b7-b6  (not used)
   *             xx : Should be set to 00
-  *          b5     IP initialization status
-  *             0  : Reset (IP not initialized)
-  *             1  : Init done (IP initialized)
+  *          b5     CEC peripheral initialization status
+  *             0  : Reset (peripheral not initialized)
+  *             1  : Init done (peripheral initialized)
   *          b4-b2  (not used)
   *            xxx : Should be set to 000
   *          b1     Rx state
@@ -791,4 +790,3 @@ uint32_t HAL_CEC_GetError(CEC_HandleTypeDef *hcec);
 
 #endif /* STM32H7xxHAL_CEC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

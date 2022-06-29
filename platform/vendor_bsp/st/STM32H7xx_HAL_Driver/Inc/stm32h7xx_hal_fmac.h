@@ -2,18 +2,16 @@
   ******************************************************************************
   * @file    stm32h7xx_hal_fmac.h
   * @author  MCD Application Team
-  * @brief   This file contains all the functions prototypes for the FMAC firmware
-  *          library.
+  * @brief   Header for stm32h7xx_hal_fmac.c module
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -82,14 +80,16 @@ typedef struct
   uint16_t                   InputCurrentSize;   /*!< Number of the input elements already written into FMAC */
 
   uint16_t                   *pInputSize;        /*!< Number of input elements to write (memory allocated to pInput).
-                                                      In case of early interruption of the filter operation, its value will be updated. */
+                                                      In case of early interruption of the filter operation,
+                                                      its value will be updated. */
 
   int16_t                    *pOutput;           /*!< Pointer to FMAC output data buffer */
 
   uint16_t                   OutputCurrentSize;  /*!< Number of the output elements already read from FMAC */
 
   uint16_t                   *pOutputSize;       /*!< Number of output elements to read (memory allocated to pOutput).
-                                                      In case of early interruption of the filter operation, its value will be updated. */
+                                                      In case of early interruption of the filter operation,
+                                                      its value will be updated. */
 
   DMA_HandleTypeDef          *hdmaIn;            /*!< FMAC peripheral input data DMA handle parameters */
 
@@ -136,7 +136,7 @@ typedef struct
 
 #if (USE_HAL_FMAC_REGISTER_CALLBACKS == 1)
 /**
-  * @brief  FMAC Callback ID structure definition
+  * @brief  FMAC Callback ID enumeration definition
   */
 typedef enum
 {
@@ -165,33 +165,38 @@ typedef  void (*pFMAC_CallbackTypeDef)(FMAC_HandleTypeDef *hfmac);  /*!< pointer
 typedef struct
 {
   uint8_t                    InputBaseAddress;  /*!< Base address of the input buffer (X1) within the internal memory (0x00 to 0xFF).
-                                                     Ignored if InputBufferSize is set to 0 (previous configuration kept).
-                                                     NB: the buffers can overlap or even coincide exactly. */
+                                                     Ignored if InputBufferSize is set to 0
+                                                     (previous configuration kept).
+                                                     Note: the buffers can overlap or even coincide exactly. */
 
-  uint8_t                    InputBufferSize;   /*!< Number of 16-bit addresses allocated to the input buffer (including the optional "headroom").
+  uint8_t                    InputBufferSize;   /*!< Number of 16-bit words allocated to the input buffer (including the optional "headroom").
                                                      0 if a previous configuration should be kept. */
 
   uint32_t                   InputThreshold;    /*!< Input threshold: the buffer full flag will be set if the number of free spaces
-                                                     in the buffer is inferior to this threshold.
-                                                     This parameter can be a value of @ref FMAC_Data_Buffer_Threshold. */
+                                                     in the buffer is lower than this threshold.
+                                                     This parameter can be a value
+                                                     of @ref FMAC_Data_Buffer_Threshold. */
 
   uint8_t                    CoeffBaseAddress;  /*!< Base address of the coefficient buffer (X2) within the internal memory (0x00 to 0xFF).
-                                                     Ignored if CoeffBufferSize is set to 0 (previous configuration kept).
-                                                     NB: the buffers can overlap or even coincide exactly. */
+                                                     Ignored if CoeffBufferSize is set to 0
+                                                     (previous configuration kept).
+                                                     Note: the buffers can overlap or even coincide exactly. */
 
-  uint8_t                    CoeffBufferSize;   /*!< Number of 16-bit addresses allocated to the coefficient buffer.
+  uint8_t                    CoeffBufferSize;   /*!< Number of 16-bit words allocated to the coefficient buffer.
                                                      0 if a previous configuration should be kept. */
 
   uint8_t                    OutputBaseAddress; /*!< Base address of the output buffer (Y) within the internal memory (0x00 to 0xFF).
-                                                     Ignored if OuputBufferSize is set to 0 (previous configuration kept).
-                                                     NB: the buffers can overlap or even coincide exactly. */
+                                                     Ignored if OuputBufferSize is set to 0
+                                                     (previous configuration kept).
+                                                     Note: the buffers can overlap or even coincide exactly. */
 
-  uint8_t                    OutputBufferSize;  /*!< Number of 16-bit addresses allocated to the output buffer (including the optional "headroom").
+  uint8_t                    OutputBufferSize;  /*!< Number of 16-bit words allocated to the output buffer (including the optional "headroom").
                                                      0 if a previous configuration should be kept. */
 
   uint32_t                   OutputThreshold;   /*!< Output threshold: the buffer empty flag will be set if the number of unread values
-                                                     in the buffer is inferior to this threshold.
-                                                     This parameter can be a value of @ref FMAC_Data_Buffer_Threshold. */
+                                                     in the buffer is lower than this threshold.
+                                                     This parameter can be a value
+                                                     of @ref FMAC_Data_Buffer_Threshold. */
 
   int16_t                    *pCoeffA;          /*!< [IIR only] Initialization of the coefficient vector A.
                                                      If not needed, it should be set to NULL. */
@@ -199,21 +204,25 @@ typedef struct
   uint8_t                    CoeffASize;        /*!< Size of the coefficient vector A. */
 
   int16_t                    *pCoeffB;          /*!< Initialization of the coefficient vector B.
-                                                     If not needed (re-use of a previously loaded buffer), it should be set to NULL. */
+                                                     If not needed (re-use of a previously loaded buffer),
+                                                     it should be set to NULL. */
 
   uint8_t                    CoeffBSize;        /*!< Size of the coefficient vector B. */
 
-  uint8_t                    InputAccess;       /*!< Access to the input buffer (internal memory area): DMT, IT, Polling, None.
+  uint8_t                    InputAccess;       /*!< Access to the input buffer (internal memory area): DMA, IT, Polling, None.
                                                      This parameter can be a value of @ref FMAC_Buffer_Access. */
 
   uint8_t                    OutputAccess;      /*!< Access to the output buffer (internal memory area): DMA, IT, Polling, None.
                                                      This parameter can be a value of @ref FMAC_Buffer_Access. */
 
-  uint32_t                   Clip;              /*!< Enable or disable the clipping feature (wrapping when the q1.15 range is exceeded).
+  uint32_t                   Clip;              /*!< Enable or disable the clipping feature. If the q1.15 range is exceeded, wrapping
+                                                     is done when the clipping feature is disabled
+                                                     and saturation is done when the clipping feature is enabled.
                                                      This parameter can be a value of @ref FMAC_Clip_State. */
 
   uint32_t                   Filter;            /*!< Filter type.
-                                                     This parameter can be a value of @ref FMAC_Functions (filter related values). */
+                                                     This parameter can be a value
+                                                     of @ref FMAC_Functions (filter related values). */
 
   uint8_t                    P;                 /*!< Parameter P (vector length, number of filter taps, etc.). */
 
@@ -238,17 +247,17 @@ typedef struct
 /** @defgroup FMAC_Error_Code FMAC Error code
   * @{
   */
-#define HAL_FMAC_ERROR_NONE                0x00000000UL /*!< No error               */
-#define HAL_FMAC_ERROR_SAT                 0x00000001UL /*!< Saturation error       */
-#define HAL_FMAC_ERROR_UNFL                0x00000002UL /*!< Underflow error        */
-#define HAL_FMAC_ERROR_OVFL                0x00000004UL /*!< Overflow error         */
-#define HAL_FMAC_ERROR_DMA                 0x00000008UL /*!< DMA error              */
-#define HAL_FMAC_ERROR_RESET               0x00000010UL /*!< Reset error            */
-#define HAL_FMAC_ERROR_PARAM               0x00000020UL /*!< Parameter error        */
+#define HAL_FMAC_ERROR_NONE                0x00000000U /*!< No error               */
+#define HAL_FMAC_ERROR_SAT                 0x00000001U /*!< Saturation error       */
+#define HAL_FMAC_ERROR_UNFL                0x00000002U /*!< Underflow error        */
+#define HAL_FMAC_ERROR_OVFL                0x00000004U /*!< Overflow error         */
+#define HAL_FMAC_ERROR_DMA                 0x00000008U /*!< DMA error              */
+#define HAL_FMAC_ERROR_RESET               0x00000010U /*!< Reset error            */
+#define HAL_FMAC_ERROR_PARAM               0x00000020U /*!< Parameter error        */
 #if (USE_HAL_FMAC_REGISTER_CALLBACKS == 1)
-#define HAL_FMAC_ERROR_INVALID_CALLBACK    0x00000040UL /*!< Invalid Callback error */
+#define HAL_FMAC_ERROR_INVALID_CALLBACK    0x00000040U /*!< Invalid Callback error */
 #endif /* USE_HAL_FMAC_REGISTER_CALLBACKS */
-#define HAL_FMAC_ERROR_TIMEOUT             0x00000080UL /*!< Timeout error          */
+#define HAL_FMAC_ERROR_TIMEOUT             0x00000080U /*!< Timeout error          */
 
 /**
   * @}
@@ -257,11 +266,11 @@ typedef struct
 /** @defgroup FMAC_Functions FMAC Functions
   * @{
   */
-#define FMAC_FUNC_LOAD_X1                  ((uint32_t)(FMAC_PARAM_FUNC_0))                                        /*!< Load X1 buffer                            */
-#define FMAC_FUNC_LOAD_X2                  ((uint32_t)(FMAC_PARAM_FUNC_1))                                        /*!< Load X2 buffer                            */
-#define FMAC_FUNC_LOAD_Y                   ((uint32_t)(FMAC_PARAM_FUNC_1 | FMAC_PARAM_FUNC_0))                    /*!< Load Y buffer                             */
-#define FMAC_FUNC_CONVO_FIR                ((uint32_t)(FMAC_PARAM_FUNC_3))                                        /*!< Convolution (FIR filter)                  */
-#define FMAC_FUNC_IIR_DIRECT_FORM_1        ((uint32_t)(FMAC_PARAM_FUNC_3 | FMAC_PARAM_FUNC_0))                    /*!< IIR filter (direct form 1)                */
+#define FMAC_FUNC_LOAD_X1                  (FMAC_PARAM_FUNC_0)                                        /*!< Load X1 buffer                            */
+#define FMAC_FUNC_LOAD_X2                  (FMAC_PARAM_FUNC_1)                                        /*!< Load X2 buffer                            */
+#define FMAC_FUNC_LOAD_Y                   (FMAC_PARAM_FUNC_1 | FMAC_PARAM_FUNC_0)                    /*!< Load Y buffer                             */
+#define FMAC_FUNC_CONVO_FIR                (FMAC_PARAM_FUNC_3)                                        /*!< Convolution (FIR filter)                  */
+#define FMAC_FUNC_IIR_DIRECT_FORM_1        (FMAC_PARAM_FUNC_3 | FMAC_PARAM_FUNC_0)                    /*!< IIR filter (direct form 1)                */
 /**
   * @}
   */
@@ -270,15 +279,19 @@ typedef struct
   * @{
   * @note     This parameter sets a watermark for buffer full (input) or buffer empty (output).
   */
-#define FMAC_THRESHOLD_1                   0x00000000UL    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 1.
-                                                                Output: Buffer empty flag set if the number of unread values in the buffer is less than 1. */
-#define FMAC_THRESHOLD_2                   0x01000000UL    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 2.
-                                                                Output: Buffer empty flag set if the number of unread values in the buffer is less than 2. */
-#define FMAC_THRESHOLD_4                   0x02000000UL    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 4.
-                                                                Output: Buffer empty flag set if the number of unread values in the buffer is less than 4. */
-#define FMAC_THRESHOLD_8                   0x03000000UL    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 8.
-                                                                Output: Buffer empty flag set if the number of unread values in the buffer is less than 8. */
-#define FMAC_THRESHOLD_NO_VALUE            0xFFFFFFFFUL    /*!< The configured threshold value shouldn't be changed */
+#define FMAC_THRESHOLD_1                   0x00000000U    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 1.
+                                                                Output: Buffer empty flag set if the number
+                                                                of unread values in the buffer is less than 1. */
+#define FMAC_THRESHOLD_2                   0x01000000U    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 2.
+                                                                Output: Buffer empty flag set if the number
+                                                                of unread values in the buffer is less than 2. */
+#define FMAC_THRESHOLD_4                   0x02000000U    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 4.
+                                                                Output: Buffer empty flag set if the number
+                                                                of unread values in the buffer is less than 4. */
+#define FMAC_THRESHOLD_8                   0x03000000U    /*!< Input: Buffer full flag set if the number of free spaces in the buffer is less than 8.
+                                                                Output: Buffer empty flag set if the number
+                                                                of unread values in the buffer is less than 8. */
+#define FMAC_THRESHOLD_NO_VALUE            0xFFFFFFFFU    /*!< The configured threshold value shouldn't be changed */
 /**
   * @}
   */
@@ -287,7 +300,7 @@ typedef struct
   * @{
   */
 #define FMAC_BUFFER_ACCESS_NONE            0x00U           /*!< Buffer handled by an external IP (ADC for instance) */
-#define FMAC_BUFFER_ACCESS_DMA             0x01U           /*!< Buffer accessed through the FMAC DMA */
+#define FMAC_BUFFER_ACCESS_DMA             0x01U           /*!< Buffer accessed through DMA */
 #define FMAC_BUFFER_ACCESS_POLLING         0x02U           /*!< Buffer accessed through polling */
 #define FMAC_BUFFER_ACCESS_IT              0x03U           /*!< Buffer accessed through interruptions */
 /**
@@ -297,7 +310,7 @@ typedef struct
 /** @defgroup FMAC_Clip_State FMAC Clip State
   * @{
   */
-#define FMAC_CLIP_DISABLED                 0x00000000UL    /*!< Clipping disabled */
+#define FMAC_CLIP_DISABLED                 0x00000000U     /*!< Clipping disabled */
 #define FMAC_CLIP_ENABLED                  FMAC_CR_CLIPEN  /*!< Clipping enabled */
 /**
   * @}
@@ -327,52 +340,20 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMAC_DMAR DMA Read Request Enable bit
+/**
+  * @}
+  */
+
+
+/* External variables --------------------------------------------------------*/
+/** @defgroup FMAC_External_variables FMAC External variables
   * @{
   */
-#define FMAC_DMA_REN                       FMAC_CR_DMAREN  /*!< DMA Read Requests Enable */
 /**
   * @}
   */
 
-/** @defgroup FMAC_DMAW DMA Write Request Enable bit
-  * @{
-  */
-#define FMAC_DMA_WEN                       FMAC_CR_DMAWEN  /*!< DMA Write Channel Enable */
-/**
-  * @}
-  */
-
-/** @defgroup FMAC_DMAS DMA START bit
-  * @{
-  */
-#define FMAC_START                         FMAC_PARAM_START  /*!< DMA Start */
-/**
-  * @}
-  */
-
-/** @defgroup FMAC_TimeOut_Value    FMAC polling-based communications time-out value
-  * @{
-  */
-#define HAL_FMAC_TIMEOUT_VALUE             1000UL          /*!< FMAC polling-based communications time-out value */
-/**
-  * @}
-  */
-
-/** @defgroup FMAC_Reset_TimeOut_Value    FMAC reset time-out value
-  * @{
-  */
-#define HAL_FMAC_RESET_TIMEOUT_VALUE       500UL           /*!< FMAC reset time-out value */
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-
-/* Exported macro ------------------------------------------------------------*/
+/* Exported macros -----------------------------------------------------------*/
 /** @defgroup FMAC_Exported_Macros FMAC Exported Macros
   * @{
   */
@@ -392,10 +373,10 @@ typedef struct
 #endif /* USE_HAL_FMAC_REGISTER_CALLBACKS */
 
 /**
-  * @brief  Enable the FMAC interrupt when result is ready
+  * @brief  Enable the specified FMAC interrupt
   * @param  __HANDLE__ FMAC handle.
   * @param  __INTERRUPT__ FMAC Interrupt.
-  *         This parameter can be one of the following values:
+  *         This parameter can be any combination of the following values:
   *            @arg @ref FMAC_IT_RIEN    Read interrupt enable
   *            @arg @ref FMAC_IT_WIEN    Write interrupt enable
   *            @arg @ref FMAC_IT_OVFLIEN Overflow error interrupt enable
@@ -410,7 +391,7 @@ typedef struct
   * @brief  Disable the FMAC interrupt
   * @param  __HANDLE__ FMAC handle.
   * @param  __INTERRUPT__ FMAC Interrupt.
-  *         This parameter can be one of the following values:
+  *         This parameter can be any combination of the following values:
   *            @arg @ref FMAC_IT_RIEN    Read interrupt enable
   *            @arg @ref FMAC_IT_WIEN    Write interrupt enable
   *            @arg @ref FMAC_IT_OVFLIEN Overflow error interrupt enable
@@ -424,7 +405,7 @@ typedef struct
 /** @brief  Check whether the specified FMAC interrupt occurred or not.
   * @param  __HANDLE__ FMAC handle.
   * @param  __INTERRUPT__ FMAC interrupt to check.
-  *         This parameter can be one of the following values:
+  *         This parameter can be any combination of the following values:
   *            @arg @ref FMAC_FLAG_YEMPTY Y Buffer Empty Flag
   *            @arg @ref FMAC_FLAG_X1FULL X1 Buffer Full Flag
   *            @arg @ref FMAC_FLAG_OVFL   Overflow Error Flag
@@ -446,7 +427,7 @@ typedef struct
 /** @brief  Check whether the specified FMAC status flag is set or not.
   * @param  __HANDLE__ FMAC handle.
   * @param  __FLAG__ FMAC flag to check.
-  *         This parameter can be one of the following values:
+  *         This parameter can be any combination of the following values:
   *            @arg @ref FMAC_FLAG_YEMPTY Y Buffer Empty Flag
   *            @arg @ref FMAC_FLAG_X1FULL X1 Buffer Full Flag
   *            @arg @ref FMAC_FLAG_OVFL   Overflow Error Flag
@@ -483,8 +464,8 @@ typedef struct
   * @}
   */
 
-/* Private macros --------------------------------------------------------*/
-/** @addtogroup  FMAC_Private_Macros
+/* Private Macros-----------------------------------------------------------*/
+/** @addtogroup  FMAC_Private_Macros FMAC Private Macros
   * @{
   */
 
@@ -500,7 +481,7 @@ typedef struct
                                         ((__FUNCTION__) == FMAC_FUNC_IIR_DIRECT_FORM_1))
 
 /**
-  * @brief  Verify the FMAC load function.
+  * @brief  Verify the FMAC load function used for input data, output data or coefficients.
   * @param  __FUNCTION__ ID of the load function.
   * @retval SET (__FUNCTION__ is a valid value) or RESET (__FUNCTION__ is invalid)
   */
@@ -509,7 +490,7 @@ typedef struct
                                              ((__FUNCTION__) == FMAC_FUNC_LOAD_Y))
 
 /**
-  * @brief  Verify the FMAC load function.
+  * @brief  Verify the FMAC load function used with N values as input or output data.
   * @param  __FUNCTION__ ID of the load function.
   * @retval SET (__FUNCTION__ is a valid value) or RESET (__FUNCTION__ is invalid)
   */
@@ -517,7 +498,7 @@ typedef struct
                                                ((__FUNCTION__) == FMAC_FUNC_LOAD_Y))
 
 /**
-  * @brief  Verify the FMAC load function.
+  * @brief  Verify the FMAC load function used with N + M values as coefficients.
   * @param  __FUNCTION__ ID of the load function.
   * @retval SET (__FUNCTION__ is a valid value) or RESET (__FUNCTION__ is invalid)
   */
@@ -593,6 +574,21 @@ typedef struct
                                             ((__CLIP_STATE__) == FMAC_CLIP_ENABLED))
 
 /**
+  * @brief  Check whether the threshold is applicable.
+  * @param  __SIZE__ Size of the matching buffer.
+  * @param  __WM__ Watermark value.
+  * @param  __ACCESS__ Access to the buffer (polling, it, dma, none).
+  * @retval THRESHOLD
+  */
+#define IS_FMAC_THRESHOLD_APPLICABLE(__SIZE__, __WM__, __ACCESS__) \
+  (( (__SIZE__) >= (((__WM__) == FMAC_THRESHOLD_1)? 1U: \
+                    ((__WM__) == FMAC_THRESHOLD_2)? 2U: \
+                    ((__WM__) == FMAC_THRESHOLD_4)? 4U:8U))&& \
+   ((((__ACCESS__) == FMAC_BUFFER_ACCESS_DMA)&& \
+     ((__WM__) == FMAC_THRESHOLD_1))|| \
+    ((__ACCESS__ )!= FMAC_BUFFER_ACCESS_DMA)))
+
+/**
   * @}
   */
 
@@ -624,8 +620,8 @@ HAL_StatusTypeDef HAL_FMAC_UnRegisterCallback(FMAC_HandleTypeDef *hfmac, HAL_FMA
   * @{
   */
 /* Peripheral Control functions ***********************************************/
-HAL_StatusTypeDef HAL_FMAC_FilterConfig(FMAC_HandleTypeDef *hfmac, FMAC_FilterConfigTypeDef *sConfig);
-HAL_StatusTypeDef HAL_FMAC_FilterConfig_DMA(FMAC_HandleTypeDef *hfmac, FMAC_FilterConfigTypeDef *sConfig);
+HAL_StatusTypeDef HAL_FMAC_FilterConfig(FMAC_HandleTypeDef *hfmac, FMAC_FilterConfigTypeDef *pConfig);
+HAL_StatusTypeDef HAL_FMAC_FilterConfig_DMA(FMAC_HandleTypeDef *hfmac, FMAC_FilterConfigTypeDef *pConfig);
 HAL_StatusTypeDef HAL_FMAC_FilterPreload(FMAC_HandleTypeDef *hfmac, int16_t *pInput, uint8_t InputSize,
                                          int16_t *pOutput, uint8_t OutputSize);
 HAL_StatusTypeDef HAL_FMAC_FilterPreload_DMA(FMAC_HandleTypeDef *hfmac, int16_t *pInput, uint8_t InputSize,
@@ -692,5 +688,3 @@ uint32_t HAL_FMAC_GetError(FMAC_HandleTypeDef *hfmac);
 #endif
 
 #endif /* STM32H7xx_HAL_FMAC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

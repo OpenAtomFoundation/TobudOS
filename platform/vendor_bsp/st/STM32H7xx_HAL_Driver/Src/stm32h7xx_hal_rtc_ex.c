@@ -11,6 +11,17 @@
   *           + Extended Control functions
   *           + Extended RTC features functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                   ##### How to use this driver #####
@@ -86,18 +97,6 @@
         function.
 
    @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -251,10 +250,19 @@ HAL_StatusTypeDef HAL_RTCEx_SetTimeStamp_IT(RTC_HandleTypeDef *hrtc, uint32_t Ti
   /* Enable IT timestamp */
   __HAL_RTC_TIMESTAMP_ENABLE_IT(hrtc, RTC_IT_TS);
 
-#if !defined(DUAL_CORE)
   /* RTC timestamp Interrupt Configuration: EXTI configuration */
+#if defined(DUAL_CORE)
+  if (HAL_GetCurrentCPUID() == CM7_CPUID)
+  {
+    __HAL_RTC_TAMPER_TIMESTAMP_EXTI_ENABLE_IT();
+  }
+  else
+  {
+    __HAL_RTC_TAMPER_TIMESTAMP_EXTID2_ENABLE_IT();
+  }
+#else /* SINGLE_CORE */
   __HAL_RTC_TAMPER_TIMESTAMP_EXTI_ENABLE_IT();
-#endif
+#endif /* DUAL_CORE */
 
   __HAL_RTC_TAMPER_TIMESTAMP_EXTI_ENABLE_RISING_EDGE();
 
@@ -912,10 +920,19 @@ HAL_StatusTypeDef HAL_RTCEx_SetTamper_IT(RTC_HandleTypeDef * hrtc, RTC_TamperTyp
   /* Copy desired configuration into configuration register */
   hrtc->Instance->TAMPCR = tmpreg;
 
-#if !defined(DUAL_CORE)
   /* RTC Tamper Interrupt Configuration: EXTI configuration */
+#if defined(DUAL_CORE)
+  if (HAL_GetCurrentCPUID() == CM7_CPUID)
+  {
+    __HAL_RTC_TAMPER_TIMESTAMP_EXTI_ENABLE_IT();
+  }
+  else
+  {
+    __HAL_RTC_TAMPER_TIMESTAMP_EXTID2_ENABLE_IT();
+  }
+#else /* SINGLE_CORE */
   __HAL_RTC_TAMPER_TIMESTAMP_EXTI_ENABLE_IT();
-#endif
+#endif /* DUAL_CORE */
 
   __HAL_RTC_TAMPER_TIMESTAMP_EXTI_ENABLE_RISING_EDGE();
 
@@ -1315,7 +1332,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
     hrtc->TimeStampEventCallback(hrtc);
 #else
     HAL_RTCEx_TimeStampEventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
     /* Not immediately clear flags because the content of RTC_TSTR and RTC_TSDR are cleared when TSF bit is reset.*/
     hrtc->Instance->SCR = RTC_SCR_CTSF;
   }
@@ -1336,7 +1353,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Tamper1 callback */
     HAL_RTCEx_Tamper1EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_TAMP1E */
 
@@ -1350,7 +1367,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Tamper2 callback */
     HAL_RTCEx_Tamper2EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_TAMP2E */
 
@@ -1364,7 +1381,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Tamper3 callback */
     HAL_RTCEx_Tamper3EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_TAMP3E */
 
@@ -1378,7 +1395,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper1EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP1E */
 
@@ -1392,7 +1409,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper2EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP2E */
 
@@ -1406,7 +1423,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper3EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP3E */
 
@@ -1420,7 +1437,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper4EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP4E */
 
@@ -1434,7 +1451,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper5EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP5E */
 
@@ -1448,7 +1465,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper6EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP6E */
 
@@ -1462,7 +1479,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Call Internal Tamper Event by-default callback */
     HAL_RTCEx_InternalTamper8EventCallback(hrtc);
-#endif
+#endif /* USE_HAL_RTC_REGISTER_CALLBACKS */
   }
 #endif /* TAMP_CR1_ITAMP8E */
 
@@ -1483,7 +1500,7 @@ void HAL_RTCEx_TamperTimeStampIRQHandler(RTC_HandleTypeDef *hrtc)
   {
     __HAL_RTC_TAMPER_TIMESTAMP_EXTID2_CLEAR_FLAG();
   }
-#else  /* SINGLE_CORE */
+#else /* SINGLE_CORE */
   __HAL_RTC_TAMPER_TIMESTAMP_EXTI_CLEAR_FLAG();
 #endif /* DUAL_CORE */
 
@@ -2118,10 +2135,19 @@ HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer_IT(RTC_HandleTypeDef *hrtc, uint32_t 
     hrtc->Instance->CR = CR_tmp;
   }
 
-#if !defined(DUAL_CORE)
   /* RTC WakeUpTimer Interrupt Configuration: EXTI configuration */
+#if defined(DUAL_CORE)
+  if (HAL_GetCurrentCPUID() == CM7_CPUID)
+  {
+    __HAL_RTC_WAKEUPTIMER_EXTI_ENABLE_IT();
+  }
+  else
+  {
+    __HAL_RTC_WAKEUPTIMER_EXTID2_ENABLE_IT();
+  }
+#else /* SINGLE_CORE */
   __HAL_RTC_WAKEUPTIMER_EXTI_ENABLE_IT();
-#endif
+#endif /* DUAL_CORE */
 
   __HAL_RTC_WAKEUPTIMER_EXTI_ENABLE_RISING_EDGE();
 
@@ -2227,7 +2253,7 @@ void HAL_RTCEx_WakeUpTimerIRQHandler(RTC_HandleTypeDef *hrtc)
   {
     __HAL_RTC_WAKEUPTIMER_EXTID2_CLEAR_FLAG();
   }
-#else  /* SINGLE_CORE */
+#else /* SINGLE_CORE */
   __HAL_RTC_WAKEUPTIMER_EXTI_CLEAR_FLAG();
 #endif /* DUAL_CORE */
 
@@ -2959,4 +2985,3 @@ HAL_StatusTypeDef HAL_RTCEx_PollForAlarmBEvent(RTC_HandleTypeDef * hrtc, uint32_
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

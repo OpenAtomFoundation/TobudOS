@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -81,9 +80,6 @@ typedef struct
   uint32_t ChipSelectBoundary;        /*!< It enables the transaction boundary feature and
                                            defines the boundary of bytes to release the chip select.
                                            This parameter can be a value between 0 and 31 */
-  uint32_t ClkChipSelectHighTime;     /*!< It defines the number of clocks provided on the CLK/nCLK pins when
-                                           the chip select is set to high at the end of a transaction.
-                                           This parameter can be a value between 0 and 7 */
   uint32_t DelayBlockBypass;          /*!< It enables the delay block bypass, so the sampling is not affected
                                            by the delay block.
                                            This parameter can be a value of @ref OSPI_DelayBlockBypass */
@@ -259,7 +255,7 @@ typedef struct
                                         This parameter can be a value of @ref OSPIM_IOPort */
   uint32_t IOHighPort;             /*!< It indicates which port of the OSPI IO Manager is used for the IO[7:4] pins.
                                         This parameter can be a value of @ref OSPIM_IOPort */
-  uint32_t Req2AckTime;            /*!< It indicates the minimum switching duration (in number of clock cycles) expected 
+  uint32_t Req2AckTime;            /*!< It indicates the minimum switching duration (in number of clock cycles) expected
                                         if some signals are multiplexed in the OSPI IO Manager with the other OSPI.
                                         This parameter can be a value between 1 and 256 */
 }OSPIM_CfgTypeDef;
@@ -1028,8 +1024,6 @@ HAL_StatusTypeDef     HAL_OSPIM_Config(OSPI_HandleTypeDef *hospi, OSPIM_CfgTypeD
 
 #define IS_OSPI_CS_BOUNDARY(BOUNDARY)      ((BOUNDARY) <= 31U)
 
-#define IS_OSPI_CKCSHT(CLK_NB)             ((CLK_NB) <= 7U)
-
 #define IS_OSPI_DLYBYP(MODE)               (((MODE) == HAL_OSPI_DELAY_BLOCK_USED) || \
                                             ((MODE) == HAL_OSPI_DELAY_BLOCK_BYPASSED))
 
@@ -1079,5 +1073,3 @@ HAL_StatusTypeDef     HAL_OSPIM_Config(OSPI_HandleTypeDef *hospi, OSPIM_CfgTypeD
 #endif
 
 #endif /* STM32H7xx_HAL_OSPI_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

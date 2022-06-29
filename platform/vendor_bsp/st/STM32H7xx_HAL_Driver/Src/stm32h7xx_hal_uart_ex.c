@@ -9,6 +9,17 @@
   *           + Peripheral Control functions
   *
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                ##### UART peripheral extended features  #####
@@ -26,17 +37,6 @@
             configured prior starting RX/TX transfers.
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -483,7 +483,7 @@ HAL_StatusTypeDef HAL_UARTEx_EnableStopMode(UART_HandleTypeDef *huart)
   __HAL_LOCK(huart);
 
   /* Set UESM bit */
-  SET_BIT(huart->Instance->CR1, USART_CR1_UESM);
+  ATOMIC_SET_BIT(huart->Instance->CR1, USART_CR1_UESM);
 
   /* Process Unlocked */
   __HAL_UNLOCK(huart);
@@ -502,7 +502,7 @@ HAL_StatusTypeDef HAL_UARTEx_DisableStopMode(UART_HandleTypeDef *huart)
   __HAL_LOCK(huart);
 
   /* Clear UESM bit */
-  CLEAR_BIT(huart->Instance->CR1, USART_CR1_UESM);
+  ATOMIC_CLEAR_BIT(huart->Instance->CR1, USART_CR1_UESM);
 
   /* Process Unlocked */
   __HAL_UNLOCK(huart);
@@ -858,7 +858,7 @@ HAL_StatusTypeDef HAL_UARTEx_ReceiveToIdle_IT(UART_HandleTypeDef *huart, uint8_t
       if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
       {
         __HAL_UART_CLEAR_FLAG(huart, UART_CLEAR_IDLEF);
-        SET_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
+        ATOMIC_SET_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
       }
       else
       {
@@ -920,7 +920,7 @@ HAL_StatusTypeDef HAL_UARTEx_ReceiveToIdle_DMA(UART_HandleTypeDef *huart, uint8_
       if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
       {
         __HAL_UART_CLEAR_FLAG(huart, UART_CLEAR_IDLEF);
-        SET_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
+        ATOMIC_SET_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
       }
       else
       {
@@ -1016,4 +1016,3 @@ static void UARTEx_SetNbDataToProcess(UART_HandleTypeDef *huart)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

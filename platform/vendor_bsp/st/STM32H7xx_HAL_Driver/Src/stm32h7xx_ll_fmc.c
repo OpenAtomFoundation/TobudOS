@@ -10,6 +10,17 @@
   *           + Peripheral Control functions
   *           + Peripheral State functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### FMC peripheral features #####
@@ -40,17 +51,6 @@
         (+) Independent configuration for each memory bank
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -988,10 +988,10 @@ HAL_StatusTypeDef FMC_SDRAM_SendCommand(FMC_SDRAM_TypeDef *Device,
   assert_param(IS_FMC_MODE_REGISTER(Command->ModeRegisterDefinition));
 
   /* Set command register */
-  MODIFY_REG(Device->SDCMR, (FMC_SDCMR_MODE | FMC_SDCMR_CTB2 | FMC_SDCMR_CTB1 | 
-             FMC_SDCMR_NRFS | FMC_SDCMR_MRD), ((Command->CommandMode) | 
-             (Command->CommandTarget) | (((Command->AutoRefreshNumber) - 1U) << FMC_SDCMR_NRFS_Pos) |
-             ((Command->ModeRegisterDefinition) << FMC_SDCMR_MRD_Pos)));
+  MODIFY_REG(Device->SDCMR, (FMC_SDCMR_MODE | FMC_SDCMR_CTB2 | FMC_SDCMR_CTB1 | FMC_SDCMR_NRFS | FMC_SDCMR_MRD),
+             ((Command->CommandMode) | (Command->CommandTarget) |
+              (((Command->AutoRefreshNumber) - 1U) << FMC_SDCMR_NRFS_Pos) |
+              ((Command->ModeRegisterDefinition) << FMC_SDCMR_MRD_Pos)));
   /* Prevent unused argument(s) compilation warning */
   UNUSED(Timeout);
   return HAL_OK;
@@ -1089,5 +1089,3 @@ uint32_t FMC_SDRAM_GetModeStatus(FMC_SDRAM_TypeDef *Device, uint32_t Bank)
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

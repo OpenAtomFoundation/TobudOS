@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * Copyright (c) 2017 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -1079,12 +1078,12 @@ void HAL_SYSCFG_CompensationCodeConfig(uint32_t SYSCFG_PMOSCode, uint32_t SYSCFG
 #if defined(SYSCFG_CCCR_NCC_MMC)
 void HAL_SYSCFG_VDDMMC_CompensationCodeConfig(uint32_t SYSCFG_PMOSCode, uint32_t SYSCFG_NMOSCode);
 #endif /* SYSCFG_CCCR_NCC_MMC */
-void HAL_EnableDBGSleepMode(void);
-void HAL_DisableDBGSleepMode(void);
-void HAL_EnableDBGStopMode(void);
-void HAL_DisableDBGStopMode(void);
-void HAL_EnableDBGStandbyMode(void);
-void HAL_DisableDBGStandbyMode(void);
+void HAL_DBGMCU_EnableDBGSleepMode(void);
+void HAL_DBGMCU_DisableDBGSleepMode(void);
+void HAL_DBGMCU_EnableDBGStopMode(void);
+void HAL_DBGMCU_DisableDBGStopMode(void);
+void HAL_DBGMCU_EnableDBGStandbyMode(void);
+void HAL_DBGMCU_DisableDBGStandbyMode(void);
 #if defined(DUAL_CORE)
 void HAL_EnableDomain2DBGSleepMode(void);
 void HAL_DisableDomain2DBGSleepMode(void);
@@ -1140,4 +1139,4 @@ void HAL_SYSCFG_ADC2ALT_Rout1Config(uint32_t Adc2AltRout1);
 
 #endif /* STM32H7xx_HAL_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

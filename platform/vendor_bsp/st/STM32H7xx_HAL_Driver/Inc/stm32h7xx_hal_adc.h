@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -131,8 +130,8 @@ typedef struct
                                        Note: It is not recommended to use with interruption or DMA (HAL_ADC_Start_IT(), HAL_ADC_Start_DMA()) since these modes have to clear immediately the EOC flag (by CPU to free the IRQ pending event or by DMA).
                                                        Auto wait will work but fort a very short time, discarding its intended benefit (except specific case of high load of CPU or DMA transfers which can justify usage of auto wait).
                                                        Do use with polling: 1. Start conversion with HAL_ADC_Start(), 2. Later on, when ADC conversion data is needed:
-													   and use HAL_ADC_GetValue() to retrieve conversion result and trig another conversion (in case of usage of injected group, 
-													   use the equivalent functions HAL_ADCExInjected_Start(), HAL_ADCEx_InjectedGetValue(), ...). */
+                                                       and use HAL_ADC_GetValue() to retrieve conversion result and trig another conversion (in case of usage of injected group, 
+                                                       use the equivalent functions HAL_ADCExInjected_Start(), HAL_ADCEx_InjectedGetValue(), ...). */
 
   FunctionalState ContinuousConvMode; /*!< Specify whether the conversion is performed in single mode (one conversion) or continuous mode for ADC group regular,
                                        after the first ADC conversion start trigger occurred (software start or external trigger).
@@ -2032,4 +2031,3 @@ void ADC_ConfigureBoostMode(ADC_HandleTypeDef *hadc);
 
 #endif /* STM32H7xx_HAL_ADC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

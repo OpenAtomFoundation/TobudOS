@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -242,13 +241,13 @@ extern "C" {
   *         - @ref LL_CORDIC_SetNbRead()
   *         - @ref LL_CORDIC_SetInSize()
   *         - @ref LL_CORDIC_SetOutSize()
-  * @rmtoll CSR          FUNC          LL_CORDIC_Configure\n
-  *         CSR          PRECISION     LL_CORDIC_Configure\n
-  *         CSR          SCALE         LL_CORDIC_Configure\n
-  *         CSR          NARGS         LL_CORDIC_Configure\n
-  *         CSR          NRES          LL_CORDIC_Configure\n
-  *         CSR          ARGSIZE       LL_CORDIC_Configure\n
-  *         CSR          RESIZE        LL_CORDIC_Configure
+  * @rmtoll CSR          FUNC          LL_CORDIC_Config\n
+  *         CSR          PRECISION     LL_CORDIC_Config\n
+  *         CSR          SCALE         LL_CORDIC_Config\n
+  *         CSR          NARGS         LL_CORDIC_Config\n
+  *         CSR          NRES          LL_CORDIC_Config\n
+  *         CSR          ARGSIZE       LL_CORDIC_Config\n
+  *         CSR          RESIZE        LL_CORDIC_Config
   * @param  CORDICx CORDIC instance
   * @param  Function parameter can be one of the following values:
   *         @arg @ref LL_CORDIC_FUNCTION_COSINE
@@ -782,5 +781,3 @@ ErrorStatus LL_CORDIC_DeInit(CORDIC_TypeDef *CORDICx);
 #endif
 
 #endif /* STM32H7xx_LL_CORDIC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

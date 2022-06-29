@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -68,12 +67,14 @@ extern "C" {
                                                                   DHR12Rx channel 1 (shifted left of 20 bits)   */
 #define DAC_REG_DHR8R1_REGOFFSET       0x02000000UL            /* Register offset of DHR8Rx  channel 1 versus
                                                                   DHR12Rx channel 1 (shifted left of 24 bits)   */
+
 #define DAC_REG_DHR12R2_REGOFFSET      0x30000000UL            /* Register offset of DHR12Rx channel 2 versus
                                                                   DHR12Rx channel 1 (shifted left of 28 bits)   */
 #define DAC_REG_DHR12L2_REGOFFSET      0x00400000UL            /* Register offset of DHR12Lx channel 2 versus
                                                                   DHR12Rx channel 1 (shifted left of 20 bits)   */
 #define DAC_REG_DHR8R2_REGOFFSET       0x05000000UL            /* Register offset of DHR8Rx  channel 2 versus
                                                                   DHR12Rx channel 1 (shifted left of 24 bits)   */
+
 #define DAC_REG_DHR12RX_REGOFFSET_MASK 0xF0000000UL
 #define DAC_REG_DHR12LX_REGOFFSET_MASK 0x00F00000UL
 #define DAC_REG_DHR8RX_REGOFFSET_MASK  0x0F000000UL
@@ -81,9 +82,11 @@ extern "C" {
                                         | DAC_REG_DHR12LX_REGOFFSET_MASK | DAC_REG_DHR8RX_REGOFFSET_MASK)
 
 #define DAC_REG_DOR1_REGOFFSET         0x00000000UL            /* Register DORx channel 1 taken as reference */
+
 #define DAC_REG_DOR2_REGOFFSET         0x00000020UL            /* Register offset of DORx channel 1 versus
                                                                   DORx channel 2 (shifted left of 5 bits)    */
 #define DAC_REG_DORX_REGOFFSET_MASK    (DAC_REG_DOR1_REGOFFSET | DAC_REG_DOR2_REGOFFSET)
+
 #define DAC_REG_SHSR1_REGOFFSET        0x00000000UL            /* Register SHSRx channel 1 taken as reference */
 #define DAC_REG_SHSR2_REGOFFSET        0x00000040UL            /* Register offset of SHSRx channel 1 versus
                                                                   SHSRx channel 2 (shifted left of 6 bits)    */
@@ -229,6 +232,7 @@ typedef struct
 #define LL_DAC_FLAG_DMAUDR2                (DAC_SR_DMAUDR2)   /*!< DAC channel 2 flag DMA underrun */
 #define LL_DAC_FLAG_CAL2                   (DAC_SR_CAL_FLAG2) /*!< DAC channel 2 flag offset calibration status */
 #define LL_DAC_FLAG_BWST2                  (DAC_SR_BWST2)     /*!< DAC channel 2 flag busy writing sample time */
+
 /**
   * @}
   */
@@ -238,7 +242,9 @@ typedef struct
   * @{
   */
 #define LL_DAC_IT_DMAUDRIE1                (DAC_CR_DMAUDRIE1) /*!< DAC channel 1 interruption DMA underrun */
+
 #define LL_DAC_IT_DMAUDRIE2                (DAC_CR_DMAUDRIE2) /*!< DAC channel 2 interruption DMA underrun */
+
 /**
   * @}
   */
@@ -1644,6 +1650,7 @@ __STATIC_INLINE uint32_t LL_DAC_RetrieveOutputData(DAC_TypeDef *DACx, uint32_t D
 /** @defgroup DAC_LL_EF_FLAG_Management FLAG Management
   * @{
   */
+
 /**
   * @brief  Get DAC calibration offset flag for DAC channel 1
   * @rmtoll SR       CAL_FLAG1      LL_DAC_IsActiveFlag_CAL1
@@ -1678,7 +1685,6 @@ __STATIC_INLINE uint32_t LL_DAC_IsActiveFlag_BWST1(DAC_TypeDef *DACx)
 {
   return ((READ_BIT(DACx->SR, LL_DAC_FLAG_BWST1) == (LL_DAC_FLAG_BWST1)) ? 1UL : 0UL);
 }
-
 
 /**
   * @brief  Get DAC busy writing sample time flag for DAC channel 2
@@ -1858,4 +1864,3 @@ void        LL_DAC_StructInit(LL_DAC_InitTypeDef *DAC_InitStruct);
 
 #endif /* STM32H7xx_LL_DAC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

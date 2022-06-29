@@ -5,37 +5,27 @@
   * @brief   This file provides firmware functions to manage the following
   *          functionalities of the Analog to Digital Converter (ADC)
   *          peripheral:
-  *           + Operation functions
-  *             ++ Start, stop, get result of conversions of ADC group injected,
-  *                using 2 possible modes: polling, interruption.
-  *             ++ Calibration
-  *               +++ ADC automatic self-calibration
-  *               +++ Calibration factors get or set
-  *             ++ Multimode feature when available
-  *           + Control functions
-  *             ++ Channels configuration on ADC group injected
-  *           + State functions
-  *             ++ ADC group injected contexts queue management
+  *           + Peripheral Control functions
   *          Other functions (generic functions) are available in file
   *          "stm32h7xx_hal_adc.c".
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   [..]
   (@) Sections "ADC peripheral features" and "How to use this driver" are
       available in file of generic functions "stm32h7xx_hal_adc.c".
   [..]
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -2102,7 +2092,18 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(ADC_HandleTypeDef *hadc, ADC_I
 
     if (sConfigInjected->InjecOversamplingMode == ENABLE)
     {
+#if defined(ADC_VER_V5_V90)
+      if (hadc->Instance == ADC3)
+      {
+        assert_param(IS_ADC_OVERSAMPLING_RATIO_ADC3(sConfigInjected->InjecOversampling.Ratio));
+      }
+      else
+      {
+        assert_param(IS_ADC_OVERSAMPLING_RATIO(sConfigInjected->InjecOversampling.Ratio));
+      }
+#else
       assert_param(IS_ADC_OVERSAMPLING_RATIO(sConfigInjected->InjecOversampling.Ratio));
+#endif
       assert_param(IS_ADC_RIGHT_BIT_SHIFT(sConfigInjected->InjecOversampling.RightBitShift));
 
       /*  JOVSE must be reset in case of triggered regular mode  */
@@ -2113,14 +2114,39 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(ADC_HandleTypeDef *hadc, ADC_I
       /*  - Right bit shift                                                     */
 
       /* Enable OverSampling mode */
+#if defined(ADC_VER_V5_V90)
+      if (hadc->Instance != ADC3)
+      {
+        MODIFY_REG(hadc->Instance->CFGR2,
+                   ADC_CFGR2_JOVSE |
+                   ADC_CFGR2_OVSR  |
+                   ADC_CFGR2_OVSS,
+                   ADC_CFGR2_JOVSE                                  |
+                  ((sConfigInjected->InjecOversampling.Ratio - 1UL) << ADC_CFGR2_OVSR_Pos) |
+                   sConfigInjected->InjecOversampling.RightBitShift
+                  );
+      }
+      else
+      {
+        MODIFY_REG(hadc->Instance->CFGR2,
+                   ADC_CFGR2_JOVSE |
+                   ADC3_CFGR2_OVSR  |
+                   ADC_CFGR2_OVSS,
+                   ADC_CFGR2_JOVSE                                  |
+                  (sConfigInjected->InjecOversampling.Ratio)        |
+                   sConfigInjected->InjecOversampling.RightBitShift
+                  );
+      }
+#else
       MODIFY_REG(hadc->Instance->CFGR2,
-                 ADC_CFGR2_JOVSE |
-                 ADC_CFGR2_OVSR  |
-                 ADC_CFGR2_OVSS,
-                 ADC_CFGR2_JOVSE                                  |
-                ((sConfigInjected->InjecOversampling.Ratio - 1UL) << ADC_CFGR2_OVSR_Pos) |
-                 sConfigInjected->InjecOversampling.RightBitShift
-                );
+           ADC_CFGR2_JOVSE |
+           ADC_CFGR2_OVSR  |
+           ADC_CFGR2_OVSS,
+           ADC_CFGR2_JOVSE                                  |
+          ((sConfigInjected->InjecOversampling.Ratio - 1UL) << ADC_CFGR2_OVSR_Pos) |
+           sConfigInjected->InjecOversampling.RightBitShift
+          );
+#endif
     }
     else
     {
@@ -2145,7 +2171,7 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(ADC_HandleTypeDef *hadc, ADC_I
     {
       tmpOffsetShifted = ADC_OFFSET_SHIFT_RESOLUTION(hadc, sConfigInjected->InjectedOffset);
     }
-    
+
     if (sConfigInjected->InjectedOffsetNumber != ADC_OFFSET_NONE)
     {
       /* Set ADC selected offset number */
@@ -2590,4 +2616,3 @@ HAL_StatusTypeDef HAL_ADCEx_EnterADCDeepPowerDownMode(ADC_HandleTypeDef *hadc)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

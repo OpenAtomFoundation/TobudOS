@@ -6,6 +6,17 @@
   *          This file provides a generic firmware to drive NAND memories mounted
   *          as external device.
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                          ##### How to use this driver #####
@@ -58,25 +69,25 @@
       The compilation define  USE_HAL_NAND_REGISTER_CALLBACKS when set to 1
       allows the user to configure dynamically the driver callbacks.
 
-      Use Functions @ref HAL_NAND_RegisterCallback() to register a user callback,
+      Use Functions HAL_NAND_RegisterCallback() to register a user callback,
       it allows to register following callbacks:
         (+) MspInitCallback    : NAND MspInit.
         (+) MspDeInitCallback  : NAND MspDeInit.
       This function takes as parameters the HAL peripheral handle, the Callback ID
       and a pointer to the user callback function.
 
-      Use function @ref HAL_NAND_UnRegisterCallback() to reset a callback to the default
+      Use function HAL_NAND_UnRegisterCallback() to reset a callback to the default
       weak (surcharged) function. It allows to reset following callbacks:
         (+) MspInitCallback    : NAND MspInit.
         (+) MspDeInitCallback  : NAND MspDeInit.
       This function) takes as parameters the HAL peripheral handle and the Callback ID.
 
-      By default, after the @ref HAL_NAND_Init and if the state is HAL_NAND_STATE_RESET
+      By default, after the HAL_NAND_Init and if the state is HAL_NAND_STATE_RESET
       all callbacks are reset to the corresponding legacy weak (surcharged) functions.
       Exception done for MspInit and MspDeInit callbacks that are respectively
-      reset to the legacy weak (surcharged) functions in the @ref HAL_NAND_Init
-      and @ref  HAL_NAND_DeInit only when these callbacks are null (not registered beforehand).
-      If not, MspInit or MspDeInit are not null, the @ref HAL_NAND_Init and @ref HAL_NAND_DeInit
+      reset to the legacy weak (surcharged) functions in the HAL_NAND_Init
+      and  HAL_NAND_DeInit only when these callbacks are null (not registered beforehand).
+      If not, MspInit or MspDeInit are not null, the HAL_NAND_Init and HAL_NAND_DeInit
       keep and use the user MspInit/MspDeInit callbacks (registered beforehand)
 
       Callbacks can be registered/unregistered in READY state only.
@@ -84,25 +95,14 @@
       in READY or RESET state, thus registered (user) MspInit/DeInit callbacks can be used
       during the Init/DeInit.
       In that case first register the MspInit/MspDeInit user callbacks
-      using @ref HAL_NAND_RegisterCallback before calling @ref HAL_NAND_DeInit
-      or @ref HAL_NAND_Init function.
+      using HAL_NAND_RegisterCallback before calling HAL_NAND_DeInit
+      or HAL_NAND_Init function.
 
       When The compilation define USE_HAL_NAND_REGISTER_CALLBACKS is set to 0 or
       not defined, the callback registering feature is not available
       and weak (surcharged) callbacks are used.
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -2239,5 +2239,3 @@ uint32_t HAL_NAND_Read_Status(NAND_HandleTypeDef *hnand)
   * @}
   */
 
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

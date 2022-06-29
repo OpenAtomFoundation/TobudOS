@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -908,7 +907,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 #define __HAL_RTC_ALARM_EXTID2_DISABLE_EVENT()       (EXTI_D2->EMR1 &= ~(RTC_EXTI_LINE_ALARM_EVENT))
 
-#endif
+#endif /* DUAL_CORE */
 /**
   * @brief  Enable falling edge trigger on the RTC Alarm associated Exti line.
   * @retval None
@@ -983,7 +982,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   * @retval None
   */
 #define __HAL_RTC_ALARM_EXTID2_CLEAR_FLAG()          (EXTI_D2->PR1 = (RTC_EXTI_LINE_ALARM_EVENT))
-#endif
+#endif /* DUAL_CORE */
 /**
   * @brief Generate a Software interrupt on RTC Alarm associated Exti line.
   * @retval None
@@ -1239,4 +1238,3 @@ uint8_t            RTC_Bcd2ToByte(uint8_t Value);
 
 #endif /* STM32H7xx_HAL_RTC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
