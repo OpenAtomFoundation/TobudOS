@@ -166,7 +166,7 @@ static void _urc_mqtt_publish_handle(const char *data, size_t data_len)
 // ota urc handle
 // ----------------------------------------------------------------------------
 
-static void _cancel_char(char *str, char ch)
+static void _delete_char(char *str, char ch)
 {
     char *p;
     for (p = str; *p != '\0'; p++)
@@ -185,7 +185,7 @@ static void _urc_ota_fw_info_handle(const char *data, size_t data_len)
 {
     // +TCFWINFO:"1.2.0",17300,"a2aa3c261ebfc1322edafd37edb6b183",262144
     QcloudIotOtaFwInfo *ota_info = qcloud_iot_get_ota_info_handle();
-    _cancel_char((char *)data, '"');
+    _delete_char((char *)data, '"');
     sscanf((char *)data, "+TCFWINFO:%[^,],%u,%[^,],%u", ota_info->version, &(ota_info->fw_size), ota_info->md5,
            &ota_info->fw_max_size);
     HAL_SemaphorePost(ota_info->get_fw_info_sem);

@@ -44,7 +44,8 @@
 static void _at_client_get_expect_len(QcloudATClient *client, uint32_t *expect_len)
 {
     int len = 0;
-    if (sscanf(client->recv_buf, client->resp.expect, &len) == 1) {
+    if (sscanf(client->recv_buf, client->resp.expect, &len) == 1 &&
+        client->recv_buf[client->recv_len - 1] == client->resp.expect[strlen(client->resp.expect) - 1]) {
         *expect_len           = len + client->recv_len;
         client->resp.recv_len = len;
     }
@@ -170,7 +171,7 @@ static int _at_client_check_expect(QcloudATClient *client)
         return QCLOUD_AT_ERR_FAILURE;
     }
 
-    if (client->resp.recv_buf) {
+    if (client->resp.recv_buf && client->resp.recv_len) {
         memcpy(client->resp.recv_buf, client->recv_buf + client->recv_len - client->resp.recv_len,
                client->resp.recv_len);
         client->resp.status = QCLOUD_AT_RESP_STATUS_OK;
@@ -243,9 +244,10 @@ void qcloud_iot_at_urc_handle(void *client)
 {
     QcloudATClient *at_client = (QcloudATClient *)client;
     QcloudATUrcRecv urc_recv;
+    size_t          recv_size = sizeof(QcloudATUrcRecv);
     while (1) {
-        int rc = HAL_MailQueueRecv(at_client->urc_recv_queue, &urc_recv, sizeof(QcloudATUrcRecv), MAX_RECV_TIMEOUT);
-        if (!rc) {
+        int rc = HAL_MailQueueRecv(at_client->urc_recv_queue, &urc_recv, &recv_size, MAX_RECV_TIMEOUT);
+        if (rc) {
             continue;
         }
         urc_recv.urc->urc_handle(urc_recv.urc_handle_buf, urc_recv.urc_recv_len);

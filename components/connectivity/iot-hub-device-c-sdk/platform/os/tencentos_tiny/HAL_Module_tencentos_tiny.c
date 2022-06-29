@@ -28,10 +28,44 @@
 
 #include "qcloud_iot_platform.h"
 
-#include "esp8266_tencent_firmware.h"
+#include "qcloud_iot_at_client.h"
+#include "tos_hal.h"
 
-#define YOUR_WIFI_SSID "WIFI_SSID"
-#define YOUR_WIFI_PWD  "WIFI_PASSWORD"
+#define YOUR_WIFI_SSID "youga_wifi"
+#define YOUR_WIFI_PWD  "Iot@2018"
+
+static hal_uart_t sg_uart;
+
+/**
+ * @brief At send function.
+ *
+ * @return 0 for success
+ */
+static int qcloud_iot_usr_at_send(const void *data, size_t data_len)
+{
+    return tos_hal_uart_write(&sg_uart, data, data_len, 0xffffffff);
+}
+
+static int _esp8266_init(void)
+{
+    const char *at_cmd_resp[][2] = {
+        {"AT+RESTORE\r\n", "ready"},
+        {"ATE0\r\n", NULL},
+        {"AT+CWMODE=1\r\n", NULL},
+        {"AT+CIPMODE=0\r\n", NULL},
+    };
+    int rc;
+    for (int i = 0; i < sizeof(at_cmd_resp) / sizeof(const char *) / 2; i++) {
+        int retry = 3;
+        do {
+            rc = HAL_Module_SendAtCmdWaitResp(at_cmd_resp[i][0], at_cmd_resp[i][1], 5000);
+        } while (rc && retry-- > 0);
+        if (rc) {
+            break;
+        }
+    }
+    return rc;
+}
 
 /**
  * @brief Init at module.
@@ -40,7 +74,20 @@
  */
 int HAL_Module_Init(void)
 {
-    return esp8266_tencent_firmware_sal_init(HAL_UART_PORT_2);
+    // init at client
+    int rc = qcloud_iot_at_client_init(2048, qcloud_iot_usr_at_send);
+    if (rc < 0) {
+        Log_e("at client init fail");
+        return rc;
+    }
+    // init uart
+    rc = tos_hal_uart_init(&sg_uart, HAL_UART_PORT_2);
+    if (rc) {
+        return rc;
+    }
+
+    // init esp8266
+    return _esp8266_init();
 }
 
 /**
@@ -49,7 +96,7 @@ int HAL_Module_Init(void)
  */
 void HAL_Module_Deinit(void)
 {
-    esp8266_tencent_firmware_sal_deinit();
+    return;
 }
 
 /**
@@ -62,7 +109,8 @@ void HAL_Module_Deinit(void)
  */
 int HAL_Module_SendAtCmdWaitResp(const char *at_cmd, const char *at_expect, uint32_t timeout_ms)
 {
-    return esp8266_tencent_firmware_at_cmd_exec_until(at_cmd, at_expect, timeout_ms);
+    Log_d("at_cmd:%s", at_cmd);
+    return qcloud_iot_at_client_send_at_util_expect(at_cmd, at_expect, NULL, 0, timeout_ms);
 }
 
 /**
@@ -78,7 +126,7 @@ int HAL_Module_SendAtCmdWaitResp(const char *at_cmd, const char *at_expect, uint
 int HAL_Module_SendAtCmdWaitRespWithData(const char *at_cmd, const char *at_expect, void *recv_buf, uint32_t *recv_len,
                                          uint32_t timeout_ms)
 {
-    return esp8266_tencent_firmware_at_cmd_exec_recv(at_cmd, at_expect, recv_buf, recv_len, timeout_ms);
+    return qcloud_iot_at_client_send_at_util_expect(at_cmd, at_expect, recv_buf, recv_len, timeout_ms);
 }
 
 /**
@@ -90,7 +138,7 @@ int HAL_Module_SendAtCmdWaitRespWithData(const char *at_cmd, const char *at_expe
  */
 int HAL_Module_SendAtData(const void *data, int data_len)
 {
-    return esp8266_tencent_firmware_raw_data_send(data, data_len);
+    return qcloud_iot_at_client_send_data(data, data_len);
 }
 
 /**
@@ -102,7 +150,14 @@ int HAL_Module_SendAtData(const void *data, int data_len)
  */
 int HAL_Module_SetUrc(const char *urc, OnUrcHandler urc_handler)
 {
-    return esp8266_tencent_firmware_set_urc(urc, urc_handler);
+    static QcloudATUrc sg_urc_table[10];
+    static int         sg_urc_table_count;
+
+    sg_urc_table[sg_urc_table_count].urc_prefix = urc;
+    sg_urc_table[sg_urc_table_count].urc_handle = urc_handler;
+    sg_urc_table_count++;
+    qcloud_iot_at_client_set_urc(sg_urc_table, sg_urc_table_count);
+    return 0;
 }
 
 /**
@@ -112,5 +167,6 @@ int HAL_Module_SetUrc(const char *urc, OnUrcHandler urc_handler)
  */
 int HAL_Module_ConnectNetwork(void)
 {
-    return esp8266_tencent_firmware_join_ap(YOUR_WIFI_SSID, YOUR_WIFI_PWD);
+    return HAL_Module_SendAtCmdWaitResp("AT+CWJAP=\"" YOUR_WIFI_SSID "\",\"" YOUR_WIFI_PWD "\"\r\n", "WIFI GOT IP",
+                                        10000);
 }

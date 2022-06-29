@@ -38,7 +38,11 @@ extern "C" {
 #define QCLOUD_AT_PARSE_THREAD_NAME       "at_parse"
 #define QCLOUD_AT_PARSE_THREAD_STACK_SIZE (4096)
 #define QCLOUD_AT_PARSE_THREAD_PRIORITY   THREAD_PRIORITY_HIGH
-#define QCLOUD_AT_MAX_URC_QUEUE_LEN       (16)
+
+#define QCLOUD_AT_URC_THREAD_NAME       "at_urc"
+#define QCLOUD_AT_URC_THREAD_STACK_SIZE QCLOUD_AT_PARSE_THREAD_STACK_SIZE
+#define QCLOUD_AT_URC_THREAD_PRIORITY   THREAD_PRIORITY_HIGH
+#define QCLOUD_AT_MAX_URC_QUEUE_LEN     (16)
 
 typedef enum {
     QCLOUD_AT_RET_SUCCESS    = 0,
@@ -115,6 +119,7 @@ typedef struct {
     QcloudATStatus       status;
     QcloudATSendDataFunc at_send_func;
     // recv data
+    void    *recv_pool;
     void    *recv_queue;
     char    *recv_buf;
     uint32_t recv_buf_size;
@@ -122,6 +127,7 @@ typedef struct {
     // urc
     QcloudATUrc *urc_table;
     uint32_t     urc_table_size;
+    void        *urc_recv_pool;
     void        *urc_recv_queue;
     void        *urc_lock;
     // resp

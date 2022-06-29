@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <projectDescription>
 	<name>TencentOS-Tiny</name>
-	<comment></comment>
+	<comment/>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -93,7 +93,7 @@
 	<filteredResources>
 		<filter>
 			<id>1595986042669</id>
-			<name></name>
+			<name/>
 			<type>22</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>

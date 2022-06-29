@@ -280,7 +280,7 @@ static int _qcloud_iot_check_ota(void)
     // 1. get remote fw info
     rc = IOT_OTA_ReadFwInfo(&remote_ver, &fw_size, &md5, 5000);
     if (rc) {
-        Log_e("read ota fwinfo fail:%d", rc);
+        Log_e("read ota fw info fail:%d", rc);
         return rc;
     }
     Log_w("fw version : %s, size : %u, md5:%s", remote_ver, fw_size, md5);

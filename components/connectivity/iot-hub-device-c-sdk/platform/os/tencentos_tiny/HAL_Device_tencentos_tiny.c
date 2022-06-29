@@ -38,19 +38,19 @@
  * @brief product Id
  *
  */
-static char sg_product_id[MAX_SIZE_OF_PRODUCT_ID + 1] = "PRODUCT_ID";
+static char sg_product_id[MAX_SIZE_OF_PRODUCT_ID + 1] = "Q5NNWVC2Z8";
 
 /**
  * @brief device name
  *
  */
-static char sg_device_name[MAX_SIZE_OF_DEVICE_NAME + 1] = "DEVICE_NAME";
+static char sg_device_name[MAX_SIZE_OF_DEVICE_NAME + 1] = "test1";
 
 /**
  * @brief device secret of PSK device
  *
  */
-static char sg_device_secret[MAX_SIZE_OF_DEVICE_SECRET + 1] = "IOT_PSK";
+static char sg_device_secret[MAX_SIZE_OF_DEVICE_SECRET + 1] = "jACrR7OalxdQfdJgEduZ3w==";
 
 /**
  * @brief Copy device info from src to dst

@@ -115,6 +115,10 @@ typedef struct {
     uint16_t         keep_alive_interval; /**< keepalive option */
 } QcloudIotClient;
 
+/**
+ * @brief Cls state.
+ *
+ */
 typedef enum {
     IOT_OTA_CLS_STATE_NO_REPORT = 0,
     IOT_OTA_CLS_STATE_REPORT_MCU,

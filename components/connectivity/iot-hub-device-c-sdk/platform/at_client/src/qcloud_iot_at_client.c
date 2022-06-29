@@ -53,7 +53,12 @@ int qcloud_iot_at_client_init(int max_at_size, QcloudATSendDataFunc at_send_func
     QcloudATClient *client = &sg_client;
     client->at_send_func   = at_send_func;
 
-    client->recv_queue = HAL_MailQueueInit(NULL, 1, max_at_size);
+    client->recv_pool = HAL_Malloc(max_at_size);
+    if (!client->recv_pool) {
+        goto exit;
+    }
+
+    client->recv_queue = HAL_MailQueueInit(client->recv_pool, 1, max_at_size);
     if (!client->recv_queue) {
         goto exit;
     }
@@ -67,7 +72,13 @@ int qcloud_iot_at_client_init(int max_at_size, QcloudATSendDataFunc at_send_func
     client->urc_table      = NULL;
     client->urc_table_size = 0;
 
-    client->urc_recv_queue = HAL_MailQueueInit(NULL, sizeof(QcloudATUrcRecv), QCLOUD_AT_MAX_URC_QUEUE_LEN);
+    client->urc_recv_pool = HAL_Malloc(sizeof(QcloudATUrcRecv) * QCLOUD_AT_MAX_URC_QUEUE_LEN);
+    if (!client->urc_recv_pool) {
+        goto exit;
+    }
+
+    client->urc_recv_queue =
+        HAL_MailQueueInit(client->urc_recv_pool, sizeof(QcloudATUrcRecv), QCLOUD_AT_MAX_URC_QUEUE_LEN);
     if (!client->urc_recv_queue) {
         goto exit;
     }
@@ -84,12 +95,19 @@ int qcloud_iot_at_client_init(int max_at_size, QcloudATSendDataFunc at_send_func
     }
 
     static ThreadParams sg_qcloud_at_parse_thread_params = {0};
-    sg_qcloud_at_parse_thread_params.user_arg            = client;
-    sg_qcloud_at_parse_thread_params.stack_base          = NULL;
-    sg_qcloud_at_parse_thread_params.stack_size          = QCLOUD_AT_PARSE_THREAD_STACK_SIZE;
-    sg_qcloud_at_parse_thread_params.thread_name         = QCLOUD_AT_PARSE_THREAD_NAME;
-    sg_qcloud_at_parse_thread_params.priority            = QCLOUD_AT_PARSE_THREAD_PRIORITY;
-    sg_qcloud_at_parse_thread_params.thread_func         = qcloud_iot_at_client_parser;
+    static void        *sg_qcloud_at_parse_thread_stack;
+    if (!sg_qcloud_at_parse_thread_stack) {
+        sg_qcloud_at_parse_thread_stack = HAL_Malloc(QCLOUD_AT_PARSE_THREAD_STACK_SIZE);
+        if (!sg_qcloud_at_parse_thread_stack) {
+            goto exit;
+        }
+    }
+    sg_qcloud_at_parse_thread_params.user_arg    = client;
+    sg_qcloud_at_parse_thread_params.stack_base  = sg_qcloud_at_parse_thread_stack;
+    sg_qcloud_at_parse_thread_params.stack_size  = QCLOUD_AT_PARSE_THREAD_STACK_SIZE;
+    sg_qcloud_at_parse_thread_params.thread_name = QCLOUD_AT_PARSE_THREAD_NAME;
+    sg_qcloud_at_parse_thread_params.priority    = QCLOUD_AT_PARSE_THREAD_PRIORITY;
+    sg_qcloud_at_parse_thread_params.thread_func = qcloud_iot_at_client_parser;
 
     rc = HAL_ThreadCreate(&sg_qcloud_at_parse_thread_params);
     if (rc) {
@@ -97,12 +115,19 @@ int qcloud_iot_at_client_init(int max_at_size, QcloudATSendDataFunc at_send_func
     }
 
     static ThreadParams sg_qcloud_at_urc_thread_params = {0};
-    sg_qcloud_at_urc_thread_params.user_arg            = client;
-    sg_qcloud_at_urc_thread_params.stack_base          = NULL;
-    sg_qcloud_at_urc_thread_params.stack_size          = QCLOUD_AT_PARSE_THREAD_STACK_SIZE;
-    sg_qcloud_at_urc_thread_params.thread_name         = QCLOUD_AT_PARSE_THREAD_NAME;
-    sg_qcloud_at_urc_thread_params.priority            = QCLOUD_AT_PARSE_THREAD_PRIORITY;
-    sg_qcloud_at_urc_thread_params.thread_func         = qcloud_iot_at_urc_handle;
+    static void        *sg_qcloud_at_urc_thread_stack;
+    if (!sg_qcloud_at_urc_thread_stack) {
+        sg_qcloud_at_urc_thread_stack = HAL_Malloc(QCLOUD_AT_URC_THREAD_STACK_SIZE);
+        if (!sg_qcloud_at_urc_thread_stack) {
+            goto exit;
+        }
+    }
+    sg_qcloud_at_urc_thread_params.user_arg    = client;
+    sg_qcloud_at_urc_thread_params.stack_base  = sg_qcloud_at_urc_thread_stack;
+    sg_qcloud_at_urc_thread_params.stack_size  = QCLOUD_AT_URC_THREAD_STACK_SIZE;
+    sg_qcloud_at_urc_thread_params.thread_name = QCLOUD_AT_URC_THREAD_NAME;
+    sg_qcloud_at_urc_thread_params.priority    = QCLOUD_AT_URC_THREAD_PRIORITY;
+    sg_qcloud_at_urc_thread_params.thread_func = qcloud_iot_at_urc_handle;
 
     rc = HAL_ThreadCreate(&sg_qcloud_at_urc_thread_params);
     if (rc) {
@@ -112,15 +137,13 @@ int qcloud_iot_at_client_init(int max_at_size, QcloudATSendDataFunc at_send_func
     return QCLOUD_AT_RET_SUCCESS;
 exit:
     HAL_MailQueueDeinit(client->recv_queue);
-    client->recv_queue = NULL;
+    HAL_Free(client->recv_pool);
     HAL_Free(client->recv_buf);
-    client->recv_buf = NULL;
     HAL_MutexDestroy(client->resp_lock);
-    client->resp_lock = NULL;
     HAL_SemaphoreDestroy(client->resp_sem);
-    client->resp_sem = NULL;
     HAL_MailQueueDeinit(client->urc_recv_queue);
-    client->urc_recv_queue = NULL;
+    HAL_Free(client->urc_recv_pool);
+    memset(client, 0, sizeof(QcloudATClient));
     return QCLOUD_AT_ERR_FAILURE;
 }
 

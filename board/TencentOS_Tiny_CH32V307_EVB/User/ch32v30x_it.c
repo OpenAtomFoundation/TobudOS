@@ -8,8 +8,10 @@
 #include "ch32v30x_it.h"
 #include "tos_k.h"
 #include "tos_at.h"
-extern at_agent_t esp8266_tf_agent;
-extern at_agent_t esp8266_agent;
+#include "qcloud_iot_at_client.h"
+
+// extern at_agent_t esp8266_tf_agent;
+// extern at_agent_t esp8266_agent;
 
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -58,7 +60,7 @@ void USART2_IRQHandler(void)
   if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
   {
       data= USART_ReceiveData(USART2);
-      tos_at_uart_input_byte(&esp8266_tf_agent,data);
+      qcloud_iot_at_client_push_data(&data, sizeof(data));
   }
 
 }
@@ -77,7 +79,7 @@ void UART6_IRQHandler(void)
   if(USART_GetITStatus(UART6, USART_IT_RXNE) != RESET)
   {
       data= USART_ReceiveData(UART6);
-      tos_at_uart_input_byte(&esp8266_agent,data);
+      // tos_at_uart_input_byte(&esp8266_agent,data);
 
   }
 
@@ -95,7 +97,7 @@ void UART7_IRQHandler(void)
   if(USART_GetITStatus(UART7, USART_IT_RXNE) != RESET)
   {
       data= USART_ReceiveData(UART7);
-      tos_at_uart_input_byte(&esp8266_tf_agent,data);
+      // tos_at_uart_input_byte(&esp8266_tf_agent,data);
   }
 
 }
