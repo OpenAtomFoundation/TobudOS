@@ -1,0 +1,17 @@
+Mcu Type=CH32V30x
+Address=0x08000000
+Erase All=true
+Program=true
+Verify=true
+Reset=true
+
+Toolchain=RISC-V
+Series=CH32V307
+Description=ROM(byte): 256K, SRAM(byte): 64K, CHIP PINS: 100, GPIO PORTS: 80.\nWCH CH32V3 series of mainstream MCUs covers the needs of a large variety of applications in the industrial,medical and consumer markets. High performance with first-class peripherals and low-power,low-voltage operation is paired with a high level of integration at accessible prices with a simple architecture and easy-to-use tools.
+
+PeripheralVersion=1.3
+Target Path=obj\TencentOS-Tiny.hex
+
+Vendor=WCH
+MCU=CH32V307VCT6
+Link=WCH-Link

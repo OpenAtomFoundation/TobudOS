@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<launchConfiguration type="com.mounriver.debug.gdbjtag.openocd.launchConfigurationType">
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doContinue" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doDebugInRam" value="false" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doFirstReset" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doGdbServerAllocateConsole" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doGdbServerAllocateTelnetConsole" value="false" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doSecondReset" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doStartGdbCLient" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doStartGdbServer" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.enableSemihosting" value="false" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.firstResetType" value="init" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherCommands" value="set mem inaccessible-by-default off&#xD;&#xA;set architecture riscv:rv32&#xD;&#xA;set remotetimeout unlimited" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherOptions" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerConnectionAddress" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerExecutable" value="${eclipse_home}toolchain/OpenOCD/bin/openocd.exe" />
+  <intAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerGdbPortNumber" value="3333" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerLog" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerOther" value="-f &quot;${eclipse_home}toolchain/OpenOCD/bin/wch-riscv.cfg&quot;" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerTclPortNumber" value="6666" />
+  <intAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerTelnetPortNumber" value="4444" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.otherInitCommands" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.otherRunCommands" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.secondResetType" value="halt" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.svdPath" value="${eclipse_home}template/wizard/WCH/RISC-V/CH32V307/NoneOS/CH32V307xx.svd" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value="" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageOffset" value="" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.ipAddress" value="localhost" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.jtagDevice" value="GNU MCU OpenOCD" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadImage" value="true" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadSymbols" value="true" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.pcRegister" value="" />
+  <intAttribute key="org.eclipse.cdt.debug.gdbjtag.core.portNumber" value="3333" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setPcRegister" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setResume" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setStopAt" value="true" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.stopAt" value="handle_reset" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value="" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsOffset" value="" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useFileForImage" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useFileForSymbols" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useProjBinaryForImage" value="true" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useProjBinaryForSymbols" value="true" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useRemoteTarget" value="true" />
+  <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="${eclipse_home}toolchain/RISC-V Embedded GCC/bin/riscv-none-embed-gdb.exe" />
+  <booleanAttribute key="org.eclipse.cdt.dsf.gdb.UPDATE_THREADLIST_ON_SUSPEND" value="false" />
+  <intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="2" />
+  <stringAttribute key="org.eclipse.cdt.launch.COREFILE_PATH" value="" />
+  <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="obj\TencentOS-Tiny.elf" />
+  <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="TencentOS-Tiny" />
+  <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="true" />
+  <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="" />
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+    <listEntry value="/TencentOS-Tiny" />
+  </listAttribute>
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+    <listEntry value="4" />
+  </listAttribute>
+  <stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#xD;&#xA;&lt;memoryBlockExpressionList context=&quot;Context string&quot;/&gt;&#xD;&#xA;" />
+  <stringAttribute key="process_factory_id" value="org.eclipse.cdt.dsf.gdb.GdbProcessFactory" />
+</launchConfiguration>
