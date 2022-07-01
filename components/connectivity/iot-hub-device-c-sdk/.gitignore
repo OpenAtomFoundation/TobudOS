@@ -1,0 +1,7 @@
+/.vscode/
+/build/
+/output/
+/tmp/
+build.yml
+app_ota_fw.bin
+break_point.dat
