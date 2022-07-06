@@ -330,6 +330,50 @@ int esp8266_tencent_firmware_ota_read_fwinfo(ota_fw_info_t *ota_fw_info)
     return 0;
 }
 
+static int esp8266_tencent_firmware_get_rssi(int *rssi)
+{
+    at_echo_t echo;
+    int ret;
+    int channel, res_rssi;
+
+    char *str;
+    char echo_buffer[100] = {0};
+    char ssid_buf[32+2+1] = {0};
+    char bssid_buf[17+2+1] = {0};
+
+    tos_at_echo_create(&echo, echo_buffer, sizeof(echo_buffer), NULL);
+    tos_at_cmd_exec(AT_AGENT, &echo, 2000, "AT+CWJAP?\r\n");
+    if (echo.status != AT_ECHO_STATUS_OK) {
+        printf("esp8266_get_rssi fail %d %s\r\n", echo.status, echo_buffer);
+        return -1;
+    }
+
+    str = strstr((const char *)echo.buffer, "No AP");
+    if (str) {
+        //netlink is disconnect.
+        return -1;
+    }
+
+    str = strstr((const char *)echo.buffer, "+CWJAP");
+    if (!str) {
+        //netlink is fail.
+        printf("No \"+CWJAP:\"\r\n");
+        return -1;
+    }
+
+    ret = sscanf(str+strlen("+CWJAP:"), "%[^,],%[^,], %d, %d", ssid_buf, bssid_buf, &channel, &res_rssi);
+    if (ret != 4) {
+        printf("get wifi rssi fail!\r\n");
+        return -1;
+    }
+
+    printf("rec->ssid:%s, bssid:%s, channel:%d, rssi:%d\r\n", ssid_buf, bssid_buf, channel, res_rssi);
+
+    *rssi = res_rssi;
+    return 0;
+
+}
+
 k_chr_fifo_t ota_fw_data_chr_fifo;
 k_sem_t ota_fw_data_sem;
 
@@ -566,6 +610,7 @@ tencent_firmware_module_t tencent_firmware_module_esp8266 = {
     .ota_set            = esp8266_tencent_firmware_ota_set,
     .ota_read_fwinfo    = esp8266_tencent_firmware_ota_read_fwinfo,
     .ota_read_fwdata    = esp8266_tencent_firmware_ota_read_fwdata,
+    .get_rssi           = esp8266_tencent_firmware_get_rssi,
     .start_smartconfig  = esp8266_tencent_firmware_start_smartconfig,
     .stop_smartconfig   = esp8266_tencent_firmware_stop_smartconfig,
 };

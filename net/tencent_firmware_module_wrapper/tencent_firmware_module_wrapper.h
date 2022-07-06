@@ -139,6 +139,8 @@ typedef struct tencent_firmware_module_st {
     int (*ota_read_fwinfo)(ota_fw_info_t *ota_fw_info);
     
     int (*ota_read_fwdata)(uint8_t *ota_fw_data_buffer,uint16_t buf_size);
+
+    int (*get_rssi)(int *rssi);
     
     int (*start_smartconfig)(void);
     
@@ -322,6 +324,15 @@ int tos_tf_module_smartconfig_start(void);
  * @return  errcode
  */
 int tos_tf_module_smartconfig_stop(void);
+
+/**
+ * @brief Get the wifi rssi
+ *
+ * @param[in]   rssi   the pointer to rssi value
+ *
+ * @return  errcode
+ */
+int tos_tf_module_get_rssi(int *rssi);
 
 #endif
 
