@@ -215,3 +215,11 @@ int tos_tf_module_smartconfig_stop(void)
     }
     return -1;
 }
+
+int tos_tf_module_get_rssi(int *rssi)
+{
+    if (g_tencent_firmware_module && g_tencent_firmware_module->get_rssi) {
+        return g_tencent_firmware_module->get_rssi(rssi);
+    }
+    return -1;
+}
