@@ -57,7 +57,7 @@ void task2(void *arg)
 void task3(void *arg)
 {
     while (1) {
-        printf("$$$I am task3(dynamic created)\r\n");
+        printf("$$$gogo\r\n");
         osDelay(2000);
     }
 }
