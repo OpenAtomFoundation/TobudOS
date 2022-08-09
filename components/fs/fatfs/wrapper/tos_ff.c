@@ -4397,6 +4397,7 @@ FRESULT tos_f_stat (
 
 	/* Get logical drive */
 	res = find_volume(fs, 0);
+	dj.obj.fs = fs;
 	if (res == FR_OK) {
 		INIT_NAMBUF(dj.obj.fs);
 		res = follow_path(&dj, path);	/* Follow the file path */

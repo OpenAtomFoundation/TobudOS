@@ -220,7 +220,7 @@ static int fatfs_readdir(vfs_dir_t *dir, vfs_dirent_t *dirent)
 
     dp = (DIR *)dir->private;
     res = tos_f_readdir(dp, &info);
-    if (res != FR_OK) {
+    if (res != FR_OK || info.fname[0] == 0) {
         return -1;
     }
 

@@ -430,7 +430,7 @@ __API__ vfs_dirent_t *tos_vfs_readdir(VFS_DIR *dirp)
     vfs_dir_t *dir = K_NULL;
     vfs_inode_t *inode = K_NULL;
 
-    if (!dir) {
+    if (!dirp) {
         return K_NULL;
     }
 
