@@ -20,6 +20,8 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
     } else if (port == HAL_UART_PORT_3) {
         uart->private_uart = &huart3;
         MX_USART3_UART_Init();
+    } else {
+        return -1;
     }
 
     return 0;
