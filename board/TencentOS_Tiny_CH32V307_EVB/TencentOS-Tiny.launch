@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
-<launchConfiguration type="ilg.gnumcueclipse.debug.gdbjtag.openocd.launchConfigurationType">
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doContinue" value="true" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doDebugInRam" value="false" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doFirstReset" value="true" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doGdbServerAllocateConsole" value="true" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doGdbServerAllocateTelnetConsole" value="false" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doSecondReset" value="true" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doStartGdbCLient" value="true" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.doStartGdbServer" value="true" />
-  <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.enableSemihosting" value="false" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.firstResetType" value="init" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbClientOtherCommands" value="set mem inaccessible-by-default off&#xD;&#xA;set architecture riscv:rv32&#xD;&#xA;set remotetimeout unlimited" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbClientOtherOptions" value="" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerConnectionAddress" value="" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerExecutable" value="${eclipse_home}toolchain/OpenOCD/bin/openocd.exe" />
-  <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerGdbPortNumber" value="3333" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerLog" value="" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerOther" value="-f &quot;${eclipse_home}toolchain/OpenOCD/bin/wch-riscv.cfg&quot;" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerTclPortNumber" value="6666" />
-  <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerTelnetPortNumber" value="4444" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.otherInitCommands" value="" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.otherRunCommands" value="" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.secondResetType" value="halt" />
-  <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.svdPath" value="${eclipse_home}template/wizard/WCH/RISC-V/CH32V307/NoneOS/CH32V307xx.svd" />
+<launchConfiguration type="com.mounriver.debug.gdbjtag.openocd.launchConfigurationType">
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doContinue" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doDebugInRam" value="false" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doFirstReset" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doGdbServerAllocateConsole" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doGdbServerAllocateTelnetConsole" value="false" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doSecondReset" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doStartGdbCLient" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doStartGdbServer" value="true" />
+  <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.enableSemihosting" value="false" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.firstResetType" value="init" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherCommands" value="set mem inaccessible-by-default off&#xD;&#xA;set architecture riscv:rv32&#xD;&#xA;set remotetimeout unlimited" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherOptions" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerConnectionAddress" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerExecutable" value="${eclipse_home}toolchain/OpenOCD/bin/openocd.exe" />
+  <intAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerGdbPortNumber" value="3333" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerLog" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerOther" value="-f &quot;${eclipse_home}toolchain/OpenOCD/bin/wch-riscv.cfg&quot;" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerTclPortNumber" value="6666" />
+  <intAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerTelnetPortNumber" value="4444" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.otherInitCommands" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.otherRunCommands" value="" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.secondResetType" value="halt" />
+  <stringAttribute key="com.mounriver.debug.gdbjtag.svdPath" value="${eclipse_home}template/wizard/WCH/RISC-V/CH32V307/NoneOS/CH32V307xx.svd" />
   <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value="" />
   <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageOffset" value="" />
   <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.ipAddress" value="localhost" />
