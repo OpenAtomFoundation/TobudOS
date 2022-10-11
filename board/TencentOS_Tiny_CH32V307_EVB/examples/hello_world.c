@@ -36,6 +36,7 @@ void task3_entry(void *arg) {
     struct js *js =  tos_js_vm_create(js_mem, sizeof(js_mem));
     js_run(js,
             "let a = 1;"
+            "LCD_ShowString(0, 20, 'Greet from JS!');"
             "let b = 1, c = 1, tmp = 1;"
             "for (let i = 1; i <= 10; i++) {"
             "    a *= 2;"

@@ -1335,6 +1335,7 @@ struct js *tos_js_vm_create(void *buf, size_t len) {
     js_set(vm, js_glob(vm), "print", js_mkfun(js_print));
     js_set(vm, js_glob(vm), "sleep", js_mkfun(js_sleep));
     js_set(vm, js_glob(vm), "fib", js_mkfun(js_fib));
+    js_set(vm, js_glob(vm), "LCD_ShowString", js_mkfun(js_LCD_ShowString));
     return vm;
 }
 

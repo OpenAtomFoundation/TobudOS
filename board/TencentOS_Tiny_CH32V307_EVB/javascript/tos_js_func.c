@@ -1,10 +1,11 @@
 #include "tos_js_func.h"
 #include "stdio.h"
 #include "tos_k.h"
+#include "lcd.h"
 
 static jsval_t tov(double d) { union { double d; jsval_t v; } u = {d}; return u.v; }
 static double tod(jsval_t v) { union { jsval_t v; double d; } u = {v}; return u.d; }
-static jsval_t mkval(uint8_t type, uint64_t data) { return ((jsval_t) 0x7ff0U << 48U) | ((jsval_t) (type) << 48) | (data & 0xffffffffffffUL); }
+//static jsval_t mkval(uint8_t type, uint64_t data) { return ((jsval_t) 0x7ff0U << 48U) | ((jsval_t) (type) << 48) | (data & 0xffffffffffffUL); }
 jsval_t js_print(struct js *js, jsval_t *args, int nargs) {
     for (int i = 0; i < nargs; i++) {
         const char *space = i == 0 ? "" : " ";
@@ -30,4 +31,12 @@ jsval_t js_fib(struct js *js, jsval_t *args, int nargs) {
         b = tmp;
     }
     return tov(b);
+}
+
+jsval_t js_LCD_ShowString(struct js *js, jsval_t *args, int nargs) {
+    if (nargs != 3) return js_mkundef();
+    u16 xt = (u16)tod(args[0]);
+    u16 yt = (u16)tod(args[1]);
+    const char * s = js_str(js, args[2]);
+    LCD_ShowString(xt,yt,s,WHITE,BLACK,16,0);
 }
