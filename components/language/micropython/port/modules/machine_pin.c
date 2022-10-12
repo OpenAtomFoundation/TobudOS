@@ -155,13 +155,13 @@ STATIC mp_obj_t machine_pin_obj_init_helper(machine_pin_obj_t *self, size_t n_ar
         mp_raise_msg_varg(&mp_type_ValueError, MP_ERROR_TEXT("invalid pin mode: %d"), mode);
     }
 
-    // if given, set the pin value before initialising to prevent glitches
+    // configure the GPIO as requested
+    mp_hal_pin_config(self, mode);
+
+    // set the pin value
     if (args[ARG_value].u_obj != MP_OBJ_NULL) {
         mp_hal_pin_write(self, mp_obj_is_true(args[ARG_value].u_obj));
     }
-
-    // configure the GPIO as requested
-    mp_hal_pin_config(self, mode);
 
     return mp_const_none;
 }

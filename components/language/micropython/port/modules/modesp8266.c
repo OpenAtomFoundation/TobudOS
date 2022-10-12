@@ -246,9 +246,9 @@ STATIC mp_obj_t esp8266_make_new(const mp_obj_type_t *type, size_t n_args, size_
 
         esp8266_obj.uart = uart;
         esp8266_obj.init = 1;
-
-        mod_network_register_nic(MP_OBJ_FROM_PTR(&esp8266_obj));
     }
+
+    mod_network_register_nic(MP_OBJ_FROM_PTR(&esp8266_obj));
 
     return MP_OBJ_FROM_PTR(&esp8266_obj);
 }
