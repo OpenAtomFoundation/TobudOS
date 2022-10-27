@@ -143,8 +143,8 @@ restore_context:
 
 /* just switch at Software interrupt */
 .align 2
-.global SW_handler
-SW_handler:
+.global SW_Handler
+SW_Handler:
 #if ARCH_RISCV_FPU
 	addi sp, sp, -128
 	fsw  f0,  __reg_f0_OFFSET(sp)
