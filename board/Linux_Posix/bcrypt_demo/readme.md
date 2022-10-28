@@ -19,7 +19,7 @@ run program !!
 
 ```bash
 # in build directory
-./inidemo
+./bcrypt_demo
 ```
 
 ## other

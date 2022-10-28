@@ -28,9 +28,7 @@ TREE_LIB_ENABLE=y
 lib=
 subdirs=
 
-CFGFLAGS += -I$(QTOP)/components/utils/Bcrypt/include
-CFGFLAGS += -I$(QTOP)/components/utils/JSON/include
-CFGFLAGS += -I$(QTOP)/components/utils/INI/include
+CFGFLAGS += -I$(CUR_DIR)/include
 
 include ${QTOP}/qmk/generic/Make.tpl
 
