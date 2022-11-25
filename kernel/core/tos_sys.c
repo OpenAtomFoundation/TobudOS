@@ -251,7 +251,7 @@ __STATIC__ void knl_idle_entry(void *arg)
     arg = arg; // make compiler happy
 
     while (K_TRUE) {
-#if TOS_CFG_TASK_DYNAMIC_CREATE_EN > 0u
+#if TOS_CFG_OBJ_DYNAMIC_CREATE_EN > 0u
         task_free_all();
 #endif
 
