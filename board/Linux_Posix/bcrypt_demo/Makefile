@@ -4,7 +4,7 @@ CUR_DIR := $(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 TRYQTOP := $(shell if [ -n "$$QTOP" ] ; then\
         echo $$QTOP;\
         else\
-        cd $(CUR_DIR); while /usr/bin/test ! -d qmk ; do \
+        cd $(CUR_DIR); while /usr/bin/test ! -e qmk ; do \
         dir=`cd ../;pwd`;                       \
         if [ "$$dir" = "/" ] ; then             \
            echo Cannot find QTOP in $(firstword $(MAKEFILE_LIST)) 1>&2; \
@@ -20,18 +20,31 @@ ifeq ($(QTOP),)
 $(error Please run this in a tree)
 endif
 LOCALDIR = $(patsubst %/,%,$(subst $(realpath $(QTOP))/,,$(CUR_DIR)))
+export QTOP
 
 ####################################################################
 
 
-TREE_LIB_ENABLE=y
+export BP=Linux_Posix
+
+TREE_LIB_ENABLE=1
 lib=
-subdirs=
+subdirs =
 
-CFGFLAGS += -I$(QTOP)/components/utils/Bcrypt/include
-CFGFLAGS += -I$(QTOP)/components/utils/JSON/include
-CFGFLAGS += -I$(QTOP)/components/utils/INI/include
 
-include ${QTOP}/qmk/generic/Make.tpl
+all::
+	make -C ${QTOP}/arch BP=${BP}
+	make -C ${QTOP}/kernel BP=${BP}
+	make -C ${QTOP}/osal BP=${BP}
+	make -C ${QTOP}/net BP=${BP}
+	make -C ${QTOP}/devices BP=${BP}
+exec = 
+LD_A_FILES += $(LIBDIR)/libarch.a
+LD_A_FILES += $(LIBDIR)/libkernel.a
+LD_A_FILES += $(LIBDIR)/libbcrypt_demo.a
+LD_A_FILES += $(LIBDIR)/libcmsis_os.a
+LDFLAGS += -lpthread
+
+include ${QTOP}/qmk/generic/Make.exec
 
 
