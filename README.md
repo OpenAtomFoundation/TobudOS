@@ -4,7 +4,7 @@
 
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/TencentOS-tiny/pulls)
-[![Build status](https://travis-ci.org/Tencent/TencentOS-tiny.svg?branch=master)](https://travis-ci.org/Tencent/TencentOS-tiny)
+[![Build status](https://travis-ci.com/Tencent/TencentOS-tiny.svg?branch=master)](https://travis-ci.com/Tencent/TencentOS-tiny)
 
 [(English Documents Available)](README_en.md)
 
