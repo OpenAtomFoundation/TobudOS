@@ -412,16 +412,18 @@ uint16_t MEM_BufferGetSize(void *buffer) /* IN: Block of memory to get size*/
 
     uint32_t regPrimask = DisableGlobalIRQ();
 
+    if(buffer==NULL)
+    {
+        EnableGlobalIRQ(regPrimask);
+        return 0;
+    }
     pBlock      = (block_list_header_t *)buffer - 1;
     pParentPool = (mem_pool_structure_t *)pBlock->pParentPool;
 
-    if (buffer != NULL)
-    {
-        EnableGlobalIRQ(regPrimask);
-        return pParentPool->blockSize;
-    }
     EnableGlobalIRQ(regPrimask);
-    return 0;
+    return pParentPool->blockSize;
+    
+    
 }
 
 /*!
