@@ -95,7 +95,7 @@ void SWM_SetFixedPinSelect(SWM_Type *base, swm_select_fixed_pin_t func, bool ena
 {
     /* Check arguments */
     assert(NULL != base);
-    assert((func > 0) || func < kSWM_FIXEDPIN_NUM_FUNCS);
+    assert((func > 0) && func < kSWM_FIXEDPIN_NUM_FUNCS);
 
     if (enable)
     {
