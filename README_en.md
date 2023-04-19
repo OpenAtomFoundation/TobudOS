@@ -3,7 +3,6 @@
 
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/TencentOS-tiny/pulls)
-[![Build status](https://travis-ci.org/Tencent/TencentOS-tiny.svg?branch=master)](https://travis-ci.org/Tencent/TencentOS-tiny)
 
 [(中文)](README.md)
 
@@ -79,7 +78,7 @@ The fault scene information is automatically uploaded to the cloud platform, whi
 
 ![](./doc/image/introduction/Partners_en.png)
 
-TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
+TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. In addition to MCU and modules, TencentOS tiny is also actively promoting the implementation of terminal products and projects. Currently, solutions such as AI smart agriculture, smart containers, and smart conference rooms have been formed, and internal cooperation has been established with WeChat Pay, Tencent Cloud Smart Industry, AI Platform Department, Tencent Weiling, and QQ family within Tencent to jointly expand the industry ecosystem; At the same time, we have also begun to actively develop external customers, and currently have reached business cooperation with Shenzhen Guanghe Display Technology's ink screen retail labels, Xinyuegou charging piles, and others.TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
 
 # TencentOS tiny code directory
 - [TencentOS tiny code directory description](./doc/09.Code_Directories.md)
