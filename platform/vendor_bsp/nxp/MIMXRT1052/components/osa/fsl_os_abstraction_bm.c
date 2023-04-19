@@ -312,7 +312,7 @@ osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority
         }
         list_element = LIST_GetNext(list_element);
     }
-    if (ptaskStruct->priority > tcb->priority)
+    if ((NULL == tcb) || (ptaskStruct->priority > tcb->priority))
     {
         OSA_InterruptDisable();
         (void)LIST_AddTail(&s_osaState.taskList, (list_element_handle_t)(void *)&(ptaskStruct->link));
