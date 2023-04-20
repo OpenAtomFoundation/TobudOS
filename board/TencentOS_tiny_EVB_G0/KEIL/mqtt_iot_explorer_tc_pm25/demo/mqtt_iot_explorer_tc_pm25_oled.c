@@ -82,7 +82,7 @@ void mqtt_demo_task(void)
     
     device_info_t dev_info;
     memset(&dev_info, 0, sizeof(device_info_t));
-    char str[16];   
+    char str[30];   
     size_t mail_size;
     uint8_t report_error_count = 0;
     char client_token[10];
