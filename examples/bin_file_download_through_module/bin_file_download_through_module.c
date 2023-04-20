@@ -148,7 +148,7 @@ static int ota_http_body_read(int fd, int file_len, unsigned char *buf, size_t b
     
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
     
-    printf("file_len is %d,  remain_len = %d\r\n", file_len, read_len);
+    printf("file_len is %d,  remain_len = %d\r\n", file_len, remain_len);
     
     while (remain_len > 0) {
         read_len = MIN(remain_len, buf_len);
