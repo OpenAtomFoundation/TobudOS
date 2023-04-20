@@ -4422,17 +4422,19 @@ LoRaMacStatus_t LoRaMacMcChannelSetupRxParams( AddressIdentifier_t groupID, McRx
         return LORAMAC_STATUS_BUSY;
     }
 
+    if( ( groupID >= LORAMAC_MAX_MC_CTX ) || 
+        ( MacCtx.NvmCtx->MulticastChannelList[groupID].ChannelParams.IsEnabled == false ) )
+    {
+        return LORAMAC_STATUS_MC_GROUP_UNDEFINED;
+    }
+    
     DeviceClass_t devClass = MacCtx.NvmCtx->MulticastChannelList[groupID].ChannelParams.Class;
     if( ( devClass == CLASS_A ) || ( devClass > CLASS_C ) )
     {
         return LORAMAC_STATUS_PARAMETER_INVALID;
     }
 
-    if( ( groupID >= LORAMAC_MAX_MC_CTX ) || 
-        ( MacCtx.NvmCtx->MulticastChannelList[groupID].ChannelParams.IsEnabled == false ) )
-    {
-        return LORAMAC_STATUS_MC_GROUP_UNDEFINED;
-    }
+
     *status &= 0x0F; // groupID OK
 
     VerifyParams_t verify;
