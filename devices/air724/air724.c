@@ -386,7 +386,7 @@ static int air724_recv(int id, void *buf, size_t len)
 int air724_send(int id, const void *buf, size_t len)
 {
     at_echo_t echo;
-    char expect_str[10];
+    char expect_str[24];
 
     if (tos_at_global_lock_pend() != 0) {
         return -1;
