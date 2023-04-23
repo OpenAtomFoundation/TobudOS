@@ -170,7 +170,7 @@ xs:noNamespaceSchemaLocation="PACK.xsd"\>
 \<vendor\> TencentOS-tiny\</vendor\>
 
 \< url\>
-[https://github.com/OpenAtomFoundation/TencentOS-tiny\</url](https://github.com/OpenAtomFoundation/TencentOS-tiny%3c/url)
+[https://github.com/OpenAtomFoundation/TencentOS-tiny](https://github.com/OpenAtomFoundation/TencentOS-tiny)\</url\>
 
 \<license\>LICENSE.txt\</license\>
 
