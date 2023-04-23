@@ -65,7 +65,7 @@ void mqtt_demo_task(void)
     
     device_info_t dev_info;
     memset(&dev_info, 0, sizeof(device_info_t));
-    char str[16];   
+    char str[32];   
     size_t mail_size;
     uint8_t report_error_count = 0;
     char client_token[10];
@@ -103,7 +103,7 @@ void mqtt_demo_task(void)
         tos_sleep_ms(5000);
     }
     
-    /* ¿ªÊ¼¶©ÔÄtopic */
+    /* ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½topic */
     size = snprintf(report_reply_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/down/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_reply_topic_name) - 1) {
@@ -122,7 +122,7 @@ void mqtt_demo_task(void)
         printf("pub topic content length not enough! content size:%d  buf size:%d", size, (int)sizeof(report_topic_name));
     }
     
-    /* ´´½¨ÓÊÏä */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     tos_mail_q_create(&mail_q, pm2d5_value_pool, 3, sizeof(pm2d5_data_u));
     
     HAL_NVIC_DisableIRQ(USART2_IRQn);
@@ -133,22 +133,22 @@ void mqtt_demo_task(void)
     }
   
     while (1) {
-        /* Í¨¹ý½ÓÊÕÓÊ¼þÀ´¶ÁÈ¡Êý¾Ý */
+        /* Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ */
         HAL_NVIC_EnableIRQ(USART2_IRQn);
         tos_mail_q_pend(&mail_q, (uint8_t*)&pm2d5_value, &mail_size, TOS_TIME_FOREVER);
         HAL_NVIC_DisableIRQ(USART2_IRQn);
         
-        //ÊÕµ½Ö®ºó´òÓ¡ÐÅÏ¢
+        //ï¿½Õµï¿½Ö®ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½Ï¢
         printf("\r\n\r\n\r\n");
         for (i = 0; i < 13; i++) {
             printf("data[%d]:%d ug/m3\r\n", i+1, pm2d5_value.data[i]);
         }
         
-        /* ÏÔÊ¾PM2.5µÄÖµ */
+        /* ï¿½ï¿½Ê¾PM2.5ï¿½ï¿½Öµ */
         sprintf(str, "PM2.5:%4d ug/m3", pm2d5_value.pm2d5_data.data2);
-        OLED_ShowString(0,0,(uint8_t*)str,16);
+        OLED_ShowString(0,0,(uint8_t*)str,32);
         
-        /* ÉÏ±¨Öµ */
+        /* ï¿½Ï±ï¿½Öµ */
         generate_client_token(client_token, sizeof(client_token));
         memset(payload, 0, 1024);
         snprintf(payload, 1024, REPORT_DATA_TEMPLATE, client_token,
@@ -183,7 +183,7 @@ void application_entry(void *arg)
 {
     char *str = "TencentOS-Tiny";
     
-    /* ³õÊ¼»¯OLED */
+    /* ï¿½ï¿½Ê¼ï¿½ï¿½OLED */
     
     mqtt_demo_task();
     while (1) {

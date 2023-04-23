@@ -82,7 +82,7 @@ void mqtt_demo_task(void)
     
     device_info_t dev_info;
     memset(&dev_info, 0, sizeof(device_info_t));
-    char str[16];   
+    char str[32];   
     size_t mail_size;
     uint8_t report_error_count = 0;
     char client_token[10];
@@ -99,7 +99,7 @@ void mqtt_demo_task(void)
     
     OLED_Clear();
     sprintf(str, "Connecting WIFI...");
-    OLED_ShowString(0, 0, (uint8_t*)str, 16);
+    OLED_ShowString(0, 0, (uint8_t*)str, 32);
     while (1) {
         if ( esp8266_tencent_firmware_join_ap(WIFI_SSID, WIFI_PASSWD) == 0) {
             printf("module WIFI connect success\n");
@@ -111,7 +111,7 @@ void mqtt_demo_task(void)
     
     OLED_Clear();
     sprintf(str, "Connecting IoT Explorer...");
-    OLED_ShowString(0, 0, (uint8_t*)str, 16);
+    OLED_ShowString(0, 0, (uint8_t*)str, 32);
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
     strncpy(dev_info.device_name, device_name, DEVICE_NAME_MAX_SIZE);
     strncpy(dev_info.device_serc, key, DEVICE_SERC_MAX_SIZE);
@@ -170,7 +170,7 @@ void mqtt_demo_task(void)
         /* 显示PM2.5的值 */
         OLED_Clear();
         sprintf(str, "PM2.5:%4d ug/m3", pm2d5_value.pm2d5_data.data2);
-        OLED_ShowString(0,0,(uint8_t*)str,16);
+        OLED_ShowString(0,0,(uint8_t*)str,32);
         
         /* 上报值 */
         generate_client_token(client_token, sizeof(client_token));
@@ -188,12 +188,12 @@ void mqtt_demo_task(void)
             report_error_count++;
             printf("module mqtt publ fail, count: %d\n", report_error_count);
             sprintf(str, "# report fail");
-            OLED_ShowString(0,2,(uint8_t*)str,16);
+            OLED_ShowString(0,2,(uint8_t*)str,32);
         } else {
             report_error_count = 0;
             printf("module mqtt publ success\n");
             sprintf(str, "# report ok");
-            OLED_ShowString(0,2,(uint8_t*)str,16);
+            OLED_ShowString(0,2,(uint8_t*)str,32);
         }
 
         if (report_error_count >= 6) {
@@ -212,7 +212,7 @@ void application_entry(void *arg)
     /* 初始化OLED */
     OLED_Init();
     OLED_Clear();
-    OLED_ShowString(0, 0, (uint8_t*)str, 16);
+    OLED_ShowString(0, 0, (uint8_t*)str, 32);
     
     mqtt_demo_task();
     while (1) {
