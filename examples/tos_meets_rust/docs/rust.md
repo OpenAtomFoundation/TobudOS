@@ -190,6 +190,6 @@
 
 # 参考
 
-- [Hosting Embedded Rust apps on Apache Mynewt with STM32 Blue Pill](https://medium.com/@ly.lee/hosting-embedded-rust-apps-on-apache-mynewt-with-stm32-blue-pill-c86b119fe5f)
+- [Hosting Embedded Rust apps on Apache Mynewt with STM32 Blue Pill](https://lupyuen.github.io/articles/hosting-embedded-rust-apps-on-apache-mynewt-with-stm32-blue-pill)
 - [STM32L0 Rust Part 1 - Getting Started](https://craigjb.com/2019/12/31/stm32l0-rust/)
 - [FreeRTOS meets Rust](http://www.hashmismatch.net/freertos-meets-rust/)
