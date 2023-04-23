@@ -98,10 +98,10 @@ unsigned int salof_fifo_read(salof_fifo_t fifo, void *buff, unsigned int len, un
 {
     int l;
 
-    salof_sem_pend(fifo->sem, timeout);
-
     if((!fifo) || (!buff) || (!len))
         return 0;
+        
+    salof_sem_pend(fifo->sem, timeout);
     
     len = FIFO_MIN(len, fifo->in - fifo->out);
 
