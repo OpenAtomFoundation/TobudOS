@@ -122,36 +122,36 @@ void sys_sem_set_invalid(sys_sem_t *sem)
 }
 
 /*
-   ���timeout������Ϊ�㣬�򷵻�ֵΪ
-   �ȴ��ź��������ѵĺ����������
-   �ź���δ��ָ��ʱ���ڷ����źţ�����ֵΪ
-   SYS_ARCH_TIMEOUT������̲߳��صȴ��ź���
-   �ú��������㡣 */
+   如果timeout参数不为零，则返回值为
+   等待信号量所花费的毫秒数。如果
+   信号量未在指定时间内发出信号，返回值为
+   SYS_ARCH_TIMEOUT。如果线程不必等待信号量
+   该函数返回零。 */
 u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
 {
     k_tick_t wait_tick = 0;
     k_tick_t start_tick = 0;
 
-    //�����ź����Ƿ���Ч
+    //看看信号量是否有效
     if (sem == SYS_SEM_NULL) {
         return SYS_ARCH_TIMEOUT;
     }
 
-    //���Ȼ�ȡ��ʼ�ȴ��ź�����ʱ�ӽ���
+    //首先获取开始等待信号量的时钟节拍
     start_tick = sys_now();
 
-    //timeout != 0����Ҫ��ms����ϵͳ��ʱ�ӽ���
+    //timeout != 0，需要将ms换成系统的时钟节拍
     if (timeout != 0) {
-        //��msת����ʱ�ӽ���
+        //将ms转换成时钟节拍
         wait_tick = timeout / (1000 / TOS_CFG_CPU_TICK_PER_SECOND);
         if (wait_tick == 0) {
             wait_tick = 1;
         }
     } else {
-        wait_tick = TOS_TIME_FOREVER;  //һֱ����
+        wait_tick = TOS_TIME_FOREVER;  //一直阻塞
     }
 
-    //�ȴ��ɹ�������ȴ���ʱ�䣬����ͱ�ʾ�ȴ���ʱ
+    //等待成功，计算等待的时间，否则就表示等待超时
     if (tos_sem_pend(sem, wait_tick) == K_ERR_NONE) {
         return ((sys_now() - start_tick) * (1000 / TOS_CFG_CPU_TICK_PER_SECOND));
     }
@@ -231,7 +231,7 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn function, void *arg
         return NULL;
     }
 
-    /* ����MidPriority_Task���� */
+    /* 创建MidPriority_Task任务 */
     rc = tos_task_create(task, (char*)name, function, arg,
                             prio, task_stack, stacksize, 20);
     if (rc != K_ERR_NONE) {
@@ -313,25 +313,25 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *q, void **msg, u32_t timeout)
     k_tick_t wait_tick = 0;
     k_tick_t start_tick = 0;
 
-    if (!msg) { // �����洢��Ϣ�ĵط��Ƿ���Ч
+    if (!msg) { // 看看存储消息的地方是否有效
         msg = &dummyptr;
     }
 
-    // ���Ȼ�ȡ��ʼ�ȴ��ź�����ʱ�ӽ���
+    // 首先获取开始等待信号量的时钟节拍
     start_tick = sys_now();
 
-    // timeout != 0����Ҫ��ms����ϵͳ��ʱ�ӽ���
+    // timeout != 0，需要将ms换成系统的时钟节拍
     if (timeout != 0) {
-        //��msת����ʱ�ӽ���
+        //将ms转换成时钟节拍
         wait_tick = timeout / (1000 / TOS_CFG_CPU_TICK_PER_SECOND);
         if (wait_tick == 0) {
             wait_tick = 1;
         }
-    } else { // һֱ����
+    } else { // 一直阻塞
         wait_tick = TOS_TIME_FOREVER;
     }
 
-    // �ȴ��ɹ�������ȴ���ʱ�䣬����ͱ�ʾ�ȴ���ʱ
+    // 等待成功，计算等待的时间，否则就表示等待超时
     if (tos_msg_q_pend(q,&(*msg), wait_tick) == K_ERR_NONE) {
         return ((sys_now() - start_tick) * (1000 / TOS_CFG_CPU_TICK_PER_SECOND));
     }
