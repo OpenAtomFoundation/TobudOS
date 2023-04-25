@@ -122,36 +122,36 @@ void sys_sem_set_invalid(sys_sem_t *sem)
 }
 
 /*
-   Èç¹ûtimeout²ÎÊı²»ÎªÁã£¬Ôò·µ»ØÖµÎª
-   µÈ´ıĞÅºÅÁ¿Ëù»¨·ÑµÄºÁÃëÊı¡£Èç¹û
-   ĞÅºÅÁ¿Î´ÔÚÖ¸¶¨Ê±¼äÄÚ·¢³öĞÅºÅ£¬·µ»ØÖµÎª
-   SYS_ARCH_TIMEOUT¡£Èç¹ûÏß³Ì²»±ØµÈ´ıĞÅºÅÁ¿
-   ¸Ãº¯Êı·µ»ØÁã¡£ */
+   å¦‚æœtimeoutå‚æ•°ä¸ä¸ºé›¶ï¼Œåˆ™è¿”å›å€¼ä¸º
+   ç­‰å¾…ä¿¡å·é‡æ‰€èŠ±è´¹çš„æ¯«ç§’æ•°ã€‚å¦‚æœ
+   ä¿¡å·é‡æœªåœ¨æŒ‡å®šæ—¶é—´å†…å‘å‡ºä¿¡å·ï¼Œè¿”å›å€¼ä¸º
+   SYS_ARCH_TIMEOUTã€‚å¦‚æœçº¿ç¨‹ä¸å¿…ç­‰å¾…ä¿¡å·é‡
+   è¯¥å‡½æ•°è¿”å›é›¶ã€‚ */
 u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
 {
     k_tick_t wait_tick = 0;
     k_tick_t start_tick = 0;
 
-    //¿´¿´ĞÅºÅÁ¿ÊÇ·ñÓĞĞ§
+    //çœ‹çœ‹ä¿¡å·é‡æ˜¯å¦æœ‰æ•ˆ
     if (sem == SYS_SEM_NULL) {
         return SYS_ARCH_TIMEOUT;
     }
 
-    //Ê×ÏÈ»ñÈ¡¿ªÊ¼µÈ´ıĞÅºÅÁ¿µÄÊ±ÖÓ½ÚÅÄ
+    //é¦–å…ˆè·å–å¼€å§‹ç­‰å¾…ä¿¡å·é‡çš„æ—¶é’ŸèŠ‚æ‹
     start_tick = sys_now();
 
-    //timeout != 0£¬ĞèÒª½«ms»»³ÉÏµÍ³µÄÊ±ÖÓ½ÚÅÄ
+    //timeout != 0ï¼Œéœ€è¦å°†msæ¢æˆç³»ç»Ÿçš„æ—¶é’ŸèŠ‚æ‹
     if (timeout != 0) {
-        //½«ms×ª»»³ÉÊ±ÖÓ½ÚÅÄ
+        //å°†msè½¬æ¢æˆæ—¶é’ŸèŠ‚æ‹
         wait_tick = timeout / (1000 / TOS_CFG_CPU_TICK_PER_SECOND);
         if (wait_tick == 0) {
             wait_tick = 1;
         }
     } else {
-        wait_tick = TOS_TIME_FOREVER;  //Ò»Ö±×èÈû
+        wait_tick = TOS_TIME_FOREVER;  //ä¸€ç›´é˜»å¡
     }
 
-    //µÈ´ı³É¹¦£¬¼ÆËãµÈ´ıµÄÊ±¼ä£¬·ñÔò¾Í±íÊ¾µÈ´ı³¬Ê±
+    //ç­‰å¾…æˆåŠŸï¼Œè®¡ç®—ç­‰å¾…çš„æ—¶é—´ï¼Œå¦åˆ™å°±è¡¨ç¤ºç­‰å¾…è¶…æ—¶
     if (tos_sem_pend(sem, wait_tick) == K_ERR_NONE) {
         return ((sys_now() - start_tick) * (1000 / TOS_CFG_CPU_TICK_PER_SECOND));
     }
@@ -224,17 +224,20 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn function, void *arg
         return NULL;
     }
 
-    task_stack = tos_mmheap_alloc(stacksize);
+    task_stack = (k_stack_t *)tos_mmheap_alloc(stacksize);
     if (!task_stack) {
         printf("[sys_arch]:memalloc task stack fail!\n");
+        tos_mmheap_free(task);
         return NULL;
     }
 
-    /* ´´½¨MidPriority_TaskÈÎÎñ */
+    /* åˆ›å»ºMidPriority_Taskä»»åŠ¡ */
     rc = tos_task_create(task, (char*)name, function, arg,
                             prio, task_stack, stacksize, 20);
     if (rc != K_ERR_NONE) {
         printf("[sys_arch]:create task fail! code: %d \r\n", rc);
+        tos_mmheap_free(task);
+        tos_mmheap_free(task_stack);
         return NULL;
     }
 
@@ -310,25 +313,25 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *q, void **msg, u32_t timeout)
     k_tick_t wait_tick = 0;
     k_tick_t start_tick = 0;
 
-    if (!msg) { // ¿´¿´´æ´¢ÏûÏ¢µÄµØ·½ÊÇ·ñÓĞĞ§
+    if (!msg) { // çœ‹çœ‹å­˜å‚¨æ¶ˆæ¯çš„åœ°æ–¹æ˜¯å¦æœ‰æ•ˆ
         msg = &dummyptr;
     }
 
-    // Ê×ÏÈ»ñÈ¡¿ªÊ¼µÈ´ıĞÅºÅÁ¿µÄÊ±ÖÓ½ÚÅÄ
+    // é¦–å…ˆè·å–å¼€å§‹ç­‰å¾…ä¿¡å·é‡çš„æ—¶é’ŸèŠ‚æ‹
     start_tick = sys_now();
 
-    // timeout != 0£¬ĞèÒª½«ms»»³ÉÏµÍ³µÄÊ±ÖÓ½ÚÅÄ
+    // timeout != 0ï¼Œéœ€è¦å°†msæ¢æˆç³»ç»Ÿçš„æ—¶é’ŸèŠ‚æ‹
     if (timeout != 0) {
-        //½«ms×ª»»³ÉÊ±ÖÓ½ÚÅÄ
+        //å°†msè½¬æ¢æˆæ—¶é’ŸèŠ‚æ‹
         wait_tick = timeout / (1000 / TOS_CFG_CPU_TICK_PER_SECOND);
         if (wait_tick == 0) {
             wait_tick = 1;
         }
-    } else { // Ò»Ö±×èÈû
+    } else { // ä¸€ç›´é˜»å¡
         wait_tick = TOS_TIME_FOREVER;
     }
 
-    // µÈ´ı³É¹¦£¬¼ÆËãµÈ´ıµÄÊ±¼ä£¬·ñÔò¾Í±íÊ¾µÈ´ı³¬Ê±
+    // ç­‰å¾…æˆåŠŸï¼Œè®¡ç®—ç­‰å¾…çš„æ—¶é—´ï¼Œå¦åˆ™å°±è¡¨ç¤ºç­‰å¾…è¶…æ—¶
     if (tos_msg_q_pend(q,&(*msg), wait_tick) == K_ERR_NONE) {
         return ((sys_now() - start_tick) * (1000 / TOS_CFG_CPU_TICK_PER_SECOND));
     }
