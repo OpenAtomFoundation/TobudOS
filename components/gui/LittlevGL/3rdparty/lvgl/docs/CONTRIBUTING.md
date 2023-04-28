@@ -22,7 +22,7 @@ If you borrow code from another project, please make sure to add their copyright
 
 ### Where do I ask questions, give feedback, or report bugs?
 
-We use the [forum](http://forum.littlevgl.com/) for questions, feature suggestions, and discussions.
+We use the [forum](https://forum.lvgl.io/) for questions, feature suggestions, and discussions.
 
 We use [GitHub's issue tracker](https://github.com/littlevgl/lvgl/issues) to report bugs.
 
@@ -47,17 +47,17 @@ Some advice:
 - If you are not sure about your fix or feature it's better to open an issue first, and discuss the details there.
 - Maybe your fix or update won't be perfect at first. Don't be afraid, just improve it and push the new commits. The PR will be updated accordingly. 
 - If your update needs some extra work it's okay to say: _"I'm busy now and I will improve it soon"_ or _"Sorry, I don't have time to improve it, I hope it helps in this form too"_. So it's better to say don't have time to continue then saying nothing.
-- Please read and follow this [guide about the coding style](https://docs.littlevgl.com/#Coding-Style-Guide)
+- Please read and follow this [guide about the coding style](https://github.com/lvgl/lvgl/blob/master/docs/CODING_STYLE.rst)
 
 
 ### Where is the documentation?
 
-You can read the documentation here: https://docs.littlevgl.com/  
+You can read the documentation here: https://docs.lvgl.io/master/index.html  
 You can edit the documentation here: https://github.com/littlevgl/doc  
 
 ### Where is the blog?
 
-You can read the blog here: https://blog.littlevgl.com/  
+You can read the blog here: https://blog.lvgl.io/  
 You can edit the blog here: https://github.com/littlevgl/blog  
 
 
@@ -73,7 +73,7 @@ For simple bugfixes (typos, missing error handling, fixing a warning) is fine to
 ### Suggesting and/or implementing new features
 If you have a good idea don't hesitate to share with us. It's even better if you have time to deal with its implementation. Don't be afraid if you still don't know LittlevGL well enough. We will help you to get started. 
 
-During the implementation don't forget the [Code style guide](https://docs.littlevgl.com/#Coding-Style-Guide).
+During the implementation don't forget the [Code style guide](https://github.com/lvgl/lvgl/blob/master/docs/CODING_STYLE.rst).
 
 ### Improving and/or translating the documentation
 
