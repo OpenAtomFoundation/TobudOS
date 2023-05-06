@@ -389,8 +389,8 @@ static void *run(void *arg)
 			continue;
 
 		if (strcmp(crypt_ra(key, hash, &data, &size), hash)) {
-			printf("%d: FAILED (crypt_ra/%d/%lu)\n",
-				(int)((char *)arg - (char *)0), i, count);
+			printf("%d: FAILED (crypt_ra/%d/%lu)\n", 
+			       (int)(intptr_t)arg, i, count);
 			free(data);
 			return NULL;
 		}
@@ -398,7 +398,7 @@ static void *run(void *arg)
 	} while (running);
 
 	free(data);
-	return count + (char *)0;
+	return (void *)(intptr_t)count;
 }
 
 int main(void)
