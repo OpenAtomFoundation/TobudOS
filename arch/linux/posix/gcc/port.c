@@ -291,6 +291,7 @@ __PORT__ void *_thread_entry(void *arg)
     _wait_resume();
     params->entry(params->arg);
     params->exit(params->arg);
+    return NULL;
 }
 
 __PORT__ void _handle_context_switch()
