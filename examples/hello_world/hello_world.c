@@ -28,6 +28,7 @@ void task2_entry(void *arg)
 
 void application_entry(void *arg)
 {
+     printf("***This is a demo\r\n");
     tos_task_create(&task1, "task1", task1_entry, NULL, 3, task1_stk, TASK1_STK_SIZE, 0); // Create task1
     tos_task_create(&task2, "task2", task2_entry, NULL, 3, task2_stk, TASK2_STK_SIZE, 0);// Create task2
 }
