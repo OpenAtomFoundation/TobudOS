@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include "tos_at.h"
 
 /* USER CODE BEGIN 0 */
 uint8_t data;
