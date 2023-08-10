@@ -157,24 +157,19 @@ tag contains the protocol that the user needs to follow to use the pack; the \<
 support \> tag contains a description of the pack. Figure 1.2 shows the pack
 interface for the following code.
 
-\<? xml version="1.0" encoding="utf-8"? \>
-
-\<pack schemaVersion="1.0"
-xmlns:[xs=http://www.w3.org/2001/XMLSchema-instance](http://www.w3.org/2001/XMLSchema-instance)
-xs:noNamespaceSchemaLocation="PACK.xsd"\>
-
-\<name\> Tencent\</name\>
-
-\< description \> Description of your pack\</description
-
-\<vendor\> TencentOS-tiny\</vendor\>
-
-\< url\>
-[https://github.com/OpenAtomFoundation/TencentOS-tiny](https://github.com/OpenAtomFoundation/TencentOS-tiny)\</url\>
-
-\<license\>LICENSE.txt\</license\>
-
-\< supportContact\> ...\</supportContact\>
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<package schemaVersion="1.0"
+	xmlns:xs=
+	<http://www.w3.org/2001/XMLSchema-instance>
+xs:noNamespaceSchemaLocation="PACK.xsd">
+		<name>Tencent</name>
+		<description>Description of your pack</description>
+		<vendor>TencentOS-tiny</vendor>
+		<url>[https://github.com/OpenAtomFoundation/TencentOS-tiny](https://github.com/OpenAtomFoundation/TencentOS-tiny)</url>
+		<license>LICENSE.txt</license>
+		<supportContact>…</supportContact>
+```
 
 ![](media_en/0809f249e08db80cbdb8062f75c5eb14.png)
 
@@ -185,17 +180,20 @@ of the pack, where the developer can mark when the version is updated, so that
 when the pack is generated, the system will automatically generate the latest
 version of the pack.
 
-\<releases\>
+```xml
+<releases>
+	<release version=**"1.0.1"**>
 
-\<release version=**"1.0.1**"\> Sep/3/2021, version name
+Sep/3/2021, version name
 
-\</release\>
+</release>
+	<release version=**"1.0.0"**>
 
-\<release version=**"1.0.0**"\> Sep/1/2021, version name
+Sep/1/2021, version name
 
-\</release\>
-
-\</releases\>
+</release>
+</releases>
+```
 
 The \< taxonomy\> tag is used to define the description for each component, as
 shown in Figure 1.3, by identifying where the description is located with the
@@ -203,12 +201,12 @@ following code for Cclass, Cgroup and Csub, doc is used to specify the
 description file (which may or may not be added) and then adding the name of the
 description.
 
-\<taxonomy\>
-
-\<description Cclass="TencentOS tiny" Cgroup="xx" Csub="xx" doc =
-"examples/index.html"\> TencentOS tiny\</description\>
-
-\</taxonomy\>
+```xml
+<taxonomy>
+	<description Cclass="TencentOS tiny" Cgroup="xx" Csub="xx"
+doc="examples/index.html">TencentOS tiny</description>
+</taxonomy>
+```
 
 ![](media_en/f82ec656ef23d89a3442d5e6fffaa271.png)
 
@@ -217,11 +215,11 @@ Figure 1.3 \< taxonomy\> tag
 The \< keywords \> tag defines the keywords for the pack, which can be used to
 search for the pack you need when downloading packs from the ARM website.
 
-\<keywords \>
-
-\<keyword\>Tencent\</keyword\>
-
-\</keywords \>
+```xml
+<keywords>
+	<keyword>Tencent</keyword>
+</keywords>
+```
 
 The \< requirements \> tag defines the associated installation requirements for
 the pack, i.e. when installing this pack, other packs need to be installed
@@ -230,15 +228,13 @@ online (URL: [MDK5 Software](https://www.keil.com/dd2/pack/#!%23eula-container)
 example the following definition requires us to install the CMSIS 5.7.0 pack for
 ARM.
 
-\<requirements\>
-
-\<packs\>
-
-\<pack vendor="ARM" name="CMSIS" version="5.7.0"/\>
-
-\</packs\>
-
-\</requirements
+```xml
+<requirements>
+	<packages>
+		<package vendor="ARM" name="CMSIS" version="5.7.0"/>
+	</packages>
+</requirements>
+```
 
 Next is the \< conditions\> tag, which is used when designing \< components\> to
 indicate the dependencies of each component in the pack, i.e. the use of this
@@ -259,23 +255,21 @@ corresponding to that condition, \<require Cclass=" TencentOS tiny"
 Cgroup="kernel" Csub="core"/\> indicates that the user also needs to select the
 core component.
 
-\<conditions\>
-
-\<condition id="Cortex_M0"\>
-
-\<description\> Cortex-M0\</description\>
-
-\<accept Dvendor="ARM:82" Dname="ARMCM0"/\>
-
-\<require condition="condition id"/\>
-
-\< require Tcompiler="ARMCC"/\>
-
-\<require Cclass="TencentOS tiny" Cgroup="kernel" Csub="core"/\>
-
-\</condition\>
-
-\</conditions\>
+```xml
+<conditions>
+	<condition id="Cortex_M0">
+		<description> Cortex-M0</description>
+		<accept Dvendor="ARM:82" Dname="ARMCM0"/>
+		<require condition="condition id "/>
+		< require Tcompiler="ARMCC"/>
+		<require Cclass="TencentOS tiny" Cgroup="kernel" Csub="core"/>
+	</condition>
+	<condition id=" condition_2 ">
+		<description></description>
+		<!-- 第二个condition的内容 -->
+	</condition>
+</conditions>
+```
 
 Then there is the \< components\> tag, which describes all the files contained
 in the pack. When writing programs under this tag, the files need to be divided
@@ -287,29 +281,20 @@ about the component, as shown in Figure 1.4.
 
 Figure 1.4 \<component\> definition screen
 
-\<components\>
-
-\<component Cvendor="Keil" Cclass="TencentOS tiny" Cgroup="arch" Csub="arch"
-Cversion="1.0.1" condition=" condition id"\>
-
-\<description\> description \</description\>
-
-\<files\>
-
-\<file category="doc" name="Documentation/General/html/driver_I2C.html"/\> --\>
-
-\<file category="include" name="arch/arm/arm-v7m/common/include/"/\>
-
-\<file category="header" name="arch/arm/arm-v7m/cortex-m0+/armcc/port.h"/\>
-
-\<file category="header" name="arch/arm/arm-v7m/cortex-m0+/armcc/port_config.h"
-attr="config" version="1.1.0"/\>
-
-\<file category="source" name="arch/arm/arm-v7m/common/tos_cpu.c"/\>
-
-\</files\>
-
-\</components\>
+```xml
+<components>
+	<component Cvendor="Keil" Cclass="TencentOS tiny" Cgroup="arch" Csub="arch"
+Cversion="1.0.1" condition=" condition id">
+		<description> description </description>
+		<files><file category="doc" name="Documentation/General/html/driver_I2C.html"/>
+			<file category="include" name="arch/arm/arm-v7m/common/include/"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m0+/armcc/port.h"/>
+			<file category="header" name="arch/arm/arm-v7m/cortex-m0+/armcc/port_config.h" attr="config" version="1.1.0"/>
+			<file category="source" name="arch/arm/arm-v7m/common/tos_cpu.c"/>
+		</files>
+	</component>
+</components>
+```
 
 condition=" condition id" is the \<condition\> tag introduced above, so that the
 user also needs to satisfy the dependencies required by the condition when using
@@ -324,7 +309,7 @@ version.
 Table 1-1 File category definitions
 
 | category | Meaning                                             |
-|----------|-----------------------------------------------------|
+| -------- | --------------------------------------------------- |
 | doc      | Documents, which can be web pages or other links    |
 | include  | Contains all the headers under a certain path       |
 | header   | Contains specific header files under a certain path |
@@ -366,13 +351,31 @@ structure can be used, where each \< bundle\> tag defines a pack.
 
 \< component
 
-\<! -- Component content --\>
+\<! --  --\>
 
 \</component
 
 \</bundle\>
 
 \</components\>
+
+```xml
+<components>
+	<bundle Cbundle="MDK-ARM" Cclass="TencentOS tiny" Cversion="1.0.0"\>
+		<description>TencentOS tiny</description>
+		<doc>examples/index.html</doc> 
+        <component>
+		<!-- Component content -->
+	</component>
+</bundle>
+<bundle Cbundle="MDK-ARM" Cclass="TencentOS tiny" Cversion="1.0.0">
+	<description>TencentOS tiny</description>
+	<doc>examples/index.html</doc>
+	<component>
+		<!-- Component content -->
+	</component>
+</bundle>undefined</components>
+```
 
 In addition, PDSC files can also contain \<devices\>, \<apis\>, \<boards\> and
 \<examples\>, which are provided by ARM or other device or board manufacturers,
@@ -402,9 +405,10 @@ Figure 1.5 Software configuration required to generate the pack
 First open gen_pack.bat using Notepad or Notepad++ and make the following
 changes to the following areas, as shown in Table 1-2.
 
-SET ZIPPATH=C:\\Program Files\\7-Zip
+```bat
+SET ZIPPATH=C:\Program Files\7-Zip
 
-SET RELEASE_PATH=..\\Local_Release
+SET RELEASE_PATH=..\Local_Release
 
 SET PACK_VENDOR=Tencent
 
@@ -413,11 +417,12 @@ SET PACK_NAME=TencentOS-tiny
 SET PACK_FOLDER_LIST=arch osal kernel examples
 
 SET PACK_FILE_LIST=%PACK_VENDOR%.%PACK_NAME%.pdsc README.md LICENSE.txt
+```
 
 Table 1-2 gen_pack.bat modifications
 
 | Code                 | Meaning                                            |
-|----------------------|----------------------------------------------------|
+| -------------------- | -------------------------------------------------- |
 | SET ZIPPATH          | Installation path for 7-Zip File Manager software  |
 | SET RELEASE_PATH     | The path to the generated pack, as a relative path |
 | SET PACK_VENDOR      | The \<vendor\> tag in the PDSC file                |
@@ -467,32 +472,32 @@ designed in this paper includes the elements shown in Table 2-1.
 
 Table 2-1 Software pack contents
 
-| Contents   | Function                                                                                                                                     |                                                                                          |
-|------------|----------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-|  arch      | Includes arch files for cores Cortex-M0+, Cortex-M0, Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23, Cortex-M33 under TencentOS-tiny\\arch\\arm |                                                                                          |
-| kernel     | Including the files in the core, hal path under TencentOS-tiny\\kernel and tos_config file                                                   |                                                                                          |
-| cmsis_os   | Files corresponding to TencentOS-tiny\\osal\\cmsis_os                                                                                        |                                                                                          |
-|    example | helloworld_main                                                                                                                              | The main file for testing the pack                                                       |
-|            | mcu_it.c                                                                                                                                     | The interrupt functions need to be modified according to this file when porting the pack |
-|            | mcu_platform.h                                                                                                                               | The user can add the header file of the corresponding microcontroller to this file       |
+| Contents | Function                                                                                                                                     |                                                                                          |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| arch     | Includes arch files for cores Cortex-M0+, Cortex-M0, Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23, Cortex-M33 under TencentOS-tiny\\arch\\arm |                                                                                          |
+| kernel   | Including the files in the core, hal path under TencentOS-tiny\\kernel and tos_config file                                                   |                                                                                          |
+| cmsis_os | Files corresponding to TencentOS-tiny\\osal\\cmsis_os                                                                                        |                                                                                          |
+| example  | helloworld_main                                                                                                                              | The main file for testing the pack                                                       |
+|          | mcu_it.c                                                                                                                                     | The interrupt functions need to be modified according to this file when porting the pack |
+|          | mcu_platform.h                                                                                                                               | The user can add the header file of the corresponding microcontroller to this file       |
 
 The software pack has the following features.
 
-1.  The pack packs the TencentOS tiny software for the ARMCortex-M0+, Cortex-M0,
-    Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23 and Cortex-M33 cores, allowing
-    users to quickly integrate the TencentOS tiny corresponding kernel in a Keil
-    project.
+1. The pack packs the TencentOS tiny software for the ARMCortex-M0+, Cortex-M0,
+   Cortex-M3, Cortex-M4, Cortex-M7, Cortex-M23 and Cortex-M33 cores, allowing
+   users to quickly integrate the TencentOS tiny corresponding kernel in a Keil
+   project.
 
-    1.  The pack can automatically adapt to the kernel selected by the user and
-        the arch file can be displayed automatically according to the kernel,
-        thus facilitating the user's use.
+   1. The pack can automatically adapt to the kernel selected by the user and
+      the arch file can be displayed automatically according to the kernel,
+      thus facilitating the user's use.
 
-        1.  When the user checks a component, the pack will automatically prompt
-            that other modules need to be checked and can be checked with one
-            click using Resolve in the interface to prevent omissions.
+      1. When the user checks a component, the pack will automatically prompt
+         that other modules need to be checked and can be checked with one
+         click using Resolve in the interface to prevent omissions.
 
-        2.  Users can modify the tos_config file of the corresponding kernel on
-            their own to tailor the functions of TencentOS tiny.
+      2. Users can modify the tos_config file of the corresponding kernel on
+         their own to tailor the functions of TencentOS tiny.
 
 ## 2.2 Software pack installation
 
@@ -561,7 +566,7 @@ version 5, then select C99 mode.
 
 Figure 3.4 Options for target
 
-Then add the \#include "ARMCM3.h" and \#include "core_cm3.h" header files to
+Then add the `#include "ARMCM3.h"` and `#include "core_cm3.h"` header files to
 mcu_platform.h.
 
 ![](media_en/07c46384195f99f7f857a8ddd86e2c00.png)
@@ -575,8 +580,7 @@ Finally click on the Build icon to test, as shown in Figure 3.6.
 Figure 3.6 Compilation test
 
 Similarly, to test this pack under the ARM Cortex-M4 core, simply modify the
-header files in mcu_platform. h to \#include "ARMCM4.h" and \#include
-"core_cm4.h" in the above steps, or modify the header files correspondingly for
+header files in mcu_platform. h to `#include "ARMCM4.h"` and `#include "core_cm4.h"` in the above steps, or modify the header files correspondingly for
 other cores.
 
 ## 3.2 STM32-independent bare-metal engineering port
@@ -619,11 +623,13 @@ Figure 3.10 Software settings
 
 Then add the following header file to mcu_platform. h, as shown in Figure 3.11.
 
-\#include "stm32f10x.h"
+```c
+#include "stm32f10x.h"
 
-\#include "core_cm3.h"
+#include "core_cm3.h"
 
-\#include "system_stm32f10x.h"
+#include "system_stm32f10x.h"
+```
 
 ![](media_en/765b3494099251eae39043b3a6aed54c.png)
 
@@ -664,7 +670,7 @@ function.
 
 Figure 3.15 Function modification
 
-(3) Modify mcu_platform.h by adding \#include "stm32f4xx.h"
+(3) Modify mcu_platform.h by adding `#include "stm32f4xx.h"`
 
 ![](media_en/9ab294a1beab98c5f618a2799326ae73.png)
 
@@ -672,11 +678,12 @@ Figure 3.16 Modifying mcu_platform.h
 
 (4) Next, use the following main program.
 
-\#include "stm32f4xx.h"
+```c
+#include "stm32f4xx.h"
 
-\#include "usart.h"
+#include "usart.h"
 
-\#include "tos_k.h"
+#include "tos_k.h"
 
 k_task_t task1;
 
@@ -686,128 +693,94 @@ k_stack_t task_stack1[1024];
 
 k_stack_t task_stack2[1024];
 
-void test_task1(void \*Parameter)
-
+void test_task1(void *Parameter)
 {
-
-while(1)
-
-{
-
-printf("task1 running\\r\\n");
-
-tos_task_delay(200);
-
+    while (1)
+    {
+        printf("task1 running\r\n");
+        tos_task_delay(200);
+    }
 }
 
-}
-
-void test_task2(void \*Parameter)
-
+void test_task2(void *Parameter)
 {
+    k_err_t err;
 
-k_err_t err;
+    printf("task2 running\r\n");
 
-printf("task2 running\\r\\n");
+    tos_task_delay(2000);
 
-tos_task_delay(2000);
+    // suspend task1暂停
+    printf("suspend task1\r\n");
 
-// suspend task1
+    err = tos_task_suspend(&task1);
 
-printf("suspend task1\\r\\n");
+    if (err != K_ERR_NONE)
+        printf("suspend task1 fail! code : %d \r\n", err);
 
-err = tos_task_suspend(&task1);
+    tos_task_delay(2000);
 
-if(err != K_ERR_NONE)
+    // resume task1恢复
+    printf("resume task1\r\n");
 
-printf("suspend task1 fail! code : %d \\r\\n",err);
+    err = tos_task_resume(&task1);
 
-tos_task_delay(2000);
+    if (err != K_ERR_NONE)
 
-// resume task1
+    printf("resume task1 fail! code : %d \r\n", err);
 
-printf("resume task1\\r\\n");
+    tos_task_delay(2000);
 
-err = tos_task_resume(&task1);
+    // destroy task1销毁
+    printf("destroy task1\r\n");
 
-if(err != K_ERR_NONE)
+    err = tos_task_destroy(&task1);
 
-printf("resume task1 fail! code : %d \\r\\n",err);
+    if (err != K_ERR_NONE)
 
-tos_task_delay(2000);
+    printf("destroy task1 fail! code : %d \r\n", err);
 
-// destroy task1
+    // task2 running
+    while (1)
+    {
+        printf("task2 running\r\n");
 
-printf("destroy task1\\r\\n");
-
-err = tos_task_destroy(&task1);
-
-if(err != K_ERR_NONE)
-
-printf("destroy task1 fail! code : %d \\r\\n",err);
-
-// task2 running
-
-while(1)
-
-{
-
-printf("task2 running\\r\\n");
-
-tos_task_delay(1000);
-
+        tos_task_delay(1000);
+    }
 }
-
-}
-
-/\*\*
-
-\* @brief main function
-
-\* @param none
-
-\* @retval none
-
-\*/
 
 int main(void)
-
 {
+    k_err_t err;
 
-k_err_t err;
+    /*初始化USART 配置模式为 115200 8-N-1，中断接收*/
+    uart_init(115200);
 
-/\* Initialize USART configuration mode to 115200 8-N-1, interrupt function
-receive\*/
+    printf("Welcome to TencentOS tiny\r\n");
 
-uart_init(115200);
+    tos_knl_init(); // TOS Tiny kernel initialize
 
-printf("Welcome to TencentOS tiny\\r\\n");
+    tos_robin_default_timeslice_config((k_timeslice_t)500u);
 
-tos_knl_init(); // TOS Tiny kernel initialize
+    printf("create task1\r\n");
 
-tos_robin_default_timeslice_config((k_timeslice_t)500u);
+    err = tos_task_create(&task1, "task1", test_task1, NULL, 3, task_stack1, 1024, 20);
 
-printf("create task1\\r\\n");
+    if (err != K_ERR_NONE)
 
-err = tos_task_create(&task1, "task1", test_task1, NULL, 3, task_stack1, 1024,
-20);
+    printf("TencentOS Create task1 fail! code : %d \r\n", err);
 
-if(err != K_ERR_NONE)
+    printf("create task2\r\n");
 
-printf("TencentOS Create task1 fail! code : %d \\r\\n",err);
+    err = tos_task_create(&task2, "task2", test_task2, NULL, 4, task_stack2, 1024, 20);
 
-printf("create task2\\r\\n");
+    if (err != K_ERR_NONE)
 
-err = tos_task_create(&task2, "task2", test_task2, NULL, 4, task_stack2, 1024,
-20);
+    printf("TencentOS Create task2 fail! code : %d \r\n", err);
 
-if(err != K_ERR_NONE)
-
-printf("TencentOS Create task2 fail! code : %d \\r\\n",err);
-
-tos_knl_start(); // Start TOS Tiny
-
+    tos_knl_start(); // Start TOS Tiny
 }
+```
 
 (5) Then click compile and use ST LINK-V2 to download the program to the
 microcontroller as shown in Figure 3.17. Then connect the serial port of the
@@ -823,8 +796,8 @@ Figure 3.17 Compilation interface
 Figure 3.18 Test interface
 
 In addition, if you encounter the error in Figure 3.19(a) during compilation,
-you need to change \#define TOS_CFG_OBJECT_VERIFY_EN 1u to
-TOS_CFG_OBJECT_VERIFY_EN 0u in Figure 3.19(b)
+you need to change `#define TOS_CFG_OBJECT_VERIFY_EN 1u` to
+`TOS_CFG_OBJECT_VERIFY_EN 0u` in Figure 3.19(b)
 
 ![](media_en/4fa1aaf0199ee8bd345183c950581734.png)
 
@@ -856,18 +829,18 @@ to improve porting efficiency.
 2\. MDK[5 Software Packs MDK5 Software Packs
 (keil.com)](https://www.keil.com/dd2/pack/#!%23eula-container)
 
-1.  Production of software pack training videos
-    <https://www.bilibili.com/video/BV1AK411p7d9>
+1. Production of software pack training videos
+   <https://www.bilibili.com/video/BV1AK411p7d9>
 
-2.  Production pack blog
-    <https://blog.csdn.net/qq_40259429/article/details/119320319>
+2. Production pack blog
+   <https://blog.csdn.net/qq_40259429/article/details/119320319>
 
-3.  Make a simple pack <https://www.cnblogs.com/libra13179/p/6273415.html>
+3. Make a simple pack <https://www.cnblogs.com/libra13179/p/6273415.html>
 
-4.  CMSIS-Driver pack [ARM-software/CMSIS-Driver: Repository of microcontroller
-    peripheral](https://github.com/ARM-software/CMSIS-Driver) [drivers
-    implementing the CMSIS-Driver API specification (
-    github.com)](https://github.com/ARM-software/CMSIS-Driver)
+4. CMSIS-Driver pack [ARM-software/CMSIS-Driver: Repository of microcontroller
+   peripheral](https://github.com/ARM-software/CMSIS-Driver) [drivers
+   implementing the CMSIS-Driver API specification (
+   github.com)](https://github.com/ARM-software/CMSIS-Driver)
 
 # 6、Appendix - Migration Configuration Reference
 
@@ -881,9 +854,11 @@ to improve porting efficiency.
 
 （2）In mcu_platform.h, add：
 
-\#include "ARMCM0.h"
+```c
+#include "ARMCM0.h"
 
-\#include "core_cm0.h"
+#include "core_cm0.h"
+```
 
 ### 6.1.2 Cortex-M0+ core porting
 
@@ -893,9 +868,11 @@ to improve porting efficiency.
 
 （2）In mcu_platform.h, add.
 
-\#include "ARMCM0plus.h"
+```c
+#include "ARMCM0plus.h"
 
-\#include "core_cm0plus.h"
+#include "core_cm0plus.h"
+```
 
 ### 6.1.3 Cortex-M3 core porting
 
@@ -905,9 +882,11 @@ to improve porting efficiency.
 
 （2）In mcu_platform.h, add.
 
-\#include "ARMCM3.h"
+```c
+#include "ARMCM3.h"
 
-\#include "core_cm3.h"
+#include "core_cm3.h"
+```
 
 ### Cortex-M4 core porting
 
@@ -917,9 +896,11 @@ to improve porting efficiency.
 
 （2）In mcu_platform.h, add.
 
-\#include "ARMCM4.h"
+```c
+#include "ARMCM4.h"
 
-\#include "core_cm4.h"
+#include "core_cm4.h"
+```
 
 ### 6.1.5 Cortex-M7 core porting
 
@@ -933,9 +914,11 @@ to improve porting efficiency.
 
 （3）In mcu_platform.h, add.
 
-\#include "ARMCM7.h"
+```c
+#include "ARMCM7.h"
 
-\#include "core_cm7.h"
+#include "core_cm7.h"
+```
 
 ## 6.2 MDK version 5.14 ported to ARM core-based chips
 
@@ -947,11 +930,13 @@ to improve porting efficiency.
 
 （2）In mcu_platform.h, add.
 
-\#include "stm32f10x.h"
+```c
+#include "stm32f10x.h"
 
-\#include "core_cm3.h"
+#include "core_cm3.h"
 
-\#include "system_stm32f10x.h"
+#include "system_stm32f10x.h"
+```
 
 ### Porting to the STM32F767IGTx chip
 
@@ -965,11 +950,13 @@ to improve porting efficiency.
 
 （3）In mcu_platform.h, add.
 
-\#include "stm32f7xx.h"
+```c
+#include "stm32f7xx.h"
 
-\#include "core_cm7.h"
+#include "core_cm7.h"
 
-\#include "system_stm32f7xx.h"
+#include "system_stm32f7xx.h"
+```
 
 ## 6.3 MDK5.30 and MDK5.35 porting (Cortex-M0+, 0, 3, 4, 7 cores and chips)
 
@@ -992,9 +979,11 @@ as follows and then just execute the compilation.
 
 （2）In mcu_platform.h, add.
 
-\#include "ARMCM23.h"
+```c
+#include "ARMCM23.h"
 
-\#include "core_cm23.h"
+#include "core_cm23.h"
+```
 
 （3）Amend to not view error reports.
 
@@ -1012,9 +1001,11 @@ as follows and then just execute the compilation.
 
 （3）In mcu_platform.h, add.
 
-\#include "ARMCM33_DSP_FP.h"
+```c
+#include "ARMCM33_DSP_FP.h"
 
-\#include "core_cm33.h"
+#include "core_cm33.h"
+```
 
 （4）Amend to not view error reports.
 
