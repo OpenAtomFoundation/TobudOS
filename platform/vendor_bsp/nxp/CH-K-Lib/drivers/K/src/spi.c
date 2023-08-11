@@ -6,7 +6,7 @@
   * @date    2014.3.26
   * \date    2015.10.07 FreeXc 完善了对 spi 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片SPI模块的底层功能函数
+  * @note    此文件为芯片 SPI 模块的底层功能函数
   ******************************************************************************
   */
 #include "spi.h"
@@ -149,9 +149,9 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
 }
 
 /**
- * @brief  初始化SPI模块
- * @note 需要其它函数配合使用，具体可参考SPI_QuickInit内部定义
- * @param[in]  SPI_InitStruct 指向SPI初始化配置结构体的指针
+ * @brief  初始化 SPI 模块
+ * @note 需要其它函数配合使用，具体可参考 SPI_QuickInit 内部定义
+ * @param[in]  SPI_InitStruct 指向 SPI 初始化配置结构体的指针
  * @return None
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
@@ -206,14 +206,14 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
  
 /**
  * @brief  SPI 波特率及传输控制寄存器配置
- * @param[in]  instance      芯片SPI端口
- *              @arg HW_SPI0 芯片的SPI0端口
- *              @arg HW_SPI1 芯片的SPI1端口
- *              @arg HW_SPI2 芯片的SPI2端口
- * @param[in]  ctar SPI通信通道选择
- *          		@arg HW_CTAR0  0配置寄存器
- *          		@arg HW_CTAR1  1配置寄存器
- * @param[in]  frameFormat SPI通信时的相位和极性的关系
+ * @param[in]  instance      芯片 SPI 端口
+ *              @arg HW_SPI0 芯片的 SPI0 端口
+ *              @arg HW_SPI1 芯片的 SPI1 端口
+ *              @arg HW_SPI2 芯片的 SPI2 端口
+ * @param[in]  ctar SPI 通信通道选择
+ *          		@arg HW_CTAR0  0 配置寄存器
+ *          		@arg HW_CTAR1  1 配置寄存器
+ * @param[in]  frameFormat SPI 通信时的相位和极性的关系
  *         			@arg kSPI_CPOL0_CPHA0
  *         			@arg kSPI_CPOL1_CPHA0
  *         			@arg kSPI_CPOL0_CPHA1
@@ -222,7 +222,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
  * \param[in]  bitOrder LSB First
  *  						\arg 0 Data is transferred MSB first
  * 							\arg 1 Data is transferred LSB first
- * @param[in]  baudrate SPI通信速度设置
+ * @param[in]  baudrate SPI 通信速度设置
  * @return None
  */
 void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
@@ -282,19 +282,19 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
 }
 
 /**
- * @brief  快速初始化SPI模块
+ * @brief  快速初始化 SPI 模块
  * @code
- *     //使用SPI的1模块SCK-PE02 SOUT-PE01 SIN-PE03 通信速度为48000hz 极性和相位都是0 
+ *     //使用 SPI 的 1 模块 SCK-PE02 SOUT-PE01 SIN-PE03 通信速度为 48000hz 极性和相位都是 0 
  *     SPI_QuickInit(SPI1_SCK_PE02_SOUT_PE01_SIN_PE03, kSPI_CPOL0_CPHA0, 48000);
  * @endcode
- * @param[in]  MAP SPI通信快速配置引脚预定义，详见spi.h文件
- * @param[in]  frameFormat SPI通信时的相位和极性的关系
+ * @param[in]  MAP SPI 通信快速配置引脚预定义，详见 spi.h 文件
+ * @param[in]  frameFormat SPI 通信时的相位和极性的关系
  *         			@arg kSPI_CPOL0_CPHA0
  *         			@arg kSPI_CPOL1_CPHA0
  *         			@arg kSPI_CPOL0_CPHA1
  *         			@arg kSPI_CPOL1_CPHA1
- * @param[in]  baudrate SPI通信速度设置
- * @return SPI模块号
+ * @param[in]  baudrate SPI 通信速度设置
+ * @return SPI 模块号
  */
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
@@ -319,11 +319,11 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
 }
 
 /**
- * @brief  使能SPI发送的FIFO功能
- * @param[in]  instance      芯片SPI端口
- *              @arg HW_SPI0 芯片的SPI0端口
- *              @arg HW_SPI1 芯片的SPI1端口
- *              @arg HW_SPI2 芯片的SPI2端口
+ * @brief  使能 SPI 发送的 FIFO 功能
+ * @param[in]  instance      芯片 SPI 端口
+ *              @arg HW_SPI0 芯片的 SPI0 端口
+ *              @arg HW_SPI1 芯片的 SPI1 端口
+ *              @arg HW_SPI2 芯片的 SPI2 端口
  * \param[in] status enable or disable Tx FIFO
  *              \arg 0 disable
  *              \arg 1  enable
@@ -340,11 +340,11 @@ void SPI_EnableTxFIFO(uint32_t instance, bool status)
 }
 
 /**
- * @brief  使能SPI接收的FIFO功能
- * @param[in]  instance      芯片SPI端口
- *              @arg HW_SPI0 芯片的SPI0端口
- *              @arg HW_SPI1 芯片的SPI1端口
- *              @arg HW_SPI2 芯片的SPI2端口
+ * @brief  使能 SPI 接收的 FIFO 功能
+ * @param[in]  instance      芯片 SPI 端口
+ *              @arg HW_SPI0 芯片的 SPI0 端口
+ *              @arg HW_SPI1 芯片的 SPI1 端口
+ *              @arg HW_SPI2 芯片的 SPI2 端口
  * \param[in] status enable or disable Tx FIFO
  *              \arg 0 disable
  *              \arg 1  enable
@@ -363,19 +363,19 @@ void SPI_EnableRxFIFO(uint32_t instance, bool status)
 
 
 /**
- * @brief  SPI模块 中断和DMA功能配置
+ * @brief  SPI 模块 中断和 DMA 功能配置
  * @code
- *     //使用SPI的1模块发送完成中断
+ *     //使用 SPI 的 1 模块发送完成中断
  *     SPI_ITDMAConfig(HW_SPI1, kSPI_IT_TCF, true);
  * @endcode
- * @param[in]  instance      芯片SPI端口
- *              @arg HW_SPI0 芯片的SPI0端口
- *              @arg HW_SPI1 芯片的SPI1端口
- *              @arg HW_SPI2 芯片的SPI2端口
- * @param[in]  config SPI中断类型
+ * @param[in]  instance      芯片 SPI 端口
+ *              @arg HW_SPI0 芯片的 SPI0 端口
+ *              @arg HW_SPI1 芯片的 SPI1 端口
+ *              @arg HW_SPI2 芯片的 SPI2 端口
+ * @param[in]  config SPI 中断类型
  *         			@arg kSPI_IT_TCF          开启发送完成中断
- *         			@arg kSPI_DMA_TFFF        TxFIFO 空 DMA请求
- *         			@arg kSPI_DMA_RFDF        RxFIFO 空 DMA请求
+ *         			@arg kSPI_DMA_TFFF        TxFIFO 空 DMA 请求
+ *         			@arg kSPI_DMA_RFDF        RxFIFO 空 DMA 请求
  * \param[in] status enable or disable IT/DMA
  *              \arg 0 disable
  *              \arg 1  enable
@@ -418,10 +418,10 @@ void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status
 
 /**
  * @brief  注册中断回调函数
- * @param[in]  instance      芯片SPI端口
- *              @arg HW_SPI0 芯片的SPI0端口
- *              @arg HW_SPI1 芯片的SPI1端口
- *              @arg HW_SPI2 芯片的SPI2端口
+ * @param[in]  instance      芯片 SPI 端口
+ *              @arg HW_SPI0 芯片的 SPI0 端口
+ *              @arg HW_SPI1 芯片的 SPI1 端口
+ *              @arg HW_SPI2 芯片的 SPI2 端口
  * @param[in]  AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
@@ -435,18 +435,18 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
 }
 
 /**
- * @brief  SPI读写一字节数据
+ * @brief  SPI 读写一字节数据
  * @code
- *     //使用SPI的1模块的1片选信号写一字节的数据0x55，片选信号最后为选中状态
+ *     //使用 SPI 的 1 模块的 1 片选信号写一字节的数据 0x55，片选信号最后为选中状态
  *    SPI_ReadWriteByte(HW_SPI1, HW_CTAR0, 0x55, 1, kSPI_PCS_ReturnInactive);
  * @endcode
- * @param[in]  instance      芯片SPI端口
- *              @arg HW_SPI0 芯片的SPI0端口
- *              @arg HW_SPI1 芯片的SPI1端口
- *              @arg HW_SPI2 芯片的SPI2端口
- * @param[in]  ctar SPI通信通道选择
- *          		@arg HW_CTAR0  0配置寄存器
- *          		@arg HW_CTAR1  1配置寄存器
+ * @param[in]  instance      芯片 SPI 端口
+ *              @arg HW_SPI0 芯片的 SPI0 端口
+ *              @arg HW_SPI1 芯片的 SPI1 端口
+ *              @arg HW_SPI2 芯片的 SPI2 端口
+ * @param[in]  ctar SPI 通信通道选择
+ *          		@arg HW_CTAR0  0 配置寄存器
+ *          		@arg HW_CTAR1  1 配置寄存器
  * @param[in]  data     要发送的一字节数据
  * @param[in]  CSn      片选信号端口选择
  * @param[in]  csState  片选信号最后的状态
@@ -498,7 +498,7 @@ static void SPI_IRQHandler(uint32_t instance)
 }
 
 /**
- * @brief  系统SPI0中断函数，用户无需使用
+ * @brief  系统 SPI0 中断函数，用户无需使用
  */
 void SPI0_IRQHandler(void)
 {
@@ -506,7 +506,7 @@ void SPI0_IRQHandler(void)
 }
 
 /**
- * @brief  系统SPI1中断函数，用户无需使用
+ * @brief  系统 SPI1 中断函数，用户无需使用
  */
 void SPI1_IRQHandler(void)
 {
@@ -515,7 +515,7 @@ void SPI1_IRQHandler(void)
 
 #if defined(SPI2)
 /**
- * @brief  系统SPI2中断函数，用户无需使用
+ * @brief  系统 SPI2 中断函数，用户无需使用
  */
 void SPI2_IRQHandler(void)
 {

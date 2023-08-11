@@ -33,8 +33,8 @@ typedef void (*PIT_CallBackType)(void);
  */
 typedef struct
 {
-    uint8_t   chl;            ///<PIT模块通道选择
-    uint32_t  timeInUs;       ///<定时时间单位为us
+    uint8_t   chl;            ///<PIT 模块通道选择
+    uint32_t  timeInUs;       ///<定时时间单位为 us
 }PIT_InitTypeDef;
 
 /**

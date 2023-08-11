@@ -1,6 +1,6 @@
 /*
 
-    提供 board_init 函数, 最终调用的是
+    提供 board_init 函数，最终调用的是
 
         tos/platform/vendor_bsp/st/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h
 

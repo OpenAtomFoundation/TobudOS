@@ -27,7 +27,7 @@
         set carrier-watch off
         connect
 
-    执行 sudo -E env "PATH=$PATH" kermit 启动串口工具, 出现如下输出表示连接成功
+    执行 sudo -E env "PATH=$PATH" kermit 启动串口工具，出现如下输出表示连接成功
 
         Connecting to /dev/ttyUSB0, speed 115200
          Escape character: Ctrl-\ (ASCII 28, FS): enabled
@@ -35,4 +35,4 @@
         or followed by ? to see other options.
         ----------------------------------------------------
 
-    如果想回到 kermit, 按下 Ctrl-\, 再按下 C 即可, 如果想再连接到串口, 输入 c 即可.
+    如果想回到 kermit, 按下 Ctrl-\, 再按下 C 即可，如果想再连接到串口，输入 c 即可。

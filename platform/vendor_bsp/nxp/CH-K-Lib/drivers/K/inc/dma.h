@@ -150,16 +150,16 @@ typedef enum
  */
 typedef struct 
 {
-    uint8_t                     chl;                                ///< DMA通道号0~15      
-    uint8_t                     chlTriggerSource;                   ///< DMA触发源选择 
+    uint8_t                     chl;                                ///< DMA 通道号 0~15      
+    uint8_t                     chlTriggerSource;                   ///< DMA 触发源选择 
     uint16_t                    minorLoopByteCnt;                   ///< MINOR LOOP 中一次传输的字节数 
     uint16_t                    majorLoopCnt;                       ///< MAJOR LOOP 循环次数 
     DMA_TriggerSource_Type      triggerSourceMode;                  ///< 触发模式选择 
     /* 源地址配置 */
-    int32_t                     sAddrOffset;                ///< DMA每次读取sAddr之后 sAddr的偏移量 可正可负 
+    int32_t                     sAddrOffset;                ///< DMA 每次读取 sAddr 之后 sAddr 的偏移量 可正可负 
     uint32_t                    sAddr;                      ///< 数据源地址 
     DMA_DataWidthBit_Type       sDataWidth;                 ///< 数据源地址数据宽度 8 16 32 
-    int32_t                     sLastAddrAdj;               ///< 所有MAJOR LOOP循环完成后 源地址偏移量 
+    int32_t                     sLastAddrAdj;               ///< 所有 MAJOR LOOP 循环完成后 源地址偏移量 
     DMA_Modulo_Type             sMod;                       ///< Modulo 设置 参见 AN2898 
     /* 目标地址属性配置 */
     int32_t                     dAddrOffset;                

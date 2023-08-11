@@ -11,7 +11,7 @@
 [TencentOS tiny](https://cloud.tencent.com/product/tos-tiny) is a real-time operating system developed by Tencent for the Internet of Things. It features low power consumption, low resource consumption, modularity, security and reliability, and can effectively improve the development efficiency of IoT terminal products. TencentOS tiny provides a streamlined RTOS core that can be tailored and configurable for rapid migration to a wide range of mainstream MCUs (such as the full range of STM32) and module chips. Moreover, based on the RTOS kernel, it provides a wealth of IoT components, and internally integrates mainstream IoT protocol stacks (such as CoAP/MQTT/TLS/DTLS/LoRaWAN/NB-IoT, etc.), which can help IoT terminals and services to quickly access Tencent. Cloud Internet of Things platform.
 
 
-## 1、The software architecture of TencentOS tiny
+## 1, The software architecture of TencentOS tiny
 
 ![](./doc/image/introduction/TencentOS_tiny_Architecture_en.png)
 
@@ -33,7 +33,7 @@ TencentOS tiny main architecture diagram, from bottom to top, mainly includes:
 
 **examples**：TencentOS tiny provides sample code, module test code, etc., which is convenient for users to refer to.
 
-## 2、Key features of TencentOS tiny
+## 2, Key features of TencentOS tiny
 
 ### (1).Small size
 
@@ -74,7 +74,7 @@ Provide cloudized last screen debugging;
 
 The fault scene information is automatically uploaded to the cloud platform, which is convenient for developers to debug and analyze.
 
-## 3、TencentOS tiny and partners are committed to building the IoT ecosystem
+## 3, TencentOS tiny and partners are committed to building the IoT ecosystem
 
 ![](./doc/image/introduction/Partners_en.png)
 
@@ -84,12 +84,12 @@ TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semi
 - [TencentOS tiny code directory description](./doc/09.Code_Directories.md)
 
 # TencentOS tiny reference documentation
-## 1、Porting guide
-- [TencentOS tiny Porting guide（KEIL version）](./doc/10.Porting_Manual_for_KEIL.md)
-- [TencentOS tiny Porting guide（IAR version）](./doc/11.Porting_Manual_for_IAR.md)
-- [TencentOS tiny Porting guide（GCC version）](./doc/12.Porting_Manual_for_GCC.md)
+## 1, Porting guide
+- [TencentOS tiny Porting guide (KEIL version)](./doc/10.Porting_Manual_for_KEIL.md)
+- [TencentOS tiny Porting guide (IAR version)](./doc/11.Porting_Manual_for_IAR.md)
+- [TencentOS tiny Porting guide (GCC version)](./doc/12.Porting_Manual_for_GCC.md)
 
-## 2、Development guide
+## 2, Development guide
 - [TencentOS tiny Kernel development guide](./doc/04.Development_Manual.md)
 - [TencentOS tiny API reference](./doc/05.SDK_Manual.md)
 - [The development Guide for use TencentOS tiny connect to  Tencent Cloud IoTHub ](./doc/08.QCloud_IoTHub_Quick_Start.md)

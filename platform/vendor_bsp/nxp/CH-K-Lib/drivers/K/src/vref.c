@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
-  * \date    2015.10.03 FreeXc完善了vref模块的相关注释
+  * \date    2015.10.03 FreeXc 完善了 vref 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -13,8 +13,8 @@
  #include "common.h"
  
  /**
- * @brief  初始化VREF 模块
- * @param[in]  VREF_InitStruct 指向VREF初始化结构体的指针
+ * @brief  初始化 VREF 模块
+ * @param[in]  VREF_InitStruct 指向 VREF 初始化结构体的指针
  * @retval None
  */
 void VREF_Init(VREF_InitTypeDef *VREF_InitStruct)
@@ -31,9 +31,9 @@ void VREF_Init(VREF_InitTypeDef *VREF_InitStruct)
 }
 
  /**
- * @brief  快速初始化VREF模块
- * @note   VREF被初始化后 需要经过大概35MS 才能有稳定的参考电压输出
-* \attention bufferMode对于不同的芯片，其可选的参数视不同的，比如K60只能是00和10，而K64有三种模式可选
+ * @brief  快速初始化 VREF 模块
+ * @note   VREF 被初始化后 需要经过大概 35MS 才能有稳定的参考电压输出
+* \attention bufferMode 对于不同的芯片，其可选的参数视不同的，比如 K60 只能是 00 和 10，而 K64 有三种模式可选
  * @retval None
  */
 void VREF_QuickInit(void)
@@ -45,7 +45,7 @@ void VREF_QuickInit(void)
 }
 
  /**
- * @brief  恢复VREF到默认状态
+ * @brief  恢复 VREF 到默认状态
  * @retval None
  */
 void VREF_DeInit(void)
@@ -55,7 +55,7 @@ void VREF_DeInit(void)
 }
 
  /**
- * @brief  设置VREF校准值
+ * @brief  设置 VREF 校准值
  * \attention the trim value changes the resulting VREF by approximately ± 0.5 mV for each step
  * \attention It is ± 0.5 mV,pay attention to the unit
  * @param[in]  val 校准值

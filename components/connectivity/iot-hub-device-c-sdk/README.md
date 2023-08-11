@@ -3,39 +3,39 @@
 
 腾讯云物联网设备端 C-SDK 依靠安全且性能强大的数据通道，为物联网领域开发人员提供设备端快速接入云端，并和云端进行双向通信的能力。
 
-本SDK仅适用于物联网通信平台IoT Hub，对于物联网开发平台，请访问 [IoT Explorer C-SDK](https://github.com/tencentyun/qcloud-iot-explorer-sdk-embedded-c)
+本 SDK 仅适用于物联网通信平台 IoT Hub，对于物联网开发平台，请访问 [IoT Explorer C-SDK](https://github.com/tencentyun/qcloud-iot-explorer-sdk-embedded-c)
 
 ## 一、SDK 目录结构简介
 
 | 名称               | 说明 |
 | ------------------ | ------------------------------------------------------------ |
-| CMakeLists.txt     | cmake编译描述文件 |
-| cmake_build.sh     | Linux下使用cmake的编译脚本 |
+| CMakeLists.txt     | cmake 编译描述文件 |
+| cmake_build.sh     | Linux 下使用 cmake 的编译脚本 |
 | docs               | 文档目录 |
-| 3rd                | 第三方软件包组件，如mbedtls |
-| config             | SDK功能配置以及编译工具链配置 |
+| 3rd                | 第三方软件包组件，如 mbedtls |
+| config             | SDK 功能配置以及编译工具链配置 |
 | include            | 提供给用户使用的外部头文件 |
-| platform           | 平台相关的源码文件，目前提供了针对不同OS(Linux/Windows/FreeRTOS/nonOS)，TLS(mbedtls)以及AT模组下的实现 |
-| common             | SDK通用组件库 |
-| services           | SDK提供的服务源码，以模块独立存在 |
+| platform           | 平台相关的源码文件，目前提供了针对不同 OS(Linux/Windows/FreeRTOS/nonOS)，TLS(mbedtls) 以及 AT 模组下的实现 |
+| common             | SDK 通用组件库 |
+| services           | SDK 提供的服务源码，以模块独立存在 |
 
-- `config/settings`可选择相应的配置脚本，以根据需要裁剪SDK
+- `config/settings`可选择相应的配置脚本，以根据需要裁剪 SDK
 - `config/toolchains`可配置相应的编译工具链，以及选择平台
 
 ## 二、SDK 各模块介绍
 
 | 模块名        | 所在目录 | 功能 |
 | ------------ | ------   | ------ |
-| mqtt_packet  | common/mqtt_packet | 通用组件，实现MQTT控制包的序列化和反序列化 |
+| mqtt_packet  | common/mqtt_packet | 通用组件，实现 MQTT 控制包的序列化和反序列化 |
 | utils        | common/utils | 通用组件，实现列表、日志等通用操作 |
-| cryptology   | common/cryptology | 通用组件，实现SDK所需密码学算法 |
-| mqtt_client  | common/mqtt_packet | 服务组件，实现MQTT客户端 |
+| cryptology   | common/cryptology | 通用组件，实现 SDK 所需密码学算法 |
+| mqtt_client  | common/mqtt_packet | 服务组件，实现 MQTT 客户端 |
 
 ## 三、快速体验
 
 ### 1. 安装环境
 
-以下以ubuntu为例子，安装`cmake`和`gcc`。
+以下以 ubuntu 为例子，安装`cmake`和`gcc`。
 
 ```bash
 apt-get install cmake gcc g++
@@ -45,7 +45,7 @@ apt-get install cmake gcc g++
 
 参考[设备接入准备](https://cloud.tencent.com/document/product/634/14442#null)创建**密钥认证**设备，获取设备信息用作连接平台。
 
-- 产品ID
+- 产品 ID
 
 ![product_id](https://main.qcloudimg.com/raw/a746d4e9455f045b5e65ba870f269e7d.png)
 
@@ -55,7 +55,7 @@ apt-get install cmake gcc g++
 
 ### 3. 修改设备信息
 
-编辑`platform/os/Linux/HAL_Device_linux.c`，修改设备信息:
+编辑`platform/os/Linux/HAL_Device_linux.c`，修改设备信息：
 
 ```c
 static char sg_product_id[MAX_SIZE_OF_PRODUCT_ID + 1] = "YOUR_PRODUCT_ID";
@@ -69,11 +69,11 @@ static char sg_device_secret[MAX_SIZE_OF_DEVICE_SECRET + 1] = "YOUR_IOT_PSK";
 
 ## 四、代码贡献
 
-请仔细阅读[SDK代码规范说明](./docs/SDK代码规范说明.md)和[SDK代码格式说明](./docs/SDK代码格式说明)。
+请仔细阅读[SDK 代码规范说明](./docs/SDK代码规范说明.md)和[SDK 代码格式说明](./docs/SDK代码格式说明)。
 
 `vscode`编辑器请安装以下插件，并配置：
 
-- `C/C++`：支持C语言语法和`clang-format`
+- `C/C++`：支持 C 语言语法和`clang-format`
 - `Code Spell Checker`：检查单词拼写，以及单词纠正
 - `Doxygen Documentation Generator`：在`settings.json`中添加以下内容，以支持`doxygen`
 

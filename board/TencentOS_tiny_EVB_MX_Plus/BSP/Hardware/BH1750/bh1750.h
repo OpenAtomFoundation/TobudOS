@@ -26,7 +26,7 @@ typedef struct
 }BH1750_Data_TypeDef;
 
 
-void Init_BH1750(void);      //IO初始化，
+void Init_BH1750(void);      //IO 初始化，
 void Start_BH1750(void);     //上电，设置清除数据寄存器
 //void Read_BH1750(void);    //连续的读取内部寄存器数据
 float Convert_BH1750(void);

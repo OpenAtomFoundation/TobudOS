@@ -1,9 +1,9 @@
-# mqttclient连接到OneNET云平台
+# mqttclient 连接到 OneNET 云平台
 
-有了前面连接百度云的经验，废话不多说，直接使用OneNET，OneNET平台应该是最开放，对开发者最友好的平台了。
+有了前面连接百度云的经验，废话不多说，直接使用 OneNET，OneNET 平台应该是最开放，对开发者最友好的平台了。
 
-## 使用OneNET
-首先注册与登陆OneNET，然后进入开发者中心：https://open.iot.10086.cn/develop/global/product/#/public?protocol=3&other=1， 选择公有协议产品，点击“添加产品”，填写产品相关的信息，联网方式选择wifi（其实我们是以太网，但是没有这个选项，那就选择wifi，没啥影响的），接入协议必须选择MQTT，操作系统选择“linux”，运营商这个随意选择，具体见：
+## 使用 OneNET
+首先注册与登陆 OneNET，然后进入开发者中心：https://open.iot.10086.cn/develop/global/product/#/public?protocol=3&other=1，选择公有协议产品，点击“添加产品”，填写产品相关的信息，联网方式选择 wifi（其实我们是以太网，但是没有这个选项，那就选择 wifi，没啥影响的），接入协议必须选择 MQTT，操作系统选择“linux”，运营商这个随意选择，具体见：
 
 ![mqtt-onenet001](http://qiniu.jiejie01.top/mqtt-onenet001.png)
 
@@ -20,13 +20,13 @@
 
 ## 测试连接
 
-OneNET的数据交互做的很好，它支持动态创建主题（除系统主题外），即不用我们在平台上创建任何的主题，只需要随意订阅某个主题即可，同一个产品下，即使是不同设备之间的主题之间的消息是共享的，简单来说，我们在开发板上可以随意向某个主题发起订阅请求，也可以向这个主题发布消息，而同一产品的其他设备如果订阅了这个主题，那么将收到开发板发布的消息数据，这样子更加方便嵌入式的开发者，只不过这样子的信息安全就没有阿里云物联那么好。
+OneNET 的数据交互做的很好，它支持动态创建主题（除系统主题外），即不用我们在平台上创建任何的主题，只需要随意订阅某个主题即可，同一个产品下，即使是不同设备之间的主题之间的消息是共享的，简单来说，我们在开发板上可以随意向某个主题发起订阅请求，也可以向这个主题发布消息，而同一产品的其他设备如果订阅了这个主题，那么将收到开发板发布的消息数据，这样子更加方便嵌入式的开发者，只不过这样子的信息安全就没有阿里云物联那么好。
 
-我们可以在这个网页中去查看服务器的IP地址：https://open.iot.10086.cn/doc/multiprotocol/book/problem/platformaddress.html， 对于服务器的地址，onenet分为了不同的地区平台，不过我们一般正常使用的都是中心平台。
+我们可以在这个网页中去查看服务器的 IP 地址：https://open.iot.10086.cn/doc/multiprotocol/book/problem/platformaddress.html，对于服务器的地址，onenet 分为了不同的地区平台，不过我们一般正常使用的都是中心平台。
 
 ![mqtt-onenet005](http://qiniu.jiejie01.top/mqtt-onenet005.png)
 
-现在我们打开MQTT软件，进行连接测试，与前面的实验操作是一样的，配置好相关信息，即可，这些信息都可以在平台上找到，需要注意的是服务器地址是183.230.40.39；端口号是6002，这与我们常见的1883是不一样的；Client ID是设备ID，在设备列表中是可以找到的；用户名是产品ID，在产品概况页面中可以找到；密码就是创建设备时候的鉴权信息，具体见：
+现在我们打开 MQTT 软件，进行连接测试，与前面的实验操作是一样的，配置好相关信息，即可，这些信息都可以在平台上找到，需要注意的是服务器地址是 183.230.40.39；端口号是 6002，这与我们常见的 1883 是不一样的；Client ID 是设备 ID，在设备列表中是可以找到的；用户名是产品 ID，在产品概况页面中可以找到；密码就是创建设备时候的鉴权信息，具体见：
 
 ![mqtt-onenet006](http://qiniu.jiejie01.top/mqtt-onenet006.png)
 
@@ -35,26 +35,26 @@ OneNET的数据交互做的很好，它支持动态创建主题（除系统主�
 ![mqtt-onenet008](http://qiniu.jiejie01.top/mqtt-onenet008.png)
 
 
-接下来我们可以通过MQTT软件来测试一下能否正常连接，在这一步之前必须已在物联网平台控制台中创建产品和设备，并获取设备相关的信息。
+接下来我们可以通过 MQTT 软件来测试一下能否正常连接，在这一步之前必须已在物联网平台控制台中创建产品和设备，并获取设备相关的信息。
 
 其实连接是与百度天工差不多的，直接填写相关的内容即可：
 
 ![mqtt-onenet009](http://qiniu.jiejie01.top/mqtt-onenet009.png)
 
-配置好就可以连接，然后随便订阅一个主题，因为OneNet平台支持动态创建主题（除系统主题外），所以对我们来说是非常方便的，直接订阅就好了，然后再用客户端进行发布消息，如果收到消息，表明通信成功，
+配置好就可以连接，然后随便订阅一个主题，因为 OneNet 平台支持动态创建主题（除系统主题外），所以对我们来说是非常方便的，直接订阅就好了，然后再用客户端进行发布消息，如果收到消息，表明通信成功，
 
 ![mqtt-onenet010](http://qiniu.jiejie01.top/mqtt-onenet010.png)
 
 ![mqtt-onenet011](http://qiniu.jiejie01.top/mqtt-onenet011.png)
 
-回到OneNet的设备列表界面，可以看到刚刚创建的设备是处于在线状态的：
+回到 OneNet 的设备列表界面，可以看到刚刚创建的设备是处于在线状态的：
 
 ![mqtt-onenet012](http://qiniu.jiejie01.top/mqtt-onenet012.png)
 
 
 ## 手动安装相关的依赖包
 
-这些依赖包是使用mqttclient库去连接OneNet云时必须要安装的。
+这些依赖包是使用 mqttclient 库去连接 OneNet 云时必须要安装的。
 
 ```bash
 sudo apt-get -y install git
@@ -76,37 +76,37 @@ sudo apt-get -y install g++
 sudo apt-get -y install cmake
 ```
 
-## 拉取mqttclient仓库
+## 拉取 mqttclient 仓库
 
-接着到github拉取这个仓库，仓库非常小，下载下来是很快的，注意，这里也需要拉取下来。
+接着到 GitHub 拉取这个仓库，仓库非常小，下载下来是很快的，注意，这里也需要拉取下来。
 
 ```bash
 git clone https://github.com/jiejieTop/mqttclient.git
 ```
 
-当然也可以从gitee仓库下载。
+当然也可以从 gitee 仓库下载。
 
 ```bash
 git clone https://gitee.com/jiejieTop/mqttclient.git
 ```
 
-## 简单介绍mqttclient仓库文件夹
+## 简单介绍 mqttclient 仓库文件夹
 
-- common文件夹：是一些通用的文件内容，比如链表的处理，错误代码的处理、随机数生成器、日志库等内容。
+- common 文件夹：是一些通用的文件内容，比如链表的处理，错误代码的处理、随机数生成器、日志库等内容。
 
-- mqtt文件夹：著名的paho mqtt库。
+- mqtt 文件夹：著名的 paho mqtt 库。
 
-- mqttclient文件夹：实现mqttclient的主要文件，并且包含了一个默认的配置文件。
+- mqttclient 文件夹：实现 mqttclient 的主要文件，并且包含了一个默认的配置文件。
 
-- network文件夹：网络抽象层，封装了mbedtls加密库、网络数据的通道类型，自动选择tls加密传输或者是tcp直连。
+- network 文件夹：网络抽象层，封装了 mbedtls 加密库、网络数据的通道类型，自动选择 tls 加密传输或者是 tcp 直连。
 
-- platform文件夹：平台抽象层，此处封装了各种平台的内存管理、互斥锁、线程管理、时间管理等内容，如linux平台，freertos平台、rt-thread平台、TencentOS tiny平台等。
+- platform 文件夹：平台抽象层，此处封装了各种平台的内存管理、互斥锁、线程管理、时间管理等内容，如 linux 平台，freertos 平台、rt-thread 平台、TencentOS tiny 平台等。
 
-- test文件夹：一些测试的代码，比如我们连接OneNet云的时候，就会使用test文件夹的OneNet云平台的测试代码。
+- test 文件夹：一些测试的代码，比如我们连接 OneNet 云的时候，就会使用 test 文件夹的 OneNet 云平台的测试代码。
 
 ## 编译
 
-拉取下来后看到本地有mqttclient文件夹，我们进去mqttclient目录下，运行它提供的编译脚本，它主要是通过cmake去自动构建整个代码工程。
+拉取下来后看到本地有 mqttclient 文件夹，我们进去 mqttclient 目录下，运行它提供的编译脚本，它主要是通过 cmake 去自动构建整个代码工程。
 
 ```bash
 ./build.sh
@@ -159,7 +159,7 @@ topic: temp_hum, qos: 0,
 message:welcome to mqttclient, this is a publish test, a rand number: 1837236902 ...
 ```
 
-此时表示已经连接上OneNet云了，并且实现了数据的收发。
+此时表示已经连接上 OneNet 云了，并且实现了数据的收发。
 
 ## 代码
 
@@ -246,16 +246,16 @@ int main(void)
 }
 ```
 
-## 使用到的API
+## 使用到的 API
 
-- 申请一个MQTT客户端
+- 申请一个 MQTT 客户端
 
     ```c
     mqtt_client_t *client = NULL;
     client = mqtt_lease();
     ```
 
-- mqtt客户端配置，主要是配置**mqtt_client_t**结构的相关信息，如果没有指定初始化参数，则系统会提供默认的参数。但连接部分的参数则必须指定，比如连接的端口号、云服务器的地址或者域名、用户名、密码，这些信息都是百度云平台得到的。
+- mqtt 客户端配置，主要是配置**mqtt_client_t**结构的相关信息，如果没有指定初始化参数，则系统会提供默认的参数。但连接部分的参数则必须指定，比如连接的端口号、云服务器的地址或者域名、用户名、密码，这些信息都是百度云平台得到的。
 
     ```c
     mqtt_set_port(client, "6002");
@@ -266,13 +266,13 @@ int main(void)
     mqtt_set_clean_session(client, 1);
     ```
 
-- 连接服务器并建立mqtt会话。
+- 连接服务器并建立 mqtt 会话。
 
     ```c
     mqtt_connect(&client);
     ```
 
-- 订阅主题，字符串类型的**主题**（支持通配符"#" "+"），主题的**服务质量**，以及收到报文的**回调处理函数**，如不指定则有默认处理函数，订阅主题的处理方式是异步处理的，此处设置为NULL则表示使用默认的回调处理函数。
+- 订阅主题，字符串类型的**主题**（支持通配符"#" "+"），主题的**服务质量**，以及收到报文的**回调处理函数**，如不指定则有默认处理函数，订阅主题的处理方式是异步处理的，此处设置为 NULL 则表示使用默认的回调处理函数。
 
     ```c
     mqtt_subscribe(client, "topic1", QOS0, NULL);
@@ -288,7 +288,7 @@ int main(void)
     mqtt_publish(&client, "topic1", &msg);
     ```
 
-- 由于onenet的设备会自动订阅系统主题，而用户是不能直接订阅的，比如我们在线调试的时候，他会下发一些系统主题，那么我们需要接收这些主题，就需要设置拦截器的处理函数，去拦截它们并且通过回调函数上报到应用层，设置如下：
+- 由于 onenet 的设备会自动订阅系统主题，而用户是不能直接订阅的，比如我们在线调试的时候，他会下发一些系统主题，那么我们需要接收这些主题，就需要设置拦截器的处理函数，去拦截它们并且通过回调函数上报到应用层，设置如下：
 
     ```c
     mqtt_set_interceptor_handler(&client, interceptor_handler); 
@@ -319,6 +319,6 @@ message:hello world !
 ```
 
 
-**上一篇**：[mqttclient连接到百度天工物接入](./mqtt-baidu.md)
+**上一篇**：[mqttclient 连接到百度天工物接入](./mqtt-baidu.md)
 
-**下一篇**：[mqttclient连接到阿里云物联网平台](./mqtt-aliyun.md)
+**下一篇**：[mqttclient 连接到阿里云物联网平台](./mqtt-aliyun.md)

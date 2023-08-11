@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
-  * @date    2015.10.08 FreeXc 完善了enet模块的相关注释
+  * @date    2015.10.08 FreeXc 完善了 enet 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -31,7 +31,7 @@ static uint8_t ucENETRxBuffers[ ( CFG_NUM_ENET_RX_BUFFERS * CFG_ENET_BUFFER_SIZE
 
 /**
  * @brief 初始化以太网描述符缓冲区，内部函数
- * @note  以太网模块为提升速度 通过nent内部DMA搬运用户自定义内存区 每个内存区还要分配描述符
+ * @note  以太网模块为提升速度 通过 nent 内部 DMA 搬运用户自定义内存区 每个内存区还要分配描述符
  * @retval None
  */
 static void ENET_BDInit(void)
@@ -90,7 +90,7 @@ static void ENET_BDInit(void)
  * @brief 计算哈希校验值
  * @note  辅助函数
  * \param[in] addr 地址指针
- * @retval Hash值
+ * @retval Hash 值
  */
 static uint8_t ENET_HashAddress(const uint8_t* addr)
 {
@@ -117,9 +117,9 @@ static uint8_t ENET_HashAddress(const uint8_t* addr)
 }
 
 /**
- * @brief   设置ENET模块的接收MAC地址
+ * @brief   设置 ENET 模块的接收 MAC 地址
  * @note  	内部函数
- * @param[in] pa  MAC地址
+ * @param[in] pa  MAC 地址
  * @retval  None
  */
 static void ENET_SetAddress(const uint8_t *pa)
@@ -135,7 +135,7 @@ static void ENET_SetAddress(const uint8_t *pa)
 }
 
 /**
- * @brief  初始化以太网 MII配置层接口
+ * @brief  初始化以太网 MII 配置层接口
  * @retval None
  */
 void ENET_MII_Init(void)
@@ -153,9 +153,9 @@ void ENET_MII_Init(void)
 }
 
 /**
- * @brief  写入以太网MII配置层数据
- * @param[in]   phy_addr  PHY芯片地址
- * @param[in]   reg_addr  寄存器在PHY内部的偏移地址
+ * @brief  写入以太网 MII 配置层数据
+ * @param[in]   phy_addr  PHY 芯片地址
+ * @param[in]   reg_addr  寄存器在 PHY 内部的偏移地址
  * @param[in]   data      需要写入的数据
  * @retval  0     成功 
  * \retval  其它  失败
@@ -199,9 +199,9 @@ bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 }
 
 /**
- * @brief  读以太网MII配置层数据
- * @param[in]   phy_addr    PHY芯片地址
- * @param[in]   reg_addr    寄存器在PHY内部的偏移地址
+ * @brief  读以太网 MII 配置层数据
+ * @param[in]   phy_addr    PHY 芯片地址
+ * @param[in]   reg_addr    寄存器在 PHY 内部的偏移地址
  * @param[in]   data        需要读入的数据地址
  * @retval  true 
  * \retval  false
@@ -282,7 +282,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 #endif
     
     
-    /* 根据协商结果设置ENET模块 */
+    /* 根据协商结果设置 ENET 模块 */
     usData = 0;	
     
     /* 清除单独和组地址哈希寄存器 */
@@ -290,9 +290,9 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     ENET->IAUR = 0;
     ENET->GALR = 0;
     ENET->GAUR = 0;
-    //设置ENET模块MAC地址
+    //设置 ENET 模块 MAC 地址
     ENET_SetAddress(ENET_InitStrut->pMacAddress);
-    //设置接收控制寄存器，最大长度、RMII模式、接收CRC校验等
+    //设置接收控制寄存器，最大长度、RMII 模式、接收 CRC 校验等
     ENET->RCR = ENET_RCR_MAX_FL(1518) | ENET_RCR_MII_MODE_MASK | ENET_RCR_CRCFWD_MASK | ENET_RCR_RMII_MODE_MASK;
     //清除发送接收控制
     ENET->TCR = 0;
@@ -342,7 +342,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
  * @brief  发送一帧以太帧数据
  * @note    用户调用函数
  * @param[in]   data    发送数据指针
- * @param[in]   len     数据长度 (< 1500字节)
+ * @param[in]   len     数据长度 (< 1500 字节)
  * @retval  None
  */
 uint32_t ENET_MacSendData(uint8_t *data, uint16_t len)
@@ -404,7 +404,7 @@ uint16_t ENET_MacReceiveData(uint8_t *data)
 }
 
 /**
- * @brief  配置ENET模块的中断或者DMA属性
+ * @brief  配置 ENET 模块的中断或者 DMA 属性
  * @param[in]  config     模式选择
  *         			@arg kENET_IT_TXF_Disable 禁止发送一帧以太网数据帧中断
  *         			@arg kENET_IT_RXF_Disable 禁止接收一帧以太网数据帧中断
@@ -436,7 +436,7 @@ void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config)
 }
 
 /**
- * @brief  设置ENET发送中断回调函数
+ * @brief  设置 ENET 发送中断回调函数
  * @param[in]  AppCBFun 回调函数指针
  * @retval None
  */
@@ -449,7 +449,7 @@ void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun)
 }
 
 /**
- * @brief  设置ENET接收中断回调函数
+ * @brief  设置 ENET 接收中断回调函数
  * @param[in]  AppCBFun 回调函数指针
  * @retval None
  */
@@ -477,7 +477,7 @@ bool ENET_IsTxTransferComplete(void)
 }
 
 /**
- * @brief  ENET发送中断处理函数
+ * @brief  ENET 发送中断处理函数
  * @note   此函数内部用于调用注册的回调函数，用户无需使用
  */
 void ENET_Transmit_IRQHandler(void)
@@ -490,7 +490,7 @@ void ENET_Transmit_IRQHandler(void)
 }
 
 /**
- * @brief  ENET接收中断处理函数
+ * @brief  ENET 接收中断处理函数
  * @note   此函数内部用于调用注册的回调函数，用户无需使用
  */
 void ENET_Receive_IRQHandler(void)

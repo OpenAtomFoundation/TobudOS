@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
-  * @date    2015.10.04 FreeXc 完善了cpuidy.c & cpuidy.h文件的注释
+  * @date    2015.10.04 FreeXc 完善了 cpuidy.c & cpuidy.h 文件的注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为内部文件，用于获取芯片的出厂信息，少部分用户使用
   ******************************************************************************
@@ -52,12 +52,12 @@ static const char *CPUIDY_FamIDTable[8] =
 
 
 /**
- * @brief  获得芯片的系列ID
+ * @brief  获得芯片的系列 ID
  * @code
  *      // 打印芯片型号
  *      printf("Family Type:%s\r\n", CPUIDY_GetFamID());
  * @endcode
- * @retval ID字符串指针
+ * @retval ID 字符串指针
  */
 char *CPUIDY_GetFamID(void)
 {
@@ -83,17 +83,17 @@ uint32_t CPUIDY_GetPinCount(void)
 /**
  * @brief  获得芯片ROM/RAM 大小
  * @code
- *      // 获取芯片Pflash的大小并显示出来
+ *      // 获取芯片 Pflash 的大小并显示出来
  *      uint32_t PFlashSize;
  *      PFlashSize = CPUIDY_GetMemSize(kPFlashSizeInKB);
  *      printf("PFlash Size:%dKB\r\n", PFlashSize);
  * @endcode
  * @param[in]  memSizeName 存储器类型
- *              @arg kPFlashSizeInKB   编程Flash的尺寸
- *              @arg kDFlashSizeInKB   数据Flash的尺寸
- *              @arg kFlexNVMSizeInKB  FlexNVM的尺寸
- *              @arg kEEPROMSizeInByte EEPOROM的尺寸
- *              @arg kRAMSizeInKB      芯片RAM的尺寸
+ *              @arg kPFlashSizeInKB   编程 Flash 的尺寸
+ *              @arg kDFlashSizeInKB   数据 Flash 的尺寸
+ *              @arg kFlexNVMSizeInKB  FlexNVM 的尺寸
+ *              @arg kEEPROMSizeInByte EEPOROM 的尺寸
+ *              @arg kRAMSizeInKB      芯片 RAM 的尺寸
  * @retval None
  */
 uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
@@ -128,9 +128,9 @@ uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
 }
 
 /**
- * @brief  获得芯片UID信息(全球唯一识别码)
+ * @brief  获得芯片 UID 信息 (全球唯一识别码)
  * @code
- *      // 获取芯片的UID并显示出来
+ *      // 获取芯片的 UID 并显示出来
  *      uint32_t UID[4],i;
  *      CPUIDY_GetUID(UID);
  *      for(i = 0; i < 4; i++)
@@ -138,7 +138,7 @@ uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
  *          printf("UID[%d]:0x%x\n", i, UID[i]);
  *      }
  * @endcode
- * @param[in]  UIDArray UID数据的首地址
+ * @param[in]  UIDArray UID 数据的首地址
  * @retval None
  */
 void CPUIDY_GetUID(uint32_t * UIDArray)

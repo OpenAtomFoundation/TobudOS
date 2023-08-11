@@ -12,7 +12,7 @@ extern void stm32g0xx_key_init(void);
 #define DEVICE_NAME             "led_01"
 #define DEVICE_KEY              "uNdwCyxa1Jd6Zch4r3/khw=="
 
-// WIFI信息
+// WIFI 信息
 #define YOUR_WIFI_SSID          "iot_explorer"
 #define YOUR_WIFI_PWD           "iot_explorer"
 
@@ -35,8 +35,8 @@ int  brightness_level_cache = 2;
 char client_token_cache[128] = {0};
 
 /***************************************************************
-* 函数名称: key1_handler_callback
-* 说    明: 按键处理回调
+* 函数名称：key1_handler_callback
+* 说    明：按键处理回调
 ***************************************************************/
 void key1_handler_callback(void)
 {
@@ -52,8 +52,8 @@ void key1_handler_callback(void)
 }
 
 /***************************************************************
-* 函数名称: iot_explorer_handle_power_switch
-* 说    明: 根据power switch控制开关
+* 函数名称：iot_explorer_handle_power_switch
+* 说    明：根据 power switch 控制开关
 ***************************************************************/
 static void iot_explorer_handle_power_switch(int power_switch)
 {
@@ -79,8 +79,8 @@ static void iot_explorer_handle_power_switch(int power_switch)
 }
 
 /***************************************************************
-* 函数名称: default_message_handler
-* 说    明: IoT Explorer下行数据处理
+* 函数名称：default_message_handler
+* 说    明：IoT Explorer 下行数据处理
 ***************************************************************/
 static void default_message_handler(mqtt_message_t* msg)
 {
@@ -105,7 +105,7 @@ static void default_message_handler(mqtt_message_t* msg)
 		return;
 	}
 
-	// 2. 解析出method
+	// 2. 解析出 method
 	method = cJSON_GetObjectItem(root, "method");
 	if (!method){
 		printf("Invalid json method\r\n");
@@ -113,13 +113,13 @@ static void default_message_handler(mqtt_message_t* msg)
 		return;
 	}
 
-	// 3. 仅处理云端下发的 control 数据，report_reply暂不处理
+	// 3. 仅处理云端下发的 control 数据，report_reply 暂不处理
 	if (0 != strncmp(method->valuestring, "control", sizeof("control") - 1)){
 		cJSON_Delete(root);
 		return;
 	}
 
-	// 4. 解析出params
+	// 4. 解析出 params
 	params = cJSON_GetObjectItem(root, "params");
 	if (!params){
 		printf("Invalid json params\r\n");
@@ -141,7 +141,7 @@ static void default_message_handler(mqtt_message_t* msg)
         is_brightness_level_changed = true;
     }
 
-	// 4. 设置clientToken回复
+	// 4. 设置 clientToken 回复
 	token = cJSON_GetObjectItem(root, "clientToken");
 	if (token) {
 		strcpy(client_token_cache, token->valuestring);
@@ -152,8 +152,8 @@ static void default_message_handler(mqtt_message_t* msg)
 }
 
 /***************************************************************
-* 函数名称: mqtt_demo_task
-* 说    明: 主任务，连接平台以及发送上行数据
+* 函数名称：mqtt_demo_task
+* 说    明：主任务，连接平台以及发送上行数据
 ***************************************************************/
 static void mqtt_demo_task(void)
 {
@@ -176,22 +176,22 @@ static void mqtt_demo_task(void)
     /**
      * Please Choose your AT Port first, default is HAL_UART_2(USART2)
     */
-	// 1. 初始化ESP8266
+	// 1. 初始化 ESP8266
     ret = esp8266_tencent_firmware_sal_init(HAL_UART_PORT_2);
     if (ret < 0) {
         printf("esp8266 tencent firmware sal init fail, ret is %d\r\n", ret);
     }
 
-    // 2. 连接wifi，如果需要自行配置热点或者wifi，请打开注释
+    // 2. 连接 wifi，如果需要自行配置热点或者 wifi，请打开注释
     esp8266_tencent_firmware_join_ap(YOUR_WIFI_SSID, YOUR_WIFI_PWD);
 
-	// 3. 设置设备信息：产品ID，设备名，设备密钥
+	// 3. 设置设备信息：产品 ID，设备名，设备密钥
     strncpy(dev_info.product_id, product_id, PRODUCT_ID_MAX_SIZE);
     strncpy(dev_info.device_name, device_name, DEVICE_NAME_MAX_SIZE);
     strncpy(dev_info.device_serc, key, DEVICE_SERC_MAX_SIZE);
     tos_tf_module_info_set(&dev_info, TLS_MODE_PSK);
 
-	// 4. 连接IoT Explorer
+	// 4. 连接 IoT Explorer
     mqtt_param_t init_params = DEFAULT_MQTT_PARAMS;
     if (tos_tf_module_mqtt_conn(init_params) != 0) {
         printf("module mqtt conn fail\n");
@@ -221,7 +221,7 @@ static void mqtt_demo_task(void)
     }
 
     while (1) {
-		// 判断当前IoT Explorer连接状态
+		// 判断当前 IoT Explorer 连接状态
 		mqtt_state_t state;
 		tos_tf_module_mqtt_state_get(&state);
 		if (state == MQTT_STATE_DISCONNECTED) {
@@ -251,7 +251,7 @@ static void mqtt_demo_task(void)
             }
         }
 		
-		// 扩展实验2：请在此处添加亮度等级状态上报物联网开发平台的代码
+		// 扩展实验 2：请在此处添加亮度等级状态上报物联网开发平台的代码
         if (is_brightness_level_changed){
             is_brightness_level_changed = false;
 			//----请在空白处填写代码
@@ -259,7 +259,7 @@ static void mqtt_demo_task(void)
 			//----
         }
 		
-		// 接受到下行control消息，回复最近一条
+		// 接受到下行 control 消息，回复最近一条
 		if (is_client_token_received) {
 			is_client_token_received = false;
 			memset(payload, 0, sizeof(payload));
@@ -271,7 +271,7 @@ static void mqtt_demo_task(void)
 			}
 		}
 
-		// 1. 构造上报的JSON
+		// 1. 构造上报的 JSON
 		memset(payload, 0, sizeof(payload));
         snprintf(payload, sizeof(payload), REPORT_LX_DATA_TEMPLATE, e53_value);
         // 2. 向数据模板 topic 发布光照强度信息
@@ -282,7 +282,7 @@ static void mqtt_demo_task(void)
             printf("module mqtt pub success\n");
         }
 
-		// 2. 向数据模板topic发布光照强度信息
+		// 2. 向数据模板 topic 发布光照强度信息
         memset(payload, 0, sizeof(payload));
         snprintf(payload, sizeof(payload), REPORT_BRIGHTNESS_LEVEL_DATA_TEMPLATE,
         brightness_level_cache);
@@ -298,8 +298,8 @@ static void mqtt_demo_task(void)
 
 
 /***************************************************************
-* 函数名称: application_entry
-* 说    明: 应用入口
+* 函数名称：application_entry
+* 说    明：应用入口
 ***************************************************************/
 void application_entry(void *arg)
 {

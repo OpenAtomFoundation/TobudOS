@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
-  * @date    2015.10.05 FreeXc 完善了wdog模块的相关API注释
+  * @date    2015.10.05 FreeXc 完善了 wdog 模块的相关 API 注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为芯片看门狗模块的底层功能函数
   ******************************************************************************
@@ -28,10 +28,10 @@ static void WDOG_Unlock(void)
 /**
  * @brief  看门狗快速初始化配置
  * @code
- *      //配置看门狗的定时时间为100ms
+ *      //配置看门狗的定时时间为 100ms
  *      WDOG_QuickInit(100); 
  * @endcode
- * @param[in]  timeInMs 看门狗触发时间，单位ms
+ * @param[in]  timeInMs 看门狗触发时间，单位 ms
  * @retval None
  */
 void WDOG_QuickInit(uint32_t timeInMs)
@@ -45,10 +45,10 @@ void WDOG_QuickInit(uint32_t timeInMs)
 /**
  * @brief  看门狗详细初始化配置
  * @code
- *      //配置看门狗在正常模式下，时间为100ms
+ *      //配置看门狗在正常模式下，时间为 100ms
  *    WDOG_InitTypeDef WDOG_InitStruct1;        //申请一个结构变量
  *    WDOG_InitStruct1.mode = kWDOG_Mode_Normal;//选择看门狗处于正常模式
- *    WDOG_InitStruct1.timeOutInMs = 100;       //设置间隔时间为100ms
+ *    WDOG_InitStruct1.timeOutInMs = 100;       //设置间隔时间为 100ms
  *    WDOG_InitStruct1.windowInMs  = 20;        //在正常模式下无意义
  *    WDOG_Init(&WDOG_InitStruct1); 
  * @endcode
@@ -93,7 +93,7 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
  *      //开启看门狗中断功能    
  *      WDOG_ITDMAConfig(true);  //中断不常用
  * @endcode
- * @param[in]  status 是否开启WDOG中断
+ * @param[in]  status 是否开启 WDOG 中断
  *          \arg true  开启中断
  *          \arg false 关闭中断
  * @retval None
@@ -111,7 +111,7 @@ void WDOG_ITDMAConfig(bool status)
 }
 
 /**
- * @brief  WDOG注册中断回调函数
+ * @brief  WDOG 注册中断回调函数
  * @param[in] AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应该请查阅应用实例
@@ -129,7 +129,7 @@ void WDOG_CallbackInstall(WDOG_CallBackType AppCBFun)
  * @code
  *      //获取当前看门狗中计时器的数值 
  *      uint32_t counter;    //申请一个变量
- *      counter = WDOG_GetResetCounter();  //获取计时器的数值，存储在counter中
+ *      counter = WDOG_GetResetCounter();  //获取计时器的数值，存储在 counter 中
  * @endcode
  * @retval 当前计数器的数值
  */
@@ -186,7 +186,7 @@ void WDOG_Refresh(void)
 
 /**
  * @brief  中断处理函数入口
- * @note   用于调用用户注册的回调函数,用户无需使用
+ * @note   用于调用用户注册的回调函数，用户无需使用
  */
 void Watchdog_IRQHandler(void)
 {

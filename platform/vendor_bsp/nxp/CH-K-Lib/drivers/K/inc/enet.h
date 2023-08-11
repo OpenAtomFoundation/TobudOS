@@ -45,7 +45,7 @@
 #define TX_BD_BDU       0x00000080    
 
 /* RX缓冲区描述符位定义 */
-// 0偏移标志 - 状态:大端格式
+// 0 偏移标志 - 状态：大端格式
 #define RX_BD_E			0x0080
 #define RX_BD_R01		0x0040
 #define RX_BD_W			0x0020

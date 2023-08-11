@@ -213,7 +213,7 @@ void qcloud_agent(void) {
         return;
     }
 
-    // 建立到IoT hub的MQTT连接
+    // 建立到 IoT hub 的 MQTT 连接
     ret = mqtt_connect();
     if (ret < 0) {
         printf("mqtt_connect fail\n");
@@ -284,14 +284,14 @@ void normal_task() {
 }
 
 void network_test_task() {
-    // 初始化WiFi模组，连接AP
+    // 初始化 WiFi 模组，连接 AP
     int ret = network_init();
     if (ret < 0) {
         printf("network_init fail\n");
         return;
     }
 
-    // 调用SAL层接口，建立Socket连接
+    // 调用 SAL 层接口，建立 Socket 连接
     int socket_id = -1;
     uint8_t recv_data[128];
     socket_id = tos_sal_module_connect("45.40.201.56", "8080", TOS_SAL_PROTO_TCP);
@@ -302,7 +302,7 @@ void network_test_task() {
         printf("TCP connect success! fd: %d\n", socket_id);
     }
 
-    // 调用SAL层接口，消息收发
+    // 调用 SAL 层接口，消息收发
     while (1) {
         tos_sal_module_send(socket_id, (const void *)"Hello TencentOS tiny!\r\n",
             strlen("Hello TencentOS tiny!\r\n"));
@@ -378,7 +378,7 @@ while(1) {
 
 
 // 多任务，基于优先级抢占
-// 高优先级任务: 读取传感器，并实时监控传感器值
+// 高优先级任务：读取传感器，并实时监控传感器值
 osThreadCreate(osThread(monitor_task), NULL);
 // 普通优先级任务：其他业务逻辑
 osThreadCreate(osThread(normal_task), NULL);

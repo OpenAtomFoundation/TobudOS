@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * \date    2015.10.04 FreeXc完善了common.h & common.c文件的注释
+  * \date    2015.10.04 FreeXc 完善了 common.h & common.c 文件的注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为内部文件，用户无需调用和修改  
   ******************************************************************************
@@ -30,10 +30,10 @@
  *              @arg kCoreClock    内核时钟
  *              @arg kSystemClock  系统时钟 = 内核时钟
  *              @arg kBusClock     总线时钟
- *              @arg kFlexBusClock Flexbus总线时钟
- *              @arg kFlashClock   Flash总线时钟
+ *              @arg kFlexBusClock Flexbus 总线时钟
+ *              @arg kFlashClock   Flash 总线时钟
  * @retval 0    成功
- * \retval 非0  错误
+ * \retval 非 0  错误
  */
 uint32_t GetClock(Clock_t clockName)
 {
@@ -64,7 +64,7 @@ uint32_t GetClock(Clock_t clockName)
  * @brief  进入低功耗模式
  * @param[in]  enSleepOnExit 在系统唤醒时候 是否继续进入低功耗
  * @retval None
- * @note  任何中断 都可以唤醒CPU
+ * @note  任何中断 都可以唤醒 CPU
  */
 void EnterSTOPMode(bool enSleepOnExit)
 {
@@ -82,7 +82,7 @@ void EnterSTOPMode(bool enSleepOnExit)
  /**
  * @brief  编码快速初始化结构 用户不需调用
  * @param[in]  type 快速初始化结构体指针
- * @retval     32位快速初始化编码
+ * @retval     32 位快速初始化编码
  */
 uint32_t QuickInitEncode(map_t * type)
 {
@@ -90,8 +90,8 @@ uint32_t QuickInitEncode(map_t * type)
 }
 
 /**
- * @brief  获得芯片UID信息(全球唯一识别码)
- * @retval UID信息
+ * @brief  获得芯片 UID 信息 (全球唯一识别码)
+ * @retval UID 信息
  */
 uint32_t GetUID(void) 
 {
@@ -105,7 +105,7 @@ uint32_t GetUID(void)
 
  /**
  * @brief  解码快速初始化结构 用户不需调用
- * @param[in]  map 32位快速初始化编码
+ * @param[in]  map 32 位快速初始化编码
  * @param[out]  type 快速初始化结构指针
  * @retval None
  */
@@ -129,9 +129,9 @@ void DWT_DelayInit(void)
 }
 
 /**
- * @brief  DWT微秒级延时
+ * @brief  DWT 微秒级延时
  * @param[in]  us 延时微秒数
- * \note DWT(Data and Address Watchpoints)具有一个Core Clock的计数器，通过该计数器来实现us级延时
+ * \note DWT(Data and Address Watchpoints) 具有一个 Core Clock 的计数器，通过该计数器来实现 us 级延时
  * \retval  None
  */
 void DWT_DelayUs(uint32_t us)
@@ -152,7 +152,7 @@ void DWT_DelayUs(uint32_t us)
 }
 
 /**
- * @brief  DWT毫秒级延时
+ * @brief  DWT 毫秒级延时
  * @param[in]  ms 延时毫秒数
  * \retval  None
  */
@@ -165,7 +165,7 @@ void DWT_DelayMs(uint32_t ms)
  * @brief  延时初始化函数
  * @code
  *   // 完成延时初始化配置，
- *   //使用内核的Systick模块实现延时功能
+ *   //使用内核的 Systick 模块实现延时功能
  *   DelayInit();
  * @endcode
  * @retval None
@@ -179,7 +179,7 @@ void DelayInit(void)
 /**
  * @brief 抽象毫秒级的延时设置函数
  * @code
- *   // 实现500ms的延时功能
+ *   // 实现 500ms 的延时功能
  *   DelayMs(500);
  * @endcode
  * @param[in]  ms 需要延时的时间，单位毫秒
@@ -195,7 +195,7 @@ void DelayMs(uint32_t ms)
 /**
  * @brief 抽象微秒级的延时设置函数
  * @code
- *   // 实现500us的延时功能
+ *   // 实现 500us 的延时功能
  *   DelayUs(500);
  * @endcode
  * @param[in]  us 需要延时的时间，单位微秒
@@ -246,7 +246,7 @@ void NMI_Handler(void)
 #if (defined(LIB_DEBUG) && defined(DEBUG_FAULT_HANDLER))
 
 /**
- * @brief  Hard Fault中断处理函数入口
+ * @brief  Hard Fault 中断处理函数入口
  */
 void HardFault_Handler(void)
 {
@@ -256,7 +256,7 @@ void HardFault_Handler(void)
 }
 
 /**
- * @brief  Bus Fault中断处理函数入口
+ * @brief  Bus Fault 中断处理函数入口
  */
 void BusFault_Handler(void)
 {

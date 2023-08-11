@@ -1,11 +1,11 @@
 #include "oled.h"
 #include "stdlib.h"
 #include "oledfont.h"
-//OLED的显存
-//存放格式如下.
+//OLED 的显存
+//存放格式如下。
 //-----------------------------------
 //|x→[0,127]						|
-//|			OLED显示坐标				|
+//|			OLED 显示坐标				|
 //|y			范围					|
 //|↓								|
 //|[0,31]							|
@@ -127,21 +127,21 @@ void OLED_Set_Pos(unsigned char x, unsigned char y)
 	OLED_WR_Byte(((x&0xf0)>>4)|0x10,OLED_CMD);
 	OLED_WR_Byte((x&0x0f),OLED_CMD);
 }
-//开启OLED显示
+//开启 OLED 显示
 void OLED_Display_On(void)
 {
-	OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC命令
+	OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC 命令
 	OLED_WR_Byte(0X14,OLED_CMD);  //DCDC ON
 	OLED_WR_Byte(0XAF,OLED_CMD);  //DISPLAY ON
 }
-//关闭OLED显示
+//关闭 OLED 显示
 void OLED_Display_Off(void)
 {
-	OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC命令
+	OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC 命令
 	OLED_WR_Byte(0X10,OLED_CMD);  //DCDC OFF
 	OLED_WR_Byte(0XAE,OLED_CMD);  //DISPLAY OFF
 }
-//注意：清屏函数,清完屏,整个屏幕是黑色的!和没点亮一样!!!
+//注意：清屏函数，清完屏，整个屏幕是黑色的！和没点亮一样!!!
 void OLED_Clear(void)
 {
 	uint8_t i,n;
@@ -165,7 +165,7 @@ void OLED_On(void)
 		for(n=0;n<128;n++)OLED_WR_Byte(1,OLED_DATA);
 	} //更新显示
 }
-//在指定位置显示一个字符,包括部分字符
+//在指定位置显示一个字符，包括部分字符
 //x:0~127
 //y:0~63
 //
@@ -194,19 +194,19 @@ void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size)
 			OLED_WR_Byte(F6x8[c][i],OLED_DATA);
 	}
 }
-//m^n函数
+//m^n 函数
 uint32_t oled_pow(uint8_t m,uint8_t n)
 {
 	uint32_t result=1;
 	while(n--)result*=m;
 	return result;
 }
-//显示2个数字
+//显示 2 个数字
 //x,y :起点坐标
 //len :数字的位数
 //size:字体大小
 //
-//num:数值(0~4294967295);
+//num:数值 (0~4294967295);
 void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size2)
 {
 	uint8_t t,temp;
@@ -258,7 +258,7 @@ void OLED_ShowChinese(uint8_t x,uint8_t y,uint8_t no)
 		adder+=1;
 	}
 }
-/***********功能描述：显示显示BMP图片128×64起始点坐标(x,y),x的范围0〜127，y为页的范围0〜7*****************/
+/***********功能描述：显示显示 BMP 图片 128×64 起始点坐标 (x,y),x 的范围 0〜127，y 为页的范围 0〜7*****************/
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[])
 {
 	unsigned int j=0;
@@ -276,7 +276,7 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 	}
 }
 
-//初始化OLED
+//初始化 OLED
 void OLED_Init(void)
 {
 	HAL_Delay(200);

@@ -11,10 +11,10 @@ static unsigned char gps_uart[1000];
 TIM_HandleTypeDef htim16;
 
 /***************************************************************
-* 函数名称: MX_TIM16_Init
-* 说    明: 初始化定时器16
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：MX_TIM16_Init
+* 说    明：初始化定时器 16
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 /* TIM16 init function */
 void MX_TIM16_Init(void)
@@ -68,10 +68,10 @@ void MX_TIM16_Init(void)
 
 }
 /***************************************************************
-* 函数名称: HAL_TIM_Base_MspInit
-* 说    明: 使能定时器16时钟,设置时钟源
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：HAL_TIM_Base_MspInit
+* 说    明：使能定时器 16 时钟，设置时钟源
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 {
@@ -90,10 +90,10 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 }
 
 /***************************************************************
-* 函数名称: HAL_TIM_MspPostInit
-* 说    明: 使能定时器16硬件初始化
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：HAL_TIM_MspPostInit
+* 说    明：使能定时器 16 硬件初始化
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 {
@@ -123,10 +123,10 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 }
 
 /***************************************************************
-* 函数名称: Init_Beep
-* 说    明: 初始化E53_ST1的蜂鸣器
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：Init_Beep
+* 说    明：初始化 E53_ST1 的蜂鸣器
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void Init_Beep(void)
 {
@@ -147,10 +147,10 @@ void Init_Beep(void)
 }
 
 /***************************************************************
-* 函数名称: Init_LED
-* 说    明: 初始化E53_ST1的LED灯
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：Init_LED
+* 说    明：初始化 E53_ST1 的 LED 灯
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void Init_LED(void)
 {
@@ -170,10 +170,10 @@ void Init_LED(void)
   HAL_GPIO_Init(ST1_LED_GPIO_Port, &GPIO_InitStruct);
 }
 /***************************************************************
-* 函数名称: Init_GPS_POW
-* 说    明: 初始化E53_ST1的GPS使能引脚
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：Init_GPS_POW
+* 说    明：初始化 E53_ST1 的 GPS 使能引脚
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void Init_GPS_POW(void)
 {
@@ -193,10 +193,10 @@ void Init_GPS_POW(void)
   HAL_GPIO_Init(ST1_GPS_POW_GPIO_Port, &GPIO_InitStruct);
 }
 /***************************************************************
-* 函数名称: GPS_Init
-* 说    明: 初始化GPS模块
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：GPS_Init
+* 说    明：初始化 GPS 模块
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void GPS_Init(void)
 {
@@ -207,10 +207,10 @@ void GPS_Init(void)
 }
 
 /***************************************************************
-* 函数名称: Init_E53_ST1
-* 说    明: 初始化E53_ST1扩展板
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：Init_E53_ST1
+* 说    明：初始化 E53_ST1 扩展板
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void Init_E53_ST1(void)
 {
@@ -222,11 +222,11 @@ void Init_E53_ST1(void)
 }
 
 /***************************************************\
-* 函数名称: NMEA_Comma_Pos
-*	函数功能：从buf里面得到第cx个逗号所在的位置
+* 函数名称：NMEA_Comma_Pos
+*	函数功能：从 buf 里面得到第 cx 个逗号所在的位置
 *	输入值：
 *	返回值：0~0xFE，代表逗号所在位置的偏移
-*		0xFF，代表不存在第cx个逗号
+*		0xFF，代表不存在第 cx 个逗号
 \***************************************************/
 
 uint8_t NMEA_Comma_Pos(uint8_t *buf,uint8_t cx)
@@ -241,9 +241,9 @@ uint8_t NMEA_Comma_Pos(uint8_t *buf,uint8_t cx)
 	return buf-p;
 }
 /***************************************************\
-* 函数名称: NMEA_Pow
-*	函数功能：返回m的n次方值
-*	输入值：底数m和指数n
+* 函数名称：NMEA_Pow
+*	函数功能：返回 m 的 n 次方值
+*	输入值：底数 m 和指数 n
 *	返回值：m^n
 \***************************************************/
 uint32_t NMEA_Pow(uint8_t m,uint8_t n)
@@ -253,8 +253,8 @@ uint32_t NMEA_Pow(uint8_t m,uint8_t n)
 	return result;
 }
 /***************************************************\
-* 函数名称: NMEA_Str2num
-*	函数功能：str数字转换为（int）数字，以','或者'*'结束
+* 函数名称：NMEA_Str2num
+*	函数功能：str 数字转换为（int）数字，以','或者'*'结束
 *	输入值：buf，数字存储区
 *				 	dx，小数点位数，返回给调用函数
 *	返回值：转换后的数值
@@ -271,14 +271,14 @@ int NMEA_Str2num(uint8_t *buf,uint8_t*dx)
 		if(*p=='-'){mask |= 0x02;p++;}//说明有负数
 		if(*p==','||*p=='*')break;//遇到结束符
 		if(*p=='.'){mask |= 0x01;p++;}//遇到小数点
-		else if(*p>'9'||(*p<'0'))//数字不在0和9之内，说明有非法字符
+		else if(*p>'9'||(*p<'0'))//数字不在 0 和 9 之内，说明有非法字符
 		{
 			ilen = 0;
 			flen = 0;
 			break;
 		}
 		if(mask&0x01)flen++;//小数点的位数
-		else ilen++;//str长度加一
+		else ilen++;//str 长度加一
 		p++;//下一个字符
 	}
 	if(mask&0x02)buf++;//移到下一位，除去负号
@@ -297,10 +297,10 @@ int NMEA_Str2num(uint8_t *buf,uint8_t*dx)
 	return res;
 }
 /***************************************************\
-* 函数名称: NMEA_BDS_GPRMC_Analysis
-*	函数功能：解析GPRMC信息
-*	输入值：gpsx,NMEA信息结构体
-*				 buf：接收到的GPS数据缓冲区首地址
+* 函数名称：NMEA_BDS_GPRMC_Analysis
+*	函数功能：解析 GPRMC 信息
+*	输入值：gpsx,NMEA 信息结构体
+*				 buf：接收到的 GPS 数据缓冲区首地址
 \***************************************************/
 void NMEA_BDS_GPRMC_Analysis(gps_msg *gpsmsg,uint8_t *buf)
 {
@@ -308,7 +308,7 @@ void NMEA_BDS_GPRMC_Analysis(gps_msg *gpsmsg,uint8_t *buf)
 	uint8_t posx;     
 	uint32_t temp;	   
 	float rs;  
-	p4=(uint8_t*)strstr((const char *)buf,"$GPRMC");//"$GPRMC",经常有&和GPRMC分开的情况,故只判断GPRMC.
+	p4=(uint8_t*)strstr((const char *)buf,"$GPRMC");//"$GPRMC",经常有&和 GPRMC 分开的情况，故只判断 GPRMC.
 	posx=NMEA_Comma_Pos(p4,3);								//得到纬度
 	if(posx!=0XFF)
 	{
@@ -332,10 +332,10 @@ void NMEA_BDS_GPRMC_Analysis(gps_msg *gpsmsg,uint8_t *buf)
 }
 
 /***************************************************************
-* 函数名称: E53_ST1_Read_Data
-* 说    明: 获取GPS经纬度信息
-* 参    数: 无
-* 返 回 值: 无
+* 函数名称：E53_ST1_Read_Data
+* 说    明：获取 GPS 经纬度信息
+* 参    数：无
+* 返 回 值：无
 ***************************************************************/
 void E53_ST1_Read_Data(void)
 {	
@@ -346,12 +346,12 @@ void E53_ST1_Read_Data(void)
 }
 
 /***************************************************************
-* 函数名称: E53_ST1_LED_StatusSet
-* 说    明: E53 ST1开发板上的LED灯的亮灭控制
-* 参    数: status,LED灯的状态
-*	    非1,关灯
-*	    1,开灯
-* 返 回 值: 无
+* 函数名称：E53_ST1_LED_StatusSet
+* 说    明：E53 ST1 开发板上的 LED 灯的亮灭控制
+* 参    数：status,LED 灯的状态
+*	    非 1，关灯
+*	    1，开灯
+* 返 回 值：无
 ***************************************************************/
 void E53_ST1_LED_StatusSet(E53ST1_Status_ENUM status)
 {
@@ -359,12 +359,12 @@ void E53_ST1_LED_StatusSet(E53ST1_Status_ENUM status)
 }
 
 /***************************************************************
-* 函数名称: E53_ST1_Beep
-* 说    明: E53 ST1蜂鸣器报警与否
-* 参    数: status,LED_ENUM枚举的数据
-*	    ST1_OFF,关蜂鸣器
-*	    ST1_ON,开蜂鸣器
-* 返 回 值: 无
+* 函数名称：E53_ST1_Beep
+* 说    明：E53 ST1 蜂鸣器报警与否
+* 参    数：status,LED_ENUM 枚举的数据
+*	    ST1_OFF，关蜂鸣器
+*	    ST1_ON，开蜂鸣器
+* 返 回 值：无
 ***************************************************************/
 void E53_ST1_Beep(E53ST1_Status_ENUM status)
 {

@@ -31,10 +31,10 @@ typedef enum
 \***************************************************/
 __packed typedef struct
 {
-    uint32_t latitude_bd;     //纬度 分扩大100000倍,实际要除以100000
-    uint8_t  nshemi_bd;       //北纬/南纬,N:北纬;S:南纬	
-    uint32_t longitude_bd;    //经度 分扩大100000倍,实际要除以100000
-    uint8_t  ewhemi_bd;       //东经/西经,E:东经;W:西经
+    uint32_t latitude_bd;     //纬度 分扩大 100000 倍，实际要除以 100000
+    uint8_t  nshemi_bd;       //北纬/南纬，N:北纬;S:南纬	
+    uint32_t longitude_bd;    //经度 分扩大 100000 倍，实际要除以 100000
+    uint8_t  ewhemi_bd;       //东经/西经，E:东经;W:西经
 }gps_msg;
 
 /* E53_ST1传感器数据类型定义 ------------------------------------------------------------*/

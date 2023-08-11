@@ -4,9 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
-  * \date    2015.10.03 FreeXc完善了systick模块的相关注释
+  * \date    2015.10.03 FreeXc 完善了 systick 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片ARM内核中的SysTick模块的底层功能函数
+  * @note    此文件为芯片 ARM 内核中的 SysTick 模块的底层功能函数
   ******************************************************************************
   */
 #include "systick.h"
@@ -18,13 +18,13 @@ static uint32_t fac_ms = 0;     //!< msDelay Mut
 
 
  /**
- * @brief  初始化SysTick时钟
+ * @brief  初始化 SysTick 时钟
  * @code
- *   // 初始化SysTick时钟 设定中断周期为10000us(10ms)
+ *   // 初始化 SysTick 时钟 设定中断周期为 10000us(10ms)
  *   SYSTICK_Init(10000);
  * @endcode
- * @param[in]  timeInUs 中断周期,单位us
- * \note systick属于cm4内核中的模块，在RTOS中可作为其时钟节拍
+ * @param[in]  timeInUs 中断周期，单位 us
+ * \note systick 属于 cm4 内核中的模块，在 RTOS 中可作为其时钟节拍
  * @retval None
  */
 void SYSTICK_Init(uint32_t timeInUs)
@@ -39,9 +39,9 @@ void SYSTICK_Init(uint32_t timeInUs)
 }
 
  /**
- * @brief  初始化SysTick为延时应用 初始化后就可以调用 DelayMs DelayUs
+ * @brief  初始化 SysTick 为延时应用 初始化后就可以调用 DelayMs DelayUs
  * @code
- *      //将SysTick用作延时的初始化 初始化后系统延时20ms
+ *      //将 SysTick 用作延时的初始化 初始化后系统延时 20ms
  *      SYSTICK_DelayInit();
  *      SYSTICK_DelayMs(20);
  * @endcode
@@ -55,7 +55,7 @@ void SYSTICK_DelayInit(void)
 }
 
  /**
- * @brief  开启或者停止SysTick时钟
+ * @brief  开启或者停止 SysTick 时钟
  * @code
  *   //开启时钟
  *   SYSTICK_Cmd(true);
@@ -63,7 +63,7 @@ void SYSTICK_DelayInit(void)
  * @param[in]  NewState 使能或者关闭
  *              @arg true 使能
  *              @arg false 停止
- * \attention  当给微控制器移植OS后，需要开启systick时钟以及中断，不然OS创建的任务无法工作
+ * \attention  当给微控制器移植 OS 后，需要开启 systick 时钟以及中断，不然 OS 创建的任务无法工作
  * @retval None
  */
 void SYSTICK_Cmd(bool NewState)
@@ -72,7 +72,7 @@ void SYSTICK_Cmd(bool NewState)
 }
 
  /**
- * @brief  开启SysTick中断
+ * @brief  开启 SysTick 中断
  * @code
  *      //开启中断功能
  *      SYSTICK_ITConfig(true);
@@ -80,7 +80,7 @@ void SYSTICK_Cmd(bool NewState)
  * @param[in]  NewState 使能或者关闭
  *              @arg true  使能
  *              @arg false 禁止
- * \attention  当给微控制器移植OS后，需要开启systick时钟以及中断，不然OS创建的任务无法工作
+ * \attention  当给微控制器移植 OS 后，需要开启 systick 时钟以及中断，不然 OS 创建的任务无法工作
  * @retval None
  */
 void SYSTICK_ITConfig(bool NewState)
@@ -91,10 +91,10 @@ void SYSTICK_ITConfig(bool NewState)
  /**
  * @brief 微秒级延时函数
  * @code
- *      //延时100us
+ *      //延时 100us
  *      SYSTICK_DelayUs(100);
  * @endcode
- * @param[in]  us 延时时间 单位us
+ * @param[in]  us 延时时间 单位 us
  * @retval None
  */
 void SYSTICK_DelayUs(uint32_t us)
@@ -114,7 +114,7 @@ void SYSTICK_DelayUs(uint32_t us)
  * @brief  毫秒级延时函数
  * 
  * @code
- *      //延时100ms
+ *      //延时 100ms
  *      SYSTICK_DelayMs(100);
  * @endcode
  * @param[in]  ms 延时
@@ -138,8 +138,8 @@ void SYSTICK_DelayMs(uint32_t ms)
 }
 
 /**
- * @brief  获得当前System tick timer的值
- * @retval 当前System tick timer的值
+ * @brief  获得当前 System tick timer 的值
+ * @retval 当前 System tick timer 的值
  */
 uint32_t SYSTICK_GetVal(void)
 {

@@ -1,5 +1,5 @@
 
-# mqttclient设计与实现方式
+# mqttclient 设计与实现方式
 
 # 设计思想
 - 整体采用分层式设计，代码实现采用异步设计方式，降低耦合。
@@ -8,39 +8,39 @@
 
 - 不依赖外部任何文件。
 
-# API接口
+# API 接口
 
 **mqttclient**拥有非常简洁的**API**接口，参数都是非常简单的。
 
 | API | 说明 | 示例 |
 | -- | -- | -- |
-| mqtt_lease() | 申请一个mqtt客户端 | mqtt_client_t *client = mqtt_lease(); |
-| mqtt_release() | 释放已申请的mqtt客户端 | mqtt_release(client); |
+| mqtt_lease() | 申请一个 mqtt 客户端 | mqtt_client_t *client = mqtt_lease(); |
+| mqtt_release() | 释放已申请的 mqtt 客户端 | mqtt_release(client); |
 | mqtt_connect() | 与服务器建立连接 | mqtt_connect(client); |
 | mqtt_disconnect() | 与服务器断开连接 | mqtt_disconnect(client); |
 | mqtt_subscribe() | 订阅主题，参数：主题名字、服务质量、指定当收到主题数据时的处理函数。| mqtt_subscribe(client, "topic", QOS0, sub_topic_handle); |
 | mqtt_unsubscribe() | 取消订阅指定主题，参数：主题名字 | mqtt_unsubscribe(client, | "topic"); |
-| mqtt_publish() | 向指定主题发布数据，参数：主题名字，mqtt_message_t类型的数据内容 | mqtt_publish(client, "topic", &msg); |
+| mqtt_publish() | 向指定主题发布数据，参数：主题名字，mqtt_message_t 类型的数据内容 | mqtt_publish(client, "topic", &msg); |
 | mqtt_list_subscribe_topic() | 列出客户端已订阅的主题 | mqtt_list_subscribe_topic(client); |
-| mqtt_set_host() | 设置要连接的MQTT服务器地址，参数：域名 / 点分十进制的IP地址 | mqtt_set_host(client, "www.jiejie01.top"); |
-| mqtt_set_port() | 设置要连接的MQTT服务器端口号 | mqtt_set_port(client, "1883"); |
-| mqtt_set_ca() | 设置要连接的MQTT服务器ca证书 | mqtt_set_ca(client, "ca ..."); |
+| mqtt_set_host() | 设置要连接的 MQTT 服务器地址，参数：域名 / 点分十进制的 IP 地址 | mqtt_set_host(client, "www.jiejie01.top"); |
+| mqtt_set_port() | 设置要连接的 MQTT 服务器端口号 | mqtt_set_port(client, "1883"); |
+| mqtt_set_ca() | 设置要连接的 MQTT 服务器 ca 证书 | mqtt_set_ca(client, "ca ..."); |
 | mqtt_set_user_name() | 设置客户端的用户名 | mqtt_set_user_name(client, "any"); |
 | mqtt_set_password() | 设置客户端的密码 | mqtt_set_password(client, "any"); |
-| mqtt_set_client_id() | 设置客户端的ID | mqtt_set_client_id(client, "any"); |
+| mqtt_set_client_id() | 设置客户端的 ID | mqtt_set_client_id(client, "any"); |
 | mqtt_set_clean_session() | 设置在断开连接后清除会话 | mqtt_set_clean_session(client, 1); |
 | mqtt_set_keep_alive_interval() | 设置心跳间隔时间（秒） | mqtt_set_keep_alive_interval(client, 50); |
-| mqtt_set_cmd_timeout() | 设置命令超时时间（毫秒），主要用于socket读写超时 | mqtt_set_cmd_timeout(client, 5000); |
+| mqtt_set_cmd_timeout() | 设置命令超时时间（毫秒），主要用于 socket 读写超时 | mqtt_set_cmd_timeout(client, 5000); |
 | mqtt_set_reconnect_try_duration() | 设置重连的时间间隔（毫秒） | mqtt_set_reconnect_try_duration(client, 1024); |
 | mqtt_set_read_buf_size() | 设置读数据缓冲区的大小 | mqtt_set_read_buf_size(client, 1024); |
 | mqtt_set_write_buf_size() | 设置写数据缓冲区的大小 | mqtt_set_write_buf_size(client, 1024); |
 | mqtt_set_will_flag() | 设置遗嘱标记 | mqtt_set_will_flag(client, 1); |
 | mqtt_set_will_options() | 设置遗嘱的配置信息，指定遗嘱主题，服务质量，遗嘱保留标记，遗嘱内容 | mqtt_set_will_options(client, "will_topic", QOS0, 0, "will_message"); |
-| mqtt_set_version() | 设置MQTT协议的版本，默认值是4，MQTT版本为3.1.1 | mqtt_set_version(client, 4); |
+| mqtt_set_version() | 设置 MQTT 协议的版本，默认值是 4，MQTT 版本为 3.1.1 | mqtt_set_version(client, 4); |
 | mqtt_set_reconnect_handler() | 设置重连时的回调函数 | mqtt_set_reconnect_handler(client, reconnect_handler); |
 | mqtt_set_interceptor_handler() | 设置拦截器处理函数，将所有底层数据上报给用户 | mqtt_set_interceptor_handler(client, interceptor_handler); |
 
-# MQTT客户端的核心结构
+# MQTT 客户端的核心结构
 
 **mqtt_client_t 结构**
 
@@ -87,15 +87,15 @@ typedef struct mqtt_client {
 
 该结构主要维护以下内容：
 
-1. MQTT客户端连接服务器必要的参数，如**客户端ID mqtt_client_id、用户名mqtt_user_name、密码mqtt_password**以及**客户端ID长度mqtt_client_id_len、用户名长度mqtt_user_name_len、密码长度mqtt_password_len**等。
+1. MQTT 客户端连接服务器必要的参数，如**客户端 ID mqtt_client_id、用户名 mqtt_user_name、密码 mqtt_password**以及**客户端 ID 长度 mqtt_client_id_len、用户名长度 mqtt_user_name_len、密码长度 mqtt_password_len**等。
 
 2. 读写数据缓冲区**mqtt_read_buf、mqtt_write_buf**及其大小的配置**mqtt_read_buf_size、mqtt_write_buf_size**。
 
-3. 服务器相关的配置信息，如**服务器地址mqtt_host、服务器端口号mqtt_port、服务器CA证书mqtt_ca**。
+3. 服务器相关的配置信息，如**服务器地址 mqtt_host、服务器端口号 mqtt_port、服务器 CA 证书 mqtt_ca**。
 
-4. 一些MQTT客户端的配置信息：如**心跳时间间隔mqtt_keep_alive_interval、MQTT报文标识符mqtt_packet_id、遗嘱标记位mqtt_will_flag、清除会话标记mqtt_clean_session、MQTT协议版本mqtt_version、等待应答列表的最大记录个数mqtt_ack_handler_number**等。
+4. 一些 MQTT 客户端的配置信息：如**心跳时间间隔 mqtt_keep_alive_interval、MQTT 报文标识符 mqtt_packet_id、遗嘱标记位 mqtt_will_flag、清除会话标记 mqtt_clean_session、MQTT 协议版本 mqtt_version、等待应答列表的最大记录个数 mqtt_ack_handler_number**等。
 
-5. 一些其他的配置，如**遗嘱消息相关的配置mqtt_will_options、客户端的状态mqtt_client_state、写缓冲区的互斥锁mqtt_write_lock、全局的互斥锁mqtt_global_lock**等。
+5. 一些其他的配置，如**遗嘱消息相关的配置 mqtt_will_options、客户端的状态 mqtt_client_state、写缓冲区的互斥锁 mqtt_write_lock、全局的互斥锁 mqtt_global_lock**等。
 
 6. 命令超时时间**mqtt_cmd_timeout**（主要是读写阻塞时间、等待响应的时间、重连等待时间等）。
 
@@ -105,7 +105,7 @@ typedef struct mqtt_client {
 
 9.  维护一个网络组件层**mqtt_network**，它可以自动选择数据通道。
 
-10. 维护一个内部线程**mqtt_thread**，所有来自服务器的mqtt包都会在内部线程这里被处理！
+10. 维护一个内部线程**mqtt_thread**，所有来自服务器的 mqtt 包都会在内部线程这里被处理！
 
 11. 两个定时器，分别是掉线重连定时器与保活定时器**mqtt_reconnect_timer、mqtt_last_sent、mqtt_last_received**
 
@@ -114,34 +114,34 @@ typedef struct mqtt_client {
 13. 设置底层的拦截器的回调函数**mqtt_interceptor_handler**，将所有底层数据上报给应用层。
 
 
-# mqttclient实现
+# mqttclient 实现
 
-以下是整个框架的实现方式，方便大家更容易理解mqttclient的代码与设计思想，让大家能够修改源码与使用，还可以提交pr或者issues，开源的世界期待各位大神的参与，感谢！
+以下是整个框架的实现方式，方便大家更容易理解 mqttclient 的代码与设计思想，让大家能够修改源码与使用，还可以提交 pr 或者 issues，开源的世界期待各位大神的参与，感谢！
 
 除此之外以下代码的**记录机制**与**超时处理机制**是非常好的编程思想，大家有兴趣一定要看源代码！
 
-## 申请一个mqtt客户端
+## 申请一个 mqtt 客户端
 
 ```c
 mqtt_client_t *mqtt_lease(void);
 ```
 
-1. 这个函数的内部通过动态申请内存的方式申请了一个MQTT客户端结构**mqtt_client_t**。
+1. 这个函数的内部通过动态申请内存的方式申请了一个 MQTT 客户端结构**mqtt_client_t**。
 
 2. 调用**_mqtt_init()**函数将其内部的进行了默认的初始化，如申请网络组件的内存空间、初始化相关的互斥锁、链表等。
 
 
-## 释放已申请的mqtt客户端
+## 释放已申请的 mqtt 客户端
 
 ```c
 mqtt_release()
 ```
 
-回收MQTT客户端结构**mqtt_client_t**的内存空间、网络组件的内存空间、与服务器断开连接。
+回收 MQTT 客户端结构**mqtt_client_t**的内存空间、网络组件的内存空间、与服务器断开连接。
 
-## 设置MQTT客户端的信息
+## 设置 MQTT 客户端的信息
 
-通过宏定义去统一设置MQTT客户端结构**mqtt_client_t**的信息，定义如下：
+通过宏定义去统一设置 MQTT 客户端结构**mqtt_client_t**的信息，定义如下：
 
 ```c
 #define MQTT_CLIENT_SET_DEFINE(name, type, res)         \
@@ -216,7 +216,7 @@ int mqtt_connect(mqtt_client_t* c);
     }
     ```
 
-5. 而对于重连来说则不会重新创建线程，直接改变客户端状态为连接状态即可:
+5. 而对于重连来说则不会重新创建线程，直接改变客户端状态为连接状态即可：
 
     ```c
     mqtt_set_client_state(c, CLIENT_STATE_CONNECTED);
@@ -286,7 +286,7 @@ int mqtt_unsubscribe(mqtt_client_t* c, const char* topic_filter);
 int mqtt_publish(mqtt_client_t* c, const char* topic_filter, mqtt_message_t* msg)
 ```
 
-向指定主题发布一个MQTT报文。参数只有**mqtt_client_t** 类型的指针，字符串类型的**主题**（支持通配符），要发布的消息（包括**服务质量**、**消息主体**）。
+向指定主题发布一个 MQTT 报文。参数只有**mqtt_client_t** 类型的指针，字符串类型的**主题**（支持通配符），要发布的消息（包括**服务质量**、**消息主体**）。
 
 使用如下：
 
@@ -308,7 +308,7 @@ mqtt_publish(&client, "testtopic1", &msg);
     mqtt_send_packet(c, len, &timer)
     ```
 
-2. 对于QOS0的逻辑，不做任何处理，对于QOS1和QOS2的报文则需要记录下来，在没收到服务器应答的时候进行重发
+2. 对于 QOS0 的逻辑，不做任何处理，对于 QOS1 和 QOS2 的报文则需要记录下来，在没收到服务器应答的时候进行重发
 
     ```c
     if (QOS1 == msg->qos) {
@@ -318,7 +318,7 @@ mqtt_publish(&client, "testtopic1", &msg);
     }
     ```
 
-3. 还有非常重要的一点，重发报文的MQTT报文头部需要设置DUP标志位，这是MQTT协议的标准，因此，在重发的时候作者直接操作了报文的DUP标志位，因为修改DUP标志位的函数我没有从MQTT库中找到，所以我封装了一个函数，这与LwIP中的交叉存取思想是一个道理，它假设我知道MQTT报文的所有操作，所以我可以操作它，这样子可以提高很多效率：
+3. 还有非常重要的一点，重发报文的 MQTT 报文头部需要设置 DUP 标志位，这是 MQTT 协议的标准，因此，在重发的时候作者直接操作了报文的 DUP 标志位，因为修改 DUP 标志位的函数我没有从 MQTT 库中找到，所以我封装了一个函数，这与 LwIP 中的交叉存取思想是一个道理，它假设我知道 MQTT 报文的所有操作，所以我可以操作它，这样子可以提高很多效率：
 
     ```c
     mqtt_set_publish_dup(c,1);  /* may resend this data, set the udp flag in advance */
@@ -406,19 +406,19 @@ static void mqtt_yield_thread(void *arg)
     mqtt_set_client_state(c, CLIENT_STATE_DISCONNECTED);
     ```
 
-2. `ack`链表的扫描，当收到服务器的报文时，对ack列表进行扫描操作
+2. `ack`链表的扫描，当收到服务器的报文时，对 ack 列表进行扫描操作
 
     ```c
     mqtt_ack_list_scan(c);
     ```
 
-    当超时后就销毁ack链表节点：
+    当超时后就销毁 ack 链表节点：
 
     ```c
     mqtt_ack_handler_destroy(ack_handler);
     ```
 
-    当然下面这几种报文则需要重发操作：（**PUBACK 、PUBREC、 PUBREL 、PUBCOMP**，保证QOS1 QOS2的服务质量）
+    当然下面这几种报文则需要重发操作：（**PUBACK 、PUBREC、 PUBREL 、PUBCOMP**，保证 QOS1 QOS2 的服务质量）
 
     ```c
     if ((ack_handler->type ==  PUBACK) || (ack_handler->type ==  PUBREC) || (ack_handler->type ==  PUBREL) || (ack_handler->type ==  PUBCOMP))
@@ -449,7 +449,7 @@ static int mqtt_puback_and_pubcomp_packet_handle(mqtt_client_t *c, platform_time
     MQTTDeserialize_ack(&packet_type, &dup, &packet_id, c->read_buf, c->read_buf_size)
     ```
 
-2. 取消对应的ack记录
+2. 取消对应的 ack 记录
 
     ```c
     mqtt_ack_list_unrecord(c, packet_type, packet_id, NULL);
@@ -467,7 +467,7 @@ static int mqtt_puback_and_pubcomp_packet_handle(mqtt_client_t *c, platform_time
     MQTTDeserialize_suback(&packet_id, 1, &count, (int*)&granted_qos, c->read_buf, c->read_buf_size)
     ```
 
-2. 取消对应的ack记录
+2. 取消对应的 ack 记录
 
     ```c
     mqtt_ack_list_unrecord(c, packet_type, packet_id, NULL);
@@ -491,7 +491,7 @@ static int mqtt_puback_and_pubcomp_packet_handle(mqtt_client_t *c, platform_time
     MQTTDeserialize_unsuback(&packet_id, c->read_buf, c->read_buf_size)
     ```
 
-2. 取消对应的ack记录，并且获取到已经订阅的消息处理节点
+2. 取消对应的 ack 记录，并且获取到已经订阅的消息处理节点
 
     ```c
     mqtt_ack_list_unrecord(c, UNSUBACK, packet_id, &msg_handler)
@@ -516,19 +516,19 @@ static int mqtt_puback_and_pubcomp_packet_handle(mqtt_client_t *c, platform_time
             (unsigned char**)&msg.payload, (int*)&msg.payloadlen, c->read_buf, c->read_buf_size)
     ```
 
-2. 对于QOS0、QOS1的报文，直接去处理消息
+2. 对于 QOS0、QOS1 的报文，直接去处理消息
 
     ```c
     mqtt_deliver_message(c, &topic_name, &msg);
     ```
 
-3. 对于QOS1的报文，还需要发送一个**PUBACK**应答报文给服务器
+3. 对于 QOS1 的报文，还需要发送一个**PUBACK**应答报文给服务器
 
     ```c
     MQTTSerialize_ack(c->write_buf, c->write_buf_size, PUBACK, 0, msg.id);
     ```
 
-4. 而对于QOS2的报文则需要发送**PUBREC**报文给服务器，除此之外还需要记录**PUBREL**到ack链表上，等待服务器的发布释放报文，最后再去处理这个消息
+4. 而对于 QOS2 的报文则需要发送**PUBREC**报文给服务器，除此之外还需要记录**PUBREL**到 ack 链表上，等待服务器的发布释放报文，最后再去处理这个消息
 
     ```c
     MQTTSerialize_ack(c->write_buf, c->write_buf_size, PUBREC, 0, msg.id);
@@ -536,7 +536,7 @@ static int mqtt_puback_and_pubcomp_packet_handle(mqtt_client_t *c, platform_time
     mqtt_deliver_message(c, &topic_name, &msg);
     ```
 
-说明：一旦注册到ack列表上的报文，当具有重复的报文是不会重新被注册的，它会通过**mqtt_ack_list_node_is_exist()**函数判断这个节点是否存在，主要是依赖等待响应的消息类型与msgid。
+说明：一旦注册到 ack 列表上的报文，当具有重复的报文是不会重新被注册的，它会通过**mqtt_ack_list_node_is_exist()**函数判断这个节点是否存在，主要是依赖等待响应的消息类型与 msgid。
 
 ## 发布收到与发布释放报文的处理
 
@@ -556,12 +556,12 @@ static int mqtt_pubrec_and_pubrel_packet_handle(mqtt_client_t *c, platform_timer
     mqtt_publish_ack_packet(c, packet_id, packet_type);
     ```
 
-3. 取消对应的ack记录
+3. 取消对应的 ack 记录
 
     ```c
     mqtt_ack_list_unrecord(c, UNSUBACK, packet_id, &msg_handler)
     ```
 
-**上一篇**：[mqttclient配置及裁剪工具](./mqtt-config.md)
+**上一篇**：[mqttclient 配置及裁剪工具](./mqtt-config.md)
 
-**下一篇**：[mqttclient连接到百度天工物接入](./mqtt-baidu.md)
+**下一篇**：[mqttclient 连接到百度天工物接入](./mqtt-baidu.md)

@@ -63,7 +63,7 @@ typedef enum
  */
 typedef struct
 {
-    uint16_t                        counterOverflowValue;   ///< 脉冲累加器溢出阀值 最大0xFFFF 
+    uint16_t                        counterOverflowValue;   ///< 脉冲累加器溢出阀值 最大 0xFFFF 
     LPTMR_PC_IntputSource_Type      inputSource;            ///< 输入源选择 
     LPTMR_PC_PinPolarity_Type       pinPolarity;            ///< 输入捕捉极性选择 
 }LPTMR_PC_InitTypeDef;
