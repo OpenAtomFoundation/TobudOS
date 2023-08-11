@@ -35,8 +35,8 @@ int  brightness_level_cache = 2;
 char client_token_cache[128] = {0};
 
 /***************************************************************
-* 函数名称：key1_handler_callback
-* 说    明：按键处理回调
+* 函数名称: key1_handler_callback
+* 说    明: 按键处理回调
 ***************************************************************/
 void key1_handler_callback(void)
 {
@@ -52,8 +52,8 @@ void key1_handler_callback(void)
 }
 
 /***************************************************************
-* 函数名称：iot_explorer_handle_power_switch
-* 说    明：根据 power switch 控制开关
+* 函数名称: iot_explorer_handle_power_switch
+* 说    明: 根据 power switch 控制开关
 ***************************************************************/
 static void iot_explorer_handle_power_switch(int power_switch)
 {
@@ -79,8 +79,8 @@ static void iot_explorer_handle_power_switch(int power_switch)
 }
 
 /***************************************************************
-* 函数名称：default_message_handler
-* 说    明：IoT Explorer 下行数据处理
+* 函数名称: default_message_handler
+* 说    明: IoT Explorer 下行数据处理
 ***************************************************************/
 static void default_message_handler(mqtt_message_t* msg)
 {
@@ -152,8 +152,8 @@ static void default_message_handler(mqtt_message_t* msg)
 }
 
 /***************************************************************
-* 函数名称：mqtt_demo_task
-* 说    明：主任务，连接平台以及发送上行数据
+* 函数名称: mqtt_demo_task
+* 说    明: 主任务，连接平台以及发送上行数据
 ***************************************************************/
 static void mqtt_demo_task(void)
 {
@@ -298,8 +298,8 @@ static void mqtt_demo_task(void)
 
 
 /***************************************************************
-* 函数名称：application_entry
-* 说    明：应用入口
+* 函数名称: application_entry
+* 说    明: 应用入口
 ***************************************************************/
 void application_entry(void *arg)
 {

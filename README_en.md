@@ -1,4 +1,3 @@
-
 ![](./doc/image/introduction/TencentOS_tiny_log.png)
 
 [![license](http://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/Tencent/TencentOS-tiny/blob/master/LICENSE)
@@ -9,7 +8,6 @@
 # Introduction to TencentOS Tiny
 
 [TencentOS tiny](https://cloud.tencent.com/product/tos-tiny) is a real-time operating system developed by Tencent for the Internet of Things. It features low power consumption, low resource consumption, modularity, security and reliability, and can effectively improve the development efficiency of IoT terminal products. TencentOS tiny provides a streamlined RTOS core that can be tailored and configurable for rapid migration to a wide range of mainstream MCUs (such as the full range of STM32) and module chips. Moreover, based on the RTOS kernel, it provides a wealth of IoT components, and internally integrates mainstream IoT protocol stacks (such as CoAP/MQTT/TLS/DTLS/LoRaWAN/NB-IoT, etc.), which can help IoT terminals and services to quickly access Tencent. Cloud Internet of Things platform.
-
 
 ## 1, The software architecture of TencentOS tiny
 
@@ -59,7 +57,7 @@ Provides easy-to-use end-cloud API to accelerate user service access to Tencent 
 
 ### (4).Reliable security framework
 
-Diversified security grading scheme; 
+Diversified security grading scheme;
 
 Balanced security requirements & cost control.
 
@@ -70,6 +68,7 @@ Highly decoupled core and IoT components, providing a standard adaptation layer;
 Provide automated migration tools to improve development efficiency.
 
 ### (6).Convenient debugging means
+
 Provide cloudized last screen debugging;
 
 The fault scene information is automatically uploaded to the cloud platform, which is convenient for developers to debug and analyze.
@@ -81,29 +80,35 @@ The fault scene information is automatically uploaded to the cloud platform, whi
 TencentOS tiny currently supports mainstream MCUs such as STM32, NXP, Huada Semiconductor, National Technology, GD32, Nordic, and TI. Two sets of official custom development board designs have been completed, supporting the full range of STM32 NUCLEO official evaluation board kernel migration. In addition to MCU and modules, TencentOS tiny is also actively promoting the implementation of terminal products and projects. Currently, solutions such as AI smart agriculture, smart containers, and smart conference rooms have been formed, and internal cooperation has been established with WeChat Pay, Tencent Cloud Smart Industry, AI Platform Department, Tencent Weiling, and QQ family within Tencent to jointly expand the industry ecosystem; At the same time, we have also begun to actively develop external customers, and currently have reached business cooperation with Shenzhen Guanghe Display Technology's ink screen retail labels, Xinyuegou charging piles, and others.TencentOS tiny will work together with partners to provide better IoT terminal software solutions for IoT terminal manufacturers, facilitating the rapid access of various IoT devices to Tencent Cloud, and jointly expanding the IoT ecosystem to better support smart cities, smart water meters, and smart homes. , smart wear, car networking and other industrial applications.
 
 # TencentOS tiny code directory
+
 - [TencentOS tiny code directory description](./doc/09.Code_Directories.md)
 
 # TencentOS tiny reference documentation
+
 ## 1, Porting guide
+
 - [TencentOS tiny Porting guide (KEIL version)](./doc/10.Porting_Manual_for_KEIL.md)
 - [TencentOS tiny Porting guide (IAR version)](./doc/11.Porting_Manual_for_IAR.md)
 - [TencentOS tiny Porting guide (GCC version)](./doc/12.Porting_Manual_for_GCC.md)
 
 ## 2, Development guide
+
 - [TencentOS tiny Kernel development guide](./doc/04.Development_Manual.md)
 - [TencentOS tiny API reference](./doc/05.SDK_Manual.md)
-- [The development Guide for use TencentOS tiny connect to  Tencent Cloud IoTHub ](./doc/08.QCloud_IoTHub_Quick_Start.md)
+- [The development Guide for use TencentOS tiny connect to Tencent Cloud IoTHub ](./doc/08.QCloud_IoTHub_Quick_Start.md)
 
 # TencentOS tiny opensource license
-* TencentOS tiny follow [BSD-3 Open source license agreement](LICENSE)
 
+- TencentOS tiny follow [BSD-3 Open source license agreement](LICENSE)
 
-# The IoT platform TencentOS tiny  support 
+# The IoT platform TencentOS tiny support
+
 TencentOS tiny can support IoT terminal devices and services for fast access to Tencent Cloud IoT Platform [IoT Explorer](https://cloud.tencent.com/product/iotexplorer)。
 
 TencentOS tiny combines Tencent Cloud IoT development platform IoT Explorer, which has built up the ability to connect communication chips to cloud development. Together with the largest LoRa network in China, Tencent has completely opened up from chip communication development, network support services, and physical equipment. Defining management, data analysis and multi-scenario application development and other full-chain IoT cloud development service capabilities, redefining the IoT development model, helping multi-mode low threshold access to Tencent cloud services. As an IoT infrastructure construction service provider, Tencent will continue to build an open IoT ecosystem and promote the sound development of the Internet of Things.
 
 # TencentOS tiny Quick Start Reference
+
 TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development board, as shown below:
 ![](./doc/image/introduction/EVB_MX.png)
 
@@ -111,17 +116,15 @@ TencentOS tiny joint partner (Nanjing Houde IoT) designed a custom development b
 - [TencentOS-tiny Custom Development Board Getting Started Guide](./doc/15.TencentOS_tiny_EVB_MX_Plus_Quick_Start.md)
 
 # Contributing
-* 1.  Fork TencentOS tiny open source project under your own GitHub account;
-* 2.  Clone a TencentOS tiny code locally according to your needs;
-* 3.  After you modify or add a new function, push to the remote branch of your fork;
-* 4.  Create a pull request and submit a join request to the official TencentOS tiny development branch;
-* 5.  The TencentOS tiny R&D team will periodically review the code and merge your pull request.
+
+- 1.  Fork TencentOS tiny open source project under your own GitHub account;
+- 2.  Clone a TencentOS tiny code locally according to your needs;
+- 3.  After you modify or add a new function, push to the remote branch of your fork;
+- 4.  Create a pull request and submit a join request to the official TencentOS tiny development branch;
+- 5.  The TencentOS tiny R&D team will periodically review the code and merge your pull request.
 
 # Join the TencentOS tiny official QQ technology exchange group
 
 Scan the QR code to join the qq group, please note the TencentOS tiny developer, the TencentOS tiny staff will review according to the notes:
 
 ![](./doc/image/introduction/qq.png)
-
-
-

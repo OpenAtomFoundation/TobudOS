@@ -4,7 +4,6 @@
 
 相对于百度天工物接入，阿里云物联的安全性更好，因为即使是客户端连接服务器都需要各种验证，还使用哈希加密算法进行加密。
 
-
 ## 使用阿里云物联
 
 下面开始使用阿里云物联，首先在“产品”信息中创建一个产品，每个产品下允许有多个设备，产品就是设备的集合，通常是一组具有相同功能定义的设备集合。例如：产品指同一个型号的产品，设备就是该型号下的某个设备。操作步骤如下：
@@ -27,13 +26,13 @@
 
 - 在设备添加完成后，要保存设备的证书，后续会使用到，比如此时的设备证书是：
 
-    ```json
-    { 
-        "ProductKey": "a1w7XupONEX",
-        "DeviceName": "test1", 
-        "DeviceSecret": "2H1FiqEvyovF8bdckg6RjBcO2LAgGhwu" 
-    }
-    ```
+  ```json
+  {
+    "ProductKey": "a1w7XupONEX",
+    "DeviceName": "test1",
+    "DeviceSecret": "2H1FiqEvyovF8bdckg6RjBcO2LAgGhwu"
+  }
+  ```
 
 ![mqtt-ali005](http://qiniu.jiejie01.top/mqtt-ali005.png)
 
@@ -87,44 +86,42 @@
 
 1. 国内地区及 Region ID
 
-    | 地域名称 | 所在城市 | Region ID | 可用区数量 |
-    | -- | -- | -- | -- |
-    | 华北 1 | 青岛 | cn-qingdao | 2 |
-    | 华北 2 | 北京 | cn-beijing | 8 |
-    | 华北 3 | 张家口 | cn-zhangjiakou | 3 |
-    | 华北 5 | 呼和浩特 | cn-huhehaote | 2 |
-    | 华东 1 | 杭州 | cn-hangzhou | 8 |
-    | 华东 2 | 上海 | cn-shanghai | 7 |
-    | 华南 1 | 深圳 | cn-shenzhen | 5 |
-    | 华南 2 | 河源 | cn-heyuan | 2 |
-    | 西南 1 | 成都 | cn-chengdu | 2 |
+   | 地域名称 | 所在城市 | Region ID      | 可用区数量 |
+   | -------- | -------- | -------------- | ---------- |
+   | 华北 1   | 青岛     | cn-qingdao     | 2          |
+   | 华北 2   | 北京     | cn-beijing     | 8          |
+   | 华北 3   | 张家口   | cn-zhangjiakou | 3          |
+   | 华北 5   | 呼和浩特 | cn-huhehaote   | 2          |
+   | 华东 1   | 杭州     | cn-hangzhou    | 8          |
+   | 华东 2   | 上海     | cn-shanghai    | 7          |
+   | 华南 1   | 深圳     | cn-shenzhen    | 5          |
+   | 华南 2   | 河源     | cn-heyuan      | 2          |
+   | 西南 1   | 成都     | cn-chengdu     | 2          |
 
 2. 国外地区及 Region ID
 
-    | 地域名称 | 所在城市 | Region ID | 可用区数量 |
-    | -- | -- | -- | -- |
-    | 中国香港 | 香港 | cn-hongkong | 2 |
-    | 亚太东南 1 | 新加坡 | ap-southeast-1 | 3 |
-    | 亚太东南 2 | 悉尼 | ap-southeast-2 | 2 |
-    | 亚太东南 3 | 吉隆坡 | ap-southeast-3 | 2 |
-    | 亚太东南 5 | 雅加达 | ap-southeast-5 | 2 |
-    | 亚太南部 1 | 孟买 | ap-south-1 | 2 |
-    | 亚太东北 1 | 东京 | ap-northeast-1 | 2 |
-    | 美国西部 1 | 硅谷 | us-west-1 | 2 |
-    | 美国东部 1 | 弗吉尼亚 | us-east-1 | 2 |
-    | 欧洲中部 1 | 法兰克福 | eu-central-1 | 2 |
-    | 英国（伦敦） | 伦敦 | eu-west-1 | 2 |
-    | 中东东部 1 | 迪拜 | me-east-1 | 1 |
+   | 地域名称     | 所在城市 | Region ID      | 可用区数量 |
+   | ------------ | -------- | -------------- | ---------- |
+   | 中国香港     | 香港     | cn-hongkong    | 2          |
+   | 亚太东南 1   | 新加坡   | ap-southeast-1 | 3          |
+   | 亚太东南 2   | 悉尼     | ap-southeast-2 | 2          |
+   | 亚太东南 3   | 吉隆坡   | ap-southeast-3 | 2          |
+   | 亚太东南 5   | 雅加达   | ap-southeast-5 | 2          |
+   | 亚太南部 1   | 孟买     | ap-south-1     | 2          |
+   | 亚太东北 1   | 东京     | ap-northeast-1 | 2          |
+   | 美国西部 1   | 硅谷     | us-west-1      | 2          |
+   | 美国东部 1   | 弗吉尼亚 | us-east-1      | 2          |
+   | 欧洲中部 1   | 法兰克福 | eu-central-1   | 2          |
+   | 英国（伦敦） | 伦敦     | eu-west-1      | 2          |
+   | 中东东部 1   | 迪拜     | me-east-1      | 1          |
 
 - 用户名：格式：`${YourDeviceName}&${YourPrductKey}` 由设备名 DeviceName、符号（&）和产品 ProductKey 组成，这些信息在创建设备的时候都已经保存的。
 
 - 密码：在线签名工具生成的密码。注意的是 clientId 是填写前面自己定义的 clientId 即可。
 
-
 在连接成功后，可以添加订阅的主题名字，向指定的主题发送内容：
 
 ![mqtt-ali016](http://qiniu.jiejie01.top/mqtt-ali016.png)
-
 
 ## 更新
 
@@ -227,7 +224,7 @@ libarch.a  libcommon.a  libmbedtls.a  libmqtt.a  libmqttclient.a  libnetwork.a  
 我们直接运行`./build/bin/ali`这个可执行文件：
 
 ```bash
-➜  mqttclient git:(master) ./build/bin/ali 
+➜  mqttclient git:(master) ./build/bin/ali
 
 welcome to mqttclient test...
 
@@ -279,7 +276,7 @@ static void topic1_handler(void* client, message_data_t* msg)
 void *mqtt_publish_thread(void *arg)
 {
     mqtt_client_t *client = (mqtt_client_t *)arg;
-    
+
     char buf[100] = { 0 };
     mqtt_message_t msg;
     memset(&msg, 0, sizeof(msg));
@@ -303,13 +300,13 @@ int main(void)
     int res;
     pthread_t thread1;
     mqtt_client_t *client = NULL;
-    
+
     printf("\nwelcome to mqttclient test...\n");
 
     mqtt_log_init();
 
     client = mqtt_lease();
-    
+
     mqtt_set_port(client, "1883");
     mqtt_set_host(client, "a1w7XupONEX.iot-as-mqtt.cn-shanghai.aliyuncs.com");
     mqtt_set_client_id(client, "123456|securemode=3,signmethod=hmacsha1|");
@@ -318,9 +315,9 @@ int main(void)
     mqtt_set_clean_session(client, 1);
 
     mqtt_connect(client);
-    
+
     mqtt_subscribe(client, "/a1w7XupONEX/test1/user/topic1", QOS0, topic1_handler);
-    
+
     res = pthread_create(&thread1, NULL, mqtt_publish_thread, client);
     if(res != 0) {
         MQTT_LOG_E("create mqtt publish thread fail");
@@ -332,48 +329,48 @@ int main(void)
     }
 }
 ```
+
 ## 使用到的 API
 
 - 申请一个 MQTT 客户端
 
-    ```c
-    mqtt_client_t *client = NULL;
-    client = mqtt_lease();
-    ```
-
+  ```c
+  mqtt_client_t *client = NULL;
+  client = mqtt_lease();
+  ```
 
 - mqtt 客户端配置，主要是配置**mqtt_client_t**结构的相关信息，如果没有指定初始化参数，则系统会提供默认的参数。但连接部分的参数则必须指定，比如连接的端口号、云服务器的地址或者域名、用户名、密码，这些信息都是百度云平台得到的。
 
-    ```c
-    mqtt_set_port(client, "1883");
-    mqtt_set_host(client, "a1w7XupONEX.iot-as-mqtt.cn-shanghai.aliyuncs.com");
-    mqtt_set_client_id(client, "123456|securemode=3,signmethod=hmacsha1|");
-    mqtt_set_user_name(client, "test1&a1w7XupONEX");
-    mqtt_set_password(client, "A9EFF34CCA05EABAE560373CBED3E43AC88956CF");
-    mqtt_set_clean_session(client, 1);
-    ```
+  ```c
+  mqtt_set_port(client, "1883");
+  mqtt_set_host(client, "a1w7XupONEX.iot-as-mqtt.cn-shanghai.aliyuncs.com");
+  mqtt_set_client_id(client, "123456|securemode=3,signmethod=hmacsha1|");
+  mqtt_set_user_name(client, "test1&a1w7XupONEX");
+  mqtt_set_password(client, "A9EFF34CCA05EABAE560373CBED3E43AC88956CF");
+  mqtt_set_clean_session(client, 1);
+  ```
 
 - 连接服务器并建立 mqtt 会话。
 
-    ```c
-    mqtt_connect(&client);
-    ```
+  ```c
+  mqtt_connect(&client);
+  ```
 
 - 订阅主题，字符串类型的**主题**（支持通配符"#" "+"），主题的**服务质量**，以及收到报文的**回调处理函数**，如不指定则有默认处理函数，订阅主题的处理方式是异步处理的，topic1_handler 则是当收到服务器下发的数据内容时调用的回调函数。
 
-    ```c
-    mqtt_subscribe(&client, "topic1", QOS0, topic1_handler);
-    ```
+  ```c
+  mqtt_subscribe(&client, "topic1", QOS0, topic1_handler);
+  ```
 
 - 创建一个发布主题的线程，并且发布主题数据，指定字符串类型的**主题**（支持通配符），要发布的消息（包括**服务质量**、**消息主体**）。
 
-    ```c
-    mqtt_message_t msg;
-    msg.payload = (void *) buf;
-    msg.qos = 0;
+  ```c
+  mqtt_message_t msg;
+  msg.payload = (void *) buf;
+  msg.qos = 0;
 
-    mqtt_publish(&client, "topic1", &msg);
-    ```
+  mqtt_publish(&client, "topic1", &msg);
+  ```
 
 **上一篇**：[mqttclient 连接到 OneNET 云平台](./mqtt-onenet.md)
 

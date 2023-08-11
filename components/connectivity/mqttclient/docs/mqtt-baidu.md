@@ -10,14 +10,14 @@
 
 在使用物接入服务前，必须要创建一个百度云账号用于管理我们的设备，所有的设备信息都是在云端后台进行管理的，地址：https://console.bce.baidu.com/iot2/hub/。
 
-使用 IoT Hub 之前应先了解一下计费套餐，目前 IoT Hub 的计费是很便宜的，每个月的前 1000000 条消息是免费的，更多的消息数量请自行参考 IoT Hub 的收费说明，因此我们用它来做实验早已足够，计算一下，假设我们的开发板在一个月内不间断以 3 秒的频率发送一次消息到 IoT Hub，那么一个月只能发送 30*24*60*(60/3) = 864000，还不到 1000000 条呢，因此这个流量用来做实验早就绰绰有余，即使这个月用完了流量，下个月还有 1000000 条，只要当月没超出这个流量都是可以免费使用，具体见
+使用 IoT Hub 之前应先了解一下计费套餐，目前 IoT Hub 的计费是很便宜的，每个月的前 1000000 条消息是免费的，更多的消息数量请自行参考 IoT Hub 的收费说明，因此我们用它来做实验早已足够，计算一下，假设我们的开发板在一个月内不间断以 3 秒的频率发送一次消息到 IoT Hub，那么一个月只能发送 30*24*60\*(60/3) = 864000，还不到 1000000 条呢，因此这个流量用来做实验早就绰绰有余，即使这个月用完了流量，下个月还有 1000000 条，只要当月没超出这个流量都是可以免费使用，具体见
 
-| 月用量：消息条数 N | 价格 (元/百万条) |
-| -- | -- |
-| N < 100 万 | 免费 |
-| 100 万 < N < 1 亿条 | 1.2 |
-| 1 亿条 < N < 10 亿条 | 1.0 |
-| 10 亿条以上 | 0.8 |
+| 月用量：消息条数 N   | 价格 (元/百万条) |
+| -------------------- | ---------------- |
+| N < 100 万           | 免费             |
+| 100 万 < N < 1 亿条  | 1.2              |
+| 1 亿条 < N < 10 亿条 | 1.0              |
+| 10 亿条以上          | 0.8              |
 
 当然也可以按消息数计算，以下计价单位中的条数代表发布消息（PUB）和订阅消息（SUB）之和。例如：有 5 台设备订阅了同一个主题（topic），第 6 台设备向该主题发布 1 条消息，则总条数的计算方法为：1（PUB）+5（SUB）=6。在计费上，消息长度在 512Bytes 内的记为一条消息，超出部分将被算作是一条或多条新的消息，也就是“实际消息长度/512Bytes”的计算结果向上取整。（在实际使用中，用户上传的单条消息大小限制是 32KB，超过 32KB 的消息会被丢弃）
 
@@ -31,21 +31,17 @@ IoT Hub 是用于物联网设备的后台管理的，将设备接入 IoT Hub 的
 
 ![mqtt-baidu001](http://qiniu.jiejie01.top/mqtt-baidu001.png)
 
-
 此处补充说明一点：通过项目可以将不同项目的设备进行隔离和管理，一个项目下允许有多个用户（设备），用户与身份进行绑定，而每个身份需要绑定一个策略，而策略下可以创建多个不同的主题，因此一个设备可以订阅多个不同的主题，并且同一个项目下的主题是共享的，所有的设备均可进行订阅。
 
 具体见：
 
 ![mqtt-baidu0011](http://qiniu.jiejie01.top/mqtt-baidu0011.png)
 
-
 ### 创建策略
 
 首先我们点击刚刚创建的“mqtt-client”项目，进入项目里面，首先创建一个策略（简单来说就是主题），输入对应的名称与主题，选择发布与订阅权限，当创建完成后，项目下的设备就可以订阅这个主题，具体见
 
-
 ![mqtt-baidu002](http://qiniu.jiejie01.top/mqtt-baidu002.png)
-
 
 ### 创建身份
 
@@ -56,7 +52,6 @@ IoT Hub 是用于物联网设备的后台管理的，将设备接入 IoT Hub 的
 ![mqtt-baidu004](http://qiniu.jiejie01.top/mqtt-baidu004.png)
 
 ![mqtt-baidu005](http://qiniu.jiejie01.top/mqtt-baidu005.png)
-
 
 ### 创建用户
 
@@ -80,11 +75,9 @@ IoT Hub 是用于物联网设备的后台管理的，将设备接入 IoT Hub 的
 
 ![mqtt-baidu012](http://qiniu.jiejie01.top/mqtt-baidu012.png)
 
-
 最后回到项目下，可以看到项目的地址信息，等内容。
 
 ![mqtt-baidu013](http://qiniu.jiejie01.top/mqtt-baidu013.png)
-
 
 ## MQTT 软件测试连接
 
@@ -105,7 +98,6 @@ IoT Hub 是用于物联网设备的后台管理的，将设备接入 IoT Hub 的
 在连接成功后，可以添加订阅的主题名字，向指定的主题发送内容：
 
 ![mqtt-baidu016](http://qiniu.jiejie01.top/mqtt-baidu016.png)
-
 
 ## 手动安装相关的依赖包
 
@@ -201,7 +193,7 @@ libarch.a  libcommon.a  libmbedtls.a  libmqtt.a  libmqttclient.a  libnetwork.a  
 我们直接运行`./build/bin/baidu`这个可执行文件：
 
 ```bash
-➜  mqttclient git:(master) ./build/bin/baidu 
+➜  mqttclient git:(master) ./build/bin/baidu
 
 welcome to mqttclient test...
 
@@ -240,7 +232,7 @@ message:welcome to mqttclient, this is a publish test, a rand number: 1675963111
 #include <pthread.h>
 #include "mqttclient.h"
 
-// #define TEST_USEING_TLS  
+// #define TEST_USEING_TLS
 
 static const char *test_baidu_ca_crt = {
     "-----BEGIN CERTIFICATE-----\r\n"
@@ -301,7 +293,7 @@ int main(void)
     int res;
     pthread_t thread1;
     mqtt_client_t *client = NULL;
-    
+
     printf("\nwelcome to mqttclient test...\n");
 
     mqtt_log_init();
@@ -322,9 +314,9 @@ int main(void)
     mqtt_set_clean_session(client, 1);
 
     mqtt_connect(client);
-    
+
     mqtt_subscribe(client, "topic1", QOS0, topic1_handler);
-    
+
     res = pthread_create(&thread1, NULL, mqtt_publish_thread, client);
     if(res != 0) {
         MQTT_LOG_E("create mqtt publish thread fail");
@@ -341,44 +333,43 @@ int main(void)
 
 - 申请一个 MQTT 客户端
 
-    ```c
-    mqtt_client_t *client = NULL;
-    client = mqtt_lease();
-    ```
-
+  ```c
+  mqtt_client_t *client = NULL;
+  client = mqtt_lease();
+  ```
 
 - mqtt 客户端配置，主要是配置**mqtt_client_t**结构的相关信息，如果没有指定初始化参数，则系统会提供默认的参数。但连接部分的参数则必须指定，比如连接的端口号、云服务器的地址或者域名、用户名、密码，这些信息都是百度云平台得到的。
 
-    ```c
-    mqtt_set_port(client, "1883");
-    mqtt_set_host(client, "j6npr4w.mqtt.iot.gz.baidubce.com");
-    mqtt_set_client_id(client, random_string(10));
-    mqtt_set_user_name(client, "j6npr4w/mqtt-client-dev");
-    mqtt_set_password(client, "lcUhUs5VYLMSbrnB");
-    mqtt_set_clean_session(client, 1);
-    ```
+  ```c
+  mqtt_set_port(client, "1883");
+  mqtt_set_host(client, "j6npr4w.mqtt.iot.gz.baidubce.com");
+  mqtt_set_client_id(client, random_string(10));
+  mqtt_set_user_name(client, "j6npr4w/mqtt-client-dev");
+  mqtt_set_password(client, "lcUhUs5VYLMSbrnB");
+  mqtt_set_clean_session(client, 1);
+  ```
 
 - 连接服务器并建立 mqtt 会话。
 
-    ```c
-    mqtt_connect(&client);
-    ```
+  ```c
+  mqtt_connect(&client);
+  ```
 
 - 订阅主题，字符串类型的**主题**（支持通配符"#" "+"），主题的**服务质量**，以及收到报文的**回调处理函数**，如不指定则有默认处理函数，订阅主题的处理方式是异步处理的，topic1_handler 则是当收到服务器下发的数据内容时调用的回调函数。
 
-    ```c
-    mqtt_subscribe(&client, "topic1", QOS0, topic1_handler);
-    ```
+  ```c
+  mqtt_subscribe(&client, "topic1", QOS0, topic1_handler);
+  ```
 
 - 创建一个发布主题的线程，并且发布主题数据，指定字符串类型的**主题**（支持通配符），要发布的消息（包括**服务质量**、**消息主体**）。
 
-    ```c
-    mqtt_message_t msg;
-    msg.payload = (void *) buf;
-    msg.qos = 0;
+  ```c
+  mqtt_message_t msg;
+  msg.payload = (void *) buf;
+  msg.qos = 0;
 
-    mqtt_publish(&client, "topic1", &msg);
-    ```
+  mqtt_publish(&client, "topic1", &msg);
+  ```
 
 **上一篇**：[mqttclient 设计与实现方式](./mqtt-design.md)
 

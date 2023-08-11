@@ -1,22 +1,22 @@
 # ST-LINK 驱动安装
 
-- 连接 ST-LINK (STv2)  和开发板
+- 连接 ST-LINK (STv2) 和开发板
 
-    STv2 上有一个示意图标有各个 Pin 的含义，Pin 周围有一个缺口，
-    缺口对应的一排 Pin 对应与示意图外侧的一列，STv2 和开发板接口连接对应关系如下表所示。
+  STv2 上有一个示意图标有各个 Pin 的含义，Pin 周围有一个缺口，
+  缺口对应的一排 Pin 对应与示意图外侧的一列，STv2 和开发板接口连接对应关系如下表所示。
 
-    |STv2 接口      |开发板接口   |
-    | ------------- |-------------|
-    |    3.3v       |    3v3      |
-    |    SWDIO      |    DIO      |
-    |    SWCLK      |    CLK      |
-    |    GND        |    GND      |
+  | STv2 接口 | 开发板接口 |
+  | --------- | ---------- |
+  | 3.3v      | 3v3        |
+  | SWDIO     | DIO        |
+  | SWCLK     | CLK        |
+  | GND       | GND        |
 
 - 安装 STv2 驱动
 
-    ST-LINK 的驱动源码地址为 https://github.com/stlink-org/stlink
+  ST-LINK 的驱动源码地址为 https://github.com/stlink-org/stlink
 
-    安装编译依赖
+  安装编译依赖
 
         - ubuntu
 
@@ -26,18 +26,18 @@
 
                 sudo pacman -S cmake libusb clang
 
-    下载源码并编译，注意 st-link 默认分支是 develop, 这个分支上的功能是不稳定的
+  下载源码并编译，注意 st-link 默认分支是 develop, 这个分支上的功能是不稳定的
 
         git clone https://github.com/stlink-org/stlink
         cd stlink
         git checkout v1.6.1
 
-    安装到 $HOME/.usr/stlink 目录中
+  安装到 $HOME/.usr/stlink 目录中
 
         make release
         cd build/Release && make install DESTDIR=$HOME/.usr/stlink
 
-    安装后 $HOME/.usr/stlink 结构如下
+  安装后 $HOME/.usr/stlink 结构如下
 
         ➜  Release git:(develop) tree ~/.usr/stlink/
         /home/m9/.usr/stlink/
@@ -84,34 +84,34 @@
                             ├── st-info.1
                             └── st-util.1
 
-    现在需要通过 udev 设置 USB 访问权限，进入到 stlink 源码根目录执行如下操作
+  现在需要通过 udev 设置 USB 访问权限，进入到 stlink 源码根目录执行如下操作
 
         sudo cp -a config/udev/rules.d/* /etc/udev/rules.d/
         sudo udevadm control --reload-rules
         sudo udevadm trigger
 
-    现在给电脑插上电路板，使用 lsusb 查看 USB 设备，能看到如下输出说明安装成功
+  现在给电脑插上电路板，使用 lsusb 查看 USB 设备，能看到如下输出说明安装成功
 
         ➜  stlink git:(develop) lsusb
         ...
         Bus 002 Device 013: ID 0483:3748 STMicroelectronics ST-LINK/V2
         ...
 
-    在 shell 配置文件如 $HOME/.zshrc 中添加如下环境变量
+  在 shell 配置文件如 $HOME/.zshrc 中添加如下环境变量
 
         STLINK=$HOME/.usr/stlink
         export PATH=${STLINK}/usr/local/bin:${PATH}
         export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${STLINK}/usr/local/lib
 
-    刷新环境变量
+  刷新环境变量
 
         exec $SHELL
 
-    更新库缓存
+  更新库缓存
 
         sudo ldconfig
 
-    然后查看板子信息
+  然后查看板子信息
 
         ➜  ~ st-info --probe
         Found 1 stlink programmers
@@ -122,7 +122,7 @@
          chipid:     0x0460
          descr:      G070/G071/G081
 
-    如果上述命令输出如下
+  如果上述命令输出如下
 
         Found 1 stlink programmers
         version:    V2J35S7
@@ -132,10 +132,10 @@
         chipid:     0x0000
         descr:      unknown device
 
-    这表示无法识别 st-link 设备，检查是否使用了 develop 分支的代码，这个分支上的代码无法正确识别 st-link,
-    切换到 v1.6.1 tag 解决问题。
+  这表示无法识别 st-link 设备，检查是否使用了 develop 分支的代码，这个分支上的代码无法正确识别 st-link,
+  切换到 v1.6.1 tag 解决问题。
 
-    测试文件读取
+  测试文件读取
 
         ➜  ~ st-flash --debug read dummy.file 0 256
         st-flash 1.6.1-96-gbf41f14
@@ -175,8 +175,8 @@
 
 - 虚拟机映射
 
-    VirtualBox 虚拟机需要将用户添加到 vboxusers 用户组
+  VirtualBox 虚拟机需要将用户添加到 vboxusers 用户组
 
         sudo usermod -aG vboxusers $USER
 
-    添加完毕后，重启主机。
+  添加完毕后，重启主机。

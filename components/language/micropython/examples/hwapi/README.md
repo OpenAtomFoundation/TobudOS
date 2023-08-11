@@ -20,8 +20,8 @@ board is required).
 The key to this approach is splitting your application into (at least)
 2 parts:
 
-* main application logic
-* hardware configuration
+- main application logic
+- hardware configuration
 
 The key point is that hardware configuration should be a separate file
 (module in Python terms). A good name would be `hwconfig.py`, and that's
@@ -47,7 +47,6 @@ application of this idea would look like:
         utime.sleep_ms(500)
         LED.value(0)
         utime.sleep_ms(500)
-
 
 To deploy this application to a particular board, a user will need:
 
@@ -89,10 +88,10 @@ and user's sides for larger projects. Then instead of single
 `hwconfig.py` file, you can provide few "template" ones for well-known
 boards:
 
-* `hwconfig_pyboard.py`
-* `hwconfig_wipy.py`
-* `hwconfig_esp8266.py`
-* etc.
+- `hwconfig_pyboard.py`
+- `hwconfig_wipy.py`
+- `hwconfig_esp8266.py`
+- etc.
 
 Then step 1 above will be:
 

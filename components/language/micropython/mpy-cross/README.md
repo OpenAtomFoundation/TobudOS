@@ -1,5 +1,4 @@
-MicroPython cross compiler
-==========================
+# MicroPython cross compiler
 
 This directory contains the MicroPython cross compiler, which runs under any
 Unix-like system and compiles .py scripts into .mpy files.
@@ -8,7 +7,7 @@ Build it as usual:
 
     $ make
 
-The compiler is called `mpy-cross`.  Invoke it as:
+The compiler is called `mpy-cross`. Invoke it as:
 
     $ ./mpy-cross foo.py
 

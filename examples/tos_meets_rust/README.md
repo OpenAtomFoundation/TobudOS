@@ -35,9 +35,9 @@
 
 - 配置腾讯云
 
-    到腾讯云物联网开发平台 https://cloud.tencent.com/product/iotexplorer 注册一个新产品。
+  到腾讯云物联网开发平台 https://cloud.tencent.com/product/iotexplorer 注册一个新产品。
 
-    新建产品后导入模板数据如下
+  新建产品后导入模板数据如下
 
         {
             "version": "1.0",
@@ -66,50 +66,50 @@
             "actions": []
         }
 
-    然后新建设备，新建之后能够得到三个信息：设备名称，设备密钥，产品 ID,
-    这三个信息需要写入到 TencentOS 固件中。
+  然后新建设备，新建之后能够得到三个信息：设备名称，设备密钥，产品 ID,
+  这三个信息需要写入到 TencentOS 固件中。
 
-    配置完成后，将甲醛传感器与底板连接，根据板子和底板的 5v 和 GND 接口对应关系，将底板连接到板子上，
-    然后根据传感器的 Rx 和 Tx 口将传感器和板子底板连接起来。
+  配置完成后，将甲醛传感器与底板连接，根据板子和底板的 5v 和 GND 接口对应关系，将底板连接到板子上，
+  然后根据传感器的 Rx 和 Tx 口将传感器和板子底板连接起来。
 
 - 下载源码
 
-    下载 TencentOS 源码
+  下载 TencentOS 源码
 
         git clone https://github.com/Tencent/TencentOS-tiny.git
 
-    进入 `examples/tos_meets_rust` 目录，将 `TOS_CONFIG/_user_config.h` 复制一份为 `TOS_CONFIG/user_config.h`,
-    写入设备信息和 WiFI 信息。
+  进入 `examples/tos_meets_rust` 目录，将 `TOS_CONFIG/_user_config.h` 复制一份为 `TOS_CONFIG/user_config.h`,
+  写入设备信息和 WiFI 信息。
 
-    新建系统环境变量 TOS_SRC_ROOT, 其值为 TencentOS Tiny 源码的绝对路径。
+  新建系统环境变量 TOS_SRC_ROOT, 其值为 TencentOS Tiny 源码的绝对路径。
 
 - 基础依赖安装
 
-    - ST-LINK 驱动安装，参考 [stlink](./docs/stlink.md)
+  - ST-LINK 驱动安装，参考 [stlink](./docs/stlink.md)
 
-    - CH34X 驱动安装，参考 [CH34X](./docs/ch34x.md)
+  - CH34X 驱动安装，参考 [CH34X](./docs/ch34x.md)
 
-    - kermit 串口工具安装，参考 [kermit](./docs/kermit.md)
+  - kermit 串口工具安装，参考 [kermit](./docs/kermit.md)
 
 - 工具链安装
 
-    编译需要的 arm-none-eabi 工具链，eabi 的含义是 Embedded Application Binary Interface, 
-    不同发行版安装方式不一样
+  编译需要的 arm-none-eabi 工具链，eabi 的含义是 Embedded Application Binary Interface,
+  不同发行版安装方式不一样
 
-    - ubuntu
+  - ubuntu
 
-            sudo apt-get install -y gcc-arm-none-eabi
+          sudo apt-get install -y gcc-arm-none-eabi
 
-    - archlinux:
+  - archlinux:
 
-            sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib
+          sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib
 
-    这里默认你已经安装了 rust 工具链，如果你的 rustc 版本低于 1.47.0 则切换到 nightly 版本，
-    切换命令如下
+  这里默认你已经安装了 rust 工具链，如果你的 rustc 版本低于 1.47.0 则切换到 nightly 版本，
+  切换命令如下
 
         rustup default nightly
 
-    如果版本大于等于 1.47.0, 则不用切换，接着安装支持板子的 rust 工具链
+  如果版本大于等于 1.47.0, 则不用切换，接着安装支持板子的 rust 工具链
 
         rustup target add thumbv6m-none-eabi
 
@@ -117,12 +117,12 @@
 
 - 刷入系统
 
-    连接 STLINK 后，执行如下命令
+  连接 STLINK 后，执行如下命令
 
         bash build.sh
 
-    刷入完成后，登录 kermit, 然后按下板子上的 reset 按键，程序就运行了，串口会输出 WIFI CONNECTED 之类的，
-    腾讯云上显示设备上线。
+  刷入完成后，登录 kermit, 然后按下板子上的 reset 按键，程序就运行了，串口会输出 WIFI CONNECTED 之类的，
+  腾讯云上显示设备上线。
 
 ## Rust 集成
 

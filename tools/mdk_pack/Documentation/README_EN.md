@@ -331,7 +331,7 @@ structure can be used, where each `<bundle>` tag defines a pack.
 <components>
 	<bundle Cbundle="MDK-ARM" Cclass="TencentOS tiny" Cversion="1.0.0">`
 		<description>TencentOS tiny</description>
-		<doc>examples/index.html</doc> 
+		<doc>examples/index.html</doc>
         <component>
 		<!-- Component content -->
 	</component>

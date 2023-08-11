@@ -2,11 +2,16 @@ name: Format Docs and Code
 on: [push, pull_request]
 
 jobs:
-  format:
+  prettier:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }}
 
-    - name: AutoCorrect
-      uses: huacnlee/autocorrect-action@main
+      - name: Prettify code
+        uses: creyD/prettier_action@v4
+        with:
+          prettier_options: --write

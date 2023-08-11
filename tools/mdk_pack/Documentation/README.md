@@ -269,7 +269,7 @@ Cortex-M0 内核才会触发该条件；（2）在添加`<files>`时，我们可
 <components>
 	<bundle Cbundle="MDK-ARM" Cclass="TencentOS tiny" Cversion="1.0.0">
 		<description>TencentOS tiny</description>
-		<doc>examples/index.html</doc> 
+		<doc>examples/index.html</doc>
 		<!-- 添加网页功能-->
         <component>
 		<!-- 组件内容 -->

@@ -66,26 +66,26 @@
 
 总计占 **10857 字节** 的 ROM，而 RAM 的开销则几乎只依赖动态内存，在不使用 TLS 加密传输的情况下，维持 QOS0 服务质量等级的通信动态内存大约仅需要**3694**字节，这包括 1024 读缓冲区 + 1024 写缓冲区 + 1024 内部线程栈大小，相对于其他 MQTT 客户端来说，mqttclient 需要的 RAM 资源开销极少。
 
-| Code | RO Data | RW Data | ZI Data | Object Name |
-| -- | -- | -- | -- | -- |
-| 7118 | 791 | 0 | 0 | mqttclient.o |
-| 546 | 0 | 0 | 0 | mqttconnectclient.o |
-| 212 | 0 | 0 | 0 | mqttdeserializepublish.o |
-| 476 | 0 | 4 | 0 | mqttpacket.o |
-| 236 | 0 | 0 | 0 | mqttserializepublish.o |
-| 310 | 0 | 0 | 0 | mqttsubscribeclient.o |
-| 38 | 0 | 0 | 0 | mqttunsubscribeclient.o |
-| 56 | 0 | 0 | 0 | nettype_tcp.o |
-| 62 | 0 | 0 | 0 | network.o |
-| 24 | 0 | 0 | 0 | platform_memory.o |
-| 40 | 0 | 0 | 0 | platform_mutex.o |
-| 344 | 0 | 0 | 0 | platform_net_socket.o |
-| 94 | 0 | 0 | 0 | platform_thread.o |
-| 70 | 0 | 0 | 0 | platform_timer.o |
-| 246 | 0 | 4 | 0 | random.o |
-| 62 | 0 | 0 | 0 | mqtt_list.o |
-| - | - | - | - | - |
-| 10066  | 791 | 8 | 0 | total |
+| Code  | RO Data | RW Data | ZI Data | Object Name              |
+| ----- | ------- | ------- | ------- | ------------------------ |
+| 7118  | 791     | 0       | 0       | mqttclient.o             |
+| 546   | 0       | 0       | 0       | mqttconnectclient.o      |
+| 212   | 0       | 0       | 0       | mqttdeserializepublish.o |
+| 476   | 0       | 4       | 0       | mqttpacket.o             |
+| 236   | 0       | 0       | 0       | mqttserializepublish.o   |
+| 310   | 0       | 0       | 0       | mqttsubscribeclient.o    |
+| 38    | 0       | 0       | 0       | mqttunsubscribeclient.o  |
+| 56    | 0       | 0       | 0       | nettype_tcp.o            |
+| 62    | 0       | 0       | 0       | network.o                |
+| 24    | 0       | 0       | 0       | platform_memory.o        |
+| 40    | 0       | 0       | 0       | platform_mutex.o         |
+| 344   | 0       | 0       | 0       | platform_net_socket.o    |
+| 94    | 0       | 0       | 0       | platform_thread.o        |
+| 70    | 0       | 0       | 0       | platform_timer.o         |
+| 246   | 0       | 4       | 0       | random.o                 |
+| 62    | 0       | 0       | 0       | mqtt_list.o              |
+| -     | -       | -       | -       | -                        |
+| 10066 | 791     | 8       | 0       | total                    |
 
 ## 整体框架
 
@@ -113,24 +113,23 @@
 
 **目前已实现了 Linux、TencentOS tiny、FreeRTOS、RT-Thread 平台（已做成软件包，名字为`kawaii-mqtt`），除此之外 TencentOS tiny 的 AT 框架亦可以使用，并且稳定性极好！**
 
-| 平台           | 代码位置 |
-| -------------- | -------- |
-| Linux          | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient) |
-| TencentOS tiny | [https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429](https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429) |
-| TencentOS tiny AT 框架 | [https://github.com/jiejieTop/gokit3-board-mqttclient](https://github.com/jiejieTop/gokit3-board-mqttclient) |
-| RT-Thread      | [https://github.com/jiejieTop/kawaii-mqtt](https://github.com/jiejieTop/kawaii-mqtt) |
-| FreeRTOS       | [https://github.com/jiejieTop/freertos-mqttclient](https://github.com/jiejieTop/freertos-mqttclient) |
-
+| 平台                   | 代码位置                                                                                                                                                 |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Linux                  | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient)                                                                       |
+| TencentOS tiny         | [https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429](https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429) |
+| TencentOS tiny AT 框架 | [https://github.com/jiejieTop/gokit3-board-mqttclient](https://github.com/jiejieTop/gokit3-board-mqttclient)                                             |
+| RT-Thread              | [https://github.com/jiejieTop/kawaii-mqtt](https://github.com/jiejieTop/kawaii-mqtt)                                                                     |
+| FreeRTOS               | [https://github.com/jiejieTop/freertos-mqttclient](https://github.com/jiejieTop/freertos-mqttclient)                                                     |
 
 ## 版本
 
-| 发布版本 | 描述 | 
-| --- | --- |
-| [v1.0.0] | 初次发布，完成基本框架及其稳定性验证 |
-| [v1.0.1] | 修复主动与服务器断开连接时的逻辑处理 |
-| [v1.0.2] | 添加新特性——拦截器，修复一些小 bug |
-| [v1.0.3] | 避免造成全局污染修改了 log、list 相关函数的命名 |
-| [v1.0.4] | 重新调整了 network 结构与 mbedtls 数据通道 |
+| 发布版本 | 描述                                                                                                                                                                                            |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [v1.0.0] | 初次发布，完成基本框架及其稳定性验证                                                                                                                                                            |
+| [v1.0.1] | 修复主动与服务器断开连接时的逻辑处理                                                                                                                                                            |
+| [v1.0.2] | 添加新特性——拦截器，修复一些小 bug                                                                                                                                                              |
+| [v1.0.3] | 避免造成全局污染修改了 log、list 相关函数的命名                                                                                                                                                 |
+| [v1.0.4] | 重新调整了 network 结构与 mbedtls 数据通道                                                                                                                                                      |
 | [v1.1.0] | 一个较大版本的更新，重构部分代码，优化 MQTT 处理的逻辑，提升整体的稳定性，支持多客户端，支持设置遗嘱，优化 API 接口，增加多个云平台的测试代码与说明文档，增加在线代码生成工具、在线裁剪配置工具 |
 
 ## 问题
@@ -151,12 +150,12 @@ mqttclient 遵循 [Apache License v2.0](https://github.com/jiejieTop/mqttclient/
 
 ### 测试程序
 
-| 测试平台 | 位置 |
-| -- | -- |
-| emqx（我私人部署的服务器） | [./test/emqx/test.c](./test/emqx/test.c) |
-| 百度天工 | [./test/baidu/test.c](./test/baidu/test.c) |
-| onenet | [./test/onenet/test.c](./test/onenet/test.c) |
-| 阿里云物联 | [./test/ali/test.c](./test/ali/test.c) |
+| 测试平台                   | 位置                                         |
+| -------------------------- | -------------------------------------------- |
+| emqx（我私人部署的服务器） | [./test/emqx/test.c](./test/emqx/test.c)     |
+| 百度天工                   | [./test/baidu/test.c](./test/baidu/test.c)   |
+| onenet                     | [./test/onenet/test.c](./test/onenet/test.c) |
+| 阿里云物联                 | [./test/ali/test.c](./test/ali/test.c)       |
 
 ### 编译 & 运行
 
@@ -167,7 +166,7 @@ mqttclient 遵循 [Apache License v2.0](https://github.com/jiejieTop/mqttclient/
 运行**build.sh**脚本后会在 **./build/bin/**目录下生成可执行文件**emqx**、**baidu**、**onenet**等多个平台的可执行程序，直接运行即可。
 
 ```bash
-    ./build/bin/emqx 
+    ./build/bin/emqx
 ```
 
 ### 编译成动态库 libmqttclient.so
@@ -181,7 +180,7 @@ mqttclient 遵循 [Apache License v2.0](https://github.com/jiejieTop/mqttclient/
 如果你是用交叉编译器的话，则应该根据你使用的编译器导出对应的环境变量（此处使用的交叉编译器是 arm-linux-gnueabihf-gcc），同时你也必须将动态库文件`libmqttclient.so`拷贝到你的嵌入式系统的`/usr/lib `目录下：
 
 ```bash
-    export CROSS_COMPILE=arm-linux-gnueabihf- 
+    export CROSS_COMPILE=arm-linux-gnueabihf-
 ```
 
 如若需要卸载**libmqttclient.so**，执行以下命令即可：

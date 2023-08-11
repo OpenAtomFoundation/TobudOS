@@ -3,10 +3,10 @@
 有了前面连接百度云的经验，废话不多说，直接使用 OneNET，OneNET 平台应该是最开放，对开发者最友好的平台了。
 
 ## 使用 OneNET
+
 首先注册与登陆 OneNET，然后进入开发者中心：https://open.iot.10086.cn/develop/global/product/#/public?protocol=3&other=1，选择公有协议产品，点击“添加产品”，填写产品相关的信息，联网方式选择 wifi（其实我们是以太网，但是没有这个选项，那就选择 wifi，没啥影响的），接入协议必须选择 MQTT，操作系统选择“linux”，运营商这个随意选择，具体见：
 
 ![mqtt-onenet001](http://qiniu.jiejie01.top/mqtt-onenet001.png)
-
 
 在添加产品完毕，继续添加设备，填写设备的相关信息，鉴权信息就是登陆密码，不过需要注意的是，这个鉴权信息在产品内是唯一的，一般推荐使用产品序列号，可作为设备登录参数之一，不同协议设备可能鉴权信息的参数不一致，不过现在是做实验，选择一个好记的即可，数据保密性要选择公有，除此之外还剩下一些设备相关的信息，就不过多赘述，具体见图：
 
@@ -34,7 +34,6 @@ OneNET 的数据交互做的很好，它支持动态创建主题（除系统主�
 
 ![mqtt-onenet008](http://qiniu.jiejie01.top/mqtt-onenet008.png)
 
-
 接下来我们可以通过 MQTT 软件来测试一下能否正常连接，在这一步之前必须已在物联网平台控制台中创建产品和设备，并获取设备相关的信息。
 
 其实连接是与百度天工差不多的，直接填写相关的内容即可：
@@ -50,7 +49,6 @@ OneNET 的数据交互做的很好，它支持动态创建主题（除系统主�
 回到 OneNet 的设备列表界面，可以看到刚刚创建的设备是处于在线状态的：
 
 ![mqtt-onenet012](http://qiniu.jiejie01.top/mqtt-onenet012.png)
-
 
 ## 手动安装相关的依赖包
 
@@ -146,16 +144,16 @@ libarch.a  libcommon.a  libmbedtls.a  libmqtt.a  libmqttclient.a  libnetwork.a  
 我们直接运行`./build/bin/onenet`这个可执行文件：
 
 ```bash
-➜  mqttclient git:(master) ✗ ./build/bin/onenet 
+➜  mqttclient git:(master) ✗ ./build/bin/onenet
 
 welcome to mqttclient test...
 
 [I] >> [TS: 1590547112] /home/jiejie/github/mqttclient/mqttclient/mqttclient.c:948 mqtt_connect_with_results()... mqtt connect success...
 [I] >> [TS: 1590547113] /home/jiejie/github/mqttclient/mqttclient/mqttclient.c:16 default_msg_handler()...
-topic: temp_hum, qos: 0, 
+topic: temp_hum, qos: 0,
 message:welcome to mqttclient, this is a publish test, a rand number: 1804289383 ...
 [I] >> [TS: 1590547116] /home/jiejie/github/mqttclient/mqttclient/mqttclient.c:16 default_msg_handler()...
-topic: temp_hum, qos: 0, 
+topic: temp_hum, qos: 0,
 message:welcome to mqttclient, this is a publish test, a rand number: 1837236902 ...
 ```
 
@@ -199,7 +197,7 @@ void *mqtt_publish_thread(void *arg)
     mqtt_message_t msg;
     memset(&msg, 0, sizeof(msg));
     sprintf(buf, "welcome to mqttclient, this is a publish test...");
-    
+
     msg.qos = 0;
     msg.payload = (void *) buf;
     while(1) {
@@ -214,7 +212,7 @@ int main(void)
     int res;
     pthread_t thread1;
     mqtt_client_t *client = NULL;
-    
+
     printf("\nwelcome to mqttclient test...\n");
 
     mqtt_log_init();
@@ -227,13 +225,13 @@ int main(void)
     mqtt_set_user_name(client, "348547");
     mqtt_set_password(client, "mqttclienttest1");
     mqtt_set_clean_session(client, 1);
-    
+
     mqtt_connect(client);
-    
+
     mqtt_subscribe(client, "topic1", QOS0, NULL);
 
     mqtt_set_interceptor_handler(client, interceptor_handler);     // set interceptor handler
-    
+
     res = pthread_create(&thread1, NULL, mqtt_publish_thread, client);
     if(res != 0) {
         MQTT_LOG_E("create mqtt publish thread fail");
@@ -250,49 +248,49 @@ int main(void)
 
 - 申请一个 MQTT 客户端
 
-    ```c
-    mqtt_client_t *client = NULL;
-    client = mqtt_lease();
-    ```
+  ```c
+  mqtt_client_t *client = NULL;
+  client = mqtt_lease();
+  ```
 
 - mqtt 客户端配置，主要是配置**mqtt_client_t**结构的相关信息，如果没有指定初始化参数，则系统会提供默认的参数。但连接部分的参数则必须指定，比如连接的端口号、云服务器的地址或者域名、用户名、密码，这些信息都是百度云平台得到的。
 
-    ```c
-    mqtt_set_port(client, "6002");
-    mqtt_set_host(client, "183.230.40.39");
-    mqtt_set_client_id(client, "599908192");
-    mqtt_set_user_name(client, "348547");
-    mqtt_set_password(client, "mqttclienttest1");
-    mqtt_set_clean_session(client, 1);
-    ```
+  ```c
+  mqtt_set_port(client, "6002");
+  mqtt_set_host(client, "183.230.40.39");
+  mqtt_set_client_id(client, "599908192");
+  mqtt_set_user_name(client, "348547");
+  mqtt_set_password(client, "mqttclienttest1");
+  mqtt_set_clean_session(client, 1);
+  ```
 
 - 连接服务器并建立 mqtt 会话。
 
-    ```c
-    mqtt_connect(&client);
-    ```
+  ```c
+  mqtt_connect(&client);
+  ```
 
 - 订阅主题，字符串类型的**主题**（支持通配符"#" "+"），主题的**服务质量**，以及收到报文的**回调处理函数**，如不指定则有默认处理函数，订阅主题的处理方式是异步处理的，此处设置为 NULL 则表示使用默认的回调处理函数。
 
-    ```c
-    mqtt_subscribe(client, "topic1", QOS0, NULL);
-    ```
+  ```c
+  mqtt_subscribe(client, "topic1", QOS0, NULL);
+  ```
 
 - 创建一个发布主题的线程，并且发布主题数据，指定字符串类型的**主题**（支持通配符），要发布的消息（包括**服务质量**、**消息主体**）。
 
-    ```c
-    mqtt_message_t msg;
-    msg.payload = (void *) buf;
-    msg.qos = 0;
+  ```c
+  mqtt_message_t msg;
+  msg.payload = (void *) buf;
+  msg.qos = 0;
 
-    mqtt_publish(&client, "topic1", &msg);
-    ```
+  mqtt_publish(&client, "topic1", &msg);
+  ```
 
 - 由于 onenet 的设备会自动订阅系统主题，而用户是不能直接订阅的，比如我们在线调试的时候，他会下发一些系统主题，那么我们需要接收这些主题，就需要设置拦截器的处理函数，去拦截它们并且通过回调函数上报到应用层，设置如下：
 
-    ```c
-    mqtt_set_interceptor_handler(&client, interceptor_handler); 
-    ```
+  ```c
+  mqtt_set_interceptor_handler(&client, interceptor_handler);
+  ```
 
 我们在设备列表页面，点击下方命令，下发一些数据到开发板上：
 
@@ -317,7 +315,6 @@ topic: $creq/5d2670bb-a9a4-5bc9-93d5-107246135af8
 message:hello world !
 [I] >> [TS: 1590548023] -----------------------------------------------------------------------------------
 ```
-
 
 **上一篇**：[mqttclient 连接到百度天工物接入](./mqtt-baidu.md)
 

@@ -1,4 +1,3 @@
-
 # 腾讯云物联网设备端 C-SDK
 
 腾讯云物联网设备端 C-SDK 依靠安全且性能强大的数据通道，为物联网领域开发人员提供设备端快速接入云端，并和云端进行双向通信的能力。
@@ -7,29 +6,29 @@
 
 ## 一、SDK 目录结构简介
 
-| 名称               | 说明 |
-| ------------------ | ------------------------------------------------------------ |
-| CMakeLists.txt     | cmake 编译描述文件 |
-| cmake_build.sh     | Linux 下使用 cmake 的编译脚本 |
-| docs               | 文档目录 |
-| 3rd                | 第三方软件包组件，如 mbedtls |
-| config             | SDK 功能配置以及编译工具链配置 |
-| include            | 提供给用户使用的外部头文件 |
-| platform           | 平台相关的源码文件，目前提供了针对不同 OS(Linux/Windows/FreeRTOS/nonOS)，TLS(mbedtls) 以及 AT 模组下的实现 |
-| common             | SDK 通用组件库 |
-| services           | SDK 提供的服务源码，以模块独立存在 |
+| 名称           | 说明                                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| CMakeLists.txt | cmake 编译描述文件                                                                                         |
+| cmake_build.sh | Linux 下使用 cmake 的编译脚本                                                                              |
+| docs           | 文档目录                                                                                                   |
+| 3rd            | 第三方软件包组件，如 mbedtls                                                                               |
+| config         | SDK 功能配置以及编译工具链配置                                                                             |
+| include        | 提供给用户使用的外部头文件                                                                                 |
+| platform       | 平台相关的源码文件，目前提供了针对不同 OS(Linux/Windows/FreeRTOS/nonOS)，TLS(mbedtls) 以及 AT 模组下的实现 |
+| common         | SDK 通用组件库                                                                                             |
+| services       | SDK 提供的服务源码，以模块独立存在                                                                         |
 
 - `config/settings`可选择相应的配置脚本，以根据需要裁剪 SDK
 - `config/toolchains`可配置相应的编译工具链，以及选择平台
 
 ## 二、SDK 各模块介绍
 
-| 模块名        | 所在目录 | 功能 |
-| ------------ | ------   | ------ |
-| mqtt_packet  | common/mqtt_packet | 通用组件，实现 MQTT 控制包的序列化和反序列化 |
-| utils        | common/utils | 通用组件，实现列表、日志等通用操作 |
-| cryptology   | common/cryptology | 通用组件，实现 SDK 所需密码学算法 |
-| mqtt_client  | common/mqtt_packet | 服务组件，实现 MQTT 客户端 |
+| 模块名      | 所在目录           | 功能                                         |
+| ----------- | ------------------ | -------------------------------------------- |
+| mqtt_packet | common/mqtt_packet | 通用组件，实现 MQTT 控制包的序列化和反序列化 |
+| utils       | common/utils       | 通用组件，实现列表、日志等通用操作           |
+| cryptology  | common/cryptology  | 通用组件，实现 SDK 所需密码学算法            |
+| mqtt_client | common/mqtt_packet | 服务组件，实现 MQTT 客户端                   |
 
 ## 三、快速体验
 
