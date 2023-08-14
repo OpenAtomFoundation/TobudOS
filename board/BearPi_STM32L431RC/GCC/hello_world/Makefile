@@ -35,6 +35,7 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
+
 KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/core/*.c}
         C_SOURCES += $(KERNEL_SRC)
@@ -44,9 +45,14 @@ ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-v7m/common/*.c}
         C_SOURCES += $(ARCH_SRC)
 
-CMSIS_SRC =  \
-        ${wildcard $(TOP_DIR)/osal/cmsis_os/*.c}
-        C_SOURCES += $(CMSIS_SRC)
+USE_CMSIS_OS2 ?= 0
+ifeq ($(USE_CMSIS_OS2),1)
+  CMSIS_SRC = $(TOP_DIR)/osal/cmsis_os2/cmsis_os2.c
+else
+  CMSIS_SRC = $(TOP_DIR)/osal/cmsis_os/cmsis_os.c
+endif
+
+C_SOURCES += $(CMSIS_SRC)
 
 HAL_DRIVER_SRC =  \
 		$(TOP_DIR)/board/BearPi_STM32L431RC/BSP/Src/main.c \
@@ -156,9 +162,15 @@ KERNEL_INC = \
         -I $(TOP_DIR)/arch/arm/arm-v7m/cortex-m4/gcc \
         -I $(TOP_DIR)/board/\BearPi_STM32L431RC/TOS-CONFIG
         C_INCLUDES += $(KERNEL_INC)
-CMSIS_INC = \
-        -I $(TOP_DIR)/osal/cmsis_os
-        C_INCLUDES += $(CMSIS_INC)
+ifeq ($(USE_CMSIS_OS2),1)
+  CMSIS_INC = -I$(TOP_DIR)/osal/cmsis_os2
+else
+  CMSIS_INC = -I$(TOP_DIR)/osal/cmsis_os
+endif
+
+CMSIS_INC += -I$(TOP_DIR)/osal/os_tick
+
+C_INCLUDES += $(CMSIS_INC)
 	
 HAL_DRIVER_INC =  \
 		-I $(TOP_DIR)/board/BearPi_STM32L431RC/BSP/Inc \
