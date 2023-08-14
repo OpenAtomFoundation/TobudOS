@@ -2,7 +2,7 @@ name: Format Docs and Code
 on: [push, pull_request]
 
 jobs:
-  prettier:
+  format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -10,6 +10,14 @@ jobs:
         with:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
+          ssh-key: ${{ secrets.ACTION_PUSH }}
+
+      - name: Use lint-md to format Markdown
+        # For issues of Chinese characters in prettier:
+        # https://github.com/prettier/prettier/blob/e22a5516f5b2c44e6d68be4c0a7ba0b32c1b9f86/website/blog/2023-07-05-3.0.0.md?plain=1#L27
+        run: |
+          npm install --save-dev --save-exact @lint-md/cli
+          lint-md ./**/* --fix
 
       - name: Prettify code
         uses: creyD/prettier_action@v4.3
