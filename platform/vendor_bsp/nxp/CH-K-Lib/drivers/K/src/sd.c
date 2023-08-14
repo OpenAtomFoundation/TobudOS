@@ -425,7 +425,7 @@ uint32_t SD_QuickInit(uint32_t baudrate)
 
 /**
  * @brief SDHC complete initialize
- * \param[in] Init SD初始化结构体指针
+ * \param[in] Init SD 初始化结构体指针
  * \retval   0     ESDHC_OK
  * \retval other error code
  */                                                            

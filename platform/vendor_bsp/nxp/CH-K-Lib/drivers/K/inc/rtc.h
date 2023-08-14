@@ -19,12 +19,12 @@
  */
 typedef struct 
 {
-   uint16_t year;    ///< 年Range from 200 to 2099.
-   uint16_t month;   ///< 月Range from 1 to 12.
-   uint16_t day;     ///< 日Range from 1 to 31 (depending on month).
-   uint16_t hour;    ///< 时Range from 0 to 23.
-   uint16_t minute;  ///< 分Range from 0 to 59.
-   uint8_t second;   ///< 秒Range from 0 to 59.
+   uint16_t year;    ///< 年 Range from 200 to 2099.
+   uint16_t month;   ///< 月 Range from 1 to 12.
+   uint16_t day;     ///< 日 Range from 1 to 31 (depending on month).
+   uint16_t hour;    ///< 时 Range from 0 to 23.
+   uint16_t minute;  ///< 分 Range from 0 to 59.
+   uint8_t second;   ///< 秒 Range from 0 to 59.
 }RTC_DateTime_Type;
 
 /**

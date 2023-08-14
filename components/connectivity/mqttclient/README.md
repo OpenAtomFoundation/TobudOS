@@ -9,6 +9,7 @@
 ![](https://img.shields.io/badge/platform-Linux|Windows|Mac|Embedded-orange.svg)
 
 [中文说明](README_CN.md)
+
 # mqttclient
 
 **A high-performance, high-stability, cross-platform MQTT client**
@@ -65,26 +66,26 @@ This project has a code generation tool that only requires online configuration 
 
 A total of **10857 bytes** of ROM, and the overhead of RAM is almost only dependent on dynamic memory. Without using TLS encrypted transmission, the communication dynamic memory that maintains the QOS0 quality of service level requires only about **3694** bytes. Including 1024 read buffer + 1024 write buffer + 1024 internal thread stack size, compared with other MQTT clients, mqttclient requires very little RAM resource overhead.
 
-| Code | RO Data | RW Data | ZI Data | Object Name |
-| -- | -- | -- | -- | -- |
-| 7118 | 791 | 0 | 0 | mqttclient.o |
-| 546 | 0 | 0 | 0 | mqttconnectclient.o |
-| 212 | 0 | 0 | 0 | mqttdeserializepublish.o |
-| 476 | 0 | 4 | 0 | mqttpacket.o |
-| 236 | 0 | 0 | 0 | mqttserializepublish.o |
-| 310 | 0 | 0 | 0 | mqttsubscribeclient.o |
-| 38 | 0 | 0 | 0 | mqttunsubscribeclient.o |
-| 56 | 0 | 0 | 0 | nettype_tcp.o |
-| 62 | 0 | 0 | 0 | network.o |
-| 24 | 0 | 0 | 0 | platform_memory.o |
-| 40 | 0 | 0 | 0 | platform_mutex.o |
-| 344 | 0 | 0 | 0 | platform_net_socket.o |
-| 94 | 0 | 0 | 0 | platform_thread.o |
-| 70 | 0 | 0 | 0 | platform_timer.o |
-| 246 | 0 | 4 | 0 | random.o |
-| 62 | 0 | 0 | 0 | mqtt_list.o |
-| - | - | - | - | - |
-| 10066  | 791 | 8 | 0 | total |
+| Code  | RO Data | RW Data | ZI Data | Object Name              |
+| ----- | ------- | ------- | ------- | ------------------------ |
+| 7118  | 791     | 0       | 0       | mqttclient.o             |
+| 546   | 0       | 0       | 0       | mqttconnectclient.o      |
+| 212   | 0       | 0       | 0       | mqttdeserializepublish.o |
+| 476   | 0       | 4       | 0       | mqttpacket.o             |
+| 236   | 0       | 0       | 0       | mqttserializepublish.o   |
+| 310   | 0       | 0       | 0       | mqttsubscribeclient.o    |
+| 38    | 0       | 0       | 0       | mqttunsubscribeclient.o  |
+| 56    | 0       | 0       | 0       | nettype_tcp.o            |
+| 62    | 0       | 0       | 0       | network.o                |
+| 24    | 0       | 0       | 0       | platform_memory.o        |
+| 40    | 0       | 0       | 0       | platform_mutex.o         |
+| 344   | 0       | 0       | 0       | platform_net_socket.o    |
+| 94    | 0       | 0       | 0       | platform_thread.o        |
+| 70    | 0       | 0       | 0       | platform_timer.o         |
+| 246   | 0       | 4       | 0       | random.o                 |
+| 62    | 0       | 0       | 0       | mqtt_list.o              |
+| -     | -       | -       | -       | -                        |
+| 10066 | 791     | 8       | 0       | total                    |
 
 ## Overall framework
 
@@ -98,13 +99,13 @@ Has a very clear layered framework.
 
 - Asynchronous processing mechanism is used to manage all the acks. It does not need to wait for the server's response when sending the message, but only records it. After receiving the server's ack, cancel this record, **very efficient**; and When the mqtt message (QoS1/QoS2) is sent and no response is received from the server, the message will be **retransmitted**.
 
-- An **mqtt yield** thread is implemented internally to handle all content in a unified manner, such as **timeout processing, ack message processing, and receiving publish message from the server**, at this time the callback function will be called Inform the user of the data received, **post release, post completion message processing, heartbeat message (keep alive), when disconnected from the server, you need to try to reconnect, resubscribe to the topic, resend the message or reply* *Wait.
+- An **mqtt yield** thread is implemented internally to handle all content in a unified manner, such as **timeout processing, ack message processing, and receiving publish message from the server**, at this time the callback function will be called Inform the user of the data received, \*_post release, post completion message processing, heartbeat message (keep alive), when disconnected from the server, you need to try to reconnect, resubscribe to the topic, resend the message or reply_ \*Wait.
 
 - Message processing, such as **reading and writing messages, decoding mqtt messages, setting messages (dup flag), destroying messages** and other operations.
 
 - **network** is a network component, which can **automatically select a data channel**, if it is an encryption method, **tls encryption** is used for data transmission, and tls can choose mbedtls as the encryption backend; it can also be The **tcp direct connection** method is ultimately transmitted via tcp.
 
-- **platform** is a platform abstraction layer that encapsulates things from different systems, such as socke or AT, thread, time, mutex, memory management**, these are dealing with the system and are also necessary for cross-platform Package.
+- **platform** is a platform abstraction layer that encapsulates things from different systems, such as socke or AT, thread, time, mutex, memory management\*\*, these are dealing with the system and are also necessary for cross-platform Package.
 
 - On the far right is the general content, **list processing, log library, error handling, software random number generator**, etc.
 
@@ -112,25 +113,25 @@ Has a very clear layered framework.
 
 **At present, Linux, TencentOS tiny, FreeRTOS, RT-Thread platforms have been implemented (software package is named kawaii-mqtt`), in addition to TencentOS tiny AT framework can also be used, and the stability is excellent!**
 
-| Platform | Code Location |
-| -------------- | -------- |
-| Linux | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient) |
-| TencentOS tiny | [https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429](https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429) |
-| TencentOS tiny AT framework | [https://github.com/jiejieTop/gokit3-board-mqttclient](https://github.com/jiejieTop/gokit3-board-mqttclient) |
-| RT-Thread | [https://github.com/jiejieTop/kawaii-mqtt](https://github.com/jiejieTop/kawaii-mqtt) |
-| FreeRTOS | [https://github.com/jiejieTop/freertos-mqttclient](https://github.com/jiejieTop/freertos-mqttclient) |
-
+| Platform                    | Code Location                                                                                                                                            |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Linux                       | [https://github.com/jiejieTop/mqttclient](https://github.com/jiejieTop/mqttclient)                                                                       |
+| TencentOS tiny              | [https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429](https://github.com/Tencent/TencentOS-tiny/tree/master/board/Fire_STM32F429) |
+| TencentOS tiny AT framework | [https://github.com/jiejieTop/gokit3-board-mqttclient](https://github.com/jiejieTop/gokit3-board-mqttclient)                                             |
+| RT-Thread                   | [https://github.com/jiejieTop/kawaii-mqtt](https://github.com/jiejieTop/kawaii-mqtt)                                                                     |
+| FreeRTOS                    | [https://github.com/jiejieTop/freertos-mqttclient](https://github.com/jiejieTop/freertos-mqttclient)                                                     |
 
 ## Version
 
-| Release Version | Description |
-| --- | --- |
-| [v1.0.0] | Initial release, complete basic framework and stability verification |
-| [v1.0.1] | Fix the logical processing when actively disconnecting from the server |
-| [v1.0.2] | Add a new feature-interceptor, fix some small bugs |
-| [v1.0.3] | To avoid global pollution, modify the naming of log and list related functions |
-| [v1.0.4] | Network structure and mbedtls data channel readjusted |
-| [v1.1.0] | A larger version of the update, refactoring part of the code, optimizing the logic of MQTT processing, improving the overall stability, supporting multiple clients, supporting setting the will, optimizing the API interface, and adding multiple cloud platforms Test code and documentation, add online code generation tool, online cutting configuration tool |
+| Release Version | Description                                                                                                                                                                                                                                                                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [v1.0.0]        | Initial release, complete basic framework and stability verification                                                                                                                                                                                                                                                                                                |
+| [v1.0.1]        | Fix the logical processing when actively disconnecting from the server                                                                                                                                                                                                                                                                                              |
+| [v1.0.2]        | Add a new feature-interceptor, fix some small bugs                                                                                                                                                                                                                                                                                                                  |
+| [v1.0.3]        | To avoid global pollution, modify the naming of log and list related functions                                                                                                                                                                                                                                                                                      |
+| [v1.0.4]        | Network structure and mbedtls data channel readjusted                                                                                                                                                                                                                                                                                                               |
+| [v1.1.0]        | A larger version of the update, refactoring part of the code, optimizing the logic of MQTT processing, improving the overall stability, supporting multiple clients, supporting setting the will, optimizing the API interface, and adding multiple cloud platforms Test code and documentation, add online code generation tool, online cutting configuration tool |
+
 ## question
 
 Welcome to submit issues and bug reports in the form of [GitHub Issues](https://github.com/jiejieTop/mqttclient/issues)
@@ -149,12 +150,12 @@ mqttclient follows the [Apache License v2.0](https://github.com/jiejieTop/mqttcl
 
 ### test program
 
-| Test Platform | Location |
-| - | - |
-| emqx (my privately deployed server) | [./test/emqx/test.c](./test/emqx/test.c) |
-| Baidu Tiangong | [./test/baidu/test.c](./test/baidu/test.c) |
-| onenet | [./test/onenet/test.c](./test/onenet/test.c) |
-| Alibaba Cloud Internet of Things | [./test/ali/test.c](./test/ali/test.c) |
+| Test Platform                       | Location                                     |
+| ----------------------------------- | -------------------------------------------- |
+| emqx (my privately deployed server) | [./test/emqx/test.c](./test/emqx/test.c)     |
+| Baidu Tiangong                      | [./test/baidu/test.c](./test/baidu/test.c)   |
+| onenet                              | [./test/onenet/test.c](./test/onenet/test.c) |
+| Alibaba Cloud Internet of Things    | [./test/ali/test.c](./test/ali/test.c)       |
 
 ### Compile & Run
 

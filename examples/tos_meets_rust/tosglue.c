@@ -61,14 +61,14 @@ void rust_mqtt_daemon()
     char   ch20_ppm_str[20];
 
 
-    /* OLED显示日志 */
+    /* OLED 显示日志 */
     OLED_ShowString(0, 2, (uint8_t*)"connecting...", 16);
 
     /*
 
         Please Choose your AT Port first, default is HAL_UART_2(USART2)
 
-        网络层初始化, 这个函数位于
+        网络层初始化，这个函数位于
 
             tos/devices/esp8266_tencent_firmware/esp8266_tencent_firmware.c
 
@@ -112,7 +112,7 @@ void rust_mqtt_daemon()
         printf("MQTT: %s\n", state == MQTT_STATE_CONNECTED ? "CONNECTED" : "DISCONNECTED");
     }
 
-    /* 开始订阅topic */
+    /* 开始订阅 topic */
     size = snprintf(report_reply_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/down/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_reply_topic_name) - 1) {
@@ -151,7 +151,7 @@ void rust_mqtt_daemon()
         ch20_ppm_value = ch20_value.data / 1000.0;
         printf("ch20 value: %.3f\r\n", ch20_ppm_value);
 
-        /* OLED显示值 */
+        /* OLED 显示值 */
         sprintf(ch20_ppm_str, "%.3f ppm(mg/m3)", ch20_ppm_value);
         OLED_ShowString(0, 2, (uint8_t*)ch20_ppm_str, 16);
 

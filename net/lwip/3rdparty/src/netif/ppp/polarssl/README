@@ -1,5 +1,4 @@
-About PolarSSL files into lwIP PPP support
-------------------------------------------
+## About PolarSSL files into lwIP PPP support
 
 This folder contains some files fetched from the latest BSD release of
 the PolarSSL project (PolarSSL 0.10.1-bsd) for ciphers and encryption
@@ -17,6 +16,5 @@ libraries into your arch/cc.h port file.
 
 Beware of the stack requirements which can be a lot larger if you are not
 using our cleaned PolarSSL library.
-
 
 PolarSSL project website: http://polarssl.org/

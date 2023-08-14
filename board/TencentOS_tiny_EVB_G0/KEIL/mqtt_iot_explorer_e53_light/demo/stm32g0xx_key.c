@@ -64,7 +64,7 @@ void stm32g0xx_key_init(void)
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 	
-	// 使用tencent-os tiny的定时器实现按键检测功能
+	// 使用 tencent-os tiny 的定时器实现按键检测功能
 	tos_timer_create(&key_check_tmr, 1u, 10u, key_check_timer_cb, K_NULL, TOS_OPT_TIMER_PERIODIC);
 	tos_timer_start(&key_check_tmr);
 }

@@ -6,7 +6,7 @@
   * @date    2014.3.26
   * \date    2015.10.08 FreeXc 完善了对 flexbus 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片FlexBus模块的底层功能函数
+  * @note    此文件为芯片 FlexBus 模块的底层功能函数
   ******************************************************************************
   */
 #include "flexbus.h"
@@ -15,9 +15,9 @@
 #if (defined(FB))
 
 /**
- * @brief  初始化FlexBus模块
- * @note   具体的配置应用详见关于FlexBus的使用例程  
- * @param[in]  FLEXBUS_InitStruct 指向FlexBus初始化配置结构体的指针，详见FlexBus.h
+ * @brief  初始化 FlexBus 模块
+ * @note   具体的配置应用详见关于 FlexBus 的使用例程  
+ * @param[in]  FLEXBUS_InitStruct 指向 FlexBus 初始化配置结构体的指针，详见 FlexBus.h
  * @retval None
  */
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
@@ -108,8 +108,8 @@ void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t c
 }
 
 /**
- * @brief  高级Flexbus 配置选项
- * @note   具体的配置应用详见关于FlexBus的使用例程
+ * @brief  高级 Flexbus 配置选项
+ * @note   具体的配置应用详见关于 FlexBus 的使用例程
  * \param[in] CS 片选通道信号
  * @param[in] FLEXBUS_AdvancedConfigStruct
  * @retval None

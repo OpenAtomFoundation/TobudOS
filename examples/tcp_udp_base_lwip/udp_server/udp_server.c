@@ -4,7 +4,7 @@
 #include <lwip/err.h>
 #include <lwip/sys.h>
 
-char buff[512];	// UDP接收数据缓冲区
+char buff[512];	// UDP 接收数据缓冲区
 const unsigned short server_port = 8000;
 
 void application_entry(void *arg)
@@ -17,11 +17,11 @@ void application_entry(void *arg)
 
     MX_LWIP_Init();
 
-    /* 构造用于UDP的套接字 */
+    /* 构造用于 UDP 的套接字 */
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY); //本地任意IP
+    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY); //本地任意 IP
     serveraddr.sin_port = htons(server_port);
     while (1) {
         bind(sockfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));

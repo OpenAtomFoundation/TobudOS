@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
-  * @date    2015.10.03 FreeXc完善了rtc.c & rtc.h文件的相关注释
+  * @date    2015.10.03 FreeXc 完善了 rtc.c & rtc.h 文件的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -51,7 +51,7 @@ int RTC_GetWeek(int year, int month, int days)
  
 /**
  * @brief  由日期计算出秒
- * @param[in]  datetime 指向RTC时钟数据结构体的指针，详见rtc.h
+ * @param[in]  datetime 指向 RTC 时钟数据结构体的指针，详见 rtc.h
  * @param[out] seconds 存放秒数据的地址
  * @retval None
  */
@@ -144,11 +144,11 @@ static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * d
 }
 
 /**
- * @brief  获得RTC的时间
+ * @brief  获得 RTC 的时间
  * @code
- *      //获得RTC的时间
+ *      //获得 RTC 的时间
  *      RTC_DateTime_Type ts;    //申请一个结构体
- *      RTC_GetTime(&ts);    //将日期存储到ts中
+ *      RTC_GetTime(&ts);    //将日期存储到 ts 中
  * @endcode
  * @param  datetime  返回出来的年月日等信息结构体
  * @retval None
@@ -164,9 +164,9 @@ void RTC_GetTime(RTC_DateTime_Type * datetime)
 }
 
 /**
- * @brief  判断当前RTC时钟模块时间是否有效
+ * @brief  判断当前 RTC 时钟模块时间是否有效
  * \code
- *      当时间无效（从来未执行过RTC时，初始化RTC的时间） 
+ *      当时间无效（从来未执行过 RTC 时，初始化 RTC 的时间） 
  *    if(RTC_IsTimeValid())
  *    {
  *       printf("time invalid, reset time!\r\n");
@@ -202,7 +202,7 @@ void RTC_SetAlarm(RTC_DateTime_Type * datetime)
 }
 
 /**
- * @brief  设置RTC补偿寄存器
+ * @brief  设置 RTC 补偿寄存器
  * @param  compensationInterval
       Configures the compensation interval in seconds from 1 to 256 to control
     *  how frequently the TCR should adjust the number of 32.768 kHz cycles in
@@ -233,8 +233,8 @@ void RTC_SetCompensation(uint32_t compensationInterval, uint32_t timeCompensatio
 }
     
 /**
- * @brief  RTC模块初始化配置，用来配置内部的电容参数
- * @param[in]  RTC_InitStruct 指向RTC初始化结构体指针
+ * @brief  RTC 模块初始化配置，用来配置内部的电容参数
+ * @param[in]  RTC_InitStruct 指向 RTC 初始化结构体指针
  * @retval None
  */
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
@@ -278,7 +278,7 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
 }
 
 /**
- * @brief  RTC模块快速初始化配置，设定内部电容为8pF
+ * @brief  RTC 模块快速初始化配置，设定内部电容为 8pF
  * @retval None
  */
 void RTC_QuickInit(void)
@@ -289,7 +289,7 @@ void RTC_QuickInit(void)
 }
 
 /**
- * @brief  获得TSR值
+ * @brief  获得 TSR 值
  * @retval  0  unvalid
  * \retval !0 valid
  */
@@ -299,7 +299,7 @@ uint32_t RTC_GetTSR(void)
 }
 
 /**
- * @brief  获得Time Alarm值
+ * @brief  获得 Time Alarm 值
  * @retval  0  unvalid
  * \retval !0 valid
  */
@@ -309,7 +309,7 @@ uint32_t RTC_GetTAR(void)
 }
 
 /**
- * @brief  设置RTC的时间
+ * @brief  设置 RTC 的时间
  * @param[in]  datetime  指向时间的结构体指针
  * @retval None
  */
@@ -328,7 +328,7 @@ void RTC_SetTime(RTC_DateTime_Type * datetime)
 }
 
 /**
- * @brief  设置RTC的Time Seconds Register
+ * @brief  设置 RTC 的 Time Seconds Register
  * @param[in]  val time second vlaue
  * @retval None
  */
@@ -340,15 +340,15 @@ void RTC_SetTSR(uint32_t val)
 }
 
 /**
- * @brief  设置RTC中断功能
+ * @brief  设置 RTC 中断功能
  * @code
- *      //设置RTC开启闹钟中断
+ *      //设置 RTC 开启闹钟中断
  *      RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true); 
  * @endcode
  * @param[in] config 配置中断类型
  *                      @arg kRTC_IT_TimeAlarm            闹钟中断
  *                      @arg kRTC_IT_TimeOverflow         时间溢出中断
- * \param[in] status 是否使能RTC中断
+ * \param[in] status 是否使能 RTC 中断
  *              @arg 0 关闭中断
  *              @arg 1 打开中断   
  * @retval None

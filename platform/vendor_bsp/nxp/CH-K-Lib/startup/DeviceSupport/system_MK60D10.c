@@ -165,18 +165,18 @@ void SystemInit (void) {
     MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
     MCG->C5 = (uint8_t)0x03u;
     MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL参考时钟是内部参考时钟 */
-    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL 参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL 参考时钟是内部参考时钟 */
     while((MCG->S & 0x0Cu) != 0x08u);                   /* 等待 FBE 被选择 */
     MCG->C5 = (uint8_t)MCG_C5_PRDIV0(5);                /* 25/6 */
     MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(24));        /* (25/6)*(6*8) = 200 */
     SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(7));	
-    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待 PLLS 时钟源转到 PLL */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */
-    /* 启动PLL */
+    /* 启动 PLL */
     MCG->C1 = (uint8_t)0x1Au;
-    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
-    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
+    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待 PLL 输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待 PLL 锁定 */
 #elif (CLOCK_SETUP == 2)
   SIM->CLKDIV1 = (uint32_t)0x00110000u; /* Update system prescalers */
   /* Switch to FBE Mode */
@@ -208,29 +208,29 @@ void SystemInit (void) {
     MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
     MCG->C5 = (uint8_t)0x03u;
     MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL参考时钟是内部参考时钟 */
-    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL 参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL 参考时钟是内部参考时钟 */
     while((MCG->S & 0x0Cu) != 0x08u);                   /* 等待 FBE 被选择 */
     MCG->C5 = (uint8_t)MCG_C5_PRDIV0(24);               /* 50/25 = 2M */
     MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(26));
     SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));	
-    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待 PLLS 时钟源转到 PLL */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */
-    /* 启动PLL */
+    /* 启动 PLL */
     MCG->C1 = (uint8_t)0x1Au;
-    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
-    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
+    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待 PLL 输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待 PLL 锁定 */
 #elif (CLOCK_SETUP == 4)
 	SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;
 	// 转到 FEI 模式 
 	MCG->C1 = (uint8_t)0x06u;
 	MCG->C2 = (uint8_t)0x00u;
-	MCG->C4|= (1<<6)|(1<<7)|(1<<5);   //内部参考慢速时钟32.768KHZ  倍频因子 2197 倍频后为96MHZ 参见MCG->C4寄存器
+	MCG->C4|= (1<<6)|(1<<7)|(1<<5);   //内部参考慢速时钟 32.768KHZ  倍频因子 2197 倍频后为 96MHZ 参见 MCG->C4 寄存器
 	SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));
     MCG->C5 = (uint8_t)0x00u;
     MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_IREFST_MASK) == 0u);  //检查 FLL参考时钟是内部参考时钟
-    while((MCG->S & 0x0Cu) != 0x00u);           //等待FLL被选择
+    while((MCG->S & MCG_S_IREFST_MASK) == 0u);  //检查 FLL 参考时钟是内部参考时钟
+    while((MCG->S & 0x0Cu) != 0x00u);           //等待 FLL 被选择
 #elif (CLOCK_SETUP == 5)
     SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;               /* 配置系统预分频器 先设置为都为最低分频 */
     OSC->CR = (uint8_t)0x00u;
@@ -240,18 +240,18 @@ void SystemInit (void) {
     MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
     MCG->C5 = (uint8_t)0x03u;
     MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL参考时钟是内部参考时钟 */
-    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL 参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL 参考时钟是内部参考时钟 */
     while((MCG->S & 0x0Cu) != 0x08u);                   /* 等待 FBE 被选择 */
     MCG->C5 = (uint8_t)MCG_C5_PRDIV0(12);               /* 50/13 */
     MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(28));        /* 50/13*52 = 200 */
     SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(7));	
-    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待 PLLS 时钟源转到 PLL */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */
-    /* 启动PLL */
+    /* 启动 PLL */
     MCG->C1 = (uint8_t)0x1Au;
-    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
-    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
+    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待 PLL 输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待 PLL 锁定 */
 #elif (CLOCK_SETUP == 6)
     SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;               /* 配置系统预分频器 先设置为都为最低分频 */
     OSC->CR = (uint8_t)0x00u;
@@ -261,18 +261,18 @@ void SystemInit (void) {
     MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
     MCG->C5 = (uint8_t)0x03u;
     MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL参考时钟是内部参考时钟 */
-    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL 参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL 参考时钟是内部参考时钟 */
     while((MCG->S & 0x0Cu) != 0x08u);                   /* 等待 FBE 被选择 */
     MCG->C5 = (uint8_t)MCG_C5_PRDIV0(3);                /* 12/4  */
     MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(8));         /* 12/4*32 = 96 */
     SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));	
-    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待 PLLS 时钟源转到 PLL */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */
-    /* 启动PLL */
+    /* 启动 PLL */
     MCG->C1 = (uint8_t)0x1Au;
-    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
-    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
+    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待 PLL 输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待 PLL 锁定 */
 #endif /* (CLOCK_SETUP == 6) */
 }
 

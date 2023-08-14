@@ -23,5 +23,5 @@ file. A convenient way to generate that is to run the test, let it fail
 before checking it manually!)
 
 When creating new tests, anything that relies on float support should go in the
-float/ subdirectory.  Anything that relies on import x, where x is not a built-in
+float/ subdirectory. Anything that relies on import x, where x is not a built-in
 module, should go in the import/ subdirectory.

@@ -91,7 +91,7 @@ typedef struct
 {
     uint32_t                instance;               ///< 模块号
 	SPI_Mode_Type           mode;                   ///< 主从模式
-    uint8_t                 dataSize;               ///< 每帧数据有多少位 通常为8或16
+    uint8_t                 dataSize;               ///< 每帧数据有多少位 通常为 8 或 16
     SPI_BitOlder_Type       bitOrder;               ///< 先发高位还是先发地位
     SPI_FrameFormat_Type    frameFormat;            ///< 四种帧格式选择
     uint32_t                baudrate;               ///< 速率

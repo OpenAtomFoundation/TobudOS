@@ -25,23 +25,26 @@ LittlevGL provides everything you need to create a Graphical User Interface (GUI
 -->
 
 ### Features
-* **Powerful building blocks** buttons, charts, lists, sliders, images, etc.
-* **Advanced graphics** with animations, anti-aliasing, opacity, smooth scrolling
-* **Various input devices** touch pad, mouse, keyboard, encoder, buttons, etc.
-* **Multi-language support** with UTF-8 encoding
-* **Fully customizable** graphical elements
-* **Hardware independent** to use with any microcontroller or display
-* **Scalable** to operate with little memory (64 kB Flash, 10 kB RAM)
-* **OS, External memory and GPU** supported but not required
-* **Single frame buffer** operation even with advances graphical effects
-* **Written in C** for maximal compatibility
-* **Micropython Binding** exposes [LittlevGL API in Micropython](https://blog.littlevgl.com/2019-02-20/micropython-bindings)
-* **Simulator** to develop on PC without embedded hardware
-* **Tutorials, examples, themes** for rapid development
-* **Documentation** and API references online
+
+- **Powerful building blocks** buttons, charts, lists, sliders, images, etc.
+- **Advanced graphics** with animations, anti-aliasing, opacity, smooth scrolling
+- **Various input devices** touch pad, mouse, keyboard, encoder, buttons, etc.
+- **Multi-language support** with UTF-8 encoding
+- **Fully customizable** graphical elements
+- **Hardware independent** to use with any microcontroller or display
+- **Scalable** to operate with little memory (64 kB Flash, 10 kB RAM)
+- **OS, External memory and GPU** supported but not required
+- **Single frame buffer** operation even with advances graphical effects
+- **Written in C** for maximal compatibility
+- **Micropython Binding** exposes [LittlevGL API in Micropython](https://blog.littlevgl.com/2019-02-20/micropython-bindings)
+- **Simulator** to develop on PC without embedded hardware
+- **Tutorials, examples, themes** for rapid development
+- **Documentation** and API references online
 
 ### Supported devices
+
 Basically, every modern controller - which is able to drive a display - is suitable to run LittlevGL. The minimal requirements:
+
 - **16, 32 or 64-bit** microcontroller or processor
 - **&gt; 16 MHz** clock speed
 - **&gt; 8 kB RAM for static data** and **&gt; 2 KB RAM for dynamic data** (graphical objects)
@@ -49,6 +52,7 @@ Basically, every modern controller - which is able to drive a display - is suita
 - **Optionally ~1/10 screen sized memory** for buffered drawing (on 240 × 320, 16-bit colors it's 15 kB)
 
 Just to mention some **platforms**:
+
 - STM32F1, STM32F3, [STM32F4](https://blog.littlevgl.com/2017-07-15/stm32f429_disco_port), [STM32F7](https://github.com/littlevgl/stm32f746_disco_no_os_sw4stm32)
 - Microchip dsPIC33, PIC24, PIC32MX, PIC32MZ
 - NXP Kinetis, LPC, iMX
@@ -59,27 +63,33 @@ Just to mention some **platforms**:
 - Quectell M66
 
 ### Quick start in a simulator
-The easiest way to get started with LittlevGL is to run it in a simulator on your PC without any embedded hardware. 
+
+The easiest way to get started with LittlevGL is to run it in a simulator on your PC without any embedded hardware.
 
 Choose a project with your favourite IDE:
 
-|   Eclipse   |  CodeBlocks | Visual Studio | PlatformIO | Qt Creator |
-|-------------|-------------|---------------|-----------|------------|
-|  [![Eclipse](https://littlevgl.com/logo/ide/eclipse.jpg)](https://github.com/littlevgl/pc_simulator_sdl_eclipse) | [![CodeBlocks](https://littlevgl.com/logo/ide/codeblocks.jpg)](https://github.com/littlevgl/pc_simulator_win_codeblocks) | [![VisualStudio](https://littlevgl.com/logo/ide/visualstudio.jpg)](https://github.com/littlevgl/visual_studio_2017_sdl_x64)   |   [![PlatformIO](https://littlevgl.com/logo/ide/platformio.jpg)](https://github.com/littlevgl/pc_simulator_sdl_platformio) | [![QtCreator](https://littlevgl.com/logo/ide/qtcreator.jpg)](https://blog.littlevgl.com/2019-01-03/qt-creator) |
-| Cross-platform<br>with SDL | Native Windows | Cross-platform<br>with SDL | Cross-platform<br>with SDL | Cross-platform<br>with SDL |
+| Eclipse                                                                                                         | CodeBlocks                                                                                                               | Visual Studio                                                                                                               | PlatformIO                                                                                                               | Qt Creator                                                                                                     |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| [![Eclipse](https://littlevgl.com/logo/ide/eclipse.jpg)](https://github.com/littlevgl/pc_simulator_sdl_eclipse) | [![CodeBlocks](https://littlevgl.com/logo/ide/codeblocks.jpg)](https://github.com/littlevgl/pc_simulator_win_codeblocks) | [![VisualStudio](https://littlevgl.com/logo/ide/visualstudio.jpg)](https://github.com/littlevgl/visual_studio_2017_sdl_x64) | [![PlatformIO](https://littlevgl.com/logo/ide/platformio.jpg)](https://github.com/littlevgl/pc_simulator_sdl_platformio) | [![QtCreator](https://littlevgl.com/logo/ide/qtcreator.jpg)](https://blog.littlevgl.com/2019-01-03/qt-creator) |
+| Cross-platform<br>with SDL                                                                                      | Native Windows                                                                                                           | Cross-platform<br>with SDL                                                                                                  | Cross-platform<br>with SDL                                                                                               | Cross-platform<br>with SDL                                                                                     |
 
 ### Porting to an embedded hardware
+
 In the most simple case you need to do these steps:
-1. Copy `lv_conf_templ.h` as `lv_conf.h` next to `lvgl` and set at least `LV_HOR_RES`, `LV_VER_RES` and `LV_COLOR_DEPTH`. 
+
+1. Copy `lv_conf_templ.h` as `lv_conf.h` next to `lvgl` and set at least `LV_HOR_RES`, `LV_VER_RES` and `LV_COLOR_DEPTH`.
 2. Call `lv_tick_inc(x)` every `x` milliseconds **in a Timer or Task** (`x` should be between 1 and 10). It is required for the internal timing of LittlevGL.
 3. Call `lv_init()`
 4. Create a buffer for LittlevGL
+
 ```c
 static lv_disp_buf_t disp_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * 10];                     /*Declare a buffer for 10 lines*/
 lv_disp_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * 10);    /*Initialize the display buffer*/
 ```
+
 4. Implement and register a function which can **copy a pixel array** to an area of your diplay:
+
 ```c
 lv_disp_drv_t disp_drv;               /*Descriptor of a display driver*/
 lv_disp_drv_init(&disp_drv);          /*Basic initialization*/
@@ -88,7 +98,7 @@ disp_drv.ver_res = 320;               /*Set the vertical resolution*/
 disp_drv.flush_cb = my_disp_flush;    /*Set your driver function*/
 disp_drv.buffer = &disp_buf;          /*Assign the buffer to teh display*/
 lv_disp_drv_register(&disp_drv);      /*Finally register the driver*/
-    
+
 void my_disp_flush(lv_disp_t * disp, const lv_area_t * area, lv_color_t * color_p)
 {
     int32_t x, y;
@@ -101,9 +111,11 @@ void my_disp_flush(lv_disp_t * disp, const lv_area_t * area, lv_color_t * color_
 
     lv_disp_flush_ready(disp);                  /* Tell you are ready with the flushing*/
 }
-    
+
 ```
+
 5. Register a function which can **read an input device**. E.g. for a touch pad:
+
 ```c
 lv_indev_drv_init(&indev_drv);             /*Descriptor of a input device driver*/
 indev_drv.type = LV_INDEV_TYPE_POINTER;    /*Touch pad is a pointer-like device*/
@@ -116,9 +128,9 @@ bool my_touchpad_read(lv_indev_t * indev, lv_indev_data_t * data)
     static lv_coord_t last_y = 0;
 
     /*Save the state and save the pressed coordinate*/
-    data->state = touchpad_is_pressed() ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL; 
+    data->state = touchpad_is_pressed() ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
     if(data->state == LV_INDEV_STATE_PR) touchpad_get_xy(&last_x, &last_y);
-   
+
     /*Set the coordinates (if released use the last pressed coordinates)*/
     data->point.x = last_x;
     data->point.y = last_y;
@@ -126,13 +138,15 @@ bool my_touchpad_read(lv_indev_t * indev, lv_indev_data_t * data)
     return false; /*Return `false` because we are not buffering and no more data to read*/
 }
 ```
+
 6. Call `lv_task_handler()` periodically every few milliseconds in the main `while(1)` loop, in Timer interrupt or in an Operation system task. It will redraw the screen if required, handle input devices etc.
 
 For a detailed description check the [Documentation](https://docs.littlevgl.com/#Porting) or the [Porting examples](https://github.com/littlevgl/lvgl/tree/multi-disp/lv_porting).
- 
- 
+
 ### Code examples
+
 #### Create a button with a label and assign a click callback
+
 ```c
 lv_obj_t * btn = lv_btn_create(lv_scr_act(), NULL);     /*Add a button the current screen*/
 lv_obj_set_pos(btn, 10, 10);                            /*Set its position*/
@@ -148,9 +162,11 @@ lv_res_t btn_action(lv_obj_t * btn)
     return LV_RES_OK;
 }
 ```
+
 ![Simple button with LittelvGL](https://littlevgl.com/github/btn1.gif)
 
 #### Modify the styles
+
 ```c
 static lv_style_t style_btn_rel;                        /*A variable to store the released style*/
 lv_style_copy(&style_btn_rel, &lv_style_plain);         /*Initialize from a built-in style*/
@@ -178,6 +194,7 @@ lv_btn_set_style(btn, LV_BTN_STYLE_PR, &style_btn_pr);      /*Set the button's p
 ![Simple button with LittelvGL](https://littlevgl.com/github/btn2.gif)
 
 #### Enable a fancy effect
+
 ```c
 /*Add some effects when the button is clicked*/
 lv_btn_set_ink_in_time(btn, 300);
@@ -188,6 +205,7 @@ lv_btn_set_ink_out_time(btn, 300);
 ![Simple button with LittelvGL](https://littlevgl.com/github/btn3.gif)
 
 #### Use LittlevGL from Micropython
+
 ```python
 # Create a Button and a Label
 scr = lv.obj()
@@ -203,9 +221,11 @@ lv.scr_load(scr)
 Check out the [Documentation](https://docs.littlevgl.com/) for more!
 
 ### Contributing
+
 To ask questions please use the [Forum](https://forum.littlevgl.com).
-FOr development related things (bug reports, feature suggestions) use [GitHub's Issue tracker](https://github.com/littlevgl/lvgl/issues). 
+FOr development related things (bug reports, feature suggestions) use [GitHub's Issue tracker](https://github.com/littlevgl/lvgl/issues).
 You can contribute in several ways:
+
 - **Answer other's question** in the Forum
 - **Report and/or fix bugs** using the issue tracker and in Pull-request
 - **Suggest and/or implement new features** using the issue tracker and in Pull-request
@@ -213,9 +233,10 @@ You can contribute in several ways:
 - **Write a blog post about your experiences** learn more [here](https://github.com/littlevgl/blog)
 - **Upload your project or product as a reference** to [this site](https://blog.littlevgl.com/2018-12-26/references)
 
-Before contributing, please read [CONTRIBUTING.md](https://github.com/littlevgl/lvgl/blob/master/docs/CONTRIBUTING.md).  
+Before contributing, please read [CONTRIBUTING.md](https://github.com/littlevgl/lvgl/blob/master/docs/CONTRIBUTING.md).
 
 ### Donate
+
 If you are pleased with the library, found it useful, or you are happy with the support you got, please help its further development:
 
 [![Donate](https://littlevgl.com/donate_dir/donate_btn.png)](https://littlevgl.com/donate)

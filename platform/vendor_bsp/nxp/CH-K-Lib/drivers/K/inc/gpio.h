@@ -97,9 +97,9 @@ typedef enum
  */
 typedef struct
 {
-    uint8_t                instance;    ///<引脚端口HW_GPIOA~HW_GPIOF
+    uint8_t                instance;    ///<引脚端口 HW_GPIOA~HW_GPIOF
     GPIO_Mode_Type         mode;        ///<工作模式
-    uint32_t               pinx;        ///<引脚号0~31
+    uint32_t               pinx;        ///<引脚号 0~31
 }GPIO_InitTypeDef;
 
 /* 端口中断回调函数定义 */

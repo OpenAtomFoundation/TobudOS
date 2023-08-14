@@ -55,16 +55,16 @@ typedef enum
  */
 typedef struct
 {
-    uint32_t                instance;  ///< CAN通信端口 HW_CAN0/HW_CAN1
-    uint32_t       baudrate;  ///< CAN通信速度设置
+    uint32_t                instance;  ///< CAN 通信端口 HW_CAN0/HW_CAN1
+    uint32_t       baudrate;  ///< CAN 通信速度设置
 }CAN_InitTypeDef;
 
 
 /* CAN QuickInit macro */
-#define CAN1_TX_PE24_RX_PE25   (0xB0A1U)  //CAN1模块 发送引脚为PTE24 接收引脚为PTE25
-#define CAN0_TX_PA12_RX_PA13   (0x9880U)  //CAN0模块 发送引脚为PTA12 接收引脚为PTA13
-#define CAN0_TX_PB18_RX_PB19   (0xA488U)  //CAN0模块 发送引脚为PTB18 接收引脚为PTB19
-#define CAN1_TX_PC17_RX_PC16   (0xA091U)  //CAN1模块 发送引脚为PTC17 接收引脚为PTC16
+#define CAN1_TX_PE24_RX_PE25   (0xB0A1U)  //CAN1 模块 发送引脚为 PTE24 接收引脚为 PTE25
+#define CAN0_TX_PA12_RX_PA13   (0x9880U)  //CAN0 模块 发送引脚为 PTA12 接收引脚为 PTA13
+#define CAN0_TX_PB18_RX_PB19   (0xA488U)  //CAN0 模块 发送引脚为 PTB18 接收引脚为 PTB19
+#define CAN1_TX_PC17_RX_PC16   (0xA091U)  //CAN1 模块 发送引脚为 PTC17 接收引脚为 PTC16
 
 /**
  * \enum CAN_ITDMAConfig_Type

@@ -6,7 +6,7 @@
   * @date    2014.3.26
   * \date    2015.10.06 FreeXc 完善了对 i2c 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片IIC模块的底层功能函数
+  * @note    此文件为芯片 IIC 模块的底层功能函数
   ******************************************************************************
   */
   
@@ -28,15 +28,15 @@
 static i2c_gpio i2c;
 
 /**
- * @brief  I2C快速初始化函数
+ * @brief  I2C 快速初始化函数
  * \code 
- *   //PE00\PE01初始化为i2c功能，波特率为
+ *   //PE00\PE01 初始化为 i2c 功能，波特率为
  *   uint32_t instance;
  *   instance = I2C_QuickInit(I2C1_SCL_PE01_SDA_PE00,1000);
  * \endcode
- * @param[in] MAP  I2C引脚配置缩略图,详见i2c.h
- * \param[in] baudrate 波特率(函数中暂未配置，取为默认)
- * @retval i2c模块号
+ * @param[in] MAP  I2C 引脚配置缩略图，详见 i2c.h
+ * \param[in] baudrate 波特率 (函数中暂未配置，取为默认)
+ * @retval i2c 模块号
  */
 uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
@@ -94,8 +94,8 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 }
 
 /**
- * \brief I2C 初始化(待定义)
- * \param[in] I2C_InitStruct 指向I2C结构体的指针 
+ * \brief I2C 初始化 (待定义)
+ * \param[in] I2C_InitStruct 指向 I2C 结构体的指针 
  */
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
@@ -103,8 +103,8 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 }
 
 /**
- * \brief 读取I2C上SDA数据，Internal function
- * \return SDA上的数据(1 bit)
+ * \brief 读取 I2C 上 SDA 数据，Internal function
+ * \return SDA 上的数据 (1 bit)
  */
 static inline uint8_t SDA_IN(void)
 {
@@ -194,7 +194,7 @@ static bool I2C_WaitAck(void)
 
 /**
  * \brief I2C 发送一个字节数据，Internal function
- * \param[in] data 待发送的数据(字节)
+ * \param[in] data 待发送的数据 (字节)
  * \retval None
  */
 static void I2C_SendByte(uint8_t data)
@@ -217,7 +217,7 @@ static void I2C_SendByte(uint8_t data)
 
 /**
  * \brief I2C 接收一个字节数据，Internal function
- * \return 待接收的数据(字节)
+ * \return 待接收的数据 (字节)
  */
 static uint8_t I2C_GetByte(void)
 {
@@ -459,7 +459,7 @@ int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, 
 
 /**
  * \brief i2c bus scan test
- * @param[in] MAP  I2C引脚配置缩略图,详见i2c.h
+ * @param[in] MAP  I2C 引脚配置缩略图，详见 i2c.h
  * \retval None
  */
 void I2C_Scan(uint32_t MAP)

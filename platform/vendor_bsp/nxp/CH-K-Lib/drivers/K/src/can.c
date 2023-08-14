@@ -56,7 +56,7 @@ static CAN_CallBackType CAN_CallBackTable[ARRAY_SIZE(CANBase)] = {NULL};
 /**
  * @brief  Set CAN baudrate，internal function
  * @note   
- * @param[in]  CANx          指向CAN_Type类型的指针
+ * @param[in]  CANx          指向 CAN_Type 类型的指针
  * @param[in]  baudrate      CAN speed
  * @retval 0             ok
  * \retval other error code
@@ -102,11 +102,11 @@ static uint32_t CAN_SetBaudrate(CAN_Type *CANx, uint32_t baudrate)
 
 /**
  * @brief  Set CAN ID，internal function
- * @param[in]  instance CAN通信模块号
- *         			@arg HW_CAN0  0号CAN通信模块
- *         			@arg HW_CAN1  1号CAN通信模块
- * @param[in]  mb      CAN通信接收邮箱0~15
- * @param[in]  id      CAN通信接收ID，11位标准地址或者28位扩展地址
+ * @param[in]  instance CAN 通信模块号
+ *         			@arg HW_CAN0  0 号 CAN 通信模块
+ *         			@arg HW_CAN1  1 号 CAN 通信模块
+ * @param[in]  mb      CAN 通信接收邮箱 0~15
+ * @param[in]  id      CAN 通信接收 ID，11 位标准地址或者 28 位扩展地址
  * @retval 0             
  */
 static uint32_t set_id(uint32_t instance, uint32_t mb, uint32_t id)
@@ -125,13 +125,13 @@ static uint32_t set_id(uint32_t instance, uint32_t mb, uint32_t id)
 }
 
 /**
- * @brief  设置CAN通讯屏蔽掩码
+ * @brief  设置 CAN 通讯屏蔽掩码
  * @note   内部函数 用于设置邮箱过滤的
- * @param[in]  instance CAN通信模块号
- *         			@arg HW_CAN0  0号CAN通信模块
- *         			@arg HW_CAN1  1号CAN通信模块
- * @param[in]  mb      CAN通信接收邮箱0~15
- * @param[in]  mask    CAN通信接收过滤掩码
+ * @param[in]  instance CAN 通信模块号
+ *         			@arg HW_CAN0  0 号 CAN 通信模块
+ *         			@arg HW_CAN1  1 号 CAN 通信模块
+ * @param[in]  mb      CAN 通信接收邮箱 0~15
+ * @param[in]  mask    CAN 通信接收过滤掩码
  * @retval none
  */
 void CAN_SetRxFilterMask(uint32_t instance, uint32_t mb, uint32_t mask)
@@ -152,13 +152,13 @@ void CAN_SetRxFilterMask(uint32_t instance, uint32_t mb, uint32_t mask)
 }
 
 /**
- * @brief  设置CAN通讯接收邮箱
+ * @brief  设置 CAN 通讯接收邮箱
  * @note   用户调用函数
- * @param[in]  instance CAN通信模块号
- *         			@arg HW_CAN0  0号CAN通信模块
- *         			@arg HW_CAN1  1号CAN通信模块
- * @param[in]  mb      CAN通信接收邮箱0~15
- * @param[in]  id      CAN通信接收ID，11位标准地址或者28位扩展地址
+ * @param[in]  instance CAN 通信模块号
+ *         			@arg HW_CAN0  0 号 CAN 通信模块
+ *         			@arg HW_CAN1  1 号 CAN 通信模块
+ * @param[in]  mb      CAN 通信接收邮箱 0~15
+ * @param[in]  id      CAN 通信接收 ID，11 位标准地址或者 28 位扩展地址
  * @retval none
  */
 void CAN_SetRxMB(uint32_t instance, uint32_t mb, uint32_t id)
@@ -169,10 +169,10 @@ void CAN_SetRxMB(uint32_t instance, uint32_t mb, uint32_t id)
 }
 
 /**
- * @brief  CAN通讯初始化配置  （需要配合使用）
- * @note   通信速度是基于bus时钟为50MHz时候的计算
- * @param[in]  Init   CAN通信模块初始化配置结构体(指针)
- * \see CAN_QuickInit() and can.h中相关定义
+ * @brief  CAN 通讯初始化配置（需要配合使用）
+ * @note   通信速度是基于 bus 时钟为 50MHz 时候的计算
+ * @param[in]  Init   CAN 通信模块初始化配置结构体 (指针)
+ * \see CAN_QuickInit() and can.h 中相关定义
  * @retval none
  */
 void CAN_Init(CAN_InitTypeDef* Init)
@@ -231,11 +231,11 @@ void CAN_Init(CAN_InitTypeDef* Init)
 }
 
 /**
- * @brief  CAN通信快速初始化配置
- * @note   通信速度是基于bus时钟为50MHz时候的计算
- * @param[in]  CANxMAP   CAN通信快速配置地图，详见can.h文件
- * @param[in]  baudrate  CAN通信波特率
- * @retval CAN模块号0或1
+ * @brief  CAN 通信快速初始化配置
+ * @note   通信速度是基于 bus 时钟为 50MHz 时候的计算
+ * @param[in]  CANxMAP   CAN 通信快速配置地图，详见 can.h 文件
+ * @param[in]  baudrate  CAN 通信波特率
+ * @retval CAN 模块号 0 或 1
  */
 uint32_t CAN_QuickInit(uint32_t CANxMAP, uint32_t baudrate)
 {
@@ -254,12 +254,12 @@ uint32_t CAN_QuickInit(uint32_t CANxMAP, uint32_t baudrate)
 }
 
 /**
- * @brief  CAN通信通道状态检测
+ * @brief  CAN 通信通道状态检测
  * @note   内部函数
- * @param[in]  instance CAN通信模块号
- *         @arg HW_CAN0  0号CAN通信模块
- *         @arg HW_CAN1  1号CAN通信模块
- * @param[in]  mb      CAN通信接收邮箱0~15
+ * @param[in]  instance CAN 通信模块号
+ *         @arg HW_CAN0  0 号 CAN 通信模块
+ *         @arg HW_CAN1  1 号 CAN 通信模块
+ * @param[in]  mb      CAN 通信接收邮箱 0~15
  * \return 
  */
 static bool is_mb_idle(uint32_t instance, uint32_t mb)
@@ -364,9 +364,9 @@ uint32_t CAN_WriteRemote(uint32_t instance, uint32_t mb, uint32_t id, uint8_t le
 
 /**
  * @brief  注册中断回调函数
- * @param[in]  instance CAN模块中断入口号
- *         @arg HW_CAN0 芯片的CAN模块0中断入口
- *         @arg HW_CAN1 芯片的CAN模块1中断入口
+ * @param[in]  instance CAN 模块中断入口号
+ *         @arg HW_CAN0 芯片的 CAN 模块 0 中断入口
+ *         @arg HW_CAN1 芯片的 CAN 模块 1 中断入口
  * @param[in] AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
@@ -380,10 +380,10 @@ void CAN_CallbackInstall(uint32_t instance, CAN_CallBackType AppCBFun)
 }
 
 /**
- * @brief  设置CAN模块的中断类型或者DMA功能
- * @param[in]  instance CAN模块号
- *         			@arg HW_CAN0 芯片的CAN模块0号
- *         			@arg HW_CAN1 芯片的CAN模块1号
+ * @brief  设置 CAN 模块的中断类型或者 DMA 功能
+ * @param[in]  instance CAN 模块号
+ *         			@arg HW_CAN0 芯片的 CAN 模块 0 号
+ *         			@arg HW_CAN1 芯片的 CAN 模块 1 号
  * @param[in]  mb      邮箱编号 0~15
  * @param[in] config   配置模式
  *         			@arg kCAN_IT_Tx_Disable 禁止发送中断
@@ -416,14 +416,14 @@ void CAN_ITDMAConfig(uint32_t instance, uint32_t mb, CAN_ITDMAConfig_Type config
 }
 
 /**
- * @brief  读取CAN邮箱接收到的数据
- * @param[in]  instance CAN模块号
- *         			@arg HW_CAN0 芯片的CAN模块0号
- *         			@arg HW_CAN1 芯片的CAN模块1号
- * @param[in]  mb      CAN通信接收邮箱0~15
- * \param[in]  id      CAN通信接收ID指针地址
- * @param[in]  buf     CAN通信接收数据指针地址
- * @param[in]  len     CAN通信接收数据长度指针地址
+ * @brief  读取 CAN 邮箱接收到的数据
+ * @param[in]  instance CAN 模块号
+ *         			@arg HW_CAN0 芯片的 CAN 模块 0 号
+ *         			@arg HW_CAN1 芯片的 CAN 模块 1 号
+ * @param[in]  mb      CAN 通信接收邮箱 0~15
+ * \param[in]  id      CAN 通信接收 ID 指针地址
+ * @param[in]  buf     CAN 通信接收数据指针地址
+ * @param[in]  len     CAN 通信接收数据长度指针地址
  * @retval 0 正常
  * \retval 1 无数据 
  * \retval 2 正在接收
@@ -462,13 +462,13 @@ uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint32_t *id, uint8_t *buf
 }
 
 /**
- * @brief  读取CAN的FIFO中数据
- * @param[in]  instance CAN模块号
- *         			@arg HW_CAN0 芯片的CAN模块0号
- *         			@arg HW_CAN1 芯片的CAN模块1号
- * \param[in]  id      CAN通信接收ID指针地址
- * @param[in]  buf     CAN通信接收数据指针地址
- * @param[in]  len     CAN通信接收数据长度指针地址
+ * @brief  读取 CAN 的 FIFO 中数据
+ * @param[in]  instance CAN 模块号
+ *         			@arg HW_CAN0 芯片的 CAN 模块 0 号
+ *         			@arg HW_CAN1 芯片的 CAN 模块 1 号
+ * \param[in]  id      CAN 通信接收 ID 指针地址
+ * @param[in]  buf     CAN 通信接收数据指针地址
+ * @param[in]  len     CAN 通信接收数据长度指针地址
  * @retval 0 正常
  */
 uint32_t CAN_ReadFIFO(uint32_t instance, uint32_t *id, uint8_t *buf, uint8_t *len)
@@ -494,10 +494,10 @@ uint32_t CAN_ReadFIFO(uint32_t instance, uint32_t *id, uint8_t *buf, uint8_t *le
 }
 
 /**
- * @brief  CAN的FIFO接收是否使能
- * @param[in]  instance CAN模块号
- *         			@arg HW_CAN0 芯片的CAN模块0号
- *         			@arg HW_CAN1 芯片的CAN模块1号
+ * @brief  CAN 的 FIFO 接收是否使能
+ * @param[in]  instance CAN 模块号
+ *         			@arg HW_CAN0 芯片的 CAN 模块 0 号
+ *         			@arg HW_CAN1 芯片的 CAN 模块 1 号
  * @retval 0 Rx FIFO not enabled
  * @retval 1 Rx FIFO enabled
  */
@@ -507,10 +507,10 @@ bool CAN_IsRxFIFOEnable(uint32_t instance)
 }
 
 /**
- * @brief  设置CAN的FIFO接收功能
- * @param[in]  instance CAN模块号
- *         			@arg HW_CAN0 芯片的CAN模块0号
- *         			@arg HW_CAN1 芯片的CAN模块1号
+ * @brief  设置 CAN 的 FIFO 接收功能
+ * @param[in]  instance CAN 模块号
+ *         			@arg HW_CAN0 芯片的 CAN 模块 0 号
+ *         			@arg HW_CAN1 芯片的 CAN 模块 1 号
  * @retval None
  */
 void CAN_SetRxFIFO(uint32_t instance)
@@ -534,10 +534,10 @@ void CAN_SetRxFIFO(uint32_t instance)
 
 
 /**
- * @brief  CAN中断处理函数
- * @param[in]  instance CAN模块号
- *         			@arg HW_CAN0 芯片的CAN模块0号
- *         			@arg HW_CAN1 芯片的CAN模块1号
+ * @brief  CAN 中断处理函数
+ * @param[in]  instance CAN 模块号
+ *         			@arg HW_CAN0 芯片的 CAN 模块 0 号
+ *         			@arg HW_CAN1 芯片的 CAN 模块 1 号
  * @note 触发中断之后调用用户注册的中断处理函数
  */
 void CAN_IRQHandler(uint32_t instance)
@@ -549,13 +549,13 @@ void CAN_IRQHandler(uint32_t instance)
 }
 
 /**
- * @brief  CAN0中断处理函数入口
+ * @brief  CAN0 中断处理函数入口
  * @note 函数内部用于中断事件处理
  */
 void CAN0_ORed_Message_buffer_IRQHandler(void) {CAN_IRQHandler(HW_CAN0);}
 
 /**
- * @brief  CAN1中断处理函数入口
+ * @brief  CAN1 中断处理函数入口
  * @note 函数内部用于中断事件处理
  */
 void CAN1_ORed_Message_buffer_IRQHandler(void) {CAN_IRQHandler(HW_CAN1);}

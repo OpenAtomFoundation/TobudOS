@@ -20,7 +20,7 @@
 
 /***************************************************************
 * 函数名称: Init_BH1750
-* 说    明: 写命令初始化BH1750
+* 说    明: 写命令初始化 BH1750
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
@@ -32,7 +32,7 @@ static void Init_BH1750(void)
 
 /***************************************************************
 * 函数名称: Start_BH1750
-* 说    明: 启动BH1750
+* 说    明: 启动 BH1750
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
@@ -64,7 +64,7 @@ static float Convert_BH1750(void)
 
 /***************************************************************
 * 函数名称: e53_scl_read_data
-* 说    明: 读取e53接口数据
+* 说    明: 读取 e53 接口数据
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
@@ -80,17 +80,17 @@ TIM_HandleTypeDef TIM3_Handler;
 
 /***************************************************************
 * 函数名称: TIM3_Init
-* 说    明: 启动定时器，定时器溢出时间计算方法:Tout=((arr+1)*(psc+1))/Ft us. Ft=定时器工作频率,单位:Mhz
+* 说    明: 启动定时器，定时器溢出时间计算方法:Tout=((arr+1)*(psc+1))/Ft us. Ft=定时器工作频率，单位:Mhz
 ***************************************************************/
 static void TIM3_Init(uint16_t arr,uint16_t psc)		//arr：自动重装值	psc：时钟预分频数
 {  
-	TIM3_Handler.Instance=TIM3;                             //通用定时器3
+	TIM3_Handler.Instance=TIM3;                             //通用定时器 3
 	TIM3_Handler.Init.Prescaler=psc;                        //分频系数
 	TIM3_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;       //向上计数器
 	TIM3_Handler.Init.Period=arr;                           //自动装载值
 	TIM3_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1; //时钟分频因子
 	HAL_TIM_Base_Init(&TIM3_Handler);						//时基初始化
-	HAL_TIM_Base_Start_IT(&TIM3_Handler); 					//使能定时器3和定时器3更新中断：TIM_IT_UPDATE
+	HAL_TIM_Base_Start_IT(&TIM3_Handler); 					//使能定时器 3 和定时器 3 更新中断：TIM_IT_UPDATE
 }
 
 /***************************************************************
@@ -101,9 +101,9 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance==TIM3)
 	{
-		__HAL_RCC_TIM3_CLK_ENABLE();            //使能TIM3时钟
-		HAL_NVIC_SetPriority(TIM3_IRQn,1,3);    //设置中断优先级，抢占优先级1，子优先级3
-		HAL_NVIC_EnableIRQ(TIM3_IRQn);          //开启ITM3中断
+		__HAL_RCC_TIM3_CLK_ENABLE();            //使能 TIM3 时钟
+		HAL_NVIC_SetPriority(TIM3_IRQn,1,3);    //设置中断优先级，抢占优先级 1，子优先级 3
+		HAL_NVIC_EnableIRQ(TIM3_IRQn);          //开启 ITM3 中断
 	}
 }
 
@@ -162,7 +162,7 @@ void e53_sc1_set_ligth_level(int light_level)
 
 /***************************************************************
 * 函数名称: e53_sc1_init
-* 说    明: 初始化e53
+* 说    明: 初始化 e53
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/

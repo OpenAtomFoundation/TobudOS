@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
-  * \date    2015.10.04 FreeXc完善了pdb模块的注释
+  * \date    2015.10.04 FreeXc 完善了 pdb 模块的注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -14,7 +14,7 @@
 static PDB_CallBackType PDB_CallBackTable[1] = {NULL};
 
 /**
- * @brief  软件触发PDB开始转换一次  
+ * @brief  软件触发 PDB 开始转换一次  
  * @retval None
  */
 void PDB_SoftwareTrigger(void)
@@ -23,7 +23,7 @@ void PDB_SoftwareTrigger(void)
 }
 
 /**
- * @brief  设置PDB转换频率
+ * @brief  设置 PDB 转换频率
  * \param[in] srcClock
  * \param[in] timeInUs
  * \note 函数内部调用，用户无需使用
@@ -63,8 +63,8 @@ static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)
 }
 
 /**
- * @brief  获得PDB Mod 寄存器
- * @retval MOD寄存器值
+ * @brief  获得 PDB Mod 寄存器
+ * @retval MOD 寄存器值
  */
 uint32_t PDB_GetMODValue(void)
 {
@@ -72,13 +72,13 @@ uint32_t PDB_GetMODValue(void)
 }
 
 /**
- * \brief PDB快速初始化
+ * \brief PDB 快速初始化
  * \code
- *   //开启PDB模块(软件触发)，定时10ms
+ *   //开启 PDB 模块 (软件触发)，定时 10ms
  *   PDB_QuickInit(kPDB_SoftwareTrigger, 10*1000);
  * \endcode
- * \param[in] triggerSrc PDB trigger source,详细请参见pdb.h文件
- * \param[in] timeInUs 定时时间，单位为微秒us
+ * \param[in] triggerSrc PDB trigger source，详细请参见 pdb.h 文件
+ * \param[in] timeInUs 定时时间，单位为微秒 us
  * \retval None
  */
 void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)
@@ -96,9 +96,9 @@ void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)
 }
 
 /**
- * \brief PDB模块初始化
- * \param[in] PDB_InitStruct 指向PDB初始化结构体的指针
- * \see 详细请参见PDB_QuickInit的函数定义
+ * \brief PDB 模块初始化
+ * \param[in] PDB_InitStruct 指向 PDB 初始化结构体的指针
+ * \see 详细请参见 PDB_QuickInit 的函数定义
  * \retval None
  */
 void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
@@ -126,15 +126,15 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 }
 
 /**
- * @brief  设置PDB触发ADC
- * @param[in]  adcInstance 需要触发的ADC模块号
- *              @arg HW_ADC0  ADC0模块
- *              @arg HW_ADC1  ADC1模块
- *              @arg HW_ADC2  ADC2模块
- * @param[in]  adcMux      ADC转换通道
- *              @arg kADC_MuxA   A通道模式
- *              @arg kADC_MuxB   B通道模式
- * @param[in]  dlyValue    延时计数值(内部暂未使用)
+ * @brief  设置 PDB 触发 ADC
+ * @param[in]  adcInstance 需要触发的 ADC 模块号
+ *              @arg HW_ADC0  ADC0 模块
+ *              @arg HW_ADC1  ADC1 模块
+ *              @arg HW_ADC2  ADC2 模块
+ * @param[in]  adcMux      ADC 转换通道
+ *              @arg kADC_MuxA   A 通道模式
+ *              @arg kADC_MuxB   B 通道模式
+ * @param[in]  dlyValue    延时计数值 (内部暂未使用)
  * @param[in]  status      是否使能
  *              @arg 1 enable
  *              @arg 0 disable
@@ -154,13 +154,13 @@ void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyVal
 
 /**
  * @brief  PDB ADC pre-trigger operation as back-to-back mode 
- * @param[in]  adcInstance 需要触发的ADC模块号
- *              @arg HW_ADC0  ADC0模块
- *              @arg HW_ADC1  ADC1模块
- *              @arg HW_ADC2  ADC2模块
- * @param[in]  adcMux      ADC转换通道
- *              @arg kADC_MuxA   A通道模式
- *              @arg kADC_MuxB   B通道模式
+ * @param[in]  adcInstance 需要触发的 ADC 模块号
+ *              @arg HW_ADC0  ADC0 模块
+ *              @arg HW_ADC1  ADC1 模块
+ *              @arg HW_ADC2  ADC2 模块
+ * @param[in]  adcMux      ADC 转换通道
+ *              @arg kADC_MuxA   A 通道模式
+ *              @arg kADC_MuxB   B 通道模式
  * \param[in]  status enable/disable the PDB ADC pre-trigger operation as back-to-back mode
  *              \arg 0 disable
  *              \arg 1 enable
@@ -175,11 +175,11 @@ void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status)
 }
 
 /**
- * @brief  PDB中断及DMA功能开关函数
- * @param[in]  config   中断及DMA配置
+ * @brief  PDB 中断及 DMA 功能开关函数
+ * @param[in]  config   中断及 DMA 配置
  *              @arg kPDB_IT_CF    关闭中断
- *              @arg kPDB_DMA_CF   关闭DMA功能 
- * \param[in]  status 是否使能中断或DMA
+ *              @arg kPDB_DMA_CF   关闭 DMA 功能 
+ * \param[in]  status 是否使能中断或 DMA
  *              \arg 0 disable
  *              \arg 1 enable
  * @retval None
@@ -213,7 +213,7 @@ void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status)
 }
 
 /**
- * @brief  PDB注册中断回调函数
+ * @brief  PDB 注册中断回调函数
  * @param[in] AppCBFun 回调函数指针入口
  * @retval None
  * @see 对于此函数的具体应用请查阅应用实例
@@ -229,9 +229,9 @@ void PDB_CallbackInstall(PDB_CallBackType AppCBFun)
 }
 
 /**
- * @brief    PDB中断处理函数入口
- * @details  PDB0_IRQHandler 芯片的PDB0模块中断函数入口
- * @note     该函数内部用于调用用户的中断处理函数,用户无需使用
+ * @brief    PDB 中断处理函数入口
+ * @details  PDB0_IRQHandler 芯片的 PDB0 模块中断函数入口
+ * @note     该函数内部用于调用用户的中断处理函数，用户无需使用
  */
 void PDB0_IRQHandler(void)
 {

@@ -1,5 +1,4 @@
-MBEDTLS Error Strings for MicroPython
-=====================================
+# MBEDTLS Error Strings for MicroPython
 
 This directory contains source code and tools to rework the Mbedtls error strings for
 micropython to use less space. In short, instead of storing and printing something like
@@ -15,6 +14,7 @@ directory modify this process to produce a more space efficient error lookup tab
 shorter error strings.
 
 The files are as follows:
+
 - `generate_errors.diff` - diff for original mbedtls perl script
 - `error.fmt` - modified code template for MicroPython
 - `mp_mbedtls_errors.c` - source file with `mbedtls_strerror` this is built using the include

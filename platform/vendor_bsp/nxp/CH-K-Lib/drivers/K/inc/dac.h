@@ -58,8 +58,8 @@ typedef enum
  */
 typedef struct
 {
-    uint32_t                    instance;      ///<DAC模块号0~1
-    DAC_TriggerSelect_Type      triggerMode;   ///<DAC触发模式
+    uint32_t                    instance;      ///<DAC 模块号 0~1
+    DAC_TriggerSelect_Type      triggerMode;   ///<DAC 触发模式
     DAC_BufferMode_Type         bufferMode;    ///<缓存类型
     DAC_ReferenceSelect_Type    referenceMode; ///<参考源选择
 }DAC_InitTypeDef;

@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
-  * \date    2015.10.03 FreeXc 完善了lptmr模块的相关注释
+  * \date    2015.10.03 FreeXc 完善了 lptmr 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -36,15 +36,15 @@ static const Reg_t SIM_LPTMRClockGateTable[] =
 #endif
 
 /**
- * @brief  初始化配置LPTMR模块处于计时器模式
+ * @brief  初始化配置 LPTMR 模块处于计时器模式
  * @code
- *      //设置LPTM工作在计时器模式，时间间隔是500毫秒
+ *      //设置 LPTM 工作在计时器模式，时间间隔是 500 毫秒
  *      LPTMR_TC_InitTypeDef LPTMR_TC_InitStruct1; //申请一个结构变量
- *      LPTMR_TC_InitStruct1.timeInMs = 500;       //设置计时时间是500ms
+ *      LPTMR_TC_InitStruct1.timeInMs = 500;       //设置计时时间是 500ms
  *      LPTMR_TC_Init(&LPTMR_TC_InitStruct1);
  * @endcode
- * @param[in]  LPTMR_TC_InitStruct LPTMR配置结构体
- *              @arg timeInMs 定时时间 单位为ms
+ * @param[in]  LPTMR_TC_InitStruct LPTMR 配置结构体
+ *              @arg timeInMs 定时时间 单位为 ms
  * @retval None
  */
 void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
@@ -76,16 +76,16 @@ void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
 }
 
 /**
- * @brief  初始化配置LPTM模块处于脉冲计数模式
+ * @brief  初始化配置 LPTM 模块处于脉冲计数模式
  * @code
- *      //设置LPTM工作在脉冲计数模式，计数上限是0xFFFE
+ *      //设置 LPTM 工作在脉冲计数模式，计数上限是 0xFFFE
  *      LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1; //申请一个结构变量
- *      LPTMR_PC_InitStruct1.timeInMs = 500;       //设置计时时间是500ms
+ *      LPTMR_PC_InitStruct1.timeInMs = 500;       //设置计时时间是 500ms
  *      LPTMR_TC_Init(&LPTMR_TC_InitStruct1);
  * @endcode
- * @param[in]  LPTMR_PC_InitStruct LPTMR配置结构体
- *              @arg counterOverflowValue       计数器计数上限，极限为0xFFFF
- *              @arg inputSource 脉冲源选择 kLPTMR_PC_InputSource_CMP0-CMP0作为脉冲计数时钟源 kLPTMR_PC_InputSource_ALT1-外部引脚LPTMR_ALT1作为外部计数时钟源 kLPTMR_PC_InputSource_ALT2-外部引脚LPTMR_ALT2作为外部计数时钟源
+ * @param[in]  LPTMR_PC_InitStruct LPTMR 配置结构体
+ *              @arg counterOverflowValue       计数器计数上限，极限为 0xFFFF
+ *              @arg inputSource 脉冲源选择 kLPTMR_PC_InputSource_CMP0-CMP0 作为脉冲计数时钟源 kLPTMR_PC_InputSource_ALT1-外部引脚 LPTMR_ALT1 作为外部计数时钟源 kLPTMR_PC_InputSource_ALT2-外部引脚 LPTMR_ALT2 作为外部计数时钟源
  *              @arg pinPolarity 脉冲计数极性选择 kLPTMR_PC_PinPolarity_RigsingEdge 上升沿计数 kLPTMR_PC_PinPolarity_FallingEdge 下降沿计数
  * @retval None
  */
@@ -147,12 +147,12 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
 }
 
 /**
- * @brief  LPTM模块中断和DMA功能配置
+ * @brief  LPTM 模块中断和 DMA 功能配置
  * @code
- *     //配置LPTM模块产生溢出中断
+ *     //配置 LPTM 模块产生溢出中断
  *     LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
  * @endcode
- * @param[in]  config LPTM中断类型
+ * @param[in]  config LPTM 中断类型
  *         @arg kLPTMR_IT_Disable  关闭中断
  *         @arg kLPTMR_IT_TOF      开启计数溢出中断
  * @param[in] status 是否使能中断
@@ -180,7 +180,7 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
 }
 
 /**
- * @brief  注册LPTMR中断回调函数
+ * @brief  注册 LPTMR 中断回调函数
  * @param[in]  AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
@@ -214,13 +214,13 @@ uint32_t LPTMR_PC_ReadCounter(void)
 }
 
 /**
- * @brief  LPTMR脉冲计数快速初始化
+ * @brief  LPTMR 脉冲计数快速初始化
  * @code
- *     //LPTMR脉冲计数快速初始化
+ *     //LPTMR 脉冲计数快速初始化
  *     LPTMR_PC_QuickInit(LPTMR_ALT2_PC05);
  * @endcode
  * @param[in] MAP 单路脉冲计数模块
- * @see MAP详细的宏定义请见lptmr.h文件
+ * @see MAP 详细的宏定义请见 lptmr.h 文件
  * @retval 脉冲计数的模块号
  */
 

@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2015.3.5
-  * \date    2015.10.04 FreeXc完善了nfc模块的注释
+  * \date    2015.10.04 FreeXc 完善了 nfc 模块的注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -53,7 +53,7 @@ uint32_t NFC_GetBufAddr(uint8_t nfcbufNum)
 
 /**
  * @brief  initialize NFC struct
- * @param[in]  NFC_InitStruct 指向NFC初始化结构体指针
+ * @param[in]  NFC_InitStruct 指向 NFC 初始化结构体指针
  * @retval None
  */
 void NFC_Init(NFC_InitTypeDef *NFC_InitStruct)

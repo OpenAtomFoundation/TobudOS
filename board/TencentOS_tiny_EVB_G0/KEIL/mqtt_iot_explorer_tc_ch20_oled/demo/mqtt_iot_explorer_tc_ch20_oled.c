@@ -47,7 +47,7 @@ void mqtt_demo_task(void)
     char   ch20_ppm_str[20];
     
     
-    /* OLED显示日志 */
+    /* OLED 显示日志 */
     OLED_ShowString(0, 2, (uint8_t*)"connecting...", 16);
 
     /**
@@ -77,7 +77,7 @@ void mqtt_demo_task(void)
         printf("MQTT: %s\n", state == MQTT_STATE_CONNECTED ? "CONNECTED" : "DISCONNECTED");
     }
     
-    /* 开始订阅topic */
+    /* 开始订阅 topic */
     size = snprintf(report_reply_topic_name, TOPIC_NAME_MAX_SIZE, "$thing/down/property/%s/%s", product_id, device_name);
 
     if (size < 0 || size > sizeof(report_reply_topic_name) - 1) {
@@ -116,7 +116,7 @@ void mqtt_demo_task(void)
         ch20_ppm_value = ch20_value.data / 1000.0;
         printf("ch20 value: %.3f\r\n", ch20_ppm_value);
         
-        /* OLED显示值 */
+        /* OLED 显示值 */
         sprintf(ch20_ppm_str, "%.3f ppm(mg/m3)", ch20_ppm_value);
         OLED_ShowString(0, 2, (uint8_t*)ch20_ppm_str, 16);
         
@@ -143,7 +143,7 @@ void application_entry(void *arg)
 {
     char *str = "TencentOS-tiny";
     
-    /* 初始化OLED */
+    /* 初始化 OLED */
     OLED_Init();
     OLED_Clear();
     OLED_ShowString(0, 0, (uint8_t*)str, 16);

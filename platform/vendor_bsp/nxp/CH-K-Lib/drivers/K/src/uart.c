@@ -89,8 +89,8 @@ FILE __stdout;
 FILE __stdin;
 /**
  * \brief put char, called by printf
- * \note 若串口初始化完成之后，调用printf函数会重定向到uart的发送函数
- * \note 即需要打印的数据可以通过PC的串口调试助手(终端)打印出来
+ * \note 若串口初始化完成之后，调用 printf 函数会重定向到 uart 的发送函数
+ * \note 即需要打印的数据可以通过 PC 的串口调试助手 (终端) 打印出来
  */
 __weak int fputc(int ch,FILE *f)
 {
@@ -169,7 +169,7 @@ __weak size_t __read(int handle, unsigned char * buffer, size_t size)
 /**
  * \brief UART putchar function
  * \attention 内部函数，用户无法调用
- * \param[in] instance UART模块号
+ * \param[in] instance UART 模块号
  * \param[in] str 指向字符串常量的指针
  * \retval None
  */
@@ -231,18 +231,18 @@ _loop:
 
 
 /**
- * @brief  初始化UART模块 
+ * @brief  初始化 UART 模块 
  * @note   用户需自己进行引脚的复用配置
  * @code
- *    //使用UART0模块 使用115200波特率进行通信
+ *    //使用 UART0 模块 使用 115200 波特率进行通信
  *    UART_InitTypeDef UART_InitStruct1;      //申请一个结构变量
- *    UART_InitStruct1.instance = HW_UART0;   //选择UART0模块
- *    UART_InitStruct1.baudrate = 115200;     //设置通信速度为115200
+ *    UART_InitStruct1.instance = HW_UART0;   //选择 UART0 模块
+ *    UART_InitStruct1.baudrate = 115200;     //设置通信速度为 115200
  *    UART_InitStruct1.parityMode = kUART_ParityDisabled; //校验位禁止
- *    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;   //每帧8bit
+ *    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;   //每帧 8bit
  *    UART_Init(&UART_InitStruct1);
  * @endcode
- * @param[in]  Init 指向串口工作配置存储结构体的指针,详细的定义请见uart.h文件
+ * @param[in]  Init 指向串口工作配置存储结构体的指针，详细的定义请见 uart.h 文件
  * @retval None
  */
 void UART_Init(UART_InitTypeDef* Init)
@@ -347,13 +347,13 @@ void UART_Init(UART_InitTypeDef* Init)
 /**
  * @brief  Uart Deinitialization
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @retval None
  */
 void UART_DeInit(uint32_t instance)
@@ -378,15 +378,15 @@ void UART_SelectDebugInstance(uint32_t instance)
 }
 
 /**
- * @brief  使能UART发送的FIFO功能
+ * @brief  使能 UART 发送的 FIFO 功能
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * \param[in] status enable or disable Tx FIFO
  *              \arg 0 disable
  *              \arg 1  enable
@@ -404,15 +404,15 @@ void UART_EnableTxFIFO(uint32_t instance, bool status)
 }
 
 /**
- * @brief  使能UART接收的FIFO功能
+ * @brief  使能 UART 接收的 FIFO 功能
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * \param[in] status enable or disable Rx FIFO
  *              \arg 0 disable
  *              \arg 1  enable
@@ -426,15 +426,15 @@ void UART_EnableRxFIFO(uint32_t instance, bool status)
 }
 
 /**
- * @brief  获取UART发送中FIFO的通道深度
+ * @brief  获取 UART 发送中 FIFO 的通道深度
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @return Transmit FIFO/Buffer Depth
  */
 uint32_t UART_GetTxFIFOSize(uint32_t instance)
@@ -444,15 +444,15 @@ uint32_t UART_GetTxFIFOSize(uint32_t instance)
 }
 
 /**
- * @brief  获取UART接收中FIFO的通道深度
+ * @brief  获取 UART 接收中 FIFO 的通道深度
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @return Receive FIFO/Buffer Depth
  */
 uint32_t UART_GetRxFIFOSize(uint32_t instance)
@@ -462,15 +462,15 @@ uint32_t UART_GetRxFIFOSize(uint32_t instance)
 }
 
 /**
- * @brief  设定发送FIFO通道的水位
+ * @brief  设定发送 FIFO 通道的水位
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * \param[in] size Transmit Watermark Size
  * @retval None
  */
@@ -483,15 +483,15 @@ void UART_SetTxFIFOWatermark(uint32_t instance, uint32_t size)
 }
 
 /**
- * @brief  设定接收FIFO通道的水位
+ * @brief  设定接收 FIFO 通道的水位
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * \param[in] size Receive Watermark Size
  * @retval None
  */
@@ -506,17 +506,17 @@ void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size)
  * @brief  串口发送一个字节
  * @attention   阻塞式发送 只有发送完后才会返回
  * @code
- *    //使用UART0模块 发送数据0x5A
+ *    //使用 UART0 模块 发送数据 0x5A
  *    UART_WriteByte(HW_UART0, 0x5A);
  * @endcode
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in]  ch 需要发送的一字节数据
  * @retval None
  */
@@ -543,24 +543,24 @@ void UART_WriteByte(uint32_t instance, uint16_t ch)
 
 
 /**
- * @brief  UART接受一个字节
+ * @brief  UART 接受一个字节
  * @note   非阻塞式接收 立即返回
  * @code
- *   //接收UART0模块的数据
+ *   //接收 UART0 模块的数据
  *   uint8_t data; //申请变量，存储接收的数据
  *   UART_ReadByte(HW_UART0, &data);
  * @endcode
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in]  ch 接收到的数据指针
  * @retval 0        成功接收到数据
- * \retval 非0      没有接收到数据
+ * \retval 非 0      没有接收到数据
  */
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
 {
@@ -577,19 +577,19 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
 }
 
 /**
- * @brief  配置UART模块的中断或DMA属性
+ * @brief  配置 UART 模块的中断或 DMA 属性
  * @code
- *   //配置UART0模块开启接收中断功能
+ *   //配置 UART0 模块开启接收中断功能
  *   UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
  * @endcode
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in]  status      使能开关
  *              \arg 0 disable
  *              \arg 1  enable
@@ -647,13 +647,13 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
 /**
  * @brief  注册发送中断回调函数
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in] AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
@@ -671,13 +671,13 @@ void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 /**
  * @brief  注册接收中断回调函数
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in] AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
@@ -696,13 +696,13 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
  /**
  * @brief  串口快速化配置函数
  * @code
- *      // 初始化 UART4 属性: 115200-N-8-N-1, Tx:PC15 Rx:PC14
+ *      // 初始化 UART4 属性：115200-N-8-N-1, Tx:PC15 Rx:PC14
  *      UART_QuickInit(UART4_RX_PC14_TX_PC15, 115200);
  * @endcode
- * @param[in]  MAP   串口引脚配置缩略图,详见uart.h
- * \note       例如 UART1_RX_PE01_TX_PE00，使用串口1的PTE1/PTE0引脚
+ * @param[in]  MAP   串口引脚配置缩略图，详见 uart.h
+ * \note       例如 UART1_RX_PE01_TX_PE00，使用串口 1 的 PTE1/PTE0 引脚
  * @param[in]  baudrate 波特率 9600 115200...
- * @retval UART模块号
+ * @retval UART 模块号
  */
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
@@ -774,7 +774,7 @@ static void UART_IRQ_Handler(uint32_t instance)
         
 }
 /**
- * @brief  系统UART0接收和发送的中断函数，用户无需使用
+ * @brief  系统 UART0 接收和发送的中断函数，用户无需使用
  */
 void UART0_RX_TX_IRQHandler(void)
 {
@@ -782,7 +782,7 @@ void UART0_RX_TX_IRQHandler(void)
 }
 
 /**
- * @brief  系统UART1接收和发送的中断函数，用户无需使用
+ * @brief  系统 UART1 接收和发送的中断函数，用户无需使用
  */
 void UART1_RX_TX_IRQHandler(void)
 {
@@ -791,7 +791,7 @@ void UART1_RX_TX_IRQHandler(void)
 
 #ifdef UART2
 /**
- * @brief  系统UART2接收和发送的中断函数，用户无需使用
+ * @brief  系统 UART2 接收和发送的中断函数，用户无需使用
  */
 void UART2_RX_TX_IRQHandler(void)
 {
@@ -801,7 +801,7 @@ void UART2_RX_TX_IRQHandler(void)
 
 #ifdef UART3
 /**
- * @brief  系统UART3接收和发送的中断函数，用户无需使用
+ * @brief  系统 UART3 接收和发送的中断函数，用户无需使用
  */
 void UART3_RX_TX_IRQHandler(void)
 {
@@ -811,7 +811,7 @@ void UART3_RX_TX_IRQHandler(void)
 
 #ifdef UART4
 /**
- * @brief  系统UART4接收和发送的中断函数，用户无需使用
+ * @brief  系统 UART4 接收和发送的中断函数，用户无需使用
  */
 void UART4_RX_TX_IRQHandler(void)
 {
@@ -821,7 +821,7 @@ void UART4_RX_TX_IRQHandler(void)
 
 #ifdef UART5
 /**
- * @brief  系统UART5接收和发送的中断函数，用户无需使用
+ * @brief  系统 UART5 接收和发送的中断函数，用户无需使用
  */
 void UART5_RX_TX_IRQHandler(void)
 {
@@ -887,15 +887,15 @@ static const void* _UART_DMA_sAddrTable[] =
 };
 
 /**
- * @brief  设置UART为DMA发送模式
+ * @brief  设置 UART 为 DMA 发送模式
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in]  status      使能开关
  *              \arg 0 disable
  *              \arg 1  enable
@@ -941,15 +941,15 @@ void UART_SetDMATxMode(uint32_t instance, bool status)
 }
 
 /**
- * @brief  UART在DMA模式下发送数据
+ * @brief  UART 在 DMA 模式下发送数据
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
  * @param[in]  buf 指向需要发送数据的指针
  * \param[in] size 发送数据的个数
  * @retval None
@@ -964,16 +964,16 @@ void UART_DMASendByte(uint32_t instance, uint8_t* buf, uint32_t size)
 }
 
 /**
- * @brief  UART在DMA模式下，获得DMA主循环的次数
+ * @brief  UART 在 DMA 模式下，获得 DMA 主循环的次数
  * @param[in]  instance      芯片串口端口
- *              @arg HW_UART0 芯片的UART0端口
- *              @arg HW_UART1 芯片的UART1端口
- *              @arg HW_UART2 芯片的UART2端口
- *              @arg HW_UART3 芯片的UART3端口
- *              @arg HW_UART4 芯片的UART4端口
- *              @arg HW_UART5 芯片的UART5端口
- * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
- * @retval DMA主循环的次数
+ *              @arg HW_UART0 芯片的 UART0 端口
+ *              @arg HW_UART1 芯片的 UART1 端口
+ *              @arg HW_UART2 芯片的 UART2 端口
+ *              @arg HW_UART3 芯片的 UART3 端口
+ *              @arg HW_UART4 芯片的 UART4 端口
+ *              @arg HW_UART5 芯片的 UART5 端口
+ * \attention 具体的 UART 资源依芯片而不同，请参见相应的引脚复用说明
+ * @retval DMA 主循环的次数
  */
 uint32_t UART_DMAGetRemainByte(uint32_t instance)
 {

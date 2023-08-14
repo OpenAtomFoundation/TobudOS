@@ -77,7 +77,7 @@ int mq_dev_report(void)
 int parse_dev_cmd(uint8_t *data)
 {
     //{"motor":0,"light":1}
-    //JSON字符串到cJSON格式
+    //JSON 字符串到 cJSON 格式
     cJSON* cjson = cJSON_Parse((char *)data); 
     cJSON *cjsonret=NULL;
     int motor;
@@ -229,7 +229,7 @@ void sensor_read(void)
     }
 }
 
-#define welcomspeak "欢迎TOS"
+#define welcomspeak "欢迎 TOS"
 void speaker(char *str)
 {
     uint8_t data[100];

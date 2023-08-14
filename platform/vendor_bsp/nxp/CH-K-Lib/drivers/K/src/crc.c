@@ -6,7 +6,7 @@
   * @date    2014.3.26
   * \date    2015.10.08 FreeXc 完善了对 crc 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片IIC模块的底层功能函数
+  * @note    此文件为芯片 IIC 模块的底层功能函数
   ******************************************************************************
   */
 #include "crc.h"
@@ -14,7 +14,7 @@
 
 /* 
  * FIXME
- * CRC只能在MK64上验证通过, K60上结果不对
+ * CRC 只能在 MK64 上验证通过，K60 上结果不对
  */
  
 /* common CRC protrool define */
@@ -62,8 +62,8 @@ uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
 
 
 /**
- * @brief  初始化CRC硬件模块  
- * @param[in]  CRC_InitStruct  指向CRC初始化结构体的指针
+ * @brief  初始化 CRC 硬件模块  
+ * @param[in]  CRC_InitStruct  指向 CRC 初始化结构体的指针
  * @retval None
  */
 void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
@@ -101,8 +101,8 @@ void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
 }
 
 /**
- * @brief  快速初始化CRC硬件模块  
- * @param[in]  type  CRC协议类型，详细请见crc.h文件中的定义
+ * @brief  快速初始化 CRC 硬件模块  
+ * @param[in]  type  CRC 协议类型，详细请见 crc.h 文件中的定义
  * @retval None
  */
 void CRC_QuickInit(CRC_ProtocolType type)
@@ -153,10 +153,10 @@ static uint32_t CRC_HAL_GetCrcResult(void)
 }
 
 /**
- * @brief  计算并产生CRC运算结果 
+ * @brief  计算并产生 CRC 运算结果 
  * @param[in]  data  数据指针
  * @param[in]  len   数据长度
- * @return CRC计算结果
+ * @return CRC 计算结果
  */
 uint32_t CRC_Generate(uint8_t* data, uint32_t len)
 {

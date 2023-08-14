@@ -122,7 +122,7 @@ void sys_sem_set_invalid(sys_sem_t *sem)
 }
 
 /*
-   如果timeout参数不为零，则返回值为
+   如果 timeout 参数不为零，则返回值为
    等待信号量所花费的毫秒数。如果
    信号量未在指定时间内发出信号，返回值为
    SYS_ARCH_TIMEOUT。如果线程不必等待信号量
@@ -140,9 +140,9 @@ u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
     //首先获取开始等待信号量的时钟节拍
     start_tick = sys_now();
 
-    //timeout != 0，需要将ms换成系统的时钟节拍
+    //timeout != 0，需要将 ms 换成系统的时钟节拍
     if (timeout != 0) {
-        //将ms转换成时钟节拍
+        //将 ms 转换成时钟节拍
         wait_tick = timeout / (1000 / TOS_CFG_CPU_TICK_PER_SECOND);
         if (wait_tick == 0) {
             wait_tick = 1;
@@ -231,7 +231,7 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn function, void *arg
         return NULL;
     }
 
-    /* 创建MidPriority_Task任务 */
+    /* 创建 MidPriority_Task 任务 */
     rc = tos_task_create(task, (char*)name, function, arg,
                             prio, task_stack, stacksize, 20);
     if (rc != K_ERR_NONE) {
@@ -320,9 +320,9 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *q, void **msg, u32_t timeout)
     // 首先获取开始等待信号量的时钟节拍
     start_tick = sys_now();
 
-    // timeout != 0，需要将ms换成系统的时钟节拍
+    // timeout != 0，需要将 ms 换成系统的时钟节拍
     if (timeout != 0) {
-        //将ms转换成时钟节拍
+        //将 ms 转换成时钟节拍
         wait_tick = timeout / (1000 / TOS_CFG_CPU_TICK_PER_SECOND);
         if (wait_tick == 0) {
             wait_tick = 1;

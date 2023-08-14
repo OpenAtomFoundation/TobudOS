@@ -1,16 +1,15 @@
 ---
 name: Security report
 about: Report a security issue or vunerability in MicroPython
-title: ''
+title: ""
 labels: security
-assignees: ''
-
+assignees: ""
 ---
 
-* Remove all placeholder text before submitting the new issue.
+- Remove all placeholder text before submitting the new issue.
 
-* If you need to raise this issue privately with the MicroPython team, please email contact@micropython.org instead.
+- If you need to raise this issue privately with the MicroPython team, please email contact@micropython.org instead.
 
-* Include a clear and concise description of what the security issue is.
+- Include a clear and concise description of what the security issue is.
 
-* What does this issue allow an attacker to do?
+- What does this issue allow an attacker to do?

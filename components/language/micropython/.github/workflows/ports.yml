@@ -4,8 +4,8 @@ on:
   push:
   pull_request:
     paths:
-      - '.github/workflows/*.yml'
-      - 'tools/**'
+      - ".github/workflows/*.yml"
+      - "tools/**"
       - ports/**
 
 jobs:
@@ -13,6 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build ports download metadata
-      run: mkdir boards && ./tools/autobuild/build-downloads.py . ./boards
+      - uses: actions/checkout@v2
+      - name: Build ports download metadata
+        run: mkdir boards && ./tools/autobuild/build-downloads.py . ./boards

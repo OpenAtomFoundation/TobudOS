@@ -29,13 +29,13 @@ The full list of supported commands are:
                                             --inject-file <file>
     mpremote help                    -- print list of commands and exit
 
-Multiple commands can be specified and they will be run sequentially.  Connection
+Multiple commands can be specified and they will be run sequentially. Connection
 and disconnection will be done automatically at the start and end of the execution
-of the tool, if such commands are not explicitly given.  Automatic connection will
-search for the first available serial device.  If no action is specified then the
+of the tool, if such commands are not explicitly given. Automatic connection will
+search for the first available serial device. If no action is specified then the
 REPL will be entered.
 
-Shortcuts can be defined using the macro system.  Built-in shortcuts are:
+Shortcuts can be defined using the macro system. Built-in shortcuts are:
 
 - a0, a1, a2, a3: connect to `/dev/ttyACM?`
 - u0, u1, u2, u3: connect to `/dev/ttyUSB?`
@@ -45,7 +45,7 @@ Shortcuts can be defined using the macro system.  Built-in shortcuts are:
 - bootloader: make the device enter its bootloader
 
 Any user configuration, including user-defined shortcuts, can be placed in
-.config/mpremote/config.py.  For example:
+.config/mpremote/config.py. For example:
 
     # Custom macro commands
     commands = {

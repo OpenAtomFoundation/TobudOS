@@ -130,11 +130,11 @@ typedef enum
 
 #define kADC_MuxA                (0x00)
 #define kADC_MuxB                (0x01)
-//!< ADC 通道触发器复用选择(每个ADC通道有2个ADC转换触发器 为MuxA 和 MuxB. MuxB 只能硬件触发)
+//!< ADC 通道触发器复用选择 (每个 ADC 通道有 2 个 ADC 转换触发器 为 MuxA 和 MuxB. MuxB 只能硬件触发)
 
 #define kADC_ChlMuxA             (0x00)
 #define kADC_ChlMuxB             (0x01)
-//!< ADC 通道复用选择(SEA 还是SEB) 硬件通道选择 
+//!< ADC 通道复用选择 (SEA 还是 SEB) 硬件通道选择 
 
 /**
  * \enum ADC_VoltageRef_Type
@@ -182,8 +182,8 @@ typedef struct
 {
     uint32_t                    instance;                   ///<模块号
     ADC_TriggerSelect_Type      triggerMode;                ///<触发模式 软件触发 或 硬件触发
-    ADC_ClockDiv_Type           clockDiv;                   ///<ADC时钟分频
-    ADC_ResolutionMode_Type     resolutionMode;             ///<分频率选择 8 10 12 16位精度等
+    ADC_ClockDiv_Type           clockDiv;                   ///<ADC 时钟分频
+    ADC_ResolutionMode_Type     resolutionMode;             ///<分频率选择 8 10 12 16 位精度等
     ADC_SingleOrDiffMode_Type   singleOrDiffMode;           ///<单端 还是 差分输入
     ADC_ContinueMode_Type       continueMode;               ///<是否启动连续转换
     ADC_HardwareAveMode_Type    hardwareAveMode;            ///<硬件平均功能选择

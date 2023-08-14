@@ -97,7 +97,7 @@ void I2S_SetTxCmd(uint32_t instance, bool val)
 /**
  * \brief I2S Transmitter Protocol Config
  * \param[in] instance I2S instance
- * \param[in] protocol 协议，详见i2s.h文件
+ * \param[in] protocol 协议，详见 i2s.h 文件
  * \return None
  */  
 void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol)
@@ -164,7 +164,7 @@ void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol)
 /**
  * \brief I2S Sample Bit Config
  * \param[in] instance I2S instance
- * \param[in] protocol 协议，详见i2s.h文件
+ * \param[in] protocol 协议，详见 i2s.h 文件
  * \param[in] bits width
  * \return None
  */  
@@ -181,7 +181,7 @@ void I2S_SetSampleBit(uint32_t instance, I2S_Protocol_t protocol, uint32_t bits)
 /**
  * \brief I2S Interrupt Mode Config
  * \param[in] instance I2S instance
- * \param[in] mode 中断模式，详见i2s.h文件
+ * \param[in] mode 中断模式，详见 i2s.h 文件
  * \param[in] val enable or disable
  *   						\arg 0 disable
  * 							\arg 1  enable
@@ -209,7 +209,7 @@ void I2S_SetIntMode(uint32_t instance, I2S_Int_t mode, bool val)
 /**
  * \brief I2S Sync Mode config
  * \param[in] instance I2S instance
- * \param[in] mode 同步模式，详见i2s.h文件
+ * \param[in] mode 同步模式，详见 i2s.h 文件
  * \return None
  */  
 void I2S_TxSetSyncMode(uint32_t instance, SAI_SyncMode_t mode)
@@ -267,7 +267,7 @@ void I2S_SendData(uint32_t instance, uint32_t sampleBit, uint32_t chl, uint8_t *
 
 /**
  * \brief I2S 初始化
- * \param[in] Init 指向I2S初始化结构体的指针 
+ * \param[in] Init 指向 I2S 初始化结构体的指针 
  * \return None
  */
 void I2S_Init(I2S_InitTypeDef *Init)
