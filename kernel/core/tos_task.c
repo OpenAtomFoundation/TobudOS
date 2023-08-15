@@ -260,18 +260,21 @@ __API__ k_err_t tos_task_create_dyn(k_task_t **task,
         tos_mmheap_free(the_task);
         return K_ERR_OUT_OF_MEMORY;
     }
+    TOS_CPU_CPSR_ALLOC();
 
+    TOS_CPU_INT_DISABLE();
     the_task->stk_base = stk_base;
     err = tos_task_create(the_task, name, entry, arg, prio, stk_base, stk_size, timeslice);
     if (err != K_ERR_NONE) {
         task_free(the_task);
+        TOS_CPU_INT_ENABLE();
         return err;
     }
 
     knl_object_alloc_set_dynamic(&the_task->knl_obj);
 
     *task = the_task;
-
+    TOS_CPU_INT_ENABLE();
     return K_ERR_NONE;
 }
 
