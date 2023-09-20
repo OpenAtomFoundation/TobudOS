@@ -51,7 +51,7 @@ void board_init(void)
   MX_SPI5_Init();
   //MX_UART4_Init();
   MX_UART5_Init();
-  MX_USART2_UART_Init();
+  MX_USART6_UART_Init();
   MX_I2S2_Init();
   MX_HDMI_CEC_Init();
   //MX_USART6_UART_Init();

@@ -9,6 +9,10 @@
 
 #define TOS_CFG_OBJECT_VERIFY_EN        1u
 
+
+#define TOS_CFG_OBJ_DYNAMIC_CREATE_EN    1u
+
+
 #define TOS_CFG_TASK_DYNAMIC_CREATE_EN  1u
 
 #define TOS_CFG_EVENT_EN                1u
