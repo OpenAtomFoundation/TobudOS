@@ -249,7 +249,7 @@ int main(void)
     LCD_ShowString(0,0,"Welcome to TencentOS",WHITE,BLACK,16,0);
 
     tos_knl_init();
-    tos_task_create(&application_task, "application_task", application_entry, NULL, 4, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
+    tos_task_create(&application_task, "application_task", application_entry, NULL, 5, application_task_stk, APPLICATION_TASK_STK_SIZE, 0);
     tos_knl_start();
 
     printf("should not run at here!\r\n");
