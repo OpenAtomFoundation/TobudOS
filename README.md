@@ -176,15 +176,15 @@ TobudOS 联合合作伙伴 (南京厚德物联网) 设计了定制开发板，�
 
 - [【TobudOS学习】例程（4）——信号量](https://github.com/jiejieTop/TencentOS-Demo/tree/master/04-sem)
 
-- [【TobudOS tiny 学习】例程（5）——互斥锁](https://github.com/jiejieTop/TencentOS-Demo/tree/master/05-mutex)
+- [【TobudOS学习】例程（5）——互斥锁](https://github.com/jiejieTop/TencentOS-Demo/tree/master/05-mutex)
 
-- [【TobudOStiny 学习】例程（6）——事件](https://github.com/jiejieTop/TencentOS-Demo/tree/master/06-event)
+- [【TobudOS学习】例程（6）——事件](https://github.com/jiejieTop/TencentOS-Demo/tree/master/06-event)
 
-- [【TobudOS tiny 学习】例程（7）——软件定时器](https://github.com/jiejieTop/TencentOS-Demo/tree/master/07-timer)
+- [【TobudOS学习】例程（7）——软件定时器](https://github.com/jiejieTop/TencentOS-Demo/tree/master/07-timer)
 
-- [【TobudOS tiny 学习】例程（8）——内存池](https://github.com/jiejieTop/TencentOS-Demo/tree/master/08-mmblk)
+- [【TobudOS学习】例程（8）——内存池](https://github.com/jiejieTop/TencentOS-Demo/tree/master/08-mmblk)
 
-- [【TobudOS tiny 学习】例程（9）——内存堆](https://github.com/jiejieTop/TencentOS-Demo/tree/master/09-mmheap)
+- [【TobudOS学习】例程（9）——内存堆](https://github.com/jiejieTop/TencentOS-Demo/tree/master/09-mmheap)
 
 ## 视频教程：
 
