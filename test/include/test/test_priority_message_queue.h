@@ -1,6 +1,0 @@
-#ifndef _TEST_PRIORITY_MESSAGE_QUEUE_H_
-#define  _TEST_PRIORITY_MESSAGE_QUEUE_H_
-
-
-#endif
-
