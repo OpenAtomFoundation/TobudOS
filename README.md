@@ -2,7 +2,7 @@
 
 各位用户，开发者，原TencentOS Tiny开源项目于2020年10月份开始捐赠给开放原子开源基金会，目前已经完成整个捐赠流程，开源项目更名为TobudOS，将以更加开放中立、自由的方式为各位开发者提供社区服务，代码仓转移到开放原子开源基金会的atomgit代码仓
 
-新代码仓地址：[https://atomgit.com/OpenAtomFoundation/TobudOS](https://atomgit.com/OpenAtomFoundation/TobudOS)
+新代码仓地址：[https://atomgit.com/tobudos](https://atomgit.com/tobudos)
 
 各位开发者可以在atomgit代码仓参与开源项目贡献，下载TobudOS（原TencentOS Tiny）源代码
 
